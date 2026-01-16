@@ -1,0 +1,15 @@
+profit@dropharmadm.com
+Profit2021**
+binary
+lcd "C:\Profit\Ftp\Archivos"
+get asesores.csv
+get clientes.csv
+get FacturasCompras.csv
+get FacturasComprasRenglones.csv
+get FacturasVentas.csv
+get FacturasVentasRenglones.csv
+get monedas.csv
+get proveedores.csv
+get Articulos.csv
+close
+bye

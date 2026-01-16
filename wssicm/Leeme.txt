@@ -1,0 +1,27 @@
+Saludos Sr Mauricio;
+
+Seguidamente le indico los webservices para traer todas las facturas tanto de la compañía DROPHARMA como la de MEDRIKHA. Las facturas que muestro son todas las del 2022 en adelante; luego podríamos colocar un filtro que traiga sólo lo que sea necesario según convenga.
+
+Por cada compañía tendrá 2 servicios con los cuales consultará el encabezado de cada factura y el detalle de las mismas según la estructura que me indicó. 
+
+Me di la libertad de agregar un campo adicional en cada webservices, el número de la factura, que creo puede serle de utilidad para el enlace entre la factura y su detalle.
+
+La salida de cada servicio es en formato JSON.
+
+Atento a sus comentarios me despido.
+
+Junior Sanabria
+
+DROPHARMA: 
+
+https://www.dropharmadm.com/dropharma/wssicm_dropharma/sicmAPI.php?user=365&app=factura&numero=FACT-024322
+
+https://www.dropharmadm.com/dropharma/wssicm_dropharma/sicmAPI.php?user=365&app=factura_detalle&numero=FACT-024322
+
+
+MEDRIHKA: 
+
+https://www.dropharmadm.com/dropharma/wssicm_medrikha/sicmAPI.php?user=365&app=factura&numero=FACT-001481
+
+https://www.dropharmadm.com/dropharma/wssicm_medrikha/sicmAPI.php?user=365&app=factura_detalle&numero=FACT-001481
+

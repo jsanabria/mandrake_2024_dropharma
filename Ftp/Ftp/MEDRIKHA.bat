@@ -1,0 +1,1 @@
+ftp -s:"ftpMEDRIKHA.txt" dropharmadm.com >> detallesMEDRIKHA.log

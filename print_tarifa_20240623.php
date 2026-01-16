@@ -1,0 +1,160 @@
+<?php
+session_start();
+
+header("Content-type: application/vnd.ms-excel; name='excel'");
+header("Content-Disposition: filename=tarifa.xls");
+//header("Progma; no-cache");
+header("Expires: 0");
+
+include "include/connect.php";
+
+$codcliente = trim($_REQUEST["codcliente"]);
+$tarifa = trim($_REQUEST["tarifa"]);
+
+if($tarifa == "") {
+	$sql = "SELECT tarifa FROM cliente WHERE id = $codcliente"; 
+	$rs = mysqli_query($link, $sql);
+	$row = mysqli_fetch_array($rs);
+	$tarifa = intval($row["tarifa"]);
+}
+
+$sql = "SELECT nombre FROM tarifa WHERE id = $tarifa;";
+$rs = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($rs);
+
+$titulo = "ARTICULOS TARIFA " . $row["nombre"];
+
+
+$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
+$rs = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($rs);
+$cia =  $row["id"];
+
+
+$sql = "SELECT 
+			a.ci_rif, a.nombre, b.campo_descripcion AS ciudad, 
+			a.direccion, a.telefono1, a.email1, logo  
+		FROM 
+			compania AS a 
+			LEFT OUTER JOIN tabla AS b ON b.campo_codigo = a.ciudad AND b.tabla = 'CIUDAD' 
+		WHERE a.id = '$cia';";
+$rs = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($rs);
+$ciudad = $row["ciudad"];
+$direccion = $row["direccion"]; 
+$cia =  $row["nombre"];
+$logo =  $row["logo"];
+
+?>
+
+<div class="container" id="Exportar_a_Exel">
+  <table class="table table-bordered" border="1" rules="all">
+	<thead>
+	  <tr>
+		<th colspan="10"><center><?php echo $cia; ?></center></th>
+		<th colspan="2">Fecha: <?php echo date("d/m/Y"); ?></th>
+	  </tr>
+	  <tr>
+		<th colspan="10"></th>
+		<th colspan="2">Hora: <?php echo date("H:i:s"); ?></th>
+	  </tr>
+	  <tr class="well">
+		<th colspan="12"><strong><center><?php echo $titulo; ?></th>
+	  </tr>
+	  <tr class="well">
+		<th>LABORATORIO</th>
+		<th>NOMBRE</th>
+		<th>MEDICAMENTO</th>
+		<th>PRESENTACION</th>
+		<th>TIPO LISTA</th>
+		<th>COD BARRA</th>
+		<th>VENCIMIENTO</th>
+		<th>PRECIO</th>
+		<th>DESC %</th>
+		<th>CANT</th>
+		<th>U.M.</th>
+		<th>CODIGO</th>
+	  </tr>
+	</thead>
+	<tbody>
+	<?php
+		$items = 0;
+
+		$sql = "SELECT 
+				a.id, a.codigo, 
+				a.foto, a.nombre_comercial, b.nombre AS fabricante, 
+				a.principio_activo, a.presentacion, c.precio AS precio, 
+				(a.cantidad_en_mano+a.cantidad_en_pedido)-a.cantidad_en_transito AS cantidad_en_mano, 
+				d.descripcion AS unidad_medida,
+						(
+							SELECT 
+								date_format(aa.fecha_vencimiento, '%d/%m/%Y') AS fecha_vencimiento 
+							FROM 
+								entradas_salidas AS aa 
+								JOIN entradas AS b ON
+									b.tipo_documento = aa.tipo_documento
+									AND b.id = aa.id_documento 
+								JOIN almacen AS c ON
+									c.codigo = aa.almacen AND c.movimiento = 'S' 
+								LEFT OUTER JOIN (
+										SELECT 
+											aa.id_compra AS id, SUM(IFNULL(aa.cantidad_movimiento, 0)) AS cantidad_movimiento 
+										FROM 
+											entradas_salidas AS aa 
+											JOIN salidas AS b ON
+												b.tipo_documento = aa.tipo_documento
+												AND b.id = aa.id_documento 
+											LEFT OUTER JOIN almacen AS c ON
+												c.codigo = aa.almacen AND c.movimiento = 'S'
+										WHERE
+											aa.tipo_documento IN ('TDCNET','TDCASA') 
+											AND b.estatus IN ('NUEVO', 'PROCESADO') -- AND aa.articulo = aa.articulo 
+										GROUP BY aa.id_compra
+									) AS d ON d.id = aa.id 
+							WHERE
+								((aa.tipo_documento IN ('TDCNRP','TDCAEN') 
+								AND b.estatus = 'PROCESADO')
+								 OR
+								(aa.tipo_documento = 'TDCNRP' AND b.consignacion = 'S'
+								AND b.estatus = 'NUEVO')) AND aa.articulo = a.id 
+								AND (IFNULL(aa.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) > 0
+								AND aa.almacen NOT IN ('VEN001', 'CUA001') 
+							ORDER BY aa.fecha_vencimiento ASC LIMIT 0, 1 
+						) AS vencimiento, a.descuento, a.codigo_de_barra, 
+						(SELECT campo_descripcion FROM tabla WHERE tabla = 'LISTA_PEDIDO' AND campo_codigo = a.lista_pedido) AS lista_pedido  
+			  FROM 
+				articulo AS a 
+				LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante 
+				INNER JOIN tarifa_articulo AS c ON c.articulo = a.id AND c.tarifa = $tarifa 
+				INNER JOIN unidad_medida AS d ON d.codigo = a.unidad_medida_defecto 
+			  WHERE 
+				a.activo = 'S' AND a.articulo_inventario = 'S' AND a.cantidad_en_mano > 0 
+			  ORDER BY a.principio_activo, a.presentacion;"; 
+
+
+		$rs = mysqli_query($link, $sql);
+		while($row = mysqli_fetch_array($rs)) {
+			  echo '<tr>';
+			  echo '<td>' .$row["fabricante"] . '</td>';
+			  echo '<td>' .$row["nombre_comercial"] . '</td>';
+			  echo '<td>' . substr($row["principio_activo"] . "(" . $row["nombre_comercial"] . ")", 0, 60) . '</td>';
+			  echo '<td>' . substr($row["presentacion"], 0, 60) . '</td>';
+			  echo '<td>' .$row["lista_pedido"] . '</td>';
+			  echo '<td>' .$row["codigo_de_barra"] . '</td>';
+			  echo '<td>' .$row["vencimiento"] . '</td>';
+			  //echo '<td>' . number_format($row["precio"], 2, ".", ",") . '</td>';
+			  echo '<td>' . number_format($row["precio"], 2, ",", "") . '</td>';
+			  echo '<td>' . number_format($row["descuento"], 2, ",", "") . '</td>';
+			  echo '<td></td>';
+			  echo '<td>' . $row["unidad_medida"] . '</td>';
+			  echo '<td>' . $row["codigo"] . '</td>';
+			  echo '</tr>';
+			  $items++;
+		}
+	?>
+	  <tr>
+		<th colspan="12">Total Art&iacute;culos: <?php echo $items; ?></th>
+	  </tr>
+	</tbody>
+  </table>
+</div>

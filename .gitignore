@@ -1,0 +1,59 @@
+##############################
+# PHP / PHPMaker / Laravel  #
+##############################
+
+# Dependencias
+/vendor/
+/node_modules/
+
+# Cache / logs / temporales
+/tmp/
+/temp/
+/cache/
+/storage/
+/runtime/
+/logs/
+/log/
+*.log
+/error_log
+
+# Subidas / archivos generados
+/uploads/
+/upload/
+/files/
+/media/
+/userfiles/
+/carpetacarga/
+
+# Configuración local / secretos
+.env
+.env.*
+*.local.php
+*.local.json
+*.local.yml
+config.local.php
+
+# Respaldos / dumps
+*.sql
+*.sql.gz
+*.dump
+*.bak
+*.backup
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Ejecutables / binarios
+*.exe
+*.msi
+*.dll
+*.bin
+*.iso
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

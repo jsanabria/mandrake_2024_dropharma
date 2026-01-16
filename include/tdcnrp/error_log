@@ -1,0 +1,216 @@
+[07-Mar-2025 18:47:36 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[07-Mar-2025 18:47:54 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[17-Mar-2025 13:25:55 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:26:01 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:26:37 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:26:53 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:28:38 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:29:28 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:29:56 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:30:11 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:30:14 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:32:53 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:33:36 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:37:57 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:40:19 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:40:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:40:25 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:40:26 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:40:26 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:41:30 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:45:52 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[17-Mar-2025 13:49:07 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: Column 'lote' in field list is ambiguous in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php:94
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php(94): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/listar_tdcnrp.php on line 94
+[18-Mar-2025 12:45:54 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[18-Mar-2025 12:46:27 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[18-Mar-2025 12:46:33 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[18-Mar-2025 12:46:45 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[07-Apr-2025 13:04:51 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[09-Apr-2025 20:01:38 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[09-Apr-2025 20:01:45 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[09-Apr-2025 20:02:06 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[09-Apr-2025 20:02:08 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[10-Apr-2025 08:38:59 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' 'N', 'S', '0125/1362', '2027-02-01')' at line 8 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php:127
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php(127): mysqli_query(Object(mysqli), 'INSERT INTO ent...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php on line 127
+[10-Apr-2025 15:09:43 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' 'N', 'S', '1025/9635', '2027-04-01')' at line 8 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php:127
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php(127): mysqli_query(Object(mysqli), 'INSERT INTO ent...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php on line 127
+[23-Apr-2025 12:18:48 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[23-Apr-2025 12:19:00 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[23-Apr-2025 12:19:26 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[23-Apr-2025 12:20:46 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[23-Apr-2025 12:24:31 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Warning:  Undefined array key "username" in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 17
+[30-Apr-2025 13:45:22 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND articulo = 2669' at line 3 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php:149
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php(149): mysqli_query(Object(mysqli), 'SELECT \n       ...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/buscar_articulos_tdcnrp.php on line 149
+[02-May-2025 12:24:44 UTC] PHP Warning:  session_destroy(): Trying to destroy uninitialized session in /home4/drophqsc/ww1.dropharmadm.com/admin/include/connect.php on line 3
+[05-May-2025 14:35:35 America/La_Paz] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' 'N', 'S', '240506', '1990-01-01')' at line 8 in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php:127
+Stack trace:
+#0 /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php(127): mysqli_query(Object(mysqli), 'INSERT INTO ent...')
+#1 {main}
+  thrown in /home4/drophqsc/ww1.dropharmadm.com/admin/include/tdcnrp/insertar_linea_pedido_tdcnrp.php on line 127

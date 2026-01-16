@@ -1,0 +1,5 @@
+Nombre de usuario de FTP: ftpexportar@dropharmadm.com
+Servidor FTP: ftp.dropharmadm.com
+Puerto FTPS explícito de FTP &:  21
+Usaurio ftpexportar@dropharmadm.com
+Clave iIo8k-APBEO9

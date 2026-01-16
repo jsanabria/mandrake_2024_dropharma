@@ -1,0 +1,5126 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<ew-language date="2024/5/31" version="17.0.4" id="es-419" name="Spanish" desc="Spanish" author="ELA83">
+  <!--
+    *** Important Notes:
+    1. Language ID should follow: https://developers.google.com/recaptcha/docs/language,
+    2. Locale settings are placed in a separate locale files under the "locales" folder,
+    3. Locale files must be named with language ID of language file (and converted to lowercase), e.g. en.json,
+    4. Locale files are ALWAYS used, regardless of whether the project is single language or multiple language.
+-->
+  <global>
+    <phrase id="accept" value="Aceptar" />
+    <!-- v2019 -->
+    <phrase id="actiondeleted" value="Borrado" />
+    <phrase id="actioninserted" value="Insertado" />
+    <phrase id="actioninsertedgridadd" value="Insertado (Grid-Add)" />
+    <phrase id="actionupdated" value="Actualizado" />
+    <phrase id="actionupdatedgridedit" value="Actualizado (Grid-Edit)" />
+    <phrase id="actionupdatedmultiupdate" value="Actualizado (Multi-Update)" />
+    <phrase id="activateaccount" value="Su cuenta fue activada" />
+    <phrase id="activatefailed" value="Falló la activación" />
+    <phrase id="add" value="Agregar" />
+    <phrase id="addblankrow" value="Agregar Fila en blanco" class="fas fa-plus ew-icon" />
+    <!-- v2019 -->
+    <phrase id="addbtn" value="Agregar" client="1" />
+    <!-- v2018 -->
+    <phrase id="addlink" value="Agregar" class="fas fa-plus ew-icon" />
+    <!-- v2019 -->
+    <phrase id="addmasterdetaillink" value="Principal/Detalle Agregar" class="icon-md-add ew-icon" />
+    <!-- v11 -->
+    <phrase id="addsuccess" value="Agregado correctamente" />
+    <phrase id="advancedsearch" value="Búsqueda avanzada" />
+    <!-- v11 -->
+    <phrase id="advancedsearchbtn" value="Búsqueda avanzada" class="icon-advanced-search ew-icon" />
+    <!-- v11 -->
+    <phrase id="aggregatecolon" value=": " />
+    <!-- v2020 (report) -->
+    <phrase id="aggregateequal" value="=" />
+    <!-- v2020 (report) -->
+    <phrase id="allrecords" value="Todos" />
+    <phrase id="allword" value="Todas las palabras" />
+    <phrase id="alwaysask" value="Preguntar siempre mi usuario y contraseña" />
+    <!-- Deprecated since v2018 -->
+    <phrase id="anyword" value="Cualquier palabra" />
+    <phrase id="apititle" value="REST API" />
+    <!-- v2021 -->
+    <phrase id="audittrailautologin" value="conectar automáticamente" />
+    <phrase id="audittrailfailedattempt" value="intento fallido: %n" />
+    <phrase id="audittrailuserloggedin" value="el usuario ya está conectado" />
+    <phrase id="audittrailpasswordexpired" value="caducó la contraseña" />
+    <phrase id="audittraillogin" value="conectar" />
+    <phrase id="audittraillogout" value="salir" />
+    <phrase id="autologin" value="Conectar automáticamente salvo que especificamente hubiera salido" />
+    <!-- Deprecated since v2018 -->
+    <phrase id="autologinfailed" value="Falló al conectar automáticamente" />
+    <!-- v2018 -->
+    <phrase id="average" value="Promedio" />
+    <phrase id="backtolist" value="Volver a la lista" />
+    <phrase id="backtologin" value="Volver a la página de conexión" />
+    <phrase id="backtomasterrecordpage" value="Volver a la tabla principal" />
+    <phrase id="batchdeletebegin" value="*** Iniciar borrado por lotes ***" />
+    <phrase id="batchdeleterollback" value="*** Desahecer borrado por lotes ***" />
+    <phrase id="batchdeletesuccess" value="*** Borrado por lotes exitoso ***" />
+    <phrase id="batchinsertbegin" value="*** iniciar ingreso por lotes ***" />
+    <phrase id="batchinsertrollback" value="*** Desahecer ingreso por lotes ***" />
+    <phrase id="batchinsertsuccess" value="*** Ingreso por lotes exitoso ***" />
+    <phrase id="batchupdatebegin" value="*** Iniciar actualización por lotes ***" />
+    <phrase id="batchupdaterollback" value="*** Deshacer actualización por lotes ***" />
+    <phrase id="batchupdatesuccess" value="*** Actualización por lotes exitosa ***" />
+    <phrase id="booleanno" value="No" />
+    <!-- v2020 (report) -->
+    <phrase id="booleanyes" value="Si" />
+    <!-- v2020 (report) -->
+    <phrase id="buttonactions" value="Acciones" class="icon-options ew-icon" />
+    <!-- v11 -->
+    <phrase id="buttonaddedit" value="Agregar/Editar" class="icon-addedit ew-icon" />
+    <!-- v11 -->
+    <phrase id="buttondetails" value="Principal/Detalle" class="icon-master-detail ew-icon" />
+    <!-- v11 -->
+    <phrase id="buttonexport" value="Exportar" class="fas fa-download ew-icon" />
+    <!-- v2019 -->
+    <phrase id="buttonimport" value="Importar" class="fas fa-upload ew-icon" />
+    <!-- v2019 -->
+    <phrase id="buttonlistoptions" value="Optiones" class="icon-options ew-icon" />
+    <!-- v11 -->
+    <phrase id="buttonsearch" value="Buscar" class="icon-search ew-icon" />
+    <!-- v11 -->
+    <phrase id="cancelbtn" value="Cancelar" client="1" />
+    <!-- v2017 -->
+    <phrase id="cancellink" value="Cancelar" class="fas fa-times ew-icon" />
+    <!-- v2019 -->
+    <phrase id="changepassword" value="Cambiar Contraseña" client="1" />
+    <!-- v2020 -->
+    <phrase id="changepasswordmessage" value="Cambiar Contraseña" />
+    <!-- v2019 -->
+    <phrase id="changepasswordpage" value="Cambiar Contraseña" />
+    <phrase id="changepasswordbtn" value="Cambiar" />
+    <phrase id="chartexporterrmsg1" value="Imposible obtener %t imagen desde %e." />
+    <!-- v2021 -->
+    <phrase id="chartexporterrmsg2" value="Falta el nombre del archivo." />
+    <!-- v2021 -->
+    <phrase id="chartexporterrmsg3" value="La carpeta de destino no existe." />
+    <!-- v2021 -->
+    <phrase id="chartexporterrmsg4" value="No tienes permisos de escritura en la carpeta de destino." />
+    <!-- v2021 -->
+    <phrase id="chartorder" value="Ordenar por" />
+    <!-- v2020 (report) -->
+    <phrase id="chartorderxasc" value="Etiquetas Ascendente" />
+    <!-- v2020 (report) -->
+    <phrase id="chartorderxdesc" value="Etiquetas Descendente" />
+    <!-- v2020 (report) -->
+    <phrase id="chartorderyasc" value="Valores Ascendentes" />
+    <!-- v2020 (report) -->
+    <phrase id="chartorderydesc" value="Valores Descendentes" />
+    <!-- v2020 (report) -->
+    <phrase id="choosefilebtn" value="Elige..." />
+    <!-- v11 -->
+    <phrase id="choosefile" value="Elije el archivo" />
+    <!-- v11 -->
+    <phrase id="choosefiles" value="Elije los archivos" />
+    <!-- v11 -->
+    <phrase id="clickrecaptcha" value="Por favor seleccione reCAPTCHA" client="1" />
+    <!-- v12 -->
+    <phrase id="clicktodrilldown" value="Presiona para desplegar" />
+    <!-- v2020 (report) -->
+    <phrase id="closeaccountbtn" value="Borrar datos y eliminar mi cuenta" />
+    <!-- v2019 -->
+    <phrase id="closebtn" value="Cerrar" client="1" />
+    <!-- v2017 -->
+    <phrase id="confirm" value="Confirmar" />
+    <phrase id="confirmbtn" value="Confirmar" client="1" />
+    <!-- v2017 -->
+    <phrase id="confirmcancel" value="¿Quiere cancelar?" client="1" />
+    <!-- v12 -->
+    <phrase id="confirmpassword" value="Confirmar Contrseña" client="1" />
+    <!-- v2021 -->
+    <phrase id="conflictcancellink" value="Cancelar" />
+    <phrase id="cookieconsenttitle" value="Cookies" client="1" />
+    <!-- v2021 -->
+    <phrase id="cookieconsentsummary" value="Describa aquí sus políticas de privacidad y Cookies." client="1" />
+    <!-- v2021 -->
+    <phrase id="copy" value="Copiar" />
+    <phrase id="copylink" value="Copiar" class="icon-copy ew-icon" />
+    <!-- v11 -->
+    <phrase id="count" value="Contar" />
+    <phrase id="countselected" value="%s seleccionados" client="1" />
+    <!-- v12 -->
+    <phrase id="ctbsumhead" value="Sumario" />
+    <!-- v2020 (report) -->
+    <phrase id="currentfilters" value="Filtros actuales:" />
+    <!-- v2020 (report) -->
+    <phrase id="currentpassword" value="Contraseña actual: " client="1" />
+    <!-- v12 -->
+    <phrase id="customactioncompleted" value="'%s' completado" />
+    <phrase id="customactioncancelled" value="'%s' cancelado" />
+    <phrase id="customactionfailed" value="'%s' falló" />
+    <!-- v12 -->
+    <phrase id="customactionnotallowed" value="'%s' no permitido" />
+    <!-- v12 -->
+    <phrase id="customview" value="VISTA PERSONALIZADA" />
+    <phrase id="danger" value="Error" client="1" />
+    <!-- v2020 -->
+    <phrase id="debug" value="Debug" />
+    <!-- v2021 -->
+    <phrase id="delete" value="Borrar" />
+    <phrase id="deletebtn" value="Borrar" />
+    <phrase id="deletecancelled" value="Borrado cancelado" />
+    <phrase id="deleteconfirmmsg" value="Are you sure you want to delete?" client="1" />
+    <phrase id="deletefilter" value="Delete filter" />
+    <!-- v12 -->
+    <phrase id="deletefilterconfirm" value="Delete filter %s?" client="1" />
+    <!-- v12 -->
+    <phrase id="deletelink" value="Delete" class="fas fa-trash ew-icon" />
+    <!-- v2019 -->
+    <phrase id="deleteselectedlink" value="Delete Selected Records" class="fas fa-trash ew-icon" />
+    <!-- v2019 -->
+    <phrase id="deletesuccess" value="Borrado exitoso" />
+    <phrase id="detaillink" value="" />
+    <phrase id="detailcount" value="&lt;span class='badge badge-info ew-detail-count%c'&gt;%c&lt;/span&gt;" />
+    <!-- v2019 -->
+    <phrase id="downloadbtn" value="Descargar" />
+    <!-- v2019 -->
+    <phrase id="drilldownallrecords" value="Todos los registros" />
+    <!-- v2020 (report) -->
+    <phrase id="drilldownfilters" value="Desplegar filtros:" />
+    <!-- v2020 (report) -->
+    <phrase id="dupindex" value="Valor duplicado '%v' para índice único '%f'" />
+    <phrase id="dupkey" value="Clave primaria duplicada: '%f'" />
+    <phrase id="edit" value="Editar" />
+    <phrase id="editbtn" value="Editar" client="1" />
+    <!-- v2018 -->
+    <phrase id="editlink" value="Editar" class="icon-edit ew-icon" />
+    <!-- v11 -->
+    <phrase id="email" value="Correo electrónico" client="1" />
+    <!-- v2021 -->
+    <phrase id="emailformsender" value="De" />
+    <phrase id="emailformrecipient" value="Para" />
+    <phrase id="emailformcc" value="Copia" />
+    <phrase id="emailformbcc" value="Copia oculta" />
+    <phrase id="emailformsubject" value="Asunto" />
+    <phrase id="emailformmessage" value="Mensaje" />
+    <phrase id="emailformcontenttype" value="Enviar como" />
+    <phrase id="emailformcontenttypeurl" value="URL" />
+    <phrase id="emailformcontenttypehtml" value="HTML" />
+    <phrase id="emptylabel" value="(Vacío)" />
+    <!-- v2020 (report) -->
+    <phrase id="enterfiltername" value="Ingrese nombre del filtro" client="1" />
+    <!-- v12 -->
+    <phrase id="enternewpassword" value="Ingrese la nueva contraseña" client="1" />
+    <phrase id="enteroldpassword" value="Ingrese la contraseña anterior" client="1" />
+    <phrase id="enterpassword" value="Ingrese la contraseña" client="1" />
+    <phrase id="enterrequiredfield" value="Ingrese campo requerido - %s" client="1" />
+    <!-- v2021 -->
+    <phrase id="entersearchcriteria" value="Ingrese criterio de búsqueda" />
+    <phrase id="enterusername" value="Ingerese su nombre de usuario" client="1" />
+    <phrase id="entervalidatecode" value="Ingrese código de validación" client="1" />
+    <!-- v11 -->
+    <phrase id="enterpropersenderemail" value="Supera el máximo de remitentes o la dirección de correo electrónico es incorrecta" client="1" />
+    <phrase id="enterproperrecipientemail" value="Supera el máximo de destinatarios o la dirección de correo electrónico es incorrecta" client="1" />
+    <phrase id="enterproperccemail" value="Supera el máximo de copias o la dirección de correo electrónico es incorrecta" client="1" />
+    <phrase id="enterproperbccemail" value="Supera el máximo de copias ocultas o la dirección de correo electrónico es incorrecta" client="1" />
+    <phrase id="entersubject" value="Por favor ingrese el asunto" client="1" />
+    <phrase id="entervalue" value="Por favor ingrese un valor" client="1" />
+    <!-- v2021 -->
+    <phrase id="entervalue2" value="Por favor ingrese un segundo valor" client="1" />
+    <!-- v2021 -->
+    <phrase id="error" value="Error" />
+    <!-- v2021 -->
+    <phrase id="exactphrase" value="Frase exacta" />
+    <phrase id="exceedmaxretry" value="Supera el máximo de intentos de acceso. La cuenta está bloqueada. Intente de nuevo en %t minutos" />
+    <phrase id="exceedmaxemailexport" value="Supera el máximo de correos electrónicos de exportación. Por favor, inténtelo de nuevo más tarde" />
+    <phrase id="exportchart" value="Exportar gráfico: " client="1" />
+    <!-- v2020 (report) -->
+    <phrase id="exportchartdata" value="Exportar datos del gráfico" client="1" />
+    <!-- v2020 (report) -->
+    <phrase id="exportcharterror" value="Falló al exportar gráfico: " client="1" />
+    <!-- v2020 (report) -->
+    <phrase id="exportclassnotfound" value="Exportar clase no encontrada" />
+    <!-- v2019 -->
+    <phrase id="exporting" value="Exportando, por favor espere..." client="1" />
+    <!-- v2018 -->
+    <phrase id="exportingchart" value="Exportando gráfico (%c de %t), por favor espere..." client="1" />
+    <!-- v2020 (report) -->
+    <phrase id="exporttocsv" value="Exportar a CSV" class="icon-csv ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttocsvtext" value="CSV" />
+    <phrase id="exporttoemail" value="Correo electrónico" class="icon-email ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttoemailtext" value="Correo electrónico" client="1" />
+    <phrase id="exporttoexcel" value="Exportar a Excel" class="icon-excel ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttoexceltext" value="Excel" />
+    <phrase id="exporttohtml" value="Exportar a HTML" class="icon-html ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttohtmltext" value="HTML" />
+    <phrase id="exporttopdf" value="Exportar a PDF" class="icon-pdf ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttopdftext" value="PDF" />
+    <phrase id="exporttoword" value="Exportar a Word" class="icon-word ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttowordtext" value="Word" />
+    <phrase id="exporttoxml" value="Exportar a XML" class="icon-xml ew-icon" />
+    <!-- v11 -->
+    <phrase id="exporttoxmltext" value="XML" />
+    <phrase id="failedtoexport" value="Falló al Exportar" client="1" />
+    <!-- v2018 -->
+    <phrase id="failedtosendmail" value="Falló al enviar correo electrónico. " />
+    <phrase id="fieldname" value="Nombre del campo" />
+    <phrase id="fieldrequiredindicator" class="fas fa-asterisk ew-required" />
+    <!-- v2019 -->
+    <phrase id="filenotfound" value="Archivo no encontrado" />
+    <phrase id="filter" value="Filtro" />
+    <!-- v12 -->
+    <phrase id="filtername" value="Nombre del Filtro" client="1" />
+    <!-- v12 -->
+    <phrase id="filters" value="Filtros" class="icon-filter ew-icon" />
+    <!-- v12 -->
+    <phrase id="resetpasswordresponse" value="Recibirá instrucciones a la brevedad si su correo electrónico está registrado." />
+    <!-- v2019 -->
+    <phrase id="resetpassword" value="Restablecer contraseña" client="1" />
+    <!-- v2020 -->
+    <phrase id="generatepassword" value="Generar contraseña" class="fas fa-bolt ew-icon" />
+    <!-- v2019 -->
+    <phrase id="goback" value="Volver" />
+    <phrase id="gridaddcancelled" value="Agregar cuadrícula cancelado" />
+    <!-- v11 -->
+    <phrase id="gridaddlink" value="Agregar cuadrícula" class="icon-grid-add ew-icon" />
+    <!-- v11 -->
+    <phrase id="gridcancellink" value="Cancelar" class="fas fa-times ew-icon" />
+    <!-- v2019 -->
+    <phrase id="grideditcancelled" value="Editar cuadrícula cancelado" />
+    <!-- v11 -->
+    <phrase id="grideditlink" value="Editar cuadrícula" class="icon-grid-edit ew-icon" />
+    <!-- v11 -->
+    <phrase id="gridinsertlink" value="Insertar" class="fas fa-check ew-icon" />
+    <!-- v2019 -->
+    <phrase id="gridsavelink" value="Guardar" class="fas fa-check ew-icon" />
+    <!-- v2019 -->
+    <phrase id="group" value="Grupos" />
+    <!-- v2020 (report) -->
+    <phrase id="groupsperpage" value="Grupos por páginas" />
+    <!-- v2020 (report) -->
+    <phrase id="highlight" value="Resaltar" />
+    <!-- v11 -->
+    <phrase id="highlightbtn" value="Resaltar" class="icon-highlight ew-icon" />
+    <!-- v11 -->
+    <phrase id="homepage" value="Inicio" class="fas fa-home ew-icon" />
+    <!-- v2019 -->
+    <phrase id="import" value="Importar" class="fas fa-upload ew-icon" />
+    <!-- v2019 -->
+    <phrase id="importbtn" value="Importar" />
+    <!-- v2019 -->
+    <phrase id="importmessageerror1" value="Importado %c de %t registros de %f (exitoso: %s, errores: %e)" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageerror2" value=", error: %e" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageerror3" value="fila %i: %d" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageerror4" value="archivo de registro: %l" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageinvalidfileextension" value="Extension de archivo inválida '%e'" />
+    <!-- v2019 -->
+    <phrase id="importmessageinvalidfieldname" value="Nombre de archivo inválido: %f" />
+    <!-- v2019 -->
+    <phrase id="importmessageinvalidfieldvalue" value="Valor inválido (nombre de archivo %f): %v" />
+    <!-- v2019 -->
+    <phrase id="importmessagemore" value="(%s más)" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessagenoheaderrow" value="Importar sin encabezado" />
+    <!-- v2019 -->
+    <phrase id="importmessageprogress" value="Importando %c de %t registros desde %f..." client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageservererror" value="Error de servidor %s: %t" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessagesuccess" value="Importados exitosamente %c de %t registros desde %f" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageuploaderror" value="Fallo al subir %f: %s" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageuploadcomplete" value="Subida completada" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageuploadprogress" value="Subiendo...(p%)" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessagepleaseselect" value="Seleccione un archivo" client="1" />
+    <!-- v2019 -->
+    <phrase id="importmessageincorrectfiletype" value="Tipo de archivo incorrecto" client="1" />
+    <!-- v2019 -->
+    <phrase id="importtext" value="Importar" client="1" />
+    <!-- v2019 -->
+    <phrase id="incorrectcreditcard" value="Número de tarjeta incorrecto" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectdate" value="Fecha incorrecta (%s)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectdateymd" value="Fecha incorrecta (yyyy%smm%sdd)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectdatemdy" value="Fecha incorrecta (mm%sdd%syyyy)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectdatedmy" value="Fecha incorrecta (dd%smm%syyyy)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectshortdateymd" value="Fecha incorrecta (yy%smm%sdd)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectshortdatemdy" value="Fecha incorrecta (mm%sdd%syy)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectshortdatedmy" value="Fecha incorrecta (dd%smm%syy)" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectemail" value="Correo electrónico incorrecto" client="1" />
+    <phrase id="incorrectfield" value="Valor incorrecto" client="1" />
+    <phrase id="incorrectfloat" value="Número incorrecto" client="1" />
+    <phrase id="incorrectguid" value="GUID incorrecto" client="1" />
+    <phrase id="incorrectinteger" value="Número entero incorrecto" client="1" />
+    <phrase id="incorrectphone" value="Número de teléfono incorrecto" client="1" />
+    <phrase id="incorrectrange" value="El número debe estar entre %1 y %2" client="1" />
+    <phrase id="incorrectregexp" value="No concuerda la expresión" client="1" />
+    <phrase id="incorrectssn" value="Número de Seguro Social incorrecto" client="1" />
+    <phrase id="incorrecttime" value="Hora incorrecta (hh%smm(%sss))" client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectvalidationcode" value="Código de validación incorrecto, intente de nuevo." client="1" />
+    <!-- v2021 -->
+    <phrase id="incorrectzip" value="Código Postal incorrecto" client="1" />
+    <phrase id="info" value="Información" client="1" />
+    <!-- v2020 -->
+    <phrase id="inlineaddlink" value="Inline Add" class="icon-inline-add ew-icon" />
+    <!-- v11 -->
+    <phrase id="inlinecopylink" value="Inline Copy" class="icon-inline-copy ew-icon" />
+    <!-- v11 -->
+    <phrase id="inlineeditlink" value="Inline Edit" class="icon-inline-edit ew-icon" />
+    <!-- v11 -->
+    <phrase id="insertcancelled" value="Inserción cancelada" />
+    <phrase id="nsertfailed" value="Falló al insertar" client="1" />
+    <phrase id="inisertlink" value="Insertar" class="fas fa-check ew-icon" />
+    <!-- v2019 -->
+    <phrase id="insertsuccess" value="Insertado exitosamente" />
+    <phrase id="invaliddate" value="Fecha inválida" client="1" />
+    <!-- v2021 -->
+    <phrase id="invalidkeyvalue" value="Clave principal inválida" />
+    <phrase id="invalidrecord" value="Registro inválido! Clave principal nula" client="1" />
+    <phrase id="invalidpostrequest" value="Solicitud de publicación inválida" />
+    <!-- v11 -->
+    <phrase id="invalidparameter" value="Parametro inválido" />
+    <phrase id="invalidpassword" value="Contraseña inválida" />
+    <phrase id="invalidpasswordchars" value="La contraseña no debe contener &amp;, &lt;, &gt;, &quot;, o '" client="1" />
+    <!-- v2021 -->
+    <phrase id="invalidnewpassword" value="Contraseña nueva inválida" />
+    <phrase id="invaliduidpwd" value="Usuario o contraseña incorrectos" />
+    <phrase id="invalidusernamechars" value="El usuario no debe contener &amp;, &lt;, &gt;, &quot;, o '" client="1" />
+    <!-- v2021 -->
+    <phrase id="keep" value="Mantener" />
+    <phrase id="language" value="Idioma" />
+    <phrase id="learnmore" value="Ver más" />
+    <!-- v2019 -->
+    <phrase id="lightboxtitle" value=" " client="1" />
+    <!-- v11 -->
+    <phrase id="lightboxcurrent" value="imagen {current} de {total}" client="1" />
+    <!-- Note: DO NOT translate "{current}" and "{total}" -->
+    <!-- v11 -->
+    <phrase id="lightboxprevious" value="anterior" client="1" />
+    <!-- v11 -->
+    <phrase id="lightboxnext" value="siguiente" client="1" />
+    <!-- v11 -->
+    <phrase id="lightboxclose" value="cerrar" client="1" />
+    <!-- v11 -->
+    <phrase id="lightboxxhrerror" value="Falló al cargar el contenido." client="1" />
+    <!-- v11 -->
+    <phrase id="lightboximgerror" value="Falló al cargar la imagen." client="1" />
+    <!-- v11 -->
+    <phrase id="list" value="" />
+    <!-- v2019 -->
+    <phrase id="listactionbutton" value="Actiones" class="fas fa-ellipsis-v" />
+    <!-- v2020 -->
+    <phrase id="loading" value="Cargando..." client="1" />
+    <phrase id="login" value="Ingresar" client="1" />
+    <!-- v2020 -->
+    <phrase id="logincancelled" value="Conexión cancelada" />
+    <phrase id="loginfacebook" value="Ingresar con Facebook" />
+    <!-- v2018 -->
+    <phrase id="loginfailed" value="Falló conexión con %p" />
+    <!-- v2018 -->
+    <phrase id="logingoogle" value="Ingresar con Google" />
+    <!-- v2018 -->
+    <phrase id="loginmsg" value="Regístrese para iniciar su sesión" />
+    <!-- v2019 -->
+    <phrase id="loginoptions" value="Optiones" />
+    <!-- v11 -->
+    <phrase id="loginor" value="- O -" />
+    <!-- v2018 -->
+    <phrase id="loginpage" value="Ingresar" />
+    <phrase id="logout" value="Salir" />
+    <phrase id="lookuplink" value="Buscar - %s" class="fas fa-search ew-icon" />
+    <!-- v2019 -->
+    <phrase id="masterdetailcopylink" value="Principal/Detalle Copiar" class="icon-md-copy ew-icon" />
+    <!-- v11 -->
+    <phrase id="masterdetaileditlink" value="Principal/Detalle Editar" class="icon-md-edit ew-icon" />
+    <!-- v11 -->
+    <phrase id="masterdetaillistlink" value="Detalle Lista" class="icon-table ew-icon" />
+    <!-- v11 -->
+    <phrase id="masterdetailviewlink" value="Principal/Detalle Vista" class="icon-md-view ew-icon" />
+    <!-- v11 -->
+    <phrase id="masterrecord" value="Registro Principal: " />
+    <phrase id="maxfilesize" value="Tamaño de archivo máximo (%s bytes) excedido." client="1" />
+    <phrase id="midnight" value="medianoche" client="1" />
+    <!-- v2017 -->
+    <phrase id="mismatchpassword" value="Las contraseñas no coinciden" client="1" />
+    <phrase id="missinglookuptablename" value="Falta el nombre de la tabla de búsqueda" />
+    <phrase id="missingdisplayfieldname" value="Falta el nombre del campo de visualización" />
+    <phrase id="missingdisplayfieldvalue" value="Falta el valor del campo de visualización" />
+    <phrase id="missingpdfobject" value="Falta el objeto PDF" client="1" />
+    <!-- v2020 -->
+    <phrase id="missinguserlevelid" value="Falta el ID de Nivel de Usuario" />
+    <phrase id="missinguserlevelname" value="Falta el Nombre de Nivel de Usuario" />
+    <phrase id="mobilemenu" value="Menu" />
+    <phrase id="monthjan" value="Ene" />
+    <!-- v2020 (report) -->
+    <phrase id="monthfeb" value="Feb" />
+    <!-- v2020 (report) -->
+    <phrase id="monthmar" value="Mar" />
+    <!-- v2020 (report) -->
+    <phrase id="monthapr" value="Abr" />
+    <!-- v2020 (report) -->
+    <phrase id="monthmay" value="May" />
+    <!-- v2020 (report) -->
+    <phrase id="monthjun" value="Jun" />
+    <!-- v2020 (report) -->
+    <phrase id="monthjul" value="Jul" />
+    <!-- v2020 (report) -->
+    <phrase id="monthaug" value="Ago" />
+    <!-- v2020 (report) -->
+    <phrase id="monthsep" value="Sep" />
+    <!-- v2020 (report) -->
+    <phrase id="monthoct" value="Oct" />
+    <!-- v2020 (report) -->
+    <phrase id="monthnov" value="Nov" />
+    <!-- v2020 (report) -->
+    <phrase id="monthdec" value="Dic" />
+    <!-- v2020 (report) -->
+    <phrase id="more" value="Más" client="1" />
+    <!-- v2018 -->
+    <phrase id="multiplemasterdetails" value="Principal/Detalle" class="icon-master-detail ew-icon" />
+    <!-- v11 -->
+    <phrase id="new" value="Nuevo" />
+    <phrase id="newpassword" value="Nueva Contraseña" client="1" />
+    <!-- v2021 -->
+    <phrase id="newvalue" value="Nuevo valor" />
+    <!-- v12 -->
+    <phrase id="next" value="Siguiente" client="1" />
+    <!-- v12 -->
+    <phrase id="noaddrecord" value="No hay registros para agregar" client="1" />
+    <phrase id="nofieldselected" value="No hay registros seleccionados para actualizar" client="1" />
+    <phrase id="nopermission" value="No tiene permisos para acceder %s." />
+    <!-- v12 -->
+    <phrase id="noaddpermission" value="No tiene permisos para agregar el registro." />
+    <phrase id="nochartdata" value="No hay datos para mostrar" client="1" />
+    <!-- v2020 -->
+    <phrase id="nodeletepermission" value="No tiene permisos para borrar el registro." />
+    <phrase id="nodistinctcolvals" value="Sin valores de columna distintos para SQL." />
+    <!-- v2020 (report) -->
+    <phrase id="noeditpermission" value="No tienes permiso para editar el registro." />
+    <phrase id="noon" value="mediodía" />
+    <!-- v2017 -->
+    <phrase id="norecord" value="No se encontraron registros" client="1" />
+    <!-- v2017 -->
+    <phrase id="norecordforkey" value="No se encontró registro para = " />
+    <phrase id="noreportorcharts" value="No hay informes ni gráficos disponibles para esta página." />
+    <!-- v2020 (report) -->
+    <phrase id="norecordselected" value="No se seleccionaron registros" client="1" />
+    <phrase id="notablegenerated" value="No se generaron tablas" />
+    <phrase id="nouserlevel" value="Sin configuración de nivel de usuario." />
+    <phrase id="nulllabel" value="(Null)" />
+    <!-- v2020 (report) -->
+    <phrase id="of" value="de" client="1" />
+    <!-- v2017 -->
+    <phrase id="okbtn" value="OK" client="1" />
+    <!-- v2021 -->
+    <phrase id="old" value="Anterior" />
+    <phrase id="oldpassword" value="Contraseña anterior" client="1" />
+    <!-- v2021 -->
+    <phrase id="optionalreadyexist" value="La opción ya existe" />
+    <phrase id="overwritebtn" value="Sobreescribir" client="1" />
+    <!-- v2017 -->
+    <phrase id="overwritelink" value="Sobreescribir" />
+    <phrase id="page" value="Página" client="1" />
+    <!-- v2017 -->
+    <phrase id="pagenotfound" value="La ruta '%p' no existe." />
+    <!-- v2021 -->
+    <phrase id="pagerfirst" value="Primera" />
+    <phrase id="pagerlast" value="Última" />
+    <phrase id="pagernext" value="Siguiente" />
+    <phrase id="pagerprevious" value="Anterior" />
+    <phrase id="password" value="Contraseña" client="1" />
+    <!-- v2021 -->
+    <phrase id="passwordmask" value="********" />
+    <!-- v12 -->
+    <phrase id="passwordrequest" value="Contraseña requerida" />
+    <phrase id="passwordchanged" value="Contraseña cambiada" />
+    <phrase id="passwordexpired" value="Contraseña caducada. Por favor cambiela." />
+    <phrase id="passwordstrength" value="Seguridad: %p" client="1" />
+    <!-- v12 -->
+    <phrase id="passwordtoosimple" value="Su contraseña es muy simple" client="1" />
+    <!-- v12 -->
+    <phrase id="permission" value="Permisos" class="icon-user ew-icon" />
+    <!-- v11 -->
+    <phrase id="permissionadd" value="Agregar/Copiar" client="1" />
+    <!-- v2020 -->
+    <phrase id="permissionadmin" value="Admin" client="1" />
+    <!-- v2019 -->
+    <phrase id="permissiondelete" value="Borrar" client="1" />
+    <!-- v2018 -->
+    <phrase id="permissionedit" value="Editar" client="1" />
+    <!-- v2018 -->
+    <phrase id="permissionimport" value="Importar" client="1" />
+    <!-- v2020 -->
+    <phrase id="permissionlistsearchview" value="Listar/Buscar/Ver" client="1" />
+    <!-- v2018 -->
+    <phrase id="permissionlist" value="Listar" client="1" />
+    <!-- v2018 -->
+    <phrase id="permissionlookup" value="Referencia" client="1" />
+    <!-- v2020 -->
+    <phrase id="permissionsearch" value="Buscar" client="1" />
+    <!-- v2018 -->
+    <phrase id="permissionview" value="Ver" client="1" />
+    <!-- v2018 -->
+    <phrase id="personaldatabtn" value="Datos Personales" />
+    <!-- v2019 -->
+    <phrase id="personaldatacontent" value="Su cuenta contiene datos personales que usted brindó. Esta página le permite descargar o borrar esos datos." />
+    <!-- v2019 -->
+    <phrase id="personaldatadeletefailure" value="Ocurrió un error inesperado al borrar el usuario" />
+    <!-- v2019 -->
+    <phrase id="personaldatadeletesuccess" value="Datos personales borrados exitosamente" />
+    <!-- v2019 -->
+    <phrase id="personaldatatitle" value="Datos Personales" />
+    <!-- v2019 -->
+    <phrase id="personaldatawarning" value="Borrando estos datos usted elimina su cuenta, y no podrá ser recuperada." />
+    <!-- v2019 -->
+    <phrase id="pickdate" value="Seleccione una fecha" />
+    <phrase id="pleaseselect" value="Por favor seleccione" client="1" />
+    <!-- v12 -->
+    <phrase id="pleasewait" value="Por favor espere..." client="1" />
+    <phrase id="prev" value="Previo" client="1" />
+    <!-- v12 -->
+    <phrase id="primarykeyunspecified" value="Clave proncipal no especificada" />
+    <phrase id="printerfriendly" value="Versión imprimible" class="icon-print ew-icon" />
+    <!-- v11 -->
+    <phrase id="printerfriendlytext" value="Versión imprimible" />
+    <phrase id="privacypolicy" value="Política de Privacidad" />
+    <!-- v2019 -->
+    <phrase id="privacypolicycontent" value="Use ésta página para detallar las políticas de privacidad del sitio." />
+    <!-- v2019 -->
+    <phrase id="qtr1" value="1er Cuarto" />
+    <!-- v2020 (report) -->
+    <phrase id="qtr2" value="2do Cuarto" />
+    <!-- v2020 (report) -->
+    <phrase id="qtr3" value="3ro Cuarto" />
+    <!-- v2020 (report) -->
+    <phrase id="qtr4" value="4to Cuarto" />
+    <!-- v2020 (report) -->
+    <phrase id="quicksearch" value="Búsqueda Rápida" />
+    <phrase id="quicksearchbtn" value="Buscar" />
+    <phrase id="quicksearchauto" value="Auto" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchautoshort" value="" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchall" value="Todas las palabras" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchallshort" value="Todos" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchany" value="Cualquier palabra" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchanyshort" value="Cualquiera" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchexact" value="Frase exacta" client="1" />
+    <!-- v11 -->
+    <phrase id="quicksearchexactshort" value="Exacta" client="1" />
+    <!-- v11 -->
+    <phrase id="recipient" value="Destinatario(s)" client="1" />
+    <!-- v2021 -->
+    <phrase id="record" value="Registros" client="1" />
+    <!-- v2017 -->
+    <phrase id="recordchangedbyotheruser" value="Los datos fueron cambiados por otro usuario. Presione [Recargar] para obtener los datos de nuevo (sus datos en el formulario serán reemplazados) o presione [Sobreescribir] para sobreescribir esos datos." />
+    <phrase id="recorddeleted" value="registro(s) borrados" />
+    <phrase id="recordinserted" value="registro(s) insertados" />
+    <phrase id="recordupdated" value="registro(s) actualizados" />
+    <phrase id="recordsperpage" value="Tamaño de página" client="1" />
+    <!-- v2017 -->
+    <phrase id="register" value="Registrar" client="1" />
+    <!-- v2020 -->
+    <phrase id="registerbtn" value="Registrar" />
+    <phrase id="registersuccess" value="Registrado exitosamente" />
+    <phrase id="registersuccessactivate" value="Registrado exitosamente. Le llegará un correo electrónico, por favor siga el vínculo para activar su cuenta." />
+    <phrase id="registerpage" value="Registrese" />
+    <phrase id="relatedrecordrequired" value="No puede agregar ni actualizar el registro porque la clave principal no existe en la tabla principal '%t'" />
+    <phrase id="relatedrecordexists" value="No puede borrar un registro porque está relacionado a registros de la tabla '%t'" />
+    <phrase id="reloadbtn" value="Recargar" client="1" />
+    <!-- v2017 -->
+    <phrase id="reloadlink" value="Recargar" />
+    <phrase id="rememberme" value="Recuerdame" />
+    <phrase id="remove" value="Remover" />
+    <phrase id="replace" value="Reemplazar" />
+    <phrase id="report" value="Reporte" />
+    <phrase id="resetpwd" value="Reiniciar Contraseña" />
+    <!-- v2020 -->
+    <phrase id="resetpwdmsg" value="Reiniciar Contraseña" />
+    <!-- v2020 -->
+    <phrase id="resendregisteremailbtn" value="Reenviar correo electrónico de registro" />
+    <!-- v12 -->
+    <phrase id="resendregisteremailsuccess" value="El correo electrónico de registro del usuario '%u' fué reenviado" />
+    <!-- v12 -->
+    <phrase id="resendregisteremailfailure" value="Fallo al reenvair el correo electrónico de registro del usuario '%u'" />
+    <!-- v12 -->
+    <phrase id="reset" value="Reiniciar" />
+    <phrase id="resetallfilter" value="Reiniciar todos los filtros" class="icon-reset-search ew-icon" />
+    <!-- v2020 (report) -->
+    <phrase id="resetconcurrentuserbtn" value="Restablecer la sesión de usuario concurrente" />
+    <!-- v12 -->
+    <phrase id="resetconcurrentusersuccess" value="La sesión del usuario '%u' fue reiniciada" />
+    <!-- v12 -->
+    <phrase id="resetconcurrentuserfailure" value="Falló al reiniciar sesión del usuario '%u'" />
+    <!-- v12 -->
+    <phrase id="resetloginretrybtn" value="Reiniciar conteo de intentos de ingreso" />
+    <!-- v12 -->
+    <phrase id="resetloginretrysuccess" value="Conteo de intentos de ingreso del usuario '%u' reiniciado" />
+    <!-- v12 -->
+    <phrase id="resetloginretryfailure" value="Fallo al reiniciar conteo de intentos de ingreso del usuario '%u'" />
+    <!-- v12 -->
+    <phrase id="resetsearchbtn" value="Reset" class="icon-reset-search ew-icon" />
+    <!-- v11 -->
+    <phrase id="resetsearch" value="Reiniciar" />
+    <phrase id="rptavg" value="PROM" />
+    <!-- v2020 (report) -->
+    <phrase id="rptcnt" value="TOTAL" />
+    <!-- v2020 (report) -->
+    <phrase id="rptdtlrec" value=" registros detallados" />
+    <!-- v2020 (report) -->
+    <phrase id="rptgrandsummary" value="Resumen General" />
+    <!-- v2020 (report) -->
+    <phrase id="rptmax" value="MAX" />
+    <!-- v2020 (report) -->
+    <phrase id="rptmin" value="MIN" />
+    <!-- v2020 (report) -->
+    <phrase id="rptpagesummary" value="Resumen de Página" />
+    <!-- v2020 (report) -->
+    <phrase id="rptsum" value="SUM" />
+    <!-- v2020 (report) -->
+    <phrase id="rptsumhead" value="Resumen para %c: %v" />
+    <!-- v2020 (report) -->
+    <phrase id="savebtn" value="Guardar" client="1" />
+    <!-- v2018 -->
+    <phrase id="savecurrentfilter" value="Guardar filtro actual" />
+    <!-- v12 -->
+    <phrase id="saveusername" value="Guardar mi nombre de usuario" />
+    <!-- Deprecated since v2018 -->
+    <phrase id="search" value="Buscar" client="1" />
+    <!-- v2017 -->
+    <phrase id="searchbtn" value="Buscar" client="1" />
+    <!-- v2018 -->
+    <phrase id="searchlink" value="Buscar" class="fas fa-search ew-icon" />
+    <!-- v2019 -->
+    <phrase id="searchpanel" value="Buscar Panel" />
+    <!-- v11 -->
+    <phrase id="selectbtn" value="Seleccionar" client="1" />
+    <!-- v2017 -->
+    <phrase id="sendemailbtn" value="Enviar" />
+    <phrase id="sendemailsuccess" value="Correo electrónico enviado correctamente" client="1" />
+    <phrase id="sender" value="Remitente" client="1" />
+    <!-- v2021 -->
+    <phrase id="sendpwd" value="Enviar" client="1" />
+    <!-- v2020 -->
+    <phrase id="sequencenumber" value="%s." />
+    <phrase id="servercommunicationerror" value="Error de comunicación con el Servidor." />
+    <!-- v2017 -->
+    <phrase id="servererror" value="Se produjo un error interno al procesar su solicitud." />
+    <!-- v2021 -->
+    <phrase id="sessionwillexpire" value="La sesión expirará en %s segundos. Presione OK para continuar." client="1" />
+    <!-- v12 -->
+    <phrase id="sessionexpired" value="Su sesión expiró." client="1" />
+    <!-- v12 -->
+    <phrase id="setpasswordexpiredbtn" value="Establecer contraseña como expirada" />
+    <!-- v12 -->
+    <phrase id="setpasswordexpiredsuccess" value="La contraseña para el usuario '%u' se estableció como expirada" />
+    <!-- v12 -->
+    <phrase id="setpasswordexpiredfailure" value="Fallo al establecer la contraseña del usuario '%u' como expirada" />
+    <!-- v12 -->
+    <phrase id="showallbtn" value="Mostrar todos" class="icon-reset-search ew-icon" />
+    <!-- v11 -->
+    <phrase id="showall" value="Mostrar todos" />
+    <!-- v11 -->
+    <phrase id="subject" value="Asunto" client="1" />
+    <!-- v2021 -->
+    <phrase id="success" value="Éxito" client="1" />
+    <!-- v2020 -->
+    <phrase id="summary" value="Resumen" />
+    <!-- v2020 (report) -->
+    <phrase id="summarycolon" value=": " />
+    <!-- v2020 (report) -->
+    <phrase id="table" value="TABLA" />
+    <phrase id="tableorview" value="Tablas" client="1" />
+    <!-- v2018 -->
+    <phrase id="tasks" value="Tareas" />
+    <!-- v2020 (report) -->
+    <phrase id="tbltypetable" value="Tabla: " />
+    <phrase id="tbltypeview" value="Vista: " />
+    <phrase id="tbltypecustomview" value="Vista personalizada: " />
+    <phrase id="tbltypereport" value="Reporte: " />
+    <phrase id="to" value="a" />
+    <phrase id="top" value="Superior" />
+    <!-- v2020 (report) -->
+    <phrase id="total" value="Total" />
+    <phrase id="unauthorizeduserid" value="El usuario actual (%c) no está autorizado a asignar el usuario ID (%u)." />
+    <phrase id="unauthorizedparentuserid" value="El usuario actual (%c) no está autorizado a asignar el usuario padre ID(%p)." />
+    <phrase id="unauthorizedmasteruserid" value="El usuario actual (%c) no está autorizado a insertar el registro. Filtro principal: %f" />
+    <phrase id="unsupportedbrowser" value="Su navegador no es compatible con esta página" client="1" />
+    <!-- v2021 -->
+    <phrase id="update" value="Actualizar" />
+    <phrase id="updatebtn" value="Actualizar" client="1" />
+    <!-- v2017 -->
+    <phrase id="updatecancelled" value="Actualización cancelada" />
+    <phrase id="updatefailed" value="Actualización fallada" />
+    <phrase id="updatelink" value="Actualizar" class="fas fa-check ew-icon" />
+    <!-- v2019 -->
+    <phrase id="updateselectall" value="Seleccionar todo" />
+    <!-- v11 -->
+    <phrase id="updateselectedlink" value="Actualizar los registros seleccionados" class="icon-edit ew-icon" />
+    <!-- v11 -->
+    <phrase id="updatesuccess" value="Actualización exitosa" />
+    <phrase id="uploading" value="Subiendo..." client="1" />
+    <phrase id="uploadstart" value="Iniciar" client="1" />
+    <phrase id="uploadcancel" value="Cancelar" client="1" />
+    <phrase id="uploaddelete" value="Borrar" client="1" />
+    <phrase id="uploadoverwrite" value="¿Sobreescribir archivo viejo?" client="1" />
+    <phrase id="uploaderrmsg1" value="El archivo excede el tamaño máximo establecido en php.ini (upload_max_filesize)." />
+    <phrase id="uploaderrmsg2" value="El archivo excede el tamaño máximo establecido en el formulario HTML (MAX_FILE_SIZE)" />
+    <phrase id="uploaderrmsg3" value="El archivo fue subido parcialmente" />
+    <phrase id="uploaderrmsg4" value="No se subió ningún archivo" />
+    <phrase id="uploaderrmsg6" value="Falta la carpeta temporal" />
+    <phrase id="uploaderrmsg7" value="Fallo al escribir en el disco" />
+    <phrase id="uploaderrmsg8" value="Una extension detuvo la subida del archivo" />
+    <phrase id="uploaderrmsgpostmaxsize" value="El archivo excede el tamaño máximo establecido en php.ini (post_max_size)" />
+    <phrase id="uploaderrmsgmaxfilesize" value="El archivo es demasiado grande" client="1" />
+    <phrase id="uploaderrmsgminfilesize" value="El archivo es demasiado pequeño" client="1" />
+    <phrase id="uploaderrmsgacceptfiletypes" value="Tipo de archivo no permitido" client="1" />
+    <phrase id="uploaderrmsgmaxnumberoffiles" value="Se superó el número máximo de archivos" client="1" />
+    <phrase id="uploaderrmsgmaxwidth" value="La imagen excede el ancho máximo" />
+    <phrase id="uploaderrmsgminwidth" value="La imagen necesita un ancho mínimo" />
+    <phrase id="uploaderrmsgmaxheight" value="La imagen excede el alto máximo" />
+    <phrase id="uploaderrmsgminheight" value="La imagen necesita un alto mínimo" />
+    <phrase id="uploaderrmsgmaxfilelength" value="La longitud total de los nombres de archivo supera la longitud del campo" client="1" />
+    <phrase id="useradministrator" value="Administrador" client="1" />
+    <!-- v12 -->
+    <phrase id="useranonymous" value="Anónimo" client="1" />
+    <!-- v12 -->
+    <phrase id="userdefault" value="Predeterminado" client="1" />
+    <!-- v12 -->
+    <phrase id="useremail" value="Correo electrónico" />
+    <phrase id="userexists" value="El usuario ya existe" />
+    <phrase id="userlevel" value="Nivel de Usuario: " />
+    <phrase id="userleveladministratorname" value="El nombre de nivel de usuario para el nivel de usuario -1 debe ser 'Administrador'" client="1" />
+    <phrase id="userlevelanonymousname" value="El nombre de nivel de usuario para el nivel de usuario -2 debe ser 'Anónimo'" client="1" />
+    <!-- v12 -->
+    <phrase id="userlevelpermission" value="Permisos de Nivel de Usuario" />
+    <phrase id="userlevelidinteger" value="El ID de nivel de usuario debe ser un número entero" client="1" />
+    <phrase id="userleveldefaultname" value="El nombre de nivel de usuario para el nivel de usuario 0 debe ser 'Predeterminado'" client="1" />
+    <phrase id="userlevelidincorrect" value="El ID de nivel de usuario definido por el usuario debe ser mayor que 0" client="1" />
+    <phrase id="userlevelnameincorrect" value="El nombre de nivel de usuario definido por el usuario no puede ser 'Anónimo', 'Administrador' o 'Predeterminado'" client="1" />
+    <phrase id="userloggedin" value="El usuario '%u' ya está conectado" />
+    <phrase id="username" value="Nombre de Usuario" client="1" />
+    <!-- v2021 -->
+    <phrase id="usernotfound" value="Usuario '%u' no encontrado" />
+    <!-- v2018 -->
+    <phrase id="userprofilecorrupted" value="El perfil de usuario está dañado. Cierre la sesión y vuelva a entrar" />
+    <phrase id="valuenotexist" value="El valor no existe" client="1" />
+    <!-- v11 -->
+    <phrase id="view" value="Ver" />
+    <phrase id="viewimagegallery" value="Clic para ver la imagen" />
+    <!-- v12 -->
+    <phrase id="viewlink" value="Ver" class="icon-view ew-icon" />
+    <!-- v11 -->
+    <phrase id="viewpageaddlink" value="Agregar" class="fas fa-plus ew-icon" />
+    <!-- v2019 -->
+    <phrase id="viewpagecopylink" value="Copiar" class="icon-copy ew-icon" />
+    <!-- v11 -->
+    <phrase id="viewpagedeletelink" value="Borrar" class="fas fa-trash ew-icon" />
+    <!-- v2019 -->
+    <phrase id="viewpagedetaillink" value="" />
+    <phrase id="viewpageeditlink" value="Editar" class="icon-edit ew-icon" />
+    <!-- v11 -->
+    <phrase id="warning" value="Advertencia" client="1" />
+    <!-- v2020 -->
+    <phrase id="week" value="Semana" />
+    <!-- v2020 (report) -->
+    <phrase id="wrongfiletype" value="Tipo de archivo no permitido." client="1" />
+    <phrase id="year" value="Año" />
+    <!-- v2020 (report) -->
+    <phrase id="=" value="&amp;nbsp;" />
+    <!-- v12 -->
+    <phrase id="equal" value="=" />
+    <!-- v12 -->
+    <phrase id="&lt;&gt;" value="&amp;lt;&amp;gt;" />
+    <phrase id="&lt;" value="&amp;lt;" />
+    <phrase id="&lt;=" value="&amp;lt;=" />
+    <phrase id="&gt;" value="&amp;gt;" />
+    <phrase id="&gt;=" value="&amp;gt;=" />
+    <phrase id="like" value="contiene" />
+    <phrase id="not like" value="no contiene" />
+    <!-- v11.0.3 -->
+    <phrase id="starts with" value="comienza con" />
+    <phrase id="ends with" value="termina con" />
+    <phrase id="is null" value="es nulo" />
+    <phrase id="is not null" value="no es nulo" />
+    <phrase id="between" value="entre" />
+    <phrase id="and" value="y" />
+    <phrase id="or" value="o" />
+    <phrase id="am" value="AM" client="1" />
+    <!-- v2017 -->
+    <phrase id="pm" value="PM" client="1" />
+    <!-- v2017 -->
+    <!-- Menu Prefix/Suffix (report) -->
+    <!-- v2020 -->
+    <phrase id="simplereportmenuitemprefix" value="" />
+    <phrase id="simplereportmenuitemsuffix" value="" />
+    <phrase id="detailsummaryreportmenuitemprefix" value="" />
+    <phrase id="detailsummaryreportmenuitemsuffix" value="" />
+    <phrase id="crosstabreportmenuitemprefix" value="" />
+    <phrase id="crosstabreportmenuitemsuffix" value="" />
+    <phrase id="chartreportmenuitemprefix" value="" />
+    <phrase id="chartreportmenuitemsuffix" value="" />
+    <!-- Advanced Filter (report) -->
+    <!-- v2020 -->
+    <phrase id="future" value="Futuro" />
+    <phrase id="past" value="Pasado" />
+    <phrase id="last14days" value="Últimos 14 días" />
+    <phrase id="last30days" value="Últimos 30 días" />
+    <phrase id="last7days" value="Últimos 7 días" />
+    <phrase id="next14days" value="Siguientes 14 días" />
+    <phrase id="next30days" value="Siguientes 30 días" />
+    <phrase id="next7days" value="Siguientes 7 días" />
+    <phrase id="today" value="Hoy" />
+    <phrase id="tomorrow" value="Mañana" />
+    <phrase id="yesterday" value="Ayer" />
+    <phrase id="lastmonth" value="Último mes" />
+    <phrase id="nextmonth" value="Siguiente mes" />
+    <phrase id="thismonth" value="Este mes" />
+    <phrase id="lasttwoweeks" value="Últimas dos semanas" />
+    <phrase id="lastweek" value="Última semana" />
+    <phrase id="nexttwoweeks" value="Sigientes dos semanas" />
+    <phrase id="nextweek" value="Siguiente semana" />
+    <phrase id="thisweek" value="Esta semana" />
+    <phrase id="lastyear" value="Último año" />
+    <phrase id="nextyear" value="Siguiente año" />
+    <phrase id="thisyear" value="Este año" />
+    <!-- Exceptions -->
+    <!-- v2021 -->
+    <phrase id="400" value="Solicitud incorrecta" />
+    <phrase id="400desc" value="El servidor no puede o no procesará la solicitud debido a un aparente error del cliente." />
+    <phrase id="401" value="No autorizado" />
+    <phrase id="401desc" value="La solicitud requiere una autenticación de usuario válida." />
+    <phrase id="403" value="Prohibido" />
+    <phrase id="403desc" value="No se le permite realizar la operación solicitada." />
+    <phrase id="404" value="No encontrado" />
+    <phrase id="404desc" value="No se pudo encontrar el recurso solicitado. Verifique el URI y vuelva a intentarlo." />
+    <phrase id="405" value="Método no permitido" />
+    <phrase id="405desc" value="El método de solicitud no es compatible con el recurso solicitado." />
+    <phrase id="500" value="Error de Servidor Interno" />
+    <phrase id="500desc" value="Se encontró una condición inesperada que impide que el servidor complete la solicitud." />
+    <phrase id="501" value="No Implementado" />
+    <phrase id="501desc" value="El servidor no admite la funcionalidad requerida para cumplir con la solicitud." />
+  </global>
+  <project>
+    <phrase id="bodytitle" value="Mandrake" />
+    <phrase id="footertext" value="&amp;copy;2022. All rights reserved." />
+    <menu id="1164">
+      <phrase id="menutext" value="limite cliente" />
+    </menu>
+    <menu id="1162">
+      <phrase id="menutext" value="Descuento Utilidad" />
+    </menu>
+    <menu id="1161">
+      <phrase id="menutext" value="ftp fact pedi procesado" />
+    </menu>
+    <menu id="1156">
+      <phrase id="menutext" value="Imagenes Cliente" />
+    </menu>
+    <menu id="933">
+      <phrase id="menutext" value="Clientes con Consignaciones" />
+    </menu>
+    <menu id="934">
+      <phrase id="menutext" value="Clientes con Consignaciones" />
+    </menu>
+    <menu id="931">
+      <phrase id="menutext" value="Clientes con Consignaciones" />
+    </menu>
+    <menu id="932">
+      <phrase id="menutext" value="Clientes con Consignaciones" />
+    </menu>
+    <menu id="920">
+      <phrase id="menutext" value="view tarifa" />
+    </menu>
+    <menu id="919">
+      <phrase id="menutext" value="Detalle Pagos" />
+    </menu>
+    <menu id="915">
+      <phrase id="menutext" value="ALL - Pagina de Confirmación" />
+    </menu>
+    <menu id="913">
+      <phrase id="menutext" value="view x cobrar" />
+    </menu>
+    <menu id="912">
+      <phrase id="menutext" value="Cobros Facturas Cliente" />
+    </menu>
+    <menu id="910">
+      <phrase id="menutext" value="Pagos Facturas Proveedores" />
+    </menu>
+    <menu id="911">
+      <phrase id="menutext" value="view x pagar" />
+    </menu>
+    <menu id="909">
+      <phrase id="menutext" value="view banco" />
+    </menu>
+    <menu id="722">
+      <phrase id="menutext" value="Costo Articulos no Encontrados" />
+    </menu>
+    <menu id="723">
+      <phrase id="menutext" value="Tarifa Articulos no Encontrados" />
+    </menu>
+    <menu id="590">
+      <phrase id="menutext" value="view plancta" />
+    </menu>
+    <menu id="468">
+      <phrase id="menutext" value="Porcentaje Descuento por Artículos" />
+    </menu>
+    <menu id="467">
+      <phrase id="menutext" value="Subir Porcentaje Descuento Artículos" />
+    </menu>
+    <menu id="465">
+      <phrase id="menutext" value="Indicadores de Ventas" />
+    </menu>
+    <menu id="464">
+      <phrase id="menutext" value="Inicios de Sesion" />
+    </menu>
+    <menu id="462">
+      <phrase id="menutext" value="temp consignacion" />
+    </menu>
+    <menu id="463">
+      <phrase id="menutext" value="Asesor Fabricante" />
+    </menu>
+    <menu id="461">
+      <phrase id="menutext" value="Ajustes de Salida" />
+    </menu>
+    <menu id="460">
+      <phrase id="menutext" value="Facturas a Consignación" />
+    </menu>
+    <menu id="459">
+      <phrase id="menutext" value="Facturas a Consignación" />
+    </menu>
+    <menu id="458">
+      <phrase id="menutext" value="costo temp" />
+    </menu>
+    <menu id="457">
+      <phrase id="menutext" value="Costo Anterior" />
+    </menu>
+    <menu id="453">
+      <phrase id="menutext" value="tarifa articulo temp" />
+    </menu>
+    <menu id="454">
+      <phrase id="menutext" value="view temp tarifa" />
+    </menu>
+    <menu id="456">
+      <phrase id="menutext" value="Subir Costo de Artículos" />
+    </menu>
+    <menu id="452">
+      <phrase id="menutext" value="Subir Tarifas de Artículos" />
+    </menu>
+    <menu id="450">
+      <phrase id="menutext" value="tarifa temp" />
+    </menu>
+    <menu id="451">
+      <phrase id="menutext" value="Tarifa Anterior" />
+    </menu>
+    <menu id="327">
+      <phrase id="menutext" value="Detalle Pedido" />
+    </menu>
+    <menu id="213">
+      <phrase id="menutext" value="Ventas por Laboratorio" />
+    </menu>
+    <menu id="214">
+      <phrase id="menutext" value="Reportes" />
+    </menu>
+    <menu id="209">
+      <phrase id="menutext" value="Reportes" />
+    </menu>
+    <menu id="210">
+      <phrase id="menutext" value="Reportes" />
+    </menu>
+    <menu id="211">
+      <phrase id="menutext" value="Reportes" />
+    </menu>
+    <menu id="203">
+      <phrase id="menutext" value="ALL - Factura de Compra Detalle copia" />
+    </menu>
+    <menu id="204">
+      <phrase id="menutext" value="ALL - Ajuste de Entrada Detalle copia" />
+    </menu>
+    <menu id="205">
+      <phrase id="menutext" value="ALL - Factura de Ventas Detalle copia" />
+    </menu>
+    <menu id="206">
+      <phrase id="menutext" value="ALL - Factura de Ventas copiar como" />
+    </menu>
+    <menu id="207">
+      <phrase id="menutext" value="ALL - Imprimir Tarifa" />
+    </menu>
+    <menu id="199">
+      <phrase id="menutext" value="ALL - Agregar Articulos Nuevos Activos a la Tarifa" />
+    </menu>
+    <menu id="200">
+      <phrase id="menutext" value="view lotes" />
+    </menu>
+    <menu id="201">
+      <phrase id="menutext" value="view lotes subquery" />
+    </menu>
+    <menu id="202">
+      <phrase id="menutext" value="ALL - Pedido de Compra Detalle copia" />
+    </menu>
+    <menu id="198">
+      <phrase id="menutext" value="Pagos" />
+    </menu>
+    <menu id="197">
+      <phrase id="menutext" value="ALL - Nota de Entrega" />
+    </menu>
+    <menu id="196">
+      <phrase id="menutext" value="ALL - Pedido de Ventas Detalle copia" />
+    </menu>
+    <menu id="195">
+      <phrase id="menutext" value="ALL - Pedido de Ventas Detalle agregar" />
+    </menu>
+    <menu id="194">
+      <phrase id="menutext" value="ALL - Pedido de Ventas Detalle Guardar" />
+    </menu>
+    <menu id="193">
+      <phrase id="menutext" value="ALL - Pedido de Ventas Detalle" />
+    </menu>
+    <menu id="192">
+      <phrase id="menutext" value="ALL - Procesar Actualizaci&amp;oacute;n de Tarifas" />
+    </menu>
+    <menu id="191">
+      <phrase id="menutext" value="ALL - Actualizar Nota de Entrega" />
+    </menu>
+    <menu id="190">
+      <phrase id="menutext" value="Adjuntos" />
+    </menu>
+    <menu id="127">
+      <phrase id="menutext" value="Funciones del Grupo" />
+    </menu>
+    <menu id="125">
+      <phrase id="menutext" value="ALL - Eliminar Lineas de Entradas Salidas" />
+    </menu>
+    <menu id="124">
+      <phrase id="menutext" value="ALL - Verficar Existencia Actualizar" />
+    </menu>
+    <menu id="123">
+      <phrase id="menutext" value="ALL - Nueva Nota de Entrega Actualizar" />
+    </menu>
+    <menu id="122">
+      <phrase id="menutext" value="ALL - Verificar Existencia" />
+    </menu>
+    <menu id="121">
+      <phrase id="menutext" value="ALL - Nueva Nota de Entrega Guardar" />
+    </menu>
+    <menu id="120">
+      <phrase id="menutext" value="ALL - Documentos a Facturar / Entregar" />
+    </menu>
+    <menu id="119">
+      <phrase id="menutext" value="ALL - Nueva Nota de Entrega" />
+    </menu>
+    <menu id="117">
+      <phrase id="menutext" value="username tipo documento" />
+    </menu>
+    <menu id="116">
+      <phrase id="menutext" value="ALL - Crear Factura desde Pedido de Venta" />
+    </menu>
+    <menu id="115">
+      <phrase id="menutext" value="ALL - Crear Factura de Compra desde Recepción" />
+    </menu>
+    <menu id="114">
+      <phrase id="menutext" value="ALL - Vista Movimientos" />
+    </menu>
+    <menu id="113">
+      <phrase id="menutext" value="ALL - Crear Nota Recpeción" />
+    </menu>
+    <menu id="112">
+      <phrase id="menutext" value="ALL - Documentos a Facturar / Recepcionar" />
+    </menu>
+    <menu id="111">
+      <phrase id="menutext" value="Home" />
+    </menu>
+    <menu id="110">
+      <phrase id="menutext" value="ALL - Errores Sistema" />
+    </menu>
+    <menu id="60">
+      <phrase id="menutext" value="ALL - Vericar Venta" />
+    </menu>
+    <menu id="61">
+      <phrase id="menutext" value="ALL - Anular Venta" />
+    </menu>
+    <menu id="59">
+      <phrase id="menutext" value="ALL - Convertir Pedido en Factura" />
+    </menu>
+    <menu id="56">
+      <phrase id="menutext" value="Unidad de Medida" />
+    </menu>
+    <menu id="52">
+      <phrase id="menutext" value="Articulo por Proveedor" />
+    </menu>
+    <menu id="50">
+      <phrase id="menutext" value="ALL" />
+    </menu>
+    <menu id="21">
+      <phrase id="menutext" value="ALL" />
+    </menu>
+    <menu id="20">
+      <phrase id="menutext" value="ALL" />
+    </menu>
+    <menu id="7">
+      <phrase id="menutext" value="medicamentos" />
+    </menu>
+    <menu id="19">
+      <phrase id="menutext" value="Maestros" />
+    </menu>
+    <menu id="53">
+      <phrase id="menutext" value="Fabricante" />
+    </menu>
+    <menu id="9">
+      <phrase id="menutext" value="Proveedores" />
+    </menu>
+    <menu id="1">
+      <phrase id="menutext" value="Art&amp;iacute;culos" />
+    </menu>
+    <menu id="1163">
+      <phrase id="menutext" value="Historia Artículo" />
+    </menu>
+    <menu id="212">
+      <phrase id="menutext" value="Actualizar Costo Artículos" />
+    </menu>
+    <menu id="455">
+      <phrase id="menutext" value="Subir Costo Artículos" />
+    </menu>
+    <menu id="24">
+      <phrase id="menutext" value="Unidades de Medida del Artículo" />
+    </menu>
+    <menu id="2">
+      <phrase id="menutext" value="Asesores" />
+    </menu>
+    <menu id="49">
+      <phrase id="menutext" value="Asesor Cliente" />
+    </menu>
+    <menu id="5">
+      <phrase id="menutext" value="Clientes" />
+    </menu>
+    <menu id="4">
+      <phrase id="menutext" value="Cuenta Bancos" />
+    </menu>
+    <menu id="930">
+      <phrase id="menutext" value="Existencia por Almacen" />
+    </menu>
+    <menu id="1159">
+      <phrase id="menutext" value="Almacenistas" />
+    </menu>
+    <menu id="48">
+      <phrase id="menutext" value="Movimientos" />
+    </menu>
+    <menu id="102">
+      <phrase id="menutext" value="Pedido de Compra" />
+    </menu>
+    <menu id="103">
+      <phrase id="menutext" value="Nota de Recepción" />
+    </menu>
+    <menu id="104">
+      <phrase id="menutext" value="Factura de Compra" />
+    </menu>
+    <menu id="105">
+      <phrase id="menutext" value="Ajuste de Entrada" />
+    </menu>
+    <menu id="189">
+      <phrase id="menutext" value="--" />
+    </menu>
+    <menu id="106">
+      <phrase id="menutext" value="Pedido de Ventas" />
+    </menu>
+    <menu id="107">
+      <phrase id="menutext" value="Nota de Entrega" />
+    </menu>
+    <menu id="108">
+      <phrase id="menutext" value="Factura de Venta" />
+    </menu>
+    <menu id="109">
+      <phrase id="menutext" value="Ajuste de Salida" />
+    </menu>
+    <menu id="64">
+      <phrase id="menutext" value="Entradas" />
+    </menu>
+    <menu id="921">
+      <phrase id="menutext" value="Crear Factura Fiscal de N. E. USD" />
+    </menu>
+    <menu id="922">
+      <phrase id="menutext" value="Factura Fiscal Nota de Entrega Seleccionar" />
+    </menu>
+    <menu id="923">
+      <phrase id="menutext" value="Factura Fiscal Nota de Entrega para Crear Factura" />
+    </menu>
+    <menu id="924">
+      <phrase id="menutext" value="Factura Fiscal desde Nota de Entrega" />
+    </menu>
+    <menu id="65">
+      <phrase id="menutext" value="Salidas" />
+    </menu>
+    <menu id="66">
+      <phrase id="menutext" value="Movimientos" />
+    </menu>
+    <menu id="423">
+      <phrase id="menutext" value="--" />
+    </menu>
+    <menu id="329">
+      <phrase id="menutext" value="Salida de Bultos" />
+    </menu>
+    <menu id="726">
+      <phrase id="menutext" value="Actualizar Existencia" />
+    </menu>
+    <menu id="727">
+      <phrase id="menutext" value="Ajustar Existencia de Lotes" />
+    </menu>
+    <menu id="862">
+      <phrase id="menutext" value="--" />
+    </menu>
+    <menu id="728">
+      <phrase id="menutext" value="Compras Administrativas" />
+    </menu>
+    <menu id="863">
+      <phrase id="menutext" value="Cobros Clientes" />
+    </menu>
+    <menu id="864">
+      <phrase id="menutext" value="Pagos Proveedores" />
+    </menu>
+    <menu id="914">
+      <phrase id="menutext" value="Lotes Facturas de Venta" />
+    </menu>
+    <menu id="918">
+      <phrase id="menutext" value="Lotes de Pagos Generar" />
+    </menu>
+    <menu id="916">
+      <phrase id="menutext" value="Exportar Datos a Profit" />
+    </menu>
+    <menu id="917">
+      <phrase id="menutext" value="Transacciones" />
+    </menu>
+    <menu id="1160">
+      <phrase id="menutext" value="FTP Subir Pedidos" />
+    </menu>
+    <menu id="1103">
+      <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="935">
+      <phrase id="menutext" value="Transferencias Listar" />
+    </menu>
+    <menu id="925">
+      <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="926">
+      <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="927">
+      <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="928">
+      <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="929">
+      <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="1157">
+      <phrase id="menutext" value="Conteo Manual" />
+    </menu>
+    <menu id="1158">
+      <phrase id="menutext" value="Conteo Manual Detalle" />
+    </menu>
+    <menu id="328">
+      <phrase id="menutext" value="Pedidos en Línea" />
+    </menu>
+    <menu id="1154">
+      <phrase id="menutext" value="Cobranza" />
+    </menu>
+    <menu id="1104">
+      <phrase id="menutext" value="Cobranzas" />
+    </menu>
+    <menu id="1105">
+      <phrase id="menutext" value="Reporte de Pagos" />
+    </menu>
+    <menu id="1155">
+      <phrase id="menutext" value="Abonos" />
+    </menu>
+    <menu id="587">
+      <phrase id="menutext" value="Contabilidad" />
+    </menu>
+    <menu id="715">
+      <phrase id="menutext" value="Periodos" />
+    </menu>
+    <menu id="592">
+      <phrase id="menutext" value="Periodo Contable" />
+    </menu>
+    <menu id="591">
+      <phrase id="menutext" value="Mes Contable" />
+    </menu>
+    <menu id="730">
+      <phrase id="menutext" value="Reglas Contables" />
+    </menu>
+    <menu id="729">
+      <phrase id="menutext" value="Reglas Contable" />
+    </menu>
+    <menu id="469">
+      <phrase id="menutext" value="Plan de Cuentas" />
+    </menu>
+    <menu id="589">
+      <phrase id="menutext" value="Comprobantes" />
+    </menu>
+    <menu id="588">
+      <phrase id="menutext" value="Asientos" />
+    </menu>
+    <menu id="716">
+      <phrase id="menutext" value="Libro Diario" />
+    </menu>
+    <menu id="717">
+      <phrase id="menutext" value="Libro Mayor" />
+    </menu>
+    <menu id="718">
+      <phrase id="menutext" value="Balance General" />
+    </menu>
+    <menu id="719">
+      <phrase id="menutext" value="Balance de Comprobación" />
+    </menu>
+    <menu id="720">
+      <phrase id="menutext" value="Estado de Resultados" />
+    </menu>
+    <menu id="304">
+      <phrase id="menutext" value="Reportes" />
+    </menu>
+    <menu id="208">
+      <phrase id="menutext" value="Reportes Principales" />
+    </menu>
+    <menu id="325">
+      <phrase id="menutext" value="Alertas" />
+    </menu>
+    <menu id="217">
+      <phrase id="menutext" value="Alerta Facturas Vencidas" />
+    </menu>
+    <menu id="216">
+      <phrase id="menutext" value="Alerta Marcar Pedidos Entregados" />
+    </menu>
+    <menu id="724">
+      <phrase id="menutext" value="Facturas Asesor" />
+    </menu>
+    <menu id="17">
+      <phrase id="menutext" value="Sistema" />
+    </menu>
+    <menu id="6">
+      <phrase id="menutext" value="Compa&amp;ntilde;&amp;iacute;a" />
+    </menu>
+    <menu id="8">
+      <phrase id="menutext" value="Parametros" />
+    </menu>
+    <menu id="11">
+      <phrase id="menutext" value="Tablas" />
+    </menu>
+    <menu id="54">
+      <phrase id="menutext" value="Almacen" />
+    </menu>
+    <menu id="67">
+      <phrase id="menutext" value="Tipo Documento" />
+    </menu>
+    <menu id="55">
+      <phrase id="menutext" value="Unidades de Medida" />
+    </menu>
+    <menu id="449">
+      <phrase id="menutext" value="Tarifas" />
+    </menu>
+    <menu id="62">
+      <phrase id="menutext" value="Tarifa" />
+    </menu>
+    <menu id="63">
+      <phrase id="menutext" value="Tarifa Articulo" />
+    </menu>
+    <menu id="424">
+      <phrase id="menutext" value="Subir Tarifas" />
+    </menu>
+    <menu id="466">
+      <phrase id="menutext" value="Subir Porcentaje Descuento Artículos" />
+    </menu>
+    <menu id="118">
+      <phrase id="menutext" value="Alicuota IVA" />
+    </menu>
+    <menu id="215">
+      <phrase id="menutext" value="Tasa USD" />
+    </menu>
+    <menu id="725">
+      <phrase id="menutext" value="Notificaciones Email" />
+    </menu>
+    <menu id="18">
+      <phrase id="menutext" value="Seguridad" />
+    </menu>
+    <menu id="15">
+      <phrase id="menutext" value="Trazas" />
+    </menu>
+    <menu id="14">
+      <phrase id="menutext" value="Grupos" />
+    </menu>
+    <menu id="13">
+      <phrase id="menutext" value="Permisos" />
+    </menu>
+    <menu id="12">
+      <phrase id="menutext" value="Usuarios" />
+    </menu>
+    <menu id="126">
+      <phrase id="menutext" value="Funciones" />
+    </menu>
+    <table id="abono">
+      <phrase id="tblcaption" value="Abonos" />
+      <field id="nro_recibo">
+        <phrase id="fldcaption" value="Nro." />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="pago">
+        <phrase id="fldcaption" value="Monto Bs." />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="tasa_usd">
+        <phrase id="fldcaption" value="Tasa USD" />
+      </field>
+      <field id="metodo_pago">
+        <phrase id="fldcaption" value="Tipo de Pago" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="pivote">
+        <phrase id="fldcaption" value="pivote" />
+      </field>
+      <field id="pivote2">
+        <phrase id="fldcaption" value="pivote 2" />
+      </field>
+    </table>
+    <table id="actualizar_nota_entrega">
+      <phrase id="tblcaption" value="ALL - Actualizar Nota de Entrega" />
+    </table>
+    <table id="actualizar_tarifa_patron">
+      <phrase id="tblcaption" value="ALL - Procesar Actualizaci&amp;oacute;n de Tarifas" />
+    </table>
+    <table id="actualizarexiste">
+      <phrase id="tblcaption" value="Actualizar Existencia" />
+    </table>
+    <table id="adjunto">
+      <phrase id="tblcaption" value="Adjuntos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="proveedor" />
+      </field>
+      <field id="foto">
+        <phrase id="fldcaption" value="Archivo" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+    </table>
+    <table id="ajustar_existencia_lotes">
+      <phrase id="tblcaption" value="Ajustar Existencia de Lotes" />
+    </table>
+    <table id="ajuste_de_entrada_detalle_copia">
+      <phrase id="tblcaption" value="ALL - Ajuste de Entrada Detalle copia" />
+    </table>
+    <table id="ajuste_salida">
+      <phrase id="tblcaption" value="Ajustes de Salida" />
+    </table>
+    <table id="alicuota">
+      <phrase id="tblcaption" value="Alicuota IVA" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="alicuota">
+        <phrase id="fldcaption" value="Alicuota" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="almacen">
+      <phrase id="tblcaption" value="Almacen" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="movimiento">
+        <phrase id="fldcaption" value="Movimiento" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="anular_venta">
+      <phrase id="tblcaption" value="ALL - Anular Venta" />
+    </table>
+    <table id="articulo">
+      <phrase id="tblcaption" value="Art&amp;iacute;culos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="nombre_comercial">
+        <phrase id="fldcaption" value="Nombre Comercial" />
+      </field>
+      <field id="principio_activo">
+        <phrase id="fldcaption" value="Nombre Principal" />
+      </field>
+      <field id="presentacion">
+        <phrase id="fldcaption" value="Presentación" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="codigo_ims">
+        <phrase id="fldcaption" value="Ref.#" />
+      </field>
+      <field id="codigo_de_barra">
+        <phrase id="fldcaption" value="Código de Barra" />
+      </field>
+      <field id="categoria">
+        <phrase id="fldcaption" value="Categoría" />
+      </field>
+      <field id="lista_pedido">
+        <phrase id="fldcaption" value="Lista Pedido" />
+      </field>
+      <field id="unidad_medida_defecto">
+        <phrase id="fldcaption" value="Unidad de Medida" />
+      </field>
+      <field id="cantidad_por_unidad_medida">
+        <phrase id="fldcaption" value="Cantidad por Unidad de Medida" />
+      </field>
+      <field id="foto">
+        <phrase id="fldcaption" value="Foto" />
+      </field>
+      <field id="cantidad_minima">
+        <phrase id="fldcaption" value="Cantidad Mínima" />
+      </field>
+      <field id="cantidad_maxima">
+        <phrase id="fldcaption" value="Cantidad Máxima" />
+      </field>
+      <field id="cantidad_en_mano">
+        <phrase id="fldcaption" value="Existencia" />
+      </field>
+      <field id="cantidad_en_pedido">
+        <phrase id="fldcaption" value="Pedido" />
+      </field>
+      <field id="cantidad_en_transito">
+        <phrase id="fldcaption" value="Transito" />
+      </field>
+      <field id="ultimo_costo">
+        <phrase id="fldcaption" value="Ultimo Costo" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="% Desc" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="Precio" />
+      </field>
+      <field id="alicuota">
+        <phrase id="fldcaption" value="Alicuota" />
+      </field>
+      <field id="articulo_inventario">
+        <phrase id="fldcaption" value="Articulo de Inventario" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="articulo_anterior">
+      <phrase id="tblcaption" value="Costo Anterior" />
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Laboratorio" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="costo_anterior">
+        <phrase id="fldcaption" value="Costo Anterior" />
+      </field>
+      <field id="costo_nuevo">
+        <phrase id="fldcaption" value="Costo Nuevo" />
+      </field>
+    </table>
+    <table id="articulo_porcentaje_descuento_temp">
+      <phrase id="tblcaption" value="Porcentaje Descuento por Artículos" />
+      <field id="codigo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="porcentaje">
+        <phrase id="fldcaption" value="Porcentaje" />
+      </field>
+    </table>
+    <table id="articulo_unidad_medida">
+      <phrase id="tblcaption" value="Unidades de Medida del Artículo" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="unidad_medida">
+        <phrase id="fldcaption" value="Unidad Medida" />
+      </field>
+    </table>
+    <table id="asesor">
+      <phrase id="tblcaption" value="Asesores" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="ci_rif">
+        <phrase id="fldcaption" value="CI / RIF" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="ciudad">
+        <phrase id="fldcaption" value="Ciudad" />
+      </field>
+      <field id="direccion">
+        <phrase id="fldcaption" value="Dirección" />
+      </field>
+      <field id="telefono1">
+        <phrase id="fldcaption" value="Telefono 1" />
+      </field>
+      <field id="telefono2">
+        <phrase id="fldcaption" value="Telefono 2" />
+      </field>
+      <field id="email1">
+        <phrase id="fldcaption" value="Email 1" />
+      </field>
+      <field id="email2">
+        <phrase id="fldcaption" value="Email 2" />
+      </field>
+      <field id="web">
+        <phrase id="fldcaption" value="WEB" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="asesor_cliente">
+      <phrase id="tblcaption" value="Asesor Cliente" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="Asesor" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+    </table>
+    <table id="asesor_fabricante">
+      <phrase id="tblcaption" value="Asesor Fabricante" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="asesor" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+    </table>
+    <table id="audittrail">
+      <phrase id="tblcaption" value="Trazas" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="datetime">
+        <phrase id="fldcaption" value="Fecha Hora" />
+      </field>
+      <field id="script">
+        <phrase id="fldcaption" value="Script" />
+      </field>
+      <field id="user">
+        <phrase id="fldcaption" value="User" />
+      </field>
+      <field id="_action">
+        <phrase id="fldcaption" value="Acción" />
+      </field>
+      <field id="_table">
+        <phrase id="fldcaption" value="Table" />
+      </field>
+      <field id="field">
+        <phrase id="fldcaption" value="Campo" />
+      </field>
+      <field id="keyvalue">
+        <phrase id="fldcaption" value="Valor Clave" />
+      </field>
+      <field id="oldvalue">
+        <phrase id="fldcaption" value="Valor Anterior" />
+      </field>
+      <field id="newvalue">
+        <phrase id="fldcaption" value="Valor Actual" />
+      </field>
+    </table>
+    <table id="balance_de_comprobacion">
+      <phrase id="tblcaption" value="Balance de Comprobación" />
+    </table>
+    <table id="balance_general">
+      <phrase id="tblcaption" value="Balance General" />
+    </table>
+    <table id="cliente">
+      <phrase id="tblcaption" value="Clientes" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="ci_rif">
+        <phrase id="fldcaption" value="CI / RIF" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="sucursal">
+        <phrase id="fldcaption" value="Sucursal" />
+      </field>
+      <field id="contacto">
+        <phrase id="fldcaption" value="Contacto" />
+      </field>
+      <field id="ciudad">
+        <phrase id="fldcaption" value="Ciudad" />
+      </field>
+      <field id="zona">
+        <phrase id="fldcaption" value="Zona" />
+      </field>
+      <field id="direccion">
+        <phrase id="fldcaption" value="Direccion" />
+      </field>
+      <field id="telefono1">
+        <phrase id="fldcaption" value="Teléfono 1" />
+      </field>
+      <field id="telefono2">
+        <phrase id="fldcaption" value="Teléfono 2" />
+      </field>
+      <field id="email1">
+        <phrase id="fldcaption" value="Email 1" />
+      </field>
+      <field id="email2">
+        <phrase id="fldcaption" value="WEB" />
+      </field>
+      <field id="codigo_ims">
+        <phrase id="fldcaption" value="Código IMS" />
+      </field>
+      <field id="web">
+        <phrase id="fldcaption" value="SICM" />
+      </field>
+      <field id="tipo_cliente">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="tarifa">
+        <phrase id="fldcaption" value="Tarifa" />
+      </field>
+      <field id="consignacion">
+        <phrase id="fldcaption" value="Ventas a Consignación" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="limite_credito">
+        <phrase id="fldcaption" value="Limite de Credito" />
+      </field>
+      <field id="condicion">
+        <phrase id="fldcaption" value="Condicion" />
+        <phrase id="fldtagvalue1" value="CREDITO" />
+        <phrase id="fldtagcaption1" value="CREDITO" />
+        <phrase id="fldtagvalue2" value="PREPAGO" />
+        <phrase id="fldtagcaption2" value="PREPAGO" />
+        <phrase id="fldtagvalue3" value="CONTADO" />
+        <phrase id="fldtagcaption3" value="CONTADO" />
+      </field>
+      <field id="cuenta">
+        <phrase id="fldcaption" value="Cuenta Contable" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="foto1">
+        <phrase id="fldcaption" value="Foto 1" />
+      </field>
+      <field id="foto2">
+        <phrase id="fldcaption" value="Foto 2" />
+      </field>
+    </table>
+    <table id="cliente_consignacion_articulos">
+      <phrase id="tblcaption" value="Clientes con Consignaciones" />
+    </table>
+    <table id="cliente_consignacion_lista">
+      <phrase id="tblcaption" value="Clientes con Consignaciones" />
+    </table>
+    <table id="cliente_consignacion_procesar">
+      <phrase id="tblcaption" value="Clientes con Consignaciones" />
+    </table>
+    <table id="cliente_consignacion_ver">
+      <phrase id="tblcaption" value="Clientes con Consignaciones" />
+    </table>
+    <table id="cobros_cliente">
+      <phrase id="tblcaption" value="Cobros Clientes" />
+      <field id="id">
+        <phrase id="fldcaption" value="Nro." />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="pivote">
+        <phrase id="fldcaption" value="Documentos" />
+      </field>
+      <field id="tipo_pago">
+        <phrase id="fldcaption" value="Tipo Pago" />
+      </field>
+      <field id="referencia">
+        <phrase id="fldcaption" value="Referencia" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="Banco Depositio" />
+      </field>
+      <field id="banco_origen">
+        <phrase id="fldcaption" value="Banco Origen" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="monto_recibido">
+        <phrase id="fldcaption" value="Monto Recibido Bs./USD" />
+      </field>
+      <field id="monto">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="fecha_registro">
+        <phrase id="fldcaption" value="Fecha Registro" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+      </field>
+    </table>
+    <table id="cobros_cliente_factura">
+      <phrase id="tblcaption" value="Cobros Facturas Cliente" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="cobros_cliente">
+        <phrase id="fldcaption" value="cobros cliente" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo Documento" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="abono">
+        <phrase id="fldcaption" value="Abono" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="monto">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="retivamonto">
+        <phrase id="fldcaption" value="Ret. IVA" />
+      </field>
+      <field id="retiva">
+        <phrase id="fldcaption" value="#Ref IVA" />
+      </field>
+      <field id="retislrmonto">
+        <phrase id="fldcaption" value="Ret. ISLR" />
+      </field>
+      <field id="retislr">
+        <phrase id="fldcaption" value="#Ref. ISLR" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+      </field>
+    </table>
+    <table id="codigo_buscar">
+      <phrase id="tblcaption" value="ALL" />
+    </table>
+    <table id="codigo_proveedor_buscar">
+      <phrase id="tblcaption" value="ALL" />
+    </table>
+    <table id="compania">
+      <phrase id="tblcaption" value="Compañía" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="ci_rif">
+        <phrase id="fldcaption" value="CI / RIF" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="ciudad">
+        <phrase id="fldcaption" value="Ciudad" />
+      </field>
+      <field id="direccion">
+        <phrase id="fldcaption" value="Dirección" />
+      </field>
+      <field id="telefono1">
+        <phrase id="fldcaption" value="Teléfono 1" />
+      </field>
+      <field id="telefono2">
+        <phrase id="fldcaption" value="Teléfono 2" />
+      </field>
+      <field id="email1">
+        <phrase id="fldcaption" value="Email 1" />
+      </field>
+      <field id="email2">
+        <phrase id="fldcaption" value="Email 2" />
+      </field>
+      <field id="agente_retencion">
+        <phrase id="fldcaption" value="Agente de Retencion" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="logo">
+        <phrase id="fldcaption" value="Logo" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="compania_cuenta">
+      <phrase id="tblcaption" value="Cuentas Bancos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="Banco" />
+      </field>
+      <field id="titular">
+        <phrase id="fldcaption" value="Titular" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+        <phrase id="fldtagvalue1" value="CTA AHORRO" />
+        <phrase id="fldtagcaption1" value="CTA AHORRO" />
+        <phrase id="fldtagvalue2" value="CTA CORRIENTE" />
+        <phrase id="fldtagcaption2" value="CTA CORRIENTE" />
+      </field>
+      <field id="numero">
+        <phrase id="fldcaption" value="Número" />
+      </field>
+      <field id="mostrar">
+        <phrase id="fldcaption" value="Mostrar" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="cuenta">
+        <phrase id="fldcaption" value="Cuenta" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="compania">
+        <phrase id="fldcaption" value="compania" />
+      </field>
+    </table>
+    <table id="compra">
+      <phrase id="tblcaption" value="Compra Administrativas" />
+      <phrase id="tblpagecaption1" value="Datos 1" />
+      <phrase id="tblpagecaption2" value="Datos 2" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Documento" />
+        <phrase id="fldtagvalue1" value="FC" />
+        <phrase id="fldtagcaption1" value="FACTURA" />
+        <phrase id="fldtagvalue2" value="NC" />
+        <phrase id="fldtagcaption2" value="NOTA CREDITO" />
+        <phrase id="fldtagvalue3" value="ND" />
+        <phrase id="fldtagcaption3" value="NOTA DEBITO" />
+      </field>
+      <field id="doc_afectado">
+        <phrase id="fldcaption" value="Doc. Afectado" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="Nro. Documento" />
+      </field>
+      <field id="nro_control">
+        <phrase id="fldcaption" value="Nro. Control" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripcion" />
+      </field>
+      <field id="aplica_retencion">
+        <phrase id="fldcaption" value="Aplica Retencion" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="monto_exento">
+        <phrase id="fldcaption" value="Monto Exento" />
+      </field>
+      <field id="monto_gravado">
+        <phrase id="fldcaption" value="Monto Gravado" />
+      </field>
+      <field id="alicuota">
+        <phrase id="fldcaption" value="Alicuota" />
+      </field>
+      <field id="monto_iva">
+        <phrase id="fldcaption" value="Monto IVA" />
+      </field>
+      <field id="monto_total">
+        <phrase id="fldcaption" value="Monto Total" />
+      </field>
+      <field id="monto_pagar">
+        <phrase id="fldcaption" value="Monto a Pagar" />
+      </field>
+      <field id="ret_iva">
+        <phrase id="fldcaption" value="Ret. IVA" />
+      </field>
+      <field id="ref_iva">
+        <phrase id="fldcaption" value="Ref# IVA" />
+      </field>
+      <field id="ret_islr">
+        <phrase id="fldcaption" value="Ret. ISLR" />
+      </field>
+      <field id="ref_islr">
+        <phrase id="fldcaption" value="Ref# ISLR" />
+      </field>
+      <field id="ret_municipal">
+        <phrase id="fldcaption" value="Ret. Municipal" />
+      </field>
+      <field id="ref_municipal">
+        <phrase id="fldcaption" value="Ref# Municipal" />
+      </field>
+      <field id="fecha_registro">
+        <phrase id="fldcaption" value="Fecha Libro Compra" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+      </field>
+      <field id="tipo_iva">
+        <phrase id="fldcaption" value="tipo iva" />
+      </field>
+      <field id="tipo_islr">
+        <phrase id="fldcaption" value="tipo islr" />
+      </field>
+      <field id="sustraendo">
+        <phrase id="fldcaption" value="sustraendo" />
+      </field>
+      <field id="tipo_municipal">
+        <phrase id="fldcaption" value="tipo municipal" />
+      </field>
+      <field id="anulado">
+        <phrase id="fldcaption" value="Anulado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="confirm_page">
+      <phrase id="tblcaption" value="ALL - Pagina de Confirmación" />
+    </table>
+    <table id="cont_asiento">
+      <phrase id="tblcaption" value="Asientos" />
+      <field id="id">
+        <phrase id="fldcaption" value="Nro Asiento" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Nro Comprobante" />
+      </field>
+      <field id="cuenta">
+        <phrase id="fldcaption" value="Cuenta" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="referencia">
+        <phrase id="fldcaption" value="Referencia" />
+      </field>
+      <field id="debe">
+        <phrase id="fldcaption" value="Debe" />
+      </field>
+      <field id="haber">
+        <phrase id="fldcaption" value="Haber" />
+      </field>
+      <field id="id_referencia">
+        <phrase id="fldcaption" value="id referencia" />
+      </field>
+    </table>
+    <table id="cont_comprobante">
+      <phrase id="tblcaption" value="Comprobantes" />
+      <field id="id">
+        <phrase id="fldcaption" value="Nro Comprobante" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="contabilizacion">
+        <phrase id="fldcaption" value="Contabilización" />
+      </field>
+      <field id="registra">
+        <phrase id="fldcaption" value="Usuario Registra" />
+      </field>
+      <field id="fecha_registro">
+        <phrase id="fldcaption" value="Fecha Registro" />
+      </field>
+      <field id="contabiliza">
+        <phrase id="fldcaption" value="Usuario Contabiliza" />
+      </field>
+      <field id="fecha_contabiliza">
+        <phrase id="fldcaption" value="Fecha Contabiliza" />
+      </field>
+    </table>
+    <table id="cont_lotes">
+      <phrase id="tblcaption" value="Lotes Facturas de Venta" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha Facturas" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="fecha_registro">
+        <phrase id="fldcaption" value="Registro" />
+      </field>
+      <field id="usuario">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+    </table>
+    <table id="cont_lotes_pagos">
+      <phrase id="tblcaption" value="Lotes de Pagos Generar" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha Pago" />
+      </field>
+      <field id="procesado">
+        <phrase id="fldcaption" value="Procesado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="fecha_registro">
+        <phrase id="fldcaption" value="Fecha Registro" />
+      </field>
+      <field id="usuario">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+    </table>
+    <table id="cont_lotes_pagos_detalle">
+      <phrase id="tblcaption" value="Detalle Pagos" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="cont_lotes_pago">
+        <phrase id="fldcaption" value="cont lotes pago" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Saldo" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="tipodoc">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="monto_a_pagar">
+        <phrase id="fldcaption" value="Monto a Pagar" />
+      </field>
+      <field id="monto_pagdo">
+        <phrase id="fldcaption" value="Monto Pagado" />
+      </field>
+      <field id="saldo">
+        <phrase id="fldcaption" value="saldo" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="comprobante" />
+      </field>
+    </table>
+    <table id="cont_mes_contable">
+      <phrase id="tblcaption" value="Mes Contable" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_comprobante">
+        <phrase id="fldcaption" value="CODIGO" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="TIPO COMPROBANTE" />
+      </field>
+      <field id="m01">
+        <phrase id="fldcaption" value="ENERO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m02">
+        <phrase id="fldcaption" value="FEBRERO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m03">
+        <phrase id="fldcaption" value="MARZO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m04">
+        <phrase id="fldcaption" value="ABRIL" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m05">
+        <phrase id="fldcaption" value="MAYO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m06">
+        <phrase id="fldcaption" value="JUNIO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m07">
+        <phrase id="fldcaption" value="JULIO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m08">
+        <phrase id="fldcaption" value="AGOSTO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m09">
+        <phrase id="fldcaption" value="SEPTIEMBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m10">
+        <phrase id="fldcaption" value="OCTUBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m11">
+        <phrase id="fldcaption" value="NOVIEMBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="m12">
+        <phrase id="fldcaption" value="DICIEMBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="Cerrado" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="Abierto" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="ACTIVO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="cont_periodo_contable">
+      <phrase id="tblcaption" value="Periodo Contable" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="fecha_inicio">
+        <phrase id="fldcaption" value="Fecha Inicio" />
+      </field>
+      <field id="fecha_fin">
+        <phrase id="fldcaption" value="Fecha Fin" />
+      </field>
+      <field id="cerrado">
+        <phrase id="fldcaption" value="Cerrado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="cont_plancta">
+      <phrase id="tblcaption" value="Plan de Cuentas" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="clase">
+        <phrase id="fldcaption" value="Clase" />
+      </field>
+      <field id="grupo">
+        <phrase id="fldcaption" value="Grupo" />
+      </field>
+      <field id="cuenta">
+        <phrase id="fldcaption" value="Cuenta" />
+      </field>
+      <field id="subcuenta">
+        <phrase id="fldcaption" value="Sub Cuenta" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="clasificacion">
+        <phrase id="fldcaption" value="Clasificación" />
+        <phrase id="fldtagvalue1" value="ACTIVO" />
+        <phrase id="fldtagcaption1" value="ACTIVO" />
+        <phrase id="fldtagvalue2" value="PASIVO" />
+        <phrase id="fldtagcaption2" value="PASIVO" />
+        <phrase id="fldtagvalue3" value="CAPITAL" />
+        <phrase id="fldtagcaption3" value="CAPITAL" />
+        <phrase id="fldtagvalue4" value="VENTAS" />
+        <phrase id="fldtagcaption4" value="VENTAS" />
+        <phrase id="fldtagvalue5" value="COSTOS" />
+        <phrase id="fldtagcaption5" value="COSTOS" />
+        <phrase id="fldtagvalue6" value="GASTOS" />
+        <phrase id="fldtagcaption6" value="GASTOS" />
+        <phrase id="fldtagvalue7" value="ORDEN" />
+        <phrase id="fldtagcaption7" value="ORDEN" />
+      </field>
+      <field id="naturaleza">
+        <phrase id="fldcaption" value="Naturaleza" />
+        <phrase id="fldtagvalue1" value="DEBE" />
+        <phrase id="fldtagcaption1" value="DEBE" />
+        <phrase id="fldtagvalue2" value="HABER" />
+        <phrase id="fldtagcaption2" value="HABER" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+        <phrase id="fldtagvalue1" value="BALANCE" />
+        <phrase id="fldtagcaption1" value="BALANCE" />
+        <phrase id="fldtagvalue2" value="RESULTADO" />
+        <phrase id="fldtagcaption2" value="RESULTADO" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="activa">
+        <phrase id="fldcaption" value="Activa" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="cont_reglas">
+      <phrase id="tblcaption" value="Reglas Contable" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="regla">
+        <phrase id="fldcaption" value="regla" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="CODIGO" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="cuenta">
+        <phrase id="fldcaption" value="Cuenta" />
+      </field>
+      <field id="cargo">
+        <phrase id="fldcaption" value="Cargo" />
+        <phrase id="fldtagvalue1" value="DEBE" />
+        <phrase id="fldtagcaption1" value="DEBE" />
+        <phrase id="fldtagvalue2" value="HABER" />
+        <phrase id="fldtagcaption2" value="HABER" />
+      </field>
+    </table>
+    <table id="cont_reglas_hr">
+      <phrase id="tblcaption" value="Carga Reglas Contable" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+    </table>
+    <table id="convertir_a_factura">
+      <phrase id="tblcaption" value="ALL - Convertir Pedido en Factura" />
+    </table>
+    <table id="costo_temp">
+      <phrase id="tblcaption" value="costo temp" />
+      <field id="codigo">
+        <phrase id="fldcaption" value="codigo" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="nombre" />
+      </field>
+      <field id="costo">
+        <phrase id="fldcaption" value="costo" />
+      </field>
+    </table>
+    <table id="crear_factura_compra">
+      <phrase id="tblcaption" value="ALL - Crear Factura de Compra desde Recepción" />
+    </table>
+    <table id="crear_factura_venta">
+      <phrase id="tblcaption" value="ALL - Crear Factura desde Pedido de Venta" />
+    </table>
+    <table id="crear_factura_venta2">
+      <phrase id="tblcaption" value="Factura Fiscal desde Nota de Entrega" />
+    </table>
+    <table id="crear_nota_entrada_update">
+      <phrase id="tblcaption" value="ALL - Nueva Nota de Entrega Actualizar" />
+    </table>
+    <table id="crear_nota_entrega">
+      <phrase id="tblcaption" value="ALL - Nueva Nota de Entrega" />
+    </table>
+    <table id="crear_nota_entrega_guardar">
+      <phrase id="tblcaption" value="ALL - Nueva Nota de Entrega Guardar" />
+    </table>
+    <table id="crear_nota_recepcion">
+      <phrase id="tblcaption" value="ALL - Crear Nota Recpeción" />
+    </table>
+    <table id="eliminar_linea">
+      <phrase id="tblcaption" value="ALL - Eliminar Lineas de Entradas Salidas" />
+    </table>
+    <table id="entradas">
+      <phrase id="tblcaption" value="Entradas" />
+      <phrase id="tblpagecaption1" value="Datos 1" />
+      <phrase id="tblpagecaption2" value="Datos 2" />
+      <phrase id="tblpagecaption3" value="Datos 3" />
+      <phrase id="tblpagecaption4" value="Datos 4" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="doc_afectado">
+        <phrase id="fldcaption" value="Doc. Relacionado" />
+      </field>
+      <field id="nro_control">
+        <phrase id="fldcaption" value="Nro Control" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="Almacen" />
+      </field>
+      <field id="monto_total">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="alicuota_iva">
+        <phrase id="fldcaption" value="Alicuota IVA" />
+      </field>
+      <field id="iva">
+        <phrase id="fldcaption" value="IVA" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Total" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="Documento" />
+        <phrase id="fldtagvalue1" value="FC" />
+        <phrase id="fldtagcaption1" value="FACTURA" />
+        <phrase id="fldtagvalue2" value="NC" />
+        <phrase id="fldtagcaption2" value="NOTA DE CREDITO" />
+        <phrase id="fldtagvalue3" value="ND" />
+        <phrase id="fldtagcaption3" value="NOTA DE DEBITO" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="estatus">
+        <phrase id="fldcaption" value="Estatus" />
+        <phrase id="fldtagvalue1" value="NUEVO" />
+        <phrase id="fldtagcaption1" value="NUEVO" />
+        <phrase id="fldtagvalue2" value="PROCESADO" />
+        <phrase id="fldtagcaption2" value="PROCESADO" />
+        <phrase id="fldtagvalue3" value="ANULADO" />
+        <phrase id="fldtagcaption3" value="ANULADO" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="id_documento_padre">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="consignacion">
+        <phrase id="fldcaption" value="Consignación" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="consignacion_reportada">
+        <phrase id="fldcaption" value="Consignacion Reportada" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="aplica_retencion">
+        <phrase id="fldcaption" value="Aplica Retencion" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="ret_iva">
+        <phrase id="fldcaption" value="Ret. IVA" />
+      </field>
+      <field id="ref_iva">
+        <phrase id="fldcaption" value="Ref# IVA" />
+      </field>
+      <field id="ret_islr">
+        <phrase id="fldcaption" value="Ret. ISLR" />
+      </field>
+      <field id="ref_islr">
+        <phrase id="fldcaption" value="Ref# ISLR" />
+      </field>
+      <field id="ret_municipal">
+        <phrase id="fldcaption" value="Ret. Municipal" />
+      </field>
+      <field id="ref_municipal">
+        <phrase id="fldcaption" value="Ref# Municipal" />
+      </field>
+      <field id="monto_pagar">
+        <phrase id="fldcaption" value="Monto a Pagar" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+      </field>
+      <field id="tipo_iva">
+        <phrase id="fldcaption" value="tipo iva" />
+      </field>
+      <field id="tipo_islr">
+        <phrase id="fldcaption" value="tipo islr" />
+      </field>
+      <field id="sustraendo">
+        <phrase id="fldcaption" value="sustraendo" />
+      </field>
+      <field id="fecha_registro_retenciones">
+        <phrase id="fldcaption" value="fecha registro retenciones" />
+      </field>
+      <field id="tasa_dia">
+        <phrase id="fldcaption" value="Tasa del Día" />
+      </field>
+      <field id="monto_usd">
+        <phrase id="fldcaption" value="Monto USD" />
+      </field>
+      <field id="fecha_libro_compra">
+        <phrase id="fldcaption" value="Fecha Libro Compra" />
+      </field>
+      <field id="tipo_municipal">
+        <phrase id="fldcaption" value="tipo municipal" />
+      </field>
+      <field id="cerrado">
+        <phrase id="fldcaption" value="cerrado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="% Descuento" />
+      </field>
+      <field id="archivo_pedido">
+        <phrase id="fldcaption" value="Archivo de Pedido de Compra" />
+      </field>
+    </table>
+    <table id="entradas_salidas">
+      <phrase id="tblcaption" value="Movimientos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="Lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="Vencimiento" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="Almacen" />
+      </field>
+      <field id="id_compra">
+        <phrase id="fldcaption" value="Alamacen Existencia" />
+      </field>
+      <field id="cantidad_articulo">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+      <field id="articulo_unidad_medida">
+        <phrase id="fldcaption" value="Unidad Medida" />
+      </field>
+      <field id="cantidad_unidad_medida">
+        <phrase id="fldcaption" value="cantidad unidad medida" />
+      </field>
+      <field id="cantidad_movimiento">
+        <phrase id="fldcaption" value="cantidad movimiento" />
+      </field>
+      <field id="precio_unidad_sin_desc">
+        <phrase id="fldcaption" value="Costo Full" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="Desc%" />
+      </field>
+      <field id="costo_unidad">
+        <phrase id="fldcaption" value="Costo Unidad" />
+      </field>
+      <field id="costo">
+        <phrase id="fldcaption" value="Costo" />
+      </field>
+      <field id="precio_unidad">
+        <phrase id="fldcaption" value="Precio Unidad" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="Precio" />
+      </field>
+      <field id="alicuota">
+        <phrase id="fldcaption" value="alicuota" />
+      </field>
+      <field id="cantidad_movimiento_consignacion">
+        <phrase id="fldcaption" value="cantidad movimiento consignacion" />
+      </field>
+      <field id="id_consignacion">
+        <phrase id="fldcaption" value="id consignacion" />
+      </field>
+      <field id="check_ne">
+        <phrase id="fldcaption" value="Check" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="packer_cantidad">
+        <phrase id="fldcaption" value="Pedido" />
+      </field>
+    </table>
+    <table id="error_page">
+      <phrase id="tblcaption" value="ALL - Errores Sistema" />
+    </table>
+    <table id="estado_resultados">
+      <phrase id="tblcaption" value="Estado de Resultados" />
+    </table>
+    <table id="exportar_data">
+      <phrase id="tblcaption" value="Exportar Datos a Profit" />
+    </table>
+    <table id="fabricante">
+      <phrase id="tblcaption" value="Fabricante" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="% Desc. Lineal" />
+      </field>
+      <field id="utilidad">
+        <phrase id="fldcaption" value="% Utilidad" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="factura_consignacion">
+      <phrase id="tblcaption" value="Facturas a Consignación" />
+    </table>
+    <table id="factura_consignacion_guardar">
+      <phrase id="tblcaption" value="Facturas a Consignación" />
+    </table>
+    <table id="factura_de_compra_detalle_copia">
+      <phrase id="tblcaption" value="ALL - Factura de Compra Detalle copia" />
+    </table>
+    <table id="factura_de_venta_copiar_como">
+      <phrase id="tblcaption" value="ALL - Factura de Ventas copiar como" />
+    </table>
+    <table id="factura_de_venta_detalle_copia">
+      <phrase id="tblcaption" value="ALL - Factura de Ventas Detalle copia" />
+    </table>
+    <table id="funciones">
+      <phrase id="tblcaption" value="Funciones" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+    </table>
+    <table id="grupo_funciones">
+      <phrase id="tblcaption" value="Funciones del Grupo" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="grupo">
+        <phrase id="fldcaption" value="grupo" />
+      </field>
+      <field id="funcion">
+        <phrase id="fldcaption" value="Función" />
+      </field>
+    </table>
+    <table id="home">
+      <phrase id="tblcaption" value="Home" />
+    </table>
+    <table id="indicadores">
+      <phrase id="tblcaption" value="Indicadores de Ventas" />
+    </table>
+    <table id="libro_diario">
+      <phrase id="tblcaption" value="Libro Diario" />
+    </table>
+    <table id="libro_mayor">
+      <phrase id="tblcaption" value="Libro Mayor" />
+    </table>
+    <table id="listado_master">
+      <phrase id="tblcaption" value="Reportes" />
+    </table>
+    <table id="listado_master_buscar">
+      <phrase id="tblcaption" value="Reportes" />
+    </table>
+    <table id="listado_master_buscar_excel">
+      <phrase id="tblcaption" value="Reportes" />
+    </table>
+    <table id="listado_master_general">
+      <phrase id="tblcaption" value="Reportes" />
+    </table>
+    <table id="main_report">
+      <phrase id="tblcaption" value="Reportes" />
+    </table>
+    <table id="medicamentos">
+      <phrase id="tblcaption" value="medicamentos" />
+      <field id="laboratorio">
+        <phrase id="fldcaption" value="laboratorio" />
+      </field>
+      <field id="principio_activo">
+        <phrase id="fldcaption" value="principio activo" />
+      </field>
+      <field id="presentacion">
+        <phrase id="fldcaption" value="presentacion" />
+      </field>
+    </table>
+    <table id="nota_de_entrega_buscar">
+      <phrase id="tblcaption" value="Factura Fiscal desde Nota de Entrega" />
+    </table>
+    <table id="nota_de_entrega_buscar_listar">
+      <phrase id="tblcaption" value="Factura Fiscal Nota de Entrega Seleccionar" />
+    </table>
+    <table id="nota_de_entrega_ver">
+      <phrase id="tblcaption" value="Factura Fiscal Nota de Entrega para Crear Factura" />
+    </table>
+    <table id="notificaciones">
+      <phrase id="tblcaption" value="Notificaciones Email" />
+      <field id="nnotificaciones">
+        <phrase id="fldcaption" value="Nnotificaciones" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="notificar">
+        <phrase id="fldcaption" value="Notificar" />
+      </field>
+      <field id="asunto">
+        <phrase id="fldcaption" value="Asunto" />
+      </field>
+      <field id="notificacion">
+        <phrase id="fldcaption" value="Texto Notificación" />
+      </field>
+      <field id="notificados">
+        <phrase id="fldcaption" value="Notificados" />
+      </field>
+      <field id="notificados_efectivos">
+        <phrase id="fldcaption" value="Efectivos" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuarios" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="enviado">
+        <phrase id="fldcaption" value="Enviado" />
+        <phrase id="fldtagvalue1" value="0" />
+        <phrase id="fldtagcaption1" value="NO" />
+        <phrase id="fldtagvalue2" value="1" />
+        <phrase id="fldtagcaption2" value="SI" />
+      </field>
+      <field id="adjunto">
+        <phrase id="fldcaption" value="Adjunto" />
+      </field>
+    </table>
+    <table id="pagos">
+      <phrase id="tblcaption" value="Pagos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="tipo_pago">
+        <phrase id="fldcaption" value="Tipo Pago" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="Banco Origen" />
+      </field>
+      <field id="banco_destino">
+        <phrase id="fldcaption" value="Banco Destino" />
+      </field>
+      <field id="referencia">
+        <phrase id="fldcaption" value="Referencia" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="monto">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="comprobante_pago">
+        <phrase id="fldcaption" value="Comprobante Pago" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="comprobante" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="fecha_resgistro">
+        <phrase id="fldcaption" value="fecha resgistro" />
+      </field>
+    </table>
+    <table id="pagos_proveedor">
+      <phrase id="tblcaption" value="Pagos Proveedores" />
+      <field id="id">
+        <phrase id="fldcaption" value="Nro." />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="pivote">
+        <phrase id="fldcaption" value="Documentos" />
+      </field>
+      <field id="tipo_pago">
+        <phrase id="fldcaption" value="Tipo Pago" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="Banco" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="referencia">
+        <phrase id="fldcaption" value="Referencia" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="monto_dado">
+        <phrase id="fldcaption" value="Monto Desembolsado Bs./USD" />
+      </field>
+      <field id="monto">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="fecha_registro">
+        <phrase id="fldcaption" value="Fecha Registro" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+      </field>
+    </table>
+    <table id="pagos_proveedor_factura">
+      <phrase id="tblcaption" value="Pagos Facturas Proveedores" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="pagos_proveedor">
+        <phrase id="fldcaption" value="pagos proveedor" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo Documento" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="abono">
+        <phrase id="fldcaption" value="Abono" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="monto">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+      </field>
+      <field id="retiva">
+        <phrase id="fldcaption" value="retiva" />
+      </field>
+      <field id="retivamonto">
+        <phrase id="fldcaption" value="retivamonto" />
+      </field>
+      <field id="retislr">
+        <phrase id="fldcaption" value="retislr" />
+      </field>
+      <field id="retislrmonto">
+        <phrase id="fldcaption" value="retislrmonto" />
+      </field>
+    </table>
+    <table id="parametro">
+      <phrase id="tblcaption" value="Parametros" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="valor1">
+        <phrase id="fldcaption" value="Valor 1" />
+      </field>
+      <field id="valor2">
+        <phrase id="fldcaption" value="Valor 2" />
+      </field>
+      <field id="valor3">
+        <phrase id="fldcaption" value="Valor 3" />
+      </field>
+      <field id="valor4">
+        <phrase id="fldcaption" value="Valor 4" />
+      </field>
+    </table>
+    <table id="pedidio_detalle_online">
+      <phrase id="tblcaption" value="Detalle Pedido" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Laboratorio" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="fecha vencimiento" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="almacen" />
+      </field>
+      <field id="cantidad_articulo">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+      <field id="articulo_unidad_medida">
+        <phrase id="fldcaption" value="Unidad Medida" />
+      </field>
+      <field id="cantidad_unidad_medida">
+        <phrase id="fldcaption" value="cantidad unidad medida" />
+      </field>
+      <field id="cantidad_movimiento">
+        <phrase id="fldcaption" value="cantidad movimiento" />
+      </field>
+      <field id="costo_unidad">
+        <phrase id="fldcaption" value="Costo Unidad" />
+      </field>
+      <field id="costo">
+        <phrase id="fldcaption" value="Costo" />
+      </field>
+      <field id="precio_unidad">
+        <phrase id="fldcaption" value="Precio Unidad" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="Precio" />
+      </field>
+      <field id="id_compra">
+        <phrase id="fldcaption" value="id compra" />
+      </field>
+      <field id="alicuota">
+        <phrase id="fldcaption" value="alicuota" />
+      </field>
+    </table>
+    <table id="pedido_de_compra_detalle_copia">
+      <phrase id="tblcaption" value="ALL - Pedido de Compra Detalle copia" />
+    </table>
+    <table id="pedido_de_venta_detalle">
+      <phrase id="tblcaption" value="ALL - Pedido de Ventas Detalle" />
+    </table>
+    <table id="pedido_de_venta_detalle_agregar">
+      <phrase id="tblcaption" value="ALL - Pedido de Ventas Detalle agregar" />
+    </table>
+    <table id="pedido_de_venta_detalle_copia">
+      <phrase id="tblcaption" value="ALL - Pedido de Ventas Detalle copia" />
+    </table>
+    <table id="pedido_de_venta_detalle_guardar">
+      <phrase id="tblcaption" value="ALL - Pedido de Ventas Detalle Guardar" />
+    </table>
+    <table id="pedido_online">
+      <phrase id="tblcaption" value="Pedidos en Línea" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Documento" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="Asesor" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="nro documento" />
+      </field>
+      <field id="nro_control">
+        <phrase id="fldcaption" value="nro control" />
+      </field>
+      <field id="monto_total">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="alicuota_iva">
+        <phrase id="fldcaption" value="alicuota iva" />
+      </field>
+      <field id="iva">
+        <phrase id="fldcaption" value="Iva" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Total" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="estatus">
+        <phrase id="fldcaption" value="Estatus" />
+        <phrase id="fldtagvalue1" value="NUEVO" />
+        <phrase id="fldtagcaption1" value="NUEVO" />
+        <phrase id="fldtagvalue2" value="PROCESADO" />
+        <phrase id="fldtagcaption2" value="PROCESADO" />
+      </field>
+      <field id="id_documento_padre">
+        <phrase id="fldcaption" value="id documento padre" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="moneda" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="documento" />
+      </field>
+      <field id="tasa_dia">
+        <phrase id="fldcaption" value="tasa dia" />
+      </field>
+      <field id="monto_usd">
+        <phrase id="fldcaption" value="monto usd" />
+      </field>
+      <field id="dias_credito">
+        <phrase id="fldcaption" value="dias credito" />
+      </field>
+      <field id="entregado">
+        <phrase id="fldcaption" value="entregado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="fecha_entrega">
+        <phrase id="fldcaption" value="fecha entrega" />
+      </field>
+      <field id="pagado">
+        <phrase id="fldcaption" value="pagado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+    </table>
+    <table id="print_tarifa">
+      <phrase id="tblcaption" value="ALL - Imprimir Tarifa" />
+    </table>
+    <table id="proveedor">
+      <phrase id="tblcaption" value="Proveedores" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="ci_rif">
+        <phrase id="fldcaption" value="CI / RIF" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="ciudad">
+        <phrase id="fldcaption" value="Ciudad" />
+      </field>
+      <field id="direccion">
+        <phrase id="fldcaption" value="Dirección" />
+      </field>
+      <field id="telefono1">
+        <phrase id="fldcaption" value="Teléfono 1" />
+      </field>
+      <field id="telefono2">
+        <phrase id="fldcaption" value="Teléfono 2" />
+      </field>
+      <field id="email1">
+        <phrase id="fldcaption" value="Email 1" />
+      </field>
+      <field id="email2">
+        <phrase id="fldcaption" value="Email 2" />
+      </field>
+      <field id="cuenta_auxiliar">
+        <phrase id="fldcaption" value="Cuenta Auxiliar" />
+      </field>
+      <field id="cuenta_gasto">
+        <phrase id="fldcaption" value="Cuenta Gasto" />
+      </field>
+      <field id="tipo_iva">
+        <phrase id="fldcaption" value="% Retención IVA" />
+      </field>
+      <field id="tipo_islr">
+        <phrase id="fldcaption" value="% Retención ISLR" />
+      </field>
+      <field id="sustraendo">
+        <phrase id="fldcaption" value="Sustraendo" />
+      </field>
+      <field id="tipo_impmun">
+        <phrase id="fldcaption" value="% Retención Imp. Muni." />
+      </field>
+      <field id="cta_bco">
+        <phrase id="fldcaption" value="Nro Cuenta Proveedor" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="proveedor_articulo">
+      <phrase id="tblcaption" value="Articulo por Proveedor" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Articulo" />
+      </field>
+      <field id="codigo_proveedor">
+        <phrase id="fldcaption" value="Código Proveedor" />
+      </field>
+    </table>
+    <table id="recarga">
+      <phrase id="tblcaption" value="Transacciones" />
+      <field id="nro_recibo">
+        <phrase id="fldcaption" value="Nro." />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="metodo_pago">
+        <phrase id="fldcaption" value="Tipo de Pago" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="Banco" />
+      </field>
+      <field id="referencia">
+        <phrase id="fldcaption" value="Nro. Ref." />
+      </field>
+      <field id="reverso">
+        <phrase id="fldcaption" value="Reverso" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="monto_moneda">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="tasa_moneda">
+        <phrase id="fldcaption" value="Tasa Moneda" />
+      </field>
+      <field id="monto_bs">
+        <phrase id="fldcaption" value="Monto Bs." />
+      </field>
+      <field id="tasa_usd">
+        <phrase id="fldcaption" value="Tasa USD" />
+      </field>
+      <field id="monto_usd">
+        <phrase id="fldcaption" value="Monto USD" />
+      </field>
+      <field id="saldo">
+        <phrase id="fldcaption" value="Saldo Bs." />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="cobro_cliente_reverso">
+        <phrase id="fldcaption" value="cobro cliente reverso" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="nota_recepcion">
+        <phrase id="fldcaption" value="nota recepcion" />
+      </field>
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="abono">
+        <phrase id="fldcaption" value="abono" />
+      </field>
+    </table>
+    <table id="rif_buscar">
+      <phrase id="tblcaption" value="ALL" />
+    </table>
+    <table id="salidas">
+      <phrase id="tblcaption" value="Salidas" />
+      <phrase id="tblpagecaption1" value="Datos 1" />
+      <phrase id="tblpagecaption2" value="Datos 2" />
+      <phrase id="tblpagecaption3" value="Datos 3" />
+      <phrase id="tblpagecaption4" value="Datos 4" />
+      <phrase id="tblpagecaption5" value="Fotos" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="nro_control">
+        <phrase id="fldcaption" value="Nro de Control" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="Documento" />
+        <phrase id="fldtagvalue1" value="FC" />
+        <phrase id="fldtagcaption1" value="FACTURA" />
+        <phrase id="fldtagvalue2" value="NC" />
+        <phrase id="fldtagcaption2" value="NOTA DE CREDITO" />
+        <phrase id="fldtagvalue3" value="ND" />
+        <phrase id="fldtagcaption3" value="NOTA DE DEBITO" />
+      </field>
+      <field id="doc_afectado">
+        <phrase id="fldcaption" value="Doc. Afectado" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="monto_total">
+        <phrase id="fldcaption" value="Monto" />
+      </field>
+      <field id="alicuota_iva">
+        <phrase id="fldcaption" value="Alicuota IVA" />
+      </field>
+      <field id="iva">
+        <phrase id="fldcaption" value="IVA" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Total" />
+      </field>
+      <field id="tasa_dia">
+        <phrase id="fldcaption" value="Tasa del Día" />
+      </field>
+      <field id="monto_usd">
+        <phrase id="fldcaption" value="Monto USD" />
+      </field>
+      <field id="lista_pedido">
+        <phrase id="fldcaption" value="Lista Pedido" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="estatus">
+        <phrase id="fldcaption" value="Estatus" />
+        <phrase id="fldtagvalue1" value="NUEVO" />
+        <phrase id="fldtagcaption1" value="NUEVO" />
+        <phrase id="fldtagvalue2" value="PROCESADO" />
+        <phrase id="fldtagcaption2" value="PROCESADO" />
+        <phrase id="fldtagvalue3" value="ANULADO" />
+        <phrase id="fldtagcaption3" value="ANULADO" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="Asesor/Cliente" />
+      </field>
+      <field id="dias_credito">
+        <phrase id="fldcaption" value="Días Crédito" />
+      </field>
+      <field id="entregado">
+        <phrase id="fldcaption" value="Entregado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="fecha_entrega">
+        <phrase id="fldcaption" value="Fecha Entrega" />
+      </field>
+      <field id="pagado">
+        <phrase id="fldcaption" value="Pagado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="bultos">
+        <phrase id="fldcaption" value="# Bultos" />
+      </field>
+      <field id="fecha_bultos">
+        <phrase id="fldcaption" value="Fecha Bultos" />
+      </field>
+      <field id="user_bultos">
+        <phrase id="fldcaption" value="Usuario Bultos" />
+      </field>
+      <field id="fecha_despacho">
+        <phrase id="fldcaption" value="Fecha Despacho" />
+      </field>
+      <field id="user_despacho">
+        <phrase id="fldcaption" value="Usuario Despacho" />
+      </field>
+      <field id="consignacion">
+        <phrase id="fldcaption" value="Consignación" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="unidades">
+        <phrase id="fldcaption" value="Unidades" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="Porcentaje Descuento" />
+      </field>
+      <field id="monto_sin_descuento">
+        <phrase id="fldcaption" value="monto sin descuento" />
+      </field>
+      <field id="factura">
+        <phrase id="fldcaption" value="Factura" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="ci_rif">
+        <phrase id="fldcaption" value="ci rif" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Cliente Compra" />
+      </field>
+      <field id="direccion">
+        <phrase id="fldcaption" value="direccion" />
+      </field>
+      <field id="telefono">
+        <phrase id="fldcaption" value="telefono" />
+      </field>
+      <field id="_email">
+        <phrase id="fldcaption" value="email" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="Comprobante" />
+      </field>
+      <field id="nro_despacho">
+        <phrase id="fldcaption" value="Nro Despacho" />
+      </field>
+      <field id="cerrado">
+        <phrase id="fldcaption" value="cerrado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="asesor_asignado">
+        <phrase id="fldcaption" value="Asesor Asignado" />
+      </field>
+      <field id="tasa_indexada">
+        <phrase id="fldcaption" value="tasa indexada" />
+      </field>
+      <field id="id_documento_padre_nd">
+        <phrase id="fldcaption" value="Nro N.E. no va" />
+      </field>
+      <field id="id_documento_padre">
+        <phrase id="fldcaption" value="Doc. Origen" />
+      </field>
+      <field id="archivo_pedido">
+        <phrase id="fldcaption" value="Archivo de Pedido de Venta o Factura" />
+      </field>
+      <field id="checker">
+        <phrase id="fldcaption" value="Checker" />
+      </field>
+      <field id="checker_date">
+        <phrase id="fldcaption" value="Checker Fecha" />
+      </field>
+      <field id="packer">
+        <phrase id="fldcaption" value="Packer" />
+      </field>
+      <field id="packer_date">
+        <phrase id="fldcaption" value="Packer Fecha" />
+      </field>
+      <field id="fotos">
+        <phrase id="fldcaption" value="Fotos" />
+      </field>
+    </table>
+    <table id="sesiones">
+      <phrase id="tblcaption" value="Inicios de Sesion" />
+    </table>
+    <table id="subir_costo">
+      <phrase id="tblcaption" value="Subir Costo de Artículos" />
+    </table>
+    <table id="subir_costo_guardar">
+      <phrase id="tblcaption" value="Subir Costo de Artículos" />
+    </table>
+    <table id="subir_por_desc_articulo">
+      <phrase id="tblcaption" value="Subir Porcentaje Descuento Artículos" />
+    </table>
+    <table id="subir_por_desc_articulo_guardar">
+      <phrase id="tblcaption" value="Subir Porcentaje Descuento Artículos" />
+    </table>
+    <table id="subir_tarifa">
+      <phrase id="tblcaption" value="Subir Tarifas de Artículos" />
+    </table>
+    <table id="subir_tarifa_guardar">
+      <phrase id="tblcaption" value="Subir Tarifas de Artículos" />
+    </table>
+    <table id="syncitem">
+      <phrase id="tblcaption" value="ALL - Agregar Articulos Nuevos Activos a la Tarifa" />
+    </table>
+    <table id="tabla">
+      <phrase id="tblcaption" value="Tablas" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="tabla">
+        <phrase id="fldcaption" value="Tabla" />
+      </field>
+      <field id="campo_codigo">
+        <phrase id="fldcaption" value="Campo Código" />
+      </field>
+      <field id="campo_descripcion">
+        <phrase id="fldcaption" value="Campo Descripción" />
+      </field>
+      <field id="campo_dato">
+        <phrase id="fldcaption" value="Color" />
+      </field>
+    </table>
+    <table id="tarifa">
+      <phrase id="tblcaption" value="Tarifa" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre Tarifa" />
+      </field>
+      <field id="patron">
+        <phrase id="fldcaption" value="Tarifa Patron" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="porcentaje">
+        <phrase id="fldcaption" value="Porcentaje" />
+      </field>
+    </table>
+    <table id="tarifa_anterior">
+      <phrase id="tblcaption" value="Tarifa Anterior" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="tarifa">
+        <phrase id="fldcaption" value="Tarifa" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Laboratorio" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="precio_anterior">
+        <phrase id="fldcaption" value="Precio Anterior" />
+      </field>
+      <field id="precio_nuevo">
+        <phrase id="fldcaption" value="Precio Nuevo" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="tarifa_articulo">
+      <phrase id="tblcaption" value="Tarifa Articulo" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tarifa">
+        <phrase id="fldcaption" value="Tarifa" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="Precio" />
+      </field>
+    </table>
+    <table id="tarifa_articulo_temp">
+      <phrase id="tblcaption" value="tarifa articulo temp" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tarifa">
+        <phrase id="fldcaption" value="tarifa" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="precio" />
+      </field>
+    </table>
+    <table id="tarifa_temp">
+      <phrase id="tblcaption" value="tarifa temp" />
+      <field id="codigo">
+        <phrase id="fldcaption" value="codigo" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="nombre" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="precio" />
+      </field>
+    </table>
+    <table id="tasa_usd">
+      <phrase id="tblcaption" value="Tasa USD" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="tasa">
+        <phrase id="fldcaption" value="Tasa" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="hora">
+        <phrase id="fldcaption" value="Hora" />
+      </field>
+    </table>
+    <table id="temp_consignacion">
+      <phrase id="tblcaption" value="temp consignacion" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="nro documento" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="cantidad_movimiento">
+        <phrase id="fldcaption" value="cantidad movimiento" />
+      </field>
+      <field id="cantidad_entre_fechas">
+        <phrase id="fldcaption" value="cantidad entre fechas" />
+      </field>
+      <field id="cantidad_acumulada">
+        <phrase id="fldcaption" value="cantidad acumulada" />
+      </field>
+      <field id="cantidad_ajuste">
+        <phrase id="fldcaption" value="cantidad ajuste" />
+      </field>
+    </table>
+    <table id="tipo_documento">
+      <phrase id="tblcaption" value="Tipo Documento" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+        <phrase id="fldtagvalue1" value="PROVEEDOR" />
+        <phrase id="fldtagcaption1" value="PROVEEDOR" />
+        <phrase id="fldtagvalue2" value="CLIENTE" />
+        <phrase id="fldtagcaption2" value="CLIENTE" />
+      </field>
+      <field id="m01">
+        <phrase id="fldcaption" value="ENERO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m02">
+        <phrase id="fldcaption" value="FEBRERO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m03">
+        <phrase id="fldcaption" value="MARZO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m04">
+        <phrase id="fldcaption" value="ABRIL" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m05">
+        <phrase id="fldcaption" value="MAYO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m06">
+        <phrase id="fldcaption" value="JUNIO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m07">
+        <phrase id="fldcaption" value="JULIO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m08">
+        <phrase id="fldcaption" value="AGOSTO" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m09">
+        <phrase id="fldcaption" value="SEPTIEMBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m10">
+        <phrase id="fldcaption" value="OCTUBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m11">
+        <phrase id="fldcaption" value="NOVIEMBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+      <field id="m12">
+        <phrase id="fldcaption" value="DICIMBRE" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="CERRADO" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="ABIERTO" />
+      </field>
+    </table>
+    <table id="transferencia_articulo">
+      <phrase id="tblcaption" value="Transferencias" />
+    </table>
+    <table id="transferencia_articulo_detalle">
+      <phrase id="tblcaption" value="Transferencias" />
+    </table>
+    <table id="transferencia_articulo_listar">
+      <phrase id="tblcaption" value="Transferencias" />
+    </table>
+    <table id="transferencia_guardar">
+      <phrase id="tblcaption" value="Transferencias" />
+    </table>
+    <table id="transferencia_resultado">
+      <phrase id="tblcaption" value="Transferencias" />
+    </table>
+    <table id="unidad_medida">
+      <phrase id="tblcaption" value="Unidad de Medida" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="Descripción" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+        <phrase id="fldtagvalue1" value="*" />
+        <phrase id="fldtagcaption1" value="*" />
+        <phrase id="fldtagvalue2" value="/" />
+        <phrase id="fldtagcaption2" value="/" />
+      </field>
+      <field id="cantidad">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+    </table>
+    <table id="userlevelpermissions">
+      <phrase id="tblcaption" value="Permisos" />
+      <field id="userlevelid">
+        <phrase id="fldcaption" value="Grupo" />
+      </field>
+      <field id="_tablename">
+        <phrase id="fldcaption" value="Tabla" />
+      </field>
+      <field id="_permission">
+        <phrase id="fldcaption" value="Permiso" />
+      </field>
+    </table>
+    <table id="userlevels">
+      <phrase id="tblcaption" value="Grupos" />
+      <field id="userlevelid">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="userlevelname">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="tipo_acceso">
+        <phrase id="fldcaption" value="Tipo Acceso al Sistema" />
+        <phrase id="fldtagvalue1" value="USUARIO" />
+        <phrase id="fldtagcaption1" value="USUARIO" />
+        <phrase id="fldtagvalue2" value="CLIENTE" />
+        <phrase id="fldtagcaption2" value="CLIENTE" />
+        <phrase id="fldtagvalue3" value="PROVEEDOR" />
+        <phrase id="fldtagcaption3" value="PROVEEDOR" />
+      </field>
+    </table>
+    <table id="username_tipo_documento">
+      <phrase id="tblcaption" value="username tipo documento" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+    </table>
+    <table id="usuario">
+      <phrase id="tblcaption" value="Usuarios" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Username" />
+      </field>
+      <field id="_password">
+        <phrase id="fldcaption" value="Password" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="telefono">
+        <phrase id="fldcaption" value="Teléfono" />
+      </field>
+      <field id="_email">
+        <phrase id="fldcaption" value="Email" />
+      </field>
+      <field id="userlevelid">
+        <phrase id="fldcaption" value="Grupo" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="Asesor" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="foto">
+        <phrase id="fldcaption" value="Foto" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="ventas_por_laboratorio">
+      <phrase id="tblcaption" value="Ventas por Laboratorio" />
+    </table>
+    <table id="verificar_existencia">
+      <phrase id="tblcaption" value="ALL - Verificar Existencia" />
+    </table>
+    <table id="verificar_existencia_update2">
+      <phrase id="tblcaption" value="ALL - Verficar Existencia Actualizar" />
+    </table>
+    <table id="verificar_venta">
+      <phrase id="tblcaption" value="ALL - Vericar Venta" />
+    </table>
+    <table id="view_articulos">
+      <phrase id="tblcaption" value="Actualizar Costo Artículos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="nombre_comercial">
+        <phrase id="fldcaption" value="Nombre Comercial" />
+      </field>
+      <field id="principio_activo">
+        <phrase id="fldcaption" value="Principio Activo" />
+      </field>
+      <field id="presentacion">
+        <phrase id="fldcaption" value="Presentacion" />
+      </field>
+      <field id="cantidad_en_mano">
+        <phrase id="fldcaption" value="Existencia" />
+      </field>
+      <field id="ultimo_costo">
+        <phrase id="fldcaption" value="Costo" />
+      </field>
+    </table>
+    <table id="view_banco">
+      <phrase id="tblcaption" value="view banco" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="codigo" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="banco" />
+      </field>
+      <field id="numero">
+        <phrase id="fldcaption" value="numero" />
+      </field>
+      <field id="cuenta">
+        <phrase id="fldcaption" value="cuenta" />
+      </field>
+    </table>
+    <table id="view_bultos">
+      <phrase id="tblcaption" value="Salida de Bultos" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="ciudad">
+        <phrase id="fldcaption" value="Ciudad" />
+      </field>
+      <field id="direccion">
+        <phrase id="fldcaption" value="Direccion" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="Asesor" />
+      </field>
+      <field id="bultos">
+        <phrase id="fldcaption" value="Bultos" />
+      </field>
+      <field id="fecha_despacho">
+        <phrase id="fldcaption" value="Fecha Despacho" />
+      </field>
+      <field id="user_despacho">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+    </table>
+    <table id="view_costo_articulos_no_encontrados">
+      <phrase id="tblcaption" value="Costo Articulos no Encontrados" />
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="costo">
+        <phrase id="fldcaption" value="Costo" />
+      </field>
+    </table>
+    <table id="view_entradas">
+      <phrase id="tblcaption" value="ALL - Documentos a Facturar / Recepcionar" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="nombre_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="nombre_proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="estatus">
+        <phrase id="fldcaption" value="estatus" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="consignacion">
+        <phrase id="fldcaption" value="consignacion" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="consignacion_reportada">
+        <phrase id="fldcaption" value="consignacion reportada" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+    </table>
+    <table id="view_entradas_salidas">
+      <phrase id="tblcaption" value="ALL - Vista Movimientos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="id_documento">
+        <phrase id="fldcaption" value="id documento" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Articulo" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="Lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="Vencimiento" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="almacen" />
+      </field>
+      <field id="cantidad_articulo">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+      <field id="articulo_unidad_medida">
+        <phrase id="fldcaption" value="Unidad Medida" />
+      </field>
+      <field id="cantidad_unidad_medida">
+        <phrase id="fldcaption" value="cantidad unidad medida" />
+      </field>
+      <field id="cantidad_movimiento">
+        <phrase id="fldcaption" value="cantidad movimiento" />
+      </field>
+      <field id="costo_unidad">
+        <phrase id="fldcaption" value="costo unidad" />
+      </field>
+      <field id="costo">
+        <phrase id="fldcaption" value="costo" />
+      </field>
+      <field id="precio_unidad">
+        <phrase id="fldcaption" value="precio unidad" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="precio" />
+      </field>
+      <field id="id_compra">
+        <phrase id="fldcaption" value="id compra" />
+      </field>
+      <field id="alicuota">
+        <phrase id="fldcaption" value="alicuota" />
+      </field>
+      <field id="cantidad_movimiento_consignacion">
+        <phrase id="fldcaption" value="cantidad movimiento consignacion" />
+      </field>
+      <field id="id_consignacion">
+        <phrase id="fldcaption" value="id consignacion" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="descuento" />
+      </field>
+      <field id="precio_unidad_sin_desc">
+        <phrase id="fldcaption" value="precio unidad sin desc" />
+      </field>
+      <field id="check_ne">
+        <phrase id="fldcaption" value="Check ne" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="packer_cantidad">
+        <phrase id="fldcaption" value="VF" />
+      </field>
+    </table>
+    <table id="view_existencia_almacen">
+      <phrase id="tblcaption" value="Existencia por Almacen" />
+      <field id="codalm">
+        <phrase id="fldcaption" value="Almacen" />
+      </field>
+      <field id="codfab">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="codart">
+        <phrase id="fldcaption" value="Articulo" />
+      </field>
+      <field id="nombre_comercial">
+        <phrase id="fldcaption" value="Nombre Comercial" />
+      </field>
+      <field id="principio_activo">
+        <phrase id="fldcaption" value="Nrincipio Principal" />
+      </field>
+      <field id="presentacion">
+        <phrase id="fldcaption" value="Presentacion" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="Lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="Vencimiento" />
+      </field>
+      <field id="cantidad">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="fabricante" />
+      </field>
+      <field id="id_compra">
+        <phrase id="fldcaption" value="id compra" />
+      </field>
+      <field id="nom_almacen">
+        <phrase id="fldcaption" value="nom almacen" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="codigo" />
+      </field>
+      <field id="codigo_de_barra">
+        <phrase id="fldcaption" value="codigo de barra" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+    </table>
+    <table id="view_factura_asesor">
+      <phrase id="tblcaption" value="Facturas Asesor" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="asesor">
+        <phrase id="fldcaption" value="Asesor" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Total Factura" />
+      </field>
+      <field id="asesor_nombre">
+        <phrase id="fldcaption" value="asesor nombre" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+    </table>
+    <table id="view_facturas_a_entregar">
+      <phrase id="tblcaption" value="Facturas de Pedidos Entregados" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Documento" />
+      </field>
+      <field id="codcli">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Monto Total" />
+      </field>
+      <field id="entregado">
+        <phrase id="fldcaption" value="Mercancia Entregada" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="fecha_entrega">
+        <phrase id="fldcaption" value="Fecha Entrega" />
+      </field>
+      <field id="dias_credito">
+        <phrase id="fldcaption" value="Dias de Crédito" />
+      </field>
+    </table>
+    <table id="view_facturas_cobranza">
+      <phrase id="tblcaption" value="Cobranzas" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="Doc." />
+        <phrase id="fldtagvalue1" value="FC" />
+        <phrase id="fldtagcaption1" value="FC" />
+        <phrase id="fldtagvalue2" value="NC" />
+        <phrase id="fldtagcaption2" value="NC" />
+        <phrase id="fldtagvalue3" value="ND" />
+        <phrase id="fldtagcaption3" value="ND" />
+      </field>
+      <field id="codcli">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro. Fact." />
+      </field>
+      <field id="nro_nota">
+        <phrase id="fldcaption" value="Nro. Nota" />
+      </field>
+      <field id="ciudad">
+        <phrase id="fldcaption" value="Ciudad" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="base_imponible">
+        <phrase id="fldcaption" value="Base" />
+      </field>
+      <field id="alicuota_iva">
+        <phrase id="fldcaption" value="Alicuota" />
+      </field>
+      <field id="iva">
+        <phrase id="fldcaption" value="IVA" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Total" />
+      </field>
+      <field id="monto_pagado">
+        <phrase id="fldcaption" value="Monto Pagado" />
+      </field>
+      <field id="pendiente">
+        <phrase id="fldcaption" value="Pediente" />
+      </field>
+      <field id="pendiente2">
+        <phrase id="fldcaption" value="Pediente USD" />
+      </field>
+      <field id="pendiente3">
+        <phrase id="fldcaption" value="Pediente Bs." />
+      </field>
+      <field id="tasa_dia">
+        <phrase id="fldcaption" value="Tasa" />
+      </field>
+      <field id="monto_usd">
+        <phrase id="fldcaption" value="Monto USD" />
+      </field>
+      <field id="fecha_despacho">
+        <phrase id="fldcaption" value="Fecha Despacho" />
+      </field>
+      <field id="fecha_entrega">
+        <phrase id="fldcaption" value="Fecha Entrega" />
+      </field>
+      <field id="dias_credito">
+        <phrase id="fldcaption" value="Días Cre." />
+      </field>
+      <field id="dias_transcurridos">
+        <phrase id="fldcaption" value="Días Trans." />
+      </field>
+      <field id="dias_vencidos">
+        <phrase id="fldcaption" value="Días Ven." />
+      </field>
+      <field id="pagado">
+        <phrase id="fldcaption" value="Pagado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="bultos">
+        <phrase id="fldcaption" value="Bultos" />
+      </field>
+      <field id="asesor_asignado">
+        <phrase id="fldcaption" value="Asesor" />
+      </field>
+      <field id="id_documento_padre">
+        <phrase id="fldcaption" value="id documento padre" />
+      </field>
+    </table>
+    <table id="view_facturas_vencidas">
+      <phrase id="tblcaption" value="Facturas Vencidas Alerta" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Documento" />
+      </field>
+      <field id="codcli">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Monto Total" />
+      </field>
+      <field id="fecha_entrega">
+        <phrase id="fldcaption" value="Fecha Entrega" />
+      </field>
+      <field id="dias_credito">
+        <phrase id="fldcaption" value="Días Crédito" />
+      </field>
+      <field id="dias_vencidos">
+        <phrase id="fldcaption" value="Días Vencidos" />
+      </field>
+    </table>
+    <table id="view_lotes">
+      <phrase id="tblcaption" value="view lotes" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="fecha vencimiento" />
+      </field>
+      <field id="cantidad">
+        <phrase id="fldcaption" value="cantidad" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="almacen" />
+      </field>
+    </table>
+    <table id="view_lotes_subquery">
+      <phrase id="tblcaption" value="view lotes subquery" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="cantidad_movimiento">
+        <phrase id="fldcaption" value="cantidad movimiento" />
+      </field>
+    </table>
+    <table id="view_pagos">
+      <phrase id="tblcaption" value="Reporte de Pagos" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="Doc." />
+        <phrase id="fldtagvalue1" value="FC" />
+        <phrase id="fldtagcaption1" value="FC" />
+        <phrase id="fldtagvalue2" value="NC" />
+        <phrase id="fldtagcaption2" value="NC" />
+        <phrase id="fldtagvalue3" value="ND" />
+        <phrase id="fldtagcaption3" value="ND" />
+        <phrase id="fldtagvalue4" value="AB" />
+        <phrase id="fldtagcaption4" value="AB" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro. Doc." />
+      </field>
+      <field id="fecha_documento">
+        <phrase id="fldcaption" value="Fecha Doc." />
+      </field>
+      <field id="base_imponible">
+        <phrase id="fldcaption" value="Monto Base" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="Total" />
+      </field>
+      <field id="tipo_pago">
+        <phrase id="fldcaption" value="Tipo Pago" />
+      </field>
+      <field id="fecha_pago">
+        <phrase id="fldcaption" value="Fecha Pago" />
+      </field>
+      <field id="referencia">
+        <phrase id="fldcaption" value="Ref. #" />
+      </field>
+      <field id="banco">
+        <phrase id="fldcaption" value="Banco" />
+      </field>
+      <field id="banco_destino">
+        <phrase id="fldcaption" value="Banco Destino" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="monto">
+        <phrase id="fldcaption" value="Monto Pago" />
+      </field>
+      <field id="monto_bs">
+        <phrase id="fldcaption" value="Monto Bs" />
+      </field>
+      <field id="monto_usd">
+        <phrase id="fldcaption" value="Monto USD" />
+      </field>
+      <field id="tasa_usd">
+        <phrase id="fldcaption" value="Tasa USD" />
+      </field>
+      <field id="asesor_asignado">
+        <phrase id="fldcaption" value="asesor asignado" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Asesor Asignado" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="fecha_resgistro">
+        <phrase id="fldcaption" value="Resgistro" />
+      </field>
+    </table>
+    <table id="view_plancta">
+      <phrase id="tblcaption" value="view plancta" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="codigo">
+        <phrase id="fldcaption" value="codigo" />
+      </field>
+      <field id="descripcion">
+        <phrase id="fldcaption" value="descripcion" />
+      </field>
+      <field id="activa">
+        <phrase id="fldcaption" value="activa" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+    </table>
+    <table id="view_salidas">
+      <phrase id="tblcaption" value="ALL - Documentos a Facturar / Entregar" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="nombre_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="Cliente" />
+      </field>
+      <field id="nombre_cliente">
+        <phrase id="fldcaption" value="nombre cliente" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="estatus">
+        <phrase id="fldcaption" value="estatus" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="consignacion">
+        <phrase id="fldcaption" value="Consignación" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="cerrado">
+        <phrase id="fldcaption" value="cerrado" />
+      </field>
+    </table>
+    <table id="view_tarifa">
+      <phrase id="tblcaption" value="view tarifa" />
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="precio" />
+      </field>
+      <field id="tarifa">
+        <phrase id="fldcaption" value="tarifa" />
+      </field>
+    </table>
+    <table id="view_tarifa_articulos_no_encontrados">
+      <phrase id="tblcaption" value="Tarifa Articulos no Encontrados" />
+      <field id="codigo">
+        <phrase id="fldcaption" value="Código" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="Precio" />
+      </field>
+    </table>
+    <table id="view_temp_tarifa">
+      <phrase id="tblcaption" value="view temp tarifa" />
+      <field id="codigo">
+        <phrase id="fldcaption" value="codigo" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="nombre" />
+      </field>
+      <field id="precio">
+        <phrase id="fldcaption" value="precio" />
+      </field>
+    </table>
+    <table id="view_transferencias">
+      <phrase id="tblcaption" value="Transferencias" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor / Cliente" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="estatus">
+        <phrase id="fldcaption" value="Estatus" />
+      </field>
+      <field id="iddoc">
+        <phrase id="fldcaption" value="iddoc" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Articulo" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="Lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="Vencimiento" />
+      </field>
+      <field id="cantidad_articulo">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="Almacen" />
+      </field>
+    </table>
+    <table id="view_unidad_medida">
+      <phrase id="tblcaption" value="Unidad de Medida" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="articulo" />
+      </field>
+      <field id="unidad_medida">
+        <phrase id="fldcaption" value="unidad medida" />
+      </field>
+      <field id="cantidad_por_unidad_medida">
+        <phrase id="fldcaption" value="cantidad por unidad medida" />
+      </field>
+      <field id="descripcion_unidad_medida">
+        <phrase id="fldcaption" value="descripcion unidad medida" />
+      </field>
+    </table>
+    <table id="view_x_cobrar">
+      <phrase id="tblcaption" value="view x cobrar" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="nro documento" />
+      </field>
+      <field id="monto_pagar">
+        <phrase id="fldcaption" value="monto pagar" />
+      </field>
+      <field id="monto_pagado">
+        <phrase id="fldcaption" value="monto pagado" />
+      </field>
+      <field id="retivamonto">
+        <phrase id="fldcaption" value="retivamonto" />
+      </field>
+      <field id="retiva">
+        <phrase id="fldcaption" value="retiva" />
+      </field>
+      <field id="retislrmonto">
+        <phrase id="fldcaption" value="retislrmonto" />
+      </field>
+      <field id="retislr">
+        <phrase id="fldcaption" value="retislr" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="comprobante" />
+      </field>
+      <field id="tipodoc">
+        <phrase id="fldcaption" value="tipodoc" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="fecha" />
+      </field>
+    </table>
+    <table id="view_x_pagar">
+      <phrase id="tblcaption" value="view x pagar" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="proveedor" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="nro documento" />
+      </field>
+      <field id="monto_pagar">
+        <phrase id="fldcaption" value="monto pagar" />
+      </field>
+      <field id="monto_pagado">
+        <phrase id="fldcaption" value="monto pagado" />
+      </field>
+      <field id="total">
+        <phrase id="fldcaption" value="total" />
+      </field>
+      <field id="ret_iva">
+        <phrase id="fldcaption" value="ret iva" />
+      </field>
+      <field id="ref_iva">
+        <phrase id="fldcaption" value="ref iva" />
+      </field>
+      <field id="ret_islr">
+        <phrase id="fldcaption" value="ret islr" />
+      </field>
+      <field id="ref_islr">
+        <phrase id="fldcaption" value="ref islr" />
+      </field>
+      <field id="comprobante">
+        <phrase id="fldcaption" value="comprobante" />
+      </field>
+      <field id="tipodoc">
+        <phrase id="fldcaption" value="tipodoc" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="fecha" />
+      </field>
+    </table>
+    <table id="ya_fue_procesado">
+      <phrase id="tblcaption" value="ALL - Nota de Entrega" />
+    </table>
+    <table id="imagenes_cliente">
+      <phrase id="tblcaption" value="Imagenes Cliente" />
+    </table>
+    <table id="purga">
+      <phrase id="tblcaption" value="Conteo Manual" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="procesado">
+        <phrase id="fldcaption" value="Procesado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="username_procesa">
+        <phrase id="fldcaption" value="Usuario Procesa" />
+      </field>
+      <field id="salidas">
+        <phrase id="fldcaption" value="Salida" />
+      </field>
+      <field id="entradas">
+        <phrase id="fldcaption" value="Entradas" />
+      </field>
+    </table>
+    <table id="purga_detalle">
+      <phrase id="tblcaption" value="Conteo Manual Detalle" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="purga">
+        <phrase id="fldcaption" value="purga" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="id_entradas_salidas">
+        <phrase id="fldcaption" value="Existencia" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="Almacen" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="Lote" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="cantidad_articulo">
+        <phrase id="fldcaption" value="Cantidad" />
+      </field>
+      <field id="procesado">
+        <phrase id="fldcaption" value="procesado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+    </table>
+    <table id="almacenista">
+      <phrase id="tblcaption" value="Almacenistas" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="clave">
+        <phrase id="fldcaption" value="Clave" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="Nombre" />
+      </field>
+      <field id="tipo">
+        <phrase id="fldcaption" value="Tipo" />
+        <phrase id="fldtagvalue1" value="CHECKER" />
+        <phrase id="fldtagcaption1" value="CHECKER" />
+        <phrase id="fldtagvalue2" value="PACKER" />
+        <phrase id="fldtagcaption2" value="PACKER" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="ftp_subir_pedidos">
+      <phrase id="tblcaption" value="FTP Subir Pedidos" />
+    </table>
+    <table id="ftp_fact_pedi_procesado">
+      <phrase id="tblcaption" value="ftp fact pedi procesado" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="factura">
+        <phrase id="fldcaption" value="factura" />
+      </field>
+      <field id="pedido">
+        <phrase id="fldcaption" value="pedido" />
+      </field>
+      <field id="fecha_hora">
+        <phrase id="fldcaption" value="fecha hora" />
+      </field>
+    </table>
+    <table id="tarifa_descuento_utilidad">
+      <phrase id="tblcaption" value="Descuento Utilidad" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="Descuento" />
+      </field>
+      <field id="utilidad">
+        <phrase id="fldcaption" value="Utilidad" />
+      </field>
+      <field id="tarifa">
+        <phrase id="fldcaption" value="tarifa" />
+      </field>
+    </table>
+    <table id="historia_articulo">
+      <phrase id="tblcaption" value="Historia Artículo" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="Fabricante" />
+      </field>
+      <field id="articulo">
+        <phrase id="fldcaption" value="Artículo" />
+      </field>
+      <field id="proveedor">
+        <phrase id="fldcaption" value="Proveedor" />
+      </field>
+      <field id="almacen">
+        <phrase id="fldcaption" value="Almacen" />
+      </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="Tipo Documento" />
+      </field>
+      <field id="nro_documento">
+        <phrase id="fldcaption" value="Nro Documento" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="Fecha" />
+      </field>
+      <field id="lote">
+        <phrase id="fldcaption" value="Lote" />
+      </field>
+      <field id="fecha_vencimiento">
+        <phrase id="fldcaption" value="fecha vencimiento" />
+      </field>
+      <field id="usuario">
+        <phrase id="fldcaption" value="Usuario" />
+      </field>
+      <field id="entradas">
+        <phrase id="fldcaption" value="Entradas" />
+      </field>
+      <field id="salidas">
+        <phrase id="fldcaption" value="Salidas" />
+      </field>
+      <field id="existencia">
+        <phrase id="fldcaption" value="Existencia" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="Username" />
+      </field>
+      <field id="idx">
+        <phrase id="fldcaption" value="idx" />
+      </field>
+    </table>
+    <table id="limite_cliente">
+      <phrase id="tblcaption" value="limite cliente" />
+      <field id="rif">
+        <phrase id="fldcaption" value="rif" />
+      </field>
+      <field id="limite">
+        <phrase id="fldcaption" value="limite" />
+      </field>
+      <field id="condicion">
+        <phrase id="fldcaption" value="condicion" />
+      </field>
+    </table>
+  </project>
+</ew-language>
