@@ -452,6 +452,15 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->total->Visible) { // total ?>
         <th data-name="total" class="<?= $Page->total->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_total" class="view_out_tdcfcv_total"><?= $Page->renderFieldHeader($Page->total) ?></div></th>
 <?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+        <th data-name="igtf" class="<?= $Page->igtf->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_igtf" class="view_out_tdcfcv_igtf"><?= $Page->renderFieldHeader($Page->igtf) ?></div></th>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+        <th data-name="monto_base_igtf" class="<?= $Page->monto_base_igtf->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_monto_base_igtf" class="view_out_tdcfcv_monto_base_igtf"><?= $Page->renderFieldHeader($Page->monto_base_igtf) ?></div></th>
+<?php } ?>
+<?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+        <th data-name="monto_igtf" class="<?= $Page->monto_igtf->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_monto_igtf" class="view_out_tdcfcv_monto_igtf"><?= $Page->renderFieldHeader($Page->monto_igtf) ?></div></th>
+<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
         <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_moneda" class="view_out_tdcfcv_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
 <?php } ?>
@@ -554,6 +563,30 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_total" class="el_view_out_tdcfcv_total">
 <span<?= $Page->total->viewAttributes() ?>>
 <?= $Page->total->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->igtf->Visible) { // igtf ?>
+        <td data-name="igtf"<?= $Page->igtf->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_igtf" class="el_view_out_tdcfcv_igtf">
+<span<?= $Page->igtf->viewAttributes() ?>>
+<?= $Page->igtf->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+        <td data-name="monto_base_igtf"<?= $Page->monto_base_igtf->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_monto_base_igtf" class="el_view_out_tdcfcv_monto_base_igtf">
+<span<?= $Page->monto_base_igtf->viewAttributes() ?>>
+<?= $Page->monto_base_igtf->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+        <td data-name="monto_igtf"<?= $Page->monto_igtf->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_monto_igtf" class="el_view_out_tdcfcv_monto_igtf">
+<span<?= $Page->monto_igtf->viewAttributes() ?>>
+<?= $Page->monto_igtf->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

@@ -56,14 +56,8 @@ $Page->showMessage();
 <?php if ($Page->cliente->Visible) { // cliente ?>
         <th class="<?= $Page->cliente->headerCellClass() ?>"><span id="elh_cobros_cliente_cliente" class="cobros_cliente_cliente"><?= $Page->cliente->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-        <th class="<?= $Page->tipo_pago->headerCellClass() ?>"><span id="elh_cobros_cliente_tipo_pago" class="cobros_cliente_tipo_pago"><?= $Page->tipo_pago->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->referencia->Visible) { // referencia ?>
-        <th class="<?= $Page->referencia->headerCellClass() ?>"><span id="elh_cobros_cliente_referencia" class="cobros_cliente_referencia"><?= $Page->referencia->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->banco->Visible) { // banco ?>
-        <th class="<?= $Page->banco->headerCellClass() ?>"><span id="elh_cobros_cliente_banco" class="cobros_cliente_banco"><?= $Page->banco->caption() ?></span></th>
+<?php if ($Page->id_documento->Visible) { // id_documento ?>
+        <th class="<?= $Page->id_documento->headerCellClass() ?>"><span id="elh_cobros_cliente_id_documento" class="cobros_cliente_id_documento"><?= $Page->id_documento->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
         <th class="<?= $Page->fecha->headerCellClass() ?>"><span id="elh_cobros_cliente_fecha" class="cobros_cliente_fecha"><?= $Page->fecha->caption() ?></span></th>
@@ -71,11 +65,8 @@ $Page->showMessage();
 <?php if ($Page->moneda->Visible) { // moneda ?>
         <th class="<?= $Page->moneda->headerCellClass() ?>"><span id="elh_cobros_cliente_moneda" class="cobros_cliente_moneda"><?= $Page->moneda->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->monto_recibido->Visible) { // monto_recibido ?>
-        <th class="<?= $Page->monto_recibido->headerCellClass() ?>"><span id="elh_cobros_cliente_monto_recibido" class="cobros_cliente_monto_recibido"><?= $Page->monto_recibido->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->monto->Visible) { // monto ?>
-        <th class="<?= $Page->monto->headerCellClass() ?>"><span id="elh_cobros_cliente_monto" class="cobros_cliente_monto"><?= $Page->monto->caption() ?></span></th>
+<?php if ($Page->pago->Visible) { // pago ?>
+        <th class="<?= $Page->pago->headerCellClass() ?>"><span id="elh_cobros_cliente_pago" class="cobros_cliente_pago"><?= $Page->pago->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -114,27 +105,11 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-        <td<?= $Page->tipo_pago->cellAttributes() ?>>
+<?php if ($Page->id_documento->Visible) { // id_documento ?>
+        <td<?= $Page->id_documento->cellAttributes() ?>>
 <span id="">
-<span<?= $Page->tipo_pago->viewAttributes() ?>>
-<?= $Page->tipo_pago->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->referencia->Visible) { // referencia ?>
-        <td<?= $Page->referencia->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->referencia->viewAttributes() ?>>
-<?= $Page->referencia->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->banco->Visible) { // banco ?>
-        <td<?= $Page->banco->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->banco->viewAttributes() ?>>
-<?= $Page->banco->getViewValue() ?></span>
+<span<?= $Page->id_documento->viewAttributes() ?>>
+<?= $Page->id_documento->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
@@ -154,19 +129,11 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->monto_recibido->Visible) { // monto_recibido ?>
-        <td<?= $Page->monto_recibido->cellAttributes() ?>>
+<?php if ($Page->pago->Visible) { // pago ?>
+        <td<?= $Page->pago->cellAttributes() ?>>
 <span id="">
-<span<?= $Page->monto_recibido->viewAttributes() ?>>
-<?= $Page->monto_recibido->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->monto->Visible) { // monto ?>
-        <td<?= $Page->monto->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->monto->viewAttributes() ?>>
-<?= $Page->monto->getViewValue() ?></span>
+<span<?= $Page->pago->viewAttributes() ?>>
+<?= $Page->pago->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -241,41 +241,39 @@ $facturas_vencidas = intval(ExecuteScalar($sql));
 </div>
 
 <?php
-
 $sql = "SELECT valor1 FROM parametro WHERE codigo = '013';";
 $bloquea = ExecuteScalar($sql);
+
 if($bloquea == "NO") { 
-    /* Valida si se ejucta el FTP para crear pedidos nuevos */
-    $path = "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/";
-    // $path = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos\\";
+    $rutas = [
+        "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/",
+        "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/"
+    ];
 
-    $arrFiles = scandir($path);
-    $cnt = 0;
-    foreach ($arrFiles as $key => $value) {
-        $cnt++;
-    }
+    $total_archivos = 0;
 
-    if($cnt <= 2) {
-        /* Valida si se ejucta el FTP para crear pedidos nuevos */
-        $path = "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/";
-        // $path = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos\\";
-
-        $arrFiles = scandir($path);
-        $cnt = 0;
-        foreach ($arrFiles as $key => $value) {
-            $cnt++;
+    foreach ($rutas as $path) {
+        // En Windows esto dará falso y saltará al siguiente sin dar error
+        if (is_dir($path)) {
+            $files = @scandir($path);
+            if (is_array($files)) {
+                // Filtramos '.' y '..' para contar solo archivos reales
+                $archivos_reales = array_diff($files, array('.', '..'));
+                $total_archivos += count($archivos_reales);
+            }
         }
     }
 
-    if($cnt > 2) {
-        if($levelid == -1) {
-            header("Location: FtpSubirPedidos");
-            die();
+    // Si hay archivos en cualquiera de las carpetas de producción
+    if($total_archivos > 0) {
+        if(isset($levelid) && $levelid == -1) {
+            // Usamos redirección JS porque en el Home de PHPMaker 
+            // a veces ya se envió HTML y el header() fallaría
+            echo "<script>window.location.href='FtpSubirPedidos';</script>";
+            exit();
         }
     }
-    /* * */
 } 
-
 ?>
 
 <script>

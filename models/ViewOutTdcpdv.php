@@ -4200,7 +4200,10 @@ class ViewOutTdcpdv extends DbTable
     // Recordset Searching event
     public function recordsetSearching(&$filter)
     {
-        // Enter your code here
+        // Si detecta el parámetro x_estatus en la URL, aplica el filtro
+        if (Get("x_estatus") == "NUEVO") {
+            AddFilter($filter, "estatus = 'NUEVO'");
+        }
     }
 
     // Row_Selecting event

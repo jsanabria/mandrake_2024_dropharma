@@ -24,14 +24,10 @@ loadjs.ready(["wrapper", "head"], function () {
         .setFields([
             ["cliente", [fields.cliente.visible && fields.cliente.required ? ew.Validators.required(fields.cliente.caption) : null], fields.cliente.isInvalid],
             ["pivote", [fields.pivote.visible && fields.pivote.required ? ew.Validators.required(fields.pivote.caption) : null], fields.pivote.isInvalid],
-            ["tipo_pago", [fields.tipo_pago.visible && fields.tipo_pago.required ? ew.Validators.required(fields.tipo_pago.caption) : null], fields.tipo_pago.isInvalid],
-            ["referencia", [fields.referencia.visible && fields.referencia.required ? ew.Validators.required(fields.referencia.caption) : null], fields.referencia.isInvalid],
-            ["banco", [fields.banco.visible && fields.banco.required ? ew.Validators.required(fields.banco.caption) : null], fields.banco.isInvalid],
-            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
-            ["monto_recibido", [fields.monto_recibido.visible && fields.monto_recibido.required ? ew.Validators.required(fields.monto_recibido.caption) : null, ew.Validators.float], fields.monto_recibido.isInvalid],
-            ["monto", [fields.monto.visible && fields.monto.required ? ew.Validators.required(fields.monto.caption) : null, ew.Validators.float], fields.monto.isInvalid],
-            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid]
+            ["pago", [fields.pago.visible && fields.pago.required ? ew.Validators.required(fields.pago.caption) : null, ew.Validators.float], fields.pago.isInvalid],
+            ["tipo_pago", [fields.tipo_pago.visible && fields.tipo_pago.required ? ew.Validators.required(fields.tipo_pago.caption) : null], fields.tipo_pago.isInvalid],
+            ["pivote2", [fields.pivote2.visible && fields.pivote2.required ? ew.Validators.required(fields.pivote2.caption) : null], fields.pivote2.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -48,9 +44,8 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
-            "tipo_pago": <?= $Page->tipo_pago->toClientList($Page) ?>,
-            "banco": <?= $Page->banco->toClientList($Page) ?>,
             "moneda": <?= $Page->moneda->toClientList($Page) ?>,
+            "tipo_pago": <?= $Page->tipo_pago->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -130,151 +125,6 @@ loadjs.ready("fcobros_clienteadd", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-    <div id="r_tipo_pago"<?= $Page->tipo_pago->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_tipo_pago" for="x_tipo_pago" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_pago->caption() ?><?= $Page->tipo_pago->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_pago->cellAttributes() ?>>
-<span id="el_cobros_cliente_tipo_pago">
-    <select
-        id="x_tipo_pago"
-        name="x_tipo_pago"
-        class="form-select ew-select<?= $Page->tipo_pago->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
-        data-select2-id="fcobros_clienteadd_x_tipo_pago"
-        <?php } ?>
-        data-table="cobros_cliente"
-        data-field="x_tipo_pago"
-        data-value-separator="<?= $Page->tipo_pago->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_pago->getPlaceHolder()) ?>"
-        <?= $Page->tipo_pago->editAttributes() ?>>
-        <?= $Page->tipo_pago->selectOptionListHtml("x_tipo_pago") ?>
-    </select>
-    <?= $Page->tipo_pago->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_pago->getErrorMessage() ?></div>
-<?= $Page->tipo_pago->Lookup->getParamTag($Page, "p_x_tipo_pago") ?>
-<?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fcobros_clienteadd", function() {
-    var options = { name: "x_tipo_pago", selectId: "fcobros_clienteadd_x_tipo_pago" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fcobros_clienteadd.lists.tipo_pago?.lookupOptions.length) {
-        options.data = { id: "x_tipo_pago", form: "fcobros_clienteadd" };
-    } else {
-        options.ajax = { id: "x_tipo_pago", form: "fcobros_clienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cobros_cliente.fields.tipo_pago.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->referencia->Visible) { // referencia ?>
-    <div id="r_referencia"<?= $Page->referencia->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_referencia" for="x_referencia" class="<?= $Page->LeftColumnClass ?>"><?= $Page->referencia->caption() ?><?= $Page->referencia->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->referencia->cellAttributes() ?>>
-<span id="el_cobros_cliente_referencia">
-<input type="<?= $Page->referencia->getInputTextType() ?>" name="x_referencia" id="x_referencia" data-table="cobros_cliente" data-field="x_referencia" value="<?= $Page->referencia->EditValue ?>" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->referencia->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->referencia->formatPattern()) ?>"<?= $Page->referencia->editAttributes() ?> aria-describedby="x_referencia_help">
-<?= $Page->referencia->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->referencia->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->banco->Visible) { // banco ?>
-    <div id="r_banco"<?= $Page->banco->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_banco" for="x_banco" class="<?= $Page->LeftColumnClass ?>"><?= $Page->banco->caption() ?><?= $Page->banco->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->banco->cellAttributes() ?>>
-<span id="el_cobros_cliente_banco">
-    <select
-        id="x_banco"
-        name="x_banco"
-        class="form-select ew-select<?= $Page->banco->isInvalidClass() ?>"
-        <?php if (!$Page->banco->IsNativeSelect) { ?>
-        data-select2-id="fcobros_clienteadd_x_banco"
-        <?php } ?>
-        data-table="cobros_cliente"
-        data-field="x_banco"
-        data-value-separator="<?= $Page->banco->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->banco->getPlaceHolder()) ?>"
-        <?= $Page->banco->editAttributes() ?>>
-        <?= $Page->banco->selectOptionListHtml("x_banco") ?>
-    </select>
-    <?= $Page->banco->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->banco->getErrorMessage() ?></div>
-<?= $Page->banco->Lookup->getParamTag($Page, "p_x_banco") ?>
-<?php if (!$Page->banco->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fcobros_clienteadd", function() {
-    var options = { name: "x_banco", selectId: "fcobros_clienteadd_x_banco" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fcobros_clienteadd.lists.banco?.lookupOptions.length) {
-        options.data = { id: "x_banco", form: "fcobros_clienteadd" };
-    } else {
-        options.ajax = { id: "x_banco", form: "fcobros_clienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cobros_cliente.fields.banco.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->fecha->Visible) { // fecha ?>
-    <div id="r_fecha"<?= $Page->fecha->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
-<span id="el_cobros_cliente_fecha">
-<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="cobros_cliente" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
-<?= $Page->fecha->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
-<?php if (!$Page->fecha->ReadOnly && !$Page->fecha->Disabled && !isset($Page->fecha->EditAttrs["readonly"]) && !isset($Page->fecha->EditAttrs["disabled"])) { ?>
-<script>
-loadjs.ready(["fcobros_clienteadd", "datetimepicker"], function () {
-    let format = "<?= DateFormat(7) ?>",
-        options = {
-            localization: {
-                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
-                hourCycle: format.match(/H/) ? "h24" : "h12",
-                format,
-                ...ew.language.phrase("datetimepicker")
-            },
-            display: {
-                icons: {
-                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
-                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
-                },
-                components: {
-                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
-                    hours: !!format.match(/h/i),
-                    minutes: !!format.match(/m/),
-                    seconds: !!format.match(/s/i)
-                },
-                theme: ew.getPreferredTheme()
-            }
-        };
-    ew.createDateTimePicker("fcobros_clienteadd", "x_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
     <div id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
         <label id="elh_cobros_cliente_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -321,38 +171,72 @@ loadjs.ready("fcobros_clienteadd", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->monto_recibido->Visible) { // monto_recibido ?>
-    <div id="r_monto_recibido"<?= $Page->monto_recibido->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_monto_recibido" for="x_monto_recibido" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_recibido->caption() ?><?= $Page->monto_recibido->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_recibido->cellAttributes() ?>>
-<span id="el_cobros_cliente_monto_recibido">
-<input type="<?= $Page->monto_recibido->getInputTextType() ?>" name="x_monto_recibido" id="x_monto_recibido" data-table="cobros_cliente" data-field="x_monto_recibido" value="<?= $Page->monto_recibido->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->monto_recibido->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_recibido->formatPattern()) ?>"<?= $Page->monto_recibido->editAttributes() ?> aria-describedby="x_monto_recibido_help">
-<?= $Page->monto_recibido->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->monto_recibido->getErrorMessage() ?></div>
+<?php if ($Page->pago->Visible) { // pago ?>
+    <div id="r_pago"<?= $Page->pago->rowAttributes() ?>>
+        <label id="elh_cobros_cliente_pago" for="x_pago" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pago->caption() ?><?= $Page->pago->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pago->cellAttributes() ?>>
+<span id="el_cobros_cliente_pago">
+<input type="<?= $Page->pago->getInputTextType() ?>" name="x_pago" id="x_pago" data-table="cobros_cliente" data-field="x_pago" value="<?= $Page->pago->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->pago->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->pago->formatPattern()) ?>"<?= $Page->pago->editAttributes() ?> aria-describedby="x_pago_help">
+<?= $Page->pago->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->pago->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->monto->Visible) { // monto ?>
-    <div id="r_monto"<?= $Page->monto->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_monto" for="x_monto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto->caption() ?><?= $Page->monto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto->cellAttributes() ?>>
-<span id="el_cobros_cliente_monto">
-<input type="<?= $Page->monto->getInputTextType() ?>" name="x_monto" id="x_monto" data-table="cobros_cliente" data-field="x_monto" value="<?= $Page->monto->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->monto->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto->formatPattern()) ?>"<?= $Page->monto->editAttributes() ?> aria-describedby="x_monto_help">
-<?= $Page->monto->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->monto->getErrorMessage() ?></div>
+<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
+    <div id="r_tipo_pago"<?= $Page->tipo_pago->rowAttributes() ?>>
+        <label id="elh_cobros_cliente_tipo_pago" for="x_tipo_pago" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_pago->caption() ?><?= $Page->tipo_pago->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_pago->cellAttributes() ?>>
+<span id="el_cobros_cliente_tipo_pago">
+    <select
+        id="x_tipo_pago"
+        name="x_tipo_pago"
+        class="form-select ew-select<?= $Page->tipo_pago->isInvalidClass() ?>"
+        <?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
+        data-select2-id="fcobros_clienteadd_x_tipo_pago"
+        <?php } ?>
+        data-table="cobros_cliente"
+        data-field="x_tipo_pago"
+        data-value-separator="<?= $Page->tipo_pago->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo_pago->getPlaceHolder()) ?>"
+        <?= $Page->tipo_pago->editAttributes() ?>>
+        <?= $Page->tipo_pago->selectOptionListHtml("x_tipo_pago") ?>
+    </select>
+    <?= $Page->tipo_pago->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo_pago->getErrorMessage() ?></div>
+<?= $Page->tipo_pago->Lookup->getParamTag($Page, "p_x_tipo_pago") ?>
+<?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fcobros_clienteadd", function() {
+    var options = { name: "x_tipo_pago", selectId: "fcobros_clienteadd_x_tipo_pago" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fcobros_clienteadd.lists.tipo_pago?.lookupOptions.length) {
+        options.data = { id: "x_tipo_pago", form: "fcobros_clienteadd" };
+    } else {
+        options.ajax = { id: "x_tipo_pago", form: "fcobros_clienteadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cobros_cliente.fields.tipo_pago.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->nota->Visible) { // nota ?>
-    <div id="r_nota"<?= $Page->nota->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_nota" for="x_nota" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nota->caption() ?><?= $Page->nota->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nota->cellAttributes() ?>>
-<span id="el_cobros_cliente_nota">
-<textarea data-table="cobros_cliente" data-field="x_nota" name="x_nota" id="x_nota" cols="30" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
-<?= $Page->nota->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->nota->getErrorMessage() ?></div>
+<?php if ($Page->pivote2->Visible) { // pivote2 ?>
+    <div id="r_pivote2"<?= $Page->pivote2->rowAttributes() ?>>
+        <label id="elh_cobros_cliente_pivote2" for="x_pivote2" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pivote2->caption() ?><?= $Page->pivote2->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pivote2->cellAttributes() ?>>
+<span id="el_cobros_cliente_pivote2">
+<input type="<?= $Page->pivote2->getInputTextType() ?>" name="x_pivote2" id="x_pivote2" data-table="cobros_cliente" data-field="x_pivote2" value="<?= $Page->pivote2->EditValue ?>" size="30" maxlength="1" placeholder="<?= HtmlEncode($Page->pivote2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->pivote2->formatPattern()) ?>"<?= $Page->pivote2->editAttributes() ?> aria-describedby="x_pivote2_help">
+<?= $Page->pivote2->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->pivote2->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -392,17 +276,25 @@ loadjs.ready("load", function () {
     // Startup script
     // Write your table-specific startup script here
     // document.write("page loaded");
-    $("#x_monto").prop('readonly', true);
-    $("#x_monto_recibido").prop('readonly', true);
+    $("#x_pago").prop('readonly', true);
+    $("#r_pivote").hide();
+    $("#r_pivote2").hide();
     $("#x_cliente").change(function(){
+    	$("#r_pivote").show();
     	var cliente = $("#x_cliente").val();
-    	$("#r_pivote").html("Hello World");
+    	$("#r_pivote").html("");
+    	if(cliente == "") {
+    		$("#r_pivote").hide();
+    		$("#r_pivote2").hide();
+    		return true;
+    	}
     	$.ajax({
     	  url : "include/Cliente_Facturas_Buscar.php",
     	  type: "GET",
     	  data : {cliente: cliente},
     	  beforeSend: function(){
     	    $("#r_pivote").html("Por Favor Espere. . .");
+    	    //////$("#monto").val(0.00);
     	  }
     	})
     	.done(function(data) {
@@ -426,34 +318,65 @@ loadjs.ready("load", function () {
     	});
     });
     $("#x_tipo_pago").change(function(){
+    	$("#r_pivote2").show();
     	var cliente = $("#x_cliente").val();
+    	var tipo_pago = $("#x_tipo_pago").val();
+    	var pagos = $("#pagos").val();
+    	var moneda = $("#x_moneda").val();
+    	var tasa_usd = $("#tasa_usd").val();
+    	$("#r_pivote2").html("");
     	if(cliente == "") {
-    		alert("Debe seleccionar un cliente...");
+    		//$("#r_pivote2").hide();
+    		alert("Seleccione un cliente");
     		location.reload();
-    		return false;
+    		return true;
     	}
-    	$("#elh_cobros_cliente_referencia").html("Cargando...");
-    	$("#el_cobros_cliente_referencia").html("Cargando...");
-    	if($(this).val() == "RC") {
+    	$.ajax({
+    	  url : "include/Cliente_Tipo_Pago.php",
+    	  type: "GET",
+    	  data : {cliente: cliente, tipo_pago: tipo_pago, pagos: pagos, moneda: moneda, tasa_usd: tasa_usd},
+    	  beforeSend: function(){
+    	    $("#r_pivote2").html("Por Favor Espere. . .");
+    	  }
+    	})
+    	.done(function(data) {
+    		//alert(data);
+    		var rs = '';
+    		rs = data;
+    		//$("#x_monto").prop('readonly', false);
+    		$("#r_pivote2").html(rs);
+    	})
+    	.fail(function(data) {
+    		alert( "error" + data );
+    	})
+    	.always(function(data) {
+    		//alert( "complete" );
+    		//$("#result").html("Espere. . . ");
+    	});
+    });
+    $(document).ready(function() {
+    	//alert("<?php echo isset($_GET["id_compra"]) ? $_GET["id_compra"] : 0; ?>");
+    	var id = <?php echo isset($_GET["id_compra"]) ? intval($_GET["id_compra"]) : 0; ?>;
+    	if(id != 0) {
+    		$("#r_pivote").show();
     		$.ajax({
-    		  url : "include/Saldo_Cliente_Buscar.php",
+    		  url : "include/buscar_factura_cliente.php",
     		  type: "GET",
-    		  data : {cliente: cliente},
+    		  data : {id: id},
     		  beforeSend: function(){
-    		  	$("#elh_cobros_cliente_referencia").html("Por favor esperer...");
-    		  	$("#el_cobros_cliente_referencia").html("Por favor esperer...");
+    		  	$("#r_cliente").html("Por Favor Espere. . .");
+    		    $("#r_pivote").html("Por Favor Espere. . .");
+    		    //////$("#monto").val(0.00);
     		  }
     		})
     		.done(function(data) {
     			//alert(data);
-    			var rs = '';
-    			if(data == "0")
-    				rs = '<div class="container"><div class="alert alert-success" role="alert">No hay facturas pendientes por cobrar al cliente</div></div>';
-    			else {
-    				rs = data;
-    			}
-    		  	$("#elh_cobros_cliente_referencia").html("Monto Disponible USD");
-    		  	$("#el_cobros_cliente_referencia").html(rs);
+    			var rs = data.split("|");
+    			//$("#x_monto").prop('readonly', false);
+    			$("#x_monto_recibido").prop('readonly', false);
+    			$("#r_cliente").html(rs[0]);
+    			$("#r_pivote").html(rs[1]);
+    			//////$("#monto").val(rs[2]);
     		})
     		.fail(function(data) {
     			alert( "error" + data );
@@ -463,14 +386,12 @@ loadjs.ready("load", function () {
     			//$("#result").html("Espere. . . ");
     		});
     	}
-    	else {
-    		var Ctrl = "";
-    		Ctrl += '<input type="text" data-table="cobros_cliente" data-field="x_referencia" name="x_referencia" id="x_referencia" size="30" maxlength="50" placeholder="Referencia" value="" class="form-control" aria-describedby="x_referencia_help">';
-    		Ctrl += '<div class="invalid-feedback">';
-    		Ctrl += '</div>';
-    		$("#elh_cobros_cliente_referencia").html("Referencia");
-    		$("#el_cobros_cliente_referencia").html(Ctrl);
-    	}
+    	<?php
+    	$sql = "SELECT valor1 FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
+    	?>
+    	$("#x_moneda").val("<?php echo ExecuteScalar($sql); ?>");
+    	$("#x_moneda").prop('readonly', true);
+    	$("#r_moneda").hide();
     });
 });
 </script>

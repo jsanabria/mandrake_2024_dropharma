@@ -66,6 +66,9 @@ class ViewOutTdcfcv extends DbTable
     public $alicuota_iva;
     public $iva;
     public $total;
+    public $igtf;
+    public $monto_base_igtf;
+    public $monto_igtf;
     public $moneda;
     public $lista_pedido;
     public $nota;
@@ -446,6 +449,83 @@ class ViewOutTdcfcv extends DbTable
         $this->total->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
         $this->total->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['total'] = &$this->total;
+
+        // igtf
+        $this->igtf = new DbField(
+            $this, // Table
+            'x_igtf', // Variable name
+            'igtf', // Name
+            '`igtf`', // Expression
+            '`igtf`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->igtf->addMethod("getDefault", fn() => N);
+        $this->igtf->InputTextType = "text";
+        $this->igtf->Raw = true;
+        $this->igtf->setSelectMultiple(false); // Select one
+        $this->igtf->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->igtf->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->igtf->Lookup = new Lookup($this->igtf, 'view_out_tdcfcv', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->igtf->OptionCount = 2;
+        $this->igtf->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['igtf'] = &$this->igtf;
+
+        // monto_base_igtf
+        $this->monto_base_igtf = new DbField(
+            $this, // Table
+            'x_monto_base_igtf', // Variable name
+            'monto_base_igtf', // Name
+            '`monto_base_igtf`', // Expression
+            '`monto_base_igtf`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_base_igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_base_igtf->InputTextType = "text";
+        $this->monto_base_igtf->Raw = true;
+        $this->monto_base_igtf->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_base_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_base_igtf'] = &$this->monto_base_igtf;
+
+        // monto_igtf
+        $this->monto_igtf = new DbField(
+            $this, // Table
+            'x_monto_igtf', // Variable name
+            'monto_igtf', // Name
+            '`monto_igtf`', // Expression
+            '`monto_igtf`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_igtf->InputTextType = "text";
+        $this->monto_igtf->Raw = true;
+        $this->monto_igtf->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_igtf'] = &$this->monto_igtf;
 
         // moneda
         $this->moneda = new DbField(
@@ -2058,6 +2138,9 @@ class ViewOutTdcfcv extends DbTable
         $this->alicuota_iva->DbValue = $row['alicuota_iva'];
         $this->iva->DbValue = $row['iva'];
         $this->total->DbValue = $row['total'];
+        $this->igtf->DbValue = $row['igtf'];
+        $this->monto_base_igtf->DbValue = $row['monto_base_igtf'];
+        $this->monto_igtf->DbValue = $row['monto_igtf'];
         $this->moneda->DbValue = $row['moneda'];
         $this->lista_pedido->DbValue = $row['lista_pedido'];
         $this->nota->DbValue = $row['nota'];
@@ -2484,6 +2567,9 @@ class ViewOutTdcfcv extends DbTable
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
@@ -2579,6 +2665,12 @@ class ViewOutTdcfcv extends DbTable
         // iva
 
         // total
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // moneda
 
@@ -2728,6 +2820,21 @@ class ViewOutTdcfcv extends DbTable
         // total
         $this->total->ViewValue = $this->total->CurrentValue;
         $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
+
+        // igtf
+        if (strval($this->igtf->CurrentValue) != "") {
+            $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+        } else {
+            $this->igtf->ViewValue = null;
+        }
+
+        // monto_base_igtf
+        $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+        $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+        // monto_igtf
+        $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+        $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
 
         // moneda
         $curVal = strval($this->moneda->CurrentValue);
@@ -3145,6 +3252,18 @@ class ViewOutTdcfcv extends DbTable
         $this->total->HrefValue = "";
         $this->total->TooltipValue = "";
 
+        // igtf
+        $this->igtf->HrefValue = "";
+        $this->igtf->TooltipValue = "";
+
+        // monto_base_igtf
+        $this->monto_base_igtf->HrefValue = "";
+        $this->monto_base_igtf->TooltipValue = "";
+
+        // monto_igtf
+        $this->monto_igtf->HrefValue = "";
+        $this->monto_igtf->TooltipValue = "";
+
         // moneda
         $this->moneda->HrefValue = "";
         $this->moneda->TooltipValue = "";
@@ -3405,33 +3524,42 @@ class ViewOutTdcfcv extends DbTable
         // monto_total
         $this->monto_total->setupEditAttributes();
         $this->monto_total->EditValue = $this->monto_total->CurrentValue;
-        $this->monto_total->PlaceHolder = RemoveHtml($this->monto_total->caption());
-        if (strval($this->monto_total->EditValue) != "" && is_numeric($this->monto_total->EditValue)) {
-            $this->monto_total->EditValue = FormatNumber($this->monto_total->EditValue, null);
-        }
+        $this->monto_total->EditValue = FormatNumber($this->monto_total->EditValue, $this->monto_total->formatPattern());
 
         // alicuota_iva
         $this->alicuota_iva->setupEditAttributes();
         $this->alicuota_iva->EditValue = $this->alicuota_iva->CurrentValue;
-        $this->alicuota_iva->PlaceHolder = RemoveHtml($this->alicuota_iva->caption());
-        if (strval($this->alicuota_iva->EditValue) != "" && is_numeric($this->alicuota_iva->EditValue)) {
-            $this->alicuota_iva->EditValue = FormatNumber($this->alicuota_iva->EditValue, null);
-        }
+        $this->alicuota_iva->EditValue = FormatNumber($this->alicuota_iva->EditValue, $this->alicuota_iva->formatPattern());
 
         // iva
         $this->iva->setupEditAttributes();
         $this->iva->EditValue = $this->iva->CurrentValue;
-        $this->iva->PlaceHolder = RemoveHtml($this->iva->caption());
-        if (strval($this->iva->EditValue) != "" && is_numeric($this->iva->EditValue)) {
-            $this->iva->EditValue = FormatNumber($this->iva->EditValue, null);
-        }
+        $this->iva->EditValue = FormatNumber($this->iva->EditValue, $this->iva->formatPattern());
 
         // total
         $this->total->setupEditAttributes();
         $this->total->EditValue = $this->total->CurrentValue;
-        $this->total->PlaceHolder = RemoveHtml($this->total->caption());
-        if (strval($this->total->EditValue) != "" && is_numeric($this->total->EditValue)) {
-            $this->total->EditValue = FormatNumber($this->total->EditValue, null);
+        $this->total->EditValue = FormatNumber($this->total->EditValue, $this->total->formatPattern());
+
+        // igtf
+        $this->igtf->setupEditAttributes();
+        $this->igtf->EditValue = $this->igtf->options(true);
+        $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+        // monto_base_igtf
+        $this->monto_base_igtf->setupEditAttributes();
+        $this->monto_base_igtf->EditValue = $this->monto_base_igtf->CurrentValue;
+        $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+        if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
+            $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
+        }
+
+        // monto_igtf
+        $this->monto_igtf->setupEditAttributes();
+        $this->monto_igtf->EditValue = $this->monto_igtf->CurrentValue;
+        $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
+        if (strval($this->monto_igtf->EditValue) != "" && is_numeric($this->monto_igtf->EditValue)) {
+            $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, null);
         }
 
         // moneda
@@ -3741,6 +3869,9 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
                     $doc->exportCaption($this->total);
+                    $doc->exportCaption($this->igtf);
+                    $doc->exportCaption($this->monto_base_igtf);
+                    $doc->exportCaption($this->monto_igtf);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->lista_pedido);
                     $doc->exportCaption($this->nota);
@@ -3767,6 +3898,9 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
                     $doc->exportCaption($this->total);
+                    $doc->exportCaption($this->igtf);
+                    $doc->exportCaption($this->monto_base_igtf);
+                    $doc->exportCaption($this->monto_igtf);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->lista_pedido);
                     $doc->exportCaption($this->nota);
@@ -3844,6 +3978,9 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);
                         $doc->exportField($this->total);
+                        $doc->exportField($this->igtf);
+                        $doc->exportField($this->monto_base_igtf);
+                        $doc->exportField($this->monto_igtf);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->lista_pedido);
                         $doc->exportField($this->nota);
@@ -3870,6 +4007,9 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);
                         $doc->exportField($this->total);
+                        $doc->exportField($this->igtf);
+                        $doc->exportField($this->monto_base_igtf);
+                        $doc->exportField($this->monto_igtf);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->lista_pedido);
                         $doc->exportField($this->nota);
@@ -4235,11 +4375,41 @@ class ViewOutTdcfcv extends DbTable
         // To cancel, set return value to false
         if($rsold["estatus"] != "NUEVO") {
             if(!VerificaFuncion('008')) {
-                if(date("Y-m-d") != substr($rsold["fecha"], 0, 10)) {
+                // if(date("Y-m-d") != substr($rsold["fecha"], 0, 10)) {
                     $this->CancelMessage = "No se puede modificar este documento; cree NOTA DE CREDITO o DEBITO dependiendo del caso; verifique.";
                     return FALSE;
-                }
+                // }
             } 
+        }
+        if ($rsnew["igtf"] == "S") {
+            $montoBase = floatval($rsnew["monto_base_igtf"]);
+            $montoTotalFactura = floatval($rsold["total"] ?? $rsnew["total"]); // Usa rsold en edición o rsnew en inserción
+            if ($montoBase > 0) {
+                // 1. Validar que la base no supere el total (Refuerzo de seguridad del lado del servidor)
+                if ($montoBase > $montoTotalFactura) {
+                    $this->setFailureMessage("El monto para aplicar IGTF debe ser menor o igual al monto total de la factura.");
+                    return FALSE;
+                }
+
+                // 2. Obtener la alícuota usando ExecuteRow
+                $sql = "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S'";
+                $row = ExecuteRow($sql);
+                if ($row) {
+                    $alicuota = floatval($row["alicuota"]);
+                    // 3. Calcular el monto del impuesto
+                    $rsnew["monto_igtf"] = $montoBase * ($alicuota / 100);
+                } else {
+                    $this->setFailureMessage("No se encontró una alícuota de IGTF activa.");
+                    return FALSE;
+                }
+            } else {
+                $this->setFailureMessage("El monto para aplicar IGTF debe ser mayor a 0.");
+                return FALSE;
+            }
+        }
+        else {
+            $rsnew["monto_igtf"] = 0.00;
+            $rsnew["monto_base_igtf"] = 0.00; 
         }
         $rsnew["fecha"] = $rsnew["fecha"] . " 00:00:00";
         return true;

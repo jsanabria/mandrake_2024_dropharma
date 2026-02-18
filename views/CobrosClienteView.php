@@ -67,35 +67,13 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-    <tr id="r_tipo_pago"<?= $Page->tipo_pago->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_tipo_pago"><?= $Page->tipo_pago->caption() ?></span></td>
-        <td data-name="tipo_pago"<?= $Page->tipo_pago->cellAttributes() ?>>
-<span id="el_cobros_cliente_tipo_pago">
-<span<?= $Page->tipo_pago->viewAttributes() ?>>
-<?= $Page->tipo_pago->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->referencia->Visible) { // referencia ?>
-    <tr id="r_referencia"<?= $Page->referencia->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_referencia"><?= $Page->referencia->caption() ?></span></td>
-        <td data-name="referencia"<?= $Page->referencia->cellAttributes() ?>>
-<span id="el_cobros_cliente_referencia">
-<span<?= $Page->referencia->viewAttributes() ?>>
-<?= $Page->referencia->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->banco->Visible) { // banco ?>
-    <tr id="r_banco"<?= $Page->banco->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_banco"><?= $Page->banco->caption() ?></span></td>
-        <td data-name="banco"<?= $Page->banco->cellAttributes() ?>>
-<span id="el_cobros_cliente_banco">
-<span<?= $Page->banco->viewAttributes() ?>>
-<?= $Page->banco->getViewValue() ?></span>
+<?php if ($Page->id_documento->Visible) { // id_documento ?>
+    <tr id="r_id_documento"<?= $Page->id_documento->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_id_documento"><?= $Page->id_documento->caption() ?></span></td>
+        <td data-name="id_documento"<?= $Page->id_documento->cellAttributes() ?>>
+<span id="el_cobros_cliente_id_documento">
+<span<?= $Page->id_documento->viewAttributes() ?>>
+<?= $Page->id_documento->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -122,24 +100,13 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->monto_recibido->Visible) { // monto_recibido ?>
-    <tr id="r_monto_recibido"<?= $Page->monto_recibido->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_monto_recibido"><?= $Page->monto_recibido->caption() ?></span></td>
-        <td data-name="monto_recibido"<?= $Page->monto_recibido->cellAttributes() ?>>
-<span id="el_cobros_cliente_monto_recibido">
-<span<?= $Page->monto_recibido->viewAttributes() ?>>
-<?= $Page->monto_recibido->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->monto->Visible) { // monto ?>
-    <tr id="r_monto"<?= $Page->monto->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_monto"><?= $Page->monto->caption() ?></span></td>
-        <td data-name="monto"<?= $Page->monto->cellAttributes() ?>>
-<span id="el_cobros_cliente_monto">
-<span<?= $Page->monto->viewAttributes() ?>>
-<?= $Page->monto->getViewValue() ?></span>
+<?php if ($Page->pago->Visible) { // pago ?>
+    <tr id="r_pago"<?= $Page->pago->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_pago"><?= $Page->pago->caption() ?></span></td>
+        <td data-name="pago"<?= $Page->pago->cellAttributes() ?>>
+<span id="el_cobros_cliente_pago">
+<span<?= $Page->pago->viewAttributes() ?>>
+<?= $Page->pago->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -173,6 +140,17 @@ loadjs.ready("head", function () {
 <span id="el_cobros_cliente__username">
 <span<?= $Page->_username->viewAttributes() ?>>
 <?= $Page->_username->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->pivote2->Visible) { // pivote2 ?>
+    <tr id="r_pivote2"<?= $Page->pivote2->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_pivote2"><?= $Page->pivote2->caption() ?></span></td>
+        <td data-name="pivote2"<?= $Page->pivote2->cellAttributes() ?>>
+<span id="el_cobros_cliente_pivote2">
+<span<?= $Page->pivote2->viewAttributes() ?>>
+<?= $Page->pivote2->getViewValue() ?></span>
 </span>
 </td>
     </tr>

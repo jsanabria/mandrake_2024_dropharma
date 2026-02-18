@@ -425,7 +425,11 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}actualizar_costo_poderado.php","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}actualizar_costo_poderado.php","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}usuario_master","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}usuario_master","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}usuario_master","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}articulos_costos_precios.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}articulos_costos_precios.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cobros_cliente_detalle","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cobros_cliente_detalle","0","0"]];
 
 /**
  * Tables
@@ -446,7 +450,7 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["ajustar_existencia_lotes.php","ajustar_existencia_lotes","Ajustar Existencia de Lotes",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AjustarExistenciaLotes"],
     ["ajuste_de_entrada_detalle_copia.php","ajuste_de_entrada_detalle_copia","Ajuste de Entrada Detalle copia",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AjusteDeEntradaDetalleCopia"],
     ["ajuste_salida.php","ajuste_salida","Salida de Inventario",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AjusteSalida"],
-    ["alicuota","alicuota","Alicuota IVA",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AlicuotaList"],
+    ["alicuota","alicuota","Tabla Impuestos",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AlicuotaList"],
     ["almacen","almacen","Almacen",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AlmacenList"],
     ["almacenista","almacenista","Almacenistas",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AlmacenistaList"],
     ["anular_venta.php","anular_venta"," Anular Venta",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","AnularVenta"],
@@ -639,4 +643,6 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["cliente_dias_tmp","cliente_dias_tmp","cliente dias tmp",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ClienteDiasTmpList"],
     ["pedidos_detalles_online_bitacora","pedidos_detalles_online_bitacora","pedidos detalles online bitacora",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","PedidosDetallesOnlineBitacoraList"],
     ["actualizar_costo_poderado.php","actualizar_costo_poderado","Actualizar Costo Ponderado",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ActualizarCostoPoderado"],
-    ["usuario_master","usuario_master2","Usuario Master",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","UsuarioMaster2List"]];
+    ["usuario_master","usuario_master2","Usuario Master",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","UsuarioMaster2List"],
+    ["articulos_costos_precios.php","articulos_costos_precios","Actualizar Costo Precios",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ArticulosCostosPrecios"],
+    ["cobros_cliente_detalle","cobros_cliente_detalle","Cobros Detalle",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CobrosClienteDetalleList"]];

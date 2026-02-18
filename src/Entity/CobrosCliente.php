@@ -36,8 +36,32 @@ class CobrosCliente extends AbstractEntity
     #[Column(type: "integer")]
     private int $cliente;
 
+    #[Column(name: "id_documento", type: "integer")]
+    private int $idDocumento;
+
     #[Column(type: "string", nullable: true)]
     private ?string $pivote;
+
+    #[Column(type: "date", nullable: true)]
+    private ?DateTime $fecha;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $moneda;
+
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $pago;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $nota;
+
+    #[Column(name: "fecha_registro", type: "date", nullable: true)]
+    private ?DateTime $fechaRegistro;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $username;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $comprobante;
 
     #[Column(name: "tipo_pago", type: "string", nullable: true)]
     private ?string $tipoPago;
@@ -51,29 +75,17 @@ class CobrosCliente extends AbstractEntity
     #[Column(name: "banco_origen", type: "string", nullable: true)]
     private ?string $bancoOrigen;
 
-    #[Column(type: "date", nullable: true)]
-    private ?DateTime $fecha;
-
-    #[Column(type: "string", nullable: true)]
-    private ?string $moneda;
-
     #[Column(name: "monto_recibido", type: "decimal", nullable: true)]
     private ?string $montoRecibido;
 
     #[Column(type: "decimal", nullable: true)]
     private ?string $monto;
 
-    #[Column(type: "string", nullable: true)]
-    private ?string $nota;
-
-    #[Column(name: "fecha_registro", type: "date", nullable: true)]
-    private ?DateTime $fechaRegistro;
+    #[Column(name: "tasa_cambio", type: "decimal", nullable: true)]
+    private ?string $tasaCambio;
 
     #[Column(type: "string", nullable: true)]
-    private ?string $username;
-
-    #[Column(type: "string", nullable: true)]
-    private ?string $comprobante;
+    private ?string $pivote2;
 
     public function getId(): int
     {
@@ -97,6 +109,17 @@ class CobrosCliente extends AbstractEntity
         return $this;
     }
 
+    public function getIdDocumento(): int
+    {
+        return $this->idDocumento;
+    }
+
+    public function setIdDocumento(int $value): static
+    {
+        $this->idDocumento = $value;
+        return $this;
+    }
+
     public function getPivote(): ?string
     {
         return HtmlDecode($this->pivote);
@@ -105,6 +128,83 @@ class CobrosCliente extends AbstractEntity
     public function setPivote(?string $value): static
     {
         $this->pivote = RemoveXss($value);
+        return $this;
+    }
+
+    public function getFecha(): ?DateTime
+    {
+        return $this->fecha;
+    }
+
+    public function setFecha(?DateTime $value): static
+    {
+        $this->fecha = $value;
+        return $this;
+    }
+
+    public function getMoneda(): ?string
+    {
+        return HtmlDecode($this->moneda);
+    }
+
+    public function setMoneda(?string $value): static
+    {
+        $this->moneda = RemoveXss($value);
+        return $this;
+    }
+
+    public function getPago(): ?string
+    {
+        return $this->pago;
+    }
+
+    public function setPago(?string $value): static
+    {
+        $this->pago = $value;
+        return $this;
+    }
+
+    public function getNota(): ?string
+    {
+        return HtmlDecode($this->nota);
+    }
+
+    public function setNota(?string $value): static
+    {
+        $this->nota = RemoveXss($value);
+        return $this;
+    }
+
+    public function getFechaRegistro(): ?DateTime
+    {
+        return $this->fechaRegistro;
+    }
+
+    public function setFechaRegistro(?DateTime $value): static
+    {
+        $this->fechaRegistro = $value;
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return HtmlDecode($this->username);
+    }
+
+    public function setUsername(?string $value): static
+    {
+        $this->username = RemoveXss($value);
+        return $this;
+    }
+
+    public function getComprobante(): ?string
+    {
+        return HtmlDecode($this->comprobante);
+    }
+
+    public function setComprobante(?string $value): static
+    {
+        $this->comprobante = RemoveXss($value);
         return $this;
     }
 
@@ -152,28 +252,6 @@ class CobrosCliente extends AbstractEntity
         return $this;
     }
 
-    public function getFecha(): ?DateTime
-    {
-        return $this->fecha;
-    }
-
-    public function setFecha(?DateTime $value): static
-    {
-        $this->fecha = $value;
-        return $this;
-    }
-
-    public function getMoneda(): ?string
-    {
-        return HtmlDecode($this->moneda);
-    }
-
-    public function setMoneda(?string $value): static
-    {
-        $this->moneda = RemoveXss($value);
-        return $this;
-    }
-
     public function getMontoRecibido(): ?string
     {
         return $this->montoRecibido;
@@ -196,47 +274,25 @@ class CobrosCliente extends AbstractEntity
         return $this;
     }
 
-    public function getNota(): ?string
+    public function getTasaCambio(): ?string
     {
-        return HtmlDecode($this->nota);
+        return $this->tasaCambio;
     }
 
-    public function setNota(?string $value): static
+    public function setTasaCambio(?string $value): static
     {
-        $this->nota = RemoveXss($value);
+        $this->tasaCambio = $value;
         return $this;
     }
 
-    public function getFechaRegistro(): ?DateTime
+    public function getPivote2(): ?string
     {
-        return $this->fechaRegistro;
+        return HtmlDecode($this->pivote2);
     }
 
-    public function setFechaRegistro(?DateTime $value): static
+    public function setPivote2(?string $value): static
     {
-        $this->fechaRegistro = $value;
-        return $this;
-    }
-
-    public function getUsername(): ?string
-    {
-        return HtmlDecode($this->username);
-    }
-
-    public function setUsername(?string $value): static
-    {
-        $this->username = RemoveXss($value);
-        return $this;
-    }
-
-    public function getComprobante(): ?string
-    {
-        return HtmlDecode($this->comprobante);
-    }
-
-    public function setComprobante(?string $value): static
-    {
-        $this->comprobante = RemoveXss($value);
+        $this->pivote2 = RemoveXss($value);
         return $this;
     }
 }

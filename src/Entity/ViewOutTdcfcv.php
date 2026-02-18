@@ -67,6 +67,15 @@ class ViewOutTdcfcv extends AbstractEntity
     private ?string $total;
 
     #[Column(type: "string", nullable: true)]
+    private ?string $igtf;
+
+    #[Column(name: "monto_base_igtf", type: "decimal", nullable: true)]
+    private ?string $montoBaseIgtf;
+
+    #[Column(name: "monto_igtf", type: "decimal", nullable: true)]
+    private ?string $montoIgtf;
+
+    #[Column(type: "string", nullable: true)]
     private ?string $moneda;
 
     #[Column(name: "lista_pedido", type: "string", nullable: true)]
@@ -194,6 +203,7 @@ class ViewOutTdcfcv extends AbstractEntity
 
     public function __construct()
     {
+        $this->igtf = N;
         $this->entregado = "N";
         $this->pagado = "N";
         $this->bultos = 0;
@@ -332,6 +342,42 @@ class ViewOutTdcfcv extends AbstractEntity
     public function setTotal(?string $value): static
     {
         $this->total = $value;
+        return $this;
+    }
+
+    public function getIgtf(): ?string
+    {
+        return $this->igtf;
+    }
+
+    public function setIgtf(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'igtf' value");
+        }
+        $this->igtf = $value;
+        return $this;
+    }
+
+    public function getMontoBaseIgtf(): ?string
+    {
+        return $this->montoBaseIgtf;
+    }
+
+    public function setMontoBaseIgtf(?string $value): static
+    {
+        $this->montoBaseIgtf = $value;
+        return $this;
+    }
+
+    public function getMontoIgtf(): ?string
+    {
+        return $this->montoIgtf;
+    }
+
+    public function setMontoIgtf(?string $value): static
+    {
+        $this->montoIgtf = $value;
         return $this;
     }
 

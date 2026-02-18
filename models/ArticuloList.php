@@ -4368,6 +4368,8 @@ class ArticuloList extends Articulo
         $tipo_documento = 'TDCNET';
         if($row = ExecuteRow($sql)) $tipo_documento = $row["tipo_documento"];
         $codart = intval($this->id->CurrentValue);
+        $cantidad = 0;
+        /*
         $sql = "SELECT 
                     SUM(x.cantidad_movimiento) AS cantidad 
                 FROM 
@@ -4405,32 +4407,78 @@ class ArticuloList extends Articulo
                             bb.estatus = 'NUEVO' 
                     ) AS x 
                 WHERE 1;";
-        $cantidad = 0;
         if($row = ExecuteRow($sql)) $cantidad = intval($row["cantidad"]);
+        */
     	$header = '<div class="row">
-    				<div class="col-sm-3 col-md-2">
-    					<a href="include/articulos_por_lote.php" class="btn btn-primary">Descargar Art&iacute;culos por Lote</a>
-    				</div>
-    				<div class="col-sm-3 col-md-2">
-    					<a href="include/DescargarArticulosCostos.php" class="btn btn-primary">Descargar Art&iacute;culos Costos</a>
-    				</div>
-    				<div class="col-sm-3 col-md-2">
-    					<div style="color:#222; background-color:#8ad3d3;" class="alert" role="alert">Sin Existencia</div>
-    				</div>
-    				<div class="col-sm-3 col-md-2">
-    					<div style="color:#222; background-color:#ffcccc;" class="alert" role="alert">Desactivado</div>
-    				</div>
-    				<div class="col-sm-3 col-md-2">
-    					<div style="color:#222; background-color:#ffcc99;" class="alert" role="alert">Total General Articulos <b>' . number_format($cantidad, 0, ".", ".") . ' Unidades</b></div>
-    				</div>
-    			</div>';
+                    <div class="col-sm-2">
+                        <a href="include/articulos_por_lote.php" class="btn btn-primary w-100">Art&iacute;culos por Lote</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="include/DescargarArticulosCostos.php" class="btn btn-primary w-100">Art&iacute;culos Costos</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#modalInventario">Inventario a A2</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <div style="color:#222; background-color:#8ad3d3; padding: 7px;" class="alert text-center" role="alert">Sin Existencia</div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div style="color:#222; background-color:#ffcccc; padding: 7px;" class="alert text-center" role="alert">Desactivado</div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div style="color:#222; background-color:#ffcc99; padding: 7px;" class="alert text-center" role="alert">Total: <b>' . number_format($cantidad, 0, ".", ".") . '</b></div>
+                    </div>
+                </div>';
     }
 
     // Page Data Rendered event
     public function pageDataRendered(&$footer)
     {
         // Example:
-        //$footer = "your footer";
+        $footer = '<div class="modal fade" id="modalInventario" tabindex="-1" aria-labelledby="modalInventarioLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalInventarioLabel">Reporte de Inventario a A2</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                            <label for="fecha_reporte" class="form-label">Seleccione la fecha hasta donde requiere el reporte:</label>
+                            <input type="date" id="fecha_reporte" class="form-control" required value="' . date('Y-m-d') . '">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" id="btnImprimirInventario" class="btn btn-primary">Imprimir Reporte</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>';
+        $footer .= '<script>
+                        document.addEventListener(\'DOMContentLoaded\', function() {
+                            const inputFecha = document.getElementById("fecha_reporte");
+                            const btnImprimir = document.getElementById("btnImprimirInventario");
+
+                            // Habilitar botón si la fecha ya tiene valor por defecto
+                            if (inputFecha.value !== "") {
+                                btnImprimir.disabled = false;
+                            }
+
+                            // Validar cambio de fecha
+                            inputFecha.addEventListener(\'change\', function() {
+                                btnImprimir.disabled = (this.value === "");
+                            });
+
+                            // Acción de imprimir
+                            btnImprimir.addEventListener(\'click\', function() {
+                                const fecha = inputFecha.value;
+                                if (fecha) {
+                                    window.location.href = "include/inventario_entre_fecha_excel_lotes.php?fecha_hasta=" + fecha;
+                                }
+                            });
+                        });
+                    </script>';
     }
 
     // Page Breaking event

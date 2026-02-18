@@ -1,4 +1,7 @@
 <?php
+ob_start(); // Inicia el bÃºfer de salida
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE); // Oculta avisos de obsolescencia
+
 require('rcs/fpdf.php');
 require("../include/connect.php");
 
@@ -16,10 +19,10 @@ $GLOBALS["subtitulo"] = "Desde $fecdesde Hasta $fechasta";
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	// Cabecera de p?gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
+		// Consulto datos de la compa??a 
 		require("../include/connect.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -55,7 +58,7 @@ class PDF extends FPDF
 		$this->Ln(2);
 		
 		$this->SetFont('Arial','B',14);
-		$this->Cell(270, 6, utf8_decode($GLOBALS["titulo"]),0,0,'C');
+		$this->Cell(270, 6, mb_convert_encoding($GLOBALS["titulo"], "ISO-8859-1", "UTF-8"),0,0,'C');
 		$this->SetFont('Arial','',12);
 		$this->Ln();
 		$this->Cell(270, 6, $GLOBALS["subtitulo"],0,0,'C');
@@ -109,14 +112,14 @@ class PDF extends FPDF
 		$this->Ln(5);
 	}
 	
-	// Pie de página
+	// Pie de p?gina
 	function Footer()
 	{
-		// Posición: a 1,5 cm del final
+		// Posici?n: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Arial','I',8);
-		// Número de página
+		// N?mero de p?gina
 		$this->Cell(0,5,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
@@ -143,7 +146,7 @@ class PDF extends FPDF
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaci?n del objeto de la clase heredada
 $pdf = new PDF('L', 'mm', 'A4');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();
@@ -201,8 +204,8 @@ while($row = mysqli_fetch_array($rs))
 
 	$pdf->Cell(5, 4);
 	$pdf->Cell(10, 4, $row["fecha"], 0, 0, 'L');
-	$pdf->Cell(10, 4, str_replace("FACT-", "", $row["nro_documento"]), 0, 0, 'C');
-	$pdf->Cell(12, 4, str_replace("NC-", "", $row["nota_credito"]), 0, 0, 'C');
+	$pdf->Cell(10, 4, str_replace("FACT-", "", $row["nro_documento"] ?? ''), 0, 0, 'C');
+	$pdf->Cell(12, 4, str_replace("NC-", "", $row["nota_credito"] ?? ''), 0, 0, 'C');
 	$pdf->Cell(12, 4, $row["afectado"], 0, 0, 'C');
 	$pdf->Cell(15, 4, $row["nro_control"], 0, 0, 'C');
 	$pdf->Cell(35, 4, substr((trim($row["estatus"])=="ANULADO" ? "ANULADA" : $row["cliente"]), 0, 30), 0, 0, 'L');
@@ -253,5 +256,6 @@ $pdf->EndReport($items, $_total, $_exenta, $_gravable, $_iva, $_retiva, $_retisl
 	
 require("../include/desconnect.php");
 
+ob_end_clean(); // Limpia cualquier salida previa de texto
 $pdf->Output();
 ?>

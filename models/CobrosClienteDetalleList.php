@@ -15,7 +15,7 @@ use Closure;
 /**
  * Page class
  */
-class AlicuotaList extends Alicuota
+class CobrosClienteDetalleList extends CobrosClienteDetalle
 {
     use MessagesTrait;
 
@@ -26,7 +26,7 @@ class AlicuotaList extends Alicuota
     public $ProjectID = PROJECT_ID;
 
     // Page object name
-    public $PageObjName = "AlicuotaList";
+    public $PageObjName = "CobrosClienteDetalleList";
 
     // View file path
     public $View = null;
@@ -38,13 +38,13 @@ class AlicuotaList extends Alicuota
     public $RenderingView = false;
 
     // Grid form hidden field names
-    public $FormName = "falicuotalist";
+    public $FormName = "fcobros_cliente_detallelist";
     public $FormActionName = "";
     public $FormBlankRowName = "";
     public $FormKeyCountName = "";
 
     // CSS class/style
-    public $CurrentPageName = "AlicuotaList";
+    public $CurrentPageName = "CobrosClienteDetalleList";
 
     // Page URLs
     public $AddUrl;
@@ -63,14 +63,6 @@ class AlicuotaList extends Alicuota
     public $MultiEditUrl;
     public $MultiDeleteUrl;
     public $MultiUpdateUrl;
-
-    // Audit Trail
-    public $AuditTrailOnAdd = true;
-    public $AuditTrailOnEdit = true;
-    public $AuditTrailOnDelete = true;
-    public $AuditTrailOnView = false;
-    public $AuditTrailOnViewData = false;
-    public $AuditTrailOnSearch = false;
 
     // Page headings
     public $Heading = "";
@@ -154,11 +146,16 @@ class AlicuotaList extends Alicuota
     public function setVisibility()
     {
         $this->id->Visible = false;
-        $this->codigo->setVisibility();
-        $this->nombre->setVisibility();
-        $this->alicuota->setVisibility();
-        $this->fecha->setVisibility();
-        $this->activo->Visible = false;
+        $this->cobros_cliente->Visible = false;
+        $this->metodo_pago->setVisibility();
+        $this->referencia->setVisibility();
+        $this->monto_moneda->setVisibility();
+        $this->moneda->setVisibility();
+        $this->tasa_moneda->setVisibility();
+        $this->monto_bs->setVisibility();
+        $this->tasa_usd->setVisibility();
+        $this->monto_usd->setVisibility();
+        $this->banco->setVisibility();
     }
 
     // Constructor
@@ -169,8 +166,8 @@ class AlicuotaList extends Alicuota
         $this->FormActionName = Config("FORM_ROW_ACTION_NAME");
         $this->FormBlankRowName = Config("FORM_BLANK_ROW_NAME");
         $this->FormKeyCountName = Config("FORM_KEY_COUNT_NAME");
-        $this->TableVar = 'alicuota';
-        $this->TableName = 'alicuota';
+        $this->TableVar = 'cobros_cliente_detalle';
+        $this->TableName = 'cobros_cliente_detalle';
 
         // Table CSS class
         $this->TableClass = "table table-sm ew-table";
@@ -190,26 +187,26 @@ class AlicuotaList extends Alicuota
         // Language object
         $Language = Container("app.language");
 
-        // Table object (alicuota)
-        if (!isset($GLOBALS["alicuota"]) || $GLOBALS["alicuota"]::class == PROJECT_NAMESPACE . "alicuota") {
-            $GLOBALS["alicuota"] = &$this;
+        // Table object (cobros_cliente_detalle)
+        if (!isset($GLOBALS["cobros_cliente_detalle"]) || $GLOBALS["cobros_cliente_detalle"]::class == PROJECT_NAMESPACE . "cobros_cliente_detalle") {
+            $GLOBALS["cobros_cliente_detalle"] = &$this;
         }
 
         // Page URL
         $pageUrl = $this->pageUrl(false);
 
         // Initialize URLs
-        $this->AddUrl = "AlicuotaAdd";
+        $this->AddUrl = "CobrosClienteDetalleAdd";
         $this->InlineAddUrl = $pageUrl . "action=add";
         $this->GridAddUrl = $pageUrl . "action=gridadd";
         $this->GridEditUrl = $pageUrl . "action=gridedit";
         $this->MultiEditUrl = $pageUrl . "action=multiedit";
-        $this->MultiDeleteUrl = "AlicuotaDelete";
-        $this->MultiUpdateUrl = "AlicuotaUpdate";
+        $this->MultiDeleteUrl = "CobrosClienteDetalleDelete";
+        $this->MultiUpdateUrl = "CobrosClienteDetalleUpdate";
 
         // Table name (for backward compatibility only)
         if (!defined(PROJECT_NAMESPACE . "TABLE_NAME")) {
-            define(PROJECT_NAMESPACE . "TABLE_NAME", 'alicuota');
+            define(PROJECT_NAMESPACE . "TABLE_NAME", 'cobros_cliente_detalle');
         }
 
         // Start timer
@@ -360,7 +357,7 @@ class AlicuotaList extends Alicuota
                 $result = ["url" => GetUrl($url), "modal" => "1"];  // Assume return to modal for simplicity
                 if (!SameString($pageName, GetPageName($this->getListUrl()))) { // Not List page
                     $result["caption"] = $this->getModalCaption($pageName);
-                    $result["view"] = SameString($pageName, "AlicuotaView"); // If View page, no primary button
+                    $result["view"] = SameString($pageName, "CobrosClienteDetalleView"); // If View page, no primary button
                 } else { // List page
                     $result["error"] = $this->getFailureMessage(); // List page should not be shown as modal => error
                     $this->clearFailureMessage();
@@ -703,11 +700,13 @@ class AlicuotaList extends Alicuota
         $this->setupOtherOptions();
 
         // Set up lookup cache
-        $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->metodo_pago);
+        $this->setupLookupOptions($this->moneda);
+        $this->setupLookupOptions($this->banco);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
-            $this->FormName = "falicuotagrid";
+            $this->FormName = "fcobros_cliente_detallegrid";
         }
 
         // Set up page action
@@ -895,13 +894,6 @@ class AlicuotaList extends Alicuota
                     $this->setWarningMessage($Language->phrase("NoRecord"));
                 }
             }
-
-            // Audit trail on search
-            if ($this->AuditTrailOnSearch && $this->Command == "search" && !$this->RestoreSearch) {
-                $searchParm = ServerVar("QUERY_STRING");
-                $searchSql = $this->getSessionWhere();
-                $this->writeAuditTrailOnSearch($searchParm, $searchSql);
-            }
         }
 
         // Set up list action columns
@@ -1049,11 +1041,16 @@ class AlicuotaList extends Alicuota
         $filterList = "";
         $savedFilterList = "";
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
-        $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo
-        $filterList = Concat($filterList, $this->nombre->AdvancedSearch->toJson(), ","); // Field nombre
-        $filterList = Concat($filterList, $this->alicuota->AdvancedSearch->toJson(), ","); // Field alicuota
-        $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
-        $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
+        $filterList = Concat($filterList, $this->cobros_cliente->AdvancedSearch->toJson(), ","); // Field cobros_cliente
+        $filterList = Concat($filterList, $this->metodo_pago->AdvancedSearch->toJson(), ","); // Field metodo_pago
+        $filterList = Concat($filterList, $this->referencia->AdvancedSearch->toJson(), ","); // Field referencia
+        $filterList = Concat($filterList, $this->monto_moneda->AdvancedSearch->toJson(), ","); // Field monto_moneda
+        $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
+        $filterList = Concat($filterList, $this->tasa_moneda->AdvancedSearch->toJson(), ","); // Field tasa_moneda
+        $filterList = Concat($filterList, $this->monto_bs->AdvancedSearch->toJson(), ","); // Field monto_bs
+        $filterList = Concat($filterList, $this->tasa_usd->AdvancedSearch->toJson(), ","); // Field tasa_usd
+        $filterList = Concat($filterList, $this->monto_usd->AdvancedSearch->toJson(), ","); // Field monto_usd
+        $filterList = Concat($filterList, $this->banco->AdvancedSearch->toJson(), ","); // Field banco
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1074,7 +1071,7 @@ class AlicuotaList extends Alicuota
     {
         if (Post("ajax") == "savefilters") { // Save filter request (Ajax)
             $filters = Post("filters");
-            Profile()->setSearchFilters("falicuotasrch", $filters);
+            Profile()->setSearchFilters("fcobros_cliente_detallesrch", $filters);
             WriteJson([["success" => true]]); // Success
             return true;
         } elseif (Post("cmd") == "resetfilter") {
@@ -1101,45 +1098,85 @@ class AlicuotaList extends Alicuota
         $this->id->AdvancedSearch->SearchOperator2 = @$filter["w_id"];
         $this->id->AdvancedSearch->save();
 
-        // Field codigo
-        $this->codigo->AdvancedSearch->SearchValue = @$filter["x_codigo"];
-        $this->codigo->AdvancedSearch->SearchOperator = @$filter["z_codigo"];
-        $this->codigo->AdvancedSearch->SearchCondition = @$filter["v_codigo"];
-        $this->codigo->AdvancedSearch->SearchValue2 = @$filter["y_codigo"];
-        $this->codigo->AdvancedSearch->SearchOperator2 = @$filter["w_codigo"];
-        $this->codigo->AdvancedSearch->save();
+        // Field cobros_cliente
+        $this->cobros_cliente->AdvancedSearch->SearchValue = @$filter["x_cobros_cliente"];
+        $this->cobros_cliente->AdvancedSearch->SearchOperator = @$filter["z_cobros_cliente"];
+        $this->cobros_cliente->AdvancedSearch->SearchCondition = @$filter["v_cobros_cliente"];
+        $this->cobros_cliente->AdvancedSearch->SearchValue2 = @$filter["y_cobros_cliente"];
+        $this->cobros_cliente->AdvancedSearch->SearchOperator2 = @$filter["w_cobros_cliente"];
+        $this->cobros_cliente->AdvancedSearch->save();
 
-        // Field nombre
-        $this->nombre->AdvancedSearch->SearchValue = @$filter["x_nombre"];
-        $this->nombre->AdvancedSearch->SearchOperator = @$filter["z_nombre"];
-        $this->nombre->AdvancedSearch->SearchCondition = @$filter["v_nombre"];
-        $this->nombre->AdvancedSearch->SearchValue2 = @$filter["y_nombre"];
-        $this->nombre->AdvancedSearch->SearchOperator2 = @$filter["w_nombre"];
-        $this->nombre->AdvancedSearch->save();
+        // Field metodo_pago
+        $this->metodo_pago->AdvancedSearch->SearchValue = @$filter["x_metodo_pago"];
+        $this->metodo_pago->AdvancedSearch->SearchOperator = @$filter["z_metodo_pago"];
+        $this->metodo_pago->AdvancedSearch->SearchCondition = @$filter["v_metodo_pago"];
+        $this->metodo_pago->AdvancedSearch->SearchValue2 = @$filter["y_metodo_pago"];
+        $this->metodo_pago->AdvancedSearch->SearchOperator2 = @$filter["w_metodo_pago"];
+        $this->metodo_pago->AdvancedSearch->save();
 
-        // Field alicuota
-        $this->alicuota->AdvancedSearch->SearchValue = @$filter["x_alicuota"];
-        $this->alicuota->AdvancedSearch->SearchOperator = @$filter["z_alicuota"];
-        $this->alicuota->AdvancedSearch->SearchCondition = @$filter["v_alicuota"];
-        $this->alicuota->AdvancedSearch->SearchValue2 = @$filter["y_alicuota"];
-        $this->alicuota->AdvancedSearch->SearchOperator2 = @$filter["w_alicuota"];
-        $this->alicuota->AdvancedSearch->save();
+        // Field referencia
+        $this->referencia->AdvancedSearch->SearchValue = @$filter["x_referencia"];
+        $this->referencia->AdvancedSearch->SearchOperator = @$filter["z_referencia"];
+        $this->referencia->AdvancedSearch->SearchCondition = @$filter["v_referencia"];
+        $this->referencia->AdvancedSearch->SearchValue2 = @$filter["y_referencia"];
+        $this->referencia->AdvancedSearch->SearchOperator2 = @$filter["w_referencia"];
+        $this->referencia->AdvancedSearch->save();
 
-        // Field fecha
-        $this->fecha->AdvancedSearch->SearchValue = @$filter["x_fecha"];
-        $this->fecha->AdvancedSearch->SearchOperator = @$filter["z_fecha"];
-        $this->fecha->AdvancedSearch->SearchCondition = @$filter["v_fecha"];
-        $this->fecha->AdvancedSearch->SearchValue2 = @$filter["y_fecha"];
-        $this->fecha->AdvancedSearch->SearchOperator2 = @$filter["w_fecha"];
-        $this->fecha->AdvancedSearch->save();
+        // Field monto_moneda
+        $this->monto_moneda->AdvancedSearch->SearchValue = @$filter["x_monto_moneda"];
+        $this->monto_moneda->AdvancedSearch->SearchOperator = @$filter["z_monto_moneda"];
+        $this->monto_moneda->AdvancedSearch->SearchCondition = @$filter["v_monto_moneda"];
+        $this->monto_moneda->AdvancedSearch->SearchValue2 = @$filter["y_monto_moneda"];
+        $this->monto_moneda->AdvancedSearch->SearchOperator2 = @$filter["w_monto_moneda"];
+        $this->monto_moneda->AdvancedSearch->save();
 
-        // Field activo
-        $this->activo->AdvancedSearch->SearchValue = @$filter["x_activo"];
-        $this->activo->AdvancedSearch->SearchOperator = @$filter["z_activo"];
-        $this->activo->AdvancedSearch->SearchCondition = @$filter["v_activo"];
-        $this->activo->AdvancedSearch->SearchValue2 = @$filter["y_activo"];
-        $this->activo->AdvancedSearch->SearchOperator2 = @$filter["w_activo"];
-        $this->activo->AdvancedSearch->save();
+        // Field moneda
+        $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
+        $this->moneda->AdvancedSearch->SearchCondition = @$filter["v_moneda"];
+        $this->moneda->AdvancedSearch->SearchValue2 = @$filter["y_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
+        $this->moneda->AdvancedSearch->save();
+
+        // Field tasa_moneda
+        $this->tasa_moneda->AdvancedSearch->SearchValue = @$filter["x_tasa_moneda"];
+        $this->tasa_moneda->AdvancedSearch->SearchOperator = @$filter["z_tasa_moneda"];
+        $this->tasa_moneda->AdvancedSearch->SearchCondition = @$filter["v_tasa_moneda"];
+        $this->tasa_moneda->AdvancedSearch->SearchValue2 = @$filter["y_tasa_moneda"];
+        $this->tasa_moneda->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_moneda"];
+        $this->tasa_moneda->AdvancedSearch->save();
+
+        // Field monto_bs
+        $this->monto_bs->AdvancedSearch->SearchValue = @$filter["x_monto_bs"];
+        $this->monto_bs->AdvancedSearch->SearchOperator = @$filter["z_monto_bs"];
+        $this->monto_bs->AdvancedSearch->SearchCondition = @$filter["v_monto_bs"];
+        $this->monto_bs->AdvancedSearch->SearchValue2 = @$filter["y_monto_bs"];
+        $this->monto_bs->AdvancedSearch->SearchOperator2 = @$filter["w_monto_bs"];
+        $this->monto_bs->AdvancedSearch->save();
+
+        // Field tasa_usd
+        $this->tasa_usd->AdvancedSearch->SearchValue = @$filter["x_tasa_usd"];
+        $this->tasa_usd->AdvancedSearch->SearchOperator = @$filter["z_tasa_usd"];
+        $this->tasa_usd->AdvancedSearch->SearchCondition = @$filter["v_tasa_usd"];
+        $this->tasa_usd->AdvancedSearch->SearchValue2 = @$filter["y_tasa_usd"];
+        $this->tasa_usd->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_usd"];
+        $this->tasa_usd->AdvancedSearch->save();
+
+        // Field monto_usd
+        $this->monto_usd->AdvancedSearch->SearchValue = @$filter["x_monto_usd"];
+        $this->monto_usd->AdvancedSearch->SearchOperator = @$filter["z_monto_usd"];
+        $this->monto_usd->AdvancedSearch->SearchCondition = @$filter["v_monto_usd"];
+        $this->monto_usd->AdvancedSearch->SearchValue2 = @$filter["y_monto_usd"];
+        $this->monto_usd->AdvancedSearch->SearchOperator2 = @$filter["w_monto_usd"];
+        $this->monto_usd->AdvancedSearch->save();
+
+        // Field banco
+        $this->banco->AdvancedSearch->SearchValue = @$filter["x_banco"];
+        $this->banco->AdvancedSearch->SearchOperator = @$filter["z_banco"];
+        $this->banco->AdvancedSearch->SearchCondition = @$filter["v_banco"];
+        $this->banco->AdvancedSearch->SearchValue2 = @$filter["y_banco"];
+        $this->banco->AdvancedSearch->SearchOperator2 = @$filter["w_banco"];
+        $this->banco->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1179,8 +1216,9 @@ class AlicuotaList extends Alicuota
 
         // Fields to search
         $searchFlds = [];
-        $searchFlds[] = &$this->codigo;
-        $searchFlds[] = &$this->nombre;
+        $searchFlds[] = &$this->metodo_pago;
+        $searchFlds[] = &$this->referencia;
+        $searchFlds[] = &$this->moneda;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1249,7 +1287,7 @@ class AlicuotaList extends Alicuota
     {
         // Load default Sorting Order
         if ($this->Command != "json") {
-            $defaultSort = $this->activo->Expression . " ASC" . ", " . $this->alicuota->Expression . " ASC"; // Set up default sort
+            $defaultSort = ""; // Set up default sort
             if ($this->getSessionOrderBy() == "" && $defaultSort != "") {
                 $this->setSessionOrderBy($defaultSort);
             }
@@ -1259,10 +1297,15 @@ class AlicuotaList extends Alicuota
         if (Get("order") !== null) {
             $this->CurrentOrder = Get("order");
             $this->CurrentOrderType = Get("ordertype", "");
-            $this->updateSort($this->codigo); // codigo
-            $this->updateSort($this->nombre); // nombre
-            $this->updateSort($this->alicuota); // alicuota
-            $this->updateSort($this->fecha); // fecha
+            $this->updateSort($this->metodo_pago); // metodo_pago
+            $this->updateSort($this->referencia); // referencia
+            $this->updateSort($this->monto_moneda); // monto_moneda
+            $this->updateSort($this->moneda); // moneda
+            $this->updateSort($this->tasa_moneda); // tasa_moneda
+            $this->updateSort($this->monto_bs); // monto_bs
+            $this->updateSort($this->tasa_usd); // tasa_usd
+            $this->updateSort($this->monto_usd); // monto_usd
+            $this->updateSort($this->banco); // banco
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1288,11 +1331,16 @@ class AlicuotaList extends Alicuota
                 $orderBy = "";
                 $this->setSessionOrderBy($orderBy);
                 $this->id->setSort("");
-                $this->codigo->setSort("");
-                $this->nombre->setSort("");
-                $this->alicuota->setSort("");
-                $this->fecha->setSort("");
-                $this->activo->setSort("");
+                $this->cobros_cliente->setSort("");
+                $this->metodo_pago->setSort("");
+                $this->referencia->setSort("");
+                $this->monto_moneda->setSort("");
+                $this->moneda->setSort("");
+                $this->tasa_moneda->setSort("");
+                $this->monto_bs->setSort("");
+                $this->tasa_usd->setSort("");
+                $this->monto_usd->setSort("");
+                $this->banco->setSort("");
             }
 
             // Reset start position
@@ -1322,6 +1370,12 @@ class AlicuotaList extends Alicuota
         $item = &$this->ListOptions->add("edit");
         $item->CssClass = "text-nowrap";
         $item->Visible = $Security->canEdit();
+        $item->OnLeft = true;
+
+        // "copy"
+        $item = &$this->ListOptions->add("copy");
+        $item->CssClass = "text-nowrap";
+        $item->Visible = $Security->canAdd();
         $item->OnLeft = true;
 
         // "delete"
@@ -1394,7 +1448,7 @@ class AlicuotaList extends Alicuota
             $viewcaption = HtmlTitle($Language->phrase("ViewLink"));
             if ($Security->canView()) {
                 if ($this->ModalView && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-table=\"alicuota\" data-caption=\"" . $viewcaption . "\" data-ew-action=\"modal\" data-action=\"view\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\" data-btn=\"null\">" . $Language->phrase("ViewLink") . "</a>";
+                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-table=\"cobros_cliente_detalle\" data-caption=\"" . $viewcaption . "\" data-ew-action=\"modal\" data-action=\"view\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\" data-btn=\"null\">" . $Language->phrase("ViewLink") . "</a>";
                 } else {
                     $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-caption=\"" . $viewcaption . "\" href=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\">" . $Language->phrase("ViewLink") . "</a>";
                 }
@@ -1407,9 +1461,22 @@ class AlicuotaList extends Alicuota
             $editcaption = HtmlTitle($Language->phrase("EditLink"));
             if ($Security->canEdit()) {
                 if ($this->ModalEdit && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"alicuota\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
+                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"cobros_cliente_detalle\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
                 } else {
                     $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("EditLink") . "</a>";
+                }
+            } else {
+                $opt->Body = "";
+            }
+
+            // "copy"
+            $opt = $this->ListOptions["copy"];
+            $copycaption = HtmlTitle($Language->phrase("CopyLink"));
+            if ($Security->canAdd()) {
+                if ($this->ModalAdd && !IsMobile()) {
+                    $opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-table=\"cobros_cliente_detalle\" data-caption=\"" . $copycaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("CopyLink") . "</a>";
+                } else {
+                    $opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\">" . $Language->phrase("CopyLink") . "</a>";
                 }
             } else {
                 $opt->Body = "";
@@ -1448,12 +1515,12 @@ class AlicuotaList extends Alicuota
                         $icon = ($listAction->Icon != "") ? "<i class=\"" . HtmlEncode(str_replace(" ew-icon", "", $listAction->Icon)) . "\" data-caption=\"" . $title . "\"></i> " : "";
                         $link = $disabled
                             ? "<li><div class=\"alert alert-light\">" . $icon . " " . $caption . "</div></li>"
-                            : "<li><button type=\"button\" class=\"dropdown-item ew-action ew-list-action\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"falicuotalist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button></li>";
+                            : "<li><button type=\"button\" class=\"dropdown-item ew-action ew-list-action\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"fcobros_cliente_detallelist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button></li>";
                         $links[] = $link;
                         if ($body == "") { // Setup first button
                             $body = $disabled
                             ? "<div class=\"alert alert-light\">" . $icon . " " . $caption . "</div>"
-                            : "<button type=\"button\" class=\"btn btn-default ew-action ew-list-action\" title=\"" . $title . "\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"falicuotalist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button>";
+                            : "<button type=\"button\" class=\"btn btn-default ew-action ew-list-action\" title=\"" . $title . "\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"fcobros_cliente_detallelist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button>";
                         }
                     }
                 }
@@ -1496,7 +1563,7 @@ class AlicuotaList extends Alicuota
         $item = &$option->add("add");
         $addcaption = HtmlTitle($Language->phrase("AddLink"));
         if ($this->ModalAdd && !IsMobile()) {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-table=\"alicuota\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("AddLink") . "</a>";
+            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-table=\"cobros_cliente_detalle\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("AddLink") . "</a>";
         } else {
             $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("AddLink") . "</a>";
         }
@@ -1509,10 +1576,15 @@ class AlicuotaList extends Alicuota
             $item = &$option->addGroupOption();
             $item->Body = "";
             $item->Visible = $this->UseColumnVisibility;
-            $this->createColumnOption($option, "codigo");
-            $this->createColumnOption($option, "nombre");
-            $this->createColumnOption($option, "alicuota");
-            $this->createColumnOption($option, "fecha");
+            $this->createColumnOption($option, "metodo_pago");
+            $this->createColumnOption($option, "referencia");
+            $this->createColumnOption($option, "monto_moneda");
+            $this->createColumnOption($option, "moneda");
+            $this->createColumnOption($option, "tasa_moneda");
+            $this->createColumnOption($option, "monto_bs");
+            $this->createColumnOption($option, "tasa_usd");
+            $this->createColumnOption($option, "monto_usd");
+            $this->createColumnOption($option, "banco");
         }
 
         // Set up custom actions
@@ -1537,10 +1609,10 @@ class AlicuotaList extends Alicuota
 
         // Filter button
         $item = &$this->FilterOptions->add("savecurrentfilter");
-        $item->Body = "<a class=\"ew-save-filter\" data-form=\"falicuotasrch\" data-ew-action=\"none\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
+        $item->Body = "<a class=\"ew-save-filter\" data-form=\"fcobros_cliente_detallesrch\" data-ew-action=\"none\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
         $item->Visible = true;
         $item = &$this->FilterOptions->add("deletefilter");
-        $item->Body = "<a class=\"ew-delete-filter\" data-form=\"falicuotasrch\" data-ew-action=\"none\">" . $Language->phrase("DeleteFilter") . "</a>";
+        $item->Body = "<a class=\"ew-delete-filter\" data-form=\"fcobros_cliente_detallesrch\" data-ew-action=\"none\">" . $Language->phrase("DeleteFilter") . "</a>";
         $item->Visible = true;
         $this->FilterOptions->UseDropDownButton = true;
         $this->FilterOptions->UseButtonGroup = !$this->FilterOptions->UseDropDownButton;
@@ -1600,7 +1672,7 @@ class AlicuotaList extends Alicuota
                 $item = &$option->add("custom_" . $listAction->Action);
                 $caption = $listAction->Caption;
                 $icon = ($listAction->Icon != "") ? '<i class="' . HtmlEncode($listAction->Icon) . '" data-caption="' . HtmlEncode($caption) . '"></i>' . $caption : $caption;
-                $item->Body = '<button type="button" class="btn btn-default ew-action ew-list-action" title="' . HtmlEncode($caption) . '" data-caption="' . HtmlEncode($caption) . '" data-ew-action="submit" form="falicuotalist"' . $listAction->toDataAttributes() . '>' . $icon . '</button>';
+                $item->Body = '<button type="button" class="btn btn-default ew-action ew-list-action" title="' . HtmlEncode($caption) . '" data-caption="' . HtmlEncode($caption) . '" data-ew-action="submit" form="fcobros_cliente_detallelist"' . $listAction->toDataAttributes() . '>' . $icon . '</button>';
                 $item->Visible = $listAction->Allowed;
             }
         }
@@ -1766,7 +1838,7 @@ class AlicuotaList extends Alicuota
 
                 // Set row properties
                 $this->resetAttributes();
-                $this->RowAttrs->merge(["data-rowindex" => $this->RowIndex, "id" => "r0_alicuota", "data-rowtype" => RowType::ADD]);
+                $this->RowAttrs->merge(["data-rowindex" => $this->RowIndex, "id" => "r0_cobros_cliente_detalle", "data-rowtype" => RowType::ADD]);
                 $this->RowAttrs->appendClass("ew-template");
                 // Render row
                 $this->RowType = RowType::ADD;
@@ -1827,7 +1899,7 @@ class AlicuotaList extends Alicuota
         $this->RowAttrs->merge([
             "data-rowindex" => $this->RowCount,
             "data-key" => $this->getKey(true),
-            "id" => "r" . $this->RowCount . "_alicuota",
+            "id" => "r" . $this->RowCount . "_cobros_cliente_detalle",
             "data-rowtype" => $this->RowType,
             "data-inline" => ($this->isAdd() || $this->isCopy() || $this->isEdit()) ? "true" : "false", // Inline-Add/Copy/Edit
             "class" => ($this->RowCount % 2 != 1) ? "ew-table-alt-row" : "",
@@ -1947,11 +2019,16 @@ class AlicuotaList extends Alicuota
         // Call Row Selected event
         $this->rowSelected($row);
         $this->id->setDbValue($row['id']);
-        $this->codigo->setDbValue($row['codigo']);
-        $this->nombre->setDbValue($row['nombre']);
-        $this->alicuota->setDbValue($row['alicuota']);
-        $this->fecha->setDbValue($row['fecha']);
-        $this->activo->setDbValue($row['activo']);
+        $this->cobros_cliente->setDbValue($row['cobros_cliente']);
+        $this->metodo_pago->setDbValue($row['metodo_pago']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->monto_moneda->setDbValue($row['monto_moneda']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->tasa_moneda->setDbValue($row['tasa_moneda']);
+        $this->monto_bs->setDbValue($row['monto_bs']);
+        $this->tasa_usd->setDbValue($row['tasa_usd']);
+        $this->monto_usd->setDbValue($row['monto_usd']);
+        $this->banco->setDbValue($row['banco']);
     }
 
     // Return a row with default values
@@ -1959,11 +2036,16 @@ class AlicuotaList extends Alicuota
     {
         $row = [];
         $row['id'] = $this->id->DefaultValue;
-        $row['codigo'] = $this->codigo->DefaultValue;
-        $row['nombre'] = $this->nombre->DefaultValue;
-        $row['alicuota'] = $this->alicuota->DefaultValue;
-        $row['fecha'] = $this->fecha->DefaultValue;
-        $row['activo'] = $this->activo->DefaultValue;
+        $row['cobros_cliente'] = $this->cobros_cliente->DefaultValue;
+        $row['metodo_pago'] = $this->metodo_pago->DefaultValue;
+        $row['referencia'] = $this->referencia->DefaultValue;
+        $row['monto_moneda'] = $this->monto_moneda->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['tasa_moneda'] = $this->tasa_moneda->DefaultValue;
+        $row['monto_bs'] = $this->monto_bs->DefaultValue;
+        $row['tasa_usd'] = $this->tasa_usd->DefaultValue;
+        $row['monto_usd'] = $this->monto_usd->DefaultValue;
+        $row['banco'] = $this->banco->DefaultValue;
         return $row;
     }
 
@@ -2006,57 +2088,166 @@ class AlicuotaList extends Alicuota
 
         // id
 
-        // codigo
+        // cobros_cliente
 
-        // nombre
+        // metodo_pago
 
-        // alicuota
+        // referencia
 
-        // fecha
+        // monto_moneda
 
-        // activo
+        // moneda
+
+        // tasa_moneda
+
+        // monto_bs
+
+        // tasa_usd
+
+        // monto_usd
+
+        // banco
 
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
             $this->id->ViewValue = $this->id->CurrentValue;
 
-            // codigo
-            $this->codigo->ViewValue = $this->codigo->CurrentValue;
+            // cobros_cliente
+            $this->cobros_cliente->ViewValue = $this->cobros_cliente->CurrentValue;
+            $this->cobros_cliente->ViewValue = FormatNumber($this->cobros_cliente->ViewValue, $this->cobros_cliente->formatPattern());
 
-            // nombre
-            $this->nombre->ViewValue = $this->nombre->CurrentValue;
-
-            // alicuota
-            $this->alicuota->ViewValue = $this->alicuota->CurrentValue;
-            $this->alicuota->ViewValue = FormatNumber($this->alicuota->ViewValue, $this->alicuota->formatPattern());
-
-            // fecha
-            $this->fecha->ViewValue = $this->fecha->CurrentValue;
-            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
-
-            // activo
-            if (strval($this->activo->CurrentValue) != "") {
-                $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
+            // metodo_pago
+            $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+            $curVal = strval($this->metodo_pago->CurrentValue);
+            if ($curVal != "") {
+                $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
+                if ($this->metodo_pago->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
+                    } else {
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+                    }
+                }
             } else {
-                $this->activo->ViewValue = null;
+                $this->metodo_pago->ViewValue = null;
             }
 
-            // codigo
-            $this->codigo->HrefValue = "";
-            $this->codigo->TooltipValue = "";
+            // referencia
+            $this->referencia->ViewValue = $this->referencia->CurrentValue;
 
-            // nombre
-            $this->nombre->HrefValue = "";
-            $this->nombre->TooltipValue = "";
+            // monto_moneda
+            $this->monto_moneda->ViewValue = $this->monto_moneda->CurrentValue;
+            $this->monto_moneda->ViewValue = FormatNumber($this->monto_moneda->ViewValue, $this->monto_moneda->formatPattern());
 
-            // alicuota
-            $this->alicuota->HrefValue = "";
-            $this->alicuota->TooltipValue = "";
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
 
-            // fecha
-            $this->fecha->HrefValue = "";
-            $this->fecha->TooltipValue = "";
+            // tasa_moneda
+            $this->tasa_moneda->ViewValue = $this->tasa_moneda->CurrentValue;
+            $this->tasa_moneda->ViewValue = FormatNumber($this->tasa_moneda->ViewValue, $this->tasa_moneda->formatPattern());
+
+            // monto_bs
+            $this->monto_bs->ViewValue = $this->monto_bs->CurrentValue;
+            $this->monto_bs->ViewValue = FormatNumber($this->monto_bs->ViewValue, $this->monto_bs->formatPattern());
+
+            // tasa_usd
+            $this->tasa_usd->ViewValue = $this->tasa_usd->CurrentValue;
+            $this->tasa_usd->ViewValue = FormatNumber($this->tasa_usd->ViewValue, $this->tasa_usd->formatPattern());
+
+            // monto_usd
+            $this->monto_usd->ViewValue = $this->monto_usd->CurrentValue;
+            $this->monto_usd->ViewValue = FormatNumber($this->monto_usd->ViewValue, $this->monto_usd->formatPattern());
+
+            // banco
+            $this->banco->ViewValue = $this->banco->CurrentValue;
+            $curVal = strval($this->banco->CurrentValue);
+            if ($curVal != "") {
+                $this->banco->ViewValue = $this->banco->lookupCacheOption($curVal);
+                if ($this->banco->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->banco->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->banco->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->banco->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->banco->Lookup->renderViewRow($rswrk[0]);
+                        $this->banco->ViewValue = $this->banco->displayValue($arwrk);
+                    } else {
+                        $this->banco->ViewValue = FormatNumber($this->banco->CurrentValue, $this->banco->formatPattern());
+                    }
+                }
+            } else {
+                $this->banco->ViewValue = null;
+            }
+
+            // metodo_pago
+            $this->metodo_pago->HrefValue = "";
+            $this->metodo_pago->TooltipValue = "";
+
+            // referencia
+            $this->referencia->HrefValue = "";
+            $this->referencia->TooltipValue = "";
+
+            // monto_moneda
+            $this->monto_moneda->HrefValue = "";
+            $this->monto_moneda->TooltipValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
+
+            // tasa_moneda
+            $this->tasa_moneda->HrefValue = "";
+            $this->tasa_moneda->TooltipValue = "";
+
+            // monto_bs
+            $this->monto_bs->HrefValue = "";
+            $this->monto_bs->TooltipValue = "";
+
+            // tasa_usd
+            $this->tasa_usd->HrefValue = "";
+            $this->tasa_usd->TooltipValue = "";
+
+            // monto_usd
+            $this->monto_usd->HrefValue = "";
+            $this->monto_usd->TooltipValue = "";
+
+            // banco
+            $this->banco->HrefValue = "";
+            $this->banco->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -2077,19 +2268,19 @@ class AlicuotaList extends Alicuota
         }
         if (SameText($type, "excel")) {
             if ($custom) {
-                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" form=\"falicuotalist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"excel\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToExcel") . "</button>";
+                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" form=\"fcobros_cliente_detallelist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"excel\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToExcel") . "</button>";
             } else {
                 return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
             }
         } elseif (SameText($type, "word")) {
             if ($custom) {
-                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" form=\"falicuotalist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"word\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToWord") . "</button>";
+                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" form=\"fcobros_cliente_detallelist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"word\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToWord") . "</button>";
             } else {
                 return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\">" . $Language->phrase("ExportToWord") . "</a>";
             }
         } elseif (SameText($type, "pdf")) {
             if ($custom) {
-                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" form=\"falicuotalist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"pdf\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToPdf") . "</button>";
+                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" form=\"fcobros_cliente_detallelist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"pdf\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToPdf") . "</button>";
             } else {
                 return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\">" . $Language->phrase("ExportToPdf") . "</a>";
             }
@@ -2101,7 +2292,7 @@ class AlicuotaList extends Alicuota
             return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsv", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsv", true)) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
         } elseif (SameText($type, "email")) {
             $url = $custom ? ' data-url="' . $exportUrl . '"' : '';
-            return '<button type="button" class="btn btn-default ew-export-link ew-email" title="' . $Language->phrase("ExportToEmail", true) . '" data-caption="' . $Language->phrase("ExportToEmail", true) . '" form="falicuotalist" data-ew-action="email" data-custom="false" data-hdr="' . $Language->phrase("ExportToEmail", true) . '" data-exported-selected="false"' . $url . '>' . $Language->phrase("ExportToEmail") . '</button>';
+            return '<button type="button" class="btn btn-default ew-export-link ew-email" title="' . $Language->phrase("ExportToEmail", true) . '" data-caption="' . $Language->phrase("ExportToEmail", true) . '" form="fcobros_cliente_detallelist" data-ew-action="email" data-custom="false" data-hdr="' . $Language->phrase("ExportToEmail", true) . '" data-exported-selected="false"' . $url . '>' . $Language->phrase("ExportToEmail") . '</button>';
         } elseif (SameText($type, "print")) {
             return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendly", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendly", true)) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
         }
@@ -2179,7 +2370,7 @@ class AlicuotaList extends Alicuota
         // Search button
         $item = &$this->SearchOptions->add("searchtoggle");
         $searchToggleClass = ($this->SearchWhere != "") ? " active" : "";
-        $item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-ew-action=\"search-toggle\" data-form=\"falicuotasrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
+        $item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-ew-action=\"search-toggle\" data-form=\"fcobros_cliente_detallesrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
         $item->Visible = true;
 
         // Show all button
@@ -2308,7 +2499,13 @@ class AlicuotaList extends Alicuota
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
-                case "x_activo":
+                case "x_metodo_pago":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_banco":
                     break;
                 default:
                     $lookupFilter = "";

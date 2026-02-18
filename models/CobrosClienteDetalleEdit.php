@@ -15,7 +15,7 @@ use Closure;
 /**
  * Page class
  */
-class CobrosClienteEdit extends CobrosCliente
+class CobrosClienteDetalleEdit extends CobrosClienteDetalle
 {
     use MessagesTrait;
 
@@ -26,7 +26,7 @@ class CobrosClienteEdit extends CobrosCliente
     public $ProjectID = PROJECT_ID;
 
     // Page object name
-    public $PageObjName = "CobrosClienteEdit";
+    public $PageObjName = "CobrosClienteDetalleEdit";
 
     // View file path
     public $View = null;
@@ -38,15 +38,7 @@ class CobrosClienteEdit extends CobrosCliente
     public $RenderingView = false;
 
     // CSS class/style
-    public $CurrentPageName = "CobrosClienteEdit";
-
-    // Audit Trail
-    public $AuditTrailOnAdd = true;
-    public $AuditTrailOnEdit = true;
-    public $AuditTrailOnDelete = true;
-    public $AuditTrailOnView = false;
-    public $AuditTrailOnViewData = false;
-    public $AuditTrailOnSearch = false;
+    public $CurrentPageName = "CobrosClienteDetalleEdit";
 
     // Page headings
     public $Heading = "";
@@ -129,25 +121,17 @@ class CobrosClienteEdit extends CobrosCliente
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->Visible = false;
-        $this->cliente->setVisibility();
-        $this->id_documento->setVisibility();
-        $this->pivote->Visible = false;
-        $this->fecha->setVisibility();
-        $this->moneda->setVisibility();
-        $this->pago->Visible = false;
-        $this->nota->setVisibility();
-        $this->fecha_registro->Visible = false;
-        $this->_username->Visible = false;
-        $this->comprobante->Visible = false;
-        $this->tipo_pago->setVisibility();
+        $this->id->setVisibility();
+        $this->cobros_cliente->Visible = false;
+        $this->metodo_pago->setVisibility();
         $this->referencia->setVisibility();
+        $this->monto_moneda->setVisibility();
+        $this->moneda->setVisibility();
+        $this->tasa_moneda->Visible = false;
+        $this->monto_bs->setVisibility();
+        $this->tasa_usd->setVisibility();
+        $this->monto_usd->setVisibility();
         $this->banco->setVisibility();
-        $this->banco_origen->Visible = false;
-        $this->monto_recibido->setVisibility();
-        $this->monto->Visible = false;
-        $this->tasa_cambio->setVisibility();
-        $this->pivote2->setVisibility();
     }
 
     // Constructor
@@ -155,8 +139,8 @@ class CobrosClienteEdit extends CobrosCliente
     {
         parent::__construct();
         global $Language, $DashboardReport, $DebugTimer, $UserTable;
-        $this->TableVar = 'cobros_cliente';
-        $this->TableName = 'cobros_cliente';
+        $this->TableVar = 'cobros_cliente_detalle';
+        $this->TableName = 'cobros_cliente_detalle';
 
         // Table CSS class
         $this->TableClass = "table table-striped table-sm ew-desktop-table ew-edit-table";
@@ -167,14 +151,14 @@ class CobrosClienteEdit extends CobrosCliente
         // Language object
         $Language = Container("app.language");
 
-        // Table object (cobros_cliente)
-        if (!isset($GLOBALS["cobros_cliente"]) || $GLOBALS["cobros_cliente"]::class == PROJECT_NAMESPACE . "cobros_cliente") {
-            $GLOBALS["cobros_cliente"] = &$this;
+        // Table object (cobros_cliente_detalle)
+        if (!isset($GLOBALS["cobros_cliente_detalle"]) || $GLOBALS["cobros_cliente_detalle"]::class == PROJECT_NAMESPACE . "cobros_cliente_detalle") {
+            $GLOBALS["cobros_cliente_detalle"] = &$this;
         }
 
         // Table name (for backward compatibility only)
         if (!defined(PROJECT_NAMESPACE . "TABLE_NAME")) {
-            define(PROJECT_NAMESPACE . "TABLE_NAME", 'cobros_cliente');
+            define(PROJECT_NAMESPACE . "TABLE_NAME", 'cobros_cliente_detalle');
         }
 
         // Start timer
@@ -288,7 +272,7 @@ class CobrosClienteEdit extends CobrosCliente
                 ) { // List / View / Master View page
                     if (!SameString($pageName, GetPageName($this->getListUrl()))) { // Not List page
                         $result["caption"] = $this->getModalCaption($pageName);
-                        $result["view"] = SameString($pageName, "CobrosClienteView"); // If View page, no primary button
+                        $result["view"] = SameString($pageName, "CobrosClienteDetalleView"); // If View page, no primary button
                     } else { // List page
                         $result["error"] = $this->getFailureMessage(); // List page should not be shown as modal => error
                         $this->clearFailureMessage();
@@ -536,13 +520,9 @@ class CobrosClienteEdit extends CobrosCliente
         }
 
         // Set up lookup cache
-        $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->metodo_pago);
         $this->setupLookupOptions($this->moneda);
-        $this->setupLookupOptions($this->_username);
-        $this->setupLookupOptions($this->comprobante);
-        $this->setupLookupOptions($this->tipo_pago);
         $this->setupLookupOptions($this->banco);
-        $this->setupLookupOptions($this->banco_origen);
 
         // Check modal
         if ($this->IsModal) {
@@ -615,7 +595,7 @@ class CobrosClienteEdit extends CobrosCliente
                         if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "") {
                             $this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
                         }
-                        $this->terminate("CobrosClienteList"); // Return to list page
+                        $this->terminate("CobrosClienteDetalleList"); // Return to list page
                         return;
                     } elseif ($loadByPosition) { // Load record by position
                         $this->setupStartRecord(); // Set up start record position
@@ -624,7 +604,7 @@ class CobrosClienteEdit extends CobrosCliente
                             $this->fetch($this->StartRecord);
                             // Redirect to correct record
                             $this->loadRowValues($this->CurrentRow);
-                            $url = $this->getCurrentUrl(Config("TABLE_SHOW_DETAIL") . "=" . $this->getCurrentDetailTable());
+                            $url = $this->getCurrentUrl();
                             $this->terminate($url);
                             return;
                         }
@@ -657,9 +637,6 @@ class CobrosClienteEdit extends CobrosCliente
         // Process form if post back
         if ($postBack) {
             $this->loadFormValues(); // Get form values
-
-            // Set up detail parameters
-            $this->setupDetailParms();
         }
 
         // Validate form if post back
@@ -684,7 +661,7 @@ class CobrosClienteEdit extends CobrosCliente
                         if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "") {
                             $this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
                         }
-                        $this->terminate("CobrosClienteList"); // Return to list page
+                        $this->terminate("CobrosClienteDetalleList"); // Return to list page
                         return;
                     } else {
                     }
@@ -693,17 +670,14 @@ class CobrosClienteEdit extends CobrosCliente
                         if ($this->getFailureMessage() == "") {
                             $this->setFailureMessage($Language->phrase("NoRecord")); // No record found
                         }
-                        $this->terminate("CobrosClienteList"); // No matching record, return to list
+                        $this->terminate("CobrosClienteDetalleList"); // No matching record, return to list
                         return;
                     }
                 } // End modal checking
-
-                // Set up detail parameters
-                $this->setupDetailParms();
                 break;
             case "update": // Update
-                $returnUrl = $this->getViewUrl();
-                if (GetPageName($returnUrl) == "CobrosClienteList") {
+                $returnUrl = $this->getReturnUrl();
+                if (GetPageName($returnUrl) == "CobrosClienteDetalleList") {
                     $returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
                 }
                 $this->SendEmail = true; // Send email on update success
@@ -715,9 +689,9 @@ class CobrosClienteEdit extends CobrosCliente
                     // Handle UseAjaxActions with return page
                     if ($this->IsModal && $this->UseAjaxActions) {
                         $this->IsModal = false;
-                        if (GetPageName($returnUrl) != "CobrosClienteList") {
+                        if (GetPageName($returnUrl) != "CobrosClienteDetalleList") {
                             Container("app.flash")->addMessage("Return-Url", $returnUrl); // Save return URL
-                            $returnUrl = "CobrosClienteList"; // Return list page content
+                            $returnUrl = "CobrosClienteDetalleList"; // Return list page content
                         }
                     }
                     if (IsJsonResponse()) {
@@ -741,9 +715,6 @@ class CobrosClienteEdit extends CobrosCliente
                 } else {
                     $this->EventCancelled = true; // Event cancelled
                     $this->restoreFormValues(); // Restore form values if update failed
-
-                    // Set up detail parameters
-                    $this->setupDetailParms();
                 }
         }
 
@@ -796,64 +767,19 @@ class CobrosClienteEdit extends CobrosCliente
         global $CurrentForm;
         $validate = !Config("SERVER_VALIDATE");
 
-        // Check field name 'cliente' first before field var 'x_cliente'
-        $val = $CurrentForm->hasValue("cliente") ? $CurrentForm->getValue("cliente") : $CurrentForm->getValue("x_cliente");
-        if (!$this->cliente->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->cliente->Visible = false; // Disable update for API request
-            } else {
-                $this->cliente->setFormValue($val);
-            }
+        // Check field name 'id' first before field var 'x_id'
+        $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
+        if (!$this->id->IsDetailKey) {
+            $this->id->setFormValue($val);
         }
 
-        // Check field name 'id_documento' first before field var 'x_id_documento'
-        $val = $CurrentForm->hasValue("id_documento") ? $CurrentForm->getValue("id_documento") : $CurrentForm->getValue("x_id_documento");
-        if (!$this->id_documento->IsDetailKey) {
+        // Check field name 'metodo_pago' first before field var 'x_metodo_pago'
+        $val = $CurrentForm->hasValue("metodo_pago") ? $CurrentForm->getValue("metodo_pago") : $CurrentForm->getValue("x_metodo_pago");
+        if (!$this->metodo_pago->IsDetailKey) {
             if (IsApi() && $val === null) {
-                $this->id_documento->Visible = false; // Disable update for API request
+                $this->metodo_pago->Visible = false; // Disable update for API request
             } else {
-                $this->id_documento->setFormValue($val, true, $validate);
-            }
-        }
-
-        // Check field name 'fecha' first before field var 'x_fecha'
-        $val = $CurrentForm->hasValue("fecha") ? $CurrentForm->getValue("fecha") : $CurrentForm->getValue("x_fecha");
-        if (!$this->fecha->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->fecha->Visible = false; // Disable update for API request
-            } else {
-                $this->fecha->setFormValue($val, true, $validate);
-            }
-            $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
-        }
-
-        // Check field name 'moneda' first before field var 'x_moneda'
-        $val = $CurrentForm->hasValue("moneda") ? $CurrentForm->getValue("moneda") : $CurrentForm->getValue("x_moneda");
-        if (!$this->moneda->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->moneda->Visible = false; // Disable update for API request
-            } else {
-                $this->moneda->setFormValue($val);
-            }
-        }
-
-        // Check field name 'nota' first before field var 'x_nota'
-        $val = $CurrentForm->hasValue("nota") ? $CurrentForm->getValue("nota") : $CurrentForm->getValue("x_nota");
-        if (!$this->nota->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->nota->Visible = false; // Disable update for API request
-            } else {
-                $this->nota->setFormValue($val);
-            }
-        }
-
-        // Check field name 'tipo_pago' first before field var 'x_tipo_pago'
-        $val = $CurrentForm->hasValue("tipo_pago") ? $CurrentForm->getValue("tipo_pago") : $CurrentForm->getValue("x_tipo_pago");
-        if (!$this->tipo_pago->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->tipo_pago->Visible = false; // Disable update for API request
-            } else {
-                $this->tipo_pago->setFormValue($val);
+                $this->metodo_pago->setFormValue($val);
             }
         }
 
@@ -867,50 +793,64 @@ class CobrosClienteEdit extends CobrosCliente
             }
         }
 
+        // Check field name 'monto_moneda' first before field var 'x_monto_moneda'
+        $val = $CurrentForm->hasValue("monto_moneda") ? $CurrentForm->getValue("monto_moneda") : $CurrentForm->getValue("x_monto_moneda");
+        if (!$this->monto_moneda->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_moneda->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_moneda->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'moneda' first before field var 'x_moneda'
+        $val = $CurrentForm->hasValue("moneda") ? $CurrentForm->getValue("moneda") : $CurrentForm->getValue("x_moneda");
+        if (!$this->moneda->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->moneda->Visible = false; // Disable update for API request
+            } else {
+                $this->moneda->setFormValue($val);
+            }
+        }
+
+        // Check field name 'monto_bs' first before field var 'x_monto_bs'
+        $val = $CurrentForm->hasValue("monto_bs") ? $CurrentForm->getValue("monto_bs") : $CurrentForm->getValue("x_monto_bs");
+        if (!$this->monto_bs->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_bs->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_bs->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'tasa_usd' first before field var 'x_tasa_usd'
+        $val = $CurrentForm->hasValue("tasa_usd") ? $CurrentForm->getValue("tasa_usd") : $CurrentForm->getValue("x_tasa_usd");
+        if (!$this->tasa_usd->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tasa_usd->Visible = false; // Disable update for API request
+            } else {
+                $this->tasa_usd->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'monto_usd' first before field var 'x_monto_usd'
+        $val = $CurrentForm->hasValue("monto_usd") ? $CurrentForm->getValue("monto_usd") : $CurrentForm->getValue("x_monto_usd");
+        if (!$this->monto_usd->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_usd->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_usd->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'banco' first before field var 'x_banco'
         $val = $CurrentForm->hasValue("banco") ? $CurrentForm->getValue("banco") : $CurrentForm->getValue("x_banco");
         if (!$this->banco->IsDetailKey) {
             if (IsApi() && $val === null) {
                 $this->banco->Visible = false; // Disable update for API request
             } else {
-                $this->banco->setFormValue($val);
+                $this->banco->setFormValue($val, true, $validate);
             }
-        }
-
-        // Check field name 'monto_recibido' first before field var 'x_monto_recibido'
-        $val = $CurrentForm->hasValue("monto_recibido") ? $CurrentForm->getValue("monto_recibido") : $CurrentForm->getValue("x_monto_recibido");
-        if (!$this->monto_recibido->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->monto_recibido->Visible = false; // Disable update for API request
-            } else {
-                $this->monto_recibido->setFormValue($val, true, $validate);
-            }
-        }
-
-        // Check field name 'tasa_cambio' first before field var 'x_tasa_cambio'
-        $val = $CurrentForm->hasValue("tasa_cambio") ? $CurrentForm->getValue("tasa_cambio") : $CurrentForm->getValue("x_tasa_cambio");
-        if (!$this->tasa_cambio->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->tasa_cambio->Visible = false; // Disable update for API request
-            } else {
-                $this->tasa_cambio->setFormValue($val, true, $validate);
-            }
-        }
-
-        // Check field name 'pivote2' first before field var 'x_pivote2'
-        $val = $CurrentForm->hasValue("pivote2") ? $CurrentForm->getValue("pivote2") : $CurrentForm->getValue("x_pivote2");
-        if (!$this->pivote2->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->pivote2->Visible = false; // Disable update for API request
-            } else {
-                $this->pivote2->setFormValue($val);
-            }
-        }
-
-        // Check field name 'id' first before field var 'x_id'
-        $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
-        if (!$this->id->IsDetailKey) {
-            $this->id->setFormValue($val);
         }
     }
 
@@ -919,18 +859,14 @@ class CobrosClienteEdit extends CobrosCliente
     {
         global $CurrentForm;
         $this->id->CurrentValue = $this->id->FormValue;
-        $this->cliente->CurrentValue = $this->cliente->FormValue;
-        $this->id_documento->CurrentValue = $this->id_documento->FormValue;
-        $this->fecha->CurrentValue = $this->fecha->FormValue;
-        $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
-        $this->moneda->CurrentValue = $this->moneda->FormValue;
-        $this->nota->CurrentValue = $this->nota->FormValue;
-        $this->tipo_pago->CurrentValue = $this->tipo_pago->FormValue;
+        $this->metodo_pago->CurrentValue = $this->metodo_pago->FormValue;
         $this->referencia->CurrentValue = $this->referencia->FormValue;
+        $this->monto_moneda->CurrentValue = $this->monto_moneda->FormValue;
+        $this->moneda->CurrentValue = $this->moneda->FormValue;
+        $this->monto_bs->CurrentValue = $this->monto_bs->FormValue;
+        $this->tasa_usd->CurrentValue = $this->tasa_usd->FormValue;
+        $this->monto_usd->CurrentValue = $this->monto_usd->FormValue;
         $this->banco->CurrentValue = $this->banco->FormValue;
-        $this->monto_recibido->CurrentValue = $this->monto_recibido->FormValue;
-        $this->tasa_cambio->CurrentValue = $this->tasa_cambio->FormValue;
-        $this->pivote2->CurrentValue = $this->pivote2->FormValue;
     }
 
     /**
@@ -1027,24 +963,16 @@ class CobrosClienteEdit extends CobrosCliente
         // Call Row Selected event
         $this->rowSelected($row);
         $this->id->setDbValue($row['id']);
-        $this->cliente->setDbValue($row['cliente']);
-        $this->id_documento->setDbValue($row['id_documento']);
-        $this->pivote->setDbValue($row['pivote']);
-        $this->fecha->setDbValue($row['fecha']);
-        $this->moneda->setDbValue($row['moneda']);
-        $this->pago->setDbValue($row['pago']);
-        $this->nota->setDbValue($row['nota']);
-        $this->fecha_registro->setDbValue($row['fecha_registro']);
-        $this->_username->setDbValue($row['username']);
-        $this->comprobante->setDbValue($row['comprobante']);
-        $this->tipo_pago->setDbValue($row['tipo_pago']);
+        $this->cobros_cliente->setDbValue($row['cobros_cliente']);
+        $this->metodo_pago->setDbValue($row['metodo_pago']);
         $this->referencia->setDbValue($row['referencia']);
+        $this->monto_moneda->setDbValue($row['monto_moneda']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->tasa_moneda->setDbValue($row['tasa_moneda']);
+        $this->monto_bs->setDbValue($row['monto_bs']);
+        $this->tasa_usd->setDbValue($row['tasa_usd']);
+        $this->monto_usd->setDbValue($row['monto_usd']);
         $this->banco->setDbValue($row['banco']);
-        $this->banco_origen->setDbValue($row['banco_origen']);
-        $this->monto_recibido->setDbValue($row['monto_recibido']);
-        $this->monto->setDbValue($row['monto']);
-        $this->tasa_cambio->setDbValue($row['tasa_cambio']);
-        $this->pivote2->setDbValue($row['pivote2']);
     }
 
     // Return a row with default values
@@ -1052,24 +980,16 @@ class CobrosClienteEdit extends CobrosCliente
     {
         $row = [];
         $row['id'] = $this->id->DefaultValue;
-        $row['cliente'] = $this->cliente->DefaultValue;
-        $row['id_documento'] = $this->id_documento->DefaultValue;
-        $row['pivote'] = $this->pivote->DefaultValue;
-        $row['fecha'] = $this->fecha->DefaultValue;
-        $row['moneda'] = $this->moneda->DefaultValue;
-        $row['pago'] = $this->pago->DefaultValue;
-        $row['nota'] = $this->nota->DefaultValue;
-        $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
-        $row['username'] = $this->_username->DefaultValue;
-        $row['comprobante'] = $this->comprobante->DefaultValue;
-        $row['tipo_pago'] = $this->tipo_pago->DefaultValue;
+        $row['cobros_cliente'] = $this->cobros_cliente->DefaultValue;
+        $row['metodo_pago'] = $this->metodo_pago->DefaultValue;
         $row['referencia'] = $this->referencia->DefaultValue;
+        $row['monto_moneda'] = $this->monto_moneda->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['tasa_moneda'] = $this->tasa_moneda->DefaultValue;
+        $row['monto_bs'] = $this->monto_bs->DefaultValue;
+        $row['tasa_usd'] = $this->tasa_usd->DefaultValue;
+        $row['monto_usd'] = $this->monto_usd->DefaultValue;
         $row['banco'] = $this->banco->DefaultValue;
-        $row['banco_origen'] = $this->banco_origen->DefaultValue;
-        $row['monto_recibido'] = $this->monto_recibido->DefaultValue;
-        $row['monto'] = $this->monto->DefaultValue;
-        $row['tasa_cambio'] = $this->tasa_cambio->DefaultValue;
-        $row['pivote2'] = $this->pivote2->DefaultValue;
         return $row;
     }
 
@@ -1107,99 +1027,76 @@ class CobrosClienteEdit extends CobrosCliente
         // id
         $this->id->RowCssClass = "row";
 
-        // cliente
-        $this->cliente->RowCssClass = "row";
+        // cobros_cliente
+        $this->cobros_cliente->RowCssClass = "row";
 
-        // id_documento
-        $this->id_documento->RowCssClass = "row";
-
-        // pivote
-        $this->pivote->RowCssClass = "row";
-
-        // fecha
-        $this->fecha->RowCssClass = "row";
-
-        // moneda
-        $this->moneda->RowCssClass = "row";
-
-        // pago
-        $this->pago->RowCssClass = "row";
-
-        // nota
-        $this->nota->RowCssClass = "row";
-
-        // fecha_registro
-        $this->fecha_registro->RowCssClass = "row";
-
-        // username
-        $this->_username->RowCssClass = "row";
-
-        // comprobante
-        $this->comprobante->RowCssClass = "row";
-
-        // tipo_pago
-        $this->tipo_pago->RowCssClass = "row";
+        // metodo_pago
+        $this->metodo_pago->RowCssClass = "row";
 
         // referencia
         $this->referencia->RowCssClass = "row";
 
+        // monto_moneda
+        $this->monto_moneda->RowCssClass = "row";
+
+        // moneda
+        $this->moneda->RowCssClass = "row";
+
+        // tasa_moneda
+        $this->tasa_moneda->RowCssClass = "row";
+
+        // monto_bs
+        $this->monto_bs->RowCssClass = "row";
+
+        // tasa_usd
+        $this->tasa_usd->RowCssClass = "row";
+
+        // monto_usd
+        $this->monto_usd->RowCssClass = "row";
+
         // banco
         $this->banco->RowCssClass = "row";
-
-        // banco_origen
-        $this->banco_origen->RowCssClass = "row";
-
-        // monto_recibido
-        $this->monto_recibido->RowCssClass = "row";
-
-        // monto
-        $this->monto->RowCssClass = "row";
-
-        // tasa_cambio
-        $this->tasa_cambio->RowCssClass = "row";
-
-        // pivote2
-        $this->pivote2->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
             $this->id->ViewValue = $this->id->CurrentValue;
 
-            // cliente
-            $curVal = strval($this->cliente->CurrentValue);
+            // cobros_cliente
+            $this->cobros_cliente->ViewValue = $this->cobros_cliente->CurrentValue;
+            $this->cobros_cliente->ViewValue = FormatNumber($this->cobros_cliente->ViewValue, $this->cobros_cliente->formatPattern());
+
+            // metodo_pago
+            $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+            $curVal = strval($this->metodo_pago->CurrentValue);
             if ($curVal != "") {
-                $this->cliente->ViewValue = $this->cliente->lookupCacheOption($curVal);
-                if ($this->cliente->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->cliente->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->cliente->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                    $lookupFilter = $this->cliente->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->cliente->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
+                if ($this->metodo_pago->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
                     $conn = Conn();
                     $config = $conn->getConfiguration();
                     $config->setResultCache($this->Cache);
                     $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
                     $ari = count($rswrk);
                     if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->cliente->Lookup->renderViewRow($rswrk[0]);
-                        $this->cliente->ViewValue = $this->cliente->displayValue($arwrk);
+                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
                     } else {
-                        $this->cliente->ViewValue = $this->cliente->CurrentValue;
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
                     }
                 }
             } else {
-                $this->cliente->ViewValue = null;
+                $this->metodo_pago->ViewValue = null;
             }
 
-            // id_documento
-            $this->id_documento->ViewValue = $this->id_documento->CurrentValue;
-            $this->id_documento->ViewValue = FormatNumber($this->id_documento->ViewValue, $this->id_documento->formatPattern());
+            // referencia
+            $this->referencia->ViewValue = $this->referencia->CurrentValue;
 
-            // pivote
-            $this->pivote->ViewValue = $this->pivote->CurrentValue;
-
-            // fecha
-            $this->fecha->ViewValue = $this->fecha->CurrentValue;
-            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+            // monto_moneda
+            $this->monto_moneda->ViewValue = $this->monto_moneda->CurrentValue;
+            $this->monto_moneda->ViewValue = FormatNumber($this->monto_moneda->ViewValue, $this->monto_moneda->formatPattern());
 
             // moneda
             $curVal = strval($this->moneda->CurrentValue);
@@ -1225,72 +1122,24 @@ class CobrosClienteEdit extends CobrosCliente
                 $this->moneda->ViewValue = null;
             }
 
-            // pago
-            $this->pago->ViewValue = $this->pago->CurrentValue;
-            $this->pago->ViewValue = FormatNumber($this->pago->ViewValue, $this->pago->formatPattern());
+            // tasa_moneda
+            $this->tasa_moneda->ViewValue = $this->tasa_moneda->CurrentValue;
+            $this->tasa_moneda->ViewValue = FormatNumber($this->tasa_moneda->ViewValue, $this->tasa_moneda->formatPattern());
 
-            // nota
-            $this->nota->ViewValue = $this->nota->CurrentValue;
+            // monto_bs
+            $this->monto_bs->ViewValue = $this->monto_bs->CurrentValue;
+            $this->monto_bs->ViewValue = FormatNumber($this->monto_bs->ViewValue, $this->monto_bs->formatPattern());
 
-            // fecha_registro
-            $this->fecha_registro->ViewValue = $this->fecha_registro->CurrentValue;
-            $this->fecha_registro->ViewValue = FormatDateTime($this->fecha_registro->ViewValue, $this->fecha_registro->formatPattern());
+            // tasa_usd
+            $this->tasa_usd->ViewValue = $this->tasa_usd->CurrentValue;
+            $this->tasa_usd->ViewValue = FormatNumber($this->tasa_usd->ViewValue, $this->tasa_usd->formatPattern());
 
-            // username
-            $this->_username->ViewValue = $this->_username->CurrentValue;
-            $curVal = strval($this->_username->CurrentValue);
-            if ($curVal != "") {
-                $this->_username->ViewValue = $this->_username->lookupCacheOption($curVal);
-                if ($this->_username->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->_username->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->_username->Lookup->getTable()->Fields["username"]->searchDataType(), "");
-                    $sqlWrk = $this->_username->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->_username->Lookup->renderViewRow($rswrk[0]);
-                        $this->_username->ViewValue = $this->_username->displayValue($arwrk);
-                    } else {
-                        $this->_username->ViewValue = $this->_username->CurrentValue;
-                    }
-                }
-            } else {
-                $this->_username->ViewValue = null;
-            }
-
-            // comprobante
-            $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
-
-            // tipo_pago
-            $curVal = strval($this->tipo_pago->CurrentValue);
-            if ($curVal != "") {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->lookupCacheOption($curVal);
-                if ($this->tipo_pago->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->tipo_pago->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->tipo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->tipo_pago->Lookup->renderViewRow($rswrk[0]);
-                        $this->tipo_pago->ViewValue = $this->tipo_pago->displayValue($arwrk);
-                    } else {
-                        $this->tipo_pago->ViewValue = $this->tipo_pago->CurrentValue;
-                    }
-                }
-            } else {
-                $this->tipo_pago->ViewValue = null;
-            }
-
-            // referencia
-            $this->referencia->ViewValue = $this->referencia->CurrentValue;
+            // monto_usd
+            $this->monto_usd->ViewValue = $this->monto_usd->CurrentValue;
+            $this->monto_usd->ViewValue = FormatNumber($this->monto_usd->ViewValue, $this->monto_usd->formatPattern());
 
             // banco
+            $this->banco->ViewValue = $this->banco->CurrentValue;
             $curVal = strval($this->banco->CurrentValue);
             if ($curVal != "") {
                 $this->banco->ViewValue = $this->banco->lookupCacheOption($curVal);
@@ -1306,134 +1155,89 @@ class CobrosClienteEdit extends CobrosCliente
                         $arwrk = $this->banco->Lookup->renderViewRow($rswrk[0]);
                         $this->banco->ViewValue = $this->banco->displayValue($arwrk);
                     } else {
-                        $this->banco->ViewValue = $this->banco->CurrentValue;
+                        $this->banco->ViewValue = FormatNumber($this->banco->CurrentValue, $this->banco->formatPattern());
                     }
                 }
             } else {
                 $this->banco->ViewValue = null;
             }
 
-            // banco_origen
-            $this->banco_origen->ViewValue = $this->banco_origen->CurrentValue;
-            $curVal = strval($this->banco_origen->CurrentValue);
+            // id
+            $this->id->HrefValue = "";
+
+            // metodo_pago
+            $this->metodo_pago->HrefValue = "";
+
+            // referencia
+            $this->referencia->HrefValue = "";
+
+            // monto_moneda
+            $this->monto_moneda->HrefValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+
+            // monto_bs
+            $this->monto_bs->HrefValue = "";
+
+            // tasa_usd
+            $this->tasa_usd->HrefValue = "";
+
+            // monto_usd
+            $this->monto_usd->HrefValue = "";
+
+            // banco
+            $this->banco->HrefValue = "";
+        } elseif ($this->RowType == RowType::EDIT) {
+            // id
+            $this->id->setupEditAttributes();
+            $this->id->EditValue = $this->id->CurrentValue;
+
+            // metodo_pago
+            $this->metodo_pago->setupEditAttributes();
+            if (!$this->metodo_pago->Raw) {
+                $this->metodo_pago->CurrentValue = HtmlDecode($this->metodo_pago->CurrentValue);
+            }
+            $this->metodo_pago->EditValue = HtmlEncode($this->metodo_pago->CurrentValue);
+            $curVal = strval($this->metodo_pago->CurrentValue);
             if ($curVal != "") {
-                $this->banco_origen->ViewValue = $this->banco_origen->lookupCacheOption($curVal);
-                if ($this->banco_origen->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->banco_origen->Lookup->getTable()->Fields["campo_descripcion"]->searchExpression(), "=", $curVal, $this->banco_origen->Lookup->getTable()->Fields["campo_descripcion"]->searchDataType(), "");
-                    $lookupFilter = $this->banco_origen->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->banco_origen->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $this->metodo_pago->EditValue = $this->metodo_pago->lookupCacheOption($curVal);
+                if ($this->metodo_pago->EditValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
                     $conn = Conn();
                     $config = $conn->getConfiguration();
                     $config->setResultCache($this->Cache);
                     $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
                     $ari = count($rswrk);
                     if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->banco_origen->Lookup->renderViewRow($rswrk[0]);
-                        $this->banco_origen->ViewValue = $this->banco_origen->displayValue($arwrk);
+                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                        $this->metodo_pago->EditValue = $this->metodo_pago->displayValue($arwrk);
                     } else {
-                        $this->banco_origen->ViewValue = $this->banco_origen->CurrentValue;
+                        $this->metodo_pago->EditValue = HtmlEncode($this->metodo_pago->CurrentValue);
                     }
                 }
             } else {
-                $this->banco_origen->ViewValue = null;
+                $this->metodo_pago->EditValue = null;
             }
-
-            // monto_recibido
-            $this->monto_recibido->ViewValue = $this->monto_recibido->CurrentValue;
-            $this->monto_recibido->ViewValue = FormatNumber($this->monto_recibido->ViewValue, $this->monto_recibido->formatPattern());
-
-            // monto
-            $this->monto->ViewValue = $this->monto->CurrentValue;
-            $this->monto->ViewValue = FormatNumber($this->monto->ViewValue, $this->monto->formatPattern());
-
-            // tasa_cambio
-            $this->tasa_cambio->ViewValue = $this->tasa_cambio->CurrentValue;
-            $this->tasa_cambio->ViewValue = FormatNumber($this->tasa_cambio->ViewValue, $this->tasa_cambio->formatPattern());
-
-            // pivote2
-            $this->pivote2->ViewValue = $this->pivote2->CurrentValue;
-
-            // cliente
-            $this->cliente->HrefValue = "";
-
-            // id_documento
-            $this->id_documento->HrefValue = "";
-
-            // fecha
-            $this->fecha->HrefValue = "";
-
-            // moneda
-            $this->moneda->HrefValue = "";
-
-            // nota
-            $this->nota->HrefValue = "";
-
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
+            $this->metodo_pago->PlaceHolder = RemoveHtml($this->metodo_pago->caption());
 
             // referencia
-            $this->referencia->HrefValue = "";
-
-            // banco
-            $this->banco->HrefValue = "";
-
-            // monto_recibido
-            $this->monto_recibido->HrefValue = "";
-
-            // tasa_cambio
-            $this->tasa_cambio->HrefValue = "";
-
-            // pivote2
-            $this->pivote2->HrefValue = "";
-        } elseif ($this->RowType == RowType::EDIT) {
-            // cliente
-            $curVal = trim(strval($this->cliente->CurrentValue));
-            if ($curVal != "") {
-                $this->cliente->ViewValue = $this->cliente->lookupCacheOption($curVal);
-            } else {
-                $this->cliente->ViewValue = $this->cliente->Lookup !== null && is_array($this->cliente->lookupOptions()) && count($this->cliente->lookupOptions()) > 0 ? $curVal : null;
+            $this->referencia->setupEditAttributes();
+            if (!$this->referencia->Raw) {
+                $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
             }
-            if ($this->cliente->ViewValue !== null) { // Load from cache
-                $this->cliente->EditValue = array_values($this->cliente->lookupOptions());
-                if ($this->cliente->ViewValue == "") {
-                    $this->cliente->ViewValue = $Language->phrase("PleaseSelect");
-                }
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->cliente->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $this->cliente->CurrentValue, $this->cliente->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->cliente->getSelectFilter($this); // PHP
-                $sqlWrk = $this->cliente->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->cliente->Lookup->renderViewRow($rswrk[0]);
-                    $this->cliente->ViewValue = $this->cliente->displayValue($arwrk);
-                } else {
-                    $this->cliente->ViewValue = $Language->phrase("PleaseSelect");
-                }
-                $arwrk = $rswrk;
-                $this->cliente->EditValue = $arwrk;
-            }
-            $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
+            $this->referencia->EditValue = HtmlEncode($this->referencia->CurrentValue);
+            $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
 
-            // id_documento
-            $this->id_documento->setupEditAttributes();
-            $this->id_documento->EditValue = $this->id_documento->CurrentValue;
-            $this->id_documento->PlaceHolder = RemoveHtml($this->id_documento->caption());
-            if (strval($this->id_documento->EditValue) != "" && is_numeric($this->id_documento->EditValue)) {
-                $this->id_documento->EditValue = FormatNumber($this->id_documento->EditValue, null);
+            // monto_moneda
+            $this->monto_moneda->setupEditAttributes();
+            $this->monto_moneda->EditValue = $this->monto_moneda->CurrentValue;
+            $this->monto_moneda->PlaceHolder = RemoveHtml($this->monto_moneda->caption());
+            if (strval($this->monto_moneda->EditValue) != "" && is_numeric($this->monto_moneda->EditValue)) {
+                $this->monto_moneda->EditValue = FormatNumber($this->monto_moneda->EditValue, null);
             }
-
-            // fecha
-            $this->fecha->setupEditAttributes();
-            $this->fecha->EditValue = HtmlEncode(FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()));
-            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
 
             // moneda
             $this->moneda->setupEditAttributes();
@@ -1463,132 +1267,84 @@ class CobrosClienteEdit extends CobrosCliente
             }
             $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
-            // nota
-            $this->nota->setupEditAttributes();
-            $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
-            $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
+            // monto_bs
+            $this->monto_bs->setupEditAttributes();
+            $this->monto_bs->EditValue = $this->monto_bs->CurrentValue;
+            $this->monto_bs->PlaceHolder = RemoveHtml($this->monto_bs->caption());
+            if (strval($this->monto_bs->EditValue) != "" && is_numeric($this->monto_bs->EditValue)) {
+                $this->monto_bs->EditValue = FormatNumber($this->monto_bs->EditValue, null);
+            }
 
-            // tipo_pago
-            $this->tipo_pago->setupEditAttributes();
-            $curVal = trim(strval($this->tipo_pago->CurrentValue));
-            if ($curVal != "") {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->lookupCacheOption($curVal);
-            } else {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->Lookup !== null && is_array($this->tipo_pago->lookupOptions()) && count($this->tipo_pago->lookupOptions()) > 0 ? $curVal : null;
+            // tasa_usd
+            $this->tasa_usd->setupEditAttributes();
+            $this->tasa_usd->EditValue = $this->tasa_usd->CurrentValue;
+            $this->tasa_usd->PlaceHolder = RemoveHtml($this->tasa_usd->caption());
+            if (strval($this->tasa_usd->EditValue) != "" && is_numeric($this->tasa_usd->EditValue)) {
+                $this->tasa_usd->EditValue = FormatNumber($this->tasa_usd->EditValue, null);
             }
-            if ($this->tipo_pago->ViewValue !== null) { // Load from cache
-                $this->tipo_pago->EditValue = array_values($this->tipo_pago->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $this->tipo_pago->CurrentValue, $this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->tipo_pago->getSelectFilter($this); // PHP
-                $sqlWrk = $this->tipo_pago->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->tipo_pago->EditValue = $arwrk;
-            }
-            $this->tipo_pago->PlaceHolder = RemoveHtml($this->tipo_pago->caption());
 
-            // referencia
-            $this->referencia->setupEditAttributes();
-            if (!$this->referencia->Raw) {
-                $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
+            // monto_usd
+            $this->monto_usd->setupEditAttributes();
+            $this->monto_usd->EditValue = $this->monto_usd->CurrentValue;
+            $this->monto_usd->PlaceHolder = RemoveHtml($this->monto_usd->caption());
+            if (strval($this->monto_usd->EditValue) != "" && is_numeric($this->monto_usd->EditValue)) {
+                $this->monto_usd->EditValue = FormatNumber($this->monto_usd->EditValue, null);
             }
-            $this->referencia->EditValue = HtmlEncode($this->referencia->CurrentValue);
-            $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
 
             // banco
             $this->banco->setupEditAttributes();
-            $curVal = trim(strval($this->banco->CurrentValue));
+            $this->banco->EditValue = $this->banco->CurrentValue;
+            $curVal = strval($this->banco->CurrentValue);
             if ($curVal != "") {
-                $this->banco->ViewValue = $this->banco->lookupCacheOption($curVal);
-            } else {
-                $this->banco->ViewValue = $this->banco->Lookup !== null && is_array($this->banco->lookupOptions()) && count($this->banco->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->banco->ViewValue !== null) { // Load from cache
-                $this->banco->EditValue = array_values($this->banco->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->banco->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $this->banco->CurrentValue, $this->banco->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $this->banco->EditValue = $this->banco->lookupCacheOption($curVal);
+                if ($this->banco->EditValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->banco->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->banco->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->banco->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->banco->Lookup->renderViewRow($rswrk[0]);
+                        $this->banco->EditValue = $this->banco->displayValue($arwrk);
+                    } else {
+                        $this->banco->EditValue = HtmlEncode(FormatNumber($this->banco->CurrentValue, $this->banco->formatPattern()));
+                    }
                 }
-                $sqlWrk = $this->banco->Lookup->getSql(true, $filterWrk, '', $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->banco->EditValue = $arwrk;
+            } else {
+                $this->banco->EditValue = null;
             }
             $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
 
-            // monto_recibido
-            $this->monto_recibido->setupEditAttributes();
-            $this->monto_recibido->EditValue = $this->monto_recibido->CurrentValue;
-            $this->monto_recibido->PlaceHolder = RemoveHtml($this->monto_recibido->caption());
-            if (strval($this->monto_recibido->EditValue) != "" && is_numeric($this->monto_recibido->EditValue)) {
-                $this->monto_recibido->EditValue = FormatNumber($this->monto_recibido->EditValue, null);
-            }
-
-            // tasa_cambio
-            $this->tasa_cambio->setupEditAttributes();
-            $this->tasa_cambio->EditValue = $this->tasa_cambio->CurrentValue;
-            $this->tasa_cambio->PlaceHolder = RemoveHtml($this->tasa_cambio->caption());
-            if (strval($this->tasa_cambio->EditValue) != "" && is_numeric($this->tasa_cambio->EditValue)) {
-                $this->tasa_cambio->EditValue = FormatNumber($this->tasa_cambio->EditValue, null);
-            }
-
-            // pivote2
-            $this->pivote2->setupEditAttributes();
-            if (!$this->pivote2->Raw) {
-                $this->pivote2->CurrentValue = HtmlDecode($this->pivote2->CurrentValue);
-            }
-            $this->pivote2->EditValue = HtmlEncode($this->pivote2->CurrentValue);
-            $this->pivote2->PlaceHolder = RemoveHtml($this->pivote2->caption());
-
             // Edit refer script
 
-            // cliente
-            $this->cliente->HrefValue = "";
+            // id
+            $this->id->HrefValue = "";
 
-            // id_documento
-            $this->id_documento->HrefValue = "";
-
-            // fecha
-            $this->fecha->HrefValue = "";
-
-            // moneda
-            $this->moneda->HrefValue = "";
-
-            // nota
-            $this->nota->HrefValue = "";
-
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
+            // metodo_pago
+            $this->metodo_pago->HrefValue = "";
 
             // referencia
             $this->referencia->HrefValue = "";
 
+            // monto_moneda
+            $this->monto_moneda->HrefValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+
+            // monto_bs
+            $this->monto_bs->HrefValue = "";
+
+            // tasa_usd
+            $this->tasa_usd->HrefValue = "";
+
+            // monto_usd
+            $this->monto_usd->HrefValue = "";
+
             // banco
             $this->banco->HrefValue = "";
-
-            // monto_recibido
-            $this->monto_recibido->HrefValue = "";
-
-            // tasa_cambio
-            $this->tasa_cambio->HrefValue = "";
-
-            // pivote2
-            $this->pivote2->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1610,40 +1366,14 @@ class CobrosClienteEdit extends CobrosCliente
             return true;
         }
         $validateForm = true;
-            if ($this->cliente->Visible && $this->cliente->Required) {
-                if (!$this->cliente->IsDetailKey && EmptyValue($this->cliente->FormValue)) {
-                    $this->cliente->addErrorMessage(str_replace("%s", $this->cliente->caption(), $this->cliente->RequiredErrorMessage));
+            if ($this->id->Visible && $this->id->Required) {
+                if (!$this->id->IsDetailKey && EmptyValue($this->id->FormValue)) {
+                    $this->id->addErrorMessage(str_replace("%s", $this->id->caption(), $this->id->RequiredErrorMessage));
                 }
             }
-            if ($this->id_documento->Visible && $this->id_documento->Required) {
-                if (!$this->id_documento->IsDetailKey && EmptyValue($this->id_documento->FormValue)) {
-                    $this->id_documento->addErrorMessage(str_replace("%s", $this->id_documento->caption(), $this->id_documento->RequiredErrorMessage));
-                }
-            }
-            if (!CheckInteger($this->id_documento->FormValue)) {
-                $this->id_documento->addErrorMessage($this->id_documento->getErrorMessage(false));
-            }
-            if ($this->fecha->Visible && $this->fecha->Required) {
-                if (!$this->fecha->IsDetailKey && EmptyValue($this->fecha->FormValue)) {
-                    $this->fecha->addErrorMessage(str_replace("%s", $this->fecha->caption(), $this->fecha->RequiredErrorMessage));
-                }
-            }
-            if (!CheckDate($this->fecha->FormValue, $this->fecha->formatPattern())) {
-                $this->fecha->addErrorMessage($this->fecha->getErrorMessage(false));
-            }
-            if ($this->moneda->Visible && $this->moneda->Required) {
-                if (!$this->moneda->IsDetailKey && EmptyValue($this->moneda->FormValue)) {
-                    $this->moneda->addErrorMessage(str_replace("%s", $this->moneda->caption(), $this->moneda->RequiredErrorMessage));
-                }
-            }
-            if ($this->nota->Visible && $this->nota->Required) {
-                if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
-                    $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
-                }
-            }
-            if ($this->tipo_pago->Visible && $this->tipo_pago->Required) {
-                if (!$this->tipo_pago->IsDetailKey && EmptyValue($this->tipo_pago->FormValue)) {
-                    $this->tipo_pago->addErrorMessage(str_replace("%s", $this->tipo_pago->caption(), $this->tipo_pago->RequiredErrorMessage));
+            if ($this->metodo_pago->Visible && $this->metodo_pago->Required) {
+                if (!$this->metodo_pago->IsDetailKey && EmptyValue($this->metodo_pago->FormValue)) {
+                    $this->metodo_pago->addErrorMessage(str_replace("%s", $this->metodo_pago->caption(), $this->metodo_pago->RequiredErrorMessage));
                 }
             }
             if ($this->referencia->Visible && $this->referencia->Required) {
@@ -1651,40 +1381,51 @@ class CobrosClienteEdit extends CobrosCliente
                     $this->referencia->addErrorMessage(str_replace("%s", $this->referencia->caption(), $this->referencia->RequiredErrorMessage));
                 }
             }
+            if ($this->monto_moneda->Visible && $this->monto_moneda->Required) {
+                if (!$this->monto_moneda->IsDetailKey && EmptyValue($this->monto_moneda->FormValue)) {
+                    $this->monto_moneda->addErrorMessage(str_replace("%s", $this->monto_moneda->caption(), $this->monto_moneda->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_moneda->FormValue)) {
+                $this->monto_moneda->addErrorMessage($this->monto_moneda->getErrorMessage(false));
+            }
+            if ($this->moneda->Visible && $this->moneda->Required) {
+                if (!$this->moneda->IsDetailKey && EmptyValue($this->moneda->FormValue)) {
+                    $this->moneda->addErrorMessage(str_replace("%s", $this->moneda->caption(), $this->moneda->RequiredErrorMessage));
+                }
+            }
+            if ($this->monto_bs->Visible && $this->monto_bs->Required) {
+                if (!$this->monto_bs->IsDetailKey && EmptyValue($this->monto_bs->FormValue)) {
+                    $this->monto_bs->addErrorMessage(str_replace("%s", $this->monto_bs->caption(), $this->monto_bs->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_bs->FormValue)) {
+                $this->monto_bs->addErrorMessage($this->monto_bs->getErrorMessage(false));
+            }
+            if ($this->tasa_usd->Visible && $this->tasa_usd->Required) {
+                if (!$this->tasa_usd->IsDetailKey && EmptyValue($this->tasa_usd->FormValue)) {
+                    $this->tasa_usd->addErrorMessage(str_replace("%s", $this->tasa_usd->caption(), $this->tasa_usd->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->tasa_usd->FormValue)) {
+                $this->tasa_usd->addErrorMessage($this->tasa_usd->getErrorMessage(false));
+            }
+            if ($this->monto_usd->Visible && $this->monto_usd->Required) {
+                if (!$this->monto_usd->IsDetailKey && EmptyValue($this->monto_usd->FormValue)) {
+                    $this->monto_usd->addErrorMessage(str_replace("%s", $this->monto_usd->caption(), $this->monto_usd->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_usd->FormValue)) {
+                $this->monto_usd->addErrorMessage($this->monto_usd->getErrorMessage(false));
+            }
             if ($this->banco->Visible && $this->banco->Required) {
                 if (!$this->banco->IsDetailKey && EmptyValue($this->banco->FormValue)) {
                     $this->banco->addErrorMessage(str_replace("%s", $this->banco->caption(), $this->banco->RequiredErrorMessage));
                 }
             }
-            if ($this->monto_recibido->Visible && $this->monto_recibido->Required) {
-                if (!$this->monto_recibido->IsDetailKey && EmptyValue($this->monto_recibido->FormValue)) {
-                    $this->monto_recibido->addErrorMessage(str_replace("%s", $this->monto_recibido->caption(), $this->monto_recibido->RequiredErrorMessage));
-                }
+            if (!CheckInteger($this->banco->FormValue)) {
+                $this->banco->addErrorMessage($this->banco->getErrorMessage(false));
             }
-            if (!CheckNumber($this->monto_recibido->FormValue)) {
-                $this->monto_recibido->addErrorMessage($this->monto_recibido->getErrorMessage(false));
-            }
-            if ($this->tasa_cambio->Visible && $this->tasa_cambio->Required) {
-                if (!$this->tasa_cambio->IsDetailKey && EmptyValue($this->tasa_cambio->FormValue)) {
-                    $this->tasa_cambio->addErrorMessage(str_replace("%s", $this->tasa_cambio->caption(), $this->tasa_cambio->RequiredErrorMessage));
-                }
-            }
-            if (!CheckNumber($this->tasa_cambio->FormValue)) {
-                $this->tasa_cambio->addErrorMessage($this->tasa_cambio->getErrorMessage(false));
-            }
-            if ($this->pivote2->Visible && $this->pivote2->Required) {
-                if (!$this->pivote2->IsDetailKey && EmptyValue($this->pivote2->FormValue)) {
-                    $this->pivote2->addErrorMessage(str_replace("%s", $this->pivote2->caption(), $this->pivote2->RequiredErrorMessage));
-                }
-            }
-
-        // Validate detail grid
-        $detailTblVar = explode(",", $this->getCurrentDetailTable());
-        $detailPage = Container("CobrosClienteFacturaGrid");
-        if (in_array("cobros_cliente_factura", $detailTblVar) && $detailPage->DetailEdit) {
-            $detailPage->run();
-            $validateForm = $validateForm && $detailPage->validateGridForm();
-        }
 
         // Return validate result
         $validateForm = $validateForm && !$this->hasInvalidFields();
@@ -1724,11 +1465,6 @@ class CobrosClienteEdit extends CobrosCliente
         // Update current values
         $this->setCurrentValues($rsnew);
 
-        // Begin transaction
-        if ($this->getCurrentDetailTable() != "" && $this->UseTransaction) {
-            $conn->beginTransaction();
-        }
-
         // Call Row Updating event
         $updateRow = $this->rowUpdating($rsold, $rsnew);
         if ($updateRow) {
@@ -1742,32 +1478,6 @@ class CobrosClienteEdit extends CobrosCliente
                 $editRow = true; // No field to update
             }
             if ($editRow) {
-            }
-
-            // Update detail records
-            $detailTblVar = explode(",", $this->getCurrentDetailTable());
-            $detailPage = Container("CobrosClienteFacturaGrid");
-            if (in_array("cobros_cliente_factura", $detailTblVar) && $detailPage->DetailEdit && $editRow) {
-                $Security->loadCurrentUserLevel($this->ProjectID . "cobros_cliente_factura"); // Load user level of detail table
-                $editRow = $detailPage->gridUpdate();
-                $Security->loadCurrentUserLevel($this->ProjectID . $this->TableName); // Restore user level of master table
-            }
-
-            // Commit/Rollback transaction
-            if ($this->getCurrentDetailTable() != "") {
-                if ($editRow) {
-                    if ($this->UseTransaction) { // Commit transaction
-                        if ($conn->isTransactionActive()) {
-                            $conn->commit();
-                        }
-                    }
-                } else {
-                    if ($this->UseTransaction) { // Rollback transaction
-                        if ($conn->isTransactionActive()) {
-                            $conn->rollback();
-                        }
-                    }
-                }
             }
         } else {
             if ($this->getSuccessMessage() != "" || $this->getFailureMessage() != "") {
@@ -1805,38 +1515,29 @@ class CobrosClienteEdit extends CobrosCliente
         global $Security;
         $rsnew = [];
 
-        // cliente
-        $this->cliente->setDbValueDef($rsnew, $this->cliente->CurrentValue, $this->cliente->ReadOnly);
-
-        // id_documento
-        $this->id_documento->setDbValueDef($rsnew, $this->id_documento->CurrentValue, $this->id_documento->ReadOnly);
-
-        // fecha
-        $this->fecha->setDbValueDef($rsnew, UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()), $this->fecha->ReadOnly);
-
-        // moneda
-        $this->moneda->setDbValueDef($rsnew, $this->moneda->CurrentValue, $this->moneda->ReadOnly);
-
-        // nota
-        $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
-
-        // tipo_pago
-        $this->tipo_pago->setDbValueDef($rsnew, $this->tipo_pago->CurrentValue, $this->tipo_pago->ReadOnly);
+        // metodo_pago
+        $this->metodo_pago->setDbValueDef($rsnew, $this->metodo_pago->CurrentValue, $this->metodo_pago->ReadOnly);
 
         // referencia
         $this->referencia->setDbValueDef($rsnew, $this->referencia->CurrentValue, $this->referencia->ReadOnly);
 
+        // monto_moneda
+        $this->monto_moneda->setDbValueDef($rsnew, $this->monto_moneda->CurrentValue, $this->monto_moneda->ReadOnly);
+
+        // moneda
+        $this->moneda->setDbValueDef($rsnew, $this->moneda->CurrentValue, $this->moneda->ReadOnly);
+
+        // monto_bs
+        $this->monto_bs->setDbValueDef($rsnew, $this->monto_bs->CurrentValue, $this->monto_bs->ReadOnly);
+
+        // tasa_usd
+        $this->tasa_usd->setDbValueDef($rsnew, $this->tasa_usd->CurrentValue, $this->tasa_usd->ReadOnly);
+
+        // monto_usd
+        $this->monto_usd->setDbValueDef($rsnew, $this->monto_usd->CurrentValue, $this->monto_usd->ReadOnly);
+
         // banco
         $this->banco->setDbValueDef($rsnew, $this->banco->CurrentValue, $this->banco->ReadOnly);
-
-        // monto_recibido
-        $this->monto_recibido->setDbValueDef($rsnew, $this->monto_recibido->CurrentValue, $this->monto_recibido->ReadOnly);
-
-        // tasa_cambio
-        $this->tasa_cambio->setDbValueDef($rsnew, $this->tasa_cambio->CurrentValue, $this->tasa_cambio->ReadOnly);
-
-        // pivote2
-        $this->pivote2->setDbValueDef($rsnew, $this->pivote2->CurrentValue, $this->pivote2->ReadOnly);
         return $rsnew;
     }
 
@@ -1846,68 +1547,29 @@ class CobrosClienteEdit extends CobrosCliente
      */
     protected function restoreEditFormFromRow($row)
     {
-        if (isset($row['cliente'])) { // cliente
-            $this->cliente->CurrentValue = $row['cliente'];
-        }
-        if (isset($row['id_documento'])) { // id_documento
-            $this->id_documento->CurrentValue = $row['id_documento'];
-        }
-        if (isset($row['fecha'])) { // fecha
-            $this->fecha->CurrentValue = $row['fecha'];
-        }
-        if (isset($row['moneda'])) { // moneda
-            $this->moneda->CurrentValue = $row['moneda'];
-        }
-        if (isset($row['nota'])) { // nota
-            $this->nota->CurrentValue = $row['nota'];
-        }
-        if (isset($row['tipo_pago'])) { // tipo_pago
-            $this->tipo_pago->CurrentValue = $row['tipo_pago'];
+        if (isset($row['metodo_pago'])) { // metodo_pago
+            $this->metodo_pago->CurrentValue = $row['metodo_pago'];
         }
         if (isset($row['referencia'])) { // referencia
             $this->referencia->CurrentValue = $row['referencia'];
         }
+        if (isset($row['monto_moneda'])) { // monto_moneda
+            $this->monto_moneda->CurrentValue = $row['monto_moneda'];
+        }
+        if (isset($row['moneda'])) { // moneda
+            $this->moneda->CurrentValue = $row['moneda'];
+        }
+        if (isset($row['monto_bs'])) { // monto_bs
+            $this->monto_bs->CurrentValue = $row['monto_bs'];
+        }
+        if (isset($row['tasa_usd'])) { // tasa_usd
+            $this->tasa_usd->CurrentValue = $row['tasa_usd'];
+        }
+        if (isset($row['monto_usd'])) { // monto_usd
+            $this->monto_usd->CurrentValue = $row['monto_usd'];
+        }
         if (isset($row['banco'])) { // banco
             $this->banco->CurrentValue = $row['banco'];
-        }
-        if (isset($row['monto_recibido'])) { // monto_recibido
-            $this->monto_recibido->CurrentValue = $row['monto_recibido'];
-        }
-        if (isset($row['tasa_cambio'])) { // tasa_cambio
-            $this->tasa_cambio->CurrentValue = $row['tasa_cambio'];
-        }
-        if (isset($row['pivote2'])) { // pivote2
-            $this->pivote2->CurrentValue = $row['pivote2'];
-        }
-    }
-
-    // Set up detail parms based on QueryString
-    protected function setupDetailParms()
-    {
-        // Get the keys for master table
-        $detailTblVar = Get(Config("TABLE_SHOW_DETAIL"));
-        if ($detailTblVar !== null) {
-            $this->setCurrentDetailTable($detailTblVar);
-        } else {
-            $detailTblVar = $this->getCurrentDetailTable();
-        }
-        if ($detailTblVar != "") {
-            $detailTblVar = explode(",", $detailTblVar);
-            if (in_array("cobros_cliente_factura", $detailTblVar)) {
-                $detailPageObj = Container("CobrosClienteFacturaGrid");
-                if ($detailPageObj->DetailEdit) {
-                    $detailPageObj->EventCancelled = $this->EventCancelled;
-                    $detailPageObj->CurrentMode = "edit";
-                    $detailPageObj->CurrentAction = "gridedit";
-
-                    // Save current master table to detail table
-                    $detailPageObj->setCurrentMasterTable($this->TableVar);
-                    $detailPageObj->setStartRecordNumber(1);
-                    $detailPageObj->cobros_cliente->IsDetailKey = true;
-                    $detailPageObj->cobros_cliente->CurrentValue = $this->id->CurrentValue;
-                    $detailPageObj->cobros_cliente->setSessionValue($detailPageObj->cobros_cliente->CurrentValue);
-                }
-            }
         }
     }
 
@@ -1917,7 +1579,7 @@ class CobrosClienteEdit extends CobrosCliente
         global $Breadcrumb, $Language;
         $Breadcrumb = new Breadcrumb("Home");
         $url = CurrentUrl();
-        $Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("CobrosClienteList"), "", $this->TableVar, true);
+        $Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("CobrosClienteDetalleList"), "", $this->TableVar, true);
         $pageId = "edit";
         $Breadcrumb->add("edit", $pageId, $url);
     }
@@ -1935,23 +1597,13 @@ class CobrosClienteEdit extends CobrosCliente
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
-                case "x_cliente":
+                case "x_metodo_pago":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_moneda":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
-                case "x__username":
-                    break;
-                case "x_comprobante":
-                    break;
-                case "x_tipo_pago":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
                 case "x_banco":
-                    break;
-                case "x_banco_origen":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 default:
                     $lookupFilter = "";

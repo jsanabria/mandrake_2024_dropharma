@@ -107,10 +107,10 @@ if($row = mysqli_fetch_array($rs))
 
 class PDF extends FPDF
 {
-	// Cabecera de p?gina
+	// Cabecera de página
 	function Header()
 	{
-		// Consulto datos de la compa??a 
+		// Consulto datos de la compañía 
 		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -185,7 +185,7 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$this->Cell(120, 3, mb_convert_encoding(substr($razon_social, 0, 55), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
 		$this->SetFont('Courier','B',8);
-		$tdoc = ($GLOBALS["documento"]=="FC" ? "Nro. Factura: " : ($GLOBALS["documento"]=="NC" ? "Nro. Nota de Cr?dito: " : ($GLOBALS["documento"]=="ND" ? "Nro. Nota de D?bito: ":"N/A")));
+		$tdoc = ($GLOBALS["documento"]=="FC" ? "Nro. Factura: " : ($GLOBALS["documento"]=="NC" ? "Nro. Nota de Crédito: " : ($GLOBALS["documento"]=="ND" ? "Nro. Nota de Débito: ":"N/A")));
 		$this->Cell(30, 3, $tdoc,'0','0','R');
 		$this->SetFont('Courier','',8);
 		$this->Cell(30, 3, $GLOBALS["nro_documento"],'0','0','L');
@@ -272,14 +272,14 @@ class PDF extends FPDF
 		$this->Ln(5);
 	}
 	
-	// Pie de p?gina
+	// Pie de página
 	function Footer()
 	{
-		// Posici?n: a 1,5 cm del final
+		// Posición: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Courier','I',8);
-		// N?mero de p?gina
+		// Número de página
 		//$this->Cell(0,10,'Pag '.$this->PageNo().'/{nb}',0,0,'R');
 	}
 	
@@ -306,7 +306,6 @@ class PDF extends FPDF
 					a.iva,
 					a.monto_total, 
 					a.total, 
-					a.igtf, a.monto_base_igtf, a.monto_igtf, 
 					IFNULL(a.nota, '') AS nota, IFNULL(a.doc_afectado, '') AS doc_afectado,  
 					a.moneda, 
 					IFNULL(a.asesor, '') as asesor, a.id_documento_padre, 
@@ -336,18 +335,6 @@ class PDF extends FPDF
 
 		$unidades = $row["unidades"];
 		$nro_despacho = $row["nro_despacho"];
-
-		// Variables de control
-		$igtf_status = $row["igtf"];
-		$monto_base_igtf = floatval($row["monto_base_igtf"]);
-		$monto_igtf = floatval($row["monto_igtf"]);
-		$monto_total_bs = floatval($row["total"]); 
-
-		// Consulta de alÃ­cuota dinÃ¡mica para el caso "S"
-		$sql_alicuota = "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S' LIMIT 1;";
-		$rs_ali = mysqli_query($link, $sql_alicuota);
-		$row_ali = mysqli_fetch_array($rs_ali);
-		$alicuota_dinamica = $row_ali ? floatval($row_ali["alicuota"]) : 3;
 
 
 		$sql = "SELECT
@@ -434,31 +421,8 @@ class PDF extends FPDF
 
 			$this->SetFont('Courier','BI',10);
 			$this->Cell(10,4, "", 0, 0, 'R');
-
-
-			// $this->Cell(51,4, "I.G.T.F. 3%: USD " . number_format($GLOBALS["moneda_default"]=="USD" ? ($monto_usd*$tasa_dia)+(($monto_usd*$tasa_dia)*(3/100)) : $monto_usd+($monto_usd*(3/100)), 2, ",", "."), 0, 0, 'L');
-			// $this->Cell(40,4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
-
-			// --- INICIO BLOQUE CONDICIONAL IGTF ---
-			if ($igtf_status == "S") {
-			    // LÃ³gica solicitada: (Total en Bs / Tasa) e indicar la base
-			    $total_indexado_usd = ($monto_total_bs+$monto_igtf) / $tasa_dia;
-			    
-			    $this->SetFont('Courier', 'B', 7); // Fuente mÃ¡s pequeÃ±a para que quepa la informaciÃ³n
-			    $texto_igtf = "I.G.T.F. ".number_format($alicuota_dinamica, 0)."% s/Base: ".number_format($monto_base_igtf, 2, ",", ".")." USD: " . number_format($total_indexado_usd, 2, ",", ".");
-			    $this->Cell(65, 4, $texto_igtf, 0, 0, 'L');
-			} else {
-			    // LÃ³gica original: Si NO es 'S'
-			    $this->SetFont('Courier', 'BI', 10);
-			    $monto_original = $GLOBALS["moneda_default"] == "USD" ? ($monto_usd * $tasa_dia) + (($monto_usd * $tasa_dia) * (3 / 100)) : $monto_usd + ($monto_usd * (3 / 100));
-			    $this->Cell(65, 4, "I.G.T.F. 3%: USD " . number_format($monto_original, 2, ",", "."), 0, 0, 'L');
-			}
-
-			// Celda de Tasa de Cambio
-			$this->SetFont('Courier', 'B', 8);
-			$this->Cell(26, 4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
-			// --- FIN BLOQUE CONDICIONAL ---
-
+			$this->Cell(51,4, "I.G.T.F. 3%: USD " . number_format($GLOBALS["moneda_default"]=="USD" ? ($monto_usd*$tasa_dia)+(($monto_usd*$tasa_dia)*(3/100)) : $monto_usd+($monto_usd*(3/100)), 2, ",", "."), 0, 0, 'L');
+			$this->Cell(40,4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
 			$this->SetFont('Courier','B',8);
 
 			$this->Cell(48,4, "TOTAL BASE IMPONIBLE:", 0, 0, 'R');
@@ -477,30 +441,8 @@ class PDF extends FPDF
 
 			$this->SetFont('Courier','BI',10);
 			$this->Cell(10,4, "", 0, 0, 'R');
-			// $this->Cell(51,4, "I.G.T.F. 3%: USD " . number_format($GLOBALS["moneda_default"]=="USD" ? ($monto_usd*$tasa_dia)+(($monto_usd*$tasa_dia)*(3/100)) : $monto_usd+($monto_usd*(3/100)), 2, ",", "."), 0, 0, 'L');
-			// $this->Cell(40,4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
-
-			// --- INICIO BLOQUE CONDICIONAL IGTF ---
-			if ($igtf_status == "S") {
-			    // LÃ³gica solicitada: (Total en Bs / Tasa) e indicar la base
-			    $total_indexado_usd = ($monto_total_bs+$monto_igtf) / $tasa_dia;
-			    
-			    $this->SetFont('Courier', 'B', 7); // Fuente mÃ¡s pequeÃ±a para que quepa la informaciÃ³n
-			    $texto_igtf = "I.G.T.F. ".number_format($alicuota_dinamica, 0)."% s/Base: ".number_format($monto_base_igtf, 2, ",", ".")." USD: " . number_format($total_indexado_usd, 2, ",", ".");
-			    $this->Cell(65, 4, $texto_igtf, 0, 0, 'L');
-			} else {
-			    // LÃ³gica original: Si NO es 'S'
-			    $this->SetFont('Courier', 'BI', 10);
-			    $monto_original = $GLOBALS["moneda_default"] == "USD" ? ($monto_usd * $tasa_dia) + (($monto_usd * $tasa_dia) * (3 / 100)) : $monto_usd + ($monto_usd * (3 / 100));
-			    $this->Cell(65, 4, "I.G.T.F. 3%: USD " . number_format($monto_original, 2, ",", "."), 0, 0, 'L');
-			}
-
-			// Celda de Tasa de Cambio
-			$this->SetFont('Courier', 'B', 8);
-			$this->Cell(26, 4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
-			// --- FIN BLOQUE CONDICIONAL ---
-
-
+			$this->Cell(51,4, "I.G.T.F. 3%: USD " . number_format($GLOBALS["moneda_default"]=="USD" ? ($monto_usd*$tasa_dia)+(($monto_usd*$tasa_dia)*(3/100)) : $monto_usd+($monto_usd*(3/100)), 2, ",", "."), 0, 0, 'L');
+			$this->Cell(40,4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
 			$this->SetFont('Courier','B',8);
 
 			$this->Cell(48,4, "TOTAL BASE IMPONIBLE:", 0, 0, 'R');
@@ -512,7 +454,7 @@ class PDF extends FPDF
 		//
 
 		$this->SetFont('Courier','',6);
-		$this->Cell(91, 4, "Tasa de cambio Publicada por el B.C.V. seg?n la fecha de emisi?n de esta factura.", 0, 0, 'L');
+		$this->Cell(91, 4, "Tasa de cambio Publicada por el B.C.V. según la fecha de emisión de esta factura.", 0, 0, 'L');
 		/*if(floatval($alicuota) > 0) {
 			$this->SetFont('Courier','B',8);
 			$this->Cell(10, 4, "% IVA:", 0, 0, 'R');
@@ -535,7 +477,7 @@ class PDF extends FPDF
 		$this->Ln(4);
 		$this->SetFont('Courier','B',7);
 		$this->Cell(5, 4);
-		$this->Cell(110, 4, "IGTF Sujeto a Pago Recibido (Efectivo $) seg?n Art 1 GO 42339 17/03/2022.", 0, 0, 'R');
+		$this->Cell(110, 4, "IGTF Sujeto a Pago Recibido (Efectivo $) según Art 1 GO 42339 17/03/2022.", 0, 0, 'R');
 		$this->SetFont('Courier','B',8);
 		//$this->Cell(34, 4, "TOTAL $moneda/USD $:", 0, 0, 'R');
 		$this->Cell(34, 4, "TOTAL Bs./USD $:", 0, 0, 'R');
@@ -583,16 +525,16 @@ class PDF extends FPDF
 		$this->SetFont('Courier','B',8);
 		$this->Cell(30, 4, "Unidades:$unidades", 0, 0, 'C');
 		$this->Cell(71, 4, strtoupper($nota), 0, 0, 'R');
-		if(trim($nro_despacho) != "") { $this->Cell(90, 4, "Nro. Despacho Psicotr?pico: " . $nro_despacho, 0, 0, 'C'); } 
+		if(trim($nro_despacho) != "") { $this->Cell(90, 4, "Nro. Despacho Psicotrópico: " . $nro_despacho, 0, 0, 'C'); } 
 		$this->Ln();
 		$this->Cell(10, 4);
-		$this->Cell(100, 4, "Esta factura ser? indexada a la tasa de cambio expresada por el B.C.V. al momento de recibir el pago.", 0, 0, 'L');
+		$this->Cell(100, 4, "Esta factura será indexada a la tasa de cambio expresada por el B.C.V. al momento de recibir el pago.", 0, 0, 'L');
 		
 		require("../include/desconnect.php");
 	}
 }
 
-// Creaci?n del objeto de la clase heredada
+// Creación del objeto de la clase heredada
 $pdf = new PDF('P', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();

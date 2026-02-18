@@ -159,6 +159,9 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->alicuota_iva->setVisibility();
         $this->iva->setVisibility();
         $this->total->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
         $this->moneda->setVisibility();
         $this->lista_pedido->setVisibility();
         $this->nota->setVisibility();
@@ -540,6 +543,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
     public $RecordRange = 10;
     public $RecKey = [];
     public $IsModal = false;
+    public $MultiPages; // Multi pages object
 
     /**
      * Page run
@@ -572,6 +576,9 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->setUseLookupCache(false);
         }
 
+        // Set up multi page object
+        $this->setupMultiPages();
+
         // Global Page Loading event (in userfn*.php)
         DispatchEvent(new PageLoadingEvent($this), PageLoadingEvent::NAME);
 
@@ -592,6 +599,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         // Set up lookup cache
         $this->setupLookupOptions($this->documento);
         $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->igtf);
         $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->estatus);
@@ -980,6 +988,9 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
@@ -1042,6 +1053,9 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
@@ -1128,6 +1142,12 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         // iva
 
         // total
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // moneda
 
@@ -1279,6 +1299,21 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             // total
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
+
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
 
             // moneda
             $curVal = strval($this->moneda->CurrentValue);
@@ -1677,6 +1712,18 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->total->HrefValue = "";
             $this->total->TooltipValue = "";
 
+            // igtf
+            $this->igtf->HrefValue = "";
+            $this->igtf->TooltipValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+            $this->monto_base_igtf->TooltipValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+            $this->monto_igtf->TooltipValue = "";
+
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
@@ -1779,6 +1826,22 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $Breadcrumb->add("view", $pageId, $url);
     }
 
+    // Set up multi pages
+    protected function setupMultiPages()
+    {
+        $pages = new SubPages();
+        $pages->Style = "tabs";
+        if ($pages->isAccordion()) {
+            $pages->Parent = "#accordion_" . $this->PageObjName;
+        }
+        $pages->add(0);
+        $pages->add(1);
+        $pages->add(2);
+        $pages->add(3);
+        $pages->add(4);
+        $this->MultiPages = $pages;
+    }
+
     // Setup lookup options
     public function setupLookupOptions($fld)
     {
@@ -1795,6 +1858,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
                 case "x_documento":
                     break;
                 case "x_cliente":
+                    break;
+                case "x_igtf":
                     break;
                 case "x_moneda":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
@@ -1935,22 +2000,47 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         //Log("Page Render");
     }
 
-    // Page Data Rendering event
     public function pageDataRendering(&$header)
     {
-        // Example:
+        // Iniciamos el contenedor alineado
+        $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
+
+        // 1. Botón Editar (Solo si es NUEVO)
         if($this->estatus->CurrentValue == "NUEVO") {
-            $header = "../TdcfcvAdd?tipo_documento=TDCFCV&codcli=0&pedido=" . $this->id->CurrentValue;
-            $header = '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $header . '"><span class="fas fa-edit"></span> Editar Documento</a>';
-            $header .= ' ';
+            $urlEditar = "../TdcfcvAdd?tipo_documento=TDCFCV&codcli=0&pedido=" . $this->id->CurrentValue;
+            $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $urlEditar . '"><span class="fas fa-edit"></span> Editar Documento</a>';
         }
-        $url = "../reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCV";
-        $header .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $url . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
-        $header .= ' ';
-        // if($this->nro_documento->CurrentValue != "") {
-            $url = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
-            $header .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $url . '"><span class="fas fa-copy"></span> Copiar Documento</a><br><br>';
-        // }
+
+        // 2. Botón Imprimir
+        $urlImprimir = "../reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+        $html .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $urlImprimir . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
+
+        // 3. Botón Copiar
+        $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
+        $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Copiar Documento</a>';
+
+        // Lógica de Pagos
+        $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
+        if ($row = ExecuteRow($sql)) {
+            // 4. Botón Ver Pagos
+            $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $row["id"];
+            $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
+
+            // 5. Botón Revertir (Si tiene permiso)
+            if (VerificaFuncion('014')) {
+                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . '); " style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+            }
+        } else {
+            // 6. Botón Registrar Pago
+            if ($this->estatus->CurrentValue != "ANULADO") {
+                $urlAddPago = "../CobrosClienteAdd?showdetail=&id_compra=" . $this->id->CurrentValue;
+                $html .= '<a class="btn btn-outline-primary" href="' . $urlAddPago . '"><span class="fas fa-money-bill-wave"></span> Registrar Pago</a>';
+            }
+        }
+        $html .= '</div>'; // Cerramos el contenedor flex
+
+        // Asignamos todo el bloque al header de PHPMaker
+        $header = $html;
     }
 
     // Page Data Rendered event

@@ -56,19 +56,23 @@ class CobrosCliente extends DbTable
     // Fields
     public $id;
     public $cliente;
+    public $id_documento;
     public $pivote;
-    public $tipo_pago;
-    public $referencia;
-    public $banco;
-    public $banco_origen;
     public $fecha;
     public $moneda;
-    public $monto_recibido;
-    public $monto;
+    public $pago;
     public $nota;
     public $fecha_registro;
     public $_username;
     public $comprobante;
+    public $tipo_pago;
+    public $referencia;
+    public $banco;
+    public $banco_origen;
+    public $monto_recibido;
+    public $monto;
+    public $tasa_cambio;
+    public $pivote2;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -179,6 +183,32 @@ class CobrosCliente extends DbTable
         $this->cliente->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
         $this->Fields['cliente'] = &$this->cliente;
 
+        // id_documento
+        $this->id_documento = new DbField(
+            $this, // Table
+            'x_id_documento', // Variable name
+            'id_documento', // Name
+            '`id_documento`', // Expression
+            '`id_documento`', // Basic search expression
+            19, // Type
+            10, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`id_documento`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->id_documento->InputTextType = "text";
+        $this->id_documento->Raw = true;
+        $this->id_documento->Nullable = false; // NOT NULL field
+        $this->id_documento->Required = true; // Required field
+        $this->id_documento->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->id_documento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
+        $this->Fields['id_documento'] = &$this->id_documento;
+
         // pivote
         $this->pivote = new DbField(
             $this, // Table
@@ -200,108 +230,6 @@ class CobrosCliente extends DbTable
         $this->pivote->InputTextType = "text";
         $this->pivote->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['pivote'] = &$this->pivote;
-
-        // tipo_pago
-        $this->tipo_pago = new DbField(
-            $this, // Table
-            'x_tipo_pago', // Variable name
-            'tipo_pago', // Name
-            '`tipo_pago`', // Expression
-            '`tipo_pago`', // Basic search expression
-            129, // Type
-            2, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`tipo_pago`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'SELECT' // Edit Tag
-        );
-        $this->tipo_pago->addMethod("getSelectFilter", fn() => "`codigo` = '009'");
-        $this->tipo_pago->InputTextType = "text";
-        $this->tipo_pago->Required = true; // Required field
-        $this->tipo_pago->setSelectMultiple(false); // Select one
-        $this->tipo_pago->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->tipo_pago->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->tipo_pago->Lookup = new Lookup($this->tipo_pago, 'parametro', false, 'valor1', ["valor2","","",""], '', '', [], [], [], [], [], [], false, '', '', "`valor2`");
-        $this->tipo_pago->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
-        $this->Fields['tipo_pago'] = &$this->tipo_pago;
-
-        // referencia
-        $this->referencia = new DbField(
-            $this, // Table
-            'x_referencia', // Variable name
-            'referencia', // Name
-            '`referencia`', // Expression
-            '`referencia`', // Basic search expression
-            200, // Type
-            50, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`referencia`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->referencia->InputTextType = "text";
-        $this->referencia->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['referencia'] = &$this->referencia;
-
-        // banco
-        $this->banco = new DbField(
-            $this, // Table
-            'x_banco', // Variable name
-            'banco', // Name
-            '`banco`', // Expression
-            '`banco`', // Basic search expression
-            19, // Type
-            11, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`banco`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'SELECT' // Edit Tag
-        );
-        $this->banco->InputTextType = "text";
-        $this->banco->Raw = true;
-        $this->banco->Required = true; // Required field
-        $this->banco->setSelectMultiple(false); // Select one
-        $this->banco->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->banco->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->banco->Lookup = new Lookup($this->banco, 'view_banco', false, 'id', ["banco","numero","",""], '', '', [], [], [], [], [], [], false, '', '', "CONCAT(COALESCE(`banco`, ''),'" . ValueSeparator(1, $this->banco) . "',COALESCE(`numero`,''))");
-        $this->banco->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['banco'] = &$this->banco;
-
-        // banco_origen
-        $this->banco_origen = new DbField(
-            $this, // Table
-            'x_banco_origen', // Variable name
-            'banco_origen', // Name
-            '`banco_origen`', // Expression
-            '`banco_origen`', // Basic search expression
-            200, // Type
-            30, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`banco_origen`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->banco_origen->addMethod("getSelectFilter", fn() => "`tabla` = 'BANCO'");
-        $this->banco_origen->InputTextType = "text";
-        $this->banco_origen->Lookup = new Lookup($this->banco_origen, 'tabla', false, 'campo_descripcion', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion`', '', "`campo_descripcion`");
-        $this->banco_origen->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['banco_origen'] = &$this->banco_origen;
 
         // fecha
         $this->fecha = new DbField(
@@ -356,54 +284,29 @@ class CobrosCliente extends DbTable
         $this->moneda->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['moneda'] = &$this->moneda;
 
-        // monto_recibido
-        $this->monto_recibido = new DbField(
+        // pago
+        $this->pago = new DbField(
             $this, // Table
-            'x_monto_recibido', // Variable name
-            'monto_recibido', // Name
-            '`monto_recibido`', // Expression
-            '`monto_recibido`', // Basic search expression
+            'x_pago', // Variable name
+            'pago', // Name
+            '`pago`', // Expression
+            '`pago`', // Basic search expression
             131, // Type
             16, // Size
             -1, // Date/Time format
             false, // Is upload field
-            '`monto_recibido`', // Virtual expression
+            '`pago`', // Virtual expression
             false, // Is virtual
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->monto_recibido->InputTextType = "text";
-        $this->monto_recibido->Raw = true;
-        $this->monto_recibido->Required = true; // Required field
-        $this->monto_recibido->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
-        $this->monto_recibido->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['monto_recibido'] = &$this->monto_recibido;
-
-        // monto
-        $this->monto = new DbField(
-            $this, // Table
-            'x_monto', // Variable name
-            'monto', // Name
-            '`monto`', // Expression
-            '`monto`', // Basic search expression
-            131, // Type
-            16, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`monto`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->monto->InputTextType = "text";
-        $this->monto->Raw = true;
-        $this->monto->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
-        $this->monto->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['monto'] = &$this->monto;
+        $this->pago->InputTextType = "text";
+        $this->pago->Raw = true;
+        $this->pago->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->pago->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['pago'] = &$this->pago;
 
         // nota
         $this->nota = new DbField(
@@ -499,6 +402,203 @@ class CobrosCliente extends DbTable
         $this->comprobante->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->comprobante->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['comprobante'] = &$this->comprobante;
+
+        // tipo_pago
+        $this->tipo_pago = new DbField(
+            $this, // Table
+            'x_tipo_pago', // Variable name
+            'tipo_pago', // Name
+            '`tipo_pago`', // Expression
+            '`tipo_pago`', // Basic search expression
+            129, // Type
+            2, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo_pago`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->tipo_pago->addMethod("getSelectFilter", fn() => "`codigo` = '009' AND valor1 NOT IN ('PC','PF','DV','NC','ND')");
+        $this->tipo_pago->InputTextType = "text";
+        $this->tipo_pago->Required = true; // Required field
+        $this->tipo_pago->setSelectMultiple(false); // Select one
+        $this->tipo_pago->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->tipo_pago->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->tipo_pago->Lookup = new Lookup($this->tipo_pago, 'parametro', false, 'valor1', ["valor2","","",""], '', '', [], [], [], [], [], [], false, '', '', "`valor2`");
+        $this->tipo_pago->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tipo_pago'] = &$this->tipo_pago;
+
+        // referencia
+        $this->referencia = new DbField(
+            $this, // Table
+            'x_referencia', // Variable name
+            'referencia', // Name
+            '`referencia`', // Expression
+            '`referencia`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`referencia`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->referencia->InputTextType = "text";
+        $this->referencia->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['referencia'] = &$this->referencia;
+
+        // banco
+        $this->banco = new DbField(
+            $this, // Table
+            'x_banco', // Variable name
+            'banco', // Name
+            '`banco`', // Expression
+            '`banco`', // Basic search expression
+            19, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`banco`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->banco->InputTextType = "text";
+        $this->banco->Raw = true;
+        $this->banco->Required = true; // Required field
+        $this->banco->setSelectMultiple(false); // Select one
+        $this->banco->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->banco->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->banco->Lookup = new Lookup($this->banco, 'view_banco', false, 'id', ["banco","numero","",""], '', '', [], [], [], [], [], [], false, '', '', "CONCAT(COALESCE(`banco`, ''),'" . ValueSeparator(1, $this->banco) . "',COALESCE(`numero`,''))");
+        $this->banco->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['banco'] = &$this->banco;
+
+        // banco_origen
+        $this->banco_origen = new DbField(
+            $this, // Table
+            'x_banco_origen', // Variable name
+            'banco_origen', // Name
+            '`banco_origen`', // Expression
+            '`banco_origen`', // Basic search expression
+            200, // Type
+            30, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`banco_origen`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->banco_origen->addMethod("getSelectFilter", fn() => "`tabla` = 'BANCO'");
+        $this->banco_origen->InputTextType = "text";
+        $this->banco_origen->Lookup = new Lookup($this->banco_origen, 'tabla', false, 'campo_descripcion', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion`', '', "`campo_descripcion`");
+        $this->banco_origen->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['banco_origen'] = &$this->banco_origen;
+
+        // monto_recibido
+        $this->monto_recibido = new DbField(
+            $this, // Table
+            'x_monto_recibido', // Variable name
+            'monto_recibido', // Name
+            '`monto_recibido`', // Expression
+            '`monto_recibido`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_recibido`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_recibido->InputTextType = "text";
+        $this->monto_recibido->Raw = true;
+        $this->monto_recibido->Required = true; // Required field
+        $this->monto_recibido->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_recibido->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_recibido'] = &$this->monto_recibido;
+
+        // monto
+        $this->monto = new DbField(
+            $this, // Table
+            'x_monto', // Variable name
+            'monto', // Name
+            '`monto`', // Expression
+            '`monto`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto->InputTextType = "text";
+        $this->monto->Raw = true;
+        $this->monto->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto'] = &$this->monto;
+
+        // tasa_cambio
+        $this->tasa_cambio = new DbField(
+            $this, // Table
+            'x_tasa_cambio', // Variable name
+            'tasa_cambio', // Name
+            '`tasa_cambio`', // Expression
+            '`tasa_cambio`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tasa_cambio`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tasa_cambio->InputTextType = "text";
+        $this->tasa_cambio->Raw = true;
+        $this->tasa_cambio->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->tasa_cambio->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tasa_cambio'] = &$this->tasa_cambio;
+
+        // pivote2
+        $this->pivote2 = new DbField(
+            $this, // Table
+            'x_pivote2', // Variable name
+            'pivote2', // Name
+            '`pivote2`', // Expression
+            '`pivote2`', // Basic search expression
+            129, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`pivote2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->pivote2->InputTextType = "text";
+        $this->pivote2->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['pivote2'] = &$this->pivote2;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -769,7 +869,7 @@ class CobrosCliente extends DbTable
         $sqlwrk = $sql instanceof QueryBuilder // Query builder
             ? (clone $sql)->resetQueryPart("orderBy")->getSQL()
             : $sql;
-        $pattern = '/^SELECT\s([\s\S]+)\sFROM\s/i';
+        $pattern = '/^SELECT\s([\s\S]+?)\sFROM\s/i';
         // Skip Custom View / SubQuery / SELECT DISTINCT / ORDER BY
         if (
             in_array($this->TableType, ["TABLE", "VIEW", "LINKTABLE"]) &&
@@ -1084,19 +1184,23 @@ class CobrosCliente extends DbTable
         }
         $this->id->DbValue = $row['id'];
         $this->cliente->DbValue = $row['cliente'];
+        $this->id_documento->DbValue = $row['id_documento'];
         $this->pivote->DbValue = $row['pivote'];
-        $this->tipo_pago->DbValue = $row['tipo_pago'];
-        $this->referencia->DbValue = $row['referencia'];
-        $this->banco->DbValue = $row['banco'];
-        $this->banco_origen->DbValue = $row['banco_origen'];
         $this->fecha->DbValue = $row['fecha'];
         $this->moneda->DbValue = $row['moneda'];
-        $this->monto_recibido->DbValue = $row['monto_recibido'];
-        $this->monto->DbValue = $row['monto'];
+        $this->pago->DbValue = $row['pago'];
         $this->nota->DbValue = $row['nota'];
         $this->fecha_registro->DbValue = $row['fecha_registro'];
         $this->_username->DbValue = $row['username'];
         $this->comprobante->DbValue = $row['comprobante'];
+        $this->tipo_pago->DbValue = $row['tipo_pago'];
+        $this->referencia->DbValue = $row['referencia'];
+        $this->banco->DbValue = $row['banco'];
+        $this->banco_origen->DbValue = $row['banco_origen'];
+        $this->monto_recibido->DbValue = $row['monto_recibido'];
+        $this->monto->DbValue = $row['monto'];
+        $this->tasa_cambio->DbValue = $row['tasa_cambio'];
+        $this->pivote2->DbValue = $row['pivote2'];
     }
 
     // Delete uploaded files
@@ -1459,19 +1563,23 @@ class CobrosCliente extends DbTable
         }
         $this->id->setDbValue($row['id']);
         $this->cliente->setDbValue($row['cliente']);
+        $this->id_documento->setDbValue($row['id_documento']);
         $this->pivote->setDbValue($row['pivote']);
-        $this->tipo_pago->setDbValue($row['tipo_pago']);
-        $this->referencia->setDbValue($row['referencia']);
-        $this->banco->setDbValue($row['banco']);
-        $this->banco_origen->setDbValue($row['banco_origen']);
         $this->fecha->setDbValue($row['fecha']);
         $this->moneda->setDbValue($row['moneda']);
-        $this->monto_recibido->setDbValue($row['monto_recibido']);
-        $this->monto->setDbValue($row['monto']);
+        $this->pago->setDbValue($row['pago']);
         $this->nota->setDbValue($row['nota']);
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->tipo_pago->setDbValue($row['tipo_pago']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->banco->setDbValue($row['banco']);
+        $this->banco_origen->setDbValue($row['banco_origen']);
+        $this->monto_recibido->setDbValue($row['monto_recibido']);
+        $this->monto->setDbValue($row['monto']);
+        $this->tasa_cambio->setDbValue($row['tasa_cambio']);
+        $this->pivote2->setDbValue($row['pivote2']);
     }
 
     // Render list content
@@ -1506,7 +1614,23 @@ class CobrosCliente extends DbTable
 
         // cliente
 
+        // id_documento
+
         // pivote
+
+        // fecha
+
+        // moneda
+
+        // pago
+
+        // nota
+
+        // fecha_registro
+
+        // username
+
+        // comprobante
 
         // tipo_pago
 
@@ -1516,21 +1640,13 @@ class CobrosCliente extends DbTable
 
         // banco_origen
 
-        // fecha
-
-        // moneda
-
         // monto_recibido
 
         // monto
 
-        // nota
+        // tasa_cambio
 
-        // fecha_registro
-
-        // username
-
-        // comprobante
+        // pivote2
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1559,8 +1675,78 @@ class CobrosCliente extends DbTable
             $this->cliente->ViewValue = null;
         }
 
+        // id_documento
+        $this->id_documento->ViewValue = $this->id_documento->CurrentValue;
+        $this->id_documento->ViewValue = FormatNumber($this->id_documento->ViewValue, $this->id_documento->formatPattern());
+
         // pivote
         $this->pivote->ViewValue = $this->pivote->CurrentValue;
+
+        // fecha
+        $this->fecha->ViewValue = $this->fecha->CurrentValue;
+        $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+        // moneda
+        $curVal = strval($this->moneda->CurrentValue);
+        if ($curVal != "") {
+            $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+            if ($this->moneda->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                    $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                } else {
+                    $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                }
+            }
+        } else {
+            $this->moneda->ViewValue = null;
+        }
+
+        // pago
+        $this->pago->ViewValue = $this->pago->CurrentValue;
+        $this->pago->ViewValue = FormatNumber($this->pago->ViewValue, $this->pago->formatPattern());
+
+        // nota
+        $this->nota->ViewValue = $this->nota->CurrentValue;
+
+        // fecha_registro
+        $this->fecha_registro->ViewValue = $this->fecha_registro->CurrentValue;
+        $this->fecha_registro->ViewValue = FormatDateTime($this->fecha_registro->ViewValue, $this->fecha_registro->formatPattern());
+
+        // username
+        $this->_username->ViewValue = $this->_username->CurrentValue;
+        $curVal = strval($this->_username->CurrentValue);
+        if ($curVal != "") {
+            $this->_username->ViewValue = $this->_username->lookupCacheOption($curVal);
+            if ($this->_username->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->_username->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->_username->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                $sqlWrk = $this->_username->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->_username->Lookup->renderViewRow($rswrk[0]);
+                    $this->_username->ViewValue = $this->_username->displayValue($arwrk);
+                } else {
+                    $this->_username->ViewValue = $this->_username->CurrentValue;
+                }
+            }
+        } else {
+            $this->_username->ViewValue = null;
+        }
+
+        // comprobante
+        $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
 
         // tipo_pago
         $curVal = strval($this->tipo_pago->CurrentValue);
@@ -1637,34 +1823,6 @@ class CobrosCliente extends DbTable
             $this->banco_origen->ViewValue = null;
         }
 
-        // fecha
-        $this->fecha->ViewValue = $this->fecha->CurrentValue;
-        $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
-
-        // moneda
-        $curVal = strval($this->moneda->CurrentValue);
-        if ($curVal != "") {
-            $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-            if ($this->moneda->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                    $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                } else {
-                    $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                }
-            }
-        } else {
-            $this->moneda->ViewValue = null;
-        }
-
         // monto_recibido
         $this->monto_recibido->ViewValue = $this->monto_recibido->CurrentValue;
         $this->monto_recibido->ViewValue = FormatNumber($this->monto_recibido->ViewValue, $this->monto_recibido->formatPattern());
@@ -1673,39 +1831,12 @@ class CobrosCliente extends DbTable
         $this->monto->ViewValue = $this->monto->CurrentValue;
         $this->monto->ViewValue = FormatNumber($this->monto->ViewValue, $this->monto->formatPattern());
 
-        // nota
-        $this->nota->ViewValue = $this->nota->CurrentValue;
+        // tasa_cambio
+        $this->tasa_cambio->ViewValue = $this->tasa_cambio->CurrentValue;
+        $this->tasa_cambio->ViewValue = FormatNumber($this->tasa_cambio->ViewValue, $this->tasa_cambio->formatPattern());
 
-        // fecha_registro
-        $this->fecha_registro->ViewValue = $this->fecha_registro->CurrentValue;
-        $this->fecha_registro->ViewValue = FormatDateTime($this->fecha_registro->ViewValue, $this->fecha_registro->formatPattern());
-
-        // username
-        $this->_username->ViewValue = $this->_username->CurrentValue;
-        $curVal = strval($this->_username->CurrentValue);
-        if ($curVal != "") {
-            $this->_username->ViewValue = $this->_username->lookupCacheOption($curVal);
-            if ($this->_username->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->_username->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->_username->Lookup->getTable()->Fields["username"]->searchDataType(), "");
-                $sqlWrk = $this->_username->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->_username->Lookup->renderViewRow($rswrk[0]);
-                    $this->_username->ViewValue = $this->_username->displayValue($arwrk);
-                } else {
-                    $this->_username->ViewValue = $this->_username->CurrentValue;
-                }
-            }
-        } else {
-            $this->_username->ViewValue = null;
-        }
-
-        // comprobante
-        $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
+        // pivote2
+        $this->pivote2->ViewValue = $this->pivote2->CurrentValue;
 
         // id
         $this->id->HrefValue = "";
@@ -1715,25 +1846,13 @@ class CobrosCliente extends DbTable
         $this->cliente->HrefValue = "";
         $this->cliente->TooltipValue = "";
 
+        // id_documento
+        $this->id_documento->HrefValue = "";
+        $this->id_documento->TooltipValue = "";
+
         // pivote
         $this->pivote->HrefValue = "";
         $this->pivote->TooltipValue = "";
-
-        // tipo_pago
-        $this->tipo_pago->HrefValue = "";
-        $this->tipo_pago->TooltipValue = "";
-
-        // referencia
-        $this->referencia->HrefValue = "";
-        $this->referencia->TooltipValue = "";
-
-        // banco
-        $this->banco->HrefValue = "";
-        $this->banco->TooltipValue = "";
-
-        // banco_origen
-        $this->banco_origen->HrefValue = "";
-        $this->banco_origen->TooltipValue = "";
 
         // fecha
         $this->fecha->HrefValue = "";
@@ -1743,13 +1862,9 @@ class CobrosCliente extends DbTable
         $this->moneda->HrefValue = "";
         $this->moneda->TooltipValue = "";
 
-        // monto_recibido
-        $this->monto_recibido->HrefValue = "";
-        $this->monto_recibido->TooltipValue = "";
-
-        // monto
-        $this->monto->HrefValue = "";
-        $this->monto->TooltipValue = "";
+        // pago
+        $this->pago->HrefValue = "";
+        $this->pago->TooltipValue = "";
 
         // nota
         $this->nota->HrefValue = "";
@@ -1775,6 +1890,38 @@ class CobrosCliente extends DbTable
         }
         $this->comprobante->TooltipValue = "";
 
+        // tipo_pago
+        $this->tipo_pago->HrefValue = "";
+        $this->tipo_pago->TooltipValue = "";
+
+        // referencia
+        $this->referencia->HrefValue = "";
+        $this->referencia->TooltipValue = "";
+
+        // banco
+        $this->banco->HrefValue = "";
+        $this->banco->TooltipValue = "";
+
+        // banco_origen
+        $this->banco_origen->HrefValue = "";
+        $this->banco_origen->TooltipValue = "";
+
+        // monto_recibido
+        $this->monto_recibido->HrefValue = "";
+        $this->monto_recibido->TooltipValue = "";
+
+        // monto
+        $this->monto->HrefValue = "";
+        $this->monto->TooltipValue = "";
+
+        // tasa_cambio
+        $this->tasa_cambio->HrefValue = "";
+        $this->tasa_cambio->TooltipValue = "";
+
+        // pivote2
+        $this->pivote2->HrefValue = "";
+        $this->pivote2->TooltipValue = "";
+
         // Call Row Rendered event
         $this->rowRendered();
 
@@ -1798,6 +1945,14 @@ class CobrosCliente extends DbTable
         $this->cliente->setupEditAttributes();
         $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
 
+        // id_documento
+        $this->id_documento->setupEditAttributes();
+        $this->id_documento->EditValue = $this->id_documento->CurrentValue;
+        $this->id_documento->PlaceHolder = RemoveHtml($this->id_documento->caption());
+        if (strval($this->id_documento->EditValue) != "" && is_numeric($this->id_documento->EditValue)) {
+            $this->id_documento->EditValue = FormatNumber($this->id_documento->EditValue, null);
+        }
+
         // pivote
         $this->pivote->setupEditAttributes();
         if (!$this->pivote->Raw) {
@@ -1805,30 +1960,6 @@ class CobrosCliente extends DbTable
         }
         $this->pivote->EditValue = $this->pivote->CurrentValue;
         $this->pivote->PlaceHolder = RemoveHtml($this->pivote->caption());
-
-        // tipo_pago
-        $this->tipo_pago->setupEditAttributes();
-        $this->tipo_pago->PlaceHolder = RemoveHtml($this->tipo_pago->caption());
-
-        // referencia
-        $this->referencia->setupEditAttributes();
-        if (!$this->referencia->Raw) {
-            $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
-        }
-        $this->referencia->EditValue = $this->referencia->CurrentValue;
-        $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
-
-        // banco
-        $this->banco->setupEditAttributes();
-        $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
-
-        // banco_origen
-        $this->banco_origen->setupEditAttributes();
-        if (!$this->banco_origen->Raw) {
-            $this->banco_origen->CurrentValue = HtmlDecode($this->banco_origen->CurrentValue);
-        }
-        $this->banco_origen->EditValue = $this->banco_origen->CurrentValue;
-        $this->banco_origen->PlaceHolder = RemoveHtml($this->banco_origen->caption());
 
         // fecha
         $this->fecha->setupEditAttributes();
@@ -1839,20 +1970,12 @@ class CobrosCliente extends DbTable
         $this->moneda->setupEditAttributes();
         $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
-        // monto_recibido
-        $this->monto_recibido->setupEditAttributes();
-        $this->monto_recibido->EditValue = $this->monto_recibido->CurrentValue;
-        $this->monto_recibido->PlaceHolder = RemoveHtml($this->monto_recibido->caption());
-        if (strval($this->monto_recibido->EditValue) != "" && is_numeric($this->monto_recibido->EditValue)) {
-            $this->monto_recibido->EditValue = FormatNumber($this->monto_recibido->EditValue, null);
-        }
-
-        // monto
-        $this->monto->setupEditAttributes();
-        $this->monto->EditValue = $this->monto->CurrentValue;
-        $this->monto->PlaceHolder = RemoveHtml($this->monto->caption());
-        if (strval($this->monto->EditValue) != "" && is_numeric($this->monto->EditValue)) {
-            $this->monto->EditValue = FormatNumber($this->monto->EditValue, null);
+        // pago
+        $this->pago->setupEditAttributes();
+        $this->pago->EditValue = $this->pago->CurrentValue;
+        $this->pago->PlaceHolder = RemoveHtml($this->pago->caption());
+        if (strval($this->pago->EditValue) != "" && is_numeric($this->pago->EditValue)) {
+            $this->pago->EditValue = FormatNumber($this->pago->EditValue, null);
         }
 
         // nota
@@ -1880,6 +2003,62 @@ class CobrosCliente extends DbTable
         }
         $this->comprobante->EditValue = $this->comprobante->CurrentValue;
         $this->comprobante->PlaceHolder = RemoveHtml($this->comprobante->caption());
+
+        // tipo_pago
+        $this->tipo_pago->setupEditAttributes();
+        $this->tipo_pago->PlaceHolder = RemoveHtml($this->tipo_pago->caption());
+
+        // referencia
+        $this->referencia->setupEditAttributes();
+        if (!$this->referencia->Raw) {
+            $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
+        }
+        $this->referencia->EditValue = $this->referencia->CurrentValue;
+        $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
+
+        // banco
+        $this->banco->setupEditAttributes();
+        $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
+
+        // banco_origen
+        $this->banco_origen->setupEditAttributes();
+        if (!$this->banco_origen->Raw) {
+            $this->banco_origen->CurrentValue = HtmlDecode($this->banco_origen->CurrentValue);
+        }
+        $this->banco_origen->EditValue = $this->banco_origen->CurrentValue;
+        $this->banco_origen->PlaceHolder = RemoveHtml($this->banco_origen->caption());
+
+        // monto_recibido
+        $this->monto_recibido->setupEditAttributes();
+        $this->monto_recibido->EditValue = $this->monto_recibido->CurrentValue;
+        $this->monto_recibido->PlaceHolder = RemoveHtml($this->monto_recibido->caption());
+        if (strval($this->monto_recibido->EditValue) != "" && is_numeric($this->monto_recibido->EditValue)) {
+            $this->monto_recibido->EditValue = FormatNumber($this->monto_recibido->EditValue, null);
+        }
+
+        // monto
+        $this->monto->setupEditAttributes();
+        $this->monto->EditValue = $this->monto->CurrentValue;
+        $this->monto->PlaceHolder = RemoveHtml($this->monto->caption());
+        if (strval($this->monto->EditValue) != "" && is_numeric($this->monto->EditValue)) {
+            $this->monto->EditValue = FormatNumber($this->monto->EditValue, null);
+        }
+
+        // tasa_cambio
+        $this->tasa_cambio->setupEditAttributes();
+        $this->tasa_cambio->EditValue = $this->tasa_cambio->CurrentValue;
+        $this->tasa_cambio->PlaceHolder = RemoveHtml($this->tasa_cambio->caption());
+        if (strval($this->tasa_cambio->EditValue) != "" && is_numeric($this->tasa_cambio->EditValue)) {
+            $this->tasa_cambio->EditValue = FormatNumber($this->tasa_cambio->EditValue, null);
+        }
+
+        // pivote2
+        $this->pivote2->setupEditAttributes();
+        if (!$this->pivote2->Raw) {
+            $this->pivote2->CurrentValue = HtmlDecode($this->pivote2->CurrentValue);
+        }
+        $this->pivote2->EditValue = $this->pivote2->CurrentValue;
+        $this->pivote2->PlaceHolder = RemoveHtml($this->pivote2->caption());
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1910,32 +2089,34 @@ class CobrosCliente extends DbTable
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
                     $doc->exportCaption($this->cliente);
-                    $doc->exportCaption($this->tipo_pago);
-                    $doc->exportCaption($this->referencia);
-                    $doc->exportCaption($this->banco);
+                    $doc->exportCaption($this->id_documento);
                     $doc->exportCaption($this->fecha);
                     $doc->exportCaption($this->moneda);
-                    $doc->exportCaption($this->monto_recibido);
-                    $doc->exportCaption($this->monto);
+                    $doc->exportCaption($this->pago);
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->fecha_registro);
                     $doc->exportCaption($this->_username);
+                    $doc->exportCaption($this->pivote2);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->cliente);
+                    $doc->exportCaption($this->id_documento);
                     $doc->exportCaption($this->pivote);
-                    $doc->exportCaption($this->tipo_pago);
-                    $doc->exportCaption($this->referencia);
-                    $doc->exportCaption($this->banco);
-                    $doc->exportCaption($this->banco_origen);
                     $doc->exportCaption($this->fecha);
                     $doc->exportCaption($this->moneda);
-                    $doc->exportCaption($this->monto_recibido);
-                    $doc->exportCaption($this->monto);
+                    $doc->exportCaption($this->pago);
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->fecha_registro);
                     $doc->exportCaption($this->_username);
                     $doc->exportCaption($this->comprobante);
+                    $doc->exportCaption($this->tipo_pago);
+                    $doc->exportCaption($this->referencia);
+                    $doc->exportCaption($this->banco);
+                    $doc->exportCaption($this->banco_origen);
+                    $doc->exportCaption($this->monto_recibido);
+                    $doc->exportCaption($this->monto);
+                    $doc->exportCaption($this->tasa_cambio);
+                    $doc->exportCaption($this->pivote2);
                 }
                 $doc->endExportRow();
             }
@@ -1963,32 +2144,34 @@ class CobrosCliente extends DbTable
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
                         $doc->exportField($this->cliente);
-                        $doc->exportField($this->tipo_pago);
-                        $doc->exportField($this->referencia);
-                        $doc->exportField($this->banco);
+                        $doc->exportField($this->id_documento);
                         $doc->exportField($this->fecha);
                         $doc->exportField($this->moneda);
-                        $doc->exportField($this->monto_recibido);
-                        $doc->exportField($this->monto);
+                        $doc->exportField($this->pago);
                         $doc->exportField($this->nota);
                         $doc->exportField($this->fecha_registro);
                         $doc->exportField($this->_username);
+                        $doc->exportField($this->pivote2);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->cliente);
+                        $doc->exportField($this->id_documento);
                         $doc->exportField($this->pivote);
-                        $doc->exportField($this->tipo_pago);
-                        $doc->exportField($this->referencia);
-                        $doc->exportField($this->banco);
-                        $doc->exportField($this->banco_origen);
                         $doc->exportField($this->fecha);
                         $doc->exportField($this->moneda);
-                        $doc->exportField($this->monto_recibido);
-                        $doc->exportField($this->monto);
+                        $doc->exportField($this->pago);
                         $doc->exportField($this->nota);
                         $doc->exportField($this->fecha_registro);
                         $doc->exportField($this->_username);
                         $doc->exportField($this->comprobante);
+                        $doc->exportField($this->tipo_pago);
+                        $doc->exportField($this->referencia);
+                        $doc->exportField($this->banco);
+                        $doc->exportField($this->banco_origen);
+                        $doc->exportField($this->monto_recibido);
+                        $doc->exportField($this->monto);
+                        $doc->exportField($this->tasa_cambio);
+                        $doc->exportField($this->pivote2);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -2175,102 +2358,310 @@ class CobrosCliente extends DbTable
     }
 
     // Row Inserting event
-    public function rowInserting($rsold, &$rsnew) {
-    	// Enter your code here
-    	// To cancel, set return value to FALSE
-
-    	/* Si la Cuenta Contable está configurada en moneda USD se procede a tomar la tasa de cambio del día y hacer el cálculo cambiario */
-    	$sql = "SELECT cuenta FROM view_banco WHERE id = " . $rsnew["banco"] . ";";
-    	$cuenta = ExecuteScalar($sql);
-    	$sql = "SELECT IFNULL(moneda, 'USD') AS moneda FROM cont_plancta WHERE id = $cuenta;";
-    	$moneda = ExecuteScalar($sql);
-    	if(trim($moneda) == "USD") {
-    		$sql = "SELECT tasa FROM tasa_usd ORDER BY id DESC LIMIT 0, 1;"; 
-    		$tasa = floatval(ExecuteScalar($sql));
-    		$monto_recibido = floatval($rsnew["monto_recibido"]) * $tasa;
-    	}
-    	else {
-    		$monto_recibido = floatval($rsnew["monto_recibido"]);
-    	}
-    	$monto_facturas = floatval($rsnew["monto"]);
-
-    	/*if(substr(trim($rsnew["moneda"]), 0 , 2) == "Bs") {
-    		if($monto_recibido < $monto_facturas) {
-    			$this->CancelMessage = "El monto recibido de la transacci&oacute;n no puede ser menor a los pagos de la(s) factura(s).";
-    			return FALSE;
-    		}
-    	}*/
-    	if(isset($_POST["xCantidad"])) {
-    		$cnt = intval($_POST["xCantidad"]);
-    		$monto = 0;
-    		for($i=0; $i<$cnt; $i++) {
-    			if(isset($_POST["x_id_$i"])) {
-    				$saldo = str_replace(",", ".", str_replace(".", "", $_POST["x_saldo_$i"]));
-    				$monto = floatval($saldo);
-    				$saldo = str_replace(",", ".", str_replace(".", "", $_POST["x_retIVA_$i"]));
-    				$monto += floatval($saldo);
-    				if(isset($_POST["x_retISLR_$i"])) {
-    					$saldo = str_replace(",", ".", str_replace(".", "", $_POST["x_retISLR_$i"]));
-    					$monto += floatval($saldo);
-    				}
-    			}
-    		}
-    		$monto = abs($monto);
-    		if($monto <= 0) {
-    			$this->CancelMessage = "Debe indicar monto a registrar para el pago.";
-    			return FALSE;
-    		}
-    		$rsnew["fecha_registro"] = date("Y-m-d");
-    		$rsnew["username"] = CurrentUserName();
-    	} 
-    	else {
-    		$this->CancelMessage = "No ha seleccionado facturas a pagar del proveedor.";
+    public function rowInserting($rsold, &$rsnew)
+    {
+    	$fecha = date("Y-m-d");
+    	$sql = "SELECT fecha FROM cierre_de_caja WHERE fecha = '$fecha';";
+    	if($row = ExecuteRow($sql)) {
+    		$this->CancelMessage = "El d&iacute;a " . date("d/m/Y") . " est&aacute; cerrado; no se puede agregar el pago. Verifique!";
     		return FALSE;
     	}
-    	return TRUE;
-    }
-
-    // Row Inserted event
-    public function rowInserted($rsold, $rsnew) {
-    	//echo "Row Inserted"
+        $sw = false;
     	if(isset($_POST["xCantidad"])) {
     		$cnt = intval($_POST["xCantidad"]);
     		for($i=0; $i<$cnt; $i++) {
     			if(isset($_POST["x_id_$i"])) { 
-    				$_id = explode("-", $_POST["x_id_$i"]);
-    				$pagar = str_replace(",", ".", str_replace(".", "", $_POST["x_pagar_$i"]));
-    				$saldo = str_replace(",", ".", str_replace(".", "", $_POST["x_saldo_$i"]));
-    				$m_iva = str_replace(",", ".", str_replace(".", "", $_POST["x_retIVA_$i"]));
-    				$r_iva = str_replace(",", ".", str_replace(".", "", $_POST["x_refIVA_$i"]));
-    				if(isset($_POST["x_retISLR_$i"])) {
-    					$m_islr = str_replace(",", ".", str_replace(".", "", $_POST["x_retISLR_$i"]));
-    					$r_islr = str_replace(",", ".", str_replace(".", "", $_POST["x_refISLR_$i"]));
-    					$sql = "INSERT INTO cobros_cliente_factura
-    								(id, cobros_cliente, tipo_documento, id_documento, abono, monto, retiva, retivamonto, retislr, retislrmonto)
-    							VALUES (NULL, " . $rsnew["id"] . ", '" . $_id[1] . "', " . $_id[0] . ", '" . ($pagar!=$saldo ? "S":"N") . "', $saldo, '$r_iva', $m_iva, '$r_islr', $m_islr)";
-    				}
-    				else {
-    					$sql = "INSERT INTO cobros_cliente_factura
-    								(id, cobros_cliente, tipo_documento, id_documento, abono, monto, retiva, retivamonto)
-    							VALUES (NULL, " . $rsnew["id"] . ", '" . $_id[1] . "', " . $_id[0] . ", '" . ($pagar!=$saldo ? "S":"N") . "', $saldo, '$r_iva', $m_iva)";
-    				}
-    				Execute($sql);
-    				$sql = "UPDATE salidas
-    							SET
-    								pagado='S' 
-    							WHERE 
-    								id = " . $_id[0] . " 
-    								AND tipo_documento = '" . $_id[1] . "'";
-    				Execute($sql);
+                    $_id = explode("-", $_POST["x_id_$i"]);
+                    $sw = true;
+                    break;
     			}
     		}
+    		if($sw == false) {
+    			$this->CancelMessage = "Debe seleccionar la factura a cobrar.";
+    			return FALSE;
+    		}
+            $rsnew["id_documento"] = $_id[0];
+            $rsnew["tipo_pago"] = "";
+            $pagos = $_POST["pagos"];
+            $abono = floatval($_POST["abono"]);
+            $monto = floatval($_POST["monto"]);
+            $pago = floatval($rsnew["pago"]);
+            if($pago == 0.00 or $monto == 0.00) {
+                // $this->CancelMessage = "No hay informaci&oacute;n de pago.";
+                // return FALSE;
+            }
+            if(trim(str_replace(",-,", "", $pagos)) == "") {
+                $this->CancelMessage = "No hay datos de pagos.";
+                return FALSE;
+            }            
+            if($abono > 0.00) {
+                $sql = "SELECT saldo FROM recarga WHERE cliente = " . $rsnew["cliente"] . " ORDER BY id DESC LIMIT 0, 1;";
+                $saldo = floatval(ExecuteScalar($sql));
+                if($abono > $saldo) {
+                    $this->CancelMessage = "Sanara sin fondo suficiente.";
+                    return FALSE;
+                } 
+            }
+            if($pago < $monto) {
+                $this->CancelMessage = "Pago incompleto.";
+                return FALSE;
+            }
+            $rsnew["fecha"] = date("Y-m-d");
+    		$rsnew["fecha_registro"] = date("Y-m-d");
+    		$rsnew["username"] = CurrentUserName();
+    	} 
+    	else {
+    		$this->CancelMessage = "No ha seleccionado facturas a cobrar.";
+    		return FALSE;
     	}
+    	return TRUE;
     }
+    // Row Inserted event
+    public function rowInserted($rsold, &$rsnew) {
+    	//echo "Row Inserted"
+    	$arr = explode(",-,", $_POST["pagos"]);
+      	foreach ($arr as $key => $value) {
+      		if(trim($value) != "") {
+      			$arr2 = explode("|", $value);	
+      			if(count($arr2) > 2) {
+      				$sql = "";
+      				$documentos = "";
+       				$sql = "SELECT nro_documento, tipo_documento 
+       						FROM salidas 
+       						WHERE id = " . $rsnew["id_documento"] . "";
+       				$row = ExecuteRow($sql);
+       				$documentos = ($row["tipo_documento"]=="TDCFCV" ? "FACT: " : "N. E.: ") . $row["nro_documento"] . "";
+    		  		$monto_moneda = floatval($arr2[4]);
+    				$sql = "SELECT tasa FROM tasa_usd
+    						WHERE moneda = '" . $arr2[5] . "' ORDER BY id DESC LIMIT 0, 1;";
+    				$tasa = ExecuteScalar($sql);
+    				if($arr2[5] != "Bs.") $monto_bs = $tasa * $monto_moneda;
+    				else $monto_bs = $monto_moneda;
+    		    	$sql = "SELECT tasa FROM tasa_usd
+    		    			WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0, 1;";
+    		    	$tasa_usd = ExecuteScalar($sql);
+    		    	$monto_usd = $monto_bs / $tasa_usd;
+    		    	$username = CurrentUserName();
+    		    	$banco = 0;
+    		    	if($rowb = ExecuteRow("SELECT banco FROM banco_tipo_pago WHERE tipo_pago = '" . $arr2[1] . "' AND moneda = '" . $arr2[5] . "'"))
+    		    		$banco = $rowb["banco"];
+    		  		$sql = "INSERT INTO cobros_cliente_detalle (
+    		  					id,
+    		  					cobros_cliente,
+    		  					metodo_pago,
+    		  					referencia,
+    		  					monto_moneda,
+    		  					moneda,
+    		  					tasa_moneda,
+    		  					monto_bs,
+    		  					tasa_usd,
+    		  					monto_usd,
+    		  					banco)
+    		  				VALUES (
+    		  					NULL,
+    		  					" . $rsnew["id"] . ",
+    		  					'" . $arr2[1] . "',
+    		  					'" . $arr2[2] . "',
+    		  					$monto_moneda,
+    		  					'" . $arr2[5] . "',
+    		  					$tasa,
+    		  					$monto_bs,
+    		  					$tasa_usd,
+    		  					$monto_usd,
+    		  					$banco
+    		  					)"; 
+    		  		Execute($sql);
+    		  		if($arr2[1] == "RC") {
+    		  			$sql = "SELECT IFNULL(MAX(nro_recibo), 0)+1 AS nro FROM abono WHERE 1;";
+    		  			$nro_recibo = 0; //ExecuteScalar($sql);
+    		  			$sql = "INSERT INTO
+    		  						abono 
+    		  					SET 	
+    		  						id = NULL,
+    		  						cliente = " . $rsnew["cliente"] . ",
+    		  						fecha = NOW(),
+    		  						metodo_pago = NULL,
+    		  						nro_recibo = $nro_recibo,
+    		  						nota = 'REBAJA EN COBROS Documento: $documentos',
+    		  						username = '" . CurrentUserName() . "';";
+    					Execute($sql);
+    					$sql = "SELECT LAST_INSERT_ID();";
+    					$Abono = ExecuteScalar($sql);
+    					$sql = "INSERT INTO recarga(
+    								id,
+    								cliente,
+    								fecha,
+    								metodo_pago,
+    								monto_moneda,
+    								moneda,
+    								tasa_moneda,
+    								monto_bs,
+    								tasa_usd,
+    								monto_usd,
+    								saldo,
+    								nota,
+    								username, reverso, abono)
+    							VALUES (
+    								NULL,
+    								" . $rsnew["cliente"] . ",
+    								NOW(),
+    								'" . $arr2[1] . "',
+    								$monto_moneda,
+    								'" . $arr2[5] . "',
+    								$tasa,
+    								$monto_bs,
+    								$tasa_usd,
+    								(-1)*$monto_usd,
+    								0,
+    								'Pago Documento(s): $documentos',
+    								'$username', 'N', $Abono)";
+    					Execute($sql);
+    					$sql = "SELECT LAST_INSERT_ID();";
+    					$id = ExecuteScalar($sql);
+    					$sql = "SELECT IFNULL(SUM(monto_usd), 0) AS saldo FROM recarga
+    			    			WHERE cliente = " . $rsnew["cliente"] . ";";
+    			    	$saldo = ExecuteScalar($sql);
+    			    	$sql = "UPDATE recarga SET saldo = $saldo WHERE id = $id;";
+    			    	Execute($sql);
+    			    	$sql = "SELECT SUM(monto_usd) AS pago FROM recarga WHERE abono = $Abono;";
+    			    	$monto_abono = ExecuteScalar($sql);
+    			    	$sql = "UPDATE abono SET pago = $monto_abono WHERE id = $Abono";
+    			    	Execute($sql);
+    		  		}
+      			}
+      		}
+      	 } 
+      	$sql = "SELECT tipo_documento FROM salidas WHERE id = " . $rsnew["id_documento"] . ";";
+      	$tipo_documento = ExecuteScalar($sql);
+      	if($tipo_documento == "TDCNET") {
+      		/*
+    		$sql = "UPDATE salidas SET estatus = 'PROCESADO', pagado = 'S' 
+    			WHERE id = " . $rsnew["id_documento"] . ";";
+    		ExecuteRow($sql);
+    		*/
+    	}
+      	if($tipo_documento == "TDCFCV") {
+      		/*
+    		$sql = "UPDATE salidas SET estatus = 'PROCESADO', pagado = 'S' 
+    			WHERE id = " . $rsnew["id_documento"] . ";";
+    		ExecuteRow($sql);
+    		*/
+    		$sql = "UPDATE salidas SET pagado = 'S' 
+    			WHERE id = " . $rsnew["id_documento"] . ";";
+    		ExecuteRow($sql);
+    	}
 
+    	// Si hay diferencia a favor, la agregó a recargas
+    	$monto = floatval($_POST["monto"]);
+    	$pago = floatval($rsnew["pago"]);
+        if($pago > $monto) {
+    		$sql = "SELECT IFNULL(MAX(nro_recibo), 0)+1 AS nro FROM abono WHERE 1;";
+    		$nro_recibo = ExecuteScalar($sql);
+    		$sql = "INSERT INTO
+    					abono 
+    				SET 	
+    					id = NULL,
+    					cliente = " . $rsnew["cliente"] . ",
+    					fecha = NOW(),
+    					metodo_pago = NULL,
+    					nro_recibo = $nro_recibo,
+    					nota = 'SOBRANTE EN COBROS Documento: $documentos',
+    					username = '" . CurrentUserName() . "';";
+    		Execute($sql);
+    		$sql = "SELECT LAST_INSERT_ID();";
+    		$Abono = ExecuteScalar($sql);
+        	$sql = "SELECT IFNULL(MAX(nro_recibo), 0)+1 AS nro FROM recarga WHERE 1;";
+       		$nro_recibo = ExecuteScalar($sql);
+        	$monto_moneda = $pago - $monto;
+        	$monto_bs = $tasa_usd * $monto_moneda;
+        	$sql = "INSERT INTO recarga(
+    					id,
+    					cliente,
+    					fecha,
+    					metodo_pago,
+    					monto_moneda,
+    					moneda,
+    					tasa_moneda,
+    					monto_bs,
+    					tasa_usd,
+    					monto_usd,
+    					saldo,
+    					nota,
+    					username, cobro_cliente_reverso, nro_recibo, reverso, abono)
+    				VALUES (
+    					NULL,
+    					" . $rsnew["cliente"] . ",
+    					NOW(),
+    					'RC',
+    					$monto_moneda,
+    					'" . $rsnew["moneda"] . "',
+    					$tasa_usd,
+    					$monto_bs,
+    					$tasa_usd,
+    					$monto_moneda,
+    					0,
+    					'Recarga por exedente en pago de documento(s): $documentos',
+    					'$username', " . $rsnew["id"] . ", $nro_recibo, 'N', $Abono)";
+    		Execute($sql);
+    		$sql = "SELECT LAST_INSERT_ID();";
+    		$id = ExecuteScalar($sql);
+    		$sql = "SELECT IFNULL(SUM(monto_usd), 0) AS saldo FROM recarga
+        			WHERE cliente = " . $rsnew["cliente"] . ";";
+           	$saldo = ExecuteScalar($sql);
+    	   	$sql = "UPDATE recarga SET saldo = $saldo WHERE id = $id;";
+    	   	Execute($sql);
+        	$sql = "SELECT SUM(monto_usd) AS pago FROM recarga WHERE abono = $Abono;";
+        	$monto_abono = ExecuteScalar($sql);
+        	$sql = "UPDATE abono SET pago = $monto_abono WHERE id = $Abono";
+        	Execute($sql);
+        }
+
+    	/* ------- Actualizo cantidad en mano, en pedido y en transito  ------- */
+    	$sql = "SELECT nro_documento, tipo_documento, pagado = 'S'  
+    			FROM salidas 
+       			WHERE id = " . $rsnew["id_documento"] . "";
+       	$row = ExecuteRow($sql);
+       	$documentos = $row["tipo_documento"];
+    	$sql = "SELECT COUNT(articulo) AS cantidad 
+    			FROM entradas_salidas
+    			WHERE tipo_documento = '$documentos'
+    				AND id_documento = " . $rsnew["id_documento"] . ";";
+    	$cantidad = ExecuteScalar($sql);
+    	for($i = 0; $i < $cantidad; $i++) {
+    		$sql = "SELECT articulo
+    				FROM entradas_salidas
+    				WHERE
+    					tipo_documento = '$documentos'
+    					AND id_documento = " . $rsnew["id_documento"] . " LIMIT $i, 1;";
+    		$articulo = ExecuteScalar($sql);
+    		ActualizarExitenciaArticulo($articulo);
+    	}
+
+    	// Se crea la nota de entrega a partir de la factura de venta directa con el carrito de compras o facturación tienda
+    	// Se aplicará solo para la facturación en tienda
+    	/*
+    	if(isset($rsnew["nota"])) {
+    		if(trim($rsnew["nota"]) == "SI GENERA NOTA DE ENTREGA DESDE EL PAGO") {
+    			CrearNotaDeEntragaPorTienda($rsnew["id_documento"], "TDCFCV");
+    		}
+    		else {
+    			$sql = "UPDATE salidas SET estatus = 'NUEVO', pagado = 'S' 
+    				WHERE id = " . $rsnew["id_documento"] . ";";
+    			ExecuteRow($sql);
+    		}
+    	}
+    	*/
+    }
     // Row Updating event
     public function rowUpdating($rsold, &$rsnew) {
     	// Enter your code here
     	// To cancel, set return value to FALSE
+    	$fecha = date("Y-m-d");
+    	$sql = "SELECT fecha FROM cierre_de_caja WHERE fecha = '$fecha';";
+    	if($row = ExecuteRow($sql)) {
+    		$this->CancelMessage = "El d&iacute;a " . date("d/m/Y") . " est&aacute; cerrado; no se puede modificar el pago. Verifique!";
+    		return FALSE;
+    	}
     	if($rsold["comprobante"] != "") {
     		$this->CancelMessage = "Este cobro est&aacute; contabilizado; no se puede modificar.";
     		return FALSE;
@@ -2330,20 +2721,186 @@ class CobrosCliente extends DbTable
     }
 
     // Row Deleting event
-    public function rowDeleting(&$rs) {
-    	// Enter your code here
-    	// To cancel, set return value to False
+    public function rowDeleting(&$rs)
+    {
+        // Enter your code here
+        // To cancel, set return value to False
+    	$fecha = date("Y-m-d");
+    	$sql = "SELECT fecha FROM cierre_de_caja WHERE fecha = '$fecha';";
+    	if($row = ExecuteRow($sql)) {
+    		$this->CancelMessage = "El d&iacute;a " . date("d/m/Y") . " est&aacute; cerrado; no se puede eliminar el pago. Verifique!";
+    		return FALSE;
+    	}
     	if($rs["comprobante"] != "") {
     		$this->CancelMessage = "Este cobro est&aacute; contabilizado; no se puede eliminar.";
     		return FALSE;
     	}
+    	$sql = "SELECT
+    				nro_documento, tipo_documento, cliente  
+    			FROM salidas 
+    			WHERE id = " . $rs["id_documento"] . ";";
+    	$row = ExecuteRow($sql);
+    	$cliente = $row["cliente"];
+    	$nro_documento = $row["nro_documento"];
+    	$tipo_documento = $row["tipo_documento"];
+    	$sql = "SELECT
+    				id, cobros_cliente, metodo_pago,
+    				referencia, monto_moneda, moneda,
+    				tasa_moneda, monto_bs, tasa_usd,
+    				monto_usd, banco
+    			FROM cobros_cliente_detalle
+    			WHERE cobros_cliente = " . $rs["id"] . " AND metodo_pago = 'RC';"; 
+        $rows = ExecuteRows($sql);
+        foreach ($rows as $key => $row) {
+            $id = $row["cobros_cliente"];
+            $referencia = $row["referencia"];
+            $metodo_pago = $row["metodo_pago"];
+            $moneda = $row["moneda"];
+            $monto_moneda = $row["monto_moneda"];
+            $tasa = $row["tasa_moneda"];
+            $monto_bs = $row["monto_bs"];
+            $tasa_usd = $row["tasa_usd"];
+            $monto_usd = $row["monto_usd"];
+            $username = CurrentUserName();
+            $sql = "INSERT INTO recarga(
+                        id,
+                        cliente,
+                        fecha,
+                        metodo_pago,
+                        monto_moneda,
+                        moneda,
+                        tasa_moneda,
+                        monto_bs,
+                        tasa_usd,
+                        monto_usd,
+                        saldo,
+                        nota,
+                        username, reverso)
+                    VALUES (
+                        NULL,
+                        $cliente,
+                        NOW(),
+                        '$metodo_pago',
+                        $monto_moneda,
+                        '$moneda',
+                        $tasa,
+                        $monto_bs,
+                        $tasa_usd,
+                        $monto_usd,
+                        0,
+                        'Reverso por elminación de cobro Nro. $id, con referencia de recarga Nro. $referencia, Tipo documento $tipo_documento Nro. $nro_documento.',
+                        '$username', 'S')"; 
+            Execute($sql);
+            $sql = "SELECT LAST_INSERT_ID();";
+            $id = ExecuteScalar($sql);
+            $sql = "SELECT IFNULL(SUM(monto_usd), 0) AS saldo FROM recarga
+                    WHERE cliente = $cliente;";
+            $saldo = ExecuteScalar($sql);
+            $sql = "UPDATE recarga SET saldo = $saldo WHERE id = $id;";
+            Execute($sql);
+        }
+    	///
+    	// *** Busca los excedentes *** //
+    	$sql = "SELECT
+    				id, cliente, CURDATE() AS fecha, metodo_pago,
+    				id AS referencia, monto_moneda, moneda,
+    				tasa_moneda, monto_bs, tasa_usd, monto_usd, saldo,
+    				nota, username 
+    			FROM recarga WHERE cobro_cliente_reverso = " . $rs["id"] . "";
+        $rows = ExecuteRows($sql);
+        foreach ($rows as $key => $row) {
+    		$id = $row["cobros_cliente"];
+    		$referencia = $row["referencia"];
+    		$metodo_pago = $row["metodo_pago"];
+    		$moneda = $row["moneda"];
+    		$monto_moneda = $row["monto_moneda"];
+        	$tasa = $row["tasa_moneda"];
+        	$monto_bs = $row["monto_bs"];
+        	$tasa_usd = $row["tasa_usd"];
+        	$monto_usd = $row["monto_usd"];
+        	$username = CurrentUserName();
+    		$sql = "INSERT INTO recarga(
+    					id,
+    					cliente,
+    					fecha,
+    					metodo_pago,
+    					monto_moneda,
+    					moneda,
+    					tasa_moneda,
+    					monto_bs,
+    					tasa_usd,
+    					monto_usd,
+    					saldo,
+    					nota,
+    					username, reverso)
+    				VALUES (
+    					NULL,
+    					$cliente,
+    					NOW(),
+    					'$metodo_pago',
+    					$monto_moneda,
+    					'$moneda',
+    					$tasa,
+    					(-1)*$monto_bs,
+    					$tasa_usd,
+    					(-1)*$monto_usd,
+    					0,
+    					'Reverso de abono por elminación de cobro Nro. $id, con referencia de recarga Nro. $referencia, Tipo documento $tipo_documento Nro. $nro_documento.',
+    					'$username', 'S')";
+    		Execute($sql);
+    		$sql = "SELECT LAST_INSERT_ID();";
+    		$id = ExecuteScalar($sql);
+    		$sql = "SELECT IFNULL(SUM(monto_usd), 0) AS saldo FROM recarga
+        			WHERE cliente = $cliente;";
+        	$saldo = ExecuteScalar($sql);
+        	$sql = "UPDATE recarga SET saldo = $saldo WHERE id = $id;";
+        	Execute($sql);
+    	}  	
+    	///
     	return TRUE;
     }
-
     // Row Deleted event
-    public function rowDeleted($rs)
+    public function rowDeleted(&$rs)
     {
         //Log("Row Deleted");
+        /*
+    	$sql = "UPDATE salidas SET estatus = 'NUEVO'
+    			WHERE id = " . $rs["id_documento"] . ";";
+    	$row = ExecuteRow($sql);
+    	*/
+
+    	/* ------- Actualizo cantidad en mano, en pedido y en transito  ------- */
+    	$sql = "SELECT nro_documento, tipo_documento 
+    			FROM salidas 
+       			WHERE id = " . $rs["id_documento"] . "";
+       	$row = ExecuteRow($sql);
+       	$documentos = $row["tipo_documento"];
+    	$sql = "SELECT COUNT(articulo) AS cantidad 
+    			FROM entradas_salidas
+    			WHERE tipo_documento = '$documentos'
+    				AND id_documento = " . $rs["id_documento"] . ";";
+    	$cantidad = ExecuteScalar($sql);
+    	for($i = 0; $i < $cantidad; $i++) {
+    		$sql = "SELECT articulo
+    				FROM entradas_salidas
+    				WHERE
+    					tipo_documento = '$documentos'
+    					AND id_documento = " . $rs["id_documento"] . " LIMIT $i, 1;";
+    		$articulo = ExecuteScalar($sql);
+    		ActualizarExitenciaArticulo($articulo);
+    	}
+      	$sql = "SELECT tipo_documento FROM salidas WHERE id = " . $rs["id_documento"] . ";";
+      	$tipo_documento = ExecuteScalar($sql);
+      	if($tipo_documento == "TDCFCV") {
+      		/*
+    		$sql = "UPDATE salidas SET estatus = 'PROCESADO', pagado = 'S' 
+    			WHERE id = " . $rsnew["id_documento"] . ";";
+    		ExecuteRow($sql);
+    		*/
+    		$sql = "UPDATE salidas SET pagado = 'N' 
+    			WHERE id = " . $rs["id_documento"] . ";";
+    		ExecuteRow($sql);
+    	}
     }
 
     // Email Sending event

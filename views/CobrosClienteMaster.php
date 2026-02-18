@@ -32,35 +32,13 @@ $cobros_cliente->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($cobros_cliente->tipo_pago->Visible) { // tipo_pago ?>
-        <tr id="r_tipo_pago"<?= $cobros_cliente->tipo_pago->rowAttributes() ?>>
-            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->tipo_pago->caption() ?></td>
-            <td<?= $cobros_cliente->tipo_pago->cellAttributes() ?>>
-<span id="el_cobros_cliente_tipo_pago">
-<span<?= $cobros_cliente->tipo_pago->viewAttributes() ?>>
-<?= $cobros_cliente->tipo_pago->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($cobros_cliente->referencia->Visible) { // referencia ?>
-        <tr id="r_referencia"<?= $cobros_cliente->referencia->rowAttributes() ?>>
-            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->referencia->caption() ?></td>
-            <td<?= $cobros_cliente->referencia->cellAttributes() ?>>
-<span id="el_cobros_cliente_referencia">
-<span<?= $cobros_cliente->referencia->viewAttributes() ?>>
-<?= $cobros_cliente->referencia->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($cobros_cliente->banco->Visible) { // banco ?>
-        <tr id="r_banco"<?= $cobros_cliente->banco->rowAttributes() ?>>
-            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->banco->caption() ?></td>
-            <td<?= $cobros_cliente->banco->cellAttributes() ?>>
-<span id="el_cobros_cliente_banco">
-<span<?= $cobros_cliente->banco->viewAttributes() ?>>
-<?= $cobros_cliente->banco->getViewValue() ?></span>
+<?php if ($cobros_cliente->id_documento->Visible) { // id_documento ?>
+        <tr id="r_id_documento"<?= $cobros_cliente->id_documento->rowAttributes() ?>>
+            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->id_documento->caption() ?></td>
+            <td<?= $cobros_cliente->id_documento->cellAttributes() ?>>
+<span id="el_cobros_cliente_id_documento">
+<span<?= $cobros_cliente->id_documento->viewAttributes() ?>>
+<?= $cobros_cliente->id_documento->getViewValue() ?></span>
 </span>
 </td>
         </tr>
@@ -87,24 +65,13 @@ $cobros_cliente->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($cobros_cliente->monto_recibido->Visible) { // monto_recibido ?>
-        <tr id="r_monto_recibido"<?= $cobros_cliente->monto_recibido->rowAttributes() ?>>
-            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->monto_recibido->caption() ?></td>
-            <td<?= $cobros_cliente->monto_recibido->cellAttributes() ?>>
-<span id="el_cobros_cliente_monto_recibido">
-<span<?= $cobros_cliente->monto_recibido->viewAttributes() ?>>
-<?= $cobros_cliente->monto_recibido->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($cobros_cliente->monto->Visible) { // monto ?>
-        <tr id="r_monto"<?= $cobros_cliente->monto->rowAttributes() ?>>
-            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->monto->caption() ?></td>
-            <td<?= $cobros_cliente->monto->cellAttributes() ?>>
-<span id="el_cobros_cliente_monto">
-<span<?= $cobros_cliente->monto->viewAttributes() ?>>
-<?= $cobros_cliente->monto->getViewValue() ?></span>
+<?php if ($cobros_cliente->pago->Visible) { // pago ?>
+        <tr id="r_pago"<?= $cobros_cliente->pago->rowAttributes() ?>>
+            <td class="<?= $cobros_cliente->TableLeftColumnClass ?>"><?= $cobros_cliente->pago->caption() ?></td>
+            <td<?= $cobros_cliente->pago->cellAttributes() ?>>
+<span id="el_cobros_cliente_pago">
+<span<?= $cobros_cliente->pago->viewAttributes() ?>>
+<?= $cobros_cliente->pago->getViewValue() ?></span>
 </span>
 </td>
         </tr>

@@ -37,6 +37,12 @@ loadjs.ready(["wrapper", "head"], function () {
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
             ["cliente", [fields.cliente.visible && fields.cliente.required ? ew.Validators.required(fields.cliente.caption) : null], fields.cliente.isInvalid],
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
+            ["monto_total", [fields.monto_total.visible && fields.monto_total.required ? ew.Validators.required(fields.monto_total.caption) : null], fields.monto_total.isInvalid],
+            ["alicuota_iva", [fields.alicuota_iva.visible && fields.alicuota_iva.required ? ew.Validators.required(fields.alicuota_iva.caption) : null], fields.alicuota_iva.isInvalid],
+            ["iva", [fields.iva.visible && fields.iva.required ? ew.Validators.required(fields.iva.caption) : null], fields.iva.isInvalid],
+            ["total", [fields.total.visible && fields.total.required ? ew.Validators.required(fields.total.caption) : null], fields.total.isInvalid],
+            ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
+            ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
             ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
@@ -55,9 +61,13 @@ loadjs.ready(["wrapper", "head"], function () {
         // Use JavaScript validation or not
         .setValidateRequired(ew.CLIENT_VALIDATE)
 
+        // Multi-Page
+        .setMultiPage(true)
+
         // Dynamic selection lists
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
+            "igtf": <?= $Page->igtf->toClientList($Page) ?>,
             "estatus": <?= $Page->estatus->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
@@ -84,6 +94,15 @@ loadjs.ready("head", function () {
 <input type="hidden" name="json" value="1">
 <?php } ?>
 <input type="hidden" name="<?= $Page->OldKeyName ?>" value="<?= $Page->OldKey ?>">
+<div class="ew-multi-page"><!-- multi-page -->
+<div class="ew-nav<?= $Page->MultiPages->containerClasses() ?>" id="pages_ViewOutTdcfcvEdit"><!-- multi-page tabs -->
+    <ul class="<?= $Page->MultiPages->navClasses() ?>" role="tablist">
+        <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(1) ?>" data-bs-target="#tab_view_out_tdcfcv1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_view_out_tdcfcv1" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(1)) ?>"><?= $Page->pageCaption(1) ?></button></li>
+        <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(2) ?>" data-bs-target="#tab_view_out_tdcfcv2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_view_out_tdcfcv2" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(2)) ?>"><?= $Page->pageCaption(2) ?></button></li>
+        <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(3) ?>" data-bs-target="#tab_view_out_tdcfcv3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_view_out_tdcfcv3" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(3)) ?>"><?= $Page->pageCaption(3) ?></button></li>
+    </ul>
+    <div class="<?= $Page->MultiPages->tabContentClasses() ?>"><!-- multi-page tabs .tab-content -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(1) ?>" id="tab_view_out_tdcfcv1" role="tabpanel"><!-- multi-page .tab-pane -->
 <div class="ew-edit-div"><!-- page* -->
 <?php if ($Page->documento->Visible) { // documento ?>
     <div id="r_documento"<?= $Page->documento->rowAttributes() ?>>
@@ -92,7 +111,7 @@ loadjs.ready("head", function () {
 <span id="el_view_out_tdcfcv_documento">
 <span<?= $Page->documento->viewAttributes() ?>>
 <span class="form-control-plaintext"><?= $Page->documento->getDisplayValue($Page->documento->EditValue) ?></span></span>
-<input type="hidden" data-table="view_out_tdcfcv" data-field="x_documento" data-hidden="1" name="x_documento" id="x_documento" value="<?= HtmlEncode($Page->documento->CurrentValue) ?>">
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_documento" data-hidden="1" data-page="1" name="x_documento" id="x_documento" value="<?= HtmlEncode($Page->documento->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -102,7 +121,7 @@ loadjs.ready("head", function () {
         <label id="elh_view_out_tdcfcv_nro_documento" for="x_nro_documento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_documento->caption() ?><?= $Page->nro_documento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_documento->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_nro_documento">
-<input type="<?= $Page->nro_documento->getInputTextType() ?>" name="x_nro_documento" id="x_nro_documento" data-table="view_out_tdcfcv" data-field="x_nro_documento" value="<?= $Page->nro_documento->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_documento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_documento->formatPattern()) ?>"<?= $Page->nro_documento->editAttributes() ?> aria-describedby="x_nro_documento_help">
+<input type="<?= $Page->nro_documento->getInputTextType() ?>" name="x_nro_documento" id="x_nro_documento" data-table="view_out_tdcfcv" data-field="x_nro_documento" value="<?= $Page->nro_documento->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_documento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_documento->formatPattern()) ?>"<?= $Page->nro_documento->editAttributes() ?> aria-describedby="x_nro_documento_help">
 <?= $Page->nro_documento->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nro_documento->getErrorMessage() ?></div>
 </span>
@@ -114,7 +133,7 @@ loadjs.ready("head", function () {
         <label id="elh_view_out_tdcfcv_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_fecha">
-<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="view_out_tdcfcv" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
+<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="view_out_tdcfcv" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
 <?= $Page->fecha->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
 <?php if (!$Page->fecha->ReadOnly && !$Page->fecha->Disabled && !isset($Page->fecha->EditAttrs["readonly"]) && !isset($Page->fecha->EditAttrs["disabled"])) { ?>
@@ -155,7 +174,7 @@ loadjs.ready(["fview_out_tdcfcvedit", "datetimepicker"], function () {
         <label id="elh_view_out_tdcfcv_nro_control" for="x_nro_control" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_control->caption() ?><?= $Page->nro_control->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_control->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_nro_control">
-<input type="<?= $Page->nro_control->getInputTextType() ?>" name="x_nro_control" id="x_nro_control" data-table="view_out_tdcfcv" data-field="x_nro_control" value="<?= $Page->nro_control->EditValue ?>" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->nro_control->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_control->formatPattern()) ?>"<?= $Page->nro_control->editAttributes() ?> aria-describedby="x_nro_control_help">
+<input type="<?= $Page->nro_control->getInputTextType() ?>" name="x_nro_control" id="x_nro_control" data-table="view_out_tdcfcv" data-field="x_nro_control" value="<?= $Page->nro_control->EditValue ?>" data-page="1" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->nro_control->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_control->formatPattern()) ?>"<?= $Page->nro_control->editAttributes() ?> aria-describedby="x_nro_control_help">
 <?= $Page->nro_control->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nro_control->getErrorMessage() ?></div>
 </span>
@@ -177,6 +196,7 @@ loadjs.ready(["fview_out_tdcfcvedit", "datetimepicker"], function () {
         data-field="x_cliente"
         data-caption="<?= HtmlEncode(RemoveHtml($Page->cliente->caption())) ?>"
         data-modal-lookup="true"
+        data-page="1"
         data-value-separator="<?= $Page->cliente->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Page->cliente->getPlaceHolder()) ?>"
         <?= $Page->cliente->editAttributes() ?>>
@@ -210,7 +230,7 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <label id="elh_view_out_tdcfcv_doc_afectado" for="x_doc_afectado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->doc_afectado->caption() ?><?= $Page->doc_afectado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->doc_afectado->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_doc_afectado">
-<input type="<?= $Page->doc_afectado->getInputTextType() ?>" name="x_doc_afectado" id="x_doc_afectado" data-table="view_out_tdcfcv" data-field="x_doc_afectado" value="<?= $Page->doc_afectado->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->doc_afectado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afectado->formatPattern()) ?>"<?= $Page->doc_afectado->editAttributes() ?> aria-describedby="x_doc_afectado_help">
+<input type="<?= $Page->doc_afectado->getInputTextType() ?>" name="x_doc_afectado" id="x_doc_afectado" data-table="view_out_tdcfcv" data-field="x_doc_afectado" value="<?= $Page->doc_afectado->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->doc_afectado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afectado->formatPattern()) ?>"<?= $Page->doc_afectado->editAttributes() ?> aria-describedby="x_doc_afectado_help">
 <?= $Page->doc_afectado->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->doc_afectado->getErrorMessage() ?></div>
 </span>
@@ -222,7 +242,7 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <label id="elh_view_out_tdcfcv_nota" for="x_nota" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nota->caption() ?><?= $Page->nota->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nota->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_nota">
-<textarea data-table="view_out_tdcfcv" data-field="x_nota" name="x_nota" id="x_nota" cols="35" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
+<textarea data-table="view_out_tdcfcv" data-field="x_nota" data-page="1" name="x_nota" id="x_nota" cols="35" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
 <?= $Page->nota->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nota->getErrorMessage() ?></div>
 </span>
@@ -243,6 +263,7 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <?php } ?>
         data-table="view_out_tdcfcv"
         data-field="x_estatus"
+        data-page="1"
         data-value-separator="<?= $Page->estatus->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Page->estatus->getPlaceHolder()) ?>"
         <?= $Page->estatus->editAttributes() ?>>
@@ -274,6 +295,120 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
 </div></div>
     </div>
 <?php } ?>
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(2) ?>" id="tab_view_out_tdcfcv2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+<?php if ($Page->monto_total->Visible) { // monto_total ?>
+    <div id="r_monto_total"<?= $Page->monto_total->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_monto_total" for="x_monto_total" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_total->caption() ?><?= $Page->monto_total->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_total->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_monto_total">
+<span<?= $Page->monto_total->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->monto_total->getDisplayValue($Page->monto_total->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_monto_total" data-hidden="1" data-page="2" name="x_monto_total" id="x_monto_total" value="<?= HtmlEncode($Page->monto_total->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->alicuota_iva->Visible) { // alicuota_iva ?>
+    <div id="r_alicuota_iva"<?= $Page->alicuota_iva->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_alicuota_iva" for="x_alicuota_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->alicuota_iva->caption() ?><?= $Page->alicuota_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->alicuota_iva->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_alicuota_iva">
+<span<?= $Page->alicuota_iva->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->alicuota_iva->getDisplayValue($Page->alicuota_iva->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_alicuota_iva" data-hidden="1" data-page="2" name="x_alicuota_iva" id="x_alicuota_iva" value="<?= HtmlEncode($Page->alicuota_iva->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->iva->Visible) { // iva ?>
+    <div id="r_iva"<?= $Page->iva->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_iva" for="x_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->iva->caption() ?><?= $Page->iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->iva->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_iva">
+<span<?= $Page->iva->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->iva->getDisplayValue($Page->iva->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_iva" data-hidden="1" data-page="2" name="x_iva" id="x_iva" value="<?= HtmlEncode($Page->iva->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->total->Visible) { // total ?>
+    <div id="r_total"<?= $Page->total->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_total" for="x_total" class="<?= $Page->LeftColumnClass ?>"><?= $Page->total->caption() ?><?= $Page->total->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->total->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_total">
+<span<?= $Page->total->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->total->getDisplayValue($Page->total->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_total" data-hidden="1" data-page="2" name="x_total" id="x_total" value="<?= HtmlEncode($Page->total->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+    <div id="r_igtf"<?= $Page->igtf->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_igtf" for="x_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->igtf->caption() ?><?= $Page->igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->igtf->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_igtf">
+    <select
+        id="x_igtf"
+        name="x_igtf"
+        class="form-select ew-select<?= $Page->igtf->isInvalidClass() ?>"
+        <?php if (!$Page->igtf->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcfcvedit_x_igtf"
+        <?php } ?>
+        data-table="view_out_tdcfcv"
+        data-field="x_igtf"
+        data-page="2"
+        data-value-separator="<?= $Page->igtf->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->igtf->getPlaceHolder()) ?>"
+        <?= $Page->igtf->editAttributes() ?>>
+        <?= $Page->igtf->selectOptionListHtml("x_igtf") ?>
+    </select>
+    <?= $Page->igtf->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->igtf->getErrorMessage() ?></div>
+<?php if (!$Page->igtf->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcfcvedit", function() {
+    var options = { name: "x_igtf", selectId: "fview_out_tdcfcvedit_x_igtf" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcfcvedit.lists.igtf?.lookupOptions.length) {
+        options.data = { id: "x_igtf", form: "fview_out_tdcfcvedit" };
+    } else {
+        options.ajax = { id: "x_igtf", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.igtf.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+    <div id="r_monto_base_igtf"<?= $Page->monto_base_igtf->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_monto_base_igtf" for="x_monto_base_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_base_igtf->caption() ?><?= $Page->monto_base_igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_base_igtf->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_monto_base_igtf">
+<input type="<?= $Page->monto_base_igtf->getInputTextType() ?>" name="x_monto_base_igtf" id="x_monto_base_igtf" data-table="view_out_tdcfcv" data-field="x_monto_base_igtf" value="<?= $Page->monto_base_igtf->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_base_igtf->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_base_igtf->formatPattern()) ?>"<?= $Page->monto_base_igtf->editAttributes() ?> aria-describedby="x_monto_base_igtf_help">
+<?= $Page->monto_base_igtf->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->monto_base_igtf->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(3) ?>" id="tab_view_out_tdcfcv3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
 <?php if ($Page->dias_credito->Visible) { // dias_credito ?>
     <div id="r_dias_credito"<?= $Page->dias_credito->rowAttributes() ?>>
         <label id="elh_view_out_tdcfcv_dias_credito" for="x_dias_credito" class="<?= $Page->LeftColumnClass ?>"><?= $Page->dias_credito->caption() ?><?= $Page->dias_credito->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -288,6 +423,7 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <?php } ?>
         data-table="view_out_tdcfcv"
         data-field="x_dias_credito"
+        data-page="3"
         data-value-separator="<?= $Page->dias_credito->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Page->dias_credito->getPlaceHolder()) ?>"
         <?= $Page->dias_credito->editAttributes() ?>>
@@ -325,7 +461,7 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <label id="elh_view_out_tdcfcv_nro_despacho" for="x_nro_despacho" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_despacho->caption() ?><?= $Page->nro_despacho->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_despacho->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_nro_despacho">
-<input type="<?= $Page->nro_despacho->getInputTextType() ?>" name="x_nro_despacho" id="x_nro_despacho" data-table="view_out_tdcfcv" data-field="x_nro_despacho" value="<?= $Page->nro_despacho->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_despacho->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_despacho->formatPattern()) ?>"<?= $Page->nro_despacho->editAttributes() ?> aria-describedby="x_nro_despacho_help">
+<input type="<?= $Page->nro_despacho->getInputTextType() ?>" name="x_nro_despacho" id="x_nro_despacho" data-table="view_out_tdcfcv" data-field="x_nro_despacho" value="<?= $Page->nro_despacho->EditValue ?>" data-page="3" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_despacho->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_despacho->formatPattern()) ?>"<?= $Page->nro_despacho->editAttributes() ?> aria-describedby="x_nro_despacho_help">
 <?= $Page->nro_despacho->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nro_despacho->getErrorMessage() ?></div>
 </span>
@@ -346,6 +482,7 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         data-field="x_asesor_asignado"
         data-caption="<?= HtmlEncode(RemoveHtml($Page->asesor_asignado->caption())) ?>"
         data-modal-lookup="true"
+        data-page="3"
         data-value-separator="<?= $Page->asesor_asignado->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Page->asesor_asignado->getPlaceHolder()) ?>"
         <?= $Page->asesor_asignado->editAttributes() ?>>
@@ -371,6 +508,10 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
     </div>
 <?php } ?>
 </div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+    </div><!-- /multi-page tabs .tab-content -->
+</div><!-- /multi-page tabs -->
+</div><!-- /multi-page -->
     <input type="hidden" data-table="view_out_tdcfcv" data-field="x_id" data-hidden="1" name="x_id" id="x_id" value="<?= HtmlEncode($Page->id->CurrentValue) ?>">
 <?php
     if (in_array("view_out", explode(",", $Page->getCurrentDetailTable())) && $view_out->DetailEdit) {
@@ -415,6 +556,63 @@ loadjs.ready("load", function () {
             echo '$("#x_estatus").value("' . $_REQUEST["my_estatus"] . '");';
         }
         ?>
+    });
+    $(document).ready(function() {
+
+        function gestionarEstadoInput(esLectura) {
+            if (esLectura) {
+                $("#x_monto_base_igtf").attr("readonly", true).css("background-color", "#e9ecef");
+            } else {
+                $("#x_monto_base_igtf").removeAttr("readonly").css("background-color", "#fff").focus();
+            }
+        }
+
+        function toggleIGTF() {
+            if ($("#x_igtf").val() === "S") {
+                $("#r_monto_base_igtf").show();
+                $('#modalIGTF').modal({backdrop: 'static', keyboard: false});
+                $('#modalIGTF').modal('show');
+            } else {
+                $("#r_monto_base_igtf").hide();
+                $("#x_monto_base_igtf").val(0);
+            }
+        }
+
+        // Evento al cambiar el select
+        $("#x_igtf").change(function() {
+            toggleIGTF();
+        });
+
+        // Lógica de los botones de la modal
+        $(".btn-opcion").click(function() {
+            var origen = $(this).data("origen");
+            var montoCalculado = 0;
+            var totalMaximo = parseFloat($("#x_total").val()) || 0;
+            if (origen === 'otro') {
+                gestionarEstadoInput(false); // Habilitar escritura
+                $("#x_monto_base_igtf").val(0);
+            } else {
+                gestionarEstadoInput(true); // Bloquear escritura
+                if (origen === 'subtotal') montoCalculado = $("#x_monto_total").val();
+                else if (origen === 'iva') montoCalculado = $("#x_iva").val();
+                else if (origen === 'total') montoCalculado = totalMaximo;
+                $("#x_monto_base_igtf").val(montoCalculado);
+            }
+            $('#modalIGTF').modal('hide');
+        });
+
+        // PLUS: Validación en tiempo real si eligen "Otro"
+        $("#x_monto_base_igtf").on('keyup change', function() {
+            // Solo validamos si NO es readonly (es decir, si eligieron "Otro")
+            if (!$(this).prop('readonly')) {
+                var valorIngresado = parseFloat($(this).val()) || 0;
+                var totalMaximo = parseFloat($("#x_total").val()) || 0;
+                if (valorIngresado > totalMaximo) {
+                    ew.alert("El monto base IGTF no puede ser mayor al Total de la factura (" + totalMaximo + ")");
+                    $(this).val(totalMaximo); // Lo reseteamos al máximo permitido
+                }
+            }
+        });
     });
 });
 </script>

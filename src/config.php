@@ -122,7 +122,7 @@ require_once __DIR__ . "/userlevelsettings.php";
 $CONFIG = [
 
     // Debug
-    "DEBUG" => true, // Enabled
+    "DEBUG" => false, // Enabled
     "REPORT_ALL_ERRORS" => false, // Treat PHP warnings and notices as errors
     "LOG_ERROR_TO_FILE" => false, // Log error to file
     "LOG_ERROR_DETAILS" => true, // Log error details

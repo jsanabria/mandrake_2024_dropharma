@@ -270,14 +270,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->cliente->Visible) { // cliente ?>
         <th data-name="cliente" class="<?= $Page->cliente->headerCellClass() ?>"><div id="elh_cobros_cliente_cliente" class="cobros_cliente_cliente"><?= $Page->renderFieldHeader($Page->cliente) ?></div></th>
 <?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-        <th data-name="tipo_pago" class="<?= $Page->tipo_pago->headerCellClass() ?>"><div id="elh_cobros_cliente_tipo_pago" class="cobros_cliente_tipo_pago"><?= $Page->renderFieldHeader($Page->tipo_pago) ?></div></th>
-<?php } ?>
-<?php if ($Page->referencia->Visible) { // referencia ?>
-        <th data-name="referencia" class="<?= $Page->referencia->headerCellClass() ?>"><div id="elh_cobros_cliente_referencia" class="cobros_cliente_referencia"><?= $Page->renderFieldHeader($Page->referencia) ?></div></th>
-<?php } ?>
-<?php if ($Page->banco->Visible) { // banco ?>
-        <th data-name="banco" class="<?= $Page->banco->headerCellClass() ?>"><div id="elh_cobros_cliente_banco" class="cobros_cliente_banco"><?= $Page->renderFieldHeader($Page->banco) ?></div></th>
+<?php if ($Page->id_documento->Visible) { // id_documento ?>
+        <th data-name="id_documento" class="<?= $Page->id_documento->headerCellClass() ?>"><div id="elh_cobros_cliente_id_documento" class="cobros_cliente_id_documento"><?= $Page->renderFieldHeader($Page->id_documento) ?></div></th>
 <?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
         <th data-name="fecha" class="<?= $Page->fecha->headerCellClass() ?>"><div id="elh_cobros_cliente_fecha" class="cobros_cliente_fecha"><?= $Page->renderFieldHeader($Page->fecha) ?></div></th>
@@ -285,11 +279,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->moneda->Visible) { // moneda ?>
         <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_cobros_cliente_moneda" class="cobros_cliente_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
 <?php } ?>
-<?php if ($Page->monto_recibido->Visible) { // monto_recibido ?>
-        <th data-name="monto_recibido" class="<?= $Page->monto_recibido->headerCellClass() ?>"><div id="elh_cobros_cliente_monto_recibido" class="cobros_cliente_monto_recibido"><?= $Page->renderFieldHeader($Page->monto_recibido) ?></div></th>
-<?php } ?>
-<?php if ($Page->monto->Visible) { // monto ?>
-        <th data-name="monto" class="<?= $Page->monto->headerCellClass() ?>"><div id="elh_cobros_cliente_monto" class="cobros_cliente_monto"><?= $Page->renderFieldHeader($Page->monto) ?></div></th>
+<?php if ($Page->pago->Visible) { // pago ?>
+        <th data-name="pago" class="<?= $Page->pago->headerCellClass() ?>"><div id="elh_cobros_cliente_pago" class="cobros_cliente_pago"><?= $Page->renderFieldHeader($Page->pago) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -335,27 +326,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-        <td data-name="tipo_pago"<?= $Page->tipo_pago->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_tipo_pago" class="el_cobros_cliente_tipo_pago">
-<span<?= $Page->tipo_pago->viewAttributes() ?>>
-<?= $Page->tipo_pago->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->referencia->Visible) { // referencia ?>
-        <td data-name="referencia"<?= $Page->referencia->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_referencia" class="el_cobros_cliente_referencia">
-<span<?= $Page->referencia->viewAttributes() ?>>
-<?= $Page->referencia->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->banco->Visible) { // banco ?>
-        <td data-name="banco"<?= $Page->banco->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_banco" class="el_cobros_cliente_banco">
-<span<?= $Page->banco->viewAttributes() ?>>
-<?= $Page->banco->getViewValue() ?></span>
+    <?php if ($Page->id_documento->Visible) { // id_documento ?>
+        <td data-name="id_documento"<?= $Page->id_documento->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_id_documento" class="el_cobros_cliente_id_documento">
+<span<?= $Page->id_documento->viewAttributes() ?>>
+<?= $Page->id_documento->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -375,19 +350,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->monto_recibido->Visible) { // monto_recibido ?>
-        <td data-name="monto_recibido"<?= $Page->monto_recibido->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_monto_recibido" class="el_cobros_cliente_monto_recibido">
-<span<?= $Page->monto_recibido->viewAttributes() ?>>
-<?= $Page->monto_recibido->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->monto->Visible) { // monto ?>
-        <td data-name="monto"<?= $Page->monto->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_monto" class="el_cobros_cliente_monto">
-<span<?= $Page->monto->viewAttributes() ?>>
-<?= $Page->monto->getViewValue() ?></span>
+    <?php if ($Page->pago->Visible) { // pago ?>
+        <td data-name="pago"<?= $Page->pago->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_pago" class="el_cobros_cliente_pago">
+<span<?= $Page->pago->viewAttributes() ?>>
+<?= $Page->pago->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -455,7 +422,118 @@ loadjs.ready("head", function() {
 </script>
 <script>
 loadjs.ready("load", function () {
+    // Startup script
     // Write your table-specific startup script here, no need to add script tags.
+    $(document).ready(function() {
+    	/*var d = new Date();
+    	var month = d.getMonth()+1;
+    	var day = d.getDate();
+    	var output = d.getFullYear() + '/' + (month<10 ? '0' : '') + month + '/' + (day<10 ? '0' : '') + day;
+    	var output = (day<10 ? '0' : '') + day + '/' + (month<10 ? '0' : '') + month + '/' + d.getFullYear();
+        $("#FechaCierre").val(output);*/
+    });
+    $("#btnCierreDeCaja").click(function(){
+    	var url = "";
+    	var cerrado = "S";
+    	var titulo = "";
+
+    	/*
+    	var d = new Date();
+    	var month = d.getMonth()+1;
+    	var day = d.getDate();
+    	var fecha = d.getFullYear() + '-' + (month<10 ? '0' : '') + month + '-' + (day<10 ? '0' : '') + day;
+    	var fechashow = (day<10 ? '0' : '') + day + '/' + (month<10 ? '0' : '') + month + '/' + d.getFullYear();
+    	*/
+    	var fecha = $("#FechaCierre").val();
+    	var fechashow = $("#FechaCierre").val();
+    	//url = "reportes/cierre_de_caja.php?xtitulo=CIERRE DE CAJA&fecha=" + fecha;
+    	url = "reportes/cierre_de_caja_detalle.php?xtitulo=CIERRE DE CAJA&fecha=" + fecha;
+    	var arregloFecha = fecha.split("-");
+    	var anio = arregloFecha[0];
+    	var mes = formatted_string('00',(arregloFecha[1] - 1),'l');
+    	var dia = arregloFecha[2];
+    	var ffecha = dia + "/" + mes + "/" + anio;
+    	if(fecha == "") {
+    		alert("Debe indicar fecha para el reporte");
+    		return false;
+    	}
+    	$.ajax({url: "include/cierre_de_caja.php", data: { consulta: 'S', fecha: fecha, abrir: 'N' }, success: function(result){
+    		cerrado = result;
+           	if(cerrado == "N") {
+           		if(confirm("Desea cerrar la caja para la fecha " + fecha + "?")) {
+           			$.ajax({url: "include/cierre_de_caja.php", data: { consulta: 'N', fecha: fecha, abrir: 'N' },  success: function(result){
+           				alert(result);
+           				$("#xCaja").html('<button class="btn btn-warning">Caja Cerrada para el d&iacute;a ' + ffecha + '</button>');
+           				location.reload();
+           			}});
+           		}
+       			window.open(url, 'Cierre');
+           	}
+           	else window.open(url, 'Cierre');
+    	}});
+    });
+    $("#btnDetalleDeCaja").click(function(){
+    	var url = "";
+    	var cerrado = "S";
+    	var titulo = "";
+    	var fecha = $("#FechaCierre").val();
+    	var fechashow = $("#FechaCierre").val();
+    	url = "reportes/cierre_de_caja_detalle.php?xtitulo=CIERRE DE CAJA&fecha=" + fecha;
+    	if(fecha == "") {
+    		alert("Debe indicar fecha para el reporte");
+    		return false;
+    	}
+    	window.open(url, 'Cierre');
+    });
+    $("#btnAperturaDeCaja").click(function(){
+    	var fecha = $("#FechaCierre").val();
+    	if(confirm("Desea aperturar la caja para la fecha " + fecha + "?")) {
+        	$.ajax({url: "include/cierre_de_caja.php", data: { consulta: 'N', fecha: fecha, abrir: 'S' },  success: function(result){
+            	alert(result);
+            	$("#xCaja").html('');
+            }});
+        }
+    });
+    $("#FechaCierre").change(function(){
+    	var fecha = $("#FechaCierre").val();
+    	var arregloFecha = fecha.split("-");
+    	var anio = arregloFecha[0];
+    	var mes = formatted_string('00',arregloFecha[1],'l');
+    	var dia = arregloFecha[2];
+    	var ffecha = dia + "/" + mes + "/" + anio;
+    	url = "CobrosClienteList?FechaCierre=" + fecha;
+    	$(location).attr('href',url);
+    });
+    $("#btnResumenVentas").click(function(){
+    	var xboton = "RESUMEN DE VENTAS";
+    	var fecha = $("#FechaCierre").val();
+    	var url = "";
+    	var arregloFecha = fecha.split("-");
+    	var anio = arregloFecha[0];
+    	var mes = formatted_string('00',arregloFecha[1],'l');
+    	var dia = arregloFecha[2];
+    	var ffecha = dia + "/" + mes + "/" + anio;
+    	url = "reportes/resumen_de_notas_de_entrega.php?xtitulo=" + xboton + "&xcliente=&xasesor=&xfecha=" + ffecha + "&yfecha=" + ffecha;
+    	if(fecha == "") {
+    		alert("Debe indicar fecha de cierre de caja");
+    		return false;
+    	}
+    	window.open(url, 'Resumen');	
+    });
+
+    function formatted_string(pad, user_str, pad_pos)
+    {
+      if (typeof user_str === 'undefined') 
+        return pad;
+      if (pad_pos == 'l')
+         {
+         return (pad + user_str).slice(-pad.length);
+         }
+      else 
+        {
+        return (user_str + pad).substring(0, pad.length);
+        }
+    }
 });
 </script>
 <?php } ?>

@@ -165,6 +165,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->Visible = false;
         $this->iva->Visible = false;
         $this->total->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
         $this->moneda->setVisibility();
         $this->lista_pedido->Visible = false;
         $this->nota->Visible = false;
@@ -753,6 +756,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         // Set up lookup cache
         $this->setupLookupOptions($this->documento);
         $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->igtf);
         $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->estatus);
@@ -1152,6 +1156,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $filterList = Concat($filterList, $this->alicuota_iva->AdvancedSearch->toJson(), ","); // Field alicuota_iva
         $filterList = Concat($filterList, $this->iva->AdvancedSearch->toJson(), ","); // Field iva
         $filterList = Concat($filterList, $this->total->AdvancedSearch->toJson(), ","); // Field total
+        $filterList = Concat($filterList, $this->igtf->AdvancedSearch->toJson(), ","); // Field igtf
+        $filterList = Concat($filterList, $this->monto_base_igtf->AdvancedSearch->toJson(), ","); // Field monto_base_igtf
+        $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
         $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
         $filterList = Concat($filterList, $this->lista_pedido->AdvancedSearch->toJson(), ","); // Field lista_pedido
         $filterList = Concat($filterList, $this->nota->AdvancedSearch->toJson(), ","); // Field nota
@@ -1328,6 +1335,30 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->total->AdvancedSearch->SearchValue2 = @$filter["y_total"];
         $this->total->AdvancedSearch->SearchOperator2 = @$filter["w_total"];
         $this->total->AdvancedSearch->save();
+
+        // Field igtf
+        $this->igtf->AdvancedSearch->SearchValue = @$filter["x_igtf"];
+        $this->igtf->AdvancedSearch->SearchOperator = @$filter["z_igtf"];
+        $this->igtf->AdvancedSearch->SearchCondition = @$filter["v_igtf"];
+        $this->igtf->AdvancedSearch->SearchValue2 = @$filter["y_igtf"];
+        $this->igtf->AdvancedSearch->SearchOperator2 = @$filter["w_igtf"];
+        $this->igtf->AdvancedSearch->save();
+
+        // Field monto_base_igtf
+        $this->monto_base_igtf->AdvancedSearch->SearchValue = @$filter["x_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchOperator = @$filter["z_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchCondition = @$filter["v_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->save();
+
+        // Field monto_igtf
+        $this->monto_igtf->AdvancedSearch->SearchValue = @$filter["x_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchOperator = @$filter["z_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchCondition = @$filter["v_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->save();
 
         // Field moneda
         $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
@@ -1688,6 +1719,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->buildSearchSql($where, $this->alicuota_iva, $default, false); // alicuota_iva
         $this->buildSearchSql($where, $this->iva, $default, false); // iva
         $this->buildSearchSql($where, $this->total, $default, false); // total
+        $this->buildSearchSql($where, $this->igtf, $default, false); // igtf
+        $this->buildSearchSql($where, $this->monto_base_igtf, $default, false); // monto_base_igtf
+        $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
         $this->buildSearchSql($where, $this->moneda, $default, false); // moneda
         $this->buildSearchSql($where, $this->lista_pedido, $default, false); // lista_pedido
         $this->buildSearchSql($where, $this->nota, $default, false); // nota
@@ -1748,6 +1782,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->alicuota_iva->AdvancedSearch->save(); // alicuota_iva
             $this->iva->AdvancedSearch->save(); // iva
             $this->total->AdvancedSearch->save(); // total
+            $this->igtf->AdvancedSearch->save(); // igtf
+            $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
+            $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->moneda->AdvancedSearch->save(); // moneda
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
             $this->nota->AdvancedSearch->save(); // nota
@@ -1832,6 +1869,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->alicuota_iva->AdvancedSearch->save(); // alicuota_iva
             $this->iva->AdvancedSearch->save(); // iva
             $this->total->AdvancedSearch->save(); // total
+            $this->igtf->AdvancedSearch->save(); // igtf
+            $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
+            $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->moneda->AdvancedSearch->save(); // moneda
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
             $this->nota->AdvancedSearch->save(); // nota
@@ -1991,6 +2031,33 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->total->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field igtf
+        $filter = $this->queryBuilderWhere("igtf");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->igtf, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->igtf->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field monto_base_igtf
+        $filter = $this->queryBuilderWhere("monto_base_igtf");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->monto_base_igtf, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_base_igtf->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field monto_igtf
+        $filter = $this->queryBuilderWhere("monto_igtf");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->monto_igtf, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_igtf->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field moneda
@@ -2168,6 +2235,15 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if ($this->total->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_base_igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->moneda->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -2341,6 +2417,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->AdvancedSearch->unsetSession();
         $this->iva->AdvancedSearch->unsetSession();
         $this->total->AdvancedSearch->unsetSession();
+        $this->igtf->AdvancedSearch->unsetSession();
+        $this->monto_base_igtf->AdvancedSearch->unsetSession();
+        $this->monto_igtf->AdvancedSearch->unsetSession();
         $this->moneda->AdvancedSearch->unsetSession();
         $this->lista_pedido->AdvancedSearch->unsetSession();
         $this->nota->AdvancedSearch->unsetSession();
@@ -2406,6 +2485,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->AdvancedSearch->load();
         $this->iva->AdvancedSearch->load();
         $this->total->AdvancedSearch->load();
+        $this->igtf->AdvancedSearch->load();
+        $this->monto_base_igtf->AdvancedSearch->load();
+        $this->monto_igtf->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
         $this->nota->AdvancedSearch->load();
@@ -2472,6 +2554,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->cliente); // cliente
             $this->updateSort($this->doc_afectado); // doc_afectado
             $this->updateSort($this->total); // total
+            $this->updateSort($this->igtf); // igtf
+            $this->updateSort($this->monto_base_igtf); // monto_base_igtf
+            $this->updateSort($this->monto_igtf); // monto_igtf
             $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->unidades); // unidades
             $this->updateSort($this->estatus); // estatus
@@ -2515,6 +2600,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 $this->alicuota_iva->setSort("");
                 $this->iva->setSort("");
                 $this->total->setSort("");
+                $this->igtf->setSort("");
+                $this->monto_base_igtf->setSort("");
+                $this->monto_igtf->setSort("");
                 $this->moneda->setSort("");
                 $this->lista_pedido->setSort("");
                 $this->nota->setSort("");
@@ -2929,6 +3017,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "cliente");
             $this->createColumnOption($option, "doc_afectado");
             $this->createColumnOption($option, "total");
+            $this->createColumnOption($option, "igtf");
+            $this->createColumnOption($option, "monto_base_igtf");
+            $this->createColumnOption($option, "monto_igtf");
             $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "unidades");
             $this->createColumnOption($option, "estatus");
@@ -3385,6 +3476,30 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             }
         }
 
+        // igtf
+        if ($this->igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->igtf->AdvancedSearch->SearchValue != "" || $this->igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_base_igtf
+        if ($this->monto_base_igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_base_igtf->AdvancedSearch->SearchValue != "" || $this->monto_base_igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_igtf
+        if ($this->monto_igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_igtf->AdvancedSearch->SearchValue != "" || $this->monto_igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // moneda
         if ($this->moneda->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3828,6 +3943,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
@@ -3890,6 +4008,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
@@ -3995,6 +4116,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         // iva
 
         // total
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // moneda
 
@@ -4146,6 +4273,21 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             // total
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
+
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
 
             // moneda
             $curVal = strval($this->moneda->CurrentValue);
@@ -4532,6 +4674,18 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->total->HrefValue = "";
             $this->total->TooltipValue = "";
 
+            // igtf
+            $this->igtf->HrefValue = "";
+            $this->igtf->TooltipValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+            $this->monto_base_igtf->TooltipValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+            $this->monto_igtf->TooltipValue = "";
+
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
@@ -4637,6 +4791,21 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->total->EditValue = $this->total->AdvancedSearch->SearchValue;
             $this->total->PlaceHolder = RemoveHtml($this->total->caption());
 
+            // igtf
+            $this->igtf->setupEditAttributes();
+            $this->igtf->EditValue = $this->igtf->options(true);
+            $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+            // monto_base_igtf
+            $this->monto_base_igtf->setupEditAttributes();
+            $this->monto_base_igtf->EditValue = $this->monto_base_igtf->AdvancedSearch->SearchValue;
+            $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+
+            // monto_igtf
+            $this->monto_igtf->setupEditAttributes();
+            $this->monto_igtf->EditValue = $this->monto_igtf->AdvancedSearch->SearchValue;
+            $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
+
             // moneda
             $this->moneda->setupEditAttributes();
             $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
@@ -4721,6 +4890,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->AdvancedSearch->load();
         $this->iva->AdvancedSearch->load();
         $this->total->AdvancedSearch->load();
+        $this->igtf->AdvancedSearch->load();
+        $this->monto_base_igtf->AdvancedSearch->load();
+        $this->monto_igtf->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
         $this->nota->AdvancedSearch->load();
@@ -5011,6 +5183,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 case "x_documento":
                     break;
                 case "x_cliente":
+                    break;
+                case "x_igtf":
                     break;
                 case "x_moneda":
                     $lookupFilter = $fld->getSelectFilter(); // PHP

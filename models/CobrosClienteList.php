@@ -155,19 +155,23 @@ class CobrosClienteList extends CobrosCliente
     {
         $this->id->setVisibility();
         $this->cliente->setVisibility();
+        $this->id_documento->setVisibility();
         $this->pivote->Visible = false;
-        $this->tipo_pago->setVisibility();
-        $this->referencia->setVisibility();
-        $this->banco->setVisibility();
-        $this->banco_origen->Visible = false;
         $this->fecha->setVisibility();
         $this->moneda->setVisibility();
-        $this->monto_recibido->setVisibility();
-        $this->monto->setVisibility();
+        $this->pago->setVisibility();
         $this->nota->Visible = false;
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
+        $this->tipo_pago->Visible = false;
+        $this->referencia->Visible = false;
+        $this->banco->Visible = false;
+        $this->banco_origen->Visible = false;
+        $this->monto_recibido->Visible = false;
+        $this->monto->Visible = false;
+        $this->tasa_cambio->Visible = false;
+        $this->pivote2->Visible = false;
     }
 
     // Constructor
@@ -713,12 +717,12 @@ class CobrosClienteList extends CobrosCliente
 
         // Set up lookup cache
         $this->setupLookupOptions($this->cliente);
-        $this->setupLookupOptions($this->tipo_pago);
-        $this->setupLookupOptions($this->banco);
-        $this->setupLookupOptions($this->banco_origen);
         $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
+        $this->setupLookupOptions($this->tipo_pago);
+        $this->setupLookupOptions($this->banco);
+        $this->setupLookupOptions($this->banco_origen);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1092,19 +1096,23 @@ class CobrosClienteList extends CobrosCliente
         $savedFilterList = "";
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->cliente->AdvancedSearch->toJson(), ","); // Field cliente
+        $filterList = Concat($filterList, $this->id_documento->AdvancedSearch->toJson(), ","); // Field id_documento
         $filterList = Concat($filterList, $this->pivote->AdvancedSearch->toJson(), ","); // Field pivote
-        $filterList = Concat($filterList, $this->tipo_pago->AdvancedSearch->toJson(), ","); // Field tipo_pago
-        $filterList = Concat($filterList, $this->referencia->AdvancedSearch->toJson(), ","); // Field referencia
-        $filterList = Concat($filterList, $this->banco->AdvancedSearch->toJson(), ","); // Field banco
-        $filterList = Concat($filterList, $this->banco_origen->AdvancedSearch->toJson(), ","); // Field banco_origen
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
         $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
-        $filterList = Concat($filterList, $this->monto_recibido->AdvancedSearch->toJson(), ","); // Field monto_recibido
-        $filterList = Concat($filterList, $this->monto->AdvancedSearch->toJson(), ","); // Field monto
+        $filterList = Concat($filterList, $this->pago->AdvancedSearch->toJson(), ","); // Field pago
         $filterList = Concat($filterList, $this->nota->AdvancedSearch->toJson(), ","); // Field nota
         $filterList = Concat($filterList, $this->fecha_registro->AdvancedSearch->toJson(), ","); // Field fecha_registro
         $filterList = Concat($filterList, $this->_username->AdvancedSearch->toJson(), ","); // Field username
         $filterList = Concat($filterList, $this->comprobante->AdvancedSearch->toJson(), ","); // Field comprobante
+        $filterList = Concat($filterList, $this->tipo_pago->AdvancedSearch->toJson(), ","); // Field tipo_pago
+        $filterList = Concat($filterList, $this->referencia->AdvancedSearch->toJson(), ","); // Field referencia
+        $filterList = Concat($filterList, $this->banco->AdvancedSearch->toJson(), ","); // Field banco
+        $filterList = Concat($filterList, $this->banco_origen->AdvancedSearch->toJson(), ","); // Field banco_origen
+        $filterList = Concat($filterList, $this->monto_recibido->AdvancedSearch->toJson(), ","); // Field monto_recibido
+        $filterList = Concat($filterList, $this->monto->AdvancedSearch->toJson(), ","); // Field monto
+        $filterList = Concat($filterList, $this->tasa_cambio->AdvancedSearch->toJson(), ","); // Field tasa_cambio
+        $filterList = Concat($filterList, $this->pivote2->AdvancedSearch->toJson(), ","); // Field pivote2
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1160,6 +1168,14 @@ class CobrosClienteList extends CobrosCliente
         $this->cliente->AdvancedSearch->SearchOperator2 = @$filter["w_cliente"];
         $this->cliente->AdvancedSearch->save();
 
+        // Field id_documento
+        $this->id_documento->AdvancedSearch->SearchValue = @$filter["x_id_documento"];
+        $this->id_documento->AdvancedSearch->SearchOperator = @$filter["z_id_documento"];
+        $this->id_documento->AdvancedSearch->SearchCondition = @$filter["v_id_documento"];
+        $this->id_documento->AdvancedSearch->SearchValue2 = @$filter["y_id_documento"];
+        $this->id_documento->AdvancedSearch->SearchOperator2 = @$filter["w_id_documento"];
+        $this->id_documento->AdvancedSearch->save();
+
         // Field pivote
         $this->pivote->AdvancedSearch->SearchValue = @$filter["x_pivote"];
         $this->pivote->AdvancedSearch->SearchOperator = @$filter["z_pivote"];
@@ -1167,6 +1183,62 @@ class CobrosClienteList extends CobrosCliente
         $this->pivote->AdvancedSearch->SearchValue2 = @$filter["y_pivote"];
         $this->pivote->AdvancedSearch->SearchOperator2 = @$filter["w_pivote"];
         $this->pivote->AdvancedSearch->save();
+
+        // Field fecha
+        $this->fecha->AdvancedSearch->SearchValue = @$filter["x_fecha"];
+        $this->fecha->AdvancedSearch->SearchOperator = @$filter["z_fecha"];
+        $this->fecha->AdvancedSearch->SearchCondition = @$filter["v_fecha"];
+        $this->fecha->AdvancedSearch->SearchValue2 = @$filter["y_fecha"];
+        $this->fecha->AdvancedSearch->SearchOperator2 = @$filter["w_fecha"];
+        $this->fecha->AdvancedSearch->save();
+
+        // Field moneda
+        $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
+        $this->moneda->AdvancedSearch->SearchCondition = @$filter["v_moneda"];
+        $this->moneda->AdvancedSearch->SearchValue2 = @$filter["y_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
+        $this->moneda->AdvancedSearch->save();
+
+        // Field pago
+        $this->pago->AdvancedSearch->SearchValue = @$filter["x_pago"];
+        $this->pago->AdvancedSearch->SearchOperator = @$filter["z_pago"];
+        $this->pago->AdvancedSearch->SearchCondition = @$filter["v_pago"];
+        $this->pago->AdvancedSearch->SearchValue2 = @$filter["y_pago"];
+        $this->pago->AdvancedSearch->SearchOperator2 = @$filter["w_pago"];
+        $this->pago->AdvancedSearch->save();
+
+        // Field nota
+        $this->nota->AdvancedSearch->SearchValue = @$filter["x_nota"];
+        $this->nota->AdvancedSearch->SearchOperator = @$filter["z_nota"];
+        $this->nota->AdvancedSearch->SearchCondition = @$filter["v_nota"];
+        $this->nota->AdvancedSearch->SearchValue2 = @$filter["y_nota"];
+        $this->nota->AdvancedSearch->SearchOperator2 = @$filter["w_nota"];
+        $this->nota->AdvancedSearch->save();
+
+        // Field fecha_registro
+        $this->fecha_registro->AdvancedSearch->SearchValue = @$filter["x_fecha_registro"];
+        $this->fecha_registro->AdvancedSearch->SearchOperator = @$filter["z_fecha_registro"];
+        $this->fecha_registro->AdvancedSearch->SearchCondition = @$filter["v_fecha_registro"];
+        $this->fecha_registro->AdvancedSearch->SearchValue2 = @$filter["y_fecha_registro"];
+        $this->fecha_registro->AdvancedSearch->SearchOperator2 = @$filter["w_fecha_registro"];
+        $this->fecha_registro->AdvancedSearch->save();
+
+        // Field username
+        $this->_username->AdvancedSearch->SearchValue = @$filter["x__username"];
+        $this->_username->AdvancedSearch->SearchOperator = @$filter["z__username"];
+        $this->_username->AdvancedSearch->SearchCondition = @$filter["v__username"];
+        $this->_username->AdvancedSearch->SearchValue2 = @$filter["y__username"];
+        $this->_username->AdvancedSearch->SearchOperator2 = @$filter["w__username"];
+        $this->_username->AdvancedSearch->save();
+
+        // Field comprobante
+        $this->comprobante->AdvancedSearch->SearchValue = @$filter["x_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchOperator = @$filter["z_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchCondition = @$filter["v_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchValue2 = @$filter["y_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchOperator2 = @$filter["w_comprobante"];
+        $this->comprobante->AdvancedSearch->save();
 
         // Field tipo_pago
         $this->tipo_pago->AdvancedSearch->SearchValue = @$filter["x_tipo_pago"];
@@ -1200,22 +1272,6 @@ class CobrosClienteList extends CobrosCliente
         $this->banco_origen->AdvancedSearch->SearchOperator2 = @$filter["w_banco_origen"];
         $this->banco_origen->AdvancedSearch->save();
 
-        // Field fecha
-        $this->fecha->AdvancedSearch->SearchValue = @$filter["x_fecha"];
-        $this->fecha->AdvancedSearch->SearchOperator = @$filter["z_fecha"];
-        $this->fecha->AdvancedSearch->SearchCondition = @$filter["v_fecha"];
-        $this->fecha->AdvancedSearch->SearchValue2 = @$filter["y_fecha"];
-        $this->fecha->AdvancedSearch->SearchOperator2 = @$filter["w_fecha"];
-        $this->fecha->AdvancedSearch->save();
-
-        // Field moneda
-        $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
-        $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
-        $this->moneda->AdvancedSearch->SearchCondition = @$filter["v_moneda"];
-        $this->moneda->AdvancedSearch->SearchValue2 = @$filter["y_moneda"];
-        $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
-        $this->moneda->AdvancedSearch->save();
-
         // Field monto_recibido
         $this->monto_recibido->AdvancedSearch->SearchValue = @$filter["x_monto_recibido"];
         $this->monto_recibido->AdvancedSearch->SearchOperator = @$filter["z_monto_recibido"];
@@ -1232,37 +1288,21 @@ class CobrosClienteList extends CobrosCliente
         $this->monto->AdvancedSearch->SearchOperator2 = @$filter["w_monto"];
         $this->monto->AdvancedSearch->save();
 
-        // Field nota
-        $this->nota->AdvancedSearch->SearchValue = @$filter["x_nota"];
-        $this->nota->AdvancedSearch->SearchOperator = @$filter["z_nota"];
-        $this->nota->AdvancedSearch->SearchCondition = @$filter["v_nota"];
-        $this->nota->AdvancedSearch->SearchValue2 = @$filter["y_nota"];
-        $this->nota->AdvancedSearch->SearchOperator2 = @$filter["w_nota"];
-        $this->nota->AdvancedSearch->save();
+        // Field tasa_cambio
+        $this->tasa_cambio->AdvancedSearch->SearchValue = @$filter["x_tasa_cambio"];
+        $this->tasa_cambio->AdvancedSearch->SearchOperator = @$filter["z_tasa_cambio"];
+        $this->tasa_cambio->AdvancedSearch->SearchCondition = @$filter["v_tasa_cambio"];
+        $this->tasa_cambio->AdvancedSearch->SearchValue2 = @$filter["y_tasa_cambio"];
+        $this->tasa_cambio->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_cambio"];
+        $this->tasa_cambio->AdvancedSearch->save();
 
-        // Field fecha_registro
-        $this->fecha_registro->AdvancedSearch->SearchValue = @$filter["x_fecha_registro"];
-        $this->fecha_registro->AdvancedSearch->SearchOperator = @$filter["z_fecha_registro"];
-        $this->fecha_registro->AdvancedSearch->SearchCondition = @$filter["v_fecha_registro"];
-        $this->fecha_registro->AdvancedSearch->SearchValue2 = @$filter["y_fecha_registro"];
-        $this->fecha_registro->AdvancedSearch->SearchOperator2 = @$filter["w_fecha_registro"];
-        $this->fecha_registro->AdvancedSearch->save();
-
-        // Field username
-        $this->_username->AdvancedSearch->SearchValue = @$filter["x__username"];
-        $this->_username->AdvancedSearch->SearchOperator = @$filter["z__username"];
-        $this->_username->AdvancedSearch->SearchCondition = @$filter["v__username"];
-        $this->_username->AdvancedSearch->SearchValue2 = @$filter["y__username"];
-        $this->_username->AdvancedSearch->SearchOperator2 = @$filter["w__username"];
-        $this->_username->AdvancedSearch->save();
-
-        // Field comprobante
-        $this->comprobante->AdvancedSearch->SearchValue = @$filter["x_comprobante"];
-        $this->comprobante->AdvancedSearch->SearchOperator = @$filter["z_comprobante"];
-        $this->comprobante->AdvancedSearch->SearchCondition = @$filter["v_comprobante"];
-        $this->comprobante->AdvancedSearch->SearchValue2 = @$filter["y_comprobante"];
-        $this->comprobante->AdvancedSearch->SearchOperator2 = @$filter["w_comprobante"];
-        $this->comprobante->AdvancedSearch->save();
+        // Field pivote2
+        $this->pivote2->AdvancedSearch->SearchValue = @$filter["x_pivote2"];
+        $this->pivote2->AdvancedSearch->SearchOperator = @$filter["z_pivote2"];
+        $this->pivote2->AdvancedSearch->SearchCondition = @$filter["v_pivote2"];
+        $this->pivote2->AdvancedSearch->SearchValue2 = @$filter["y_pivote2"];
+        $this->pivote2->AdvancedSearch->SearchOperator2 = @$filter["w_pivote2"];
+        $this->pivote2->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1277,19 +1317,23 @@ class CobrosClienteList extends CobrosCliente
         }
         $this->buildSearchSql($where, $this->id, $default, false); // id
         $this->buildSearchSql($where, $this->cliente, $default, false); // cliente
+        $this->buildSearchSql($where, $this->id_documento, $default, false); // id_documento
         $this->buildSearchSql($where, $this->pivote, $default, false); // pivote
-        $this->buildSearchSql($where, $this->tipo_pago, $default, false); // tipo_pago
-        $this->buildSearchSql($where, $this->referencia, $default, false); // referencia
-        $this->buildSearchSql($where, $this->banco, $default, false); // banco
-        $this->buildSearchSql($where, $this->banco_origen, $default, false); // banco_origen
         $this->buildSearchSql($where, $this->fecha, $default, false); // fecha
         $this->buildSearchSql($where, $this->moneda, $default, false); // moneda
-        $this->buildSearchSql($where, $this->monto_recibido, $default, false); // monto_recibido
-        $this->buildSearchSql($where, $this->monto, $default, false); // monto
+        $this->buildSearchSql($where, $this->pago, $default, false); // pago
         $this->buildSearchSql($where, $this->nota, $default, false); // nota
         $this->buildSearchSql($where, $this->fecha_registro, $default, false); // fecha_registro
         $this->buildSearchSql($where, $this->_username, $default, false); // username
         $this->buildSearchSql($where, $this->comprobante, $default, false); // comprobante
+        $this->buildSearchSql($where, $this->tipo_pago, $default, false); // tipo_pago
+        $this->buildSearchSql($where, $this->referencia, $default, false); // referencia
+        $this->buildSearchSql($where, $this->banco, $default, false); // banco
+        $this->buildSearchSql($where, $this->banco_origen, $default, false); // banco_origen
+        $this->buildSearchSql($where, $this->monto_recibido, $default, false); // monto_recibido
+        $this->buildSearchSql($where, $this->monto, $default, false); // monto
+        $this->buildSearchSql($where, $this->tasa_cambio, $default, false); // tasa_cambio
+        $this->buildSearchSql($where, $this->pivote2, $default, false); // pivote2
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1298,19 +1342,23 @@ class CobrosClienteList extends CobrosCliente
         if (!$default && $this->Command == "search") {
             $this->id->AdvancedSearch->save(); // id
             $this->cliente->AdvancedSearch->save(); // cliente
+            $this->id_documento->AdvancedSearch->save(); // id_documento
             $this->pivote->AdvancedSearch->save(); // pivote
-            $this->tipo_pago->AdvancedSearch->save(); // tipo_pago
-            $this->referencia->AdvancedSearch->save(); // referencia
-            $this->banco->AdvancedSearch->save(); // banco
-            $this->banco_origen->AdvancedSearch->save(); // banco_origen
             $this->fecha->AdvancedSearch->save(); // fecha
             $this->moneda->AdvancedSearch->save(); // moneda
-            $this->monto_recibido->AdvancedSearch->save(); // monto_recibido
-            $this->monto->AdvancedSearch->save(); // monto
+            $this->pago->AdvancedSearch->save(); // pago
             $this->nota->AdvancedSearch->save(); // nota
             $this->fecha_registro->AdvancedSearch->save(); // fecha_registro
             $this->_username->AdvancedSearch->save(); // username
             $this->comprobante->AdvancedSearch->save(); // comprobante
+            $this->tipo_pago->AdvancedSearch->save(); // tipo_pago
+            $this->referencia->AdvancedSearch->save(); // referencia
+            $this->banco->AdvancedSearch->save(); // banco
+            $this->banco_origen->AdvancedSearch->save(); // banco_origen
+            $this->monto_recibido->AdvancedSearch->save(); // monto_recibido
+            $this->monto->AdvancedSearch->save(); // monto
+            $this->tasa_cambio->AdvancedSearch->save(); // tasa_cambio
+            $this->pivote2->AdvancedSearch->save(); // pivote2
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1343,19 +1391,23 @@ class CobrosClienteList extends CobrosCliente
             $this->resetSearchParms();
             $this->id->AdvancedSearch->save(); // id
             $this->cliente->AdvancedSearch->save(); // cliente
+            $this->id_documento->AdvancedSearch->save(); // id_documento
             $this->pivote->AdvancedSearch->save(); // pivote
-            $this->tipo_pago->AdvancedSearch->save(); // tipo_pago
-            $this->referencia->AdvancedSearch->save(); // referencia
-            $this->banco->AdvancedSearch->save(); // banco
-            $this->banco_origen->AdvancedSearch->save(); // banco_origen
             $this->fecha->AdvancedSearch->save(); // fecha
             $this->moneda->AdvancedSearch->save(); // moneda
-            $this->monto_recibido->AdvancedSearch->save(); // monto_recibido
-            $this->monto->AdvancedSearch->save(); // monto
+            $this->pago->AdvancedSearch->save(); // pago
             $this->nota->AdvancedSearch->save(); // nota
             $this->fecha_registro->AdvancedSearch->save(); // fecha_registro
             $this->_username->AdvancedSearch->save(); // username
             $this->comprobante->AdvancedSearch->save(); // comprobante
+            $this->tipo_pago->AdvancedSearch->save(); // tipo_pago
+            $this->referencia->AdvancedSearch->save(); // referencia
+            $this->banco->AdvancedSearch->save(); // banco
+            $this->banco_origen->AdvancedSearch->save(); // banco_origen
+            $this->monto_recibido->AdvancedSearch->save(); // monto_recibido
+            $this->monto->AdvancedSearch->save(); // monto
+            $this->tasa_cambio->AdvancedSearch->save(); // tasa_cambio
+            $this->pivote2->AdvancedSearch->save(); // pivote2
             $this->setSessionRules($rules);
         }
 
@@ -1430,31 +1482,13 @@ class CobrosClienteList extends CobrosCliente
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->cliente->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field tipo_pago
-        $filter = $this->queryBuilderWhere("tipo_pago");
+        // Field id_documento
+        $filter = $this->queryBuilderWhere("id_documento");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->tipo_pago, false, false);
+            $this->buildSearchSql($filter, $this->id_documento, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tipo_pago->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field referencia
-        $filter = $this->queryBuilderWhere("referencia");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->referencia, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->referencia->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field banco
-        $filter = $this->queryBuilderWhere("banco");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->banco, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->banco->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->id_documento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field fecha
@@ -1475,22 +1509,13 @@ class CobrosClienteList extends CobrosCliente
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->moneda->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field monto_recibido
-        $filter = $this->queryBuilderWhere("monto_recibido");
+        // Field pago
+        $filter = $this->queryBuilderWhere("pago");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->monto_recibido, false, false);
+            $this->buildSearchSql($filter, $this->pago, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_recibido->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field monto
-        $filter = $this->queryBuilderWhere("monto");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->monto, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pago->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
@@ -1519,13 +1544,14 @@ class CobrosClienteList extends CobrosCliente
         // Fields to search
         $searchFlds = [];
         $searchFlds[] = &$this->pivote;
+        $searchFlds[] = &$this->moneda;
+        $searchFlds[] = &$this->nota;
+        $searchFlds[] = &$this->_username;
         $searchFlds[] = &$this->tipo_pago;
         $searchFlds[] = &$this->referencia;
         $searchFlds[] = &$this->banco;
         $searchFlds[] = &$this->banco_origen;
-        $searchFlds[] = &$this->moneda;
-        $searchFlds[] = &$this->nota;
-        $searchFlds[] = &$this->_username;
+        $searchFlds[] = &$this->pivote2;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1560,7 +1586,31 @@ class CobrosClienteList extends CobrosCliente
         if ($this->cliente->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->id_documento->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->pivote->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->fecha->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->moneda->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->pago->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->nota->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->fecha_registro->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->_username->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->comprobante->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->tipo_pago->AdvancedSearch->issetSession()) {
@@ -1575,28 +1625,16 @@ class CobrosClienteList extends CobrosCliente
         if ($this->banco_origen->AdvancedSearch->issetSession()) {
             return true;
         }
-        if ($this->fecha->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->moneda->AdvancedSearch->issetSession()) {
-            return true;
-        }
         if ($this->monto_recibido->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->monto->AdvancedSearch->issetSession()) {
             return true;
         }
-        if ($this->nota->AdvancedSearch->issetSession()) {
+        if ($this->tasa_cambio->AdvancedSearch->issetSession()) {
             return true;
         }
-        if ($this->fecha_registro->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->_username->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->comprobante->AdvancedSearch->issetSession()) {
+        if ($this->pivote2->AdvancedSearch->issetSession()) {
             return true;
         }
         return false;
@@ -1636,19 +1674,23 @@ class CobrosClienteList extends CobrosCliente
     {
         $this->id->AdvancedSearch->unsetSession();
         $this->cliente->AdvancedSearch->unsetSession();
+        $this->id_documento->AdvancedSearch->unsetSession();
         $this->pivote->AdvancedSearch->unsetSession();
-        $this->tipo_pago->AdvancedSearch->unsetSession();
-        $this->referencia->AdvancedSearch->unsetSession();
-        $this->banco->AdvancedSearch->unsetSession();
-        $this->banco_origen->AdvancedSearch->unsetSession();
         $this->fecha->AdvancedSearch->unsetSession();
         $this->moneda->AdvancedSearch->unsetSession();
-        $this->monto_recibido->AdvancedSearch->unsetSession();
-        $this->monto->AdvancedSearch->unsetSession();
+        $this->pago->AdvancedSearch->unsetSession();
         $this->nota->AdvancedSearch->unsetSession();
         $this->fecha_registro->AdvancedSearch->unsetSession();
         $this->_username->AdvancedSearch->unsetSession();
         $this->comprobante->AdvancedSearch->unsetSession();
+        $this->tipo_pago->AdvancedSearch->unsetSession();
+        $this->referencia->AdvancedSearch->unsetSession();
+        $this->banco->AdvancedSearch->unsetSession();
+        $this->banco_origen->AdvancedSearch->unsetSession();
+        $this->monto_recibido->AdvancedSearch->unsetSession();
+        $this->monto->AdvancedSearch->unsetSession();
+        $this->tasa_cambio->AdvancedSearch->unsetSession();
+        $this->pivote2->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1662,19 +1704,23 @@ class CobrosClienteList extends CobrosCliente
         // Restore advanced search values
         $this->id->AdvancedSearch->load();
         $this->cliente->AdvancedSearch->load();
+        $this->id_documento->AdvancedSearch->load();
         $this->pivote->AdvancedSearch->load();
-        $this->tipo_pago->AdvancedSearch->load();
-        $this->referencia->AdvancedSearch->load();
-        $this->banco->AdvancedSearch->load();
-        $this->banco_origen->AdvancedSearch->load();
         $this->fecha->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
-        $this->monto_recibido->AdvancedSearch->load();
-        $this->monto->AdvancedSearch->load();
+        $this->pago->AdvancedSearch->load();
         $this->nota->AdvancedSearch->load();
         $this->fecha_registro->AdvancedSearch->load();
         $this->_username->AdvancedSearch->load();
         $this->comprobante->AdvancedSearch->load();
+        $this->tipo_pago->AdvancedSearch->load();
+        $this->referencia->AdvancedSearch->load();
+        $this->banco->AdvancedSearch->load();
+        $this->banco_origen->AdvancedSearch->load();
+        $this->monto_recibido->AdvancedSearch->load();
+        $this->monto->AdvancedSearch->load();
+        $this->tasa_cambio->AdvancedSearch->load();
+        $this->pivote2->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1694,13 +1740,10 @@ class CobrosClienteList extends CobrosCliente
             $this->CurrentOrderType = Get("ordertype", "");
             $this->updateSort($this->id); // id
             $this->updateSort($this->cliente); // cliente
-            $this->updateSort($this->tipo_pago); // tipo_pago
-            $this->updateSort($this->referencia); // referencia
-            $this->updateSort($this->banco); // banco
+            $this->updateSort($this->id_documento); // id_documento
             $this->updateSort($this->fecha); // fecha
             $this->updateSort($this->moneda); // moneda
-            $this->updateSort($this->monto_recibido); // monto_recibido
-            $this->updateSort($this->monto); // monto
+            $this->updateSort($this->pago); // pago
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1727,19 +1770,23 @@ class CobrosClienteList extends CobrosCliente
                 $this->setSessionOrderBy($orderBy);
                 $this->id->setSort("");
                 $this->cliente->setSort("");
+                $this->id_documento->setSort("");
                 $this->pivote->setSort("");
-                $this->tipo_pago->setSort("");
-                $this->referencia->setSort("");
-                $this->banco->setSort("");
-                $this->banco_origen->setSort("");
                 $this->fecha->setSort("");
                 $this->moneda->setSort("");
-                $this->monto_recibido->setSort("");
-                $this->monto->setSort("");
+                $this->pago->setSort("");
                 $this->nota->setSort("");
                 $this->fecha_registro->setSort("");
                 $this->_username->setSort("");
                 $this->comprobante->setSort("");
+                $this->tipo_pago->setSort("");
+                $this->referencia->setSort("");
+                $this->banco->setSort("");
+                $this->banco_origen->setSort("");
+                $this->monto_recibido->setSort("");
+                $this->monto->setSort("");
+                $this->tasa_cambio->setSort("");
+                $this->pivote2->setSort("");
             }
 
             // Reset start position
@@ -2170,13 +2217,10 @@ class CobrosClienteList extends CobrosCliente
             $item->Visible = $this->UseColumnVisibility;
             $this->createColumnOption($option, "id");
             $this->createColumnOption($option, "cliente");
-            $this->createColumnOption($option, "tipo_pago");
-            $this->createColumnOption($option, "referencia");
-            $this->createColumnOption($option, "banco");
+            $this->createColumnOption($option, "id_documento");
             $this->createColumnOption($option, "fecha");
             $this->createColumnOption($option, "moneda");
-            $this->createColumnOption($option, "monto_recibido");
-            $this->createColumnOption($option, "monto");
+            $this->createColumnOption($option, "pago");
         }
 
         // Set up custom actions
@@ -2310,14 +2354,7 @@ class CobrosClienteList extends CobrosCliente
                     }
                 }
             } else {
-                $errmsg = str_replace('%s', $userAction, $Language->phrase("CustomActionNotFound"));
-                if (Post("ajax") == $userAction) { // Ajax
-                    echo "<p class=\"text-danger\">" . $errmsg . "</p>";
-                    return true;
-                } else {
-                    $this->setFailureMessage($errmsg);
-                    return false;
-                }
+                // Skip checking, handle by Row_CustomAction
             }
             $rows = $this->loadRs($filter)->fetchAllAssociative();
             $this->SelectedCount = count($rows);
@@ -2331,9 +2368,11 @@ class CobrosClienteList extends CobrosCliente
                 $this->SelectedIndex = 0;
                 foreach ($rows as $row) {
                     $this->SelectedIndex++;
-                    $processed = $listAction->handle($row, $this);
-                    if (!$processed) {
-                        break;
+                    if ($listAction) {
+                        $processed = $listAction->handle($row, $this);
+                        if (!$processed) {
+                            break;
+                        }
                     }
                     $processed = $this->rowCustomAction($userAction, $row);
                     if (!$processed) {
@@ -2551,10 +2590,74 @@ class CobrosClienteList extends CobrosCliente
             }
         }
 
+        // id_documento
+        if ($this->id_documento->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->id_documento->AdvancedSearch->SearchValue != "" || $this->id_documento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // pivote
         if ($this->pivote->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->pivote->AdvancedSearch->SearchValue != "" || $this->pivote->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // fecha
+        if ($this->fecha->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->fecha->AdvancedSearch->SearchValue != "" || $this->fecha->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // moneda
+        if ($this->moneda->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->moneda->AdvancedSearch->SearchValue != "" || $this->moneda->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // pago
+        if ($this->pago->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->pago->AdvancedSearch->SearchValue != "" || $this->pago->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // nota
+        if ($this->nota->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->nota->AdvancedSearch->SearchValue != "" || $this->nota->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // fecha_registro
+        if ($this->fecha_registro->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->fecha_registro->AdvancedSearch->SearchValue != "" || $this->fecha_registro->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // username
+        if ($this->_username->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->_username->AdvancedSearch->SearchValue != "" || $this->_username->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // comprobante
+        if ($this->comprobante->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->comprobante->AdvancedSearch->SearchValue != "" || $this->comprobante->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -2591,22 +2694,6 @@ class CobrosClienteList extends CobrosCliente
             }
         }
 
-        // fecha
-        if ($this->fecha->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->fecha->AdvancedSearch->SearchValue != "" || $this->fecha->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // moneda
-        if ($this->moneda->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->moneda->AdvancedSearch->SearchValue != "" || $this->moneda->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
         // monto_recibido
         if ($this->monto_recibido->AdvancedSearch->get()) {
             $hasValue = true;
@@ -2623,34 +2710,18 @@ class CobrosClienteList extends CobrosCliente
             }
         }
 
-        // nota
-        if ($this->nota->AdvancedSearch->get()) {
+        // tasa_cambio
+        if ($this->tasa_cambio->AdvancedSearch->get()) {
             $hasValue = true;
-            if (($this->nota->AdvancedSearch->SearchValue != "" || $this->nota->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+            if (($this->tasa_cambio->AdvancedSearch->SearchValue != "" || $this->tasa_cambio->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
 
-        // fecha_registro
-        if ($this->fecha_registro->AdvancedSearch->get()) {
+        // pivote2
+        if ($this->pivote2->AdvancedSearch->get()) {
             $hasValue = true;
-            if (($this->fecha_registro->AdvancedSearch->SearchValue != "" || $this->fecha_registro->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // username
-        if ($this->_username->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->_username->AdvancedSearch->SearchValue != "" || $this->_username->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // comprobante
-        if ($this->comprobante->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->comprobante->AdvancedSearch->SearchValue != "" || $this->comprobante->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+            if (($this->pivote2->AdvancedSearch->SearchValue != "" || $this->pivote2->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -2752,19 +2823,23 @@ class CobrosClienteList extends CobrosCliente
         $this->rowSelected($row);
         $this->id->setDbValue($row['id']);
         $this->cliente->setDbValue($row['cliente']);
+        $this->id_documento->setDbValue($row['id_documento']);
         $this->pivote->setDbValue($row['pivote']);
-        $this->tipo_pago->setDbValue($row['tipo_pago']);
-        $this->referencia->setDbValue($row['referencia']);
-        $this->banco->setDbValue($row['banco']);
-        $this->banco_origen->setDbValue($row['banco_origen']);
         $this->fecha->setDbValue($row['fecha']);
         $this->moneda->setDbValue($row['moneda']);
-        $this->monto_recibido->setDbValue($row['monto_recibido']);
-        $this->monto->setDbValue($row['monto']);
+        $this->pago->setDbValue($row['pago']);
         $this->nota->setDbValue($row['nota']);
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->tipo_pago->setDbValue($row['tipo_pago']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->banco->setDbValue($row['banco']);
+        $this->banco_origen->setDbValue($row['banco_origen']);
+        $this->monto_recibido->setDbValue($row['monto_recibido']);
+        $this->monto->setDbValue($row['monto']);
+        $this->tasa_cambio->setDbValue($row['tasa_cambio']);
+        $this->pivote2->setDbValue($row['pivote2']);
     }
 
     // Return a row with default values
@@ -2773,19 +2848,23 @@ class CobrosClienteList extends CobrosCliente
         $row = [];
         $row['id'] = $this->id->DefaultValue;
         $row['cliente'] = $this->cliente->DefaultValue;
+        $row['id_documento'] = $this->id_documento->DefaultValue;
         $row['pivote'] = $this->pivote->DefaultValue;
-        $row['tipo_pago'] = $this->tipo_pago->DefaultValue;
-        $row['referencia'] = $this->referencia->DefaultValue;
-        $row['banco'] = $this->banco->DefaultValue;
-        $row['banco_origen'] = $this->banco_origen->DefaultValue;
         $row['fecha'] = $this->fecha->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
-        $row['monto_recibido'] = $this->monto_recibido->DefaultValue;
-        $row['monto'] = $this->monto->DefaultValue;
+        $row['pago'] = $this->pago->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['tipo_pago'] = $this->tipo_pago->DefaultValue;
+        $row['referencia'] = $this->referencia->DefaultValue;
+        $row['banco'] = $this->banco->DefaultValue;
+        $row['banco_origen'] = $this->banco_origen->DefaultValue;
+        $row['monto_recibido'] = $this->monto_recibido->DefaultValue;
+        $row['monto'] = $this->monto->DefaultValue;
+        $row['tasa_cambio'] = $this->tasa_cambio->DefaultValue;
+        $row['pivote2'] = $this->pivote2->DefaultValue;
         return $row;
     }
 
@@ -2830,7 +2909,23 @@ class CobrosClienteList extends CobrosCliente
 
         // cliente
 
+        // id_documento
+
         // pivote
+
+        // fecha
+
+        // moneda
+
+        // pago
+
+        // nota
+
+        // fecha_registro
+
+        // username
+
+        // comprobante
 
         // tipo_pago
 
@@ -2840,21 +2935,13 @@ class CobrosClienteList extends CobrosCliente
 
         // banco_origen
 
-        // fecha
-
-        // moneda
-
         // monto_recibido
 
         // monto
 
-        // nota
+        // tasa_cambio
 
-        // fecha_registro
-
-        // username
-
-        // comprobante
+        // pivote2
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2885,8 +2972,78 @@ class CobrosClienteList extends CobrosCliente
                 $this->cliente->ViewValue = null;
             }
 
+            // id_documento
+            $this->id_documento->ViewValue = $this->id_documento->CurrentValue;
+            $this->id_documento->ViewValue = FormatNumber($this->id_documento->ViewValue, $this->id_documento->formatPattern());
+
             // pivote
             $this->pivote->ViewValue = $this->pivote->CurrentValue;
+
+            // fecha
+            $this->fecha->ViewValue = $this->fecha->CurrentValue;
+            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
+
+            // pago
+            $this->pago->ViewValue = $this->pago->CurrentValue;
+            $this->pago->ViewValue = FormatNumber($this->pago->ViewValue, $this->pago->formatPattern());
+
+            // nota
+            $this->nota->ViewValue = $this->nota->CurrentValue;
+
+            // fecha_registro
+            $this->fecha_registro->ViewValue = $this->fecha_registro->CurrentValue;
+            $this->fecha_registro->ViewValue = FormatDateTime($this->fecha_registro->ViewValue, $this->fecha_registro->formatPattern());
+
+            // username
+            $this->_username->ViewValue = $this->_username->CurrentValue;
+            $curVal = strval($this->_username->CurrentValue);
+            if ($curVal != "") {
+                $this->_username->ViewValue = $this->_username->lookupCacheOption($curVal);
+                if ($this->_username->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->_username->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->_username->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                    $sqlWrk = $this->_username->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->_username->Lookup->renderViewRow($rswrk[0]);
+                        $this->_username->ViewValue = $this->_username->displayValue($arwrk);
+                    } else {
+                        $this->_username->ViewValue = $this->_username->CurrentValue;
+                    }
+                }
+            } else {
+                $this->_username->ViewValue = null;
+            }
+
+            // comprobante
+            $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
 
             // tipo_pago
             $curVal = strval($this->tipo_pago->CurrentValue);
@@ -2963,34 +3120,6 @@ class CobrosClienteList extends CobrosCliente
                 $this->banco_origen->ViewValue = null;
             }
 
-            // fecha
-            $this->fecha->ViewValue = $this->fecha->CurrentValue;
-            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
-
-            // moneda
-            $curVal = strval($this->moneda->CurrentValue);
-            if ($curVal != "") {
-                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-                if ($this->moneda->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                    } else {
-                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                    }
-                }
-            } else {
-                $this->moneda->ViewValue = null;
-            }
-
             // monto_recibido
             $this->monto_recibido->ViewValue = $this->monto_recibido->CurrentValue;
             $this->monto_recibido->ViewValue = FormatNumber($this->monto_recibido->ViewValue, $this->monto_recibido->formatPattern());
@@ -2999,39 +3128,12 @@ class CobrosClienteList extends CobrosCliente
             $this->monto->ViewValue = $this->monto->CurrentValue;
             $this->monto->ViewValue = FormatNumber($this->monto->ViewValue, $this->monto->formatPattern());
 
-            // nota
-            $this->nota->ViewValue = $this->nota->CurrentValue;
+            // tasa_cambio
+            $this->tasa_cambio->ViewValue = $this->tasa_cambio->CurrentValue;
+            $this->tasa_cambio->ViewValue = FormatNumber($this->tasa_cambio->ViewValue, $this->tasa_cambio->formatPattern());
 
-            // fecha_registro
-            $this->fecha_registro->ViewValue = $this->fecha_registro->CurrentValue;
-            $this->fecha_registro->ViewValue = FormatDateTime($this->fecha_registro->ViewValue, $this->fecha_registro->formatPattern());
-
-            // username
-            $this->_username->ViewValue = $this->_username->CurrentValue;
-            $curVal = strval($this->_username->CurrentValue);
-            if ($curVal != "") {
-                $this->_username->ViewValue = $this->_username->lookupCacheOption($curVal);
-                if ($this->_username->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->_username->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->_username->Lookup->getTable()->Fields["username"]->searchDataType(), "");
-                    $sqlWrk = $this->_username->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->_username->Lookup->renderViewRow($rswrk[0]);
-                        $this->_username->ViewValue = $this->_username->displayValue($arwrk);
-                    } else {
-                        $this->_username->ViewValue = $this->_username->CurrentValue;
-                    }
-                }
-            } else {
-                $this->_username->ViewValue = null;
-            }
-
-            // comprobante
-            $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
+            // pivote2
+            $this->pivote2->ViewValue = $this->pivote2->CurrentValue;
 
             // id
             $this->id->HrefValue = "";
@@ -3041,17 +3143,9 @@ class CobrosClienteList extends CobrosCliente
             $this->cliente->HrefValue = "";
             $this->cliente->TooltipValue = "";
 
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
-            $this->tipo_pago->TooltipValue = "";
-
-            // referencia
-            $this->referencia->HrefValue = "";
-            $this->referencia->TooltipValue = "";
-
-            // banco
-            $this->banco->HrefValue = "";
-            $this->banco->TooltipValue = "";
+            // id_documento
+            $this->id_documento->HrefValue = "";
+            $this->id_documento->TooltipValue = "";
 
             // fecha
             $this->fecha->HrefValue = "";
@@ -3061,13 +3155,9 @@ class CobrosClienteList extends CobrosCliente
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
 
-            // monto_recibido
-            $this->monto_recibido->HrefValue = "";
-            $this->monto_recibido->TooltipValue = "";
-
-            // monto
-            $this->monto->HrefValue = "";
-            $this->monto->TooltipValue = "";
+            // pago
+            $this->pago->HrefValue = "";
+            $this->pago->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // id
             $this->id->setupEditAttributes();
@@ -3110,21 +3200,10 @@ class CobrosClienteList extends CobrosCliente
             }
             $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
 
-            // tipo_pago
-            $this->tipo_pago->setupEditAttributes();
-            $this->tipo_pago->PlaceHolder = RemoveHtml($this->tipo_pago->caption());
-
-            // referencia
-            $this->referencia->setupEditAttributes();
-            if (!$this->referencia->Raw) {
-                $this->referencia->AdvancedSearch->SearchValue = HtmlDecode($this->referencia->AdvancedSearch->SearchValue);
-            }
-            $this->referencia->EditValue = HtmlEncode($this->referencia->AdvancedSearch->SearchValue);
-            $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
-
-            // banco
-            $this->banco->setupEditAttributes();
-            $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
+            // id_documento
+            $this->id_documento->setupEditAttributes();
+            $this->id_documento->EditValue = $this->id_documento->AdvancedSearch->SearchValue;
+            $this->id_documento->PlaceHolder = RemoveHtml($this->id_documento->caption());
 
             // fecha
             $this->fecha->setupEditAttributes();
@@ -3135,15 +3214,10 @@ class CobrosClienteList extends CobrosCliente
             $this->moneda->setupEditAttributes();
             $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
-            // monto_recibido
-            $this->monto_recibido->setupEditAttributes();
-            $this->monto_recibido->EditValue = $this->monto_recibido->AdvancedSearch->SearchValue;
-            $this->monto_recibido->PlaceHolder = RemoveHtml($this->monto_recibido->caption());
-
-            // monto
-            $this->monto->setupEditAttributes();
-            $this->monto->EditValue = $this->monto->AdvancedSearch->SearchValue;
-            $this->monto->PlaceHolder = RemoveHtml($this->monto->caption());
+            // pago
+            $this->pago->setupEditAttributes();
+            $this->pago->EditValue = $this->pago->AdvancedSearch->SearchValue;
+            $this->pago->PlaceHolder = RemoveHtml($this->pago->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3180,19 +3254,23 @@ class CobrosClienteList extends CobrosCliente
     {
         $this->id->AdvancedSearch->load();
         $this->cliente->AdvancedSearch->load();
+        $this->id_documento->AdvancedSearch->load();
         $this->pivote->AdvancedSearch->load();
-        $this->tipo_pago->AdvancedSearch->load();
-        $this->referencia->AdvancedSearch->load();
-        $this->banco->AdvancedSearch->load();
-        $this->banco_origen->AdvancedSearch->load();
         $this->fecha->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
-        $this->monto_recibido->AdvancedSearch->load();
-        $this->monto->AdvancedSearch->load();
+        $this->pago->AdvancedSearch->load();
         $this->nota->AdvancedSearch->load();
         $this->fecha_registro->AdvancedSearch->load();
         $this->_username->AdvancedSearch->load();
         $this->comprobante->AdvancedSearch->load();
+        $this->tipo_pago->AdvancedSearch->load();
+        $this->referencia->AdvancedSearch->load();
+        $this->banco->AdvancedSearch->load();
+        $this->banco_origen->AdvancedSearch->load();
+        $this->monto_recibido->AdvancedSearch->load();
+        $this->monto->AdvancedSearch->load();
+        $this->tasa_cambio->AdvancedSearch->load();
+        $this->pivote2->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -3441,6 +3519,13 @@ class CobrosClienteList extends CobrosCliente
                 case "x_cliente":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x__username":
+                    break;
+                case "x_comprobante":
+                    break;
                 case "x_tipo_pago":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -3448,13 +3533,6 @@ class CobrosClienteList extends CobrosCliente
                     break;
                 case "x_banco_origen":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_moneda":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x__username":
-                    break;
-                case "x_comprobante":
                     break;
                 default:
                     $lookupFilter = "";

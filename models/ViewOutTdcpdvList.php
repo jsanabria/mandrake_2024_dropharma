@@ -5203,7 +5203,27 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
     public function pageDataRendering(&$header)
     {
         // Example:
-        $header .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCPDV"><span class="fas fa-plus"></span> Nuevo Documento</a><br><br>';
+        // $header .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCPDV"><span class="fas fa-plus"></span> Nuevo Documento</a><br><br>';
+
+        // 1. Consultar la cantidad de registros NUEVOS
+        $sqlNuevo = "SELECT COUNT(*) FROM view_out_tdcpdv WHERE estatus = 'NUEVO'";
+        $cantidadNuevos = ExecuteScalar($sqlNuevo);
+
+        // 2. Definir el botón de "Nuevo Documento" que ya tenías
+        $header .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCPDV">
+                    <span class="fas fa-plus"></span> Nuevo Documento</a> ';
+
+        // 3. Agregar el botón/leyenda de alerta si hay registros nuevos
+        if ($cantidadNuevos > 0) {
+            // Al hacer clic, redirige a la misma página agregando el parámetro 'cmd=resetall' para limpiar otros filtros
+            // y 'estatus=NUEVO' para aplicar el nuestro (ajusta el nombre del campo si es necesario)
+            $urlFiltro = CurrentPageName() . "?x_estatus=NUEVO"; 
+            $header .= '<a href="' . $urlFiltro . '" class="btn btn-warning" style="background-color: #eda135; border-color: #eda135; color: white;">
+                            <span class="fas fa-exclamation-triangle"></span> 
+                            Pedidos por Procesar <span class="badge badge-light ml-1">' . $cantidadNuevos . '</span>
+                        </a>';
+        }
+        $header .= '<br><br>';
     }
 
     // Page Data Rendered event

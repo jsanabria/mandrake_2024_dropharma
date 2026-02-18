@@ -13,9 +13,9 @@ use Slim\App;
 use Closure;
 
 /**
- * Table class for alicuota
+ * Table class for cobros_cliente_detalle
  */
-class Alicuota extends DbTable
+class CobrosClienteDetalle extends DbTable
 {
     protected $SqlFrom = "";
     protected $SqlSelect = null;
@@ -33,14 +33,6 @@ class Alicuota extends DbTable
     public $OffsetColumnClass = "col-sm-10 offset-sm-2";
     public $TableLeftColumnClass = "w-col-2";
 
-    // Audit trail
-    public $AuditTrailOnAdd = true;
-    public $AuditTrailOnEdit = true;
-    public $AuditTrailOnDelete = true;
-    public $AuditTrailOnView = false;
-    public $AuditTrailOnViewData = false;
-    public $AuditTrailOnSearch = false;
-
     // Ajax / Modal
     public $UseAjaxActions = false;
     public $ModalSearch = false;
@@ -55,11 +47,16 @@ class Alicuota extends DbTable
 
     // Fields
     public $id;
-    public $codigo;
-    public $nombre;
-    public $alicuota;
-    public $fecha;
-    public $activo;
+    public $cobros_cliente;
+    public $metodo_pago;
+    public $referencia;
+    public $monto_moneda;
+    public $moneda;
+    public $tasa_moneda;
+    public $monto_bs;
+    public $tasa_usd;
+    public $monto_usd;
+    public $banco;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -72,14 +69,14 @@ class Alicuota extends DbTable
 
         // Language object
         $Language = Container("app.language");
-        $this->TableVar = "alicuota";
-        $this->TableName = 'alicuota';
+        $this->TableVar = "cobros_cliente_detalle";
+        $this->TableName = 'cobros_cliente_detalle';
         $this->TableType = "TABLE";
         $this->ImportUseTransaction = $this->supportsTransaction() && Config("IMPORT_USE_TRANSACTION");
         $this->UseTransaction = $this->supportsTransaction() && Config("USE_TRANSACTION");
 
         // Update Table
-        $this->UpdateTable = "alicuota";
+        $this->UpdateTable = "cobros_cliente_detalle";
         $this->Dbid = 'DB';
         $this->ExportAll = true;
         $this->ExportPageBreakCount = 0; // Page break per every n record (PDF only)
@@ -133,129 +130,250 @@ class Alicuota extends DbTable
         $this->id->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
         $this->Fields['id'] = &$this->id;
 
-        // codigo
-        $this->codigo = new DbField(
+        // cobros_cliente
+        $this->cobros_cliente = new DbField(
             $this, // Table
-            'x_codigo', // Variable name
-            'codigo', // Name
-            '`codigo`', // Expression
-            '`codigo`', // Basic search expression
-            200, // Type
-            3, // Size
+            'x_cobros_cliente', // Variable name
+            'cobros_cliente', // Name
+            '`cobros_cliente`', // Expression
+            '`cobros_cliente`', // Basic search expression
+            19, // Type
+            10, // Size
             -1, // Date/Time format
             false, // Is upload field
-            '`codigo`', // Virtual expression
+            '`cobros_cliente`', // Virtual expression
             false, // Is virtual
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->codigo->InputTextType = "text";
-        $this->codigo->Required = true; // Required field
-        $this->codigo->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['codigo'] = &$this->codigo;
+        $this->cobros_cliente->InputTextType = "text";
+        $this->cobros_cliente->Raw = true;
+        $this->cobros_cliente->Nullable = false; // NOT NULL field
+        $this->cobros_cliente->Required = true; // Required field
+        $this->cobros_cliente->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->cobros_cliente->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
+        $this->Fields['cobros_cliente'] = &$this->cobros_cliente;
 
-        // nombre
-        $this->nombre = new DbField(
+        // metodo_pago
+        $this->metodo_pago = new DbField(
             $this, // Table
-            'x_nombre', // Variable name
-            'nombre', // Name
-            '`nombre`', // Expression
-            '`nombre`', // Basic search expression
+            'x_metodo_pago', // Variable name
+            'metodo_pago', // Name
+            '`metodo_pago`', // Expression
+            '`metodo_pago`', // Basic search expression
+            200, // Type
+            10, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`metodo_pago`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->metodo_pago->addMethod("getSelectFilter", fn() => "`codigo` = '009'");
+        $this->metodo_pago->InputTextType = "text";
+        $this->metodo_pago->Required = true; // Required field
+        $this->metodo_pago->Lookup = new Lookup($this->metodo_pago, 'parametro', false, 'valor1', ["valor2","","",""], '', '', [], [], [], [], [], [], false, '`valor2`', '', "`valor2`");
+        $this->metodo_pago->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['metodo_pago'] = &$this->metodo_pago;
+
+        // referencia
+        $this->referencia = new DbField(
+            $this, // Table
+            'x_referencia', // Variable name
+            'referencia', // Name
+            '`referencia`', // Expression
+            '`referencia`', // Basic search expression
             200, // Type
             50, // Size
             -1, // Date/Time format
             false, // Is upload field
-            '`nombre`', // Virtual expression
+            '`referencia`', // Virtual expression
             false, // Is virtual
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->nombre->InputTextType = "text";
-        $this->nombre->Required = true; // Required field
-        $this->nombre->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['nombre'] = &$this->nombre;
+        $this->referencia->InputTextType = "text";
+        $this->referencia->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['referencia'] = &$this->referencia;
 
-        // alicuota
-        $this->alicuota = new DbField(
+        // monto_moneda
+        $this->monto_moneda = new DbField(
             $this, // Table
-            'x_alicuota', // Variable name
-            'alicuota', // Name
-            '`alicuota`', // Expression
-            '`alicuota`', // Basic search expression
+            'x_monto_moneda', // Variable name
+            'monto_moneda', // Name
+            '`monto_moneda`', // Expression
+            '`monto_moneda`', // Basic search expression
             131, // Type
-            8, // Size
+            16, // Size
             -1, // Date/Time format
             false, // Is upload field
-            '`alicuota`', // Virtual expression
+            '`monto_moneda`', // Virtual expression
             false, // Is virtual
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->alicuota->InputTextType = "text";
-        $this->alicuota->Raw = true;
-        $this->alicuota->Required = true; // Required field
-        $this->alicuota->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
-        $this->alicuota->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['alicuota'] = &$this->alicuota;
+        $this->monto_moneda->InputTextType = "text";
+        $this->monto_moneda->Raw = true;
+        $this->monto_moneda->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_moneda->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_moneda'] = &$this->monto_moneda;
 
-        // fecha
-        $this->fecha = new DbField(
+        // moneda
+        $this->moneda = new DbField(
             $this, // Table
-            'x_fecha', // Variable name
-            'fecha', // Name
-            '`fecha`', // Expression
-            CastDateFieldForLike("`fecha`", 7, "DB"), // Basic search expression
-            133, // Type
-            10, // Size
-            7, // Date/Time format
-            false, // Is upload field
-            '`fecha`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->fecha->InputTextType = "text";
-        $this->fecha->Raw = true;
-        $this->fecha->DefaultErrorMessage = str_replace("%s", DateFormat(7), $Language->phrase("IncorrectDate"));
-        $this->fecha->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['fecha'] = &$this->fecha;
-
-        // activo
-        $this->activo = new DbField(
-            $this, // Table
-            'x_activo', // Variable name
-            'activo', // Name
-            '`activo`', // Expression
-            '`activo`', // Basic search expression
+            'x_moneda', // Variable name
+            'moneda', // Name
+            '`moneda`', // Expression
+            '`moneda`', // Basic search expression
             200, // Type
-            1, // Size
+            6, // Size
             -1, // Date/Time format
             false, // Is upload field
-            '`activo`', // Virtual expression
+            '`moneda`', // Virtual expression
             false, // Is virtual
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
             'SELECT' // Edit Tag
         );
-        $this->activo->addMethod("getDefault", fn() => "S");
-        $this->activo->InputTextType = "text";
-        $this->activo->Raw = true;
-        $this->activo->setSelectMultiple(false); // Select one
-        $this->activo->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->activo->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->activo->Lookup = new Lookup($this->activo, 'alicuota', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
-        $this->activo->OptionCount = 2;
-        $this->activo->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
-        $this->Fields['activo'] = &$this->activo;
+        $this->moneda->addMethod("getSelectFilter", fn() => "`codigo` = '006'");
+        $this->moneda->InputTextType = "text";
+        $this->moneda->setSelectMultiple(false); // Select one
+        $this->moneda->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->moneda->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->moneda->Lookup = new Lookup($this->moneda, 'parametro', false, 'valor1', ["valor1","","",""], '', '', [], [], [], [], [], [], false, '`valor1`', '', "`valor1`");
+        $this->moneda->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['moneda'] = &$this->moneda;
+
+        // tasa_moneda
+        $this->tasa_moneda = new DbField(
+            $this, // Table
+            'x_tasa_moneda', // Variable name
+            'tasa_moneda', // Name
+            '`tasa_moneda`', // Expression
+            '`tasa_moneda`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tasa_moneda`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tasa_moneda->InputTextType = "text";
+        $this->tasa_moneda->Raw = true;
+        $this->tasa_moneda->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->tasa_moneda->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tasa_moneda'] = &$this->tasa_moneda;
+
+        // monto_bs
+        $this->monto_bs = new DbField(
+            $this, // Table
+            'x_monto_bs', // Variable name
+            'monto_bs', // Name
+            '`monto_bs`', // Expression
+            '`monto_bs`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_bs`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_bs->InputTextType = "text";
+        $this->monto_bs->Raw = true;
+        $this->monto_bs->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_bs->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_bs'] = &$this->monto_bs;
+
+        // tasa_usd
+        $this->tasa_usd = new DbField(
+            $this, // Table
+            'x_tasa_usd', // Variable name
+            'tasa_usd', // Name
+            '`tasa_usd`', // Expression
+            '`tasa_usd`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tasa_usd`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tasa_usd->InputTextType = "text";
+        $this->tasa_usd->Raw = true;
+        $this->tasa_usd->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->tasa_usd->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tasa_usd'] = &$this->tasa_usd;
+
+        // monto_usd
+        $this->monto_usd = new DbField(
+            $this, // Table
+            'x_monto_usd', // Variable name
+            'monto_usd', // Name
+            '`monto_usd`', // Expression
+            '`monto_usd`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_usd`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_usd->InputTextType = "text";
+        $this->monto_usd->Raw = true;
+        $this->monto_usd->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_usd->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_usd'] = &$this->monto_usd;
+
+        // banco
+        $this->banco = new DbField(
+            $this, // Table
+            'x_banco', // Variable name
+            'banco', // Name
+            '`banco`', // Expression
+            '`banco`', // Basic search expression
+            19, // Type
+            10, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`banco`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->banco->InputTextType = "text";
+        $this->banco->Raw = true;
+        $this->banco->Lookup = new Lookup($this->banco, 'view_banco', false, 'id', ["banco","numero","",""], '', '', [], [], [], [], [], [], false, '`banco`', '', "CONCAT(COALESCE(`banco`, ''),'" . ValueSeparator(1, $this->banco) . "',COALESCE(`numero`,''))");
+        $this->banco->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->banco->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['banco'] = &$this->banco;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -324,7 +442,7 @@ class Alicuota extends DbTable
     // Get FROM clause
     public function getSqlFrom()
     {
-        return ($this->SqlFrom != "") ? $this->SqlFrom : "alicuota";
+        return ($this->SqlFrom != "") ? $this->SqlFrom : "cobros_cliente_detalle";
     }
 
     // Get FROM clause (for backward compatibility)
@@ -380,7 +498,7 @@ class Alicuota extends DbTable
     public function getSqlWhere()
     {
         $where = ($this->SqlWhere != "") ? $this->SqlWhere : "";
-        $this->DefaultFilter = "`activo` = 'S'";
+        $this->DefaultFilter = "";
         AddFilter($where, $this->DefaultFilter);
         return $where;
     }
@@ -669,9 +787,6 @@ class Alicuota extends DbTable
         if ($result) {
             $this->id->setDbValue($conn->lastInsertId());
             $rs['id'] = $this->id->DbValue;
-            if ($this->AuditTrailOnAdd) {
-                $this->writeAuditTrailOnAdd($rs);
-            }
         }
         return $result;
     }
@@ -728,14 +843,6 @@ class Alicuota extends DbTable
                 $rs['id'] = $this->id->CurrentValue;
             }
         }
-        if ($success && $this->AuditTrailOnEdit && $rsold) {
-            $rsaudit = $rs;
-            $fldname = 'id';
-            if (!array_key_exists($fldname, $rsaudit)) {
-                $rsaudit[$fldname] = $rsold[$fldname];
-            }
-            $this->writeAuditTrailOnEdit($rsold, $rsaudit);
-        }
         return $success;
     }
 
@@ -777,9 +884,6 @@ class Alicuota extends DbTable
                 $this->DbErrorMessage = $e->getMessage();
             }
         }
-        if ($success && $this->AuditTrailOnDelete) {
-            $this->writeAuditTrailOnDelete($rs);
-        }
         return $success;
     }
 
@@ -790,11 +894,16 @@ class Alicuota extends DbTable
             return;
         }
         $this->id->DbValue = $row['id'];
-        $this->codigo->DbValue = $row['codigo'];
-        $this->nombre->DbValue = $row['nombre'];
-        $this->alicuota->DbValue = $row['alicuota'];
-        $this->fecha->DbValue = $row['fecha'];
-        $this->activo->DbValue = $row['activo'];
+        $this->cobros_cliente->DbValue = $row['cobros_cliente'];
+        $this->metodo_pago->DbValue = $row['metodo_pago'];
+        $this->referencia->DbValue = $row['referencia'];
+        $this->monto_moneda->DbValue = $row['monto_moneda'];
+        $this->moneda->DbValue = $row['moneda'];
+        $this->tasa_moneda->DbValue = $row['tasa_moneda'];
+        $this->monto_bs->DbValue = $row['monto_bs'];
+        $this->tasa_usd->DbValue = $row['tasa_usd'];
+        $this->monto_usd->DbValue = $row['monto_usd'];
+        $this->banco->DbValue = $row['banco'];
     }
 
     // Delete uploaded files
@@ -868,7 +977,7 @@ class Alicuota extends DbTable
         if ($referUrl != "" && $referPageName != CurrentPageName() && $referPageName != "login") { // Referer not same page or login page
             $_SESSION[$name] = $referUrl; // Save to Session
         }
-        return $_SESSION[$name] ?? GetUrl("AlicuotaList");
+        return $_SESSION[$name] ?? GetUrl("CobrosClienteDetalleList");
     }
 
     // Set return page URL
@@ -882,9 +991,9 @@ class Alicuota extends DbTable
     {
         global $Language;
         return match ($pageName) {
-            "AlicuotaView" => $Language->phrase("View"),
-            "AlicuotaEdit" => $Language->phrase("Edit"),
-            "AlicuotaAdd" => $Language->phrase("Add"),
+            "CobrosClienteDetalleView" => $Language->phrase("View"),
+            "CobrosClienteDetalleEdit" => $Language->phrase("Edit"),
+            "CobrosClienteDetalleAdd" => $Language->phrase("Add"),
             default => ""
         };
     }
@@ -892,18 +1001,18 @@ class Alicuota extends DbTable
     // Default route URL
     public function getDefaultRouteUrl()
     {
-        return "AlicuotaList";
+        return "CobrosClienteDetalleList";
     }
 
     // API page name
     public function getApiPageName($action)
     {
         return match (strtolower($action)) {
-            Config("API_VIEW_ACTION") => "AlicuotaView",
-            Config("API_ADD_ACTION") => "AlicuotaAdd",
-            Config("API_EDIT_ACTION") => "AlicuotaEdit",
-            Config("API_DELETE_ACTION") => "AlicuotaDelete",
-            Config("API_LIST_ACTION") => "AlicuotaList",
+            Config("API_VIEW_ACTION") => "CobrosClienteDetalleView",
+            Config("API_ADD_ACTION") => "CobrosClienteDetalleAdd",
+            Config("API_EDIT_ACTION") => "CobrosClienteDetalleEdit",
+            Config("API_DELETE_ACTION") => "CobrosClienteDetalleDelete",
+            Config("API_LIST_ACTION") => "CobrosClienteDetalleList",
             default => ""
         };
     }
@@ -923,16 +1032,16 @@ class Alicuota extends DbTable
     // List URL
     public function getListUrl()
     {
-        return "AlicuotaList";
+        return "CobrosClienteDetalleList";
     }
 
     // View URL
     public function getViewUrl($parm = "")
     {
         if ($parm != "") {
-            $url = $this->keyUrl("AlicuotaView", $parm);
+            $url = $this->keyUrl("CobrosClienteDetalleView", $parm);
         } else {
-            $url = $this->keyUrl("AlicuotaView", Config("TABLE_SHOW_DETAIL") . "=");
+            $url = $this->keyUrl("CobrosClienteDetalleView", Config("TABLE_SHOW_DETAIL") . "=");
         }
         return $this->addMasterUrl($url);
     }
@@ -941,9 +1050,9 @@ class Alicuota extends DbTable
     public function getAddUrl($parm = "")
     {
         if ($parm != "") {
-            $url = "AlicuotaAdd?" . $parm;
+            $url = "CobrosClienteDetalleAdd?" . $parm;
         } else {
-            $url = "AlicuotaAdd";
+            $url = "CobrosClienteDetalleAdd";
         }
         return $this->addMasterUrl($url);
     }
@@ -951,28 +1060,28 @@ class Alicuota extends DbTable
     // Edit URL
     public function getEditUrl($parm = "")
     {
-        $url = $this->keyUrl("AlicuotaEdit", $parm);
+        $url = $this->keyUrl("CobrosClienteDetalleEdit", $parm);
         return $this->addMasterUrl($url);
     }
 
     // Inline edit URL
     public function getInlineEditUrl()
     {
-        $url = $this->keyUrl("AlicuotaList", "action=edit");
+        $url = $this->keyUrl("CobrosClienteDetalleList", "action=edit");
         return $this->addMasterUrl($url);
     }
 
     // Copy URL
     public function getCopyUrl($parm = "")
     {
-        $url = $this->keyUrl("AlicuotaAdd", $parm);
+        $url = $this->keyUrl("CobrosClienteDetalleAdd", $parm);
         return $this->addMasterUrl($url);
     }
 
     // Inline copy URL
     public function getInlineCopyUrl()
     {
-        $url = $this->keyUrl("AlicuotaList", "action=copy");
+        $url = $this->keyUrl("CobrosClienteDetalleList", "action=copy");
         return $this->addMasterUrl($url);
     }
 
@@ -982,7 +1091,7 @@ class Alicuota extends DbTable
         if ($this->UseAjaxActions && ConvertToBool(Param("infinitescroll")) && CurrentPageID() == "list") {
             return $this->keyUrl(GetApiUrl(Config("API_DELETE_ACTION") . "/" . $this->TableVar));
         } else {
-            return $this->keyUrl("AlicuotaDelete", $parm);
+            return $this->keyUrl("CobrosClienteDetalleDelete", $parm);
         }
     }
 
@@ -1148,18 +1257,23 @@ class Alicuota extends DbTable
             return;
         }
         $this->id->setDbValue($row['id']);
-        $this->codigo->setDbValue($row['codigo']);
-        $this->nombre->setDbValue($row['nombre']);
-        $this->alicuota->setDbValue($row['alicuota']);
-        $this->fecha->setDbValue($row['fecha']);
-        $this->activo->setDbValue($row['activo']);
+        $this->cobros_cliente->setDbValue($row['cobros_cliente']);
+        $this->metodo_pago->setDbValue($row['metodo_pago']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->monto_moneda->setDbValue($row['monto_moneda']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->tasa_moneda->setDbValue($row['tasa_moneda']);
+        $this->monto_bs->setDbValue($row['monto_bs']);
+        $this->tasa_usd->setDbValue($row['tasa_usd']);
+        $this->monto_usd->setDbValue($row['monto_usd']);
+        $this->banco->setDbValue($row['banco']);
     }
 
     // Render list content
     public function renderListContent($filter)
     {
         global $Response;
-        $listPage = "AlicuotaList";
+        $listPage = "CobrosClienteDetalleList";
         $listClass = PROJECT_NAMESPACE . $listPage;
         $page = new $listClass();
         $page->loadRecordsetFromFilter($filter);
@@ -1185,63 +1299,172 @@ class Alicuota extends DbTable
 
         // id
 
-        // codigo
+        // cobros_cliente
 
-        // nombre
+        // metodo_pago
 
-        // alicuota
+        // referencia
 
-        // fecha
+        // monto_moneda
 
-        // activo
+        // moneda
+
+        // tasa_moneda
+
+        // monto_bs
+
+        // tasa_usd
+
+        // monto_usd
+
+        // banco
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
 
-        // codigo
-        $this->codigo->ViewValue = $this->codigo->CurrentValue;
+        // cobros_cliente
+        $this->cobros_cliente->ViewValue = $this->cobros_cliente->CurrentValue;
+        $this->cobros_cliente->ViewValue = FormatNumber($this->cobros_cliente->ViewValue, $this->cobros_cliente->formatPattern());
 
-        // nombre
-        $this->nombre->ViewValue = $this->nombre->CurrentValue;
-
-        // alicuota
-        $this->alicuota->ViewValue = $this->alicuota->CurrentValue;
-        $this->alicuota->ViewValue = FormatNumber($this->alicuota->ViewValue, $this->alicuota->formatPattern());
-
-        // fecha
-        $this->fecha->ViewValue = $this->fecha->CurrentValue;
-        $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
-
-        // activo
-        if (strval($this->activo->CurrentValue) != "") {
-            $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
+        // metodo_pago
+        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+        $curVal = strval($this->metodo_pago->CurrentValue);
+        if ($curVal != "") {
+            $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
+            if ($this->metodo_pago->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                    $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
+                } else {
+                    $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+                }
+            }
         } else {
-            $this->activo->ViewValue = null;
+            $this->metodo_pago->ViewValue = null;
+        }
+
+        // referencia
+        $this->referencia->ViewValue = $this->referencia->CurrentValue;
+
+        // monto_moneda
+        $this->monto_moneda->ViewValue = $this->monto_moneda->CurrentValue;
+        $this->monto_moneda->ViewValue = FormatNumber($this->monto_moneda->ViewValue, $this->monto_moneda->formatPattern());
+
+        // moneda
+        $curVal = strval($this->moneda->CurrentValue);
+        if ($curVal != "") {
+            $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+            if ($this->moneda->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                    $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                } else {
+                    $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                }
+            }
+        } else {
+            $this->moneda->ViewValue = null;
+        }
+
+        // tasa_moneda
+        $this->tasa_moneda->ViewValue = $this->tasa_moneda->CurrentValue;
+        $this->tasa_moneda->ViewValue = FormatNumber($this->tasa_moneda->ViewValue, $this->tasa_moneda->formatPattern());
+
+        // monto_bs
+        $this->monto_bs->ViewValue = $this->monto_bs->CurrentValue;
+        $this->monto_bs->ViewValue = FormatNumber($this->monto_bs->ViewValue, $this->monto_bs->formatPattern());
+
+        // tasa_usd
+        $this->tasa_usd->ViewValue = $this->tasa_usd->CurrentValue;
+        $this->tasa_usd->ViewValue = FormatNumber($this->tasa_usd->ViewValue, $this->tasa_usd->formatPattern());
+
+        // monto_usd
+        $this->monto_usd->ViewValue = $this->monto_usd->CurrentValue;
+        $this->monto_usd->ViewValue = FormatNumber($this->monto_usd->ViewValue, $this->monto_usd->formatPattern());
+
+        // banco
+        $this->banco->ViewValue = $this->banco->CurrentValue;
+        $curVal = strval($this->banco->CurrentValue);
+        if ($curVal != "") {
+            $this->banco->ViewValue = $this->banco->lookupCacheOption($curVal);
+            if ($this->banco->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->banco->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->banco->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $sqlWrk = $this->banco->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->banco->Lookup->renderViewRow($rswrk[0]);
+                    $this->banco->ViewValue = $this->banco->displayValue($arwrk);
+                } else {
+                    $this->banco->ViewValue = FormatNumber($this->banco->CurrentValue, $this->banco->formatPattern());
+                }
+            }
+        } else {
+            $this->banco->ViewValue = null;
         }
 
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
 
-        // codigo
-        $this->codigo->HrefValue = "";
-        $this->codigo->TooltipValue = "";
+        // cobros_cliente
+        $this->cobros_cliente->HrefValue = "";
+        $this->cobros_cliente->TooltipValue = "";
 
-        // nombre
-        $this->nombre->HrefValue = "";
-        $this->nombre->TooltipValue = "";
+        // metodo_pago
+        $this->metodo_pago->HrefValue = "";
+        $this->metodo_pago->TooltipValue = "";
 
-        // alicuota
-        $this->alicuota->HrefValue = "";
-        $this->alicuota->TooltipValue = "";
+        // referencia
+        $this->referencia->HrefValue = "";
+        $this->referencia->TooltipValue = "";
 
-        // fecha
-        $this->fecha->HrefValue = "";
-        $this->fecha->TooltipValue = "";
+        // monto_moneda
+        $this->monto_moneda->HrefValue = "";
+        $this->monto_moneda->TooltipValue = "";
 
-        // activo
-        $this->activo->HrefValue = "";
-        $this->activo->TooltipValue = "";
+        // moneda
+        $this->moneda->HrefValue = "";
+        $this->moneda->TooltipValue = "";
+
+        // tasa_moneda
+        $this->tasa_moneda->HrefValue = "";
+        $this->tasa_moneda->TooltipValue = "";
+
+        // monto_bs
+        $this->monto_bs->HrefValue = "";
+        $this->monto_bs->TooltipValue = "";
+
+        // tasa_usd
+        $this->tasa_usd->HrefValue = "";
+        $this->tasa_usd->TooltipValue = "";
+
+        // monto_usd
+        $this->monto_usd->HrefValue = "";
+        $this->monto_usd->TooltipValue = "";
+
+        // banco
+        $this->banco->HrefValue = "";
+        $this->banco->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1262,39 +1485,78 @@ class Alicuota extends DbTable
         $this->id->setupEditAttributes();
         $this->id->EditValue = $this->id->CurrentValue;
 
-        // codigo
-        $this->codigo->setupEditAttributes();
-        if (!$this->codigo->Raw) {
-            $this->codigo->CurrentValue = HtmlDecode($this->codigo->CurrentValue);
-        }
-        $this->codigo->EditValue = $this->codigo->CurrentValue;
-        $this->codigo->PlaceHolder = RemoveHtml($this->codigo->caption());
-
-        // nombre
-        $this->nombre->setupEditAttributes();
-        if (!$this->nombre->Raw) {
-            $this->nombre->CurrentValue = HtmlDecode($this->nombre->CurrentValue);
-        }
-        $this->nombre->EditValue = $this->nombre->CurrentValue;
-        $this->nombre->PlaceHolder = RemoveHtml($this->nombre->caption());
-
-        // alicuota
-        $this->alicuota->setupEditAttributes();
-        $this->alicuota->EditValue = $this->alicuota->CurrentValue;
-        $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
-        if (strval($this->alicuota->EditValue) != "" && is_numeric($this->alicuota->EditValue)) {
-            $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, null);
+        // cobros_cliente
+        $this->cobros_cliente->setupEditAttributes();
+        $this->cobros_cliente->EditValue = $this->cobros_cliente->CurrentValue;
+        $this->cobros_cliente->PlaceHolder = RemoveHtml($this->cobros_cliente->caption());
+        if (strval($this->cobros_cliente->EditValue) != "" && is_numeric($this->cobros_cliente->EditValue)) {
+            $this->cobros_cliente->EditValue = FormatNumber($this->cobros_cliente->EditValue, null);
         }
 
-        // fecha
-        $this->fecha->setupEditAttributes();
-        $this->fecha->EditValue = FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
-        $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+        // metodo_pago
+        $this->metodo_pago->setupEditAttributes();
+        if (!$this->metodo_pago->Raw) {
+            $this->metodo_pago->CurrentValue = HtmlDecode($this->metodo_pago->CurrentValue);
+        }
+        $this->metodo_pago->EditValue = $this->metodo_pago->CurrentValue;
+        $this->metodo_pago->PlaceHolder = RemoveHtml($this->metodo_pago->caption());
 
-        // activo
-        $this->activo->setupEditAttributes();
-        $this->activo->EditValue = $this->activo->options(true);
-        $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
+        // referencia
+        $this->referencia->setupEditAttributes();
+        if (!$this->referencia->Raw) {
+            $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
+        }
+        $this->referencia->EditValue = $this->referencia->CurrentValue;
+        $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
+
+        // monto_moneda
+        $this->monto_moneda->setupEditAttributes();
+        $this->monto_moneda->EditValue = $this->monto_moneda->CurrentValue;
+        $this->monto_moneda->PlaceHolder = RemoveHtml($this->monto_moneda->caption());
+        if (strval($this->monto_moneda->EditValue) != "" && is_numeric($this->monto_moneda->EditValue)) {
+            $this->monto_moneda->EditValue = FormatNumber($this->monto_moneda->EditValue, null);
+        }
+
+        // moneda
+        $this->moneda->setupEditAttributes();
+        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
+        // tasa_moneda
+        $this->tasa_moneda->setupEditAttributes();
+        $this->tasa_moneda->EditValue = $this->tasa_moneda->CurrentValue;
+        $this->tasa_moneda->PlaceHolder = RemoveHtml($this->tasa_moneda->caption());
+        if (strval($this->tasa_moneda->EditValue) != "" && is_numeric($this->tasa_moneda->EditValue)) {
+            $this->tasa_moneda->EditValue = FormatNumber($this->tasa_moneda->EditValue, null);
+        }
+
+        // monto_bs
+        $this->monto_bs->setupEditAttributes();
+        $this->monto_bs->EditValue = $this->monto_bs->CurrentValue;
+        $this->monto_bs->PlaceHolder = RemoveHtml($this->monto_bs->caption());
+        if (strval($this->monto_bs->EditValue) != "" && is_numeric($this->monto_bs->EditValue)) {
+            $this->monto_bs->EditValue = FormatNumber($this->monto_bs->EditValue, null);
+        }
+
+        // tasa_usd
+        $this->tasa_usd->setupEditAttributes();
+        $this->tasa_usd->EditValue = $this->tasa_usd->CurrentValue;
+        $this->tasa_usd->PlaceHolder = RemoveHtml($this->tasa_usd->caption());
+        if (strval($this->tasa_usd->EditValue) != "" && is_numeric($this->tasa_usd->EditValue)) {
+            $this->tasa_usd->EditValue = FormatNumber($this->tasa_usd->EditValue, null);
+        }
+
+        // monto_usd
+        $this->monto_usd->setupEditAttributes();
+        $this->monto_usd->EditValue = $this->monto_usd->CurrentValue;
+        $this->monto_usd->PlaceHolder = RemoveHtml($this->monto_usd->caption());
+        if (strval($this->monto_usd->EditValue) != "" && is_numeric($this->monto_usd->EditValue)) {
+            $this->monto_usd->EditValue = FormatNumber($this->monto_usd->EditValue, null);
+        }
+
+        // banco
+        $this->banco->setupEditAttributes();
+        $this->banco->EditValue = $this->banco->CurrentValue;
+        $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1324,17 +1586,28 @@ class Alicuota extends DbTable
             if ($doc->Horizontal) { // Horizontal format, write header
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
-                    $doc->exportCaption($this->codigo);
-                    $doc->exportCaption($this->nombre);
-                    $doc->exportCaption($this->alicuota);
-                    $doc->exportCaption($this->fecha);
+                    $doc->exportCaption($this->id);
+                    $doc->exportCaption($this->metodo_pago);
+                    $doc->exportCaption($this->referencia);
+                    $doc->exportCaption($this->monto_moneda);
+                    $doc->exportCaption($this->moneda);
+                    $doc->exportCaption($this->tasa_moneda);
+                    $doc->exportCaption($this->monto_bs);
+                    $doc->exportCaption($this->tasa_usd);
+                    $doc->exportCaption($this->monto_usd);
+                    $doc->exportCaption($this->banco);
                 } else {
                     $doc->exportCaption($this->id);
-                    $doc->exportCaption($this->codigo);
-                    $doc->exportCaption($this->nombre);
-                    $doc->exportCaption($this->alicuota);
-                    $doc->exportCaption($this->fecha);
-                    $doc->exportCaption($this->activo);
+                    $doc->exportCaption($this->cobros_cliente);
+                    $doc->exportCaption($this->metodo_pago);
+                    $doc->exportCaption($this->referencia);
+                    $doc->exportCaption($this->monto_moneda);
+                    $doc->exportCaption($this->moneda);
+                    $doc->exportCaption($this->tasa_moneda);
+                    $doc->exportCaption($this->monto_bs);
+                    $doc->exportCaption($this->tasa_usd);
+                    $doc->exportCaption($this->monto_usd);
+                    $doc->exportCaption($this->banco);
                 }
                 $doc->endExportRow();
             }
@@ -1361,17 +1634,28 @@ class Alicuota extends DbTable
                 if (!$doc->ExportCustom) {
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
-                        $doc->exportField($this->codigo);
-                        $doc->exportField($this->nombre);
-                        $doc->exportField($this->alicuota);
-                        $doc->exportField($this->fecha);
+                        $doc->exportField($this->id);
+                        $doc->exportField($this->metodo_pago);
+                        $doc->exportField($this->referencia);
+                        $doc->exportField($this->monto_moneda);
+                        $doc->exportField($this->moneda);
+                        $doc->exportField($this->tasa_moneda);
+                        $doc->exportField($this->monto_bs);
+                        $doc->exportField($this->tasa_usd);
+                        $doc->exportField($this->monto_usd);
+                        $doc->exportField($this->banco);
                     } else {
                         $doc->exportField($this->id);
-                        $doc->exportField($this->codigo);
-                        $doc->exportField($this->nombre);
-                        $doc->exportField($this->alicuota);
-                        $doc->exportField($this->fecha);
-                        $doc->exportField($this->activo);
+                        $doc->exportField($this->cobros_cliente);
+                        $doc->exportField($this->metodo_pago);
+                        $doc->exportField($this->referencia);
+                        $doc->exportField($this->monto_moneda);
+                        $doc->exportField($this->moneda);
+                        $doc->exportField($this->tasa_moneda);
+                        $doc->exportField($this->monto_bs);
+                        $doc->exportField($this->tasa_usd);
+                        $doc->exportField($this->monto_usd);
+                        $doc->exportField($this->banco);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -1394,122 +1678,6 @@ class Alicuota extends DbTable
 
         // No binary fields
         return false;
-    }
-
-    // Write audit trail start/end for grid update
-    public function writeAuditTrailDummy($typ)
-    {
-        WriteAuditLog(CurrentUserIdentifier(), $typ, 'alicuota');
-    }
-
-    // Write audit trail (add page)
-    public function writeAuditTrailOnAdd(&$rs)
-    {
-        global $Language;
-        if (!$this->AuditTrailOnAdd) {
-            return;
-        }
-
-        // Get key value
-        $key = "";
-        if ($key != "") {
-            $key .= Config("COMPOSITE_KEY_SEPARATOR");
-        }
-        $key .= $rs['id'];
-
-        // Write audit trail
-        $usr = CurrentUserIdentifier();
-        foreach (array_keys($rs) as $fldname) {
-            if (array_key_exists($fldname, $this->Fields) && $this->Fields[$fldname]->DataType != DataType::BLOB) { // Ignore BLOB fields
-                if ($this->Fields[$fldname]->HtmlTag == "PASSWORD") { // Password Field
-                    $newvalue = $Language->phrase("PasswordMask");
-                } elseif ($this->Fields[$fldname]->DataType == DataType::MEMO) { // Memo Field
-                    $newvalue = Config("AUDIT_TRAIL_TO_DATABASE") ? $rs[$fldname] : "[MEMO]";
-                } elseif ($this->Fields[$fldname]->DataType == DataType::XML) { // XML Field
-                    $newvalue = "[XML]";
-                } else {
-                    $newvalue = $rs[$fldname];
-                }
-                WriteAuditLog($usr, "A", 'alicuota', $fldname, $key, "", $newvalue);
-            }
-        }
-    }
-
-    // Write audit trail (edit page)
-    public function writeAuditTrailOnEdit(&$rsold, &$rsnew)
-    {
-        global $Language;
-        if (!$this->AuditTrailOnEdit) {
-            return;
-        }
-
-        // Get key value
-        $key = "";
-        if ($key != "") {
-            $key .= Config("COMPOSITE_KEY_SEPARATOR");
-        }
-        $key .= $rsold['id'];
-
-        // Write audit trail
-        $usr = CurrentUserIdentifier();
-        foreach (array_keys($rsnew) as $fldname) {
-            if (array_key_exists($fldname, $this->Fields) && array_key_exists($fldname, $rsold) && $this->Fields[$fldname]->DataType != DataType::BLOB) { // Ignore BLOB fields
-                if ($this->Fields[$fldname]->DataType == DataType::DATE) { // DateTime field
-                    $modified = (FormatDateTime($rsold[$fldname], 0) != FormatDateTime($rsnew[$fldname], 0));
-                } else {
-                    $modified = !CompareValue($rsold[$fldname], $rsnew[$fldname]);
-                }
-                if ($modified) {
-                    if ($this->Fields[$fldname]->HtmlTag == "PASSWORD") { // Password Field
-                        $oldvalue = $Language->phrase("PasswordMask");
-                        $newvalue = $Language->phrase("PasswordMask");
-                    } elseif ($this->Fields[$fldname]->DataType == DataType::MEMO) { // Memo field
-                        $oldvalue = Config("AUDIT_TRAIL_TO_DATABASE") ? $rsold[$fldname] : "[MEMO]";
-                        $newvalue = Config("AUDIT_TRAIL_TO_DATABASE") ? $rsnew[$fldname] : "[MEMO]";
-                    } elseif ($this->Fields[$fldname]->DataType == DataType::XML) { // XML field
-                        $oldvalue = "[XML]";
-                        $newvalue = "[XML]";
-                    } else {
-                        $oldvalue = $rsold[$fldname];
-                        $newvalue = $rsnew[$fldname];
-                    }
-                    WriteAuditLog($usr, "U", 'alicuota', $fldname, $key, $oldvalue, $newvalue);
-                }
-            }
-        }
-    }
-
-    // Write audit trail (delete page)
-    public function writeAuditTrailOnDelete(&$rs)
-    {
-        global $Language;
-        if (!$this->AuditTrailOnDelete) {
-            return;
-        }
-
-        // Get key value
-        $key = "";
-        if ($key != "") {
-            $key .= Config("COMPOSITE_KEY_SEPARATOR");
-        }
-        $key .= $rs['id'];
-
-        // Write audit trail
-        $usr = CurrentUserIdentifier();
-        foreach (array_keys($rs) as $fldname) {
-            if (array_key_exists($fldname, $this->Fields) && $this->Fields[$fldname]->DataType != DataType::BLOB) { // Ignore BLOB fields
-                if ($this->Fields[$fldname]->HtmlTag == "PASSWORD") { // Password Field
-                    $oldvalue = $Language->phrase("PasswordMask");
-                } elseif ($this->Fields[$fldname]->DataType == DataType::MEMO) { // Memo field
-                    $oldvalue = Config("AUDIT_TRAIL_TO_DATABASE") ? $rs[$fldname] : "[MEMO]";
-                } elseif ($this->Fields[$fldname]->DataType == DataType::XML) { // XML field
-                    $oldvalue = "[XML]";
-                } else {
-                    $oldvalue = $rs[$fldname];
-                }
-                WriteAuditLog($usr, "D", 'alicuota', $fldname, $key, $oldvalue);
-            }
-        }
     }
 
     // Table level events
@@ -1558,18 +1726,11 @@ class Alicuota extends DbTable
     }
 
     // Row Inserting event
-    public function rowInserting($rsold, &$rsnew) {
-    	// Enter your code here
-    	// To cancel, set return value to FALSE
-    	$sql = "SELECT COUNT(codigo) AS cantidad FROM alicuota WHERE codigo = '" . $rsnew["codigo"] . "';";
-    	$cantidad = ExecuteScalar($sql);
-    	if($cantidad > 0) {
-    		$this->CancelMessage = "C&oacute;digo alicuota \"" . $rsnew["codigo"] . "\" ya existe.";
-    		return FALSE;
-    	}
-    	$rsnew["fecha"] = date("Y-m-d");
-    	$rsnew["activo"] = "S";
-    	return TRUE;
+    public function rowInserting($rsold, &$rsnew)
+    {
+        // Enter your code here
+        // To cancel, set return value to false
+        return true;
     }
 
     // Row Inserted event
@@ -1579,20 +1740,11 @@ class Alicuota extends DbTable
     }
 
     // Row Updating event
-    public function rowUpdating($rsold, &$rsnew) {
-    	// Enter your code here
-    	// To cancel, set return value to FALSE
-    	if($rsold["alicuota"] != $rsnew["alicuota"]) {
-    		$rsnew["activo"] = "N";
-    		$sql = "INSERT INTO alicuota
-    					(id, codigo, nombre, alicuota, fecha, activo)
-    				SELECT NULL, codigo, nombre, '" . $rsnew["alicuota"] . "', '" . date("Y-m-d H:i:s") . "', 'S'
-    				FROM alicuota
-    				WHERE id = '" . $rsold["id"] . "';";
-    		$rsnew["alicuota"] = $rsold["alicuota"];
-    		Execute($sql);
-    	}
-    	return TRUE;
+    public function rowUpdating($rsold, &$rsnew)
+    {
+        // Enter your code here
+        // To cancel, set return value to false
+        return true;
     }
 
     // Row Updated event

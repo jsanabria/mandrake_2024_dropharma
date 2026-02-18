@@ -79,7 +79,7 @@ $sql = "SELECT
           LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante 
           INNER JOIN unidad_medida AS d ON d.codigo = a.unidad_medida_defecto 
         WHERE 
-          a.articulo_inventario = 'S'  
+          a.activo = 'S' 
           AND (a.codigo LIKE '%$articulo%' OR a.nombre_comercial LIKE '%$articulo%' OR a.principio_activo LIKE '%$articulo%' OR a.codigo_de_barra = '%$articulo%')
           $where;"; 
 // die(json_encode($sql, JSON_UNESCAPED_UNICODE));       
@@ -102,10 +102,10 @@ $sql = "SELECT
           INNER JOIN tarifa_articulo AS c ON c.articulo = a.id AND c.tarifa = $tarifa 
           INNER JOIN unidad_medida AS d ON d.codigo = a.unidad_medida_defecto 
         WHERE 
-          a.activo = 'S' AND a.articulo_inventario = 'S' 
+          a.activo = 'S' 
           AND (a.codigo LIKE '%$articulo%' OR a.nombre_comercial LIKE '%$articulo%' OR a.principio_activo LIKE '%$articulo%' OR a.codigo_de_barra = '$articulo')
           $where 
-        ORDER BY a.principio_activo, a.presentacion LIMIT 0, $LineByPage;";
+        ORDER BY a.principio_activo, a.presentacion LIMIT 0, $LineByPage;"; 
 // $html = "$consignacion - $fabricante - $articulo - $sql";
 // die(json_encode($sql, JSON_UNESCAPED_UNICODE)); 
 $result = mysqli_query($link, $sql);

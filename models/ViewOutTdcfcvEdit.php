@@ -137,10 +137,13 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->nro_control->setVisibility();
         $this->cliente->setVisibility();
         $this->doc_afectado->setVisibility();
-        $this->monto_total->Visible = false;
-        $this->alicuota_iva->Visible = false;
-        $this->iva->Visible = false;
-        $this->total->Visible = false;
+        $this->monto_total->setVisibility();
+        $this->alicuota_iva->setVisibility();
+        $this->iva->setVisibility();
+        $this->total->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->Visible = false;
         $this->moneda->Visible = false;
         $this->lista_pedido->Visible = false;
         $this->nota->setVisibility();
@@ -518,6 +521,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
     public $TotalRecords = 0;
     public $RecordRange = 10;
     public $RecordCount;
+    public $MultiPages; // Multi pages object
 
     /**
      * Page run
@@ -553,6 +557,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             $this->setUseLookupCache(false);
         }
 
+        // Set up multi page object
+        $this->setupMultiPages();
+
         // Global Page Loading event (in userfn*.php)
         DispatchEvent(new PageLoadingEvent($this), PageLoadingEvent::NAME);
 
@@ -573,6 +580,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         // Set up lookup cache
         $this->setupLookupOptions($this->documento);
         $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->igtf);
         $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->estatus);
@@ -903,6 +911,66 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
         }
 
+        // Check field name 'monto_total' first before field var 'x_monto_total'
+        $val = $CurrentForm->hasValue("monto_total") ? $CurrentForm->getValue("monto_total") : $CurrentForm->getValue("x_monto_total");
+        if (!$this->monto_total->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_total->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_total->setFormValue($val);
+            }
+        }
+
+        // Check field name 'alicuota_iva' first before field var 'x_alicuota_iva'
+        $val = $CurrentForm->hasValue("alicuota_iva") ? $CurrentForm->getValue("alicuota_iva") : $CurrentForm->getValue("x_alicuota_iva");
+        if (!$this->alicuota_iva->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->alicuota_iva->Visible = false; // Disable update for API request
+            } else {
+                $this->alicuota_iva->setFormValue($val);
+            }
+        }
+
+        // Check field name 'iva' first before field var 'x_iva'
+        $val = $CurrentForm->hasValue("iva") ? $CurrentForm->getValue("iva") : $CurrentForm->getValue("x_iva");
+        if (!$this->iva->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->iva->Visible = false; // Disable update for API request
+            } else {
+                $this->iva->setFormValue($val);
+            }
+        }
+
+        // Check field name 'total' first before field var 'x_total'
+        $val = $CurrentForm->hasValue("total") ? $CurrentForm->getValue("total") : $CurrentForm->getValue("x_total");
+        if (!$this->total->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->total->Visible = false; // Disable update for API request
+            } else {
+                $this->total->setFormValue($val);
+            }
+        }
+
+        // Check field name 'igtf' first before field var 'x_igtf'
+        $val = $CurrentForm->hasValue("igtf") ? $CurrentForm->getValue("igtf") : $CurrentForm->getValue("x_igtf");
+        if (!$this->igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->igtf->setFormValue($val);
+            }
+        }
+
+        // Check field name 'monto_base_igtf' first before field var 'x_monto_base_igtf'
+        $val = $CurrentForm->hasValue("monto_base_igtf") ? $CurrentForm->getValue("monto_base_igtf") : $CurrentForm->getValue("x_monto_base_igtf");
+        if (!$this->monto_base_igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_base_igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_base_igtf->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'nota' first before field var 'x_nota'
         $val = $CurrentForm->hasValue("nota") ? $CurrentForm->getValue("nota") : $CurrentForm->getValue("x_nota");
         if (!$this->nota->IsDetailKey) {
@@ -972,6 +1040,12 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->nro_control->CurrentValue = $this->nro_control->FormValue;
         $this->cliente->CurrentValue = $this->cliente->FormValue;
         $this->doc_afectado->CurrentValue = $this->doc_afectado->FormValue;
+        $this->monto_total->CurrentValue = $this->monto_total->FormValue;
+        $this->alicuota_iva->CurrentValue = $this->alicuota_iva->FormValue;
+        $this->iva->CurrentValue = $this->iva->FormValue;
+        $this->total->CurrentValue = $this->total->FormValue;
+        $this->igtf->CurrentValue = $this->igtf->FormValue;
+        $this->monto_base_igtf->CurrentValue = $this->monto_base_igtf->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
         $this->estatus->CurrentValue = $this->estatus->FormValue;
         $this->dias_credito->CurrentValue = $this->dias_credito->FormValue;
@@ -1084,6 +1158,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
@@ -1146,6 +1223,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
@@ -1257,6 +1337,15 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
 
         // total
         $this->total->RowCssClass = "row";
+
+        // igtf
+        $this->igtf->RowCssClass = "row";
+
+        // monto_base_igtf
+        $this->monto_base_igtf->RowCssClass = "row";
+
+        // monto_igtf
+        $this->monto_igtf->RowCssClass = "row";
 
         // moneda
         $this->moneda->RowCssClass = "row";
@@ -1450,6 +1539,21 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // total
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
+
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
 
             // moneda
             $curVal = strval($this->moneda->CurrentValue);
@@ -1827,6 +1931,28 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
 
+            // monto_total
+            $this->monto_total->HrefValue = "";
+            $this->monto_total->TooltipValue = "";
+
+            // alicuota_iva
+            $this->alicuota_iva->HrefValue = "";
+            $this->alicuota_iva->TooltipValue = "";
+
+            // iva
+            $this->iva->HrefValue = "";
+            $this->iva->TooltipValue = "";
+
+            // total
+            $this->total->HrefValue = "";
+            $this->total->TooltipValue = "";
+
+            // igtf
+            $this->igtf->HrefValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+
             // nota
             $this->nota->HrefValue = "";
 
@@ -1913,6 +2039,39 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
             $this->doc_afectado->EditValue = HtmlEncode($this->doc_afectado->CurrentValue);
             $this->doc_afectado->PlaceHolder = RemoveHtml($this->doc_afectado->caption());
+
+            // monto_total
+            $this->monto_total->setupEditAttributes();
+            $this->monto_total->EditValue = $this->monto_total->CurrentValue;
+            $this->monto_total->EditValue = FormatNumber($this->monto_total->EditValue, $this->monto_total->formatPattern());
+
+            // alicuota_iva
+            $this->alicuota_iva->setupEditAttributes();
+            $this->alicuota_iva->EditValue = $this->alicuota_iva->CurrentValue;
+            $this->alicuota_iva->EditValue = FormatNumber($this->alicuota_iva->EditValue, $this->alicuota_iva->formatPattern());
+
+            // iva
+            $this->iva->setupEditAttributes();
+            $this->iva->EditValue = $this->iva->CurrentValue;
+            $this->iva->EditValue = FormatNumber($this->iva->EditValue, $this->iva->formatPattern());
+
+            // total
+            $this->total->setupEditAttributes();
+            $this->total->EditValue = $this->total->CurrentValue;
+            $this->total->EditValue = FormatNumber($this->total->EditValue, $this->total->formatPattern());
+
+            // igtf
+            $this->igtf->setupEditAttributes();
+            $this->igtf->EditValue = $this->igtf->options(true);
+            $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+            // monto_base_igtf
+            $this->monto_base_igtf->setupEditAttributes();
+            $this->monto_base_igtf->EditValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+            if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
+                $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
+            }
 
             // nota
             $this->nota->setupEditAttributes();
@@ -2017,6 +2176,28 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
 
+            // monto_total
+            $this->monto_total->HrefValue = "";
+            $this->monto_total->TooltipValue = "";
+
+            // alicuota_iva
+            $this->alicuota_iva->HrefValue = "";
+            $this->alicuota_iva->TooltipValue = "";
+
+            // iva
+            $this->iva->HrefValue = "";
+            $this->iva->TooltipValue = "";
+
+            // total
+            $this->total->HrefValue = "";
+            $this->total->TooltipValue = "";
+
+            // igtf
+            $this->igtf->HrefValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+
             // nota
             $this->nota->HrefValue = "";
 
@@ -2084,6 +2265,39 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
                 if (!$this->doc_afectado->IsDetailKey && EmptyValue($this->doc_afectado->FormValue)) {
                     $this->doc_afectado->addErrorMessage(str_replace("%s", $this->doc_afectado->caption(), $this->doc_afectado->RequiredErrorMessage));
                 }
+            }
+            if ($this->monto_total->Visible && $this->monto_total->Required) {
+                if (!$this->monto_total->IsDetailKey && EmptyValue($this->monto_total->FormValue)) {
+                    $this->monto_total->addErrorMessage(str_replace("%s", $this->monto_total->caption(), $this->monto_total->RequiredErrorMessage));
+                }
+            }
+            if ($this->alicuota_iva->Visible && $this->alicuota_iva->Required) {
+                if (!$this->alicuota_iva->IsDetailKey && EmptyValue($this->alicuota_iva->FormValue)) {
+                    $this->alicuota_iva->addErrorMessage(str_replace("%s", $this->alicuota_iva->caption(), $this->alicuota_iva->RequiredErrorMessage));
+                }
+            }
+            if ($this->iva->Visible && $this->iva->Required) {
+                if (!$this->iva->IsDetailKey && EmptyValue($this->iva->FormValue)) {
+                    $this->iva->addErrorMessage(str_replace("%s", $this->iva->caption(), $this->iva->RequiredErrorMessage));
+                }
+            }
+            if ($this->total->Visible && $this->total->Required) {
+                if (!$this->total->IsDetailKey && EmptyValue($this->total->FormValue)) {
+                    $this->total->addErrorMessage(str_replace("%s", $this->total->caption(), $this->total->RequiredErrorMessage));
+                }
+            }
+            if ($this->igtf->Visible && $this->igtf->Required) {
+                if (!$this->igtf->IsDetailKey && EmptyValue($this->igtf->FormValue)) {
+                    $this->igtf->addErrorMessage(str_replace("%s", $this->igtf->caption(), $this->igtf->RequiredErrorMessage));
+                }
+            }
+            if ($this->monto_base_igtf->Visible && $this->monto_base_igtf->Required) {
+                if (!$this->monto_base_igtf->IsDetailKey && EmptyValue($this->monto_base_igtf->FormValue)) {
+                    $this->monto_base_igtf->addErrorMessage(str_replace("%s", $this->monto_base_igtf->caption(), $this->monto_base_igtf->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_base_igtf->FormValue)) {
+                $this->monto_base_igtf->addErrorMessage($this->monto_base_igtf->getErrorMessage(false));
             }
             if ($this->nota->Visible && $this->nota->Required) {
                 if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
@@ -2253,6 +2467,12 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         // doc_afectado
         $this->doc_afectado->setDbValueDef($rsnew, $this->doc_afectado->CurrentValue, $this->doc_afectado->ReadOnly);
 
+        // igtf
+        $this->igtf->setDbValueDef($rsnew, $this->igtf->CurrentValue, $this->igtf->ReadOnly);
+
+        // monto_base_igtf
+        $this->monto_base_igtf->setDbValueDef($rsnew, $this->monto_base_igtf->CurrentValue, $this->monto_base_igtf->ReadOnly);
+
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
@@ -2290,6 +2510,12 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         }
         if (isset($row['doc_afectado'])) { // doc_afectado
             $this->doc_afectado->CurrentValue = $row['doc_afectado'];
+        }
+        if (isset($row['igtf'])) { // igtf
+            $this->igtf->CurrentValue = $row['igtf'];
+        }
+        if (isset($row['monto_base_igtf'])) { // monto_base_igtf
+            $this->monto_base_igtf->CurrentValue = $row['monto_base_igtf'];
         }
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];
@@ -2352,6 +2578,21 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $Breadcrumb->add("edit", $pageId, $url);
     }
 
+    // Set up multi pages
+    protected function setupMultiPages()
+    {
+        $pages = new SubPages();
+        $pages->Style = "tabs";
+        if ($pages->isAccordion()) {
+            $pages->Parent = "#accordion_" . $this->PageObjName;
+        }
+        $pages->add(0);
+        $pages->add(1);
+        $pages->add(2);
+        $pages->add(3);
+        $this->MultiPages = $pages;
+    }
+
     // Setup lookup options
     public function setupLookupOptions($fld)
     {
@@ -2368,6 +2609,8 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
                 case "x_documento":
                     break;
                 case "x_cliente":
+                    break;
+                case "x_igtf":
                     break;
                 case "x_moneda":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
@@ -2512,7 +2755,24 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
     public function pageDataRendering(&$header)
     {
         // Example:
-        //$header = "your header";
+        $header = '<div class="modal fade" id="modalIGTF" tabindex="-1" role="dialog" aria-labelledby="modalIGTFLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalIGTFLabel">Configuración de Base IGTF</h5>
+          </div>
+          <div class="modal-body">
+            <p>Seleccione a qué valor se le aplicará el IGTF:</p>
+            <div class="d-grid gap-2">
+              <button type="button" class="btn btn-outline-primary btn-opcion" data-origen="subtotal">Sobre Subtotal</button>
+              <button type="button" class="btn btn-outline-primary btn-opcion" data-origen="iva">Sobre IVA</button>
+              <button type="button" class="btn btn-outline-primary btn-opcion" data-origen="total">Sobre Total</button>
+              <button type="button" class="btn btn-outline-secondary btn-opcion" data-origen="otro">Otro (Cero)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>';
     }
 
     // Page Data Rendered event

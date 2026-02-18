@@ -266,6 +266,8 @@ return [
     "pedidos_detalles_online_bitacora" => \DI\create(PedidosDetallesOnlineBitacora::class),
     "actualizar_costo_poderado" => \DI\create(ActualizarCostoPoderado::class),
     "usuario_master2" => \DI\create(UsuarioMaster2::class),
+    "articulos_costos_precios" => \DI\create(ArticulosCostosPrecios::class),
+    "cobros_cliente_detalle" => \DI\create(CobrosClienteDetalle::class),
 
     // User table
     "usertable" => \DI\get("usuario"),
