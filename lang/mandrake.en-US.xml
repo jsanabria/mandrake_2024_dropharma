@@ -1,7 +1,10 @@
-<ew-language date="2026/2/10" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/2/25" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1210">
+      <phrase id="menutext" value="Registrar Pagos de Clientes" />
+    </menu>
     <menu id="1209">
       <phrase id="menutext" value="Cobros Detalle" />
     </menu>
@@ -6398,6 +6401,9 @@
       <field id="banco">
         <phrase id="fldcaption" value="Banco" />
       </field>
+    </table>
+    <table id="registrar_pagos_clientes">
+      <phrase id="tblcaption" value="Registrar Pagos de Clientes" />
     </table>
   </project>
 </ew-language>

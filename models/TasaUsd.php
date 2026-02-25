@@ -478,7 +478,7 @@ class TasaUsd extends DbTable
         $sqlwrk = $sql instanceof QueryBuilder // Query builder
             ? (clone $sql)->resetQueryPart("orderBy")->getSQL()
             : $sql;
-        $pattern = '/^SELECT\s([\s\S]+)\sFROM\s/i';
+        $pattern = '/^SELECT\s([\s\S]+?)\sFROM\s/i';
         // Skip Custom View / SubQuery / SELECT DISTINCT / ORDER BY
         if (
             in_array($this->TableType, ["TABLE", "VIEW", "LINKTABLE"]) &&

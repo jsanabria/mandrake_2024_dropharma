@@ -715,16 +715,6 @@ class TasaUsdView extends TasaUsd
         }
         $item->Visible = $this->AddUrl != "" && $Security->canAdd();
 
-        // Edit
-        $item = &$option->add("edit");
-        $editcaption = HtmlTitle($Language->phrase("ViewPageEditLink"));
-        if ($this->IsModal) {
-            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-        }
-        $item->Visible = $this->EditUrl != "" && $Security->canEdit();
-
         // Set up action default
         $option = $options["action"];
         $option->DropDownButtonPhrase = $Language->phrase("ButtonActions");

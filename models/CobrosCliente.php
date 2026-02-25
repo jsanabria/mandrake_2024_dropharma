@@ -2357,300 +2357,139 @@ class CobrosCliente extends DbTable
         //Log("Row Selected");
     }
 
-    // Row Inserting event
     public function rowInserting($rsold, &$rsnew)
     {
-    	$fecha = date("Y-m-d");
-    	$sql = "SELECT fecha FROM cierre_de_caja WHERE fecha = '$fecha';";
-    	if($row = ExecuteRow($sql)) {
-    		$this->CancelMessage = "El d&iacute;a " . date("d/m/Y") . " est&aacute; cerrado; no se puede agregar el pago. Verifique!";
-    		return FALSE;
-    	}
-        $sw = false;
-    	if(isset($_POST["xCantidad"])) {
-    		$cnt = intval($_POST["xCantidad"]);
-    		for($i=0; $i<$cnt; $i++) {
-    			if(isset($_POST["x_id_$i"])) { 
-                    $_id = explode("-", $_POST["x_id_$i"]);
-                    $sw = true;
-                    break;
-    			}
-    		}
-    		if($sw == false) {
-    			$this->CancelMessage = "Debe seleccionar la factura a cobrar.";
-    			return FALSE;
-    		}
-            $rsnew["id_documento"] = $_id[0];
-            $rsnew["tipo_pago"] = "";
-            $pagos = $_POST["pagos"];
-            $abono = floatval($_POST["abono"]);
-            $monto = floatval($_POST["monto"]);
-            $pago = floatval($rsnew["pago"]);
-            if($pago == 0.00 or $monto == 0.00) {
-                // $this->CancelMessage = "No hay informaci&oacute;n de pago.";
-                // return FALSE;
-            }
-            if(trim(str_replace(",-,", "", $pagos)) == "") {
-                $this->CancelMessage = "No hay datos de pagos.";
-                return FALSE;
-            }            
-            if($abono > 0.00) {
-                $sql = "SELECT saldo FROM recarga WHERE cliente = " . $rsnew["cliente"] . " ORDER BY id DESC LIMIT 0, 1;";
-                $saldo = floatval(ExecuteScalar($sql));
-                if($abono > $saldo) {
-                    $this->CancelMessage = "Sanara sin fondo suficiente.";
-                    return FALSE;
-                } 
-            }
-            if($pago < $monto) {
-                $this->CancelMessage = "Pago incompleto.";
-                return FALSE;
-            }
-            $rsnew["fecha"] = date("Y-m-d");
-    		$rsnew["fecha_registro"] = date("Y-m-d");
-    		$rsnew["username"] = CurrentUserName();
-    	} 
-    	else {
-    		$this->CancelMessage = "No ha seleccionado facturas a cobrar.";
-    		return FALSE;
-    	}
-    	return TRUE;
-    }
-    // Row Inserted event
-    public function rowInserted($rsold, &$rsnew) {
-    	//echo "Row Inserted"
-    	$arr = explode(",-,", $_POST["pagos"]);
-      	foreach ($arr as $key => $value) {
-      		if(trim($value) != "") {
-      			$arr2 = explode("|", $value);	
-      			if(count($arr2) > 2) {
-      				$sql = "";
-      				$documentos = "";
-       				$sql = "SELECT nro_documento, tipo_documento 
-       						FROM salidas 
-       						WHERE id = " . $rsnew["id_documento"] . "";
-       				$row = ExecuteRow($sql);
-       				$documentos = ($row["tipo_documento"]=="TDCFCV" ? "FACT: " : "N. E.: ") . $row["nro_documento"] . "";
-    		  		$monto_moneda = floatval($arr2[4]);
-    				$sql = "SELECT tasa FROM tasa_usd
-    						WHERE moneda = '" . $arr2[5] . "' ORDER BY id DESC LIMIT 0, 1;";
-    				$tasa = ExecuteScalar($sql);
-    				if($arr2[5] != "Bs.") $monto_bs = $tasa * $monto_moneda;
-    				else $monto_bs = $monto_moneda;
-    		    	$sql = "SELECT tasa FROM tasa_usd
-    		    			WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0, 1;";
-    		    	$tasa_usd = ExecuteScalar($sql);
-    		    	$monto_usd = $monto_bs / $tasa_usd;
-    		    	$username = CurrentUserName();
-    		    	$banco = 0;
-    		    	if($rowb = ExecuteRow("SELECT banco FROM banco_tipo_pago WHERE tipo_pago = '" . $arr2[1] . "' AND moneda = '" . $arr2[5] . "'"))
-    		    		$banco = $rowb["banco"];
-    		  		$sql = "INSERT INTO cobros_cliente_detalle (
-    		  					id,
-    		  					cobros_cliente,
-    		  					metodo_pago,
-    		  					referencia,
-    		  					monto_moneda,
-    		  					moneda,
-    		  					tasa_moneda,
-    		  					monto_bs,
-    		  					tasa_usd,
-    		  					monto_usd,
-    		  					banco)
-    		  				VALUES (
-    		  					NULL,
-    		  					" . $rsnew["id"] . ",
-    		  					'" . $arr2[1] . "',
-    		  					'" . $arr2[2] . "',
-    		  					$monto_moneda,
-    		  					'" . $arr2[5] . "',
-    		  					$tasa,
-    		  					$monto_bs,
-    		  					$tasa_usd,
-    		  					$monto_usd,
-    		  					$banco
-    		  					)"; 
-    		  		Execute($sql);
-    		  		if($arr2[1] == "RC") {
-    		  			$sql = "SELECT IFNULL(MAX(nro_recibo), 0)+1 AS nro FROM abono WHERE 1;";
-    		  			$nro_recibo = 0; //ExecuteScalar($sql);
-    		  			$sql = "INSERT INTO
-    		  						abono 
-    		  					SET 	
-    		  						id = NULL,
-    		  						cliente = " . $rsnew["cliente"] . ",
-    		  						fecha = NOW(),
-    		  						metodo_pago = NULL,
-    		  						nro_recibo = $nro_recibo,
-    		  						nota = 'REBAJA EN COBROS Documento: $documentos',
-    		  						username = '" . CurrentUserName() . "';";
-    					Execute($sql);
-    					$sql = "SELECT LAST_INSERT_ID();";
-    					$Abono = ExecuteScalar($sql);
-    					$sql = "INSERT INTO recarga(
-    								id,
-    								cliente,
-    								fecha,
-    								metodo_pago,
-    								monto_moneda,
-    								moneda,
-    								tasa_moneda,
-    								monto_bs,
-    								tasa_usd,
-    								monto_usd,
-    								saldo,
-    								nota,
-    								username, reverso, abono)
-    							VALUES (
-    								NULL,
-    								" . $rsnew["cliente"] . ",
-    								NOW(),
-    								'" . $arr2[1] . "',
-    								$monto_moneda,
-    								'" . $arr2[5] . "',
-    								$tasa,
-    								$monto_bs,
-    								$tasa_usd,
-    								(-1)*$monto_usd,
-    								0,
-    								'Pago Documento(s): $documentos',
-    								'$username', 'N', $Abono)";
-    					Execute($sql);
-    					$sql = "SELECT LAST_INSERT_ID();";
-    					$id = ExecuteScalar($sql);
-    					$sql = "SELECT IFNULL(SUM(monto_usd), 0) AS saldo FROM recarga
-    			    			WHERE cliente = " . $rsnew["cliente"] . ";";
-    			    	$saldo = ExecuteScalar($sql);
-    			    	$sql = "UPDATE recarga SET saldo = $saldo WHERE id = $id;";
-    			    	Execute($sql);
-    			    	$sql = "SELECT SUM(monto_usd) AS pago FROM recarga WHERE abono = $Abono;";
-    			    	$monto_abono = ExecuteScalar($sql);
-    			    	$sql = "UPDATE abono SET pago = $monto_abono WHERE id = $Abono";
-    			    	Execute($sql);
-    		  		}
-      			}
-      		}
-      	 } 
-      	$sql = "SELECT tipo_documento FROM salidas WHERE id = " . $rsnew["id_documento"] . ";";
-      	$tipo_documento = ExecuteScalar($sql);
-      	if($tipo_documento == "TDCNET") {
-      		/*
-    		$sql = "UPDATE salidas SET estatus = 'PROCESADO', pagado = 'S' 
-    			WHERE id = " . $rsnew["id_documento"] . ";";
-    		ExecuteRow($sql);
-    		*/
-    	}
-      	if($tipo_documento == "TDCFCV") {
-      		/*
-    		$sql = "UPDATE salidas SET estatus = 'PROCESADO', pagado = 'S' 
-    			WHERE id = " . $rsnew["id_documento"] . ";";
-    		ExecuteRow($sql);
-    		*/
-    		$sql = "UPDATE salidas SET pagado = 'S' 
-    			WHERE id = " . $rsnew["id_documento"] . ";";
-    		ExecuteRow($sql);
-    	}
-
-    	// Si hay diferencia a favor, la agregó a recargas
-    	$monto = floatval($_POST["monto"]);
-    	$pago = floatval($rsnew["pago"]);
-        if($pago > $monto) {
-    		$sql = "SELECT IFNULL(MAX(nro_recibo), 0)+1 AS nro FROM abono WHERE 1;";
-    		$nro_recibo = ExecuteScalar($sql);
-    		$sql = "INSERT INTO
-    					abono 
-    				SET 	
-    					id = NULL,
-    					cliente = " . $rsnew["cliente"] . ",
-    					fecha = NOW(),
-    					metodo_pago = NULL,
-    					nro_recibo = $nro_recibo,
-    					nota = 'SOBRANTE EN COBROS Documento: $documentos',
-    					username = '" . CurrentUserName() . "';";
-    		Execute($sql);
-    		$sql = "SELECT LAST_INSERT_ID();";
-    		$Abono = ExecuteScalar($sql);
-        	$sql = "SELECT IFNULL(MAX(nro_recibo), 0)+1 AS nro FROM recarga WHERE 1;";
-       		$nro_recibo = ExecuteScalar($sql);
-        	$monto_moneda = $pago - $monto;
-        	$monto_bs = $tasa_usd * $monto_moneda;
-        	$sql = "INSERT INTO recarga(
-    					id,
-    					cliente,
-    					fecha,
-    					metodo_pago,
-    					monto_moneda,
-    					moneda,
-    					tasa_moneda,
-    					monto_bs,
-    					tasa_usd,
-    					monto_usd,
-    					saldo,
-    					nota,
-    					username, cobro_cliente_reverso, nro_recibo, reverso, abono)
-    				VALUES (
-    					NULL,
-    					" . $rsnew["cliente"] . ",
-    					NOW(),
-    					'RC',
-    					$monto_moneda,
-    					'" . $rsnew["moneda"] . "',
-    					$tasa_usd,
-    					$monto_bs,
-    					$tasa_usd,
-    					$monto_moneda,
-    					0,
-    					'Recarga por exedente en pago de documento(s): $documentos',
-    					'$username', " . $rsnew["id"] . ", $nro_recibo, 'N', $Abono)";
-    		Execute($sql);
-    		$sql = "SELECT LAST_INSERT_ID();";
-    		$id = ExecuteScalar($sql);
-    		$sql = "SELECT IFNULL(SUM(monto_usd), 0) AS saldo FROM recarga
-        			WHERE cliente = " . $rsnew["cliente"] . ";";
-           	$saldo = ExecuteScalar($sql);
-    	   	$sql = "UPDATE recarga SET saldo = $saldo WHERE id = $id;";
-    	   	Execute($sql);
-        	$sql = "SELECT SUM(monto_usd) AS pago FROM recarga WHERE abono = $Abono;";
-        	$monto_abono = ExecuteScalar($sql);
-        	$sql = "UPDATE abono SET pago = $monto_abono WHERE id = $Abono";
-        	Execute($sql);
+        // 1. Verificación de Cierre de Caja (Seguridad Operativa)
+        $fechaHoy = date("Y-m-d");
+        $sqlCierre = "SELECT 1 FROM cierre_de_caja WHERE fecha = '$fechaHoy'";
+        if (ExecuteScalar($sqlCierre)) {
+            $this->CancelMessage = "La caja del día " . date("d/m/Y") . " ya está cerrada. No se permiten nuevos cobros.";
+            return FALSE;
         }
 
-    	/* ------- Actualizo cantidad en mano, en pedido y en transito  ------- */
-    	$sql = "SELECT nro_documento, tipo_documento, pagado = 'S'  
-    			FROM salidas 
-       			WHERE id = " . $rsnew["id_documento"] . "";
-       	$row = ExecuteRow($sql);
-       	$documentos = $row["tipo_documento"];
-    	$sql = "SELECT COUNT(articulo) AS cantidad 
-    			FROM entradas_salidas
-    			WHERE tipo_documento = '$documentos'
-    				AND id_documento = " . $rsnew["id_documento"] . ";";
-    	$cantidad = ExecuteScalar($sql);
-    	for($i = 0; $i < $cantidad; $i++) {
-    		$sql = "SELECT articulo
-    				FROM entradas_salidas
-    				WHERE
-    					tipo_documento = '$documentos'
-    					AND id_documento = " . $rsnew["id_documento"] . " LIMIT $i, 1;";
-    		$articulo = ExecuteScalar($sql);
-    		ActualizarExitenciaArticulo($articulo);
-    	}
+        // 2. Validación de Factura Seleccionada
+        $facturaSeleccionada = FALSE;
+        $idDoc = 0;
+        if (isset($_POST["xCantidad"])) {
+            $cantidad = intval($_POST["xCantidad"]);
+            for ($i = 0; $i < $cantidad; $i++) {
+                if (isset($_POST["x_id_$i"])) {
+                    $partes = explode("-", $_POST["x_id_$i"]);
+                    $idDoc = intval($partes[0]);
+                    $facturaSeleccionada = TRUE;
+                    break;
+                }
+            }
+        }
+        if (!$facturaSeleccionada || $idDoc <= 0) {
+            $this->CancelMessage = "Error: Debe seleccionar una factura válida de la lista.";
+            return FALSE;
+        }
 
-    	// Se crea la nota de entrega a partir de la factura de venta directa con el carrito de compras o facturación tienda
-    	// Se aplicará solo para la facturación en tienda
-    	/*
-    	if(isset($rsnew["nota"])) {
-    		if(trim($rsnew["nota"]) == "SI GENERA NOTA DE ENTREGA DESDE EL PAGO") {
-    			CrearNotaDeEntragaPorTienda($rsnew["id_documento"], "TDCFCV");
-    		}
-    		else {
-    			$sql = "UPDATE salidas SET estatus = 'NUEVO', pagado = 'S' 
-    				WHERE id = " . $rsnew["id_documento"] . ";";
-    			ExecuteRow($sql);
-    		}
-    	}
-    	*/
+        // 3. Captura y Limpieza de Montos
+        $pagosString = isset($_POST["pagos"]) ? trim($_POST["pagos"]) : "";
+        $montoFactura = floatval($_POST["monto"]); // Monto que se espera cobrar
+        $pagoRecibido = floatval($rsnew["pago"]);  // Total enviado desde el formulario (Equiv. USD)
+        $abonoRecarga = isset($_POST["abono"]) ? floatval($_POST["abono"]) : 0;
+        $idCliente = intval($rsnew["cliente"]);
+
+        // 4. Validaciones de Integridad del Pago
+        if (empty(str_replace(",-,", "", $pagosString))) {
+            $this->CancelMessage = "Debe agregar al menos un método de pago (Efectivo, Transferencia, etc.).";
+            return FALSE;
+        }
+
+        // Validación de fondos en Recargas (si aplica)
+        if ($abonoRecarga > 0) {
+            $sqlSaldo = "SELECT saldo FROM recarga WHERE cliente = $idCliente ORDER BY id DESC LIMIT 1";
+            $saldoActual = floatval(ExecuteScalar($sqlSaldo));
+            if ($abonoRecarga > $saldoActual) {
+                $this->CancelMessage = "El cliente no tiene saldo suficiente en su cuenta de recargas ($" . number_format($saldoActual, 2) . ").";
+                return FALSE;
+            }
+        }
+
+        // Validación de Pago Completo (Margen de error de 0.01 por decimales)
+        if ($pagoRecibido < ($montoFactura - 0.01)) {
+            $this->CancelMessage = "El total de los pagos registrados ($pagoRecibido) es inferior al monto de la factura ($montoFactura).";
+            return FALSE;
+        }
+
+        // 5. Asignación de Valores Finales para la Inserción
+        $rsnew["id_documento"] = $idDoc;
+        $rsnew["fecha"] = $fechaHoy;
+        $rsnew["fecha_registro"] = date("Y-m-d H:i:s");
+        $rsnew["username"] = CurrentUserName();
+        $rsnew["tipo_pago"] = "MIXTO/DETALLADO"; // Identificador para auditoría
+        return TRUE;
+    }
+
+    public function rowInserted($rsold, &$rsnew) {
+        $id_cobro = $rsnew["id"];
+        $id_doc = $rsnew["id_documento"];
+        $id_cliente = $rsnew["cliente"];
+        $username = CurrentUserName();
+
+        // 1. Obtener información del documento principal
+        $sqlDoc = "SELECT nro_documento, tipo_documento FROM salidas WHERE id = $id_doc";
+        $rowDoc = ExecuteRow($sqlDoc);
+        $tipo_doc_desc = ($rowDoc["tipo_documento"] == "TDCFCV" ? "FACT: " : "N.E.: ");
+        $documento_referencia = $tipo_doc_desc . $rowDoc["nro_documento"];
+
+        // 2. Procesar el desglose de pagos (detalles)
+        $pagos_raw = isset($_POST["pagos"]) ? $_POST["pagos"] : "";
+        $arr_pagos = array_filter(explode(",-,", $pagos_raw));
+
+        // Obtenemos tasa USD actual una sola vez para cálculos
+        $tasa_usd_actual = floatval(ExecuteScalar("SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 1"));
+        foreach ($arr_pagos as $pago_string) {
+            $data = explode("|", $pago_string); // |tipo|ref|disp|monto|moneda|
+            if (count($data) < 5) continue;
+            $metodo = $data[1];
+            $referencia = $data[2];
+            $monto_moneda = floatval($data[4]);
+            $moneda = $data[5];
+
+            // Determinar tasas y montos convertidos
+            $tasa_item = ($moneda == "Bs.") ? 1 : floatval(ExecuteScalar("SELECT tasa FROM tasa_usd WHERE moneda = '$moneda' ORDER BY id DESC LIMIT 1"));
+            $monto_bs = ($moneda == "Bs.") ? $monto_moneda : ($monto_moneda * $tasa_item);
+            $monto_usd = $monto_bs / $tasa_usd_actual;
+
+            // Buscar banco asociado al método y moneda
+            $id_banco = ExecuteScalar("SELECT banco FROM banco_tipo_pago WHERE tipo_pago = '$metodo' AND moneda = '$moneda'") ?: 0;
+
+            // Insertar detalle del cobro
+            $sqlDetalle = "INSERT INTO cobros_cliente_detalle 
+                (cobros_cliente, metodo_pago, referencia, monto_moneda, moneda, tasa_moneda, monto_bs, tasa_usd, monto_usd, banco)
+                VALUES 
+                ($id_cobro, '$metodo', '$referencia', $monto_moneda, '$moneda', $tasa_item, $monto_bs, $tasa_usd_actual, $monto_usd, $id_banco)";
+            Execute($sqlDetalle);
+
+            // 3. Si el método es Recarga (RC), registrar el descargo en la tabla de recargas
+            if ($metodo == "RC") {
+                registrarMovimientoRecarga($id_cliente, (-1) * $monto_usd, "REBAJA POR COBRO: $documento_referencia", $id_cobro);
+            }
+        }
+
+        // 4. Actualizar estatus de la Factura/Salida
+        Execute("UPDATE salidas SET pagado = 'S' WHERE id = $id_doc");
+
+        // 5. Manejo de SOBRANTE (Si pagó de más, va a su saldo a favor)
+        $monto_esperado = floatval($_POST["monto"]);
+        $pago_total_usd = floatval($rsnew["pago"]);
+        if ($pago_total_usd > ($monto_esperado + 0.01)) {
+            $sobrante_usd = $pago_total_usd - $monto_esperado;
+            registrarMovimientoRecarga($id_cliente, $sobrante_usd, "SOBRANTE EN COBRO: $documento_referencia", $id_cobro);
+        }
+
+        // 6. Actualización de Inventario
+        $tipo_doc_salida = $rowDoc["tipo_documento"];
+        $articulos = ExecuteRows("SELECT articulo FROM entradas_salidas WHERE tipo_documento = '$tipo_doc_salida' AND id_documento = $id_doc");
+        foreach ($articulos as $art) {
+            if (function_exists('ActualizarExitenciaArticulo')) {
+                ActualizarExitenciaArticulo($art["articulo"]);
+            }
+        }
     }
     // Row Updating event
     public function rowUpdating($rsold, &$rsnew) {

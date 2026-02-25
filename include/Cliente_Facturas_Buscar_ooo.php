@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 include "connect.php"; 
 
 $cliente = $_REQUEST["cliente"];

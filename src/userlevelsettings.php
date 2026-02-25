@@ -429,7 +429,9 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}articulos_costos_precios.php","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}articulos_costos_precios.php","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cobros_cliente_detalle","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cobros_cliente_detalle","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cobros_cliente_detalle","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}registrar_pagos_clientes.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}registrar_pagos_clientes.php","0","0"]];
 
 /**
  * Tables
@@ -645,4 +647,5 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["actualizar_costo_poderado.php","actualizar_costo_poderado","Actualizar Costo Ponderado",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ActualizarCostoPoderado"],
     ["usuario_master","usuario_master2","Usuario Master",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","UsuarioMaster2List"],
     ["articulos_costos_precios.php","articulos_costos_precios","Actualizar Costo Precios",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ArticulosCostosPrecios"],
-    ["cobros_cliente_detalle","cobros_cliente_detalle","Cobros Detalle",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CobrosClienteDetalleList"]];
+    ["cobros_cliente_detalle","cobros_cliente_detalle","Cobros Detalle",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CobrosClienteDetalleList"],
+    ["registrar_pagos_clientes.php","registrar_pagos_clientes","Registrar Pagos de Clientes",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","RegistrarPagosClientes"]];

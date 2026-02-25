@@ -140,7 +140,7 @@ class CobrosClienteAdd extends CobrosCliente
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
-        $this->tipo_pago->setVisibility();
+        $this->tipo_pago->Visible = false;
         $this->referencia->Visible = false;
         $this->banco->Visible = false;
         $this->banco_origen->Visible = false;
@@ -746,16 +746,6 @@ class CobrosClienteAdd extends CobrosCliente
             }
         }
 
-        // Check field name 'tipo_pago' first before field var 'x_tipo_pago'
-        $val = $CurrentForm->hasValue("tipo_pago") ? $CurrentForm->getValue("tipo_pago") : $CurrentForm->getValue("x_tipo_pago");
-        if (!$this->tipo_pago->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->tipo_pago->Visible = false; // Disable update for API request
-            } else {
-                $this->tipo_pago->setFormValue($val);
-            }
-        }
-
         // Check field name 'pivote2' first before field var 'x_pivote2'
         $val = $CurrentForm->hasValue("pivote2") ? $CurrentForm->getValue("pivote2") : $CurrentForm->getValue("x_pivote2");
         if (!$this->pivote2->IsDetailKey) {
@@ -778,7 +768,6 @@ class CobrosClienteAdd extends CobrosCliente
         $this->pivote->CurrentValue = $this->pivote->FormValue;
         $this->moneda->CurrentValue = $this->moneda->FormValue;
         $this->pago->CurrentValue = $this->pago->FormValue;
-        $this->tipo_pago->CurrentValue = $this->tipo_pago->FormValue;
         $this->pivote2->CurrentValue = $this->pivote2->FormValue;
     }
 
@@ -1159,9 +1148,6 @@ class CobrosClienteAdd extends CobrosCliente
             // pago
             $this->pago->HrefValue = "";
 
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
-
             // pivote2
             $this->pivote2->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
@@ -1245,34 +1231,6 @@ class CobrosClienteAdd extends CobrosCliente
                 $this->pago->EditValue = FormatNumber($this->pago->EditValue, null);
             }
 
-            // tipo_pago
-            $this->tipo_pago->setupEditAttributes();
-            $curVal = trim(strval($this->tipo_pago->CurrentValue));
-            if ($curVal != "") {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->lookupCacheOption($curVal);
-            } else {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->Lookup !== null && is_array($this->tipo_pago->lookupOptions()) && count($this->tipo_pago->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->tipo_pago->ViewValue !== null) { // Load from cache
-                $this->tipo_pago->EditValue = array_values($this->tipo_pago->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $this->tipo_pago->CurrentValue, $this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->tipo_pago->getSelectFilter($this); // PHP
-                $sqlWrk = $this->tipo_pago->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->tipo_pago->EditValue = $arwrk;
-            }
-            $this->tipo_pago->PlaceHolder = RemoveHtml($this->tipo_pago->caption());
-
             // pivote2
             $this->pivote2->setupEditAttributes();
             if (!$this->pivote2->Raw) {
@@ -1294,9 +1252,6 @@ class CobrosClienteAdd extends CobrosCliente
 
             // pago
             $this->pago->HrefValue = "";
-
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
 
             // pivote2
             $this->pivote2->HrefValue = "";
@@ -1343,11 +1298,6 @@ class CobrosClienteAdd extends CobrosCliente
             }
             if (!CheckNumber($this->pago->FormValue)) {
                 $this->pago->addErrorMessage($this->pago->getErrorMessage(false));
-            }
-            if ($this->tipo_pago->Visible && $this->tipo_pago->Required) {
-                if (!$this->tipo_pago->IsDetailKey && EmptyValue($this->tipo_pago->FormValue)) {
-                    $this->tipo_pago->addErrorMessage(str_replace("%s", $this->tipo_pago->caption(), $this->tipo_pago->RequiredErrorMessage));
-                }
             }
             if ($this->pivote2->Visible && $this->pivote2->Required) {
                 if (!$this->pivote2->IsDetailKey && EmptyValue($this->pivote2->FormValue)) {
@@ -1482,9 +1432,6 @@ class CobrosClienteAdd extends CobrosCliente
         // pago
         $this->pago->setDbValueDef($rsnew, $this->pago->CurrentValue, false);
 
-        // tipo_pago
-        $this->tipo_pago->setDbValueDef($rsnew, $this->tipo_pago->CurrentValue, false);
-
         // pivote2
         $this->pivote2->setDbValueDef($rsnew, $this->pivote2->CurrentValue, false);
         return $rsnew;
@@ -1507,9 +1454,6 @@ class CobrosClienteAdd extends CobrosCliente
         }
         if (isset($row['pago'])) { // pago
             $this->pago->setFormValue($row['pago']);
-        }
-        if (isset($row['tipo_pago'])) { // tipo_pago
-            $this->tipo_pago->setFormValue($row['tipo_pago']);
         }
         if (isset($row['pivote2'])) { // pivote2
             $this->pivote2->setFormValue($row['pivote2']);
@@ -1621,10 +1565,51 @@ class CobrosClienteAdd extends CobrosCliente
         }
     }
 
-    // Page Load event
+    // Page_Load event
     public function pageLoad()
     {
-        //Log("Page Load");
+        $id = isset($_GET["id_compra"]) ? intval($_GET["id_compra"]) : 0;
+
+        // 1. Obtenemos datos del documento y la tasa en una sola fase
+        $tasa_usd = floatval(ExecuteScalar("SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 1"));
+        if ($id > 0) { 
+            // Obtenemos info del documento y del cliente
+            $sqlSalida = "SELECT cliente, total, IFNULL(descuento, 0) AS descuento FROM salidas WHERE id = $id";
+            $rowSalida = ExecuteRow($sqlSalida);
+            $cliente_id = intval($rowSalida["cliente"]);
+            $total_pagar = floatval($rowSalida["total"]);
+            $descuento = floatval($rowSalida["descuento"]);
+
+            // Obtenemos CI/RIF del cliente
+            $ci_rif = ExecuteScalar("SELECT ci_rif FROM cliente WHERE id = $cliente_id");
+
+            // 2. Lógica de Saldo (Solo tabla 'recarga')
+            $saldo = 0.00;
+            $sqlSaldo = "SELECT saldo FROM recarga WHERE cliente = $cliente_id ORDER BY id DESC LIMIT 1";
+            $rowSaldo = ExecuteRow($sqlSaldo);
+            if ($rowSaldo) {
+                $saldo = floatval($rowSaldo["saldo"]);
+            }
+
+            // 3. Validación de permisos (si puede procesar el pago)
+            $si_puede = "N";
+            // Puede si el saldo cubre el total O si el descuento es menor a 25% (lógica original)
+            if ($saldo >= $total_pagar || $descuento < 25) {
+                $si_puede = "S";
+            }
+
+            // 4. Construcción de la interfaz (Caption)
+            $clase_texto = ($saldo > 0) ? "text-success" : "text-danger";
+            $html_saldo = '<span class="' . $clase_texto . '">';
+            $html_saldo .= '<strong>Saldo: </strong>$ ' . number_format($saldo, 2, ".", ",");
+            $html_saldo .= ' <input type="hidden" id="puede" value="' . $si_puede . '">';
+            $html_saldo .= '</span>';
+            $this->setTableCaption(
+                "<small>" . $html_saldo . 
+                "<br>C.I: " . $ci_rif . 
+                " <b><i>BCV Bs " . number_format($tasa_usd, 2, ",", ".") . "</i></b></small>"
+            );
+        }
     }
 
     // Page Unload event

@@ -1631,6 +1631,24 @@ function CalcularCostoPromedioPonderado($articulo, $costo, $cantidad, $recepcion
         Execute($sql);
     }
 }
+function registrarMovimientoRecarga($cliente, $monto_usd, $nota, $cobro_id) {
+    $username = CurrentUserName();
+    $nro_recibo = ExecuteScalar("SELECT IFNULL(MAX(nro_recibo), 0) + 1 FROM abono") ?: 1;
+
+    // Crear encabezado de abono/recibo
+    Execute("INSERT INTO abono (cliente, fecha, nro_recibo, nota, username, pago) VALUES ($cliente, NOW(), $nro_recibo, '$nota', '$username', ABS($monto_usd))");
+    $id_abono = ExecuteScalar("SELECT LAST_INSERT_ID()");
+
+    // Insertar en recarga
+    $sqlRecarga = "INSERT INTO recarga (cliente, fecha, metodo_pago, monto_moneda, moneda, tasa_usd, monto_usd, saldo, nota, username, abono) 
+                   VALUES ($cliente, NOW(), 'RC', ABS($monto_usd), 'USD', 1, $monto_usd, 0, '$nota', '$username', $id_abono)";
+    Execute($sqlRecarga);
+    $id_recarga = ExecuteScalar("SELECT LAST_INSERT_ID()");
+
+    // Recalcular saldo acumulado real
+    $nuevo_saldo_total = ExecuteScalar("SELECT IFNULL(SUM(monto_usd), 0) FROM recarga WHERE cliente = $cliente");
+    Execute("UPDATE recarga SET saldo = $nuevo_saldo_total WHERE id = $id_recarga");
+}
 
 // Add listeners
 AddListener(DatabaseConnectingEvent::NAME, fn(DatabaseConnectingEvent $event) => Database_Connecting($event));

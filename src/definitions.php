@@ -268,6 +268,7 @@ return [
     "usuario_master2" => \DI\create(UsuarioMaster2::class),
     "articulos_costos_precios" => \DI\create(ArticulosCostosPrecios::class),
     "cobros_cliente_detalle" => \DI\create(CobrosClienteDetalle::class),
+    "registrar_pagos_clientes" => \DI\create(RegistrarPagosClientes::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

@@ -36,7 +36,6 @@ loadjs.ready(["wrapper", "head"], function () {
             ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
-            ["tipo_pago", [fields.tipo_pago.visible && fields.tipo_pago.required ? ew.Validators.required(fields.tipo_pago.caption) : null], fields.tipo_pago.isInvalid],
             ["referencia", [fields.referencia.visible && fields.referencia.required ? ew.Validators.required(fields.referencia.caption) : null], fields.referencia.isInvalid],
             ["banco", [fields.banco.visible && fields.banco.required ? ew.Validators.required(fields.banco.caption) : null], fields.banco.isInvalid],
             ["monto_recibido", [fields.monto_recibido.visible && fields.monto_recibido.required ? ew.Validators.required(fields.monto_recibido.caption) : null, ew.Validators.float], fields.monto_recibido.isInvalid],
@@ -59,7 +58,6 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
             "moneda": <?= $Page->moneda->toClientList($Page) ?>,
-            "tipo_pago": <?= $Page->tipo_pago->toClientList($Page) ?>,
             "banco": <?= $Page->banco->toClientList($Page) ?>,
         })
         .build();
@@ -230,52 +228,6 @@ loadjs.ready("fcobros_clienteedit", function() {
 <textarea data-table="cobros_cliente" data-field="x_nota" name="x_nota" id="x_nota" cols="30" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
 <?= $Page->nota->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nota->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-    <div id="r_tipo_pago"<?= $Page->tipo_pago->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_tipo_pago" for="x_tipo_pago" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_pago->caption() ?><?= $Page->tipo_pago->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_pago->cellAttributes() ?>>
-<span id="el_cobros_cliente_tipo_pago">
-    <select
-        id="x_tipo_pago"
-        name="x_tipo_pago"
-        class="form-select ew-select<?= $Page->tipo_pago->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
-        data-select2-id="fcobros_clienteedit_x_tipo_pago"
-        <?php } ?>
-        data-table="cobros_cliente"
-        data-field="x_tipo_pago"
-        data-value-separator="<?= $Page->tipo_pago->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_pago->getPlaceHolder()) ?>"
-        <?= $Page->tipo_pago->editAttributes() ?>>
-        <?= $Page->tipo_pago->selectOptionListHtml("x_tipo_pago") ?>
-    </select>
-    <?= $Page->tipo_pago->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_pago->getErrorMessage() ?></div>
-<?= $Page->tipo_pago->Lookup->getParamTag($Page, "p_x_tipo_pago") ?>
-<?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fcobros_clienteedit", function() {
-    var options = { name: "x_tipo_pago", selectId: "fcobros_clienteedit_x_tipo_pago" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fcobros_clienteedit.lists.tipo_pago?.lookupOptions.length) {
-        options.data = { id: "x_tipo_pago", form: "fcobros_clienteedit" };
-    } else {
-        options.ajax = { id: "x_tipo_pago", form: "fcobros_clienteedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cobros_cliente.fields.tipo_pago.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
 </span>
 </div></div>
     </div>

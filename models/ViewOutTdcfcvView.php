@@ -2033,7 +2033,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         } else {
             // 6. Botón Registrar Pago
             if ($this->estatus->CurrentValue != "ANULADO") {
-                $urlAddPago = "../CobrosClienteAdd?showdetail=&id_compra=" . $this->id->CurrentValue;
+                $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
                 $html .= '<a class="btn btn-outline-primary" href="' . $urlAddPago . '"><span class="fas fa-money-bill-wave"></span> Registrar Pago</a>';
             }
         }

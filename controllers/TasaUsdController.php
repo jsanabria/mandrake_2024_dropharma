@@ -35,11 +35,4 @@ class TasaUsdController extends ControllerBase
     {
         return $this->runPage($request, $response, $args, "TasaUsdView");
     }
-
-    // edit
-    #[Map(["GET","POST","OPTIONS"], "/TasaUsdEdit[/{id}]", [PermissionMiddleware::class], "edit.tasa_usd")]
-    public function edit(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "TasaUsdEdit");
-    }
 }

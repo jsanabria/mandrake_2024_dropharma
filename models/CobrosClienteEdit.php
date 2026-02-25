@@ -140,7 +140,7 @@ class CobrosClienteEdit extends CobrosCliente
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
-        $this->tipo_pago->setVisibility();
+        $this->tipo_pago->Visible = false;
         $this->referencia->setVisibility();
         $this->banco->setVisibility();
         $this->banco_origen->Visible = false;
@@ -847,16 +847,6 @@ class CobrosClienteEdit extends CobrosCliente
             }
         }
 
-        // Check field name 'tipo_pago' first before field var 'x_tipo_pago'
-        $val = $CurrentForm->hasValue("tipo_pago") ? $CurrentForm->getValue("tipo_pago") : $CurrentForm->getValue("x_tipo_pago");
-        if (!$this->tipo_pago->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->tipo_pago->Visible = false; // Disable update for API request
-            } else {
-                $this->tipo_pago->setFormValue($val);
-            }
-        }
-
         // Check field name 'referencia' first before field var 'x_referencia'
         $val = $CurrentForm->hasValue("referencia") ? $CurrentForm->getValue("referencia") : $CurrentForm->getValue("x_referencia");
         if (!$this->referencia->IsDetailKey) {
@@ -925,7 +915,6 @@ class CobrosClienteEdit extends CobrosCliente
         $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
         $this->moneda->CurrentValue = $this->moneda->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
-        $this->tipo_pago->CurrentValue = $this->tipo_pago->FormValue;
         $this->referencia->CurrentValue = $this->referencia->FormValue;
         $this->banco->CurrentValue = $this->banco->FormValue;
         $this->monto_recibido->CurrentValue = $this->monto_recibido->FormValue;
@@ -1368,9 +1357,6 @@ class CobrosClienteEdit extends CobrosCliente
             // nota
             $this->nota->HrefValue = "";
 
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
-
             // referencia
             $this->referencia->HrefValue = "";
 
@@ -1468,34 +1454,6 @@ class CobrosClienteEdit extends CobrosCliente
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
             $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
 
-            // tipo_pago
-            $this->tipo_pago->setupEditAttributes();
-            $curVal = trim(strval($this->tipo_pago->CurrentValue));
-            if ($curVal != "") {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->lookupCacheOption($curVal);
-            } else {
-                $this->tipo_pago->ViewValue = $this->tipo_pago->Lookup !== null && is_array($this->tipo_pago->lookupOptions()) && count($this->tipo_pago->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->tipo_pago->ViewValue !== null) { // Load from cache
-                $this->tipo_pago->EditValue = array_values($this->tipo_pago->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $this->tipo_pago->CurrentValue, $this->tipo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->tipo_pago->getSelectFilter($this); // PHP
-                $sqlWrk = $this->tipo_pago->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->tipo_pago->EditValue = $arwrk;
-            }
-            $this->tipo_pago->PlaceHolder = RemoveHtml($this->tipo_pago->caption());
-
             // referencia
             $this->referencia->setupEditAttributes();
             if (!$this->referencia->Raw) {
@@ -1572,9 +1530,6 @@ class CobrosClienteEdit extends CobrosCliente
             // nota
             $this->nota->HrefValue = "";
 
-            // tipo_pago
-            $this->tipo_pago->HrefValue = "";
-
             // referencia
             $this->referencia->HrefValue = "";
 
@@ -1639,11 +1594,6 @@ class CobrosClienteEdit extends CobrosCliente
             if ($this->nota->Visible && $this->nota->Required) {
                 if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
                     $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
-                }
-            }
-            if ($this->tipo_pago->Visible && $this->tipo_pago->Required) {
-                if (!$this->tipo_pago->IsDetailKey && EmptyValue($this->tipo_pago->FormValue)) {
-                    $this->tipo_pago->addErrorMessage(str_replace("%s", $this->tipo_pago->caption(), $this->tipo_pago->RequiredErrorMessage));
                 }
             }
             if ($this->referencia->Visible && $this->referencia->Required) {
@@ -1820,9 +1770,6 @@ class CobrosClienteEdit extends CobrosCliente
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
-        // tipo_pago
-        $this->tipo_pago->setDbValueDef($rsnew, $this->tipo_pago->CurrentValue, $this->tipo_pago->ReadOnly);
-
         // referencia
         $this->referencia->setDbValueDef($rsnew, $this->referencia->CurrentValue, $this->referencia->ReadOnly);
 
@@ -1860,9 +1807,6 @@ class CobrosClienteEdit extends CobrosCliente
         }
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];
-        }
-        if (isset($row['tipo_pago'])) { // tipo_pago
-            $this->tipo_pago->CurrentValue = $row['tipo_pago'];
         }
         if (isset($row['referencia'])) { // referencia
             $this->referencia->CurrentValue = $row['referencia'];

@@ -26,7 +26,6 @@ loadjs.ready(["wrapper", "head"], function () {
             ["pivote", [fields.pivote.visible && fields.pivote.required ? ew.Validators.required(fields.pivote.caption) : null], fields.pivote.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["pago", [fields.pago.visible && fields.pago.required ? ew.Validators.required(fields.pago.caption) : null, ew.Validators.float], fields.pago.isInvalid],
-            ["tipo_pago", [fields.tipo_pago.visible && fields.tipo_pago.required ? ew.Validators.required(fields.tipo_pago.caption) : null], fields.tipo_pago.isInvalid],
             ["pivote2", [fields.pivote2.visible && fields.pivote2.required ? ew.Validators.required(fields.pivote2.caption) : null], fields.pivote2.isInvalid]
         ])
 
@@ -45,7 +44,6 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
             "moneda": <?= $Page->moneda->toClientList($Page) ?>,
-            "tipo_pago": <?= $Page->tipo_pago->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -183,52 +181,6 @@ loadjs.ready("fcobros_clienteadd", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->tipo_pago->Visible) { // tipo_pago ?>
-    <div id="r_tipo_pago"<?= $Page->tipo_pago->rowAttributes() ?>>
-        <label id="elh_cobros_cliente_tipo_pago" for="x_tipo_pago" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_pago->caption() ?><?= $Page->tipo_pago->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_pago->cellAttributes() ?>>
-<span id="el_cobros_cliente_tipo_pago">
-    <select
-        id="x_tipo_pago"
-        name="x_tipo_pago"
-        class="form-select ew-select<?= $Page->tipo_pago->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
-        data-select2-id="fcobros_clienteadd_x_tipo_pago"
-        <?php } ?>
-        data-table="cobros_cliente"
-        data-field="x_tipo_pago"
-        data-value-separator="<?= $Page->tipo_pago->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_pago->getPlaceHolder()) ?>"
-        <?= $Page->tipo_pago->editAttributes() ?>>
-        <?= $Page->tipo_pago->selectOptionListHtml("x_tipo_pago") ?>
-    </select>
-    <?= $Page->tipo_pago->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_pago->getErrorMessage() ?></div>
-<?= $Page->tipo_pago->Lookup->getParamTag($Page, "p_x_tipo_pago") ?>
-<?php if (!$Page->tipo_pago->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fcobros_clienteadd", function() {
-    var options = { name: "x_tipo_pago", selectId: "fcobros_clienteadd_x_tipo_pago" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fcobros_clienteadd.lists.tipo_pago?.lookupOptions.length) {
-        options.data = { id: "x_tipo_pago", form: "fcobros_clienteadd" };
-    } else {
-        options.ajax = { id: "x_tipo_pago", form: "fcobros_clienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cobros_cliente.fields.tipo_pago.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->pivote2->Visible) { // pivote2 ?>
     <div id="r_pivote2"<?= $Page->pivote2->rowAttributes() ?>>
         <label id="elh_cobros_cliente_pivote2" for="x_pivote2" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pivote2->caption() ?><?= $Page->pivote2->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -274,124 +226,138 @@ loadjs.ready("head", function() {
 <script>
 loadjs.ready("load", function () {
     // Startup script
-    // Write your table-specific startup script here
-    // document.write("page loaded");
-    $("#x_pago").prop('readonly', true);
-    $("#r_pivote").hide();
-    $("#r_pivote2").hide();
-    $("#x_cliente").change(function(){
-    	$("#r_pivote").show();
-    	var cliente = $("#x_cliente").val();
-    	$("#r_pivote").html("");
-    	if(cliente == "") {
-    		$("#r_pivote").hide();
-    		$("#r_pivote2").hide();
-    		return true;
-    	}
-    	$.ajax({
-    	  url : "include/Cliente_Facturas_Buscar.php",
-    	  type: "GET",
-    	  data : {cliente: cliente},
-    	  beforeSend: function(){
-    	    $("#r_pivote").html("Por Favor Espere. . .");
-    	    //////$("#monto").val(0.00);
-    	  }
-    	})
-    	.done(function(data) {
-    		//alert(data);
-    		var rs = '';
-    		if(data == "0")
-    			rs = '<div class="container"><div class="alert alert-success" role="alert">No hay facturas pendientes por cobrar al cliente</div></div>';
-    		else {
-    			//$("#x_monto").prop('readonly', false);
-    			$("#x_monto_recibido").prop('readonly', false);
-    			rs = data;
-    		}
-    		$("#r_pivote").html(rs);
-    	})
-    	.fail(function(data) {
-    		alert( "error" + data );
-    	})
-    	.always(function(data) {
-    		//alert( "complete" );
-    		//$("#result").html("Espere. . . ");
-    	});
-    });
-    $("#x_tipo_pago").change(function(){
-    	$("#r_pivote2").show();
-    	var cliente = $("#x_cliente").val();
-    	var tipo_pago = $("#x_tipo_pago").val();
-    	var pagos = $("#pagos").val();
-    	var moneda = $("#x_moneda").val();
-    	var tasa_usd = $("#tasa_usd").val();
-    	$("#r_pivote2").html("");
-    	if(cliente == "") {
-    		//$("#r_pivote2").hide();
-    		alert("Seleccione un cliente");
-    		location.reload();
-    		return true;
-    	}
-    	$.ajax({
-    	  url : "include/Cliente_Tipo_Pago.php",
-    	  type: "GET",
-    	  data : {cliente: cliente, tipo_pago: tipo_pago, pagos: pagos, moneda: moneda, tasa_usd: tasa_usd},
-    	  beforeSend: function(){
-    	    $("#r_pivote2").html("Por Favor Espere. . .");
-    	  }
-    	})
-    	.done(function(data) {
-    		//alert(data);
-    		var rs = '';
-    		rs = data;
-    		//$("#x_monto").prop('readonly', false);
-    		$("#r_pivote2").html(rs);
-    	})
-    	.fail(function(data) {
-    		alert( "error" + data );
-    	})
-    	.always(function(data) {
-    		//alert( "complete" );
-    		//$("#result").html("Espere. . . ");
-    	});
-    });
     $(document).ready(function() {
-    	//alert("<?php echo isset($_GET["id_compra"]) ? $_GET["id_compra"] : 0; ?>");
-    	var id = <?php echo isset($_GET["id_compra"]) ? intval($_GET["id_compra"]) : 0; ?>;
-    	if(id != 0) {
-    		$("#r_pivote").show();
-    		$.ajax({
-    		  url : "include/buscar_factura_cliente.php",
-    		  type: "GET",
-    		  data : {id: id},
-    		  beforeSend: function(){
-    		  	$("#r_cliente").html("Por Favor Espere. . .");
-    		    $("#r_pivote").html("Por Favor Espere. . .");
-    		    //////$("#monto").val(0.00);
-    		  }
-    		})
-    		.done(function(data) {
-    			//alert(data);
-    			var rs = data.split("|");
-    			//$("#x_monto").prop('readonly', false);
-    			$("#x_monto_recibido").prop('readonly', false);
-    			$("#r_cliente").html(rs[0]);
-    			$("#r_pivote").html(rs[1]);
-    			//////$("#monto").val(rs[2]);
-    		})
-    		.fail(function(data) {
-    			alert( "error" + data );
-    		})
-    		.always(function(data) {
-    			//alert( "complete" );
-    			//$("#result").html("Espere. . . ");
-    		});
-    	}
-    	<?php
-    	$sql = "SELECT valor1 FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
-    	?>
-    	$("#x_moneda").val("<?php echo ExecuteScalar($sql); ?>");
-    	$("#x_moneda").prop('readonly', true);
-    	$("#r_moneda").hide();
+        // 1. Configuración Estética Inicial
+        $("#x_pago").prop('readonly', true);
+        $("#r_pivote, #r_moneda").hide();
+
+        // 2. Función Maestra de Carga y Refresco
+        window.cargarInterfazPagos = function(tipoMetodo = "") {
+            // Recuperar el ID de compra de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id_compra = urlParams.get('id_compra') || 0;
+            const params = {
+                id_compra: id_compra, // Esencial para que el PHP no pierda la factura
+                cliente: $("#x_cliente").val(),
+                nro_factura: $("#nro_fact_hidden").val(),
+                monto_total: $("#monto_total_hidden").val(),
+                tipo_pago: tipoMetodo,
+                pagos: $("#pagos").val() || "[]" // Aquí viaja la lista acumulada
+            };
+            if (!params.cliente && id_compra == 0) return;
+            $.ajax({
+                url: "include/Cliente_Tipo_Pago.php",
+                type: "POST",
+                dataType: "json",
+                data: params,
+                success: function(res) {
+                    $("#r_pivote2").html(res.html).show();
+                    if(res.totales) {
+                        // Actualizar inputs de PHPMaker
+                        $("#x_pago").val(res.totales.total_usd.toFixed(2));
+                        $("#abono").val(res.totales.abono_rc);
+                        $("#abono2").val(res.totales.abono_rd);
+
+                        // Bloquear botón si el saldo no es 0
+                        const saldo = (parseFloat(res.monto_total) - res.totales.total_usd).toFixed(2);
+                        $("#btn-action").prop('disabled', (saldo > 0.01));
+                    }
+                }
+            });
+        };
+
+        // 3. LÓGICA DE CARGA AUTOMÁTICA AL INICIAR
+        // Extraemos el ID de la compra de la URL (ej: ...?id_compra=123)
+        const urlParams = new URLSearchParams(window.location.search);
+        const id_url = urlParams.get('id_compra') || 0;
+        if (id_url != 0) {
+            $.ajax({
+                url: "include/Cliente_Tipo_Pago.php",
+                type: "GET",
+                dataType: "json",
+                data: { id_compra: id_url },
+                success: function(res) {
+                    if (res.status === "success") {
+                        // Inyectamos los datos base y los inputs hidden necesarios
+                        $("#r_cliente").html(`
+                            <div class="card shadow-sm border-0 bg-light mb-3">
+                                <div class="card-body py-2 px-3 d-flex align-items-center">
+                                    <div class="bg-primary text-white rounded-circle p-2 me-3"><i class="bi bi-person-fill"></i></div>
+                                    <div>
+                                        <h6 class="text-muted small mb-0 fw-bold">CLIENTE</h6>
+                                        <p class="mb-0 fw-bold text-dark">${res.cliente_nombre}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="x_cliente" value="${res.cliente_id}">
+                            <input type="hidden" id="nro_fact_hidden" value="${res.nro_factura}">
+                            <input type="hidden" id="monto_total_hidden" value="${res.monto_total}">
+                        `);
+
+                        // Mostramos la tabla de pagos y el formulario
+                        $("#r_pivote2").html(res.html).show();
+
+                        // Sincronizamos el monto en el campo nativo de PHPMaker
+                        $("#monto").val(res.monto_total);
+                    }
+                },
+                error: function(e) {
+                    console.error("Error en carga inicial", e);
+                }
+            });
+        }
+
+        // 4. Eventos Delegados
+        $(document).on("change", "#tipo_pago", function() {
+            cargarInterfazPagos($(this).val());
+        });
+        $(document).on("click", "#btn_agregar_pago", function(e) {
+            e.preventDefault();
+
+            // 1. Capturar valores de la interfaz
+            const tipo    = $("#tipo_pago").val();
+            const monto   = parseFloat($("#pagar_input").val());
+            const moneda  = $("#moneda_input").val();
+            const ref     = $("#referencia").val() || "N/A";
+
+            // 2. Validaciones básicas
+            if (!tipo) { alert("Seleccione un método de pago"); return; }
+            if (isNaN(monto) || monto <= 0) { alert("Ingrese un monto válido"); return; }
+
+            // 3. Obtener la lista actual del input oculto
+            let lista_actual = [];
+            try {
+                const valor_input = $("#pagos").val();
+                lista_actual = JSON.parse(valor_input || "[]");
+            } catch (err) {
+                lista_actual = [];
+            }
+
+            // 4. Agregar el nuevo pago al array
+            lista_actual.push({
+                tipo: tipo,
+                ref: ref,
+                monto: monto,
+                moneda: moneda
+            });
+
+            // 5. Guardar el nuevo JSON en el input oculto
+            $("#pagos").val(JSON.stringify(lista_actual));
+
+            // 6. SOLICITAR AL SERVIDOR QUE RENDERICE LA LISTA NUEVA
+            // Llamamos a la función que ya definimos antes
+            if (typeof window.cargarInterfazPagos === "function") {
+                window.cargarInterfazPagos(""); 
+            }
+        });
     });
+
+    // Función global para borrar pagos
+    window.EliminarPago = function(index) {
+        let lista = JSON.parse($("#pagos").val() || "[]");
+        lista.splice(index, 1);
+        $("#pagos").val(JSON.stringify(lista));
+        cargarInterfazPagos("");
+    };
 });
 </script>
