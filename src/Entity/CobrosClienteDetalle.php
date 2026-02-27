@@ -60,8 +60,14 @@ class CobrosClienteDetalle extends AbstractEntity
     #[Column(name: "monto_usd", type: "decimal", nullable: true)]
     private ?string $montoUsd;
 
+    #[Column(name: "banco_origen", type: "string", nullable: true)]
+    private ?string $bancoOrigen;
+
     #[Column(type: "integer", nullable: true)]
     private ?int $banco;
+
+    #[Column(name: "anticipo_id", type: "integer", nullable: true)]
+    private ?int $anticipoId;
 
     public function getId(): int
     {
@@ -173,6 +179,17 @@ class CobrosClienteDetalle extends AbstractEntity
         return $this;
     }
 
+    public function getBancoOrigen(): ?string
+    {
+        return HtmlDecode($this->bancoOrigen);
+    }
+
+    public function setBancoOrigen(?string $value): static
+    {
+        $this->bancoOrigen = RemoveXss($value);
+        return $this;
+    }
+
     public function getBanco(): ?int
     {
         return $this->banco;
@@ -181,6 +198,17 @@ class CobrosClienteDetalle extends AbstractEntity
     public function setBanco(?int $value): static
     {
         $this->banco = $value;
+        return $this;
+    }
+
+    public function getAnticipoId(): ?int
+    {
+        return $this->anticipoId;
+    }
+
+    public function setAnticipoId(?int $value): static
+    {
+        $this->anticipoId = $value;
         return $this;
     }
 }

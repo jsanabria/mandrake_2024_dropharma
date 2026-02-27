@@ -87,39 +87,6 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($view_out_tdcfcv->igtf->Visible) { // igtf ?>
-        <tr id="r_igtf"<?= $view_out_tdcfcv->igtf->rowAttributes() ?>>
-            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->igtf->caption() ?></td>
-            <td<?= $view_out_tdcfcv->igtf->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_igtf">
-<span<?= $view_out_tdcfcv->igtf->viewAttributes() ?>>
-<?= $view_out_tdcfcv->igtf->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($view_out_tdcfcv->monto_base_igtf->Visible) { // monto_base_igtf ?>
-        <tr id="r_monto_base_igtf"<?= $view_out_tdcfcv->monto_base_igtf->rowAttributes() ?>>
-            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->monto_base_igtf->caption() ?></td>
-            <td<?= $view_out_tdcfcv->monto_base_igtf->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_monto_base_igtf">
-<span<?= $view_out_tdcfcv->monto_base_igtf->viewAttributes() ?>>
-<?= $view_out_tdcfcv->monto_base_igtf->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($view_out_tdcfcv->monto_igtf->Visible) { // monto_igtf ?>
-        <tr id="r_monto_igtf"<?= $view_out_tdcfcv->monto_igtf->rowAttributes() ?>>
-            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->monto_igtf->caption() ?></td>
-            <td<?= $view_out_tdcfcv->monto_igtf->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_monto_igtf">
-<span<?= $view_out_tdcfcv->monto_igtf->viewAttributes() ?>>
-<?= $view_out_tdcfcv->monto_igtf->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
 <?php if ($view_out_tdcfcv->moneda->Visible) { // moneda ?>
         <tr id="r_moneda"<?= $view_out_tdcfcv->moneda->rowAttributes() ?>>
             <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->moneda->caption() ?></td>

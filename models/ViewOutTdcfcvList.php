@@ -165,9 +165,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->Visible = false;
         $this->iva->Visible = false;
         $this->total->setVisibility();
-        $this->igtf->setVisibility();
-        $this->monto_base_igtf->setVisibility();
-        $this->monto_igtf->setVisibility();
+        $this->igtf->Visible = false;
+        $this->monto_base_igtf->Visible = false;
+        $this->monto_igtf->Visible = false;
         $this->moneda->setVisibility();
         $this->lista_pedido->Visible = false;
         $this->nota->Visible = false;
@@ -2033,33 +2033,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->total->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field igtf
-        $filter = $this->queryBuilderWhere("igtf");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->igtf, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->igtf->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field monto_base_igtf
-        $filter = $this->queryBuilderWhere("monto_base_igtf");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->monto_base_igtf, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_base_igtf->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field monto_igtf
-        $filter = $this->queryBuilderWhere("monto_igtf");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->monto_igtf, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_igtf->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field moneda
         $filter = $this->queryBuilderWhere("moneda");
         if (!$filter) {
@@ -2554,9 +2527,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->cliente); // cliente
             $this->updateSort($this->doc_afectado); // doc_afectado
             $this->updateSort($this->total); // total
-            $this->updateSort($this->igtf); // igtf
-            $this->updateSort($this->monto_base_igtf); // monto_base_igtf
-            $this->updateSort($this->monto_igtf); // monto_igtf
             $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->unidades); // unidades
             $this->updateSort($this->estatus); // estatus
@@ -3017,9 +2987,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "cliente");
             $this->createColumnOption($option, "doc_afectado");
             $this->createColumnOption($option, "total");
-            $this->createColumnOption($option, "igtf");
-            $this->createColumnOption($option, "monto_base_igtf");
-            $this->createColumnOption($option, "monto_igtf");
             $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "unidades");
             $this->createColumnOption($option, "estatus");
@@ -4674,18 +4641,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->total->HrefValue = "";
             $this->total->TooltipValue = "";
 
-            // igtf
-            $this->igtf->HrefValue = "";
-            $this->igtf->TooltipValue = "";
-
-            // monto_base_igtf
-            $this->monto_base_igtf->HrefValue = "";
-            $this->monto_base_igtf->TooltipValue = "";
-
-            // monto_igtf
-            $this->monto_igtf->HrefValue = "";
-            $this->monto_igtf->TooltipValue = "";
-
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
@@ -4790,21 +4745,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->total->setupEditAttributes();
             $this->total->EditValue = $this->total->AdvancedSearch->SearchValue;
             $this->total->PlaceHolder = RemoveHtml($this->total->caption());
-
-            // igtf
-            $this->igtf->setupEditAttributes();
-            $this->igtf->EditValue = $this->igtf->options(true);
-            $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
-
-            // monto_base_igtf
-            $this->monto_base_igtf->setupEditAttributes();
-            $this->monto_base_igtf->EditValue = $this->monto_base_igtf->AdvancedSearch->SearchValue;
-            $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
-
-            // monto_igtf
-            $this->monto_igtf->setupEditAttributes();
-            $this->monto_igtf->EditValue = $this->monto_igtf->AdvancedSearch->SearchValue;
-            $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
 
             // moneda
             $this->moneda->setupEditAttributes();

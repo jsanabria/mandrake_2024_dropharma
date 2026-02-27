@@ -15,7 +15,7 @@ use Closure;
 /**
  * Page class
  */
-class CobrosClienteDetalleList extends CobrosClienteDetalle
+class AnticiposAplicacionesList extends AnticiposAplicaciones
 {
     use MessagesTrait;
 
@@ -26,7 +26,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
     public $ProjectID = PROJECT_ID;
 
     // Page object name
-    public $PageObjName = "CobrosClienteDetalleList";
+    public $PageObjName = "AnticiposAplicacionesList";
 
     // View file path
     public $View = null;
@@ -38,13 +38,13 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
     public $RenderingView = false;
 
     // Grid form hidden field names
-    public $FormName = "fcobros_cliente_detallelist";
+    public $FormName = "fanticipos_aplicacioneslist";
     public $FormActionName = "";
     public $FormBlankRowName = "";
     public $FormKeyCountName = "";
 
     // CSS class/style
-    public $CurrentPageName = "CobrosClienteDetalleList";
+    public $CurrentPageName = "AnticiposAplicacionesList";
 
     // Page URLs
     public $AddUrl;
@@ -145,19 +145,15 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->Visible = false;
-        $this->cobros_cliente->Visible = false;
-        $this->metodo_pago->setVisibility();
-        $this->referencia->setVisibility();
+        $this->id->setVisibility();
+        $this->anticipo_cobro_id->setVisibility();
+        $this->cobro_factura_id->setVisibility();
+        $this->salida_id->setVisibility();
+        $this->fecha->setVisibility();
+        $this->_username->setVisibility();
         $this->monto_moneda->setVisibility();
         $this->moneda->setVisibility();
-        $this->tasa_moneda->setVisibility();
-        $this->monto_bs->setVisibility();
-        $this->tasa_usd->Visible = false;
-        $this->monto_usd->Visible = false;
-        $this->banco_origen->setVisibility();
-        $this->banco->setVisibility();
-        $this->anticipo_id->setVisibility();
+        $this->tasa_factura->setVisibility();
     }
 
     // Constructor
@@ -168,8 +164,8 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $this->FormActionName = Config("FORM_ROW_ACTION_NAME");
         $this->FormBlankRowName = Config("FORM_BLANK_ROW_NAME");
         $this->FormKeyCountName = Config("FORM_KEY_COUNT_NAME");
-        $this->TableVar = 'cobros_cliente_detalle';
-        $this->TableName = 'cobros_cliente_detalle';
+        $this->TableVar = 'anticipos_aplicaciones';
+        $this->TableName = 'anticipos_aplicaciones';
 
         // Table CSS class
         $this->TableClass = "table table-sm ew-table";
@@ -189,26 +185,26 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         // Language object
         $Language = Container("app.language");
 
-        // Table object (cobros_cliente_detalle)
-        if (!isset($GLOBALS["cobros_cliente_detalle"]) || $GLOBALS["cobros_cliente_detalle"]::class == PROJECT_NAMESPACE . "cobros_cliente_detalle") {
-            $GLOBALS["cobros_cliente_detalle"] = &$this;
+        // Table object (anticipos_aplicaciones)
+        if (!isset($GLOBALS["anticipos_aplicaciones"]) || $GLOBALS["anticipos_aplicaciones"]::class == PROJECT_NAMESPACE . "anticipos_aplicaciones") {
+            $GLOBALS["anticipos_aplicaciones"] = &$this;
         }
 
         // Page URL
         $pageUrl = $this->pageUrl(false);
 
         // Initialize URLs
-        $this->AddUrl = "CobrosClienteDetalleAdd";
+        $this->AddUrl = "AnticiposAplicacionesAdd";
         $this->InlineAddUrl = $pageUrl . "action=add";
         $this->GridAddUrl = $pageUrl . "action=gridadd";
         $this->GridEditUrl = $pageUrl . "action=gridedit";
         $this->MultiEditUrl = $pageUrl . "action=multiedit";
-        $this->MultiDeleteUrl = "CobrosClienteDetalleDelete";
-        $this->MultiUpdateUrl = "CobrosClienteDetalleUpdate";
+        $this->MultiDeleteUrl = "AnticiposAplicacionesDelete";
+        $this->MultiUpdateUrl = "AnticiposAplicacionesUpdate";
 
         // Table name (for backward compatibility only)
         if (!defined(PROJECT_NAMESPACE . "TABLE_NAME")) {
-            define(PROJECT_NAMESPACE . "TABLE_NAME", 'cobros_cliente_detalle');
+            define(PROJECT_NAMESPACE . "TABLE_NAME", 'anticipos_aplicaciones');
         }
 
         // Start timer
@@ -359,7 +355,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
                 $result = ["url" => GetUrl($url), "modal" => "1"];  // Assume return to modal for simplicity
                 if (!SameString($pageName, GetPageName($this->getListUrl()))) { // Not List page
                     $result["caption"] = $this->getModalCaption($pageName);
-                    $result["view"] = SameString($pageName, "CobrosClienteDetalleView"); // If View page, no primary button
+                    $result["view"] = SameString($pageName, "AnticiposAplicacionesView"); // If View page, no primary button
                 } else { // List page
                     $result["error"] = $this->getFailureMessage(); // List page should not be shown as modal => error
                     $this->clearFailureMessage();
@@ -701,15 +697,9 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         // Setup other options
         $this->setupOtherOptions();
 
-        // Set up lookup cache
-        $this->setupLookupOptions($this->metodo_pago);
-        $this->setupLookupOptions($this->moneda);
-        $this->setupLookupOptions($this->banco_origen);
-        $this->setupLookupOptions($this->banco);
-
         // Update form name to avoid conflict
         if ($this->IsModal) {
-            $this->FormName = "fcobros_cliente_detallegrid";
+            $this->FormName = "fanticipos_aplicacionesgrid";
         }
 
         // Set up page action
@@ -1044,18 +1034,14 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $filterList = "";
         $savedFilterList = "";
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
-        $filterList = Concat($filterList, $this->cobros_cliente->AdvancedSearch->toJson(), ","); // Field cobros_cliente
-        $filterList = Concat($filterList, $this->metodo_pago->AdvancedSearch->toJson(), ","); // Field metodo_pago
-        $filterList = Concat($filterList, $this->referencia->AdvancedSearch->toJson(), ","); // Field referencia
+        $filterList = Concat($filterList, $this->anticipo_cobro_id->AdvancedSearch->toJson(), ","); // Field anticipo_cobro_id
+        $filterList = Concat($filterList, $this->cobro_factura_id->AdvancedSearch->toJson(), ","); // Field cobro_factura_id
+        $filterList = Concat($filterList, $this->salida_id->AdvancedSearch->toJson(), ","); // Field salida_id
+        $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
+        $filterList = Concat($filterList, $this->_username->AdvancedSearch->toJson(), ","); // Field username
         $filterList = Concat($filterList, $this->monto_moneda->AdvancedSearch->toJson(), ","); // Field monto_moneda
         $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
-        $filterList = Concat($filterList, $this->tasa_moneda->AdvancedSearch->toJson(), ","); // Field tasa_moneda
-        $filterList = Concat($filterList, $this->monto_bs->AdvancedSearch->toJson(), ","); // Field monto_bs
-        $filterList = Concat($filterList, $this->tasa_usd->AdvancedSearch->toJson(), ","); // Field tasa_usd
-        $filterList = Concat($filterList, $this->monto_usd->AdvancedSearch->toJson(), ","); // Field monto_usd
-        $filterList = Concat($filterList, $this->banco_origen->AdvancedSearch->toJson(), ","); // Field banco_origen
-        $filterList = Concat($filterList, $this->banco->AdvancedSearch->toJson(), ","); // Field banco
-        $filterList = Concat($filterList, $this->anticipo_id->AdvancedSearch->toJson(), ","); // Field anticipo_id
+        $filterList = Concat($filterList, $this->tasa_factura->AdvancedSearch->toJson(), ","); // Field tasa_factura
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1076,7 +1062,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
     {
         if (Post("ajax") == "savefilters") { // Save filter request (Ajax)
             $filters = Post("filters");
-            Profile()->setSearchFilters("fcobros_cliente_detallesrch", $filters);
+            Profile()->setSearchFilters("fanticipos_aplicacionessrch", $filters);
             WriteJson([["success" => true]]); // Success
             return true;
         } elseif (Post("cmd") == "resetfilter") {
@@ -1103,29 +1089,45 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $this->id->AdvancedSearch->SearchOperator2 = @$filter["w_id"];
         $this->id->AdvancedSearch->save();
 
-        // Field cobros_cliente
-        $this->cobros_cliente->AdvancedSearch->SearchValue = @$filter["x_cobros_cliente"];
-        $this->cobros_cliente->AdvancedSearch->SearchOperator = @$filter["z_cobros_cliente"];
-        $this->cobros_cliente->AdvancedSearch->SearchCondition = @$filter["v_cobros_cliente"];
-        $this->cobros_cliente->AdvancedSearch->SearchValue2 = @$filter["y_cobros_cliente"];
-        $this->cobros_cliente->AdvancedSearch->SearchOperator2 = @$filter["w_cobros_cliente"];
-        $this->cobros_cliente->AdvancedSearch->save();
+        // Field anticipo_cobro_id
+        $this->anticipo_cobro_id->AdvancedSearch->SearchValue = @$filter["x_anticipo_cobro_id"];
+        $this->anticipo_cobro_id->AdvancedSearch->SearchOperator = @$filter["z_anticipo_cobro_id"];
+        $this->anticipo_cobro_id->AdvancedSearch->SearchCondition = @$filter["v_anticipo_cobro_id"];
+        $this->anticipo_cobro_id->AdvancedSearch->SearchValue2 = @$filter["y_anticipo_cobro_id"];
+        $this->anticipo_cobro_id->AdvancedSearch->SearchOperator2 = @$filter["w_anticipo_cobro_id"];
+        $this->anticipo_cobro_id->AdvancedSearch->save();
 
-        // Field metodo_pago
-        $this->metodo_pago->AdvancedSearch->SearchValue = @$filter["x_metodo_pago"];
-        $this->metodo_pago->AdvancedSearch->SearchOperator = @$filter["z_metodo_pago"];
-        $this->metodo_pago->AdvancedSearch->SearchCondition = @$filter["v_metodo_pago"];
-        $this->metodo_pago->AdvancedSearch->SearchValue2 = @$filter["y_metodo_pago"];
-        $this->metodo_pago->AdvancedSearch->SearchOperator2 = @$filter["w_metodo_pago"];
-        $this->metodo_pago->AdvancedSearch->save();
+        // Field cobro_factura_id
+        $this->cobro_factura_id->AdvancedSearch->SearchValue = @$filter["x_cobro_factura_id"];
+        $this->cobro_factura_id->AdvancedSearch->SearchOperator = @$filter["z_cobro_factura_id"];
+        $this->cobro_factura_id->AdvancedSearch->SearchCondition = @$filter["v_cobro_factura_id"];
+        $this->cobro_factura_id->AdvancedSearch->SearchValue2 = @$filter["y_cobro_factura_id"];
+        $this->cobro_factura_id->AdvancedSearch->SearchOperator2 = @$filter["w_cobro_factura_id"];
+        $this->cobro_factura_id->AdvancedSearch->save();
 
-        // Field referencia
-        $this->referencia->AdvancedSearch->SearchValue = @$filter["x_referencia"];
-        $this->referencia->AdvancedSearch->SearchOperator = @$filter["z_referencia"];
-        $this->referencia->AdvancedSearch->SearchCondition = @$filter["v_referencia"];
-        $this->referencia->AdvancedSearch->SearchValue2 = @$filter["y_referencia"];
-        $this->referencia->AdvancedSearch->SearchOperator2 = @$filter["w_referencia"];
-        $this->referencia->AdvancedSearch->save();
+        // Field salida_id
+        $this->salida_id->AdvancedSearch->SearchValue = @$filter["x_salida_id"];
+        $this->salida_id->AdvancedSearch->SearchOperator = @$filter["z_salida_id"];
+        $this->salida_id->AdvancedSearch->SearchCondition = @$filter["v_salida_id"];
+        $this->salida_id->AdvancedSearch->SearchValue2 = @$filter["y_salida_id"];
+        $this->salida_id->AdvancedSearch->SearchOperator2 = @$filter["w_salida_id"];
+        $this->salida_id->AdvancedSearch->save();
+
+        // Field fecha
+        $this->fecha->AdvancedSearch->SearchValue = @$filter["x_fecha"];
+        $this->fecha->AdvancedSearch->SearchOperator = @$filter["z_fecha"];
+        $this->fecha->AdvancedSearch->SearchCondition = @$filter["v_fecha"];
+        $this->fecha->AdvancedSearch->SearchValue2 = @$filter["y_fecha"];
+        $this->fecha->AdvancedSearch->SearchOperator2 = @$filter["w_fecha"];
+        $this->fecha->AdvancedSearch->save();
+
+        // Field username
+        $this->_username->AdvancedSearch->SearchValue = @$filter["x__username"];
+        $this->_username->AdvancedSearch->SearchOperator = @$filter["z__username"];
+        $this->_username->AdvancedSearch->SearchCondition = @$filter["v__username"];
+        $this->_username->AdvancedSearch->SearchValue2 = @$filter["y__username"];
+        $this->_username->AdvancedSearch->SearchOperator2 = @$filter["w__username"];
+        $this->_username->AdvancedSearch->save();
 
         // Field monto_moneda
         $this->monto_moneda->AdvancedSearch->SearchValue = @$filter["x_monto_moneda"];
@@ -1143,61 +1145,13 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
         $this->moneda->AdvancedSearch->save();
 
-        // Field tasa_moneda
-        $this->tasa_moneda->AdvancedSearch->SearchValue = @$filter["x_tasa_moneda"];
-        $this->tasa_moneda->AdvancedSearch->SearchOperator = @$filter["z_tasa_moneda"];
-        $this->tasa_moneda->AdvancedSearch->SearchCondition = @$filter["v_tasa_moneda"];
-        $this->tasa_moneda->AdvancedSearch->SearchValue2 = @$filter["y_tasa_moneda"];
-        $this->tasa_moneda->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_moneda"];
-        $this->tasa_moneda->AdvancedSearch->save();
-
-        // Field monto_bs
-        $this->monto_bs->AdvancedSearch->SearchValue = @$filter["x_monto_bs"];
-        $this->monto_bs->AdvancedSearch->SearchOperator = @$filter["z_monto_bs"];
-        $this->monto_bs->AdvancedSearch->SearchCondition = @$filter["v_monto_bs"];
-        $this->monto_bs->AdvancedSearch->SearchValue2 = @$filter["y_monto_bs"];
-        $this->monto_bs->AdvancedSearch->SearchOperator2 = @$filter["w_monto_bs"];
-        $this->monto_bs->AdvancedSearch->save();
-
-        // Field tasa_usd
-        $this->tasa_usd->AdvancedSearch->SearchValue = @$filter["x_tasa_usd"];
-        $this->tasa_usd->AdvancedSearch->SearchOperator = @$filter["z_tasa_usd"];
-        $this->tasa_usd->AdvancedSearch->SearchCondition = @$filter["v_tasa_usd"];
-        $this->tasa_usd->AdvancedSearch->SearchValue2 = @$filter["y_tasa_usd"];
-        $this->tasa_usd->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_usd"];
-        $this->tasa_usd->AdvancedSearch->save();
-
-        // Field monto_usd
-        $this->monto_usd->AdvancedSearch->SearchValue = @$filter["x_monto_usd"];
-        $this->monto_usd->AdvancedSearch->SearchOperator = @$filter["z_monto_usd"];
-        $this->monto_usd->AdvancedSearch->SearchCondition = @$filter["v_monto_usd"];
-        $this->monto_usd->AdvancedSearch->SearchValue2 = @$filter["y_monto_usd"];
-        $this->monto_usd->AdvancedSearch->SearchOperator2 = @$filter["w_monto_usd"];
-        $this->monto_usd->AdvancedSearch->save();
-
-        // Field banco_origen
-        $this->banco_origen->AdvancedSearch->SearchValue = @$filter["x_banco_origen"];
-        $this->banco_origen->AdvancedSearch->SearchOperator = @$filter["z_banco_origen"];
-        $this->banco_origen->AdvancedSearch->SearchCondition = @$filter["v_banco_origen"];
-        $this->banco_origen->AdvancedSearch->SearchValue2 = @$filter["y_banco_origen"];
-        $this->banco_origen->AdvancedSearch->SearchOperator2 = @$filter["w_banco_origen"];
-        $this->banco_origen->AdvancedSearch->save();
-
-        // Field banco
-        $this->banco->AdvancedSearch->SearchValue = @$filter["x_banco"];
-        $this->banco->AdvancedSearch->SearchOperator = @$filter["z_banco"];
-        $this->banco->AdvancedSearch->SearchCondition = @$filter["v_banco"];
-        $this->banco->AdvancedSearch->SearchValue2 = @$filter["y_banco"];
-        $this->banco->AdvancedSearch->SearchOperator2 = @$filter["w_banco"];
-        $this->banco->AdvancedSearch->save();
-
-        // Field anticipo_id
-        $this->anticipo_id->AdvancedSearch->SearchValue = @$filter["x_anticipo_id"];
-        $this->anticipo_id->AdvancedSearch->SearchOperator = @$filter["z_anticipo_id"];
-        $this->anticipo_id->AdvancedSearch->SearchCondition = @$filter["v_anticipo_id"];
-        $this->anticipo_id->AdvancedSearch->SearchValue2 = @$filter["y_anticipo_id"];
-        $this->anticipo_id->AdvancedSearch->SearchOperator2 = @$filter["w_anticipo_id"];
-        $this->anticipo_id->AdvancedSearch->save();
+        // Field tasa_factura
+        $this->tasa_factura->AdvancedSearch->SearchValue = @$filter["x_tasa_factura"];
+        $this->tasa_factura->AdvancedSearch->SearchOperator = @$filter["z_tasa_factura"];
+        $this->tasa_factura->AdvancedSearch->SearchCondition = @$filter["v_tasa_factura"];
+        $this->tasa_factura->AdvancedSearch->SearchValue2 = @$filter["y_tasa_factura"];
+        $this->tasa_factura->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_factura"];
+        $this->tasa_factura->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1237,10 +1191,8 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
 
         // Fields to search
         $searchFlds = [];
-        $searchFlds[] = &$this->metodo_pago;
-        $searchFlds[] = &$this->referencia;
+        $searchFlds[] = &$this->_username;
         $searchFlds[] = &$this->moneda;
-        $searchFlds[] = &$this->banco_origen;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1319,15 +1271,15 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         if (Get("order") !== null) {
             $this->CurrentOrder = Get("order");
             $this->CurrentOrderType = Get("ordertype", "");
-            $this->updateSort($this->metodo_pago); // metodo_pago
-            $this->updateSort($this->referencia); // referencia
+            $this->updateSort($this->id); // id
+            $this->updateSort($this->anticipo_cobro_id); // anticipo_cobro_id
+            $this->updateSort($this->cobro_factura_id); // cobro_factura_id
+            $this->updateSort($this->salida_id); // salida_id
+            $this->updateSort($this->fecha); // fecha
+            $this->updateSort($this->_username); // username
             $this->updateSort($this->monto_moneda); // monto_moneda
             $this->updateSort($this->moneda); // moneda
-            $this->updateSort($this->tasa_moneda); // tasa_moneda
-            $this->updateSort($this->monto_bs); // monto_bs
-            $this->updateSort($this->banco_origen); // banco_origen
-            $this->updateSort($this->banco); // banco
-            $this->updateSort($this->anticipo_id); // anticipo_id
+            $this->updateSort($this->tasa_factura); // tasa_factura
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1353,18 +1305,14 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
                 $orderBy = "";
                 $this->setSessionOrderBy($orderBy);
                 $this->id->setSort("");
-                $this->cobros_cliente->setSort("");
-                $this->metodo_pago->setSort("");
-                $this->referencia->setSort("");
+                $this->anticipo_cobro_id->setSort("");
+                $this->cobro_factura_id->setSort("");
+                $this->salida_id->setSort("");
+                $this->fecha->setSort("");
+                $this->_username->setSort("");
                 $this->monto_moneda->setSort("");
                 $this->moneda->setSort("");
-                $this->tasa_moneda->setSort("");
-                $this->monto_bs->setSort("");
-                $this->tasa_usd->setSort("");
-                $this->monto_usd->setSort("");
-                $this->banco_origen->setSort("");
-                $this->banco->setSort("");
-                $this->anticipo_id->setSort("");
+                $this->tasa_factura->setSort("");
             }
 
             // Reset start position
@@ -1388,6 +1336,18 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $item = &$this->ListOptions->add("view");
         $item->CssClass = "text-nowrap";
         $item->Visible = $Security->canView();
+        $item->OnLeft = true;
+
+        // "edit"
+        $item = &$this->ListOptions->add("edit");
+        $item->CssClass = "text-nowrap";
+        $item->Visible = $Security->canEdit();
+        $item->OnLeft = true;
+
+        // "delete"
+        $item = &$this->ListOptions->add("delete");
+        $item->CssClass = "text-nowrap";
+        $item->Visible = $Security->canDelete();
         $item->OnLeft = true;
 
         // List actions
@@ -1454,9 +1414,38 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             $viewcaption = HtmlTitle($Language->phrase("ViewLink"));
             if ($Security->canView()) {
                 if ($this->ModalView && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-table=\"cobros_cliente_detalle\" data-caption=\"" . $viewcaption . "\" data-ew-action=\"modal\" data-action=\"view\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\" data-btn=\"null\">" . $Language->phrase("ViewLink") . "</a>";
+                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-table=\"anticipos_aplicaciones\" data-caption=\"" . $viewcaption . "\" data-ew-action=\"modal\" data-action=\"view\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\" data-btn=\"null\">" . $Language->phrase("ViewLink") . "</a>";
                 } else {
                     $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-caption=\"" . $viewcaption . "\" href=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\">" . $Language->phrase("ViewLink") . "</a>";
+                }
+            } else {
+                $opt->Body = "";
+            }
+
+            // "edit"
+            $opt = $this->ListOptions["edit"];
+            $editcaption = HtmlTitle($Language->phrase("EditLink"));
+            if ($Security->canEdit()) {
+                if ($this->ModalEdit && !IsMobile()) {
+                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"anticipos_aplicaciones\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
+                } else {
+                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("EditLink") . "</a>";
+                }
+            } else {
+                $opt->Body = "";
+            }
+
+            // "delete"
+            $opt = $this->ListOptions["delete"];
+            if ($Security->canDelete()) {
+                $deleteCaption = $Language->phrase("DeleteLink");
+                $deleteTitle = HtmlTitle($deleteCaption);
+                if ($this->UseAjaxActions) {
+                    $opt->Body = "<a class=\"ew-row-link ew-delete\" data-ew-action=\"inline\" data-action=\"delete\" title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" data-key= \"" . HtmlEncode($this->getKey(true)) . "\" data-url=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
+                } else {
+                    $opt->Body = "<a class=\"ew-row-link ew-delete\"" .
+                        ($this->InlineDelete ? " data-ew-action=\"inline-delete\"" : "") .
+                        " title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" href=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
                 }
             } else {
                 $opt->Body = "";
@@ -1479,12 +1468,12 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
                         $icon = ($listAction->Icon != "") ? "<i class=\"" . HtmlEncode(str_replace(" ew-icon", "", $listAction->Icon)) . "\" data-caption=\"" . $title . "\"></i> " : "";
                         $link = $disabled
                             ? "<li><div class=\"alert alert-light\">" . $icon . " " . $caption . "</div></li>"
-                            : "<li><button type=\"button\" class=\"dropdown-item ew-action ew-list-action\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"fcobros_cliente_detallelist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button></li>";
+                            : "<li><button type=\"button\" class=\"dropdown-item ew-action ew-list-action\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"fanticipos_aplicacioneslist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button></li>";
                         $links[] = $link;
                         if ($body == "") { // Setup first button
                             $body = $disabled
                             ? "<div class=\"alert alert-light\">" . $icon . " " . $caption . "</div>"
-                            : "<button type=\"button\" class=\"btn btn-default ew-action ew-list-action\" title=\"" . $title . "\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"fcobros_cliente_detallelist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button>";
+                            : "<button type=\"button\" class=\"btn btn-default ew-action ew-list-action\" title=\"" . $title . "\" data-caption=\"" . $title . "\" data-ew-action=\"submit\" form=\"fanticipos_aplicacioneslist\" data-key=\"" . $this->keyToJson(true) . "\"" . $listAction->toDataAttributes() . ">" . $icon . " " . $caption . "</button>";
                         }
                     }
                 }
@@ -1521,6 +1510,17 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
     {
         global $Language, $Security;
         $options = &$this->OtherOptions;
+        $option = $options["addedit"];
+
+        // Add
+        $item = &$option->add("add");
+        $addcaption = HtmlTitle($Language->phrase("AddLink"));
+        if ($this->ModalAdd && !IsMobile()) {
+            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-table=\"anticipos_aplicaciones\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("AddLink") . "</a>";
+        } else {
+            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("AddLink") . "</a>";
+        }
+        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
         $option = $options["action"];
 
         // Show column list for column visibility
@@ -1529,15 +1529,15 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             $item = &$option->addGroupOption();
             $item->Body = "";
             $item->Visible = $this->UseColumnVisibility;
-            $this->createColumnOption($option, "metodo_pago");
-            $this->createColumnOption($option, "referencia");
+            $this->createColumnOption($option, "id");
+            $this->createColumnOption($option, "anticipo_cobro_id");
+            $this->createColumnOption($option, "cobro_factura_id");
+            $this->createColumnOption($option, "salida_id");
+            $this->createColumnOption($option, "fecha");
+            $this->createColumnOption($option, "username");
             $this->createColumnOption($option, "monto_moneda");
             $this->createColumnOption($option, "moneda");
-            $this->createColumnOption($option, "tasa_moneda");
-            $this->createColumnOption($option, "monto_bs");
-            $this->createColumnOption($option, "banco_origen");
-            $this->createColumnOption($option, "banco");
-            $this->createColumnOption($option, "anticipo_id");
+            $this->createColumnOption($option, "tasa_factura");
         }
 
         // Set up custom actions
@@ -1562,10 +1562,10 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
 
         // Filter button
         $item = &$this->FilterOptions->add("savecurrentfilter");
-        $item->Body = "<a class=\"ew-save-filter\" data-form=\"fcobros_cliente_detallesrch\" data-ew-action=\"none\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
+        $item->Body = "<a class=\"ew-save-filter\" data-form=\"fanticipos_aplicacionessrch\" data-ew-action=\"none\">" . $Language->phrase("SaveCurrentFilter") . "</a>";
         $item->Visible = true;
         $item = &$this->FilterOptions->add("deletefilter");
-        $item->Body = "<a class=\"ew-delete-filter\" data-form=\"fcobros_cliente_detallesrch\" data-ew-action=\"none\">" . $Language->phrase("DeleteFilter") . "</a>";
+        $item->Body = "<a class=\"ew-delete-filter\" data-form=\"fanticipos_aplicacionessrch\" data-ew-action=\"none\">" . $Language->phrase("DeleteFilter") . "</a>";
         $item->Visible = true;
         $this->FilterOptions->UseDropDownButton = true;
         $this->FilterOptions->UseButtonGroup = !$this->FilterOptions->UseDropDownButton;
@@ -1625,7 +1625,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
                 $item = &$option->add("custom_" . $listAction->Action);
                 $caption = $listAction->Caption;
                 $icon = ($listAction->Icon != "") ? '<i class="' . HtmlEncode($listAction->Icon) . '" data-caption="' . HtmlEncode($caption) . '"></i>' . $caption : $caption;
-                $item->Body = '<button type="button" class="btn btn-default ew-action ew-list-action" title="' . HtmlEncode($caption) . '" data-caption="' . HtmlEncode($caption) . '" data-ew-action="submit" form="fcobros_cliente_detallelist"' . $listAction->toDataAttributes() . '>' . $icon . '</button>';
+                $item->Body = '<button type="button" class="btn btn-default ew-action ew-list-action" title="' . HtmlEncode($caption) . '" data-caption="' . HtmlEncode($caption) . '" data-ew-action="submit" form="fanticipos_aplicacioneslist"' . $listAction->toDataAttributes() . '>' . $icon . '</button>';
                 $item->Visible = $listAction->Allowed;
             }
         }
@@ -1791,7 +1791,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
 
                 // Set row properties
                 $this->resetAttributes();
-                $this->RowAttrs->merge(["data-rowindex" => $this->RowIndex, "id" => "r0_cobros_cliente_detalle", "data-rowtype" => RowType::ADD]);
+                $this->RowAttrs->merge(["data-rowindex" => $this->RowIndex, "id" => "r0_anticipos_aplicaciones", "data-rowtype" => RowType::ADD]);
                 $this->RowAttrs->appendClass("ew-template");
                 // Render row
                 $this->RowType = RowType::ADD;
@@ -1852,7 +1852,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $this->RowAttrs->merge([
             "data-rowindex" => $this->RowCount,
             "data-key" => $this->getKey(true),
-            "id" => "r" . $this->RowCount . "_cobros_cliente_detalle",
+            "id" => "r" . $this->RowCount . "_anticipos_aplicaciones",
             "data-rowtype" => $this->RowType,
             "data-inline" => ($this->isAdd() || $this->isCopy() || $this->isEdit()) ? "true" : "false", // Inline-Add/Copy/Edit
             "class" => ($this->RowCount % 2 != 1) ? "ew-table-alt-row" : "",
@@ -1972,18 +1972,14 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         // Call Row Selected event
         $this->rowSelected($row);
         $this->id->setDbValue($row['id']);
-        $this->cobros_cliente->setDbValue($row['cobros_cliente']);
-        $this->metodo_pago->setDbValue($row['metodo_pago']);
-        $this->referencia->setDbValue($row['referencia']);
+        $this->anticipo_cobro_id->setDbValue($row['anticipo_cobro_id']);
+        $this->cobro_factura_id->setDbValue($row['cobro_factura_id']);
+        $this->salida_id->setDbValue($row['salida_id']);
+        $this->fecha->setDbValue($row['fecha']);
+        $this->_username->setDbValue($row['username']);
         $this->monto_moneda->setDbValue($row['monto_moneda']);
         $this->moneda->setDbValue($row['moneda']);
-        $this->tasa_moneda->setDbValue($row['tasa_moneda']);
-        $this->monto_bs->setDbValue($row['monto_bs']);
-        $this->tasa_usd->setDbValue($row['tasa_usd']);
-        $this->monto_usd->setDbValue($row['monto_usd']);
-        $this->banco_origen->setDbValue($row['banco_origen']);
-        $this->banco->setDbValue($row['banco']);
-        $this->anticipo_id->setDbValue($row['anticipo_id']);
+        $this->tasa_factura->setDbValue($row['tasa_factura']);
     }
 
     // Return a row with default values
@@ -1991,18 +1987,14 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
     {
         $row = [];
         $row['id'] = $this->id->DefaultValue;
-        $row['cobros_cliente'] = $this->cobros_cliente->DefaultValue;
-        $row['metodo_pago'] = $this->metodo_pago->DefaultValue;
-        $row['referencia'] = $this->referencia->DefaultValue;
+        $row['anticipo_cobro_id'] = $this->anticipo_cobro_id->DefaultValue;
+        $row['cobro_factura_id'] = $this->cobro_factura_id->DefaultValue;
+        $row['salida_id'] = $this->salida_id->DefaultValue;
+        $row['fecha'] = $this->fecha->DefaultValue;
+        $row['username'] = $this->_username->DefaultValue;
         $row['monto_moneda'] = $this->monto_moneda->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
-        $row['tasa_moneda'] = $this->tasa_moneda->DefaultValue;
-        $row['monto_bs'] = $this->monto_bs->DefaultValue;
-        $row['tasa_usd'] = $this->tasa_usd->DefaultValue;
-        $row['monto_usd'] = $this->monto_usd->DefaultValue;
-        $row['banco_origen'] = $this->banco_origen->DefaultValue;
-        $row['banco'] = $this->banco->DefaultValue;
-        $row['anticipo_id'] = $this->anticipo_id->DefaultValue;
+        $row['tasa_factura'] = $this->tasa_factura->DefaultValue;
         return $row;
     }
 
@@ -2045,171 +2037,80 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
 
         // id
 
-        // cobros_cliente
+        // anticipo_cobro_id
 
-        // metodo_pago
+        // cobro_factura_id
 
-        // referencia
+        // salida_id
+
+        // fecha
+
+        // username
 
         // monto_moneda
 
         // moneda
 
-        // tasa_moneda
-
-        // monto_bs
-
-        // tasa_usd
-
-        // monto_usd
-
-        // banco_origen
-
-        // banco
-
-        // anticipo_id
+        // tasa_factura
 
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
             $this->id->ViewValue = $this->id->CurrentValue;
 
-            // cobros_cliente
-            $this->cobros_cliente->ViewValue = $this->cobros_cliente->CurrentValue;
-            $this->cobros_cliente->ViewValue = FormatNumber($this->cobros_cliente->ViewValue, $this->cobros_cliente->formatPattern());
+            // anticipo_cobro_id
+            $this->anticipo_cobro_id->ViewValue = $this->anticipo_cobro_id->CurrentValue;
+            $this->anticipo_cobro_id->ViewValue = FormatNumber($this->anticipo_cobro_id->ViewValue, $this->anticipo_cobro_id->formatPattern());
 
-            // metodo_pago
-            $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
-            $curVal = strval($this->metodo_pago->CurrentValue);
-            if ($curVal != "") {
-                $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
-                if ($this->metodo_pago->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
-                        $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
-                    } else {
-                        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
-                    }
-                }
-            } else {
-                $this->metodo_pago->ViewValue = null;
-            }
+            // cobro_factura_id
+            $this->cobro_factura_id->ViewValue = $this->cobro_factura_id->CurrentValue;
+            $this->cobro_factura_id->ViewValue = FormatNumber($this->cobro_factura_id->ViewValue, $this->cobro_factura_id->formatPattern());
 
-            // referencia
-            $this->referencia->ViewValue = $this->referencia->CurrentValue;
+            // salida_id
+            $this->salida_id->ViewValue = $this->salida_id->CurrentValue;
+            $this->salida_id->ViewValue = FormatNumber($this->salida_id->ViewValue, $this->salida_id->formatPattern());
+
+            // fecha
+            $this->fecha->ViewValue = $this->fecha->CurrentValue;
+            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+            // username
+            $this->_username->ViewValue = $this->_username->CurrentValue;
 
             // monto_moneda
             $this->monto_moneda->ViewValue = $this->monto_moneda->CurrentValue;
             $this->monto_moneda->ViewValue = FormatNumber($this->monto_moneda->ViewValue, $this->monto_moneda->formatPattern());
 
             // moneda
-            $curVal = strval($this->moneda->CurrentValue);
-            if ($curVal != "") {
-                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-                if ($this->moneda->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                    } else {
-                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                    }
-                }
-            } else {
-                $this->moneda->ViewValue = null;
-            }
+            $this->moneda->ViewValue = $this->moneda->CurrentValue;
 
-            // tasa_moneda
-            $this->tasa_moneda->ViewValue = $this->tasa_moneda->CurrentValue;
-            $this->tasa_moneda->ViewValue = FormatNumber($this->tasa_moneda->ViewValue, $this->tasa_moneda->formatPattern());
+            // tasa_factura
+            $this->tasa_factura->ViewValue = $this->tasa_factura->CurrentValue;
+            $this->tasa_factura->ViewValue = FormatNumber($this->tasa_factura->ViewValue, $this->tasa_factura->formatPattern());
 
-            // monto_bs
-            $this->monto_bs->ViewValue = $this->monto_bs->CurrentValue;
-            $this->monto_bs->ViewValue = FormatNumber($this->monto_bs->ViewValue, $this->monto_bs->formatPattern());
+            // id
+            $this->id->HrefValue = "";
+            $this->id->TooltipValue = "";
 
-            // tasa_usd
-            $this->tasa_usd->ViewValue = $this->tasa_usd->CurrentValue;
-            $this->tasa_usd->ViewValue = FormatNumber($this->tasa_usd->ViewValue, $this->tasa_usd->formatPattern());
+            // anticipo_cobro_id
+            $this->anticipo_cobro_id->HrefValue = "";
+            $this->anticipo_cobro_id->TooltipValue = "";
 
-            // monto_usd
-            $this->monto_usd->ViewValue = $this->monto_usd->CurrentValue;
-            $this->monto_usd->ViewValue = FormatNumber($this->monto_usd->ViewValue, $this->monto_usd->formatPattern());
+            // cobro_factura_id
+            $this->cobro_factura_id->HrefValue = "";
+            $this->cobro_factura_id->TooltipValue = "";
 
-            // banco_origen
-            $this->banco_origen->ViewValue = $this->banco_origen->CurrentValue;
-            $curVal = strval($this->banco_origen->CurrentValue);
-            if ($curVal != "") {
-                $this->banco_origen->ViewValue = $this->banco_origen->lookupCacheOption($curVal);
-                if ($this->banco_origen->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->banco_origen->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->banco_origen->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->banco_origen->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->banco_origen->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->banco_origen->Lookup->renderViewRow($rswrk[0]);
-                        $this->banco_origen->ViewValue = $this->banco_origen->displayValue($arwrk);
-                    } else {
-                        $this->banco_origen->ViewValue = $this->banco_origen->CurrentValue;
-                    }
-                }
-            } else {
-                $this->banco_origen->ViewValue = null;
-            }
+            // salida_id
+            $this->salida_id->HrefValue = "";
+            $this->salida_id->TooltipValue = "";
 
-            // banco
-            $this->banco->ViewValue = $this->banco->CurrentValue;
-            $curVal = strval($this->banco->CurrentValue);
-            if ($curVal != "") {
-                $this->banco->ViewValue = $this->banco->lookupCacheOption($curVal);
-                if ($this->banco->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->banco->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->banco->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                    $sqlWrk = $this->banco->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->banco->Lookup->renderViewRow($rswrk[0]);
-                        $this->banco->ViewValue = $this->banco->displayValue($arwrk);
-                    } else {
-                        $this->banco->ViewValue = FormatNumber($this->banco->CurrentValue, $this->banco->formatPattern());
-                    }
-                }
-            } else {
-                $this->banco->ViewValue = null;
-            }
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
 
-            // anticipo_id
-            $this->anticipo_id->ViewValue = $this->anticipo_id->CurrentValue;
-            $this->anticipo_id->ViewValue = FormatNumber($this->anticipo_id->ViewValue, $this->anticipo_id->formatPattern());
-
-            // metodo_pago
-            $this->metodo_pago->HrefValue = "";
-            $this->metodo_pago->TooltipValue = "";
-
-            // referencia
-            $this->referencia->HrefValue = "";
-            $this->referencia->TooltipValue = "";
+            // username
+            $this->_username->HrefValue = "";
+            $this->_username->TooltipValue = "";
 
             // monto_moneda
             $this->monto_moneda->HrefValue = "";
@@ -2219,25 +2120,9 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
 
-            // tasa_moneda
-            $this->tasa_moneda->HrefValue = "";
-            $this->tasa_moneda->TooltipValue = "";
-
-            // monto_bs
-            $this->monto_bs->HrefValue = "";
-            $this->monto_bs->TooltipValue = "";
-
-            // banco_origen
-            $this->banco_origen->HrefValue = "";
-            $this->banco_origen->TooltipValue = "";
-
-            // banco
-            $this->banco->HrefValue = "";
-            $this->banco->TooltipValue = "";
-
-            // anticipo_id
-            $this->anticipo_id->HrefValue = "";
-            $this->anticipo_id->TooltipValue = "";
+            // tasa_factura
+            $this->tasa_factura->HrefValue = "";
+            $this->tasa_factura->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -2258,19 +2143,19 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         }
         if (SameText($type, "excel")) {
             if ($custom) {
-                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" form=\"fcobros_cliente_detallelist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"excel\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToExcel") . "</button>";
+                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" form=\"fanticipos_aplicacioneslist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"excel\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToExcel") . "</button>";
             } else {
                 return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-excel\" title=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToExcel", true)) . "\">" . $Language->phrase("ExportToExcel") . "</a>";
             }
         } elseif (SameText($type, "word")) {
             if ($custom) {
-                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" form=\"fcobros_cliente_detallelist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"word\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToWord") . "</button>";
+                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" form=\"fanticipos_aplicacioneslist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"word\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToWord") . "</button>";
             } else {
                 return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-word\" title=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToWord", true)) . "\">" . $Language->phrase("ExportToWord") . "</a>";
             }
         } elseif (SameText($type, "pdf")) {
             if ($custom) {
-                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" form=\"fcobros_cliente_detallelist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"pdf\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToPdf") . "</button>";
+                return "<button type=\"button\" class=\"btn btn-default ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" form=\"fanticipos_aplicacioneslist\" data-url=\"$exportUrl\" data-ew-action=\"export\" data-export=\"pdf\" data-custom=\"true\" data-export-selected=\"false\">" . $Language->phrase("ExportToPdf") . "</button>";
             } else {
                 return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-pdf\" title=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToPdf", true)) . "\">" . $Language->phrase("ExportToPdf") . "</a>";
             }
@@ -2282,7 +2167,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-csv\" title=\"" . HtmlEncode($Language->phrase("ExportToCsv", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("ExportToCsv", true)) . "\">" . $Language->phrase("ExportToCsv") . "</a>";
         } elseif (SameText($type, "email")) {
             $url = $custom ? ' data-url="' . $exportUrl . '"' : '';
-            return '<button type="button" class="btn btn-default ew-export-link ew-email" title="' . $Language->phrase("ExportToEmail", true) . '" data-caption="' . $Language->phrase("ExportToEmail", true) . '" form="fcobros_cliente_detallelist" data-ew-action="email" data-custom="false" data-hdr="' . $Language->phrase("ExportToEmail", true) . '" data-exported-selected="false"' . $url . '>' . $Language->phrase("ExportToEmail") . '</button>';
+            return '<button type="button" class="btn btn-default ew-export-link ew-email" title="' . $Language->phrase("ExportToEmail", true) . '" data-caption="' . $Language->phrase("ExportToEmail", true) . '" form="fanticipos_aplicacioneslist" data-ew-action="email" data-custom="false" data-hdr="' . $Language->phrase("ExportToEmail", true) . '" data-exported-selected="false"' . $url . '>' . $Language->phrase("ExportToEmail") . '</button>';
         } elseif (SameText($type, "print")) {
             return "<a href=\"$exportUrl\" class=\"btn btn-default ew-export-link ew-print\" title=\"" . HtmlEncode($Language->phrase("PrinterFriendly", true)) . "\" data-caption=\"" . HtmlEncode($Language->phrase("PrinterFriendly", true)) . "\">" . $Language->phrase("PrinterFriendly") . "</a>";
         }
@@ -2360,7 +2245,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         // Search button
         $item = &$this->SearchOptions->add("searchtoggle");
         $searchToggleClass = ($this->SearchWhere != "") ? " active" : "";
-        $item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-ew-action=\"search-toggle\" data-form=\"fcobros_cliente_detallesrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
+        $item->Body = "<a class=\"btn btn-default ew-search-toggle" . $searchToggleClass . "\" role=\"button\" title=\"" . $Language->phrase("SearchPanel") . "\" data-caption=\"" . $Language->phrase("SearchPanel") . "\" data-ew-action=\"search-toggle\" data-form=\"fanticipos_aplicacionessrch\" aria-pressed=\"" . ($searchToggleClass == " active" ? "true" : "false") . "\">" . $Language->phrase("SearchLink") . "</a>";
         $item->Visible = true;
 
         // Show all button
@@ -2489,17 +2374,6 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
-                case "x_metodo_pago":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_moneda":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_banco_origen":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_banco":
-                    break;
                 default:
                     $lookupFilter = "";
                     break;

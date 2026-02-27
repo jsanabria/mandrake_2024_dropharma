@@ -1,0 +1,29 @@
+CREATE TABLE anticipos_aplicaciones (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  anticipo_cobro_id INT UNSIGNED NOT NULL,
+  cobro_factura_id INT UNSIGNED NOT NULL,
+  salida_id INT UNSIGNED NOT NULL,
+  fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  username VARCHAR(30) NULL,
+  monto_moneda DECIMAL(14,2) NOT NULL,
+  moneda VARCHAR(6) NOT NULL,
+  tasa_factura DECIMAL(14,2) NULL,
+  PRIMARY KEY (id),
+  INDEX idx_anticipo (anticipo_cobro_id),
+  INDEX idx_cobro_factura (cobro_factura_id),
+  INDEX idx_salida (salida_id)
+) ENGINE=InnoDB;
+
+
+INSERT INTO parametro (`codigo`, `descripcion`, `valor1`, `valor2`) VALUES ('009', 'Tipo Pago ', 'AN', 'ANTICIPO');
+
+
+ALTER TABLE cobros_cliente_detalle
+  ADD COLUMN anticipo_id INT UNSIGNED NULL AFTER banco;
+
+CREATE INDEX idx_anticipo_id ON cobros_cliente_detalle (anticipo_id);
+
+ALTER TABLE `cobros_cliente_detalle`
+	ADD COLUMN `banco_origen` VARCHAR(6) NULL DEFAULT NULL AFTER `monto_usd`;
+
+

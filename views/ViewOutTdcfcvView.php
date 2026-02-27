@@ -48,7 +48,27 @@ loadjs.ready(["wrapper", "head"], function () {
 </script>
 <script>
 loadjs.ready("head", function () {
+    // Client script
     // Write your table-specific client script here, no need to add script tags.
+    window.RevertirPagos = function (id) {
+      if(confirm("Seguro de revertir este pago?")) {
+            var parametros = {
+                    "id" : id
+            };
+            $.ajax({
+                    data:  parametros,
+                    url:   '../include/revertir_pagos.php',
+                    type:  'post',
+                    beforeSend: function () {
+                            // alert("Procesando, espere por favor...");
+                    },
+                    success:  function (response) {
+                            alert(response);
+                            location.reload();
+                    }
+            });
+      }
+    }
 });
 </script>
 <?php } ?>

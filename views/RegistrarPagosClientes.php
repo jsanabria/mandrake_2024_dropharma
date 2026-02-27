@@ -14,6 +14,12 @@ $id_compra = Param("id_compra") ?? 0;
 $id_compra = intval($id_compra);
 $accion = Param("accion") ?? "";
 
+function jsonResponse($arr) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($arr, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 // 2. Bloque AJAX
 if ($accion == "refrescar") {
     if (ob_get_length()) ob_end_clean();
@@ -37,6 +43,63 @@ if ($accion == "refrescar") {
                 JOIN cliente AS b ON b.id = a.cliente 
                 WHERE a.id = " . QuotedValue($id_compra, 1);
     $factura = ExecuteRow($sqlFact);
+
+    ///////
+    $compania_id = 1;
+
+    // reglas
+    $reglas = ExecuteRows("
+        SELECT compania, metodo, IFNULL(moneda,'') AS moneda, cuenta_destino_id, prioridad
+        FROM pago_destino_regla
+        WHERE compania = " . intval($compania_id) . " AND activo = 'S'
+        ORDER BY prioridad DESC, id DESC
+    ");
+    $reglas_json = json_encode($reglas);
+
+    // cuentas destino (select simple)
+    $cuentas_destino = ExecuteRows("
+        SELECT a.id, b.campo_descripcion AS banco, a.tipo, a.numero
+        FROM compania_cuenta a
+        JOIN tabla b ON b.campo_codigo = a.banco AND b.tabla = 'BANCO'
+        WHERE a.compania = " . intval($compania_id) . "
+        AND a.mostrar = 'S' AND a.activo = 'S'
+        ORDER BY b.campo_descripcion, a.numero
+    ");
+    ///////
+
+    $anticipos = [];
+    if ($tipo_pago_actual === "AN") {
+        $cliente_id = intval($factura["cliente"] ?? 0);
+
+        // Anticipos = cobros_cliente.id_documento = 0
+        $sqlAnt = "
+            SELECT
+            cc.id AS anticipo_id,
+            cc.fecha,
+            ccd.moneda,
+            SUM(ccd.monto_moneda) AS monto_anticipo,
+            COALESCE((
+                SELECT SUM(a.monto_moneda)
+                FROM anticipos_aplicaciones a
+                WHERE a.anticipo_cobro_id = cc.id
+                AND a.moneda = ccd.moneda
+            ), 0) AS monto_aplicado,
+            (SUM(ccd.monto_moneda) - COALESCE((
+                SELECT SUM(a.monto_moneda)
+                FROM anticipos_aplicaciones a
+                WHERE a.anticipo_cobro_id = cc.id
+                AND a.moneda = ccd.moneda
+            ), 0)) AS saldo_disponible
+            FROM cobros_cliente cc
+            JOIN cobros_cliente_detalle ccd ON ccd.cobros_cliente = cc.id
+            WHERE cc.cliente = " . intval($cliente_id) . "
+            AND cc.id_documento = 0
+            GROUP BY cc.id, cc.fecha, ccd.moneda
+            HAVING saldo_disponible > 0.01
+            ORDER BY cc.fecha DESC
+        ";
+        $anticipos = ExecuteRows($sqlAnt);
+    }
 
     $igtf_pct = floatval(ExecuteScalar("SELECT alicuota AS IGTF FROM alicuota WHERE codigo = 'IGT' AND activo = 'S'") ?: 0);
 
@@ -112,106 +175,159 @@ if ($accion == "refrescar") {
                 <input type="hidden" id="tasa_dia_doc" value="<?= $tasa_dia ?>">
                 <input type="hidden" id="moneda_doc" value="<?= HtmlEncode($moneda_doc) ?>">
                 <input type="hidden" id="igtf_pct" value="<?= $igtf_pct ?>">
+                <input type="hidden" id="reglas_destino_json" value='<?= HtmlEncode($reglas_json) ?>'>
             </div>
         </div>
     </div>
 
     <div class="card shadow-sm border-0 mb-3 border-top border-primary border-3">
-  <div class="card-body">
+    <div class="card-body">
 
-    <!-- FILA 1 -->
-    <div class="row g-2 align-items-end">
-      <div class="col-md-4">
-        <label class="small fw-bold">MÉTODO</label>
-        <select id="tipo_pago" class="form-select form-select-sm" onchange="cambiarMetodo(this.value)">
-          <option value="">Seleccione...</option>
-          <?php
-          $metodos = ExecuteRows("SELECT valor1, valor2 FROM parametro WHERE codigo = '009' AND valor1 NOT IN ('PC','PF','DV','NC','ND')");
-          foreach ($metodos as $m) {
-              $sel = ($tipo_pago_actual == $m['valor1']) ? "selected" : "";
-              echo "<option value='{$m['valor1']}' $sel>{$m['valor2']}</option>";
-          }
-          ?>
-        </select>
-      </div>
-
-      <div class="col-md-4">
-        <label class="small fw-bold">MONTO</label>
-        <input type="number" id="monto_input" class="form-control form-control-sm fw-bold border-primary"
-               step="0.01" value="<?= ($saldo_bs > 0) ? round($saldo_bs, 2) : '' ?>">
-      </div>
-
-      <div class="col-md-2">
-        <label class="small fw-bold">MONEDA</label>
-        <select id="moneda_input" class="form-select form-select-sm">
-          <?php
-          $lista = ["Bs.", $moneda_doc_sel];
-          $lista = array_values(array_unique($lista));
-
-          $lista_sql = [];
-          foreach ($lista as $v) $lista_sql[] = "'" . AdjustSql($v) . "'";
-          $sqlMon = "SELECT valor1 FROM parametro WHERE codigo = '006' AND valor1 IN (" . implode(",", $lista_sql) . ")";
-          $monedas = ExecuteRows($sqlMon);
-
-          foreach ($monedas as $mon) {
-              echo "<option value='{$mon['valor1']}'>{$mon['valor1']}</option>";
-          }
-          ?>
-        </select>
-      </div>
-    </div>
-
-    <!-- FILA 2 -->
-    <div class="row g-2 align-items-end mt-1">
-
-      <div class="col-md-4">
-        <label class="small fw-bold">BANCO</label>
-        <?php
-        // Bancos
-        $bancos = ExecuteRows("SELECT campo_codigo AS codigo, campo_descripcion AS descripcion
-                              FROM tabla WHERE tabla = 'BANCO'
-                              ORDER BY campo_descripcion");
-        ?>
-        <select id="banco_input" class="form-select form-select-sm" style="max-width: 240px;">
-            <option value="">Banco...</option>
-            <?php foreach ($bancos as $b): ?>
-                <option value="<?= HtmlEncode($b["codigo"]) ?>"
-                        data-code="<?= HtmlEncode($b["codigo"]) ?>">
-                    <?= HtmlEncode($b["descripcion"]) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-      </div>
-
-      <div class="col-md-4">
-        <label class="small fw-bold">REFERENCIA</label>
-
-        <?php if (in_array($tipo_pago_actual, ["RC", "RD"])): 
-            $tabla = ($tipo_pago_actual == "RC") ? "recarga" : "recarga2";
-            $recarga = ExecuteRow("SELECT id, saldo FROM $tabla WHERE cliente = " . intval($factura['cliente']) . " ORDER BY id DESC LIMIT 1");
-        ?>
-            <input type="hidden" id="ref_input" value="<?= $recarga['id'] ?? '' ?>">
-            <input type="text" class="form-control form-control-sm bg-white fw-bold"
-                   value="<?= number_format($recarga['saldo'] ?? 0, 2, ".", "") ?>" readonly>
-        <?php else: ?>
-            <input type="text" id="ref_input" class="form-control form-control-sm" placeholder="Referencia...">
-        <?php endif; ?>
-
-      </div>
-
-        <div class="col-md-4 d-flex flex-column justify-content-end">
-            <button type="button"
-                    class="btn btn-primary btn-sm w-100 fw-bold"
-                    onclick="return agregarPago(event)">
-                ADD
-            </button>
-
-            <small class="mt-2 text-muted" id="help_ref_banco"></small>
+        <!-- FILA 1 -->
+        <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="small fw-bold">MÉTODO</label>
+            <select id="tipo_pago" class="form-select form-select-sm" onchange="cambiarMetodo(this.value)">
+            <option value="">Seleccione...</option>
+            <?php
+            $metodos = ExecuteRows("SELECT valor1, valor2 FROM parametro WHERE codigo = '009' AND valor1 NOT IN ('PC','PF','DV','NC','ND')");
+            foreach ($metodos as $m) {
+                $sel = ($tipo_pago_actual == $m['valor1']) ? "selected" : "";
+                echo "<option value='{$m['valor1']}' $sel>{$m['valor2']}</option>";
+            }
+            ?>
+            </select>
         </div>
-    </div>
 
-  </div>
-</div>
+        <div class="col-md-4">
+            <label class="small fw-bold">MONTO</label>
+            <input type="number" id="monto_input" class="form-control form-control-sm fw-bold border-primary"
+                step="0.01" value="<?= ($saldo_bs > 0) ? round($saldo_bs, 2) : '' ?>">
+        </div>
+
+        <div class="col-md-2">
+            <label class="small fw-bold">MONEDA</label>
+            <select id="moneda_input" class="form-select form-select-sm">
+            <?php
+            $lista = ["Bs.", $moneda_doc_sel];
+            $lista = array_values(array_unique($lista));
+
+            $lista_sql = [];
+            foreach ($lista as $v) $lista_sql[] = "'" . AdjustSql($v) . "'";
+            $sqlMon = "SELECT valor1 FROM parametro WHERE codigo = '006' AND valor1 IN (" . implode(",", $lista_sql) . ")";
+            $monedas = ExecuteRows($sqlMon);
+
+            foreach ($monedas as $mon) {
+                echo "<option value='{$mon['valor1']}'>{$mon['valor1']}</option>";
+            }
+            ?>
+            </select>
+        </div>
+        </div>
+
+        <!-- FILA 2 -->
+        <div class="row g-2 align-items-end mt-1">
+
+        <div class="col-md-4">
+            <label class="small fw-bold">BANCO</label>
+            <?php
+            // Bancos
+            $bancos = ExecuteRows("SELECT campo_codigo AS codigo, campo_descripcion AS descripcion
+                                FROM tabla WHERE tabla = 'BANCO'
+                                ORDER BY campo_descripcion");
+            ?>
+            <select id="banco_input" class="form-select form-select-sm" style="max-width: 240px;">
+                <option value="">Banco...</option>
+                <?php foreach ($bancos as $b): ?>
+                    <option value="<?= HtmlEncode($b["codigo"]) ?>"
+                            data-code="<?= HtmlEncode($b["codigo"]) ?>">
+                        <?= HtmlEncode($b["descripcion"]) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="small fw-bold">REFERENCIA</label>
+
+            <?php if (in_array($tipo_pago_actual, ["RC", "RD"])): 
+                $tabla = ($tipo_pago_actual == "RC") ? "recarga" : "recarga2";
+                $recarga = ExecuteRow("SELECT id, saldo FROM $tabla WHERE cliente = " . intval($factura['cliente']) . " ORDER BY id DESC LIMIT 1");
+            ?>
+                <input type="hidden" id="ref_input" value="<?= $recarga['id'] ?? '' ?>">
+                <input type="text" class="form-control form-control-sm bg-white fw-bold"
+                    value="<?= number_format($recarga['saldo'] ?? 0, 2, ".", "") ?>" readonly>
+            <?php else: ?>
+                <input type="text" id="ref_input" class="form-control form-control-sm" placeholder="Referencia...">
+            <?php endif; ?>
+
+        </div>
+
+            <div class="col-md-4 d-flex flex-column justify-content-end">
+                <button type="button"
+                        class="btn btn-primary btn-sm w-100 fw-bold"
+                        onclick="return agregarPago(event)">
+                    ADD
+                </button>
+
+                <small class="mt-2 text-muted" id="help_ref_banco"></small>
+            </div>
+        </div>
+
+        <!-- FILA 3 -->
+        <div class="row g-2 align-items-end mt-1">
+            <div class="col-md-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <label class="small fw-bold mb-1">CUENTA DESTINO</label>
+                <div class="form-check form-switch m-0">
+                <input class="form-check-input" type="checkbox" id="destino_auto" checked>
+                <label class="form-check-label small" for="destino_auto">Auto</label>
+                </div>
+            </div>
+
+            <select id="destino_input" class="form-select form-select-sm" style="max-width: 260px;">
+                <option value="">Seleccione...</option>
+                <?php foreach ($cuentas_destino as $c): ?>
+                <option value="<?= intval($c["id"]) ?>">
+                    <?= HtmlEncode(trim($c["banco"])) ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+
+            <small class="text-muted d-block mt-1" id="help_destino"></small>
+            </div>
+        </div>
+
+        <!-- FILA 4 -->
+        <div class="row g-2 align-items-end mt-1">
+
+            <!-- /////// -->
+            <?php if ($tipo_pago_actual === "AN"): ?>
+            <div class="col-md-12">
+                <label class="small fw-bold">ANTICIPO DISPONIBLE</label>
+                <select id="anticipo_input" class="form-select form-select-sm">
+                    <option value="">Seleccione...</option>
+                    <?php foreach ($anticipos as $a): 
+                        $idA = intval($a["anticipo_id"]);
+                        $monA = trim($a["moneda"] ?? "");
+                        $saldoA = floatval($a["saldo_disponible"] ?? 0);
+                        $txt = "#{$idA} | {$monA} " . number_format($saldoA, 2, ".", ",") . " | " . (string)($a["fecha"] ?? "");
+                    ?>
+                        <option value="<?= $idA ?>"
+                                data-moneda="<?= HtmlEncode($monA) ?>"
+                                data-saldo="<?= HtmlEncode($saldoA) ?>">
+                            <?= HtmlEncode($txt) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <small class="text-muted d-block mt-1">El monto se tomará del saldo del anticipo seleccionado.</small>
+            </div>
+            <?php endif; ?>
+            <!-- /////// -->
+        </div>
+
+    </div>
+    </div>
 
     <div class="list-group shadow-sm">
         <div class="list-group-item bg-dark text-white py-1 small fw-bold">PAGOS REGISTRADOS (<?= count($lista_pagos) ?>)</div>
@@ -226,6 +342,10 @@ if ($accion == "refrescar") {
                         Ref: <?= HtmlEncode($p['ref'] ?? '') ?>
                         <?php if (!empty($p["banco_nom"])): ?>
                             · Banco: <?= HtmlEncode($p["banco_nom"]) ?>
+                        <?php endif; ?>
+
+                        <?php if (!empty($p["destino_nom"])): ?>
+                            · Destino: <?= HtmlEncode($p["destino_nom"]) ?>
                         <?php endif; ?>
                     </small>
                 </div>
@@ -252,8 +372,8 @@ if ($accion == "refrescar") {
         (function(){
             const tipo = ($("#tipo_pago").val() || "").trim();
 
-            const requiereBanco = !["EF","RI","RC","IG","RS"].includes(tipo);
-            const requiereRef   = !["EF","RC","IG"].includes(tipo);
+            const requiereBanco = !["EF","RI","RC","IG","RS","AN"].includes(tipo);
+            const requiereRef   = !["EF","RC","IG","AN"].includes(tipo);
 
             $("#banco_input").prop("disabled", !requiereBanco);
 
@@ -267,6 +387,249 @@ if ($accion == "refrescar") {
     <?php
     exit;  
 }
+
+// 3. Bloque FINALIZAR (server-side)
+if ($accion == "finalizar") {
+    if (ob_get_length()) ob_end_clean();
+
+    $pagos_json = Param("pagos") ?? "[]";
+    $lista = json_decode($pagos_json, true);
+
+    if (!is_array($lista) || count($lista) == 0) {
+        jsonResponse(["success" => false, "message" => "No hay pagos para registrar."]);
+        exit;
+    }
+
+    // Traer factura y tasa_dia
+    $sqlFact = "SELECT a.id, a.cliente, a.nro_documento, a.moneda,
+                       CASE WHEN a.moneda <> 'Bs.' THEN (a.total * a.tasa_dia) ELSE a.total END AS total_bs,
+                       CASE WHEN a.moneda <> 'Bs.' THEN a.total ELSE (a.total / NULLIF(a.tasa_dia, 0)) END AS total_div,
+                       a.tasa_dia
+                FROM salidas a
+                WHERE a.id = $id_compra;";
+
+    $factura = ExecuteRow($sqlFact);
+    if (!$factura) {
+        jsonResponse(["success" => false, "message" => "Factura no encontrada."]);
+        exit;
+    }
+
+    $cliente_id = intval($factura["cliente"] ?? 0);
+    $tasa_dia   = floatval($factura["tasa_dia"] ?? 1);
+    $total_bs   = floatval($factura["total_bs"] ?? 0);
+
+    // Recalcular pagado BS (ignorando IG)
+    $pagado_bs = 0;
+    foreach ($lista as $p) {
+        $tipo = trim($p["tipo"] ?? "");
+        if ($tipo === "IG") continue;
+
+        $monto = floatval($p["monto"] ?? 0);
+        $mon   = trim($p["moneda"] ?? "Bs.");
+        if ($monto <= 0) continue;
+
+        $bs = ($mon === "Bs.") ? $monto : ($monto * $tasa_dia);
+        $pagado_bs += $bs;
+    }
+
+    // Validación: no pagar de más (tolerancia 0.02)
+    if ($pagado_bs > ($total_bs + 0.02)) {
+        jsonResponse([
+            "success" => false,
+            "message" => "El total pagado excede el total de la factura. Total Bs: " .
+                         number_format($total_bs, 2, ".", ",") .
+                         " / Pagado Bs: " . number_format($pagado_bs, 2, ".", ",")
+        ]);
+        exit;
+    }
+
+    // Validación: anticipos (si hay AN) contra saldo disponible
+    foreach ($lista as $p) {
+        $tipo = trim($p["tipo"] ?? "");
+        if ($tipo !== "AN") continue;
+
+        $anticipo_id = intval($p["anticipo_id"] ?? 0);
+        $monto = floatval($p["monto"] ?? 0);
+        $mon   = trim($p["moneda"] ?? "");
+
+        if ($anticipo_id <= 0) {
+            jsonResponse(["success" => false, "message" => "Anticipo inválido (anticipo_id)."]);
+            exit;
+        }
+        if ($monto <= 0) {
+            jsonResponse(["success" => false, "message" => "Monto inválido para anticipo."]);
+            exit;
+        }
+        if ($mon === "") {
+            jsonResponse(["success" => false, "message" => "Moneda inválida para anticipo."]);
+            exit;
+        }
+
+        // saldo disponible del anticipo (misma lógica que en refrescar)
+        $sqlSaldoAnt = "
+            SELECT
+              (SUM(ccd.monto_moneda) - COALESCE((
+                SELECT SUM(a.monto_moneda)
+                FROM anticipos_aplicaciones a
+                WHERE a.anticipo_cobro_id = cc.id
+                  AND a.moneda = ccd.moneda
+              ), 0)) AS saldo
+            FROM cobros_cliente cc
+            JOIN cobros_cliente_detalle ccd ON ccd.cobros_cliente = cc.id
+            WHERE cc.id = " . intval($anticipo_id) . "
+              AND cc.cliente = " . intval($cliente_id) . "
+              AND cc.id_documento = 0
+              AND ccd.moneda = '" . AdjustSql($mon) . "'
+            GROUP BY cc.id, ccd.moneda
+        ";
+
+        $saldoAnt = floatval(ExecuteScalar($sqlSaldoAnt) ?: 0);
+        if ($saldoAnt + 0.0001 < $monto) {
+            jsonResponse([
+                "success" => false,
+                "message" => "El anticipo #$anticipo_id no tiene saldo suficiente en $mon. Disponible: " .
+                             number_format($saldoAnt, 2, ".", ",") .
+                             " / Requerido: " . number_format($monto, 2, ".", ",")
+            ]);
+            exit;
+        }
+    }
+
+    // ----------------- INSERTS (TRANSACCIÓN) -----------------
+    $conn = Conn();
+    $username = CurrentUserName(); // PHPMaker
+
+    try {
+        $conn->beginTransaction();
+
+        // Insert cabecera cobros_cliente (cobro de factura)
+        // Nota: fecha y fecha_registro como CurrentDate()
+        $sqlInsCab = "
+            INSERT INTO cobros_cliente
+            (cliente, id_documento, fecha, fecha_registro, username, moneda, tasa_cambio, monto)
+            VALUES
+            (" . intval($cliente_id) . ",
+            " . intval($id_compra) . ",
+            '" . AdjustSql(CurrentDate()) . "',
+            '" . AdjustSql(CurrentDate()) . "',
+            '" . AdjustSql($username) . "',
+            '" . AdjustSql("Bs.") . "',
+            " . floatval($tasa_dia) . ",
+            " . floatval($pagado_bs) . ")
+        ";
+        Execute($sqlInsCab);
+
+        $cobro_id = intval(ExecuteScalar("SELECT LAST_INSERT_ID()"));
+        if ($cobro_id <= 0) {
+            throw new \Exception("No se pudo obtener ID de cobro (cabecera).");
+        }
+
+        // Insert detalles
+        foreach ($lista as $p) {
+
+            $tipo  = trim($p["tipo"] ?? "");
+            $monto = floatval($p["monto"] ?? 0);
+            $mon   = trim($p["moneda"] ?? "Bs.");
+            if ($monto <= 0 || $tipo === "") continue;
+
+            if ($tipo === "IG") {
+                $mon = "Bs."; // 👈 blindaje
+            }
+
+            $ref = trim($p["ref"] ?? "");
+
+            // ✅ banco_origen (VARCHAR) viene del select2 (código: BCO0xx)
+            $banco_origen = trim($p["banco_cod"] ?? "");
+
+            // ✅ banco destino (INT) viene del nuevo select (compania_cuenta.id)
+            $destino_id = intval($p["destino_id"] ?? 0);
+
+            // anticipo_id solo si es AN
+            $anticipo_id = ($tipo === "AN") ? intval($p["anticipo_id"] ?? 0) : 0;
+
+            // Calcula Bs según tasa del documento
+            $monto_bs = ($mon === "Bs.") ? $monto : ($monto * $tasa_dia);
+
+            // NULLs correctos
+            $sqlBancoDestino = ($destino_id > 0) ? (string)$destino_id : "NULL";
+            $sqlBancoOrigen  = ($banco_origen !== "") ? ("'" . AdjustSql($banco_origen) . "'") : "NULL";
+            $sqlRef          = ($ref !== "") ? ("'" . AdjustSql($ref) . "'") : "NULL";
+            $sqlAnticipo     = ($tipo === "AN") ? (string)$anticipo_id : "NULL";
+
+            $sqlInsDet = "
+                INSERT INTO cobros_cliente_detalle
+                (cobros_cliente, metodo_pago, referencia,
+                monto_moneda, moneda, tasa_moneda, monto_bs,
+                banco_origen, banco, anticipo_id)
+                VALUES
+                (" . intval($cobro_id) . ",
+                '" . AdjustSql($tipo) . "',
+                $sqlRef,
+                " . floatval($monto) . ",
+                '" . AdjustSql($mon) . "',
+                " . floatval($tasa_dia) . ",
+                " . floatval($monto_bs) . ",
+                $sqlBancoOrigen,
+                $sqlBancoDestino,
+                $sqlAnticipo
+                )
+            ";
+
+            Execute($sqlInsDet);
+
+            // Si es anticipo, registrar aplicación
+            if ($tipo === "AN") {
+                if ($anticipo_id <= 0) {
+                    throw new \Exception("Anticipo inválido al guardar (anticipo_id).");
+                }
+
+                $sqlDestinoAnt = "
+                    SELECT banco
+                    FROM cobros_cliente_detalle
+                    WHERE cobros_cliente = " . intval($anticipo_id) . "
+                        AND banco IS NOT NULL
+                    ORDER BY id DESC
+                    LIMIT 1
+                    ";
+                $destinoAnt = intval(ExecuteScalar($sqlDestinoAnt) ?: 0);
+                $destino_id = $destinoAnt;
+
+                $sqlInsApp = "
+                    INSERT INTO anticipos_aplicaciones
+                    (anticipo_cobro_id, cobro_factura_id, salida_id, fecha, username, monto_moneda, moneda, tasa_factura)
+                    VALUES
+                    (" . intval($anticipo_id) . ",
+                    " . intval($cobro_id) . ",
+                    " . intval($id_compra) . ",
+                    NOW(),
+                    '" . AdjustSql($username) . "',
+                    " . floatval($monto) . ",
+                    '" . AdjustSql($mon) . "',
+                    " . floatval($tasa_dia) . ")
+                ";
+                Execute($sqlInsApp);
+            }
+        }
+
+        $conn->commit();
+
+        jsonResponse([
+            "success" => true,
+            "message" => "Cobro registrado correctamente.",
+            "cobro_id" => $cobro_id
+        ]);
+        exit;
+
+    } catch (\Throwable $ex) {
+        try { $conn->rollBack(); } catch (\Throwable $e2) {}
+        jsonResponse([
+            "success" => false,
+            "message" => "Error guardando cobro: " . $ex->getMessage()
+        ]);
+        exit;
+    }
+}
+
 ?>
 
 <div class="container-fluid py-3" style="max-width: 900px;">
@@ -336,7 +699,12 @@ function refrescar(metodo = "") {
         url: window.location.href,
         type: "POST",
         data: data,
-        success: function (r) { $("#div-ajax").html(r); recalcularMontoSegunMoneda(); initBancoSelect2(); },
+        success: function (r) { 
+            $("#div-ajax").html(r); 
+            recalcularMontoSegunMoneda(); 
+            initBancoSelect2(); 
+            aplicarDestinoAuto(true);
+        },
         error: function (xhr) {
             console.error(xhr.responseText);
             $("#div-ajax").html("<div class='alert alert-danger'>AJAX falló (revisa Network/Console).</div>");
@@ -349,39 +717,50 @@ function cambiarMetodo(v) {
 }
 
 function agregarPago(e) {
-    // Blindaje total contra submit/postback del form padre
     e = e || window.event;
-    if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
+    if (e) { e.preventDefault(); e.stopPropagation(); }
 
     const ref = ($("#ref_input").val() || "").trim();
 
+    // Banco (select normal o select2)
     let bancoCod = ($("#banco_input").val() || "").toString().trim();
     if (!bancoCod && $("#banco_input").hasClass("select2-hidden-accessible")) {
         const d = $("#banco_input").select2("data") || [];
         if (d.length && d[0].id) bancoCod = (d[0].id || "").toString().trim();
     }
-
     const bancoNom = ($("#banco_input option:selected").text() || "").trim();
 
     const t = ($("#tipo_pago").val() || "").trim();
+    const tipo = t; // 👈 ÚNICA variable "tipo"
     const m = parseFloat($("#monto_input").val());
+    const monSel = ($("#moneda_input").val() || "Bs.").trim();
 
-    // Reglas:
+    if (!tipo) {
+        ew.alert("Seleccione un método de pago.");
+        return false;
+    }
+    if (isNaN(m) || m <= 0) {
+        ew.alert("Indique un monto válido.");
+        return false;
+    }
+
+    // Reglas banco/ref:
     // - Si tipo = (RS, RI): obligatorio SOLO referencia.
-    // - Si tipo distinto a (EF, RI, RC, IG): obligatorio banco + referencia.
-    // - Si tipo = EF, RC, IG: no exigir ref/banco.
-    const tipo = t;
+    // - Si tipo distinto a (EF, RI, RC, IG, RS, AN): obligatorio banco + referencia.
+    // - Si tipo = EF, RC, IG, AN: no exigir ref/banco.
+    const requiereRef = !["EF", "RC", "IG", "AN"].includes(tipo);
+    const requiereBanco = !["EF", "RI", "RC", "IG", "RS", "AN"].includes(tipo);
 
-    // Ref obligatoria para casi todos excepto EF/RC/IG
-    const requiereRef = !["EF", "RC", "IG"].includes(tipo);
+    const destinoId = ($("#destino_input").val() || "").toString().trim();
 
-    // Banco obligatorio solo para tipos que NO estén en (EF, RI, RC, IG, RS)
-    const requiereBanco = !["EF", "RI", "RC", "IG", "RS"].includes(tipo);
+    // Requiere destino cuando entra dinero
+    const requiereDestino = ["EF","TD","TC","TR","CH","DP","PM"].includes(t);
 
-    // Caso especial RS/RI: solo referencia
+    if (requiereDestino && !destinoId) {
+        ew.alert("Debe seleccionar la cuenta destino.");
+        return false;
+    }
+
     if (["RS", "RI"].includes(tipo)) {
         if (!ref) {
             ew.alert("Debe indicar el número de referencia.");
@@ -398,20 +777,10 @@ function agregarPago(e) {
         }
     }
 
-    const monSel = ($("#moneda_input").val() || "Bs.").trim();
-
-    if (!t) {
-        ew.alert("Seleccione un método de pago.");
-        return false;
-    }
-    if (isNaN(m) || m <= 0) {
-        ew.alert("Indique un monto válido.");
-        return false;
-    }
-
-    // Evitar duplicar clicks mientras está refrescando
+    // Evitar duplicar clicks
     if (ajaxInFlight) return false;
 
+    // JSON actual
     let lista = [];
     try {
         lista = JSON.parse($("#json_pagos").val() || "[]");
@@ -422,24 +791,72 @@ function agregarPago(e) {
 
     const gid = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-    lista.push({
+    // --------- AN (Anticipo) ----------
+    let anticipoId = null;
+    if (tipo === "AN") {
+        anticipoId = ($("#anticipo_input").val() || "").trim();
+        if (!anticipoId) {
+            ew.alert("Debe seleccionar un anticipo.");
+            return false;
+        }
+
+        // Validar moneda del anticipo vs moneda seleccionada
+        const monAnt = ($("#anticipo_input option:selected").data("moneda") || "").toString().trim();
+        if (monAnt && monSel && monAnt !== monSel) {
+            ew.alert("La moneda del pago debe coincidir con la moneda del anticipo.");
+            return false;
+        }
+
+        // Limitar monto al saldo del anticipo
+        const saldoAnt = parseFloat($("#anticipo_input option:selected").data("saldo") || "0");
+        if (!isNaN(saldoAnt) && m > saldoAnt + 0.0001) {
+            ew.alert("El monto excede el saldo disponible del anticipo.");
+            return false;
+        }
+    }
+
+    // Item principal
+    const item = {
         gid: gid,
-        tipo: t,
+        tipo: tipo,
         metodo_nom: $("#tipo_pago option:selected").text(),
         ref: ref || "N/A",
         banco_cod: bancoCod || "",
         banco_nom: (bancoCod ? bancoNom : ""),
         monto: m,
         moneda: monSel
-    });
+    };
+
+    // Solo AN agrega anticipo_id + ajusta campos visuales
+    if (tipo === "AN") {
+        item.anticipo_id = parseInt(anticipoId, 10) || 0;
+        item.ref = "ANTICIPO #" + item.anticipo_id;
+        item.banco_cod = "";
+        item.banco_nom = "";
+    }
+
+    item.destino_id = parseInt(destinoId, 10) || 0;
+    item.destino_nom = ($("#destino_input option:selected").text() || "").trim();
+
+    lista.push(item);
 
     // ---- IGTF automático si es pago en divisa (no Bs.) ----
+    // Nota: AN también puede ser en divisa; si NO quieres IGTF para AN, dímelo y lo excluimos.
+    // ---- IGTF automático (SIEMPRE en Bs.) cuando el pago NO sea Bs. ----
     const igtfPct = parseFloat($("#igtf_pct").val() || "0");
-    if (monSel !== "Bs." && igtfPct > 0) {
-        const montoIgtf = (m * igtfPct) / 100;
+    const tasaDiaDoc = parseFloat($("#tasa_dia_doc").val() || "1");
 
-        // Evitar duplicar IGTF si el usuario vuelve a dar ADD con el mismo pago
-        // (simple: siempre lo agregamos como línea nueva asociada al pago)
+    if (monSel !== "Bs." && igtfPct > 0) {
+
+        const montoPagoBs = (tasaDiaDoc > 0) ? (m * tasaDiaDoc) : 0;
+        const montoIgtfBs = (montoPagoBs * igtfPct) / 100;
+
+        // 🔹 eliminar IG previo del mismo gid si existiera
+        lista = lista.filter(x => !(
+            (x.gid || "") === gid &&
+            (x.tipo || "") === "IG"
+        ));
+
         lista.push({
             gid: gid,
             tipo: "IG",
@@ -447,18 +864,20 @@ function agregarPago(e) {
             ref: "AUTO",
             banco_cod: "",
             banco_nom: "",
-            monto: parseFloat(montoIgtf.toFixed(2)),
-            moneda: monSel,
-            es_igtf: 1
+            monto: parseFloat(montoIgtfBs.toFixed(2)),
+            moneda: "Bs.",
+            es_igtf: 1,
+            destino_id: parseInt(destinoId, 10) || 0,
+            destino_nom: ($("#destino_input option:selected").text() || "").trim()
         });
     }
 
     $("#json_pagos").val(JSON.stringify(lista));
 
-    // IMPORTANTE: refrescar manteniendo el método actual
-    refrescar(t);
+    // refrescar manteniendo método actual
+    refrescar(tipo);
 
-    return false; // <-- clave: evita comportamiento por defecto del onclick
+    return false;
 }
 
 function eliminarPago(i) {
@@ -497,9 +916,44 @@ function eliminarPago(i) {
 }
 
 function finalizar() {
-    // Aquí ya haces tu INSERT real. Por ahora:
-    console.log("Pagos:", $("#json_pagos").val());
-    ew.alert("Procesando: " + $("#json_pagos").val());
+    const pagos = $("#json_pagos").val() || "[]";
+
+    let data = {
+        accion: "finalizar",
+        id_compra: "<?= $id_compra ?>",
+        pagos: pagos
+    };
+
+    // tokens PHPMaker
+    if (window.ew) {
+        if (ew.TOKEN_NAME_KEY && ew.TOKEN_NAME) data[ew.TOKEN_NAME_KEY] = ew.TOKEN_NAME;
+        if (ew.ANTIFORGERY_TOKEN_KEY && ew.ANTIFORGERY_TOKEN) data[ew.ANTIFORGERY_TOKEN_KEY] = ew.ANTIFORGERY_TOKEN;
+    }
+
+    $.ajax({
+        url: window.location.href,
+        type: "POST",
+        dataType: "text", // 👈 así vemos el error real
+        data: data,
+        success: function (txt) {
+            console.log("RESP:", txt);
+
+            let resp = null;
+            try { resp = JSON.parse(txt); } catch (e) {}
+
+            if (resp && resp.success) {
+                window.location.href = "ViewOutTdcfcvView/<?= $id_compra ?>?showdetail=";
+            } else {
+                // Si no es JSON, te muestro el texto devuelto (PHP error/HTML)
+                ew.alert((resp && resp.message) ? resp.message : (txt || "Respuesta vacía del servidor."));
+            }
+        },
+        error: function (xhr, status, err) {
+            console.log("AJAX ERROR:", status, err);
+            console.log("RESPTEXT:", xhr.responseText);
+            ew.alert("Error servidor: " + status + " / " + err + "\n\n" + (xhr.responseText || ""));
+        }
+    });
 }
 
 function cancelar(e) {
@@ -574,8 +1028,8 @@ function recalcularMontoSegunMoneda() {
 
 (function(){
     const tipo = ($("#tipo_pago").val() || "").trim();
-    const requiereBanco = !["EF","RI","RC","IG","RS"].includes(tipo);
-    const requiereRef = !["EF","RC","IG"].includes(tipo);
+    const requiereBanco = !["EF","RI","RC","IG","RS","AN"].includes(tipo);
+    const requiereRef = !["EF","RC","IG","AN"].includes(tipo);
 
     const $b = $("#banco_input");
     $b.prop("disabled", !requiereBanco);
@@ -594,8 +1048,8 @@ function recalcularMontoSegunMoneda() {
 $(document).on("change", "#tipo_pago", function () {
     const tipo = ($(this).val() || "").trim();
 
-    const requiereBanco = !["EF","RI","RC","IG","RS"].includes(tipo);
-    const requiereRef   = !["EF","RC","IG"].includes(tipo);
+    const requiereBanco = !["EF","RI","RC","IG","RS","AN"].includes(tipo);
+    const requiereRef   = !["EF","RC","IG","AN"].includes(tipo);
 
     const $b = $("#banco_input");
     $b.prop("disabled", !requiereBanco);
@@ -609,6 +1063,8 @@ $(document).on("change", "#tipo_pago", function () {
         (requiereBanco && requiereRef) ? "Requiere: banco y referencia." :
         (requiereRef) ? "Requiere: referencia." : ""
     );
+
+    aplicarDestinoAuto(true);
 });
 
 function initBancoSelect2() {
@@ -652,8 +1108,79 @@ function initBancoSelect2() {
     });
 }
 
+/////
+function parseReglasDestino() {
+    const raw = ($("#reglas_destino_json").val() || "").trim();
+    if (!raw) return [];
+    try {
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function sugerirDestinoId(metodo, moneda) {
+    metodo = (metodo || "").trim();
+    moneda = (moneda || "").trim();
+
+    const reglas = parseReglasDestino();
+
+    // 1) match exacto
+    let r = reglas.find(x =>
+        String(x.metodo || "").trim() === metodo &&
+        String(x.moneda || "").trim() === moneda
+    );
+    if (r && r.cuenta_destino_id) return String(r.cuenta_destino_id);
+
+    // 2) comodín moneda=''
+    r = reglas.find(x =>
+        String(x.metodo || "").trim() === metodo &&
+        String(x.moneda || "").trim() === ""
+    );
+    if (r && r.cuenta_destino_id) return String(r.cuenta_destino_id);
+
+    return "";
+}
+
+function aplicarDestinoAuto(force) {
+    const auto = $("#destino_auto").is(":checked");
+    if (!auto && !force) return;
+
+    const metodoSel = ($("#tipo_pago").val() || "").trim();
+    const monedaSel = ($("#moneda_input").val() || "").trim();
+
+    // Tipos que no llevan destino
+    if (["IG","RC","RI","RS","NC","AN"].includes(metodoSel)) {
+        $("#destino_input").val("");
+        $("#help_destino").text("No aplica cuenta destino.");
+        return;
+    }
+
+    const sugerido = sugerirDestinoId(metodoSel, monedaSel);
+    if (sugerido) {
+        $("#destino_input").val(sugerido);
+        $("#help_destino").text("Auto: cuenta sugerida según configuración.");
+    } else {
+        $("#help_destino").text("No hay regla configurada para este caso.");
+    }
+}
+/////
+
+$(document).on("change", "#anticipo_input", function () {
+    const mon = ($(this).find("option:selected").data("moneda") || "").toString().trim();
+    if (mon) {
+        $("#moneda_input").val(mon).trigger("change");
+    }
+});
+
 $(document).on("change", "#moneda_input", function () {
     recalcularMontoSegunMoneda();
+    aplicarDestinoAuto(true);
+});
+
+$(document).on("change", "#destino_auto", function () {
+    if ($(this).is(":checked")) aplicarDestinoAuto(true);
 });
 
 $(document).ready(function () {

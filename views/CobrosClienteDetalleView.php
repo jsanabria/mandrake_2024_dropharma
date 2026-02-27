@@ -155,6 +155,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->banco_origen->Visible) { // banco_origen ?>
+    <tr id="r_banco_origen"<?= $Page->banco_origen->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_detalle_banco_origen"><?= $Page->banco_origen->caption() ?></span></td>
+        <td data-name="banco_origen"<?= $Page->banco_origen->cellAttributes() ?>>
+<span id="el_cobros_cliente_detalle_banco_origen">
+<span<?= $Page->banco_origen->viewAttributes() ?>>
+<?= $Page->banco_origen->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->banco->Visible) { // banco ?>
     <tr id="r_banco"<?= $Page->banco->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_detalle_banco"><?= $Page->banco->caption() ?></span></td>
@@ -162,6 +173,17 @@ loadjs.ready("head", function () {
 <span id="el_cobros_cliente_detalle_banco">
 <span<?= $Page->banco->viewAttributes() ?>>
 <?= $Page->banco->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->anticipo_id->Visible) { // anticipo_id ?>
+    <tr id="r_anticipo_id"<?= $Page->anticipo_id->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cobros_cliente_detalle_anticipo_id"><?= $Page->anticipo_id->caption() ?></span></td>
+        <td data-name="anticipo_id"<?= $Page->anticipo_id->cellAttributes() ?>>
+<span id="el_cobros_cliente_detalle_anticipo_id">
+<span<?= $Page->anticipo_id->viewAttributes() ?>>
+<?= $Page->anticipo_id->getViewValue() ?></span>
 </span>
 </td>
     </tr>

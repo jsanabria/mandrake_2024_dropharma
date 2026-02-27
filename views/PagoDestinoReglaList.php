@@ -3,12 +3,12 @@
 namespace PHPMaker2024\mandrake;
 
 // Page object
-$CobrosClienteDetalleList = &$Page;
+$PagoDestinoReglaList = &$Page;
 ?>
 <?php if (!$Page->isExport()) { ?>
 <script>
 var currentTable = <?= JsonEncode($Page->toClientVar()) ?>;
-ew.deepAssign(ew.vars, { tables: { cobros_cliente_detalle: currentTable } });
+ew.deepAssign(ew.vars, { tables: { pago_destino_regla: currentTable } });
 var currentPageID = ew.PAGE_ID = "list";
 var currentForm;
 var <?= $Page->FormName ?>;
@@ -60,20 +60,20 @@ loadjs.ready("head", function () {
 </div>
 <?php } ?>
 <?php if (!$Page->IsModal) { ?>
-<form name="fcobros_cliente_detallesrch" id="fcobros_cliente_detallesrch" class="ew-form ew-ext-search-form" action="<?= CurrentPageUrl(false) ?>" autocomplete="off">
-<div id="fcobros_cliente_detallesrch_search_panel" class="mb-2 mb-sm-0 <?= $Page->SearchPanelClass ?>"><!-- .ew-search-panel -->
+<form name="fpago_destino_reglasrch" id="fpago_destino_reglasrch" class="ew-form ew-ext-search-form" action="<?= CurrentPageUrl(false) ?>" autocomplete="off">
+<div id="fpago_destino_reglasrch_search_panel" class="mb-2 mb-sm-0 <?= $Page->SearchPanelClass ?>"><!-- .ew-search-panel -->
 <script>
 var currentTable = <?= JsonEncode($Page->toClientVar()) ?>;
-ew.deepAssign(ew.vars, { tables: { cobros_cliente_detalle: currentTable } });
+ew.deepAssign(ew.vars, { tables: { pago_destino_regla: currentTable } });
 var currentForm;
-var fcobros_cliente_detallesrch, currentSearchForm, currentAdvancedSearchForm;
+var fpago_destino_reglasrch, currentSearchForm, currentAdvancedSearchForm;
 loadjs.ready(["wrapper", "head"], function () {
     let $ = jQuery,
         fields = currentTable.fields;
 
     // Form object for search
     let form = new ew.FormBuilder()
-        .setId("fcobros_cliente_detallesrch")
+        .setId("fpago_destino_reglasrch")
         .setPageId("list")
 <?php if ($Page->UseAjaxActions) { ?>
         .setSubmitWithFetch(true)
@@ -107,10 +107,10 @@ loadjs.ready(["wrapper", "head"], function () {
                 <span id="searchtype"><?= $Page->BasicSearch->getTypeNameShort() ?></span>
             </button>
             <div class="dropdown-menu dropdown-menu-end">
-                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "" ? " active" : "" ?>" form="fcobros_cliente_detallesrch" data-ew-action="search-type"><?= $Language->phrase("QuickSearchAuto") ?></button>
-                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "=" ? " active" : "" ?>" form="fcobros_cliente_detallesrch" data-ew-action="search-type" data-search-type="="><?= $Language->phrase("QuickSearchExact") ?></button>
-                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "AND" ? " active" : "" ?>" form="fcobros_cliente_detallesrch" data-ew-action="search-type" data-search-type="AND"><?= $Language->phrase("QuickSearchAll") ?></button>
-                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "OR" ? " active" : "" ?>" form="fcobros_cliente_detallesrch" data-ew-action="search-type" data-search-type="OR"><?= $Language->phrase("QuickSearchAny") ?></button>
+                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "" ? " active" : "" ?>" form="fpago_destino_reglasrch" data-ew-action="search-type"><?= $Language->phrase("QuickSearchAuto") ?></button>
+                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "=" ? " active" : "" ?>" form="fpago_destino_reglasrch" data-ew-action="search-type" data-search-type="="><?= $Language->phrase("QuickSearchExact") ?></button>
+                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "AND" ? " active" : "" ?>" form="fpago_destino_reglasrch" data-ew-action="search-type" data-search-type="AND"><?= $Language->phrase("QuickSearchAll") ?></button>
+                <button type="button" class="dropdown-item<?= $Page->BasicSearch->getType() == "OR" ? " active" : "" ?>" form="fpago_destino_reglasrch" data-ew-action="search-type" data-search-type="OR"><?= $Language->phrase("QuickSearchAny") ?></button>
             </div>
         </div>
     </div>
@@ -150,13 +150,13 @@ $Page->showMessage();
 <input type="hidden" name="<?= $TokenNameKey ?>" value="<?= $TokenName ?>"><!-- CSRF token name -->
 <input type="hidden" name="<?= $TokenValueKey ?>" value="<?= $TokenValue ?>"><!-- CSRF token value -->
 <?php } ?>
-<input type="hidden" name="t" value="cobros_cliente_detalle">
+<input type="hidden" name="t" value="pago_destino_regla">
 <?php if ($Page->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
-<div id="gmp_cobros_cliente_detalle" class="card-body ew-grid-middle-panel <?= $Page->TableContainerClass ?>" style="<?= $Page->TableContainerStyle ?>">
+<div id="gmp_pago_destino_regla" class="card-body ew-grid-middle-panel <?= $Page->TableContainerClass ?>" style="<?= $Page->TableContainerStyle ?>">
 <?php if ($Page->TotalRecords > 0 || $Page->isGridEdit() || $Page->isMultiEdit()) { ?>
-<table id="tbl_cobros_cliente_detallelist" class="<?= $Page->TableClass ?>"><!-- .ew-table -->
+<table id="tbl_pago_destino_reglalist" class="<?= $Page->TableClass ?>"><!-- .ew-table -->
 <thead>
     <tr class="ew-table-header">
 <?php
@@ -169,32 +169,26 @@ $Page->renderListOptions();
 // Render list options (header, left)
 $Page->ListOptions->render("header", "left");
 ?>
-<?php if ($Page->metodo_pago->Visible) { // metodo_pago ?>
-        <th data-name="metodo_pago" class="<?= $Page->metodo_pago->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_metodo_pago" class="cobros_cliente_detalle_metodo_pago"><?= $Page->renderFieldHeader($Page->metodo_pago) ?></div></th>
+<?php if ($Page->compania->Visible) { // compania ?>
+        <th data-name="compania" class="<?= $Page->compania->headerCellClass() ?>"><div id="elh_pago_destino_regla_compania" class="pago_destino_regla_compania"><?= $Page->renderFieldHeader($Page->compania) ?></div></th>
 <?php } ?>
-<?php if ($Page->referencia->Visible) { // referencia ?>
-        <th data-name="referencia" class="<?= $Page->referencia->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_referencia" class="cobros_cliente_detalle_referencia"><?= $Page->renderFieldHeader($Page->referencia) ?></div></th>
-<?php } ?>
-<?php if ($Page->monto_moneda->Visible) { // monto_moneda ?>
-        <th data-name="monto_moneda" class="<?= $Page->monto_moneda->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_monto_moneda" class="cobros_cliente_detalle_monto_moneda"><?= $Page->renderFieldHeader($Page->monto_moneda) ?></div></th>
+<?php if ($Page->metodo->Visible) { // metodo ?>
+        <th data-name="metodo" class="<?= $Page->metodo->headerCellClass() ?>"><div id="elh_pago_destino_regla_metodo" class="pago_destino_regla_metodo"><?= $Page->renderFieldHeader($Page->metodo) ?></div></th>
 <?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
-        <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_moneda" class="cobros_cliente_detalle_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
+        <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_pago_destino_regla_moneda" class="pago_destino_regla_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
 <?php } ?>
-<?php if ($Page->tasa_moneda->Visible) { // tasa_moneda ?>
-        <th data-name="tasa_moneda" class="<?= $Page->tasa_moneda->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_tasa_moneda" class="cobros_cliente_detalle_tasa_moneda"><?= $Page->renderFieldHeader($Page->tasa_moneda) ?></div></th>
+<?php if ($Page->cuenta_destino_id->Visible) { // cuenta_destino_id ?>
+        <th data-name="cuenta_destino_id" class="<?= $Page->cuenta_destino_id->headerCellClass() ?>"><div id="elh_pago_destino_regla_cuenta_destino_id" class="pago_destino_regla_cuenta_destino_id"><?= $Page->renderFieldHeader($Page->cuenta_destino_id) ?></div></th>
 <?php } ?>
-<?php if ($Page->monto_bs->Visible) { // monto_bs ?>
-        <th data-name="monto_bs" class="<?= $Page->monto_bs->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_monto_bs" class="cobros_cliente_detalle_monto_bs"><?= $Page->renderFieldHeader($Page->monto_bs) ?></div></th>
+<?php if ($Page->prioridad->Visible) { // prioridad ?>
+        <th data-name="prioridad" class="<?= $Page->prioridad->headerCellClass() ?>"><div id="elh_pago_destino_regla_prioridad" class="pago_destino_regla_prioridad"><?= $Page->renderFieldHeader($Page->prioridad) ?></div></th>
 <?php } ?>
-<?php if ($Page->banco_origen->Visible) { // banco_origen ?>
-        <th data-name="banco_origen" class="<?= $Page->banco_origen->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_banco_origen" class="cobros_cliente_detalle_banco_origen"><?= $Page->renderFieldHeader($Page->banco_origen) ?></div></th>
+<?php if ($Page->nota->Visible) { // nota ?>
+        <th data-name="nota" class="<?= $Page->nota->headerCellClass() ?>"><div id="elh_pago_destino_regla_nota" class="pago_destino_regla_nota"><?= $Page->renderFieldHeader($Page->nota) ?></div></th>
 <?php } ?>
-<?php if ($Page->banco->Visible) { // banco ?>
-        <th data-name="banco" class="<?= $Page->banco->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_banco" class="cobros_cliente_detalle_banco"><?= $Page->renderFieldHeader($Page->banco) ?></div></th>
-<?php } ?>
-<?php if ($Page->anticipo_id->Visible) { // anticipo_id ?>
-        <th data-name="anticipo_id" class="<?= $Page->anticipo_id->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_anticipo_id" class="cobros_cliente_detalle_anticipo_id"><?= $Page->renderFieldHeader($Page->anticipo_id) ?></div></th>
+<?php if ($Page->activo->Visible) { // activo ?>
+        <th data-name="activo" class="<?= $Page->activo->headerCellClass() ?>"><div id="elh_pago_destino_regla_activo" class="pago_destino_regla_activo"><?= $Page->renderFieldHeader($Page->activo) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -224,75 +218,59 @@ while ($Page->RecordCount < $Page->StopRecord || $Page->RowIndex === '$rowindex$
 // Render list options (body, left)
 $Page->ListOptions->render("body", "left", $Page->RowCount);
 ?>
-    <?php if ($Page->metodo_pago->Visible) { // metodo_pago ?>
-        <td data-name="metodo_pago"<?= $Page->metodo_pago->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_metodo_pago" class="el_cobros_cliente_detalle_metodo_pago">
-<span<?= $Page->metodo_pago->viewAttributes() ?>>
-<?= $Page->metodo_pago->getViewValue() ?></span>
+    <?php if ($Page->compania->Visible) { // compania ?>
+        <td data-name="compania"<?= $Page->compania->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_compania" class="el_pago_destino_regla_compania">
+<span<?= $Page->compania->viewAttributes() ?>>
+<?= $Page->compania->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->referencia->Visible) { // referencia ?>
-        <td data-name="referencia"<?= $Page->referencia->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_referencia" class="el_cobros_cliente_detalle_referencia">
-<span<?= $Page->referencia->viewAttributes() ?>>
-<?= $Page->referencia->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->monto_moneda->Visible) { // monto_moneda ?>
-        <td data-name="monto_moneda"<?= $Page->monto_moneda->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_monto_moneda" class="el_cobros_cliente_detalle_monto_moneda">
-<span<?= $Page->monto_moneda->viewAttributes() ?>>
-<?= $Page->monto_moneda->getViewValue() ?></span>
+    <?php if ($Page->metodo->Visible) { // metodo ?>
+        <td data-name="metodo"<?= $Page->metodo->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_metodo" class="el_pago_destino_regla_metodo">
+<span<?= $Page->metodo->viewAttributes() ?>>
+<?= $Page->metodo->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
     <?php if ($Page->moneda->Visible) { // moneda ?>
         <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_moneda" class="el_cobros_cliente_detalle_moneda">
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_moneda" class="el_pago_destino_regla_moneda">
 <span<?= $Page->moneda->viewAttributes() ?>>
 <?= $Page->moneda->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->tasa_moneda->Visible) { // tasa_moneda ?>
-        <td data-name="tasa_moneda"<?= $Page->tasa_moneda->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_tasa_moneda" class="el_cobros_cliente_detalle_tasa_moneda">
-<span<?= $Page->tasa_moneda->viewAttributes() ?>>
-<?= $Page->tasa_moneda->getViewValue() ?></span>
+    <?php if ($Page->cuenta_destino_id->Visible) { // cuenta_destino_id ?>
+        <td data-name="cuenta_destino_id"<?= $Page->cuenta_destino_id->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_cuenta_destino_id" class="el_pago_destino_regla_cuenta_destino_id">
+<span<?= $Page->cuenta_destino_id->viewAttributes() ?>>
+<?= $Page->cuenta_destino_id->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->monto_bs->Visible) { // monto_bs ?>
-        <td data-name="monto_bs"<?= $Page->monto_bs->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_monto_bs" class="el_cobros_cliente_detalle_monto_bs">
-<span<?= $Page->monto_bs->viewAttributes() ?>>
-<?= $Page->monto_bs->getViewValue() ?></span>
+    <?php if ($Page->prioridad->Visible) { // prioridad ?>
+        <td data-name="prioridad"<?= $Page->prioridad->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_prioridad" class="el_pago_destino_regla_prioridad">
+<span<?= $Page->prioridad->viewAttributes() ?>>
+<?= $Page->prioridad->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->banco_origen->Visible) { // banco_origen ?>
-        <td data-name="banco_origen"<?= $Page->banco_origen->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_banco_origen" class="el_cobros_cliente_detalle_banco_origen">
-<span<?= $Page->banco_origen->viewAttributes() ?>>
-<?= $Page->banco_origen->getViewValue() ?></span>
+    <?php if ($Page->nota->Visible) { // nota ?>
+        <td data-name="nota"<?= $Page->nota->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_nota" class="el_pago_destino_regla_nota">
+<span<?= $Page->nota->viewAttributes() ?>>
+<?= $Page->nota->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->banco->Visible) { // banco ?>
-        <td data-name="banco"<?= $Page->banco->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_banco" class="el_cobros_cliente_detalle_banco">
-<span<?= $Page->banco->viewAttributes() ?>>
-<?= $Page->banco->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->anticipo_id->Visible) { // anticipo_id ?>
-        <td data-name="anticipo_id"<?= $Page->anticipo_id->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_anticipo_id" class="el_cobros_cliente_detalle_anticipo_id">
-<span<?= $Page->anticipo_id->viewAttributes() ?>>
-<?= $Page->anticipo_id->getViewValue() ?></span>
+    <?php if ($Page->activo->Visible) { // activo ?>
+        <td data-name="activo"<?= $Page->activo->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pago_destino_regla_activo" class="el_pago_destino_regla_activo">
+<span<?= $Page->activo->viewAttributes() ?>>
+<?= $Page->activo->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -355,7 +333,7 @@ echo GetDebugMessage();
 <script>
 // Field event handlers
 loadjs.ready("head", function() {
-    ew.addEventHandlers("cobros_cliente_detalle");
+    ew.addEventHandlers("pago_destino_regla");
 });
 </script>
 <script>

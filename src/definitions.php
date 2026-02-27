@@ -269,6 +269,9 @@ return [
     "articulos_costos_precios" => \DI\create(ArticulosCostosPrecios::class),
     "cobros_cliente_detalle" => \DI\create(CobrosClienteDetalle::class),
     "registrar_pagos_clientes" => \DI\create(RegistrarPagosClientes::class),
+    "anticipos_aplicaciones" => \DI\create(AnticiposAplicaciones::class),
+    "pago_destino_regla" => \DI\create(PagoDestinoRegla::class),
+    "registra_anticipos_clientes" => \DI\create(RegistraAnticiposClientes::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

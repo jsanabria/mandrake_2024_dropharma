@@ -15,7 +15,7 @@ use Closure;
 /**
  * Page class
  */
-class CobrosClienteDetalleView extends CobrosClienteDetalle
+class PagoDestinoReglaView extends PagoDestinoRegla
 {
     use MessagesTrait;
 
@@ -26,7 +26,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
     public $ProjectID = PROJECT_ID;
 
     // Page object name
-    public $PageObjName = "CobrosClienteDetalleView";
+    public $PageObjName = "PagoDestinoReglaView";
 
     // View file path
     public $View = null;
@@ -38,7 +38,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
     public $RenderingView = false;
 
     // CSS class/style
-    public $CurrentPageName = "CobrosClienteDetalleView";
+    public $CurrentPageName = "PagoDestinoReglaView";
 
     // Page URLs
     public $AddUrl;
@@ -140,18 +140,13 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
     public function setVisibility()
     {
         $this->id->setVisibility();
-        $this->cobros_cliente->setVisibility();
-        $this->metodo_pago->setVisibility();
-        $this->referencia->setVisibility();
-        $this->monto_moneda->setVisibility();
+        $this->compania->setVisibility();
+        $this->metodo->setVisibility();
         $this->moneda->setVisibility();
-        $this->tasa_moneda->setVisibility();
-        $this->monto_bs->setVisibility();
-        $this->tasa_usd->setVisibility();
-        $this->monto_usd->setVisibility();
-        $this->banco_origen->setVisibility();
-        $this->banco->setVisibility();
-        $this->anticipo_id->setVisibility();
+        $this->cuenta_destino_id->setVisibility();
+        $this->prioridad->setVisibility();
+        $this->nota->setVisibility();
+        $this->activo->setVisibility();
     }
 
     // Constructor
@@ -159,8 +154,8 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
     {
         parent::__construct();
         global $Language, $DashboardReport, $DebugTimer, $UserTable;
-        $this->TableVar = 'cobros_cliente_detalle';
-        $this->TableName = 'cobros_cliente_detalle';
+        $this->TableVar = 'pago_destino_regla';
+        $this->TableName = 'pago_destino_regla';
 
         // Table CSS class
         $this->TableClass = "table table-striped table-sm ew-view-table";
@@ -171,9 +166,9 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
         // Language object
         $Language = Container("app.language");
 
-        // Table object (cobros_cliente_detalle)
-        if (!isset($GLOBALS["cobros_cliente_detalle"]) || $GLOBALS["cobros_cliente_detalle"]::class == PROJECT_NAMESPACE . "cobros_cliente_detalle") {
-            $GLOBALS["cobros_cliente_detalle"] = &$this;
+        // Table object (pago_destino_regla)
+        if (!isset($GLOBALS["pago_destino_regla"]) || $GLOBALS["pago_destino_regla"]::class == PROJECT_NAMESPACE . "pago_destino_regla") {
+            $GLOBALS["pago_destino_regla"] = &$this;
         }
 
         // Set up record key
@@ -183,7 +178,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
 
         // Table name (for backward compatibility only)
         if (!defined(PROJECT_NAMESPACE . "TABLE_NAME")) {
-            define(PROJECT_NAMESPACE . "TABLE_NAME", 'cobros_cliente_detalle');
+            define(PROJECT_NAMESPACE . "TABLE_NAME", 'pago_destino_regla');
         }
 
         // Start timer
@@ -303,7 +298,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
                 $result = ["url" => GetUrl($url), "modal" => "1"];  // Assume return to modal for simplicity
                 if (!SameString($pageName, GetPageName($this->getListUrl()))) { // Not List page
                     $result["caption"] = $this->getModalCaption($pageName);
-                    $result["view"] = SameString($pageName, "CobrosClienteDetalleView"); // If View page, no primary button
+                    $result["view"] = SameString($pageName, "PagoDestinoReglaView"); // If View page, no primary button
                 } else { // List page
                     $result["error"] = $this->getFailureMessage(); // List page should not be shown as modal => error
                     $this->clearFailureMessage();
@@ -541,10 +536,12 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
         }
 
         // Set up lookup cache
-        $this->setupLookupOptions($this->metodo_pago);
+        $this->setupLookupOptions($this->compania);
+        $this->setupLookupOptions($this->metodo);
         $this->setupLookupOptions($this->moneda);
-        $this->setupLookupOptions($this->banco_origen);
-        $this->setupLookupOptions($this->banco);
+        $this->setupLookupOptions($this->cuenta_destino_id);
+        $this->setupLookupOptions($this->prioridad);
+        $this->setupLookupOptions($this->activo);
 
         // Check modal
         if ($this->IsModal) {
@@ -568,7 +565,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
             $this->id->setQueryStringValue($keyValue);
             $this->RecKey["id"] = $this->id->QueryStringValue;
         } elseif (!$loadCurrentRecord) {
-            $returnUrl = "CobrosClienteDetalleList"; // Return to list
+            $returnUrl = "PagoDestinoReglaList"; // Return to list
         }
 
         // Get action
@@ -582,7 +579,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
                         if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "") {
                             $this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
                         }
-                        $this->terminate("CobrosClienteDetalleList"); // Return to list page
+                        $this->terminate("PagoDestinoReglaList"); // Return to list page
                         return;
                     } elseif ($loadCurrentRecord) { // Load current record position
                         $this->setupStartRecord(); // Set up start record position
@@ -611,7 +608,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
                         if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "") {
                             $this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
                         }
-                        $returnUrl = "CobrosClienteDetalleList"; // No matching record, return to list
+                        $returnUrl = "PagoDestinoReglaList"; // No matching record, return to list
                     } else {
                         $this->loadRowValues($this->CurrentRow); // Load row values
                     }
@@ -630,7 +627,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
                         if ($this->getSuccessMessage() == "" && $this->getFailureMessage() == "") {
                             $this->setFailureMessage($Language->phrase("NoRecord")); // Set no record message
                         }
-                        $returnUrl = "CobrosClienteDetalleList"; // No matching record, return to list
+                        $returnUrl = "PagoDestinoReglaList"; // No matching record, return to list
                     }
                 } // End modal checking
                 break;
@@ -707,6 +704,35 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
         */
         $options = &$this->OtherOptions;
         $option = $options["action"];
+
+        // Add
+        $item = &$option->add("add");
+        $addcaption = HtmlTitle($Language->phrase("ViewPageAddLink"));
+        if ($this->IsModal) {
+            $item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
+        } else {
+            $item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
+        }
+        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
+
+        // Edit
+        $item = &$option->add("edit");
+        $editcaption = HtmlTitle($Language->phrase("ViewPageEditLink"));
+        if ($this->IsModal) {
+            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
+        } else {
+            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
+        }
+        $item->Visible = $this->EditUrl != "" && $Security->canEdit();
+
+        // Delete
+        $item = &$option->add("delete");
+        $url = GetUrl($this->DeleteUrl);
+        $item->Body = "<a class=\"ew-action ew-delete\"" .
+            ($this->InlineDelete || $this->IsModal ? " data-ew-action=\"inline-delete\"" : "") .
+            " title=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) .
+            "\" href=\"" . HtmlEncode($url) . "\">" . $Language->phrase("ViewPageDeleteLink") . "</a>";
+        $item->Visible = $this->DeleteUrl != "" && $Security->canDelete();
 
         // Set up action default
         $option = $options["action"];
@@ -812,18 +838,13 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
         // Call Row Selected event
         $this->rowSelected($row);
         $this->id->setDbValue($row['id']);
-        $this->cobros_cliente->setDbValue($row['cobros_cliente']);
-        $this->metodo_pago->setDbValue($row['metodo_pago']);
-        $this->referencia->setDbValue($row['referencia']);
-        $this->monto_moneda->setDbValue($row['monto_moneda']);
+        $this->compania->setDbValue($row['compania']);
+        $this->metodo->setDbValue($row['metodo']);
         $this->moneda->setDbValue($row['moneda']);
-        $this->tasa_moneda->setDbValue($row['tasa_moneda']);
-        $this->monto_bs->setDbValue($row['monto_bs']);
-        $this->tasa_usd->setDbValue($row['tasa_usd']);
-        $this->monto_usd->setDbValue($row['monto_usd']);
-        $this->banco_origen->setDbValue($row['banco_origen']);
-        $this->banco->setDbValue($row['banco']);
-        $this->anticipo_id->setDbValue($row['anticipo_id']);
+        $this->cuenta_destino_id->setDbValue($row['cuenta_destino_id']);
+        $this->prioridad->setDbValue($row['prioridad']);
+        $this->nota->setDbValue($row['nota']);
+        $this->activo->setDbValue($row['activo']);
     }
 
     // Return a row with default values
@@ -831,18 +852,13 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
     {
         $row = [];
         $row['id'] = $this->id->DefaultValue;
-        $row['cobros_cliente'] = $this->cobros_cliente->DefaultValue;
-        $row['metodo_pago'] = $this->metodo_pago->DefaultValue;
-        $row['referencia'] = $this->referencia->DefaultValue;
-        $row['monto_moneda'] = $this->monto_moneda->DefaultValue;
+        $row['compania'] = $this->compania->DefaultValue;
+        $row['metodo'] = $this->metodo->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
-        $row['tasa_moneda'] = $this->tasa_moneda->DefaultValue;
-        $row['monto_bs'] = $this->monto_bs->DefaultValue;
-        $row['tasa_usd'] = $this->tasa_usd->DefaultValue;
-        $row['monto_usd'] = $this->monto_usd->DefaultValue;
-        $row['banco_origen'] = $this->banco_origen->DefaultValue;
-        $row['banco'] = $this->banco->DefaultValue;
-        $row['anticipo_id'] = $this->anticipo_id->DefaultValue;
+        $row['cuenta_destino_id'] = $this->cuenta_destino_id->DefaultValue;
+        $row['prioridad'] = $this->prioridad->DefaultValue;
+        $row['nota'] = $this->nota->DefaultValue;
+        $row['activo'] = $this->activo->DefaultValue;
         return $row;
     }
 
@@ -866,70 +882,71 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
 
         // id
 
-        // cobros_cliente
+        // compania
 
-        // metodo_pago
-
-        // referencia
-
-        // monto_moneda
+        // metodo
 
         // moneda
 
-        // tasa_moneda
+        // cuenta_destino_id
 
-        // monto_bs
+        // prioridad
 
-        // tasa_usd
+        // nota
 
-        // monto_usd
-
-        // banco_origen
-
-        // banco
-
-        // anticipo_id
+        // activo
 
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
             $this->id->ViewValue = $this->id->CurrentValue;
 
-            // cobros_cliente
-            $this->cobros_cliente->ViewValue = $this->cobros_cliente->CurrentValue;
-            $this->cobros_cliente->ViewValue = FormatNumber($this->cobros_cliente->ViewValue, $this->cobros_cliente->formatPattern());
-
-            // metodo_pago
-            $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
-            $curVal = strval($this->metodo_pago->CurrentValue);
+            // compania
+            $curVal = strval($this->compania->CurrentValue);
             if ($curVal != "") {
-                $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
-                if ($this->metodo_pago->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $this->compania->ViewValue = $this->compania->lookupCacheOption($curVal);
+                if ($this->compania->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->compania->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->compania->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->compania->Lookup->getSql(false, $filterWrk, '', $this, true, true);
                     $conn = Conn();
                     $config = $conn->getConfiguration();
                     $config->setResultCache($this->Cache);
                     $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
                     $ari = count($rswrk);
                     if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
-                        $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
+                        $arwrk = $this->compania->Lookup->renderViewRow($rswrk[0]);
+                        $this->compania->ViewValue = $this->compania->displayValue($arwrk);
                     } else {
-                        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+                        $this->compania->ViewValue = FormatNumber($this->compania->CurrentValue, $this->compania->formatPattern());
                     }
                 }
             } else {
-                $this->metodo_pago->ViewValue = null;
+                $this->compania->ViewValue = null;
             }
 
-            // referencia
-            $this->referencia->ViewValue = $this->referencia->CurrentValue;
-
-            // monto_moneda
-            $this->monto_moneda->ViewValue = $this->monto_moneda->CurrentValue;
-            $this->monto_moneda->ViewValue = FormatNumber($this->monto_moneda->ViewValue, $this->monto_moneda->formatPattern());
+            // metodo
+            $curVal = strval($this->metodo->CurrentValue);
+            if ($curVal != "") {
+                $this->metodo->ViewValue = $this->metodo->lookupCacheOption($curVal);
+                if ($this->metodo->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->metodo->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->metodo->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->metodo->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->metodo->Lookup->renderViewRow($rswrk[0]);
+                        $this->metodo->ViewValue = $this->metodo->displayValue($arwrk);
+                    } else {
+                        $this->metodo->ViewValue = $this->metodo->CurrentValue;
+                    }
+                }
+            } else {
+                $this->metodo->ViewValue = null;
+            }
 
             // moneda
             $curVal = strval($this->moneda->CurrentValue);
@@ -955,122 +972,77 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
                 $this->moneda->ViewValue = null;
             }
 
-            // tasa_moneda
-            $this->tasa_moneda->ViewValue = $this->tasa_moneda->CurrentValue;
-            $this->tasa_moneda->ViewValue = FormatNumber($this->tasa_moneda->ViewValue, $this->tasa_moneda->formatPattern());
-
-            // monto_bs
-            $this->monto_bs->ViewValue = $this->monto_bs->CurrentValue;
-            $this->monto_bs->ViewValue = FormatNumber($this->monto_bs->ViewValue, $this->monto_bs->formatPattern());
-
-            // tasa_usd
-            $this->tasa_usd->ViewValue = $this->tasa_usd->CurrentValue;
-            $this->tasa_usd->ViewValue = FormatNumber($this->tasa_usd->ViewValue, $this->tasa_usd->formatPattern());
-
-            // monto_usd
-            $this->monto_usd->ViewValue = $this->monto_usd->CurrentValue;
-            $this->monto_usd->ViewValue = FormatNumber($this->monto_usd->ViewValue, $this->monto_usd->formatPattern());
-
-            // banco_origen
-            $this->banco_origen->ViewValue = $this->banco_origen->CurrentValue;
-            $curVal = strval($this->banco_origen->CurrentValue);
+            // cuenta_destino_id
+            $curVal = strval($this->cuenta_destino_id->CurrentValue);
             if ($curVal != "") {
-                $this->banco_origen->ViewValue = $this->banco_origen->lookupCacheOption($curVal);
-                if ($this->banco_origen->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->banco_origen->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->banco_origen->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->banco_origen->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->banco_origen->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $this->cuenta_destino_id->ViewValue = $this->cuenta_destino_id->lookupCacheOption($curVal);
+                if ($this->cuenta_destino_id->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->cuenta_destino_id->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->cuenta_destino_id->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->cuenta_destino_id->Lookup->getSql(false, $filterWrk, '', $this, true, true);
                     $conn = Conn();
                     $config = $conn->getConfiguration();
                     $config->setResultCache($this->Cache);
                     $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
                     $ari = count($rswrk);
                     if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->banco_origen->Lookup->renderViewRow($rswrk[0]);
-                        $this->banco_origen->ViewValue = $this->banco_origen->displayValue($arwrk);
+                        $arwrk = $this->cuenta_destino_id->Lookup->renderViewRow($rswrk[0]);
+                        $this->cuenta_destino_id->ViewValue = $this->cuenta_destino_id->displayValue($arwrk);
                     } else {
-                        $this->banco_origen->ViewValue = $this->banco_origen->CurrentValue;
+                        $this->cuenta_destino_id->ViewValue = FormatNumber($this->cuenta_destino_id->CurrentValue, $this->cuenta_destino_id->formatPattern());
                     }
                 }
             } else {
-                $this->banco_origen->ViewValue = null;
+                $this->cuenta_destino_id->ViewValue = null;
             }
 
-            // banco
-            $this->banco->ViewValue = $this->banco->CurrentValue;
-            $curVal = strval($this->banco->CurrentValue);
-            if ($curVal != "") {
-                $this->banco->ViewValue = $this->banco->lookupCacheOption($curVal);
-                if ($this->banco->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->banco->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->banco->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                    $sqlWrk = $this->banco->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->banco->Lookup->renderViewRow($rswrk[0]);
-                        $this->banco->ViewValue = $this->banco->displayValue($arwrk);
-                    } else {
-                        $this->banco->ViewValue = FormatNumber($this->banco->CurrentValue, $this->banco->formatPattern());
-                    }
-                }
+            // prioridad
+            if (strval($this->prioridad->CurrentValue) != "") {
+                $this->prioridad->ViewValue = $this->prioridad->optionCaption($this->prioridad->CurrentValue);
             } else {
-                $this->banco->ViewValue = null;
+                $this->prioridad->ViewValue = null;
             }
 
-            // anticipo_id
-            $this->anticipo_id->ViewValue = $this->anticipo_id->CurrentValue;
-            $this->anticipo_id->ViewValue = FormatNumber($this->anticipo_id->ViewValue, $this->anticipo_id->formatPattern());
+            // nota
+            $this->nota->ViewValue = $this->nota->CurrentValue;
+
+            // activo
+            if (strval($this->activo->CurrentValue) != "") {
+                $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
+            } else {
+                $this->activo->ViewValue = null;
+            }
 
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
 
-            // metodo_pago
-            $this->metodo_pago->HrefValue = "";
-            $this->metodo_pago->TooltipValue = "";
+            // compania
+            $this->compania->HrefValue = "";
+            $this->compania->TooltipValue = "";
 
-            // referencia
-            $this->referencia->HrefValue = "";
-            $this->referencia->TooltipValue = "";
-
-            // monto_moneda
-            $this->monto_moneda->HrefValue = "";
-            $this->monto_moneda->TooltipValue = "";
+            // metodo
+            $this->metodo->HrefValue = "";
+            $this->metodo->TooltipValue = "";
 
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
 
-            // tasa_moneda
-            $this->tasa_moneda->HrefValue = "";
-            $this->tasa_moneda->TooltipValue = "";
+            // cuenta_destino_id
+            $this->cuenta_destino_id->HrefValue = "";
+            $this->cuenta_destino_id->TooltipValue = "";
 
-            // monto_bs
-            $this->monto_bs->HrefValue = "";
-            $this->monto_bs->TooltipValue = "";
+            // prioridad
+            $this->prioridad->HrefValue = "";
+            $this->prioridad->TooltipValue = "";
 
-            // tasa_usd
-            $this->tasa_usd->HrefValue = "";
-            $this->tasa_usd->TooltipValue = "";
+            // nota
+            $this->nota->HrefValue = "";
+            $this->nota->TooltipValue = "";
 
-            // monto_usd
-            $this->monto_usd->HrefValue = "";
-            $this->monto_usd->TooltipValue = "";
-
-            // banco_origen
-            $this->banco_origen->HrefValue = "";
-            $this->banco_origen->TooltipValue = "";
-
-            // banco
-            $this->banco->HrefValue = "";
-            $this->banco->TooltipValue = "";
-
-            // anticipo_id
-            $this->anticipo_id->HrefValue = "";
-            $this->anticipo_id->TooltipValue = "";
+            // activo
+            $this->activo->HrefValue = "";
+            $this->activo->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1085,7 +1057,7 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
         global $Breadcrumb, $Language;
         $Breadcrumb = new Breadcrumb("Home");
         $url = CurrentUrl();
-        $Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("CobrosClienteDetalleList"), "", $this->TableVar, true);
+        $Breadcrumb->add("list", $this->TableVar, $this->addMasterUrl("PagoDestinoReglaList"), "", $this->TableVar, true);
         $pageId = "view";
         $Breadcrumb->add("view", $pageId, $url);
     }
@@ -1103,16 +1075,19 @@ class CobrosClienteDetalleView extends CobrosClienteDetalle
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
-                case "x_metodo_pago":
+                case "x_compania":
+                    break;
+                case "x_metodo":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_moneda":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
-                case "x_banco_origen":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                case "x_cuenta_destino_id":
                     break;
-                case "x_banco":
+                case "x_prioridad":
+                    break;
+                case "x_activo":
                     break;
                 default:
                     $lookupFilter = "";

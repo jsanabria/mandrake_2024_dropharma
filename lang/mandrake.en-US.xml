@@ -1,13 +1,7 @@
-<ew-language date="2026/2/25" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/2/27" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
-    <menu id="1210">
-      <phrase id="menutext" value="Registrar Pagos de Clientes" />
-    </menu>
-    <menu id="1209">
-      <phrase id="menutext" value="Cobros Detalle" />
-    </menu>
     <menu id="19">
       <phrase id="menutext" value="Maestros" />
     </menu>
@@ -32,32 +26,29 @@
     <menu id="455">
       <phrase id="menutext" value="Subir Costo Artículos" />
     </menu>
-    <menu id="24">
-      <phrase id="menutext" value="Unidades de Medida del Artículo" />
-    </menu>
     <menu id="2">
       <phrase id="menutext" value="Asesores" />
     </menu>
     <menu id="5">
       <phrase id="menutext" value="Clientes" />
     </menu>
+    <menu id="24">
+      <phrase id="menutext" value="Unidades de Medida del Artículo" />
+    </menu>
     <menu id="930">
       <phrase id="menutext" value="Existencia por Almacen" />
-    </menu>
-    <menu id="49">
-      <phrase id="menutext" value="Asesor Cliente" />
     </menu>
     <menu id="1159">
       <phrase id="menutext" value="Almacenistas" />
     </menu>
+    <menu id="49">
+      <phrase id="menutext" value="Asesor Cliente" />
+    </menu>
     <menu id="4">
       <phrase id="menutext" value="Cuenta Bancos" />
     </menu>
-    <menu id="1207">
-      <phrase id="menutext" value="Usuario Master" />
-    </menu>
-    <menu id="1205">
-      <phrase id="menutext" value="pedidos detalles online bitacora" />
+    <menu id="1210">
+      <phrase id="menutext" value="Registrar Pagos de Clientes" />
     </menu>
     <menu id="48">
       <phrase id="menutext" value="Movimientos" />
@@ -95,17 +86,14 @@
     <menu id="423">
       <phrase id="menutext" value="--" />
     </menu>
-    <menu id="64">
-      <phrase id="menutext" value="Entradas" />
-    </menu>
     <menu id="329">
       <phrase id="menutext" value="Salida de Bultos" />
     </menu>
     <menu id="726">
       <phrase id="menutext" value="Actualizar Existencia" />
     </menu>
-    <menu id="103">
-      <phrase id="menutext" value="Nota de Recepción" />
+    <menu id="64">
+      <phrase id="menutext" value="Entradas" />
     </menu>
     <menu id="862">
       <phrase id="menutext" value="--" />
@@ -113,17 +101,14 @@
     <menu id="728">
       <phrase id="menutext" value="Compras Administrativas" />
     </menu>
-    <menu id="921">
-      <phrase id="menutext" value="Crear Factura Fiscal de N. E. USD" />
-    </menu>
     <menu id="863">
       <phrase id="menutext" value="Cobros Clientes" />
     </menu>
     <menu id="864">
       <phrase id="menutext" value="Pagos Proveedores" />
     </menu>
-    <menu id="104">
-      <phrase id="menutext" value="Factura de Compra" />
+    <menu id="103">
+      <phrase id="menutext" value="Nota de Recepción" />
     </menu>
     <menu id="918">
       <phrase id="menutext" value="Lotes de Pagos Generar" />
@@ -131,14 +116,26 @@
     <menu id="916">
       <phrase id="menutext" value="Exportar Datos a Profit" />
     </menu>
-    <menu id="922">
-      <phrase id="menutext" value="Factura Fiscal Nota de Entrega Seleccionar" />
-    </menu>
     <menu id="1160">
       <phrase id="menutext" value="FTP Subir Pedidos" />
     </menu>
     <menu id="1206">
       <phrase id="menutext" value="Actualizar Costo Ponderado" />
+    </menu>
+    <menu id="921">
+      <phrase id="menutext" value="Crear Factura Fiscal de N. E. USD" />
+    </menu>
+    <menu id="1213">
+      <phrase id="menutext" value="Anticipos" />
+    </menu>
+    <menu id="1211">
+      <phrase id="menutext" value="Anticipos Aplicaciones" />
+    </menu>
+    <menu id="104">
+      <phrase id="menutext" value="Factura de Compra" />
+    </menu>
+    <menu id="922">
+      <phrase id="menutext" value="Factura Fiscal Nota de Entrega Seleccionar" />
     </menu>
     <menu id="105">
       <phrase id="menutext" value="Ajuste de Entrada" />
@@ -176,9 +173,6 @@
     <menu id="917">
       <phrase id="menutext" value="Transacciones" />
     </menu>
-    <menu id="1203">
-      <phrase id="menutext" value="cliente dias tmp" />
-    </menu>
     <menu id="1103">
       <phrase id="menutext" value="Transferencias" />
     </menu>
@@ -191,6 +185,12 @@
     <menu id="926">
       <phrase id="menutext" value="Transferencias" />
     </menu>
+    <menu id="1157">
+      <phrase id="menutext" value="Toma Física" />
+    </menu>
+    <menu id="1158">
+      <phrase id="menutext" value="Conteo Manual Detalle" />
+    </menu>
     <menu id="927">
       <phrase id="menutext" value="Transferencias" />
     </menu>
@@ -200,11 +200,8 @@
     <menu id="929">
       <phrase id="menutext" value="Transferencias" />
     </menu>
-    <menu id="1157">
-      <phrase id="menutext" value="Toma Física" />
-    </menu>
-    <menu id="1158">
-      <phrase id="menutext" value="Conteo Manual Detalle" />
+    <menu id="1209">
+      <phrase id="menutext" value="Cobros Detalle" />
     </menu>
     <menu id="1154">
       <phrase id="menutext" value="Cobranza" />
@@ -217,9 +214,6 @@
     </menu>
     <menu id="1155">
       <phrase id="menutext" value="Abonos" />
-    </menu>
-    <menu id="1202">
-      <phrase id="menutext" value="Procesar Pedido de Ventas" />
     </menu>
     <menu id="587">
       <phrase id="menutext" value="Contabilidad" />
@@ -263,9 +257,6 @@
     <menu id="720">
       <phrase id="menutext" value="Estado de Resultados" />
     </menu>
-    <menu id="1201">
-      <phrase id="menutext" value="Pedidos de Venta" />
-    </menu>
     <menu id="304">
       <phrase id="menutext" value="Reportes" />
     </menu>
@@ -283,6 +274,9 @@
     </menu>
     <menu id="724">
       <phrase id="menutext" value="Facturas Asesor" />
+    </menu>
+    <menu id="1207">
+      <phrase id="menutext" value="Usuario Master" />
     </menu>
     <menu id="17">
       <phrase id="menutext" value="Sistema" />
@@ -329,8 +323,8 @@
     <menu id="725">
       <phrase id="menutext" value="Notificaciones Email" />
     </menu>
-    <menu id="1199">
-      <phrase id="menutext" value="tarifa art" />
+    <menu id="1212">
+      <phrase id="menutext" value="Pago Destino Regla" />
     </menu>
     <menu id="18">
       <phrase id="menutext" value="Seguridad" />
@@ -349,6 +343,21 @@
     </menu>
     <menu id="126">
       <phrase id="menutext" value="Funciones" />
+    </menu>
+    <menu id="1205">
+      <phrase id="menutext" value="pedidos detalles online bitacora" />
+    </menu>
+    <menu id="1203">
+      <phrase id="menutext" value="cliente dias tmp" />
+    </menu>
+    <menu id="1202">
+      <phrase id="menutext" value="Procesar Pedido de Ventas" />
+    </menu>
+    <menu id="1201">
+      <phrase id="menutext" value="Pedidos de Venta" />
+    </menu>
+    <menu id="1199">
+      <phrase id="menutext" value="tarifa art" />
     </menu>
     <menu id="1200">
       <phrase id="menutext" value="tmp art" />
@@ -6398,12 +6407,94 @@
       <field id="monto_usd">
         <phrase id="fldcaption" value="Monto USD" />
       </field>
+      <field id="banco_origen">
+        <phrase id="fldcaption" value="Banco Origen" />
+      </field>
       <field id="banco">
-        <phrase id="fldcaption" value="Banco" />
+        <phrase id="fldcaption" value="Banco Destino" />
+      </field>
+      <field id="anticipo_id">
+        <phrase id="fldcaption" value="Anticipo" />
       </field>
     </table>
     <table id="registrar_pagos_clientes">
       <phrase id="tblcaption" value="Registrar Pagos de Clientes" />
+    </table>
+    <table id="anticipos_aplicaciones">
+      <phrase id="tblcaption" value="Anticipos Aplicaciones" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="anticipo_cobro_id">
+        <phrase id="fldcaption" value="anticipo cobro id" />
+      </field>
+      <field id="cobro_factura_id">
+        <phrase id="fldcaption" value="cobro factura id" />
+      </field>
+      <field id="salida_id">
+        <phrase id="fldcaption" value="salida id" />
+      </field>
+      <field id="fecha">
+        <phrase id="fldcaption" value="fecha" />
+      </field>
+      <field id="_username">
+        <phrase id="fldcaption" value="username" />
+      </field>
+      <field id="monto_moneda">
+        <phrase id="fldcaption" value="monto moneda" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="moneda" />
+      </field>
+      <field id="tasa_factura">
+        <phrase id="fldcaption" value="tasa factura" />
+      </field>
+    </table>
+    <table id="pago_destino_regla">
+      <phrase id="tblcaption" value="Pago Destino Regla" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="compania">
+        <phrase id="fldcaption" value="Compañía" />
+      </field>
+      <field id="metodo">
+        <phrase id="fldcaption" value="Método Pago" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="cuenta_destino_id">
+        <phrase id="fldcaption" value="Cuenta Destino" />
+      </field>
+      <field id="prioridad">
+        <phrase id="fldcaption" value="Prioridad" />
+        <phrase id="fldtagvalue1" value="100" />
+        <phrase id="fldtagcaption1" value="100" />
+        <phrase id="fldtagvalue2" value="90" />
+        <phrase id="fldtagcaption2" value="90" />
+        <phrase id="fldtagvalue3" value="80" />
+        <phrase id="fldtagcaption3" value="80" />
+        <phrase id="fldtagvalue4" value="70" />
+        <phrase id="fldtagcaption4" value="70" />
+        <phrase id="fldtagvalue5" value="60" />
+        <phrase id="fldtagcaption5" value="60" />
+        <phrase id="fldtagvalue6" value="50" />
+        <phrase id="fldtagcaption6" value="50" />
+      </field>
+      <field id="nota">
+        <phrase id="fldcaption" value="Nota" />
+      </field>
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
+      </field>
+    </table>
+    <table id="registra_anticipos_clientes">
+      <phrase id="tblcaption" value="Anticipos" />
     </table>
   </project>
 </ew-language>

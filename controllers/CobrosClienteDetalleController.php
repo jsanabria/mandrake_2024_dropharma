@@ -22,31 +22,10 @@ class CobrosClienteDetalleController extends ControllerBase
         return $this->runPage($request, $response, $args, "CobrosClienteDetalleList");
     }
 
-    // add
-    #[Map(["GET","POST","OPTIONS"], "/CobrosClienteDetalleAdd[/{id}]", [PermissionMiddleware::class], "add.cobros_cliente_detalle")]
-    public function add(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "CobrosClienteDetalleAdd");
-    }
-
     // view
     #[Map(["GET","POST","OPTIONS"], "/CobrosClienteDetalleView[/{id}]", [PermissionMiddleware::class], "view.cobros_cliente_detalle")]
     public function view(Request $request, Response $response, array $args): Response
     {
         return $this->runPage($request, $response, $args, "CobrosClienteDetalleView");
-    }
-
-    // edit
-    #[Map(["GET","POST","OPTIONS"], "/CobrosClienteDetalleEdit[/{id}]", [PermissionMiddleware::class], "edit.cobros_cliente_detalle")]
-    public function edit(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "CobrosClienteDetalleEdit");
-    }
-
-    // delete
-    #[Map(["GET","POST","OPTIONS"], "/CobrosClienteDetalleDelete[/{id}]", [PermissionMiddleware::class], "delete.cobros_cliente_detalle")]
-    public function delete(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "CobrosClienteDetalleDelete");
     }
 }
