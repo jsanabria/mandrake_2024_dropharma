@@ -43,6 +43,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["total", [fields.total.visible && fields.total.required ? ew.Validators.required(fields.total.caption) : null], fields.total.isInvalid],
             ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
             ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
+            ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
             ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
@@ -68,6 +69,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
             "igtf": <?= $Page->igtf->toClientList($Page) ?>,
+            "moneda": <?= $Page->moneda->toClientList($Page) ?>,
             "estatus": <?= $Page->estatus->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
@@ -401,6 +403,53 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
 <input type="<?= $Page->monto_base_igtf->getInputTextType() ?>" name="x_monto_base_igtf" id="x_monto_base_igtf" data-table="view_out_tdcfcv" data-field="x_monto_base_igtf" value="<?= $Page->monto_base_igtf->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_base_igtf->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_base_igtf->formatPattern()) ?>"<?= $Page->monto_base_igtf->editAttributes() ?> aria-describedby="x_monto_base_igtf_help">
 <?= $Page->monto_base_igtf->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->monto_base_igtf->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+    <div id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->moneda->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_moneda">
+    <select
+        id="x_moneda"
+        name="x_moneda"
+        class="form-select ew-select<?= $Page->moneda->isInvalidClass() ?>"
+        <?php if (!$Page->moneda->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcfcvedit_x_moneda"
+        <?php } ?>
+        data-table="view_out_tdcfcv"
+        data-field="x_moneda"
+        data-page="2"
+        data-value-separator="<?= $Page->moneda->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>"
+        <?= $Page->moneda->editAttributes() ?>>
+        <?= $Page->moneda->selectOptionListHtml("x_moneda") ?>
+    </select>
+    <?= $Page->moneda->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
+<?= $Page->moneda->Lookup->getParamTag($Page, "p_x_moneda") ?>
+<?php if (!$Page->moneda->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcfcvedit", function() {
+    var options = { name: "x_moneda", selectId: "fview_out_tdcfcvedit_x_moneda" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcfcvedit.lists.moneda?.lookupOptions.length) {
+        options.data = { id: "x_moneda", form: "fview_out_tdcfcvedit" };
+    } else {
+        options.ajax = { id: "x_moneda", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.moneda.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>

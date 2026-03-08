@@ -26,4 +26,1505 @@ CREATE INDEX idx_anticipo_id ON cobros_cliente_detalle (anticipo_id);
 ALTER TABLE `cobros_cliente_detalle`
 	ADD COLUMN `banco_origen` VARCHAR(6) NULL DEFAULT NULL AFTER `monto_usd`;
 
+CREATE TABLE pago_destino_regla (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  compania INT UNSIGNED NOT NULL,
+  metodo CHAR(2) NOT NULL,                 -- EF, TR, DP, PM, TD, TC, CH, AN, etc.
+  moneda VARCHAR(6) NULL DEFAULT NULL,     -- 'Bs.', 'USD', 'EURO' o NULL = aplica a cualquiera
+  cuenta_destino_id INT UNSIGNED NOT NULL, -- compania_cuenta.id
+  prioridad TINYINT NOT NULL DEFAULT 0,    -- mayor gana
+  activo CHAR(1) NOT NULL DEFAULT 'S',
+  nota VARCHAR(100) NULL,
+  PRIMARY KEY (id),
+  INDEX idx_regla (compania, metodo, moneda, activo, prioridad)
+) ENGINE=InnoDB;
 
+-- Efectivo -> caja según moneda
+INSERT INTO pago_destino_regla (compania, metodo, moneda, cuenta_destino_id, prioridad, activo, nota)
+VALUES
+(1, 'EF', 'Bs.',  5, 100, 'S', 'Efectivo Bs -> Caja Bs'),
+(1, 'EF', 'USD',  4, 100, 'S', 'Efectivo USD -> Caja USD'),
+(1, 'EF', 'EURO', 4, 100, 'S', 'Efectivo EUR -> Caja USD (ajustar si tienes caja EUR)');
+
+-- Transferencia / Depósito (ejemplo: Banesco Bs id=10 o BNC Bs id=1, etc.)
+-- aquí pongo “genérico” (moneda NULL) y tú apuntas a la cuenta que quieras
+INSERT INTO pago_destino_regla (compania, metodo, moneda, cuenta_destino_id, prioridad, activo, nota)
+VALUES
+(1, 'TR', NULL, 1, 50, 'S', 'Transferencia -> cuenta principal'),
+(1, 'DP', NULL, 1, 50, 'S', 'Depósito -> cuenta principal'),
+(1, 'PM', NULL, 2, 60, 'S', 'Pago móvil -> cuenta dedicada');
+
+-- Tarjetas (POS)
+INSERT INTO pago_destino_regla (compania, metodo, moneda, cuenta_destino_id, prioridad, activo, nota)
+VALUES
+(1, 'TD', NULL, 1, 40, 'S', 'Tarjeta Débito -> cuenta POS'),
+(1, 'TC', NULL, 1, 40, 'S', 'Tarjeta Crédito -> cuenta POS');
+
+-- Cheque
+INSERT INTO pago_destino_regla (compania, metodo, moneda, cuenta_destino_id, prioridad, activo, nota)
+VALUES
+(1, 'CH', NULL, 1, 30, 'S', 'Cheque -> cuenta principal');
+
+-- Anticipo (puedes tratarlo como EF por moneda o definir específico)
+INSERT INTO pago_destino_regla (compania, metodo, moneda, cuenta_destino_id, prioridad, activo, nota)
+VALUES
+(1, 'AN', 'Bs.',  5, 90, 'S', 'Anticipo Bs -> Caja Bs'),
+(1, 'AN', 'USD',  4, 90, 'S', 'Anticipo USD -> Caja USD');
+
+-- Para filtrar anticipos por cliente rápido
+ALTER TABLE cobros_cliente
+  ADD INDEX idx_cliente_doc (cliente, id_documento);
+
+-- Para agrupar detalles por anticipo y moneda
+ALTER TABLE cobros_cliente_detalle
+  ADD INDEX idx_cobro_moneda (cobros_cliente, moneda);
+
+-- Para aplicaciones por anticipo/moneda
+ALTER TABLE anticipos_aplicaciones
+  ADD INDEX idx_anticipo_moneda (anticipo_cobro_id, moneda);
+  
+
+CREATE TABLE `cont_plan_cuentas_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `codigo` VARCHAR(30) NOT NULL,
+  `nombre` VARCHAR(150) NOT NULL,
+  `tipo` ENUM('ACTIVO','PASIVO','PATRIMONIO','INGRESO','GASTO') NOT NULL,
+  `naturaleza` ENUM('DEUDORA','ACREEDORA') NOT NULL,
+  `acepta_movimiento` TINYINT(1) NOT NULL DEFAULT 1,
+  `cuenta_padre_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+  `nivel` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+  `estado` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_cuentas_codigo` (`codigo`),
+  KEY `idx_cuentas_padre` (`cuenta_padre_id`),
+  KEY `idx_cuentas_tipo` (`tipo`),
+  KEY `idx_cuentas_estado` (`estado`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `cont_centro_costo_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `codigo` VARCHAR(20) NOT NULL,
+  `nombre` VARCHAR(120) NOT NULL,
+  `descripcion` VARCHAR(255) NULL DEFAULT NULL,
+  `centro_padre_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+  `nivel` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+  `estado` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_cc_codigo` (`codigo`),
+  KEY `idx_cc_padre` (`centro_padre_id`),
+  KEY `idx_cc_estado` (`estado`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `cont_tercero_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tipo` ENUM('CLIENTE','PROVEEDOR','AMBOS','OTRO') NOT NULL,
+  `origen_tabla` VARCHAR(30) NOT NULL,     -- ej: 'clientes', 'proveedores'
+  `origen_id` BIGINT UNSIGNED NOT NULL,    -- id real en tu sistema
+  `nombre` VARCHAR(150) NOT NULL,
+  `rif` VARCHAR(30) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_tercero_tipo` (`tipo`),
+  KEY `idx_tercero_origen` (`origen_tabla`, `origen_id`),
+  KEY `idx_tercero_estado` (`estado`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `cont_configuracion_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `clave` VARCHAR(60) NOT NULL,                -- ej: 'CTA_CXC'
+  `descripcion` VARCHAR(255) NULL DEFAULT NULL,
+  `cuenta_id` BIGINT UNSIGNED NULL DEFAULT NULL,  -- referencia a cont_plan_cuentas_mdk.id
+  `valor_texto` VARCHAR(255) NULL DEFAULT NULL,   -- por si algún parámetro no es cuenta
+  `valor_numero` DECIMAL(20,6) NULL DEFAULT NULL,
+  `estado` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_config_clave` (`clave`),
+  KEY `idx_config_cuenta` (`cuenta_id`),
+  KEY `idx_config_estado` (`estado`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `cont_asiento_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+  `fecha` DATE NOT NULL,
+  `descripcion` VARCHAR(255) NULL DEFAULT NULL,
+  `referencia` VARCHAR(60) NULL DEFAULT NULL,
+
+  `modulo_origen` ENUM('VENTA','COBRO','ANTICIPO_CLI','APL_ANT_CLI',
+                       'COMPRA_GASTO','COMPRA_INV','PAGO_PROV','ANTICIPO_PROV','APL_ANT_PROV',
+                       'RETENCION','AJUSTE') NOT NULL,
+
+  `origen_tabla` VARCHAR(40) NULL DEFAULT NULL,  -- 'salidas','cobros_cliente','compra','entradas', etc.
+  `origen_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+
+  `tercero_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+
+  `moneda_trx` VARCHAR(6) NOT NULL DEFAULT 'Bs',      -- 'USD' o 'Bs'
+  `tasa_trx` DECIMAL(20,6) NOT NULL DEFAULT 1.000000, -- tasa usada para Bs
+  `total_moneda_trx` DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+  `total_bs` DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+
+  `centro_costo_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+
+  `username` VARCHAR(30) NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  `anulado` TINYINT(1) NOT NULL DEFAULT 0,
+  `anulado_at` DATETIME NULL DEFAULT NULL,
+  `anulado_by` VARCHAR(30) NULL DEFAULT NULL,
+  `anulado_motivo` VARCHAR(255) NULL DEFAULT NULL,
+
+  PRIMARY KEY (`id`),
+  KEY `idx_asiento_fecha` (`fecha`),
+  KEY `idx_asiento_modulo` (`modulo_origen`),
+  KEY `idx_asiento_origen` (`origen_tabla`, `origen_id`),
+  KEY `idx_asiento_tercero` (`tercero_id`),
+  KEY `idx_asiento_cc` (`centro_costo_id`),
+  KEY `idx_asiento_referencia` (`referencia`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `cont_asiento_detalle_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `asiento_id` BIGINT UNSIGNED NOT NULL,
+
+  `cuenta_id` BIGINT UNSIGNED NOT NULL,
+  `centro_costo_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+
+  `concepto` VARCHAR(255) NULL DEFAULT NULL,
+
+  `moneda_trx` VARCHAR(6) NOT NULL DEFAULT 'Bs',
+  `tasa_trx` DECIMAL(20,6) NOT NULL DEFAULT 1.000000,
+  `monto_moneda_trx` DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+
+  `debe_bs` DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+  `haber_bs` DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  KEY `idx_det_asiento` (`asiento_id`),
+  KEY `idx_det_cuenta` (`cuenta_id`),
+  KEY `idx_det_cc` (`centro_costo_id`),
+  KEY `idx_det_moneda` (`moneda_trx`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- =========================================
+-- PLAN DE CUENTAS MINIMO (MANDRAKE)
+-- =========================================
+START TRANSACTION;
+
+-- Limpieza opcional (usa con cuidado si estás arrancando de cero)
+-- DELETE FROM cont_configuracion_mdk;
+-- DELETE FROM cont_plan_cuentas_mdk;
+
+-- ---------
+-- ACTIVO (1)
+-- ---------
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1', 'ACTIVO', 'ACTIVO', 'DEUDORA', 0, NULL, 1, 1);
+SET @CTA_ACTIVO := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1.1', 'ACTIVO CORRIENTE', 'ACTIVO', 'DEUDORA', 0, @CTA_ACTIVO, 2, 1);
+SET @CTA_ACTIVO_COR := LAST_INSERT_ID();
+
+-- Caja
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1.1.01', 'CAJA', 'ACTIVO', 'DEUDORA', 1, @CTA_ACTIVO_COR, 3, 1);
+SET @CTA_CAJA := LAST_INSERT_ID();
+
+-- Bancos
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1.1.02', 'BANCOS', 'ACTIVO', 'DEUDORA', 1, @CTA_ACTIVO_COR, 3, 1);
+SET @CTA_BANCOS := LAST_INSERT_ID();
+
+-- Cuentas por cobrar
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1.1.03', 'CUENTAS POR COBRAR (CLIENTES)', 'ACTIVO', 'DEUDORA', 1, @CTA_ACTIVO_COR, 3, 1);
+SET @CTA_CXC := LAST_INSERT_ID();
+
+-- Anticipos a proveedores (activo)
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1.1.04', 'ANTICIPOS A PROVEEDORES', 'ACTIVO', 'DEUDORA', 1, @CTA_ACTIVO_COR, 3, 1);
+SET @CTA_ANT_PROV := LAST_INSERT_ID();
+
+-- IVA crédito fiscal (activo)
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('1.1.05', 'IVA CREDITO FISCAL', 'ACTIVO', 'DEUDORA', 1, @CTA_ACTIVO_COR, 3, 1);
+SET @CTA_IVA_CRED := LAST_INSERT_ID();
+
+-- ---------
+-- PASIVO (2)
+-- ---------
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2', 'PASIVO', 'PASIVO', 'ACREEDORA', 0, NULL, 1, 1);
+SET @CTA_PASIVO := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1', 'PASIVO CORRIENTE', 'PASIVO', 'ACREEDORA', 0, @CTA_PASIVO, 2, 1);
+SET @CTA_PASIVO_COR := LAST_INSERT_ID();
+
+-- Cuentas por pagar
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.01', 'CUENTAS POR PAGAR (PROVEEDORES)', 'PASIVO', 'ACREEDORA', 1, @CTA_PASIVO_COR, 3, 1);
+SET @CTA_CXP := LAST_INSERT_ID();
+
+-- Anticipos de clientes (pasivo)
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.02', 'ANTICIPOS DE CLIENTES', 'PASIVO', 'ACREEDORA', 1, @CTA_PASIVO_COR, 3, 1);
+SET @CTA_ANT_CLI := LAST_INSERT_ID();
+
+-- IVA débito fiscal (pasivo)
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.03', 'IVA DEBITO FISCAL', 'PASIVO', 'ACREEDORA', 1, @CTA_PASIVO_COR, 3, 1);
+SET @CTA_IVA_DEB := LAST_INSERT_ID();
+
+-- Retenciones por pagar (pasivo)
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.10', 'RETENCIONES POR PAGAR', 'PASIVO', 'ACREEDORA', 0, @CTA_PASIVO_COR, 3, 1);
+SET @CTA_RETENCIONES := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.10.01', 'RETENCION IVA POR PAGAR', 'PASIVO', 'ACREEDORA', 1, @CTA_RETENCIONES, 4, 1);
+SET @CTA_RET_IVA := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.10.02', 'RETENCION ISLR POR PAGAR', 'PASIVO', 'ACREEDORA', 1, @CTA_RETENCIONES, 4, 1);
+SET @CTA_RET_ISLR := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.10.03', 'RETENCION MUNICIPAL POR PAGAR', 'PASIVO', 'ACREEDORA', 1, @CTA_RETENCIONES, 4, 1);
+SET @CTA_RET_MUNI := LAST_INSERT_ID();
+
+-- IGTF por pagar (si lo usas, déjalo listo)
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('2.1.20', 'IGTF POR PAGAR', 'PASIVO', 'ACREEDORA', 1, @CTA_PASIVO_COR, 3, 1);
+SET @CTA_IGTF_PAG := LAST_INSERT_ID();
+
+-- ---------
+-- INGRESOS (4)
+-- ---------
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('4', 'INGRESOS', 'INGRESO', 'ACREEDORA', 0, NULL, 1, 1);
+SET @CTA_ING := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('4.1', 'VENTAS', 'INGRESO', 'ACREEDORA', 0, @CTA_ING, 2, 1);
+SET @CTA_VENTAS_GRP := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('4.1.01', 'VENTAS (INGRESOS OPERATIVOS)', 'INGRESO', 'ACREEDORA', 1, @CTA_VENTAS_GRP, 3, 1);
+SET @CTA_VENTAS := LAST_INSERT_ID();
+
+-- Diferencia cambiaria ganancia
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('4.9.01', 'DIFERENCIA CAMBIARIA GANANCIA', 'INGRESO', 'ACREEDORA', 1, @CTA_ING, 2, 1);
+SET @CTA_DIF_GAN := LAST_INSERT_ID();
+
+-- ---------
+-- GASTOS (5)
+-- ---------
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('5', 'GASTOS', 'GASTO', 'DEUDORA', 0, NULL, 1, 1);
+SET @CTA_GASTOS := LAST_INSERT_ID();
+
+-- Compras / Costos
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('5.1', 'COSTOS / COMPRAS', 'GASTO', 'DEUDORA', 0, @CTA_GASTOS, 2, 1);
+SET @CTA_COSTOS_GRP := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('5.1.01', 'COMPRAS / COSTO DE INVENTARIO (OPERATIVO)', 'GASTO', 'DEUDORA', 1, @CTA_COSTOS_GRP, 3, 1);
+SET @CTA_COMPRAS := LAST_INSERT_ID();
+
+-- Gastos administrativos
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('5.2', 'GASTOS ADMINISTRATIVOS', 'GASTO', 'DEUDORA', 0, @CTA_GASTOS, 2, 1);
+SET @CTA_GASTOS_ADM_GRP := LAST_INSERT_ID();
+
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('5.2.01', 'GASTOS ADMINISTRATIVOS (OPERATIVO)', 'GASTO', 'DEUDORA', 1, @CTA_GASTOS_ADM_GRP, 3, 1);
+SET @CTA_GASTOS_ADM := LAST_INSERT_ID();
+
+-- Diferencia cambiaria pérdida
+INSERT INTO cont_plan_cuentas_mdk (codigo, nombre, tipo, naturaleza, acepta_movimiento, cuenta_padre_id, nivel, estado)
+VALUES ('5.9.01', 'DIFERENCIA CAMBIARIA PERDIDA', 'GASTO', 'DEUDORA', 1, @CTA_GASTOS, 2, 1);
+SET @CTA_DIF_PER := LAST_INSERT_ID();
+
+COMMIT;
+
+
+-- =========================================
+-- CONFIGURACION CONTABLE (MANDRAKE)
+-- =========================================
+START TRANSACTION;
+
+-- Limpieza opcional (si estás iniciando)
+-- DELETE FROM cont_configuracion_mdk;
+
+-- Helper: función “inline” usando SELECT subquery por codigo
+-- NOTA: cada INSERT usa subquery para traer cuenta_id por código.
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_CXC', 'Cuenta contable para Cuentas por Cobrar (Clientes)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='1.1.03' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_CXP', 'Cuenta contable para Cuentas por Pagar (Proveedores)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_VENTAS', 'Cuenta contable para Ventas (Ingresos)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='4.1.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_CAJA', 'Cuenta contable para Caja',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='1.1.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_BANCOS', 'Cuenta contable para Bancos (genérica)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='1.1.02' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_ANTICIPO_CLIENTE', 'Cuenta contable para Anticipos de Clientes',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.02' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_ANTICIPO_PROVEEDOR', 'Cuenta contable para Anticipos a Proveedores',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='1.1.04' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_IVA_CREDITO', 'Cuenta contable IVA Crédito Fiscal (Compras)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='1.1.05' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_IVA_DEBITO', 'Cuenta contable IVA Débito Fiscal (Ventas)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.03' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_RET_IVA_PAGAR', 'Cuenta retención IVA por pagar',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.10.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_RET_ISLR_PAGAR', 'Cuenta retención ISLR por pagar',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.10.02' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_RET_MUNI_PAGAR', 'Cuenta retención municipal por pagar',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.10.03' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_IGTF_PAGAR', 'Cuenta IGTF por pagar (si aplica)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.20' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_COMPRAS', 'Cuenta compras/costos operativos (inventario o costo)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='5.1.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_GASTOS_ADM', 'Cuenta gastos administrativos (gastos generales)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='5.2.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_DIF_CAMBIARIA_GAN', 'Cuenta diferencia cambiaria (ganancia)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='4.9.01' LIMIT 1));
+
+INSERT INTO cont_configuracion_mdk (clave, descripcion, cuenta_id)
+VALUES
+('CTA_DIF_CAMBIARIA_PER', 'Cuenta diferencia cambiaria (pérdida)',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='5.9.01' LIMIT 1));
+
+-- Parámetro importante para tu lógica: "si cobros_cliente_detalle.banco es NULL/0 => CAJA, si >0 => BANCO"
+INSERT INTO cont_configuracion_mdk (clave, descripcion, valor_texto)
+VALUES
+('REGLA_CAJA_VS_BANCO', 'Si banco>0 => BANCO, si banco IS NULL o 0 => CAJA', 'BANCO_FIELD=cobros_cliente_detalle.banco');
+
+COMMIT;
+  
+  
+DELIMITER $$
+
+CREATE FUNCTION fn_cta_id_mdk(p_clave VARCHAR(60))
+RETURNS BIGINT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+  DECLARE v_id BIGINT;
+  SELECT cuenta_id INTO v_id
+  FROM cont_configuracion_mdk
+  WHERE clave = p_clave AND estado = 1
+  LIMIT 1;
+  RETURN v_id;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_mdk_asiento_venta_salida(IN p_salida_id INT UNSIGNED, IN p_centro_costo_id BIGINT)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_cliente INT;
+  DECLARE v_nro VARCHAR(60);
+  DECLARE v_moneda VARCHAR(6);
+  DECLARE v_tasa DECIMAL(20,6);
+  DECLARE v_total_bs DECIMAL(18,2);
+  DECLARE v_total_trx DECIMAL(18,2);
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_asiento_id BIGINT;
+
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ventas BIGINT;
+
+  -- Cuentas desde configuración
+  SET v_cta_cxc = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ventas = fn_cta_id_mdk('CTA_VENTAS');
+
+  IF v_cta_cxc IS NULL OR v_cta_ventas IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CXC / CTA_VENTAS).';
+  END IF;
+
+  -- Datos de la salida
+  SELECT DATE(fecha), cliente, nro_documento, moneda,
+         IFNULL(NULLIF(tasa_dia,0),1),
+         IFNULL(total,0),
+         IF(moneda='USD', IFNULL(NULLIF(monto_usd,0), ROUND(IFNULL(total,0)/IFNULL(NULLIF(tasa_dia,0),1),2)), IFNULL(total,0)),
+         username
+    INTO v_fecha, v_cliente, v_nro, v_moneda, v_tasa, v_total_bs, v_total_trx, v_username
+  FROM salidas
+  WHERE id = p_salida_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Salida no encontrada.';
+  END IF;
+
+  -- Evitar duplicar: si ya existe asiento para esa salida y módulo VENTA, no crear otro
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE modulo_origen='VENTA' AND origen_tabla='salidas' AND origen_id=p_salida_id AND anulado=0
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento VENTA para esta salida.';
+  END IF;
+
+  -- Crear cabecera de asiento
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   CONCAT('VENTA SALIDA #', p_salida_id),
+   v_nro,
+   'VENTA',
+   'salidas',
+   p_salida_id,
+   NULL, -- tercero_id lo enlazamos luego cuando tengas cont_tercero_mdk poblado
+   v_moneda,
+   v_tasa,
+   v_total_trx,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Detalle: Debe CxC / Haber Ventas
+  INSERT INTO cont_asiento_detalle_mdk
+  (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+  VALUES
+  (v_asiento_id, v_cta_cxc, p_centro_costo_id, 'CxC por venta', v_moneda, v_tasa, v_total_trx, v_total_bs, 0.00),
+  (v_asiento_id, v_cta_ventas, p_centro_costo_id, 'Ingresos por venta', v_moneda, v_tasa, v_total_trx, 0.00, v_total_bs);
+
+  -- Validación Debe/Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento VENTA descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_mdk_asiento_cobro_cliente(IN p_cobro_id INT UNSIGNED, IN p_centro_costo_id BIGINT)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_cliente INT;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_referencia VARCHAR(60);
+
+  DECLARE v_total_bs DECIMAL(18,2);
+  DECLARE v_moneda VARCHAR(6);
+  DECLARE v_tasa DECIMAL(20,6);
+
+  DECLARE v_es_banco INT DEFAULT 0;
+  DECLARE v_asiento_id BIGINT;
+
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+
+  SET v_cta_caja = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos = fn_cta_id_mdk('CTA_BANCOS');
+  SET v_cta_cxc = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+
+  IF v_cta_caja IS NULL OR v_cta_bancos IS NULL OR v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CAJA/CTA_BANCOS/CTA_CXC/CTA_ANTICIPO_CLIENTE).';
+  END IF;
+
+  SELECT fecha, cliente, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_cliente, v_id_documento, v_username, v_referencia
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicar
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total en Bs desde detalle
+  SELECT IFNULL(ROUND(SUM(IFNULL(monto_bs,0)),2),0),
+         IFNULL(MAX(moneda),'Bs'),
+         IFNULL(MAX(IFNULL(tasa_moneda,1)),1)
+    INTO v_total_bs, v_moneda, v_tasa
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF v_total_bs <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Caja vs banco: si existe algún banco > 0 => banco
+  SELECT COUNT(*) INTO v_es_banco
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id AND IFNULL(banco,0) > 0;
+
+  -- Crear cabecera
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_referencia,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   v_moneda,
+   v_tasa,
+   v_total_bs,  -- simplificado: usamos Bs como trx si tu detalle mezcla monedas; lo refinamos luego
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Debe: Caja o Bancos
+  INSERT INTO cont_asiento_detalle_mdk
+  (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+  VALUES
+  (v_asiento_id,
+   IF(v_es_banco>0, v_cta_bancos, v_cta_caja),
+   p_centro_costo_id,
+   IF(v_es_banco>0,'Ingreso a bancos','Ingreso a caja'),
+   'Bs', 1.000000, v_total_bs,
+   v_total_bs, 0.00);
+
+  -- Haber: CxC o Anticipo cliente
+  INSERT INTO cont_asiento_detalle_mdk
+  (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+  VALUES
+  (v_asiento_id,
+   IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+   p_centro_costo_id,
+   IF(v_id_documento=0,'Anticipo de cliente','Aplicación a CxC'),
+   'Bs', 1.000000, v_total_bs,
+   0.00, v_total_bs);
+
+  -- Validación
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento COBRO/ANTICIPO descuadrado.';
+  END IF;
+
+END$$
+
+DELIMITER ;
+
+
+
+--------------------------------
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_mdk_asiento_cobro_cliente_detallado(
+  IN p_cobro_id INT UNSIGNED,
+  IN p_centro_costo_id BIGINT
+)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_ref VARCHAR(60);
+
+  DECLARE v_asiento_id BIGINT;
+
+  DECLARE v_total_bs DECIMAL(18,2);
+
+  -- Cuentas
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+
+  -- Cursor (grupos)
+  DECLARE done INT DEFAULT 0;
+  DECLARE g_banco INT;
+  DECLARE g_metodo VARCHAR(10);
+  DECLARE g_moneda VARCHAR(6);
+  DECLARE g_tasa DECIMAL(20,6);
+  DECLARE g_monto_moneda DECIMAL(18,2);
+  DECLARE g_monto_bs DECIMAL(18,2);
+
+  DECLARE cur CURSOR FOR
+    SELECT
+      IFNULL(banco,0) AS banco,
+      IFNULL(metodo_pago,'') AS metodo_pago,
+      IFNULL(moneda,'Bs') AS moneda,
+      -- tasa: si Bs => 1, si no => tasa_moneda (si viene en NULL, tratamos de derivar de monto_bs / monto_moneda)
+      CASE
+        WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+        ELSE
+          IFNULL(NULLIF(tasa_moneda,0),
+            CASE
+              WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+              ELSE 1.000000
+            END
+          )
+      END AS tasa_calc,
+      -- monto en moneda original (si es Bs y monto_moneda viene NULL, usamos monto_bs como “monto moneda”)
+      ROUND(SUM(COALESCE(monto_moneda, monto_bs, 0)), 2) AS monto_moneda_sum,
+      ROUND(SUM(IFNULL(monto_bs,0)), 2) AS monto_bs_sum
+    FROM cobros_cliente_detalle
+    WHERE cobros_cliente = p_cobro_id
+    GROUP BY IFNULL(banco,0), IFNULL(metodo_pago,''), IFNULL(moneda,'Bs'),
+             CASE
+               WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+               ELSE
+                 IFNULL(NULLIF(tasa_moneda,0),
+                   CASE
+                     WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+                     ELSE 1.000000
+                   END
+                 )
+             END;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  -- Traer cuentas desde config
+  SET v_cta_caja    = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos  = fn_cta_id_mdk('CTA_BANCOS');
+  SET v_cta_cxc     = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+
+  IF v_cta_caja IS NULL OR v_cta_bancos IS NULL OR v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CAJA/CTA_BANCOS/CTA_CXC/CTA_ANTICIPO_CLIENTE).';
+  END IF;
+
+  -- Cabecera de cobro
+  SELECT fecha, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_id_documento, v_username, v_ref
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicados
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total Bs del cobro (base)
+  SELECT ROUND(SUM(IFNULL(monto_bs,0)),2)
+    INTO v_total_bs
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF IFNULL(v_total_bs,0) <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Crear cabecera del asiento (guardamos trx como Bs para cabecera; el detalle tendrá moneda real)
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_ref,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   'Bs', 1.000000,
+   v_total_bs,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Insertar detalle por grupos: DEBE (caja/banco) + HABER (CxC o Anticipo cliente) por cada grupo
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO g_banco, g_metodo, g_moneda, g_tasa, g_monto_moneda, g_monto_bs;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    -- Saltar grupos sin monto
+    IF IFNULL(g_monto_bs,0) <= 0 THEN
+      ITERATE read_loop;
+    END IF;
+
+    -- DEBE: Caja o Bancos (según banco)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      IF(IFNULL(g_banco,0) > 0, v_cta_bancos, v_cta_caja),
+      p_centro_costo_id,
+      CONCAT(IF(IFNULL(g_banco,0) > 0,'Ingreso a bancos','Ingreso a caja'),
+             ' | metodo:', g_metodo,
+             ' | banco:', IFNULL(g_banco,0)),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      g_monto_bs,
+      0.00
+    );
+
+    -- HABER: CxC o Anticipo Cliente (por el mismo grupo)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+      p_centro_costo_id,
+      CONCAT(IF(v_id_documento=0,'Anticipo cliente','Aplicación a CxC'),
+             ' | metodo:', g_metodo,
+             ' | banco:', IFNULL(g_banco,0)),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      0.00,
+      g_monto_bs
+    );
+
+  END LOOP;
+
+  CLOSE cur;
+
+  -- Validación final: Debe = Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento COBRO/ANTICIPO descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+
+DELIMITER ;
+
+
+CREATE TABLE cont_banco_cuenta_mdk (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  banco_id INT NOT NULL,                 -- cobros_cliente_detalle.banco
+  cuenta_id BIGINT UNSIGNED NOT NULL,    -- cont_plan_cuentas_mdk.id
+  estado TINYINT(1) NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY ux_banco (banco_id),
+  KEY idx_cuenta (cuenta_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE `cont_metodo_cuenta_mdk` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `metodo_pago` VARCHAR(10) NOT NULL,          -- EF, TD, TR, etc (cobros_cliente_detalle.metodo_pago)
+  `descripcion` VARCHAR(100) NULL DEFAULT NULL,
+
+  -- Tipo de “lado Debe” que representa el método:
+  -- CAJA_BANCO: entra/sale dinero
+  -- PASIVO: retención/igtf por pagar, etc
+  -- OTRO: cualquier otra cuenta especial (nota crédito, etc)
+  `tipo_destino` ENUM('CAJA_BANCO','PASIVO','OTRO') NOT NULL DEFAULT 'CAJA_BANCO',
+
+  -- Si tipo_destino != CAJA_BANCO, puedes definir una cuenta fija aquí.
+  `cuenta_id` BIGINT UNSIGNED NULL DEFAULT NULL,
+
+  -- Si quieres forzar que siempre sea BANCO o siempre CAJA:
+  `forzar_destino` ENUM('AUTO','CAJA','BANCO') NOT NULL DEFAULT 'AUTO',
+
+  `estado` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ux_metodo` (`metodo_pago`),
+  KEY `idx_cuenta` (`cuenta_id`),
+  KEY `idx_estado` (`estado`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+START TRANSACTION;
+
+-- Limpieza opcional
+-- DELETE FROM cont_metodo_cuenta_mdk;
+
+-- Métodos “dinero”: default CAJA/BANCO según campo banco (AUTO)
+INSERT INTO cont_metodo_cuenta_mdk (metodo_pago, descripcion, tipo_destino, cuenta_id, forzar_destino)
+VALUES
+('EF', 'Efectivo',            'CAJA_BANCO', NULL, 'CAJA'),   -- efectivo casi siempre caja
+('TD', 'Tarjeta Débito',      'CAJA_BANCO', NULL, 'BANCO'),
+('TC', 'Tarjeta Crédito',     'CAJA_BANCO', NULL, 'BANCO'),
+('TR', 'Transferencia',       'CAJA_BANCO', NULL, 'BANCO'),
+('DP', 'Depósito Bancario',   'CAJA_BANCO', NULL, 'BANCO'),
+('PM', 'Pago Móvil',          'CAJA_BANCO', NULL, 'BANCO'),
+('CH', 'Cheque',              'CAJA_BANCO', NULL, 'BANCO');
+
+-- Retención IVA: NO es dinero recibido “libre”, es un pasivo
+INSERT INTO cont_metodo_cuenta_mdk (metodo_pago, descripcion, tipo_destino, cuenta_id, forzar_destino)
+VALUES
+('RI', 'RETENCION IVA', 'PASIVO',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.10.01' LIMIT 1),
+ 'AUTO');
+
+-- IGTF: lo ponemos como pasivo por pagar (según tu plan mínimo)
+INSERT INTO cont_metodo_cuenta_mdk (metodo_pago, descripcion, tipo_destino, cuenta_id, forzar_destino)
+VALUES
+('IG', 'IGTF', 'PASIVO',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='2.1.20' LIMIT 1),
+ 'AUTO');
+
+-- Nota de crédito: por defecto la mandamos a una cuenta “OTRO”.
+-- Recomendación: crear cuenta de "DEVOLUCIONES Y DESCUENTOS" o "NOTAS DE CREDITO".
+-- Por ahora la mapeamos a VENTAS (para restar ingresos) hasta que crees cuenta dedicada.
+INSERT INTO cont_metodo_cuenta_mdk (metodo_pago, descripcion, tipo_destino, cuenta_id, forzar_destino)
+VALUES
+('NC', 'Nota de Credito', 'OTRO',
+ (SELECT id FROM cont_plan_cuentas_mdk WHERE codigo='4.1.01' LIMIT 1),
+ 'AUTO');
+
+-- RC/AN: lo dejamos como CAJA_BANCO por default (tu lógica real es id_documento=0)
+INSERT INTO cont_metodo_cuenta_mdk (metodo_pago, descripcion, tipo_destino, cuenta_id, forzar_destino)
+VALUES
+('RC', 'ABONOS',   'CAJA_BANCO', NULL, 'AUTO'),
+('AN', 'ANTICIPO', 'CAJA_BANCO', NULL, 'AUTO');
+
+COMMIT;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_mdk_asiento_cobro_cliente_detallado_v2(
+  IN p_cobro_id INT UNSIGNED,
+  IN p_centro_costo_id BIGINT
+)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_ref VARCHAR(60);
+
+  DECLARE v_asiento_id BIGINT;
+  DECLARE v_total_bs DECIMAL(18,2);
+
+  -- Cuentas base desde config
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+
+  -- Cursor (grupos)
+  DECLARE done INT DEFAULT 0;
+  DECLARE g_banco INT;
+  DECLARE g_metodo VARCHAR(10);
+  DECLARE g_moneda VARCHAR(6);
+  DECLARE g_tasa DECIMAL(20,6);
+  DECLARE g_monto_moneda DECIMAL(18,2);
+  DECLARE g_monto_bs DECIMAL(18,2);
+
+  -- Mapeo método
+  DECLARE m_tipo_destino VARCHAR(15);
+  DECLARE m_cuenta_id BIGINT;
+  DECLARE m_forzar_destino VARCHAR(10);
+
+  -- Cuenta final DEBE del grupo
+  DECLARE v_cuenta_debe BIGINT;
+
+  DECLARE cur CURSOR FOR
+    SELECT
+      IFNULL(banco,0) AS banco,
+      IFNULL(metodo_pago,'') AS metodo_pago,
+      IFNULL(moneda,'Bs') AS moneda,
+      CASE
+        WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+        ELSE
+          IFNULL(NULLIF(tasa_moneda,0),
+            CASE
+              WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+              ELSE 1.000000
+            END
+          )
+      END AS tasa_calc,
+      ROUND(SUM(COALESCE(monto_moneda, monto_bs, 0)), 2) AS monto_moneda_sum,
+      ROUND(SUM(IFNULL(monto_bs,0)), 2) AS monto_bs_sum
+    FROM cobros_cliente_detalle
+    WHERE cobros_cliente = p_cobro_id
+    GROUP BY IFNULL(banco,0), IFNULL(metodo_pago,''), IFNULL(moneda,'Bs'),
+             CASE
+               WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+               ELSE
+                 IFNULL(NULLIF(tasa_moneda,0),
+                   CASE
+                     WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+                     ELSE 1.000000
+                   END
+                 )
+             END;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  -- Cuentas base
+  SET v_cta_caja    = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos  = fn_cta_id_mdk('CTA_BANCOS');
+  SET v_cta_cxc     = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+
+  IF v_cta_caja IS NULL OR v_cta_bancos IS NULL OR v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CAJA/CTA_BANCOS/CTA_CXC/CTA_ANTICIPO_CLIENTE).';
+  END IF;
+
+  -- Cabecera de cobro
+  SELECT fecha, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_id_documento, v_username, v_ref
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicados
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total Bs
+  SELECT ROUND(SUM(IFNULL(monto_bs,0)),2)
+    INTO v_total_bs
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF IFNULL(v_total_bs,0) <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Crear cabecera del asiento (cabecera en Bs; detalle guarda moneda real)
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_ref,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   'Bs', 1.000000,
+   v_total_bs,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Detalle por grupos
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO g_banco, g_metodo, g_moneda, g_tasa, g_monto_moneda, g_monto_bs;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    IF IFNULL(g_monto_bs,0) <= 0 THEN
+      ITERATE read_loop;
+    END IF;
+
+    -- Buscar mapeo del método
+    SET m_tipo_destino = NULL;
+    SET m_cuenta_id = NULL;
+    SET m_forzar_destino = 'AUTO';
+
+    SELECT tipo_destino, cuenta_id, forzar_destino
+      INTO m_tipo_destino, m_cuenta_id, m_forzar_destino
+    FROM cont_metodo_cuenta_mdk
+    WHERE metodo_pago = g_metodo AND estado = 1
+    LIMIT 1;
+
+    IF m_tipo_destino IS NULL THEN
+      SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Método de pago sin mapeo en cont_metodo_cuenta_mdk.';
+    END IF;
+
+    -- Resolver cuenta DEBE
+    SET v_cuenta_debe = NULL;
+
+    IF m_tipo_destino IN ('PASIVO','OTRO') THEN
+      -- método especial: debe ir directo a una cuenta fija
+      IF m_cuenta_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+          SET MESSAGE_TEXT = 'Método PASIVO/OTRO sin cuenta_id en cont_metodo_cuenta_mdk.';
+      END IF;
+      SET v_cuenta_debe = m_cuenta_id;
+
+    ELSE
+      -- CAJA_BANCO
+      IF m_forzar_destino = 'CAJA' THEN
+        SET v_cuenta_debe = v_cta_caja;
+      ELSEIF m_forzar_destino = 'BANCO' THEN
+        SET v_cuenta_debe = v_cta_bancos;
+      ELSE
+        -- AUTO: decide por banco>0
+        SET v_cuenta_debe = IF(IFNULL(g_banco,0) > 0, v_cta_bancos, v_cta_caja);
+      END IF;
+    END IF;
+
+    -- DEBE (cuenta según método)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      v_cuenta_debe,
+      p_centro_costo_id,
+      CONCAT('Cobro metodo:', g_metodo, ' | banco:', IFNULL(g_banco,0)),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      g_monto_bs,
+      0.00
+    );
+
+    -- HABER (CxC o Anticipo cliente)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+      p_centro_costo_id,
+      CONCAT(IF(v_id_documento=0,'Anticipo','Cobro'), ' aplicado | metodo:', g_metodo),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      0.00,
+      g_monto_bs
+    );
+
+  END LOOP;
+
+  CLOSE cur;
+
+  -- Validación Debe/Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento COBRO/ANTICIPO descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_mdk_asiento_cobro_cliente_detallado_fx(
+  IN p_cobro_id INT UNSIGNED,
+  IN p_centro_costo_id BIGINT
+)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_ref VARCHAR(60);
+
+  DECLARE v_asiento_id BIGINT;
+  DECLARE v_total_bs DECIMAL(18,2);
+
+  -- Factura asociada (si aplica)
+  DECLARE v_fact_moneda VARCHAR(6);
+  DECLARE v_fact_tasa DECIMAL(20,6);
+
+  -- Cuentas base desde config
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+  DECLARE v_cta_dif_gan BIGINT;
+  DECLARE v_cta_dif_per BIGINT;
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+
+  -- Cursor (grupos)
+  DECLARE done INT DEFAULT 0;
+  DECLARE g_banco INT;
+  DECLARE g_metodo VARCHAR(10);
+  DECLARE g_moneda VARCHAR(6);
+  DECLARE g_tasa DECIMAL(20,6);
+  DECLARE g_monto_moneda DECIMAL(18,2);
+  DECLARE g_monto_bs DECIMAL(18,2);
+
+  -- Mapeo método
+  DECLARE m_tipo_destino VARCHAR(15);
+  DECLARE m_cuenta_id BIGINT;
+  DECLARE m_forzar_destino VARCHAR(10);
+
+  -- Cuenta final DEBE del grupo
+  DECLARE v_cuenta_debe BIGINT;
+
+  -- Para diferencia cambiaria por grupo
+  DECLARE v_aplica_cxc_bs DECIMAL(18,2);
+  DECLARE v_diff_bs DECIMAL(18,2);
+
+  DECLARE cur CURSOR FOR
+    SELECT
+      IFNULL(banco,0) AS banco,
+      IFNULL(metodo_pago,'') AS metodo_pago,
+      IFNULL(moneda,'Bs') AS moneda,
+      CASE
+        WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+        ELSE
+          IFNULL(NULLIF(tasa_moneda,0),
+            CASE
+              WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+              ELSE 1.000000
+            END
+          )
+      END AS tasa_calc,
+      ROUND(SUM(COALESCE(monto_moneda, monto_bs, 0)), 2) AS monto_moneda_sum,
+      ROUND(SUM(IFNULL(monto_bs,0)), 2) AS monto_bs_sum
+    FROM cobros_cliente_detalle
+    WHERE cobros_cliente = p_cobro_id
+    GROUP BY IFNULL(banco,0), IFNULL(metodo_pago,''), IFNULL(moneda,'Bs'),
+             CASE
+               WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+               ELSE
+                 IFNULL(NULLIF(tasa_moneda,0),
+                   CASE
+                     WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+                     ELSE 1.000000
+                   END
+                 )
+             END;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  -- Cuentas
+  SET v_cta_cxc     = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+  SET v_cta_dif_gan = fn_cta_id_mdk('CTA_DIF_CAMBIARIA_GAN');
+  SET v_cta_dif_per = fn_cta_id_mdk('CTA_DIF_CAMBIARIA_PER');
+  SET v_cta_caja    = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos  = fn_cta_id_mdk('CTA_BANCOS');
+
+  IF v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL OR v_cta_dif_gan IS NULL OR v_cta_dif_per IS NULL
+     OR v_cta_caja IS NULL OR v_cta_bancos IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CxC/Anticipo/DifGan/DifPer/Caja/Bancos).';
+  END IF;
+
+  -- Cabecera cobro
+  SELECT fecha, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_id_documento, v_username, v_ref
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicados
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total Bs del cobro
+  SELECT ROUND(SUM(IFNULL(monto_bs,0)),2)
+    INTO v_total_bs
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF IFNULL(v_total_bs,0) <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Datos de la factura (si aplica)
+  SET v_fact_moneda = 'Bs';
+  SET v_fact_tasa = 1.000000;
+
+  IF v_id_documento <> 0 THEN
+    SELECT IFNULL(moneda,'Bs'), IFNULL(NULLIF(tasa_dia,0),1.000000)
+      INTO v_fact_moneda, v_fact_tasa
+    FROM salidas
+    WHERE id = v_id_documento
+    LIMIT 1;
+  END IF;
+
+  -- Crear cabecera del asiento
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_ref,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   'Bs', 1.000000,
+   v_total_bs,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Detalle por grupos
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO g_banco, g_metodo, g_moneda, g_tasa, g_monto_moneda, g_monto_bs;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    IF IFNULL(g_monto_bs,0) <= 0 THEN
+      ITERATE read_loop;
+    END IF;
+
+    -- Mapeo método
+    SET m_tipo_destino = NULL;
+    SET m_cuenta_id = NULL;
+    SET m_forzar_destino = 'AUTO';
+
+    SELECT tipo_destino, cuenta_id, forzar_destino
+      INTO m_tipo_destino, m_cuenta_id, m_forzar_destino
+    FROM cont_metodo_cuenta_mdk
+    WHERE metodo_pago = g_metodo AND estado = 1
+    LIMIT 1;
+
+    IF m_tipo_destino IS NULL THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Método sin mapeo en cont_metodo_cuenta_mdk.';
+    END IF;
+
+    -- Resolver cuenta DEBE
+    SET v_cuenta_debe = NULL;
+
+    IF m_tipo_destino IN ('PASIVO','OTRO') THEN
+      IF m_cuenta_id IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Método PASIVO/OTRO sin cuenta_id en cont_metodo_cuenta_mdk.';
+      END IF;
+      SET v_cuenta_debe = m_cuenta_id;
+    ELSE
+      IF m_forzar_destino = 'CAJA' THEN
+        SET v_cuenta_debe = v_cta_caja;
+      ELSEIF m_forzar_destino = 'BANCO' THEN
+        SET v_cuenta_debe = v_cta_bancos;
+      ELSE
+        SET v_cuenta_debe = IF(IFNULL(g_banco,0) > 0, v_cta_bancos, v_cta_caja);
+      END IF;
+    END IF;
+
+    -- DEBE: entrada según método
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (v_asiento_id, v_cuenta_debe, p_centro_costo_id,
+     CONCAT('Cobro metodo:', g_metodo, ' | banco:', IFNULL(g_banco,0)),
+     g_moneda, g_tasa, g_monto_moneda,
+     g_monto_bs, 0.00);
+
+    -- Calcular cuánto acreditar a CxC (histórico) cuando factura USD y grupo USD
+    SET v_aplica_cxc_bs = g_monto_bs;
+
+    IF v_id_documento <> 0 AND v_fact_moneda = 'USD' AND g_moneda = 'USD' THEN
+      SET v_aplica_cxc_bs = ROUND(IFNULL(g_monto_moneda,0) * v_fact_tasa, 2);
+    END IF;
+
+    -- HABER: CxC o Anticipo (por el monto aplicado)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (v_asiento_id,
+     IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+     p_centro_costo_id,
+     CONCAT(IF(v_id_documento=0,'Anticipo','Cobro'), ' aplicado | metodo:', g_metodo),
+     g_moneda, g_tasa, g_monto_moneda,
+     0.00, v_aplica_cxc_bs);
+
+    -- Diferencia cambiaria (solo si cobro a factura y factura USD y grupo USD)
+    IF v_id_documento <> 0 AND v_fact_moneda = 'USD' AND g_moneda = 'USD' THEN
+      SET v_diff_bs = ROUND(g_monto_bs - v_aplica_cxc_bs, 2);
+
+      IF v_diff_bs > 0 THEN
+        -- Ganancia: crédito
+        INSERT INTO cont_asiento_detalle_mdk
+        (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+        VALUES
+        (v_asiento_id, v_cta_dif_gan, p_centro_costo_id,
+         'Diferencia cambiaria (ganancia)', 'Bs', 1.000000, v_diff_bs, 0.00, v_diff_bs);
+
+      ELSEIF v_diff_bs < 0 THEN
+        -- Pérdida: débito
+        INSERT INTO cont_asiento_detalle_mdk
+        (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+        VALUES
+        (v_asiento_id, v_cta_dif_per, p_centro_costo_id,
+         'Diferencia cambiaria (pérdida)', 'Bs', 1.000000, ABS(v_diff_bs), ABS(v_diff_bs), 0.00);
+      END IF;
+    END IF;
+
+  END LOOP;
+
+  CLOSE cur;
+
+  -- Validación final: Debe = Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+
+DELIMITER ;
+
+CREATE OR REPLACE VIEW view_cont_asiento_resumen_mdk AS
+SELECT
+    a.id,
+    a.fecha,
+    a.referencia,
+    a.modulo_origen,
+    a.origen_id,
+    a.descripcion,
+    a.anulado,
+    a.created_at,
+
+    COALESCE(SUM(d.debe_bs), 0) AS total_debe_bs,
+    COALESCE(SUM(d.haber_bs), 0) AS total_haber_bs,
+    COALESCE(SUM(d.debe_bs), 0) - COALESCE(SUM(d.haber_bs), 0) AS diferencia_bs,
+
+    CASE
+        WHEN a.anulado = 1 THEN 'ANULADO'
+        WHEN COALESCE(SUM(d.debe_bs), 0) = COALESCE(SUM(d.haber_bs), 0) THEN 'BALANCEADO'
+        ELSE 'DESCUADRADO'
+    END AS estado_cuadre
+
+FROM cont_asiento_mdk a
+LEFT JOIN cont_asiento_detalle_mdk d
+    ON d.asiento_id = a.id
+GROUP BY
+    a.id,
+    a.fecha,
+    a.referencia,
+    a.modulo_origen,
+    a.origen_id,
+    a.descripcion,
+    a.anulado,
+    a.created_at;

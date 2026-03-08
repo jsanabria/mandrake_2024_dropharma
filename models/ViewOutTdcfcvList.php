@@ -181,7 +181,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->dias_credito->Visible = false;
         $this->entregado->Visible = false;
         $this->fecha_entrega->Visible = false;
-        $this->pagado->Visible = false;
+        $this->pagado->setVisibility();
         $this->bultos->Visible = false;
         $this->fecha_bultos->Visible = false;
         $this->user_bultos->Visible = false;
@@ -2069,6 +2069,15 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->id_documento_padre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field pagado
+        $filter = $this->queryBuilderWhere("pagado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->pagado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pagado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field descuento
         $filter = $this->queryBuilderWhere("descuento");
         if (!$filter) {
@@ -2531,6 +2540,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->unidades); // unidades
             $this->updateSort($this->estatus); // estatus
             $this->updateSort($this->id_documento_padre); // id_documento_padre
+            $this->updateSort($this->pagado); // pagado
             $this->updateSort($this->descuento); // descuento
             $this->updateSort($this->descuento2); // descuento2
             $this->updateSort($this->asesor_asignado); // asesor_asignado
@@ -2991,6 +3001,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "unidades");
             $this->createColumnOption($option, "estatus");
             $this->createColumnOption($option, "id_documento_padre");
+            $this->createColumnOption($option, "pagado");
             $this->createColumnOption($option, "descuento");
             $this->createColumnOption($option, "descuento2");
             $this->createColumnOption($option, "asesor_asignado");
@@ -4657,6 +4668,10 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->id_documento_padre->HrefValue = "";
             $this->id_documento_padre->TooltipValue = "";
 
+            // pagado
+            $this->pagado->HrefValue = "";
+            $this->pagado->TooltipValue = "";
+
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
@@ -4764,6 +4779,11 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->id_documento_padre->setupEditAttributes();
             $this->id_documento_padre->EditValue = $this->id_documento_padre->AdvancedSearch->SearchValue;
             $this->id_documento_padre->PlaceHolder = RemoveHtml($this->id_documento_padre->caption());
+
+            // pagado
+            $this->pagado->setupEditAttributes();
+            $this->pagado->EditValue = $this->pagado->options(true);
+            $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
 
             // descuento
             $this->descuento->setupEditAttributes();

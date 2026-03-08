@@ -79,10 +79,10 @@ if ($accion === "tasas") {
     }
 
     $sql = "
-        SELECT tasa, DATE_FORMAT(fecha, '$d/%m/%Y') AS fecha, hora
+        SELECT tasa, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha 
         FROM tasa_usd
         WHERE moneda = '" . AdjustSql($moneda) . "'
-        ORDER BY fecha DESC, hora DESC, id DESC
+        ORDER BY id DESC
         LIMIT 15
     ";
     $rows = ExecuteRows($sql);
@@ -90,13 +90,12 @@ if ($accion === "tasas") {
     foreach ($rows as $r) {
         $out[] = [
             "tasa" => floatval($r["tasa"] ?? 0),
-            "fecha" => (string)($r["fecha"] ?? ""),
-            "hora" => (string)($r["hora"] ?? "")
+            "fecha" => (string)($r["fecha"] ?? "")
         ];
     }
 
     if (count($out) === 0) {
-        $out[] = ["tasa" => 1, "fecha" => "", "hora" => ""];
+        $out[] = ["tasa" => 1, "fecha" => ""];
     }
 
     jsonResponse(["success" => true, "moneda" => $moneda, "items" => $out]);
@@ -225,44 +224,54 @@ if ($accion === "refrescar") {
 
             <!-- FILA 1 -->
             <div class="row g-2 align-items-end">
-                <div class="col-md-4">
+
+                <div class="col-md-3">
                     <label class="small fw-bold">MÉTODO</label>
                     <select id="metodo_input" class="form-select form-select-sm">
                         <option value="">Seleccione...</option>
                         <?php foreach ($metodos as $m): ?>
-                            <option value="<?= HtmlEncode($m["valor1"]) ?>"><?= HtmlEncode($m["valor2"]) ?></option>
+                            <option value="<?= HtmlEncode($m["valor1"]) ?>">
+                                <?= HtmlEncode($m["valor2"]) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="small fw-bold">MONTO</label>
-                    <input type="number" id="monto_input" class="form-control form-control-sm fw-bold border-primary" step="0.01">
+                    <input type="number" id="monto_input"
+                        class="form-control form-control-sm fw-bold border-primary"
+                        step="0.01">
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="small fw-bold">MONEDA</label>
                     <select id="moneda_input" class="form-select form-select-sm">
                         <?php foreach ($monedas as $mm): ?>
-                            <option value="<?= HtmlEncode($mm["valor1"]) ?>"><?= HtmlEncode($mm["valor1"]) ?></option>
+                            <option value="<?= HtmlEncode($mm["valor1"]) ?>">
+                                <?= HtmlEncode($mm["valor1"]) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label class="small fw-bold">TASA</label>
                     <select id="tasa_input" class="form-select form-select-sm"></select>
                 </div>
+
             </div>
 
             <!-- FILA 2 -->
-            <div class="row g-2 align-items-end mt-1">
+            <div class="row g-2 align-items-end mt-2">
+
                 <div class="col-md-4">
                     <label class="small fw-bold">BANCO ORIGEN</label>
-                    <select id="banco_origen_input" class="form-select form-select-sm" style="max-width: 240px;">
+                    <select id="banco_origen_input" class="form-select form-select-sm">
                         <option value="">Banco...</option>
                         <?php foreach ($bancos_origen as $b): ?>
-                            <option value="<?= HtmlEncode($b["codigo"]) ?>" data-code="<?= HtmlEncode($b["codigo"]) ?>">
+                            <option value="<?= HtmlEncode($b["codigo"]) ?>"
+                                    data-code="<?= HtmlEncode($b["codigo"]) ?>">
                                 <?= HtmlEncode(trim($b["descripcion"])) ?>
                             </option>
                         <?php endforeach; ?>
@@ -271,15 +280,21 @@ if ($accion === "refrescar") {
 
                 <div class="col-md-4">
                     <label class="small fw-bold">REFERENCIA</label>
-                    <input type="text" id="ref_input" class="form-control form-control-sm" placeholder="Referencia...">
+                    <input type="text" id="ref_input"
+                        class="form-control form-control-sm"
+                        placeholder="Referencia...">
                 </div>
 
-                <div class="col-md-4 d-flex flex-column justify-content-end">
-                    <button type="button" class="btn btn-primary btn-sm w-100 fw-bold" onclick="return addItem(event)">
+                <div class="col-md-4">
+                    <button type="button"
+                            class="btn btn-primary btn-sm w-100 fw-bold"
+                            style="margin-top: 24px;"
+                            onclick="return addItem(event)">
                         ADD
                     </button>
-                    <small class="mt-2 text-muted" id="help_ref_banco"></small>
+                    <small class="mt-2 text-muted d-block" id="help_ref_banco"></small>
                 </div>
+
             </div>
 
             <!-- FILA 3 -->
@@ -501,6 +516,34 @@ if ($accion === "finalizar") {
     </div>
 </div>
 
+<div class="modal fade" id="mdlPostAnticipo" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Anticipo registrado</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert alert-success mb-0">
+          <div class="fw-bold" id="postAnticipoMsg">Anticipo registrado.</div>
+          <div class="small text-muted mt-1">Puede imprimir el comprobante ahora.</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnPrintAnticipo">
+          🖨️ Imprimir comprobante
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 let ajaxInFlight = false;
 
@@ -668,11 +711,33 @@ function finalizarAnticipo() {
             try { resp = JSON.parse(txt); } catch(e) {}
 
             if (resp && resp.success) {
-                ew.alert("Anticipo #" + resp.anticipo_id + " registrado.");
-                // Redirige a donde quieras
-                // window.location.href = "CobrosClienteView/" + resp.anticipo_id;
+
+                const anticipoId = resp.anticipo_id;
+                const urlPdf = "reportes/ComprobanteAnticipo.php?anticipo_id=" + encodeURIComponent(anticipoId);
+
+                // Mensaje
+                $("#postAnticipoMsg").text("Anticipo #" + anticipoId + " registrado correctamente.");
+
+                // Botón imprimir
+                $("#btnPrintAnticipo").off("click").on("click", function(){
+                window.open(urlPdf, "_blank"); // abre PDF
+                });
+
+                // Mostrar modal
+                const el = document.getElementById("mdlPostAnticipo");
+                if (el && window.bootstrap && bootstrap.Modal) {
+                bootstrap.Modal.getOrCreateInstance(el).show();
+                } else {
+                // fallback
+                if (confirm("Anticipo #" + anticipoId + " registrado.\n\n¿Desea imprimir el comprobante?")) {
+                    window.open(urlPdf, "_blank");
+                }
+                }
+
+                // Limpia UI y refresca (igual que ya haces)
                 $("#json_items").val("[]");
                 refrescar();
+
             } else {
                 ew.alert((resp && resp.message) ? resp.message : (txt || "Respuesta vacía del servidor."));
             }
@@ -897,4 +962,10 @@ $(document).ready(function(){
     refrescar();
 });
 </script>
+
+<style>
+  /* Ajusta qué tanto baja el ADD sin romper responsivo */
+  .pt-4 { padding-top: 1.2rem !important; }
+</style>
+
 <?= GetDebugMessage() ?>

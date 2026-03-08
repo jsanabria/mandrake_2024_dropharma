@@ -2028,7 +2028,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
 
             // 5. Botón Revertir (Si tiene permiso)
             if (VerificaFuncion('014')) {
-                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . '); " style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName(). '\'); " style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
             }
         } else {
             // 6. Botón Registrar Pago

@@ -99,6 +99,38 @@ if ($accion == "refrescar") {
             ORDER BY cc.fecha DESC
         ";
         $anticipos = ExecuteRows($sqlAnt);
+
+        // ✅ Rebaja anticipos con lo que ya está en el carrito (JSON)
+        $aplicado_local = []; // [anticipo_id][moneda] => monto
+        foreach ($lista_pagos as $pp) {
+            if (trim($pp["tipo"] ?? "") !== "AN") continue;
+            $aid = intval($pp["anticipo_id"] ?? 0);
+            $m   = floatval($pp["monto"] ?? 0);
+            $mo  = trim($pp["moneda"] ?? "");
+            if ($aid > 0 && $m > 0 && $mo !== "") {
+                if (!isset($aplicado_local[$aid])) $aplicado_local[$aid] = [];
+                if (!isset($aplicado_local[$aid][$mo])) $aplicado_local[$aid][$mo] = 0;
+                $aplicado_local[$aid][$mo] += $m;
+            }
+        }
+
+        // Ajusta saldo_disponible y filtra los que queden en 0
+        $tmp = [];
+        foreach ($anticipos as $a) {
+            $aid = intval($a["anticipo_id"] ?? 0);
+            $mo  = trim($a["moneda"] ?? "");
+            $saldo = floatval($a["saldo_disponible"] ?? 0);
+
+            $rebaja = floatval($aplicado_local[$aid][$mo] ?? 0);
+            $saldo2 = $saldo - $rebaja;
+
+            if ($saldo2 > 0.01) {
+                $a["saldo_disponible"] = $saldo2;
+                $tmp[] = $a;
+            }
+        }
+        $anticipos = $tmp;
+
     }
 
     $igtf_pct = floatval(ExecuteScalar("SELECT alicuota AS IGTF FROM alicuota WHERE codigo = 'IGT' AND activo = 'S'") ?: 0);
@@ -146,7 +178,7 @@ if ($accion == "refrescar") {
     $saldo_bs  = max(0, $total_bs - $total_bs_pagado);
     $saldo_div = max(0, $total_div - $total_div_pagado);
 
-    $saldo_restante = $saldo_bs;
+    $saldo_restante = $saldo_div;
     ?>
 
     <div class="card shadow-sm border-0 mb-3 bg-light">
@@ -525,6 +557,10 @@ if ($accion == "finalizar") {
         }
 
         // Insert detalles
+        $x_igtf = "N";
+        $x_monto_base_igtf = 0; // en Bs.
+        $x_monto_igtf = 0;      // en Bs.
+
         foreach ($lista as $p) {
 
             $tipo  = trim($p["tipo"] ?? "");
@@ -532,25 +568,33 @@ if ($accion == "finalizar") {
             $mon   = trim($p["moneda"] ?? "Bs.");
             if ($monto <= 0 || $tipo === "") continue;
 
-            if ($tipo === "IG") {
-                $mon = "Bs."; // 👈 blindaje
-            }
-
-            $ref = trim($p["ref"] ?? "");
-
-            // ✅ banco_origen (VARCHAR) viene del select2 (código: BCO0xx)
-            $banco_origen = trim($p["banco_cod"] ?? "");
-
-            // ✅ banco destino (INT) viene del nuevo select (compania_cuenta.id)
-            $destino_id = intval($p["destino_id"] ?? 0);
-
-            // anticipo_id solo si es AN
-            $anticipo_id = ($tipo === "AN") ? intval($p["anticipo_id"] ?? 0) : 0;
-
-            // Calcula Bs según tasa del documento
+            // Calcula Bs segun tasa del documento (siempre con moneda ORIGINAL)
             $monto_bs = ($mon === "Bs.") ? $monto : ($monto * $tasa_dia);
 
-            // NULLs correctos
+            // ---- acumuladores IGTF ----
+            // 1) Base IGTF: SOLO pagos en divisa que generan IG (o sea, mon != Bs y tipo != IG)
+            // (si quieres excluir AN cuando el IGTF lo cobras al aplicar anticipo, dime y lo excluimos aquí)
+            if ($tipo !== "IG" && $mon !== "Bs.") {
+                $x_monto_base_igtf += $monto_bs;  // base en Bs
+            }
+
+            // 2) IGTF acumulado: registros IG (siempre Bs)
+            if ($tipo === "IG") {
+                $x_igtf = "S";
+                $mon = "Bs.";        // blindaje visual
+                $monto_bs = $monto;  // IG ya viene en Bs.
+                $x_monto_igtf += $monto_bs;
+            }
+
+            // tasa_moneda correcta
+            $tasa_moneda = ($mon === "Bs.") ? 1 : $tasa_dia;
+
+            // ...
+            $ref = trim($p["ref"] ?? "");
+            $banco_origen = trim($p["banco_cod"] ?? "");
+            $destino_id = intval($p["destino_id"] ?? 0);
+            $anticipo_id = ($tipo === "AN") ? intval($p["anticipo_id"] ?? 0) : 0;
+
             $sqlBancoDestino = ($destino_id > 0) ? (string)$destino_id : "NULL";
             $sqlBancoOrigen  = ($banco_origen !== "") ? ("'" . AdjustSql($banco_origen) . "'") : "NULL";
             $sqlRef          = ($ref !== "") ? ("'" . AdjustSql($ref) . "'") : "NULL";
@@ -567,36 +611,39 @@ if ($accion == "finalizar") {
                 $sqlRef,
                 " . floatval($monto) . ",
                 '" . AdjustSql($mon) . "',
-                " . floatval($tasa_dia) . ",
+                " . floatval($tasa_moneda) . ",
                 " . floatval($monto_bs) . ",
                 $sqlBancoOrigen,
                 $sqlBancoDestino,
                 $sqlAnticipo
                 )
             ";
-
             Execute($sqlInsDet);
 
-            // Si es anticipo, registrar aplicación
+            // Si es anticipo, registrar aplicación (esto ES lo que rebaja el saldo)
             if ($tipo === "AN") {
+
                 if ($anticipo_id <= 0) {
-                    throw new \Exception("Anticipo inválido al guardar (anticipo_id).");
+                    throw new \Exception("Anticipo inválido (anticipo_id).");
                 }
 
-                $sqlDestinoAnt = "
-                    SELECT banco
-                    FROM cobros_cliente_detalle
-                    WHERE cobros_cliente = " . intval($anticipo_id) . "
-                        AND banco IS NOT NULL
-                    ORDER BY id DESC
+                // Recomendado: validar que el anticipo pertenece al cliente (blindaje extra)
+                $okAnt = ExecuteScalar("
+                    SELECT COUNT(*)
+                    FROM cobros_cliente
+                    WHERE id = " . intval($anticipo_id) . "
+                    AND cliente = " . intval($cliente_id) . "
+                    AND id_documento = 0
                     LIMIT 1
-                    ";
-                $destinoAnt = intval(ExecuteScalar($sqlDestinoAnt) ?: 0);
-                $destino_id = $destinoAnt;
+                ");
+                if (intval($okAnt) <= 0) {
+                    throw new \Exception("El anticipo #$anticipo_id no pertenece a este cliente o no es un anticipo válido.");
+                }
 
                 $sqlInsApp = "
                     INSERT INTO anticipos_aplicaciones
-                    (anticipo_cobro_id, cobro_factura_id, salida_id, fecha, username, monto_moneda, moneda, tasa_factura)
+                    (anticipo_cobro_id, cobro_factura_id, salida_id, fecha, username,
+                    monto_moneda, moneda, tasa_factura)
                     VALUES
                     (" . intval($anticipo_id) . ",
                     " . intval($cobro_id) . ",
@@ -609,6 +656,24 @@ if ($accion == "finalizar") {
                 ";
                 Execute($sqlInsApp);
             }
+
+        }
+
+        $sql = "UPDATE salidas  
+                SET
+                    pagado = 'S' 
+                WHERE id = " . QuotedValue($id_compra, 1) . ";";
+        Execute($sql);
+
+        if($x_igtf === "S") {
+            // Actualizo IGTF en la tabla salidas
+            $sql = "UPDATE salidas  
+                    SET
+                        igtf = '$x_igtf',
+                        monto_base_igtf = $x_monto_base_igtf,
+                        monto_igtf = $x_monto_igtf
+                    WHERE id = " . QuotedValue($id_compra, 1) . ";";
+            Execute($sql);
         }
 
         $conn->commit();

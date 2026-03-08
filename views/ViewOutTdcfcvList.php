@@ -88,7 +88,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["nro_documento", [], fields.nro_documento.isInvalid],
             ["fecha", [ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["y_fecha", [ew.Validators.between], false],
-            ["cliente", [], fields.cliente.isInvalid]
+            ["cliente", [], fields.cliente.isInvalid],
+            ["pagado", [], fields.pagado.isInvalid]
         ])
         // Validate form
         .setValidate(
@@ -125,6 +126,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "documento": <?= $Page->documento->toClientList($Page) ?>,
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
+            "pagado": <?= $Page->pagado->toClientList($Page) ?>,
         })
 
         // Filters
@@ -359,6 +361,61 @@ loadjs.ready("fview_out_tdcfcvsrch", function() {
         </div><!-- /.ew-search-field -->
     </div><!-- /.col-sm-auto -->
 <?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+<?php
+if (!$Page->pagado->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_pagado" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->pagado->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_pagado" class="ew-search-caption ew-label"><?= $Page->pagado->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("=") ?>
+<input type="hidden" name="z_pagado" id="z_pagado" value="=">
+</div>
+        </div>
+        <div id="el_view_out_tdcfcv_pagado" class="ew-search-field">
+    <select
+        id="x_pagado"
+        name="x_pagado"
+        class="form-select ew-select<?= $Page->pagado->isInvalidClass() ?>"
+        <?php if (!$Page->pagado->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcfcvsrch_x_pagado"
+        <?php } ?>
+        data-table="view_out_tdcfcv"
+        data-field="x_pagado"
+        data-value-separator="<?= $Page->pagado->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->pagado->getPlaceHolder()) ?>"
+        <?= $Page->pagado->editAttributes() ?>>
+        <?= $Page->pagado->selectOptionListHtml("x_pagado") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->pagado->getErrorMessage(false) ?></div>
+<?php if (!$Page->pagado->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcfcvsrch", function() {
+    var options = { name: "x_pagado", selectId: "fview_out_tdcfcvsrch_x_pagado" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcfcvsrch.lists.pagado?.lookupOptions.length) {
+        options.data = { id: "x_pagado", form: "fview_out_tdcfcvsrch" };
+    } else {
+        options.ajax = { id: "x_pagado", form: "fview_out_tdcfcvsrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.pagado.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
 </div><!-- /.row -->
 <div class="row mb-0">
     <div class="col-sm-auto px-0 pe-sm-2">
@@ -463,6 +520,9 @@ $Page->ListOptions->render("header", "left");
 <?php } ?>
 <?php if ($Page->id_documento_padre->Visible) { // id_documento_padre ?>
         <th data-name="id_documento_padre" class="<?= $Page->id_documento_padre->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_id_documento_padre" class="view_out_tdcfcv_id_documento_padre"><?= $Page->renderFieldHeader($Page->id_documento_padre) ?></div></th>
+<?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_pagado" class="view_out_tdcfcv_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
 <?php } ?>
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_descuento" class="view_out_tdcfcv_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
@@ -586,6 +646,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_id_documento_padre" class="el_view_out_tdcfcv_id_documento_padre">
 <span<?= $Page->id_documento_padre->viewAttributes() ?>>
 <?= $Page->id_documento_padre->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->pagado->Visible) { // pagado ?>
+        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_pagado" class="el_view_out_tdcfcv_pagado">
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

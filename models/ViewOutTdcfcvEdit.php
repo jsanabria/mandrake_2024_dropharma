@@ -144,7 +144,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->igtf->setVisibility();
         $this->monto_base_igtf->setVisibility();
         $this->monto_igtf->Visible = false;
-        $this->moneda->Visible = false;
+        $this->moneda->setVisibility();
         $this->lista_pedido->Visible = false;
         $this->nota->setVisibility();
         $this->unidades->Visible = false;
@@ -971,6 +971,16 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
         }
 
+        // Check field name 'moneda' first before field var 'x_moneda'
+        $val = $CurrentForm->hasValue("moneda") ? $CurrentForm->getValue("moneda") : $CurrentForm->getValue("x_moneda");
+        if (!$this->moneda->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->moneda->Visible = false; // Disable update for API request
+            } else {
+                $this->moneda->setFormValue($val);
+            }
+        }
+
         // Check field name 'nota' first before field var 'x_nota'
         $val = $CurrentForm->hasValue("nota") ? $CurrentForm->getValue("nota") : $CurrentForm->getValue("x_nota");
         if (!$this->nota->IsDetailKey) {
@@ -1046,6 +1056,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->total->CurrentValue = $this->total->FormValue;
         $this->igtf->CurrentValue = $this->igtf->FormValue;
         $this->monto_base_igtf->CurrentValue = $this->monto_base_igtf->FormValue;
+        $this->moneda->CurrentValue = $this->moneda->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
         $this->estatus->CurrentValue = $this->estatus->FormValue;
         $this->dias_credito->CurrentValue = $this->dias_credito->FormValue;
@@ -1953,6 +1964,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // monto_base_igtf
             $this->monto_base_igtf->HrefValue = "";
 
+            // moneda
+            $this->moneda->HrefValue = "";
+
             // nota
             $this->nota->HrefValue = "";
 
@@ -2072,6 +2086,34 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
                 $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
             }
+
+            // moneda
+            $this->moneda->setupEditAttributes();
+            $curVal = trim(strval($this->moneda->CurrentValue));
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+            } else {
+                $this->moneda->ViewValue = $this->moneda->Lookup !== null && is_array($this->moneda->lookupOptions()) && count($this->moneda->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->moneda->ViewValue !== null) { // Load from cache
+                $this->moneda->EditValue = array_values($this->moneda->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $this->moneda->CurrentValue, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                }
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                $this->moneda->EditValue = $arwrk;
+            }
+            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
             // nota
             $this->nota->setupEditAttributes();
@@ -2198,6 +2240,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // monto_base_igtf
             $this->monto_base_igtf->HrefValue = "";
 
+            // moneda
+            $this->moneda->HrefValue = "";
+
             // nota
             $this->nota->HrefValue = "";
 
@@ -2298,6 +2343,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
             if (!CheckNumber($this->monto_base_igtf->FormValue)) {
                 $this->monto_base_igtf->addErrorMessage($this->monto_base_igtf->getErrorMessage(false));
+            }
+            if ($this->moneda->Visible && $this->moneda->Required) {
+                if (!$this->moneda->IsDetailKey && EmptyValue($this->moneda->FormValue)) {
+                    $this->moneda->addErrorMessage(str_replace("%s", $this->moneda->caption(), $this->moneda->RequiredErrorMessage));
+                }
             }
             if ($this->nota->Visible && $this->nota->Required) {
                 if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
@@ -2473,6 +2523,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         // monto_base_igtf
         $this->monto_base_igtf->setDbValueDef($rsnew, $this->monto_base_igtf->CurrentValue, $this->monto_base_igtf->ReadOnly);
 
+        // moneda
+        $this->moneda->setDbValueDef($rsnew, $this->moneda->CurrentValue, $this->moneda->ReadOnly);
+
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
@@ -2516,6 +2569,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         }
         if (isset($row['monto_base_igtf'])) { // monto_base_igtf
             $this->monto_base_igtf->CurrentValue = $row['monto_base_igtf'];
+        }
+        if (isset($row['moneda'])) { // moneda
+            $this->moneda->CurrentValue = $row['moneda'];
         }
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];

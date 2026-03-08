@@ -193,9 +193,6 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->banco->Visible) { // banco ?>
         <th data-name="banco" class="<?= $Page->banco->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_banco" class="cobros_cliente_detalle_banco"><?= $Page->renderFieldHeader($Page->banco) ?></div></th>
 <?php } ?>
-<?php if ($Page->anticipo_id->Visible) { // anticipo_id ?>
-        <th data-name="anticipo_id" class="<?= $Page->anticipo_id->headerCellClass() ?>"><div id="elh_cobros_cliente_detalle_anticipo_id" class="cobros_cliente_detalle_anticipo_id"><?= $Page->renderFieldHeader($Page->anticipo_id) ?></div></th>
-<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -285,14 +282,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_banco" class="el_cobros_cliente_detalle_banco">
 <span<?= $Page->banco->viewAttributes() ?>>
 <?= $Page->banco->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->anticipo_id->Visible) { // anticipo_id ?>
-        <td data-name="anticipo_id"<?= $Page->anticipo_id->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cobros_cliente_detalle_anticipo_id" class="el_cobros_cliente_detalle_anticipo_id">
-<span<?= $Page->anticipo_id->viewAttributes() ?>>
-<?= $Page->anticipo_id->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

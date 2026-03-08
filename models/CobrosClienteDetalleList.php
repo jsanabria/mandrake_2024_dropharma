@@ -157,7 +157,7 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         $this->monto_usd->Visible = false;
         $this->banco_origen->setVisibility();
         $this->banco->setVisibility();
-        $this->anticipo_id->setVisibility();
+        $this->anticipo_id->Visible = false;
     }
 
     // Constructor
@@ -1327,7 +1327,6 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             $this->updateSort($this->monto_bs); // monto_bs
             $this->updateSort($this->banco_origen); // banco_origen
             $this->updateSort($this->banco); // banco
-            $this->updateSort($this->anticipo_id); // anticipo_id
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1537,7 +1536,6 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             $this->createColumnOption($option, "monto_bs");
             $this->createColumnOption($option, "banco_origen");
             $this->createColumnOption($option, "banco");
-            $this->createColumnOption($option, "anticipo_id");
         }
 
         // Set up custom actions
@@ -2234,10 +2232,6 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
             // banco
             $this->banco->HrefValue = "";
             $this->banco->TooltipValue = "";
-
-            // anticipo_id
-            $this->anticipo_id->HrefValue = "";
-            $this->anticipo_id->TooltipValue = "";
         }
 
         // Call Row Rendered event

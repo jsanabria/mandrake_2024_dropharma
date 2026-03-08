@@ -131,6 +131,17 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($view_out_tdcfcv->pagado->Visible) { // pagado ?>
+        <tr id="r_pagado"<?= $view_out_tdcfcv->pagado->rowAttributes() ?>>
+            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->pagado->caption() ?></td>
+            <td<?= $view_out_tdcfcv->pagado->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_pagado">
+<span<?= $view_out_tdcfcv->pagado->viewAttributes() ?>>
+<?= $view_out_tdcfcv->pagado->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
 <?php if ($view_out_tdcfcv->descuento->Visible) { // descuento ?>
         <tr id="r_descuento"<?= $view_out_tdcfcv->descuento->rowAttributes() ?>>
             <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->descuento->caption() ?></td>

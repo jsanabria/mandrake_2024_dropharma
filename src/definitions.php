@@ -272,6 +272,16 @@ return [
     "anticipos_aplicaciones" => \DI\create(AnticiposAplicaciones::class),
     "pago_destino_regla" => \DI\create(PagoDestinoRegla::class),
     "registra_anticipos_clientes" => \DI\create(RegistraAnticiposClientes::class),
+    "historico_anticipos_cliente" => \DI\create(HistoricoAnticiposCliente::class),
+    "cont_asiento_detalle_mdk" => \DI\create(ContAsientoDetalleMdk::class),
+    "cont_asiento_mdk" => \DI\create(ContAsientoMdk::class),
+    "cont_banco_cuenta_mdk" => \DI\create(ContBancoCuentaMdk::class),
+    "cont_centro_costo_mdk" => \DI\create(ContCentroCostoMdk::class),
+    "cont_configuracion_mdk" => \DI\create(ContConfiguracionMdk::class),
+    "cont_metodo_cuenta_mdk" => \DI\create(ContMetodoCuentaMdk::class),
+    "cont_plan_cuentas_mdk" => \DI\create(ContPlanCuentasMdk::class),
+    "cont_tercero_mdk" => \DI\create(ContTerceroMdk::class),
+    "view_cont_asiento_resumen_mdk" => \DI\create(ViewContAsientoResumenMdk::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

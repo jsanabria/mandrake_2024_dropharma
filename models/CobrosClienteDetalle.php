@@ -1807,10 +1807,16 @@ class CobrosClienteDetalle extends DbTable
         // Enter your code here
     }
 
-    // Recordset Selecting event
     public function recordsetSelecting(&$filter)
     {
-        // Enter your code here
+        if (Route(1) !== null || Get("fk_id") !== null) {
+            $id = intval(Get("fk_id"));
+            if ($id > 0) {
+                AddFilter($filter, "cobros_cliente = " . $id);
+            } else {
+                AddFilter($filter, "1=0");
+            }
+        }
     }
 
     // Recordset Selected event
