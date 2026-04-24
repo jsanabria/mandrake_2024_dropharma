@@ -165,6 +165,17 @@ $articulo->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($articulo->indexado->Visible) { // indexado ?>
+        <tr id="r_indexado"<?= $articulo->indexado->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->indexado->caption() ?></td>
+            <td<?= $articulo->indexado->cellAttributes() ?>>
+<span id="el_articulo_indexado">
+<span<?= $articulo->indexado->viewAttributes() ?>>
+<?= $articulo->indexado->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

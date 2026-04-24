@@ -187,6 +187,7 @@ class EntradasView extends Entradas
         $this->cerrado->setVisibility();
         $this->descuento->setVisibility();
         $this->archivo_pedido->setVisibility();
+        $this->unidades->setVisibility();
     }
 
     // Constructor
@@ -1012,6 +1013,7 @@ class EntradasView extends Entradas
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
+        $this->unidades->setDbValue($row['unidades']);
     }
 
     // Return a row with default values
@@ -1058,6 +1060,7 @@ class EntradasView extends Entradas
         $row['cerrado'] = $this->cerrado->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
+        $row['unidades'] = $this->unidades->DefaultValue;
         return $row;
     }
 
@@ -1158,6 +1161,8 @@ class EntradasView extends Entradas
         // descuento
 
         // archivo_pedido
+
+        // unidades
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1447,6 +1452,10 @@ class EntradasView extends Entradas
                 $this->archivo_pedido->ViewValue = "";
             }
 
+            // unidades
+            $this->unidades->ViewValue = $this->unidades->CurrentValue;
+            $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1599,6 +1608,10 @@ class EntradasView extends Entradas
             }
             $this->archivo_pedido->ExportHrefValue = $this->archivo_pedido->UploadPath . $this->archivo_pedido->Upload->DbValue;
             $this->archivo_pedido->TooltipValue = "";
+
+            // unidades
+            $this->unidades->HrefValue = "";
+            $this->unidades->TooltipValue = "";
         }
 
         // Call Row Rendered event

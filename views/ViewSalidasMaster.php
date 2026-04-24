@@ -98,6 +98,17 @@ $view_salidas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($view_salidas->asesor_asignado->Visible) { // asesor_asignado ?>
+        <tr id="r_asesor_asignado"<?= $view_salidas->asesor_asignado->rowAttributes() ?>>
+            <td class="<?= $view_salidas->TableLeftColumnClass ?>"><?= $view_salidas->asesor_asignado->caption() ?></td>
+            <td<?= $view_salidas->asesor_asignado->cellAttributes() ?>>
+<span id="el_view_salidas_asesor_asignado">
+<span<?= $view_salidas->asesor_asignado->viewAttributes() ?>>
+<?= $view_salidas->asesor_asignado->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

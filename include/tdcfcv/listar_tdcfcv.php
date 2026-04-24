@@ -1,4 +1,11 @@
 <?php
+// 1. ELIMINAR CUALQUIER SALIDA PREVIA
+ob_start();
+
+// Evitar que cualquier error previo ensucie la salida
+error_reporting(0);
+ini_set('display_errors', 0);
+
 include "../connect.php";
 
 
@@ -9,20 +16,17 @@ $tipo_documento = "TDCFCV";
 $sql = "SELECT valor1 AS ppal from parametro WHERE codigo = '002';";
 $result = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($result);
-$almacen = $row["ppal"];
-
-$sql = "SELECT valor1 AS ppal from parametro WHERE codigo = '014';";
-$almacenconsig = $row["ppal"];
+$almacen = $row["ppal"] ?? "";
 
 $sql = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0, 1;"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs); 
-$tasa = floatval($row["tasa"]);
+$tasa = floatval($row["tasa"] ?? 1);
 
 $sql = "SELECT valor1 AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs); 
-$moneda = $row["moneda"];
+$moneda = $row["moneda"] ?? "Bs.";
 
 $sql = "SELECT a.cliente FROM salidas AS a WHERE a.id = $pedido AND a.tipo_documento = '$tipo_documento';";
 
@@ -148,13 +152,28 @@ while ($row = mysqli_fetch_array($result)) {
       $html .= '<td class="text-center">';  
                   $html .= '<input type="number" class="form-control" id="x' . $i . '_total" name="x' . $i . '_total" size="4" readonly="yes" value="' . ($precio==0 ? "" : $precio) . '" style="width: 120px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
       $html .= '</td>';
+
       $html .= '<td class="text-center">';  
-                  if($xCant == 0) {
-                    $html .= '<span id="x' . $i . '_boton"><i class="fa-solid fa-cart-shopping" onclick="js:insertar(' . $i . ')"></i></span>';
-                  }
-                  else {
-                    $html .= '<span id="x' . $i . '_boton"><i class="fa-solid fa-trash" onclick="js:eliminar(' . $i . ', ' . $row["id_item"] . ')"></i></span>';
-                  }
+          if($xCant == 0) {
+              // Si no existe el item, mostrar opción de insertar
+              $html .= '<span id="x' . $i . '_boton">
+                          <i class="fa-solid fa-cart-shopping text-primary" style="cursor:pointer;" title="Insertar" onclick="js:insertar(' . $i . ')"></i>
+                        </span>';
+          }
+          else {
+              // Si existe, mostrar botones de Editar y Eliminar
+              $html .= '<div id="x' . $i . '_contenedor_botones" class="d-flex justify-content-around">
+                          
+                          <span id="x' . $i . '_boton_edit">
+                              <i class="fa-solid fa-pencil text-warning" style="cursor:pointer;" title="Modificar" onclick="js:habilitarEdicion(' . $i . ', ' . $row["id_item"] . ')"></i>
+                          </span>
+
+                          <span id="x' . $i . '_boton_delete">
+                              <i class="fa-solid fa-trash text-danger" style="cursor:pointer;" title="Eliminar" onclick="js:eliminar(' . $i . ', ' . $row["id_item"] . ')"></i>
+                          </span>
+
+                        </div>';
+          }
       $html .= '</td>';
     $html .= '</tr>';
 
@@ -162,5 +181,11 @@ while ($row = mysqli_fetch_array($result)) {
 }
       $html .= '<tr><td colspan="10"> <center><b>Registros ' . $i-1 . ' de ' . $cantidad . '</b></center> </td></tr>';
 
+// 3. LIMPIAR EL BUFFER ANTES DE ENVIAR EL JSON
+// Esto borra cualquier <h2... o error de conexión que se haya colado
+ob_clean();
+
+header('Content-Type: application/json');
 echo json_encode($html, JSON_UNESCAPED_UNICODE);
+exit();
 ?>

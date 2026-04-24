@@ -67,6 +67,7 @@ class PedidosOnline extends DbTable
     public $descuento;
     public $monto_sin_descuento;
     public $tipo_descuento;
+    public $descuento2;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -609,6 +610,30 @@ class PedidosOnline extends DbTable
         $this->tipo_descuento->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['tipo_descuento'] = &$this->tipo_descuento;
 
+        // descuento2
+        $this->descuento2 = new DbField(
+            $this, // Table
+            'x_descuento2', // Variable name
+            'descuento2', // Name
+            '`descuento2`', // Expression
+            '`descuento2`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento2->InputTextType = "text";
+        $this->descuento2->Raw = true;
+        $this->descuento2->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento2'] = &$this->descuento2;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -852,7 +877,7 @@ class PedidosOnline extends DbTable
         $sqlwrk = $sql instanceof QueryBuilder // Query builder
             ? (clone $sql)->resetQueryPart("orderBy")->getSQL()
             : $sql;
-        $pattern = '/^SELECT\s([\s\S]+)\sFROM\s/i';
+        $pattern = '/^SELECT\s([\s\S]+?)\sFROM\s/i';
         // Skip Custom View / SubQuery / SELECT DISTINCT / ORDER BY
         if (
             in_array($this->TableType, ["TABLE", "VIEW", "LINKTABLE"]) &&
@@ -1148,6 +1173,7 @@ class PedidosOnline extends DbTable
         $this->descuento->DbValue = $row['descuento'];
         $this->monto_sin_descuento->DbValue = $row['monto_sin_descuento'];
         $this->tipo_descuento->DbValue = $row['tipo_descuento'];
+        $this->descuento2->DbValue = $row['descuento2'];
     }
 
     // Delete uploaded files
@@ -1521,6 +1547,7 @@ class PedidosOnline extends DbTable
         $this->descuento->setDbValue($row['descuento']);
         $this->monto_sin_descuento->setDbValue($row['monto_sin_descuento']);
         $this->tipo_descuento->setDbValue($row['tipo_descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
     }
 
     // Render list content
@@ -1592,6 +1619,8 @@ class PedidosOnline extends DbTable
         // monto_sin_descuento
 
         // tipo_descuento
+
+        // descuento2
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1671,6 +1700,10 @@ class PedidosOnline extends DbTable
         } else {
             $this->tipo_descuento->ViewValue = $this->tipo_descuento->tagCaption(2) != "" ? $this->tipo_descuento->tagCaption(2) : "No";
         }
+
+        // descuento2
+        $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+        $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
 
         // id
         $this->id->HrefValue = "";
@@ -1755,6 +1788,10 @@ class PedidosOnline extends DbTable
         // tipo_descuento
         $this->tipo_descuento->HrefValue = "";
         $this->tipo_descuento->TooltipValue = "";
+
+        // descuento2
+        $this->descuento2->HrefValue = "";
+        $this->descuento2->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1928,6 +1965,14 @@ class PedidosOnline extends DbTable
         $this->tipo_descuento->EditValue = $this->tipo_descuento->options(false);
         $this->tipo_descuento->PlaceHolder = RemoveHtml($this->tipo_descuento->caption());
 
+        // descuento2
+        $this->descuento2->setupEditAttributes();
+        $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+        $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+        if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+            $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1977,6 +2022,7 @@ class PedidosOnline extends DbTable
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->monto_sin_descuento);
                     $doc->exportCaption($this->tipo_descuento);
+                    $doc->exportCaption($this->descuento2);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->_username);
@@ -1999,6 +2045,7 @@ class PedidosOnline extends DbTable
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->monto_sin_descuento);
                     $doc->exportCaption($this->tipo_descuento);
+                    $doc->exportCaption($this->descuento2);
                 }
                 $doc->endExportRow();
             }
@@ -2046,6 +2093,7 @@ class PedidosOnline extends DbTable
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->monto_sin_descuento);
                         $doc->exportField($this->tipo_descuento);
+                        $doc->exportField($this->descuento2);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->_username);
@@ -2068,6 +2116,7 @@ class PedidosOnline extends DbTable
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->monto_sin_descuento);
                         $doc->exportField($this->tipo_descuento);
+                        $doc->exportField($this->descuento2);
                     }
                     $doc->endExportRow($rowCnt);
                 }

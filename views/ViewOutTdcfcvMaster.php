@@ -109,13 +109,13 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($view_out_tdcfcv->estatus->Visible) { // estatus ?>
-        <tr id="r_estatus"<?= $view_out_tdcfcv->estatus->rowAttributes() ?>>
-            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->estatus->caption() ?></td>
-            <td<?= $view_out_tdcfcv->estatus->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_estatus">
-<span<?= $view_out_tdcfcv->estatus->viewAttributes() ?>>
-<?= $view_out_tdcfcv->estatus->getViewValue() ?></span>
+<?php if ($view_out_tdcfcv->_username->Visible) { // username ?>
+        <tr id="r__username"<?= $view_out_tdcfcv->_username->rowAttributes() ?>>
+            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->_username->caption() ?></td>
+            <td<?= $view_out_tdcfcv->_username->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv__username">
+<span<?= $view_out_tdcfcv->_username->viewAttributes() ?>>
+<?= $view_out_tdcfcv->_username->getViewValue() ?></span>
 </span>
 </td>
         </tr>
@@ -138,28 +138,6 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 <span id="el_view_out_tdcfcv_pagado">
 <span<?= $view_out_tdcfcv->pagado->viewAttributes() ?>>
 <?= $view_out_tdcfcv->pagado->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($view_out_tdcfcv->descuento->Visible) { // descuento ?>
-        <tr id="r_descuento"<?= $view_out_tdcfcv->descuento->rowAttributes() ?>>
-            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->descuento->caption() ?></td>
-            <td<?= $view_out_tdcfcv->descuento->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_descuento">
-<span<?= $view_out_tdcfcv->descuento->viewAttributes() ?>>
-<?= $view_out_tdcfcv->descuento->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($view_out_tdcfcv->descuento2->Visible) { // descuento2 ?>
-        <tr id="r_descuento2"<?= $view_out_tdcfcv->descuento2->rowAttributes() ?>>
-            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->descuento2->caption() ?></td>
-            <td<?= $view_out_tdcfcv->descuento2->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_descuento2">
-<span<?= $view_out_tdcfcv->descuento2->viewAttributes() ?>>
-<?= $view_out_tdcfcv->descuento2->getViewValue() ?></span>
 </span>
 </td>
         </tr>

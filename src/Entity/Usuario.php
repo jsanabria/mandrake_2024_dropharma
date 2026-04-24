@@ -98,12 +98,12 @@ class Usuario extends AbstractEntity
 
     public function getPassword(): ?string
     {
-        return HtmlDecode($this->password);
+        return $this->password;
     }
 
     public function setPassword(?string $value): static
     {
-        $this->password = RemoveXss($value);
+        $this->password = EncryptPassword(Config("CASE_SENSITIVE_PASSWORD") ? $value : strtolower($value));
         return $this;
     }
 

@@ -200,6 +200,11 @@ class SalidasView extends Salidas
         $this->packer->setVisibility();
         $this->packer_date->setVisibility();
         $this->fotos->setVisibility();
+        $this->descuento2->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
+        $this->doc_afe->setVisibility();
     }
 
     // Constructor
@@ -613,6 +618,7 @@ class SalidasView extends Salidas
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->id_documento_padre);
+        $this->setupLookupOptions($this->igtf);
 
         // Check modal
         if ($this->IsModal) {
@@ -1086,6 +1092,11 @@ class SalidasView extends Salidas
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
+        $this->descuento2->setDbValue($row['descuento2']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Return a row with default values
@@ -1145,6 +1156,11 @@ class SalidasView extends Salidas
         $row['packer'] = $this->packer->DefaultValue;
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
+        $row['doc_afe'] = $this->doc_afe->DefaultValue;
         return $row;
     }
 
@@ -1271,6 +1287,16 @@ class SalidasView extends Salidas
         // packer_date
 
         // fotos
+
+        // descuento2
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
+
+        // doc_afe
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1747,6 +1773,29 @@ class SalidasView extends Salidas
                 $this->fotos->ViewValue = "";
             }
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
+            // doc_afe
+            $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1947,6 +1996,26 @@ class SalidasView extends Salidas
                 $this->fotos->LinkAttrs["data-rel"] = "salidas_x_fotos";
                 $this->fotos->LinkAttrs->appendClass("ew-lightbox");
             }
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
+
+            // igtf
+            $this->igtf->HrefValue = "";
+            $this->igtf->TooltipValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+            $this->monto_base_igtf->TooltipValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+            $this->monto_igtf->TooltipValue = "";
+
+            // doc_afe
+            $this->doc_afe->HrefValue = "";
+            $this->doc_afe->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -2090,6 +2159,8 @@ class SalidasView extends Salidas
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_id_documento_padre":
+                    break;
+                case "x_igtf":
                     break;
                 default:
                     $lookupFilter = "";

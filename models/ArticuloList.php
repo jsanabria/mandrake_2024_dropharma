@@ -180,6 +180,7 @@ class ArticuloList extends Articulo
         $this->activo->setVisibility();
         $this->lote->Visible = false;
         $this->fecha_vencimiento->Visible = false;
+        $this->indexado->setVisibility();
     }
 
     // Constructor
@@ -732,6 +733,7 @@ class ArticuloList extends Articulo
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->indexado);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1130,6 +1132,7 @@ class ArticuloList extends Articulo
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
         $filterList = Concat($filterList, $this->lote->AdvancedSearch->toJson(), ","); // Field lote
         $filterList = Concat($filterList, $this->fecha_vencimiento->AdvancedSearch->toJson(), ","); // Field fecha_vencimiento
+        $filterList = Concat($filterList, $this->indexado->AdvancedSearch->toJson(), ","); // Field indexado
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1384,6 +1387,14 @@ class ArticuloList extends Articulo
         $this->fecha_vencimiento->AdvancedSearch->SearchValue2 = @$filter["y_fecha_vencimiento"];
         $this->fecha_vencimiento->AdvancedSearch->SearchOperator2 = @$filter["w_fecha_vencimiento"];
         $this->fecha_vencimiento->AdvancedSearch->save();
+
+        // Field indexado
+        $this->indexado->AdvancedSearch->SearchValue = @$filter["x_indexado"];
+        $this->indexado->AdvancedSearch->SearchOperator = @$filter["z_indexado"];
+        $this->indexado->AdvancedSearch->SearchCondition = @$filter["v_indexado"];
+        $this->indexado->AdvancedSearch->SearchValue2 = @$filter["y_indexado"];
+        $this->indexado->AdvancedSearch->SearchOperator2 = @$filter["w_indexado"];
+        $this->indexado->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1423,6 +1434,7 @@ class ArticuloList extends Articulo
         $this->buildSearchSql($where, $this->activo, $default, false); // activo
         $this->buildSearchSql($where, $this->lote, $default, false); // lote
         $this->buildSearchSql($where, $this->fecha_vencimiento, $default, false); // fecha_vencimiento
+        $this->buildSearchSql($where, $this->indexado, $default, false); // indexado
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1456,6 +1468,7 @@ class ArticuloList extends Articulo
             $this->activo->AdvancedSearch->save(); // activo
             $this->lote->AdvancedSearch->save(); // lote
             $this->fecha_vencimiento->AdvancedSearch->save(); // fecha_vencimiento
+            $this->indexado->AdvancedSearch->save(); // indexado
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1513,6 +1526,7 @@ class ArticuloList extends Articulo
             $this->activo->AdvancedSearch->save(); // activo
             $this->lote->AdvancedSearch->save(); // lote
             $this->fecha_vencimiento->AdvancedSearch->save(); // fecha_vencimiento
+            $this->indexado->AdvancedSearch->save(); // indexado
             $this->setSessionRules($rules);
         }
 
@@ -1694,6 +1708,15 @@ class ArticuloList extends Articulo
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->activo->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field indexado
+        $filter = $this->queryBuilderWhere("indexado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->indexado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->indexado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -1841,6 +1864,9 @@ class ArticuloList extends Articulo
         if ($this->fecha_vencimiento->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->indexado->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1903,6 +1929,7 @@ class ArticuloList extends Articulo
         $this->activo->AdvancedSearch->unsetSession();
         $this->lote->AdvancedSearch->unsetSession();
         $this->fecha_vencimiento->AdvancedSearch->unsetSession();
+        $this->indexado->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1941,6 +1968,7 @@ class ArticuloList extends Articulo
         $this->activo->AdvancedSearch->load();
         $this->lote->AdvancedSearch->load();
         $this->fecha_vencimiento->AdvancedSearch->load();
+        $this->indexado->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1972,6 +2000,7 @@ class ArticuloList extends Articulo
             $this->updateSort($this->cantidad_en_transito); // cantidad_en_transito
             $this->updateSort($this->descuento); // descuento
             $this->updateSort($this->activo); // activo
+            $this->updateSort($this->indexado); // indexado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2023,6 +2052,7 @@ class ArticuloList extends Articulo
                 $this->activo->setSort("");
                 $this->lote->setSort("");
                 $this->fecha_vencimiento->setSort("");
+                $this->indexado->setSort("");
             }
 
             // Reset start position
@@ -2565,6 +2595,7 @@ class ArticuloList extends Articulo
             $this->createColumnOption($option, "cantidad_en_transito");
             $this->createColumnOption($option, "descuento");
             $this->createColumnOption($option, "activo");
+            $this->createColumnOption($option, "indexado");
         }
 
         // Set up custom actions
@@ -3133,6 +3164,14 @@ class ArticuloList extends Articulo
                 $this->Command = "search";
             }
         }
+
+        // indexado
+        if ($this->indexado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->indexado->AdvancedSearch->SearchValue != "" || $this->indexado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3257,6 +3296,7 @@ class ArticuloList extends Articulo
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
+        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Return a row with default values
@@ -3290,6 +3330,7 @@ class ArticuloList extends Articulo
         $row['activo'] = $this->activo->DefaultValue;
         $row['lote'] = $this->lote->DefaultValue;
         $row['fecha_vencimiento'] = $this->fecha_vencimiento->DefaultValue;
+        $row['indexado'] = $this->indexado->DefaultValue;
         return $row;
     }
 
@@ -3383,6 +3424,8 @@ class ArticuloList extends Articulo
         // lote
 
         // fecha_vencimiento
+
+        // indexado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3552,6 +3595,13 @@ class ArticuloList extends Articulo
             $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
             $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
 
+            // indexado
+            if (strval($this->indexado->CurrentValue) != "") {
+                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+            } else {
+                $this->indexado->ViewValue = null;
+            }
+
             // foto
             if (!EmptyValue($this->foto->Upload->DbValue)) {
                 $this->foto->HrefValue = GetFileUploadUrl($this->foto, $this->foto->htmlDecode($this->foto->Upload->DbValue)); // Add prefix/suffix
@@ -3623,6 +3673,10 @@ class ArticuloList extends Articulo
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
+
+            // indexado
+            $this->indexado->HrefValue = "";
+            $this->indexado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // foto
             $this->foto->setupEditAttributes();
@@ -3793,6 +3847,11 @@ class ArticuloList extends Articulo
             $this->activo->setupEditAttributes();
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
+
+            // indexado
+            $this->indexado->setupEditAttributes();
+            $this->indexado->EditValue = $this->indexado->options(true);
+            $this->indexado->PlaceHolder = RemoveHtml($this->indexado->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3872,6 +3931,7 @@ class ArticuloList extends Articulo
         $this->activo->AdvancedSearch->load();
         $this->lote->AdvancedSearch->load();
         $this->fecha_vencimiento->AdvancedSearch->load();
+        $this->indexado->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -4138,6 +4198,8 @@ class ArticuloList extends Articulo
                 case "x_articulo_inventario":
                     break;
                 case "x_activo":
+                    break;
+                case "x_indexado":
                     break;
                 default:
                     $lookupFilter = "";

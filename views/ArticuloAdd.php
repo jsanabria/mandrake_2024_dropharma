@@ -37,7 +37,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["cantidad_maxima", [fields.cantidad_maxima.visible && fields.cantidad_maxima.required ? ew.Validators.required(fields.cantidad_maxima.caption) : null, ew.Validators.float], fields.cantidad_maxima.isInvalid],
             ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
             ["articulo_inventario", [fields.articulo_inventario.visible && fields.articulo_inventario.required ? ew.Validators.required(fields.articulo_inventario.caption) : null], fields.articulo_inventario.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
+            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
+            ["indexado", [fields.indexado.visible && fields.indexado.required ? ew.Validators.required(fields.indexado.caption) : null], fields.indexado.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -65,6 +66,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "alicuota": <?= $Page->alicuota->toClientList($Page) ?>,
             "articulo_inventario": <?= $Page->articulo_inventario->toClientList($Page) ?>,
             "activo": <?= $Page->activo->toClientList($Page) ?>,
+            "indexado": <?= $Page->indexado->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -300,6 +302,52 @@ loadjs.ready("farticuloadd", function() {
     }
     options.minimumResultsForSearch = Infinity;
     options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.activo.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+    <div id="r_indexado"<?= $Page->indexado->rowAttributes() ?>>
+        <label id="elh_articulo_indexado" for="x_indexado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->indexado->caption() ?><?= $Page->indexado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->indexado->cellAttributes() ?>>
+<span id="el_articulo_indexado">
+    <select
+        id="x_indexado"
+        name="x_indexado"
+        class="form-select ew-select<?= $Page->indexado->isInvalidClass() ?>"
+        <?php if (!$Page->indexado->IsNativeSelect) { ?>
+        data-select2-id="farticuloadd_x_indexado"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_indexado"
+        data-page="1"
+        data-value-separator="<?= $Page->indexado->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->indexado->getPlaceHolder()) ?>"
+        <?= $Page->indexado->editAttributes() ?>>
+        <?= $Page->indexado->selectOptionListHtml("x_indexado") ?>
+    </select>
+    <?= $Page->indexado->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->indexado->getErrorMessage() ?></div>
+<?php if (!$Page->indexado->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticuloadd", function() {
+    var options = { name: "x_indexado", selectId: "farticuloadd_x_indexado" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticuloadd.lists.indexado?.lookupOptions.length) {
+        options.data = { id: "x_indexado", form: "farticuloadd" };
+    } else {
+        options.ajax = { id: "x_indexado", form: "farticuloadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.indexado.selectOptions);
     ew.createSelect(options);
 });
 </script>

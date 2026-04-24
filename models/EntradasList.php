@@ -193,6 +193,7 @@ class EntradasList extends Entradas
         $this->cerrado->Visible = false;
         $this->descuento->setVisibility();
         $this->archivo_pedido->setVisibility();
+        $this->unidades->setVisibility();
     }
 
     // Constructor
@@ -1160,6 +1161,7 @@ class EntradasList extends Entradas
         $filterList = Concat($filterList, $this->cerrado->AdvancedSearch->toJson(), ","); // Field cerrado
         $filterList = Concat($filterList, $this->descuento->AdvancedSearch->toJson(), ","); // Field descuento
         $filterList = Concat($filterList, $this->archivo_pedido->AdvancedSearch->toJson(), ","); // Field archivo_pedido
+        $filterList = Concat($filterList, $this->unidades->AdvancedSearch->toJson(), ","); // Field unidades
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1518,6 +1520,14 @@ class EntradasList extends Entradas
         $this->archivo_pedido->AdvancedSearch->SearchValue2 = @$filter["y_archivo_pedido"];
         $this->archivo_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_archivo_pedido"];
         $this->archivo_pedido->AdvancedSearch->save();
+
+        // Field unidades
+        $this->unidades->AdvancedSearch->SearchValue = @$filter["x_unidades"];
+        $this->unidades->AdvancedSearch->SearchOperator = @$filter["z_unidades"];
+        $this->unidades->AdvancedSearch->SearchCondition = @$filter["v_unidades"];
+        $this->unidades->AdvancedSearch->SearchValue2 = @$filter["y_unidades"];
+        $this->unidades->AdvancedSearch->SearchOperator2 = @$filter["w_unidades"];
+        $this->unidades->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1570,6 +1580,7 @@ class EntradasList extends Entradas
         $this->buildSearchSql($where, $this->cerrado, $default, false); // cerrado
         $this->buildSearchSql($where, $this->descuento, $default, false); // descuento
         $this->buildSearchSql($where, $this->archivo_pedido, $default, false); // archivo_pedido
+        $this->buildSearchSql($where, $this->unidades, $default, false); // unidades
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1616,6 +1627,7 @@ class EntradasList extends Entradas
             $this->cerrado->AdvancedSearch->save(); // cerrado
             $this->descuento->AdvancedSearch->save(); // descuento
             $this->archivo_pedido->AdvancedSearch->save(); // archivo_pedido
+            $this->unidades->AdvancedSearch->save(); // unidades
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1686,6 +1698,7 @@ class EntradasList extends Entradas
             $this->cerrado->AdvancedSearch->save(); // cerrado
             $this->descuento->AdvancedSearch->save(); // descuento
             $this->archivo_pedido->AdvancedSearch->save(); // archivo_pedido
+            $this->unidades->AdvancedSearch->save(); // unidades
             $this->setSessionRules($rules);
         }
 
@@ -1866,6 +1879,15 @@ class EntradasList extends Entradas
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->archivo_pedido->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field unidades
+        $filter = $this->queryBuilderWhere("unidades");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->unidades, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->unidades->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
@@ -2058,6 +2080,9 @@ class EntradasList extends Entradas
         if ($this->archivo_pedido->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->unidades->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2133,6 +2158,7 @@ class EntradasList extends Entradas
         $this->cerrado->AdvancedSearch->unsetSession();
         $this->descuento->AdvancedSearch->unsetSession();
         $this->archivo_pedido->AdvancedSearch->unsetSession();
+        $this->unidades->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2184,6 +2210,7 @@ class EntradasList extends Entradas
         $this->cerrado->AdvancedSearch->load();
         $this->descuento->AdvancedSearch->load();
         $this->archivo_pedido->AdvancedSearch->load();
+        $this->unidades->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2215,6 +2242,7 @@ class EntradasList extends Entradas
             $this->updateSort($this->ref_municipal); // ref_municipal
             $this->updateSort($this->descuento); // descuento
             $this->updateSort($this->archivo_pedido); // archivo_pedido
+            $this->updateSort($this->unidades); // unidades
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2279,6 +2307,7 @@ class EntradasList extends Entradas
                 $this->cerrado->setSort("");
                 $this->descuento->setSort("");
                 $this->archivo_pedido->setSort("");
+                $this->unidades->setSort("");
             }
 
             // Reset start position
@@ -2722,6 +2751,7 @@ class EntradasList extends Entradas
             $this->createColumnOption($option, "ref_municipal");
             $this->createColumnOption($option, "descuento");
             $this->createColumnOption($option, "archivo_pedido");
+            $this->createColumnOption($option, "unidades");
         }
 
         // Set up custom actions
@@ -2855,14 +2885,7 @@ class EntradasList extends Entradas
                     }
                 }
             } else {
-                $errmsg = str_replace('%s', $userAction, $Language->phrase("CustomActionNotFound"));
-                if (Post("ajax") == $userAction) { // Ajax
-                    echo "<p class=\"text-danger\">" . $errmsg . "</p>";
-                    return true;
-                } else {
-                    $this->setFailureMessage($errmsg);
-                    return false;
-                }
+                // Skip checking, handle by Row_CustomAction
             }
             $rows = $this->loadRs($filter)->fetchAllAssociative();
             $this->SelectedCount = count($rows);
@@ -2876,9 +2899,11 @@ class EntradasList extends Entradas
                 $this->SelectedIndex = 0;
                 foreach ($rows as $row) {
                     $this->SelectedIndex++;
-                    $processed = $listAction->handle($row, $this);
-                    if (!$processed) {
-                        break;
+                    if ($listAction) {
+                        $processed = $listAction->handle($row, $this);
+                        if (!$processed) {
+                            break;
+                        }
                     }
                     $processed = $this->rowCustomAction($userAction, $row);
                     if (!$processed) {
@@ -3399,6 +3424,14 @@ class EntradasList extends Entradas
                 $this->Command = "search";
             }
         }
+
+        // unidades
+        if ($this->unidades->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->unidades->AdvancedSearch->SearchValue != "" || $this->unidades->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3536,6 +3569,7 @@ class EntradasList extends Entradas
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
+        $this->unidades->setDbValue($row['unidades']);
     }
 
     // Return a row with default values
@@ -3582,6 +3616,7 @@ class EntradasList extends Entradas
         $row['cerrado'] = $this->cerrado->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
+        $row['unidades'] = $this->unidades->DefaultValue;
         return $row;
     }
 
@@ -3701,6 +3736,8 @@ class EntradasList extends Entradas
         // descuento
 
         // archivo_pedido
+
+        // unidades
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3990,6 +4027,10 @@ class EntradasList extends Entradas
                 $this->archivo_pedido->ViewValue = "";
             }
 
+            // unidades
+            $this->unidades->ViewValue = $this->unidades->CurrentValue;
+            $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -4070,6 +4111,10 @@ class EntradasList extends Entradas
             }
             $this->archivo_pedido->ExportHrefValue = $this->archivo_pedido->UploadPath . $this->archivo_pedido->Upload->DbValue;
             $this->archivo_pedido->TooltipValue = "";
+
+            // unidades
+            $this->unidades->HrefValue = "";
+            $this->unidades->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // nro_documento
             $this->nro_documento->setupEditAttributes();
@@ -4194,6 +4239,11 @@ class EntradasList extends Entradas
             }
             $this->archivo_pedido->EditValue = HtmlEncode($this->archivo_pedido->AdvancedSearch->SearchValue);
             $this->archivo_pedido->PlaceHolder = RemoveHtml($this->archivo_pedido->caption());
+
+            // unidades
+            $this->unidades->setupEditAttributes();
+            $this->unidades->EditValue = $this->unidades->AdvancedSearch->SearchValue;
+            $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -4274,6 +4324,7 @@ class EntradasList extends Entradas
         $this->cerrado->AdvancedSearch->load();
         $this->descuento->AdvancedSearch->load();
         $this->archivo_pedido->AdvancedSearch->load();
+        $this->unidades->AdvancedSearch->load();
     }
 
     // Get export HTML tag

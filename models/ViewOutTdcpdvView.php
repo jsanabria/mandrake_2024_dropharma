@@ -201,6 +201,9 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
         $this->packer->setVisibility();
         $this->packer_date->setVisibility();
         $this->fotos->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
     }
 
     // Constructor
@@ -607,6 +610,7 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
         $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
+        $this->setupLookupOptions($this->igtf);
 
         // Check modal
         if ($this->IsModal) {
@@ -1023,6 +1027,9 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
     }
 
     // Return a row with default values
@@ -1083,6 +1090,9 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
         $row['packer'] = $this->packer->DefaultValue;
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         return $row;
     }
 
@@ -1211,6 +1221,12 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
         // packer_date
 
         // fotos
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1616,6 +1632,21 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
             $this->packer_date->ViewValue = $this->packer_date->CurrentValue;
             $this->packer_date->ViewValue = FormatDateTime($this->packer_date->ViewValue, $this->packer_date->formatPattern());
 
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -1812,6 +1843,8 @@ class ViewOutTdcpdvView extends ViewOutTdcpdv
                     break;
                 case "x_asesor_asignado":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_igtf":
                     break;
                 default:
                     $lookupFilter = "";

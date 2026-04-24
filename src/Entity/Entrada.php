@@ -150,6 +150,9 @@ class Entrada extends AbstractEntity
     #[Column(name: "archivo_pedido", type: "string", nullable: true)]
     private ?string $archivoPedido;
 
+    #[Column(type: "integer", nullable: true)]
+    private ?int $unidades;
+
     public function __construct()
     {
         $this->consignacionReportada = "N";
@@ -605,6 +608,17 @@ class Entrada extends AbstractEntity
     public function setArchivoPedido(?string $value): static
     {
         $this->archivoPedido = RemoveXss($value);
+        return $this;
+    }
+
+    public function getUnidades(): ?int
+    {
+        return $this->unidades;
+    }
+
+    public function setUnidades(?int $value): static
+    {
+        $this->unidades = $value;
         return $this;
     }
 }

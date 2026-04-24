@@ -44,7 +44,7 @@ class PersonalData
     public $RenderingView = false;
 
     // CSS class/style
-    public $CurrentPageName = "NotaDeRecepcionCopiarComoEngController";
+    public $CurrentPageName = "ViewContAsientoResumenMdkList";
 
     // Page headings
     public $Heading = "";

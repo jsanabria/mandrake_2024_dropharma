@@ -111,6 +111,9 @@ class Articulo extends AbstractEntity
     #[Column(name: "fecha_vencimiento", type: "date", nullable: true)]
     private ?DateTime $fechaVencimiento;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $indexado;
+
     public function __construct()
     {
         $this->cantidadMinima = "0";
@@ -426,6 +429,20 @@ class Articulo extends AbstractEntity
     public function setFechaVencimiento(?DateTime $value): static
     {
         $this->fechaVencimiento = $value;
+        return $this;
+    }
+
+    public function getIndexado(): ?string
+    {
+        return $this->indexado;
+    }
+
+    public function setIndexado(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'indexado' value");
+        }
+        $this->indexado = $value;
         return $this;
     }
 }

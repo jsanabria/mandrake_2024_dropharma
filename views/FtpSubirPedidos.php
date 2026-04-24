@@ -10,7 +10,7 @@ $Page->showMessage();
 ?>
 <?php
 //if(trim($_COOKIE["strcon"]) != "mandrake") {
-if(trim($_COOKIE["strcon"]) != "drophqsc_mandrake") {
+if(trim($_COOKIE["strcon"]) != "dropharm_mandrake") {
 	header("Location: Home");
 	die();
 }
@@ -30,7 +30,8 @@ $tipo_documento = "TDCPDV";
 $username = "FTP";
 $lista_pedido = "PED000";
 
-$path = "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/";
+// $path = "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/";
+$path = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
 // $path = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos\\";
 
 $arrFiles = scandir($path);
@@ -141,7 +142,7 @@ foreach ($arrFiles as $key => $value) {
 				$sql = "INSERT INTO ftp_fact_pedi_procesado	(id, factura, pedido, fecha_hora) VALUES (NULL, '', '" . $pedido . "', NOW())";
 				Execute($sql);
 
-				$path2 = "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos_old/";
+				$path2 = "/home2/dropharm/dropharmadm/ftpexportar/pedidos_old/";
 				// $path2 = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos_old\\";
 				if (!file_exists($path2)) {
 					mkdir($path2, 0777, true);
@@ -162,7 +163,9 @@ echo '<div class="alert alert-primary" role="alert">
 ///////////////////////////////////////
 ///////////////////////////////////////
 
-$path = "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/";
+// $path = "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/";
+$path = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
+
 // $path = "C:\\laragon\\www\\mandrake_2024_dropharma\\maker\\FullTech360\\salida\\";
 
 $arrFiles = scandir($path);
@@ -278,7 +281,8 @@ foreach ($arrFiles as $key => $value) {
 			}
 
             // Borrar archivo
-            $path2 = "/home4/drophqsc/dropharmadm.com/ftpexportar2/pedidos_old/";
+            // $path2 = "/home4/drophqsc/dropharmadm.com/ftpexportar2/pedidos_old/";
+            $path2 = "/home2/dropharm/dropharmadm/ftpexportar2/pedidos_old/";
             // $path2 = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos_old\\";
             if (!file_exists($path2)) {
                 mkdir($path2, 0777, true);
@@ -296,5 +300,4 @@ echo '<div class="alert alert-primary" role="alert">
 		</div>';
 
 ?>
-
 <?= GetDebugMessage() ?>

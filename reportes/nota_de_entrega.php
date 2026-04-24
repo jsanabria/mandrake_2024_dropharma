@@ -70,10 +70,10 @@ else
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	// Cabecera de p?gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
+		// Consulto datos de la compa??a 
 		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -143,7 +143,9 @@ class PDF extends FPDF
 		$this->SetFont('Arial','',12);
 		$this->Cell(200, 6, $row["descripcion"],0,0,'C');
 		
-
+		$this->Ln(5);
+		$this->SetFont('Arial','B',10);
+		$this->Cell(200, 6, mb_convert_encoding("SIN DERECHO A CRÃ‰DITO FISCAL", "ISO-8859-1"), 0, 0, 'C');
 
 		$this->Ln(8);
 		
@@ -213,14 +215,14 @@ class PDF extends FPDF
 		$this->Ln(5);
 	}
 	
-	// Pie de página
+	// Pie de p?gina
 	function Footer()
 	{
-		// Posición: a 1,5 cm del final
+		// Posici?n: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Arial','I',8);
-		// Número de página
+		// N?mero de p?gina
 		$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
@@ -258,7 +260,7 @@ class PDF extends FPDF
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaci?n del objeto de la clase heredada
 $pdf = new PDF('P', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();

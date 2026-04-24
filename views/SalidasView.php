@@ -231,6 +231,61 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+    <tr id="r_descuento2"<?= $Page->descuento2->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_descuento2"><?= $Page->descuento2->caption() ?></span></td>
+        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
+<span id="el_salidas_descuento2" data-page="1">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+    <tr id="r_igtf"<?= $Page->igtf->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_igtf"><?= $Page->igtf->caption() ?></span></td>
+        <td data-name="igtf"<?= $Page->igtf->cellAttributes() ?>>
+<span id="el_salidas_igtf" data-page="1">
+<span<?= $Page->igtf->viewAttributes() ?>>
+<?= $Page->igtf->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+    <tr id="r_monto_base_igtf"<?= $Page->monto_base_igtf->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_monto_base_igtf"><?= $Page->monto_base_igtf->caption() ?></span></td>
+        <td data-name="monto_base_igtf"<?= $Page->monto_base_igtf->cellAttributes() ?>>
+<span id="el_salidas_monto_base_igtf" data-page="1">
+<span<?= $Page->monto_base_igtf->viewAttributes() ?>>
+<?= $Page->monto_base_igtf->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+    <tr id="r_monto_igtf"<?= $Page->monto_igtf->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_monto_igtf"><?= $Page->monto_igtf->caption() ?></span></td>
+        <td data-name="monto_igtf"<?= $Page->monto_igtf->cellAttributes() ?>>
+<span id="el_salidas_monto_igtf" data-page="1">
+<span<?= $Page->monto_igtf->viewAttributes() ?>>
+<?= $Page->monto_igtf->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->doc_afe->Visible) { // doc_afe ?>
+    <tr id="r_doc_afe"<?= $Page->doc_afe->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_doc_afe"><?= $Page->doc_afe->caption() ?></span></td>
+        <td data-name="doc_afe"<?= $Page->doc_afe->cellAttributes() ?>>
+<span id="el_salidas_doc_afe" data-page="1">
+<span<?= $Page->doc_afe->viewAttributes() ?>>
+<?= $Page->doc_afe->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

@@ -81,6 +81,7 @@ class Articulo extends DbTable
     public $activo;
     public $lote;
     public $fecha_vencimiento;
+    public $indexado;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -821,6 +822,34 @@ class Articulo extends DbTable
         $this->fecha_vencimiento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['fecha_vencimiento'] = &$this->fecha_vencimiento;
 
+        // indexado
+        $this->indexado = new DbField(
+            $this, // Table
+            'x_indexado', // Variable name
+            'indexado', // Name
+            '`indexado`', // Expression
+            '`indexado`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`indexado`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->indexado->InputTextType = "text";
+        $this->indexado->Raw = true;
+        $this->indexado->setSelectMultiple(false); // Select one
+        $this->indexado->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->indexado->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->indexado->Lookup = new Lookup($this->indexado, 'articulo', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->indexado->OptionCount = 2;
+        $this->indexado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['indexado'] = &$this->indexado;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1461,6 +1490,7 @@ class Articulo extends DbTable
         $this->activo->DbValue = $row['activo'];
         $this->lote->DbValue = $row['lote'];
         $this->fecha_vencimiento->DbValue = $row['fecha_vencimiento'];
+        $this->indexado->DbValue = $row['indexado'];
     }
 
     // Delete uploaded files
@@ -1854,6 +1884,7 @@ class Articulo extends DbTable
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
+        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Render list content
@@ -1937,6 +1968,8 @@ class Articulo extends DbTable
         // lote
 
         // fecha_vencimiento
+
+        // indexado
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2170,6 +2203,13 @@ class Articulo extends DbTable
         $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
         $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
 
+        // indexado
+        if (strval($this->indexado->CurrentValue) != "") {
+            $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+        } else {
+            $this->indexado->ViewValue = null;
+        }
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2293,6 +2333,10 @@ class Articulo extends DbTable
         // fecha_vencimiento
         $this->fecha_vencimiento->HrefValue = "";
         $this->fecha_vencimiento->TooltipValue = "";
+
+        // indexado
+        $this->indexado->HrefValue = "";
+        $this->indexado->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2495,6 +2539,11 @@ class Articulo extends DbTable
         $this->fecha_vencimiento->EditValue = FormatDateTime($this->fecha_vencimiento->CurrentValue, $this->fecha_vencimiento->formatPattern());
         $this->fecha_vencimiento->PlaceHolder = RemoveHtml($this->fecha_vencimiento->caption());
 
+        // indexado
+        $this->indexado->setupEditAttributes();
+        $this->indexado->EditValue = $this->indexado->options(true);
+        $this->indexado->PlaceHolder = RemoveHtml($this->indexado->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -2546,6 +2595,7 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->articulo_inventario);
                     $doc->exportCaption($this->activo);
+                    $doc->exportCaption($this->indexado);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->codigo);
@@ -2567,6 +2617,7 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->lote);
                     $doc->exportCaption($this->fecha_vencimiento);
+                    $doc->exportCaption($this->indexado);
                 }
                 $doc->endExportRow();
             }
@@ -2616,6 +2667,7 @@ class Articulo extends DbTable
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->articulo_inventario);
                         $doc->exportField($this->activo);
+                        $doc->exportField($this->indexado);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->codigo);
@@ -2637,6 +2689,7 @@ class Articulo extends DbTable
                         $doc->exportField($this->activo);
                         $doc->exportField($this->lote);
                         $doc->exportField($this->fecha_vencimiento);
+                        $doc->exportField($this->indexado);
                     }
                     $doc->endExportRow($rowCnt);
                 }

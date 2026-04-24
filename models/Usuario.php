@@ -173,7 +173,7 @@ class Usuario extends DbTable
             '`password`', // Expression
             '`password`', // Basic search expression
             200, // Type
-            40, // Size
+            255, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`password`', // Virtual expression
@@ -184,6 +184,7 @@ class Usuario extends DbTable
             'PASSWORD' // Edit Tag
         );
         $this->_password->InputTextType = "text";
+        $this->_password->Raw = true;
         $this->_password->Required = true; // Required field
         $this->_password->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['password'] = &$this->_password;

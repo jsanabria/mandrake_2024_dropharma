@@ -19,7 +19,7 @@ if($bloquea == "SI") {
 
 $sql = "SELECT IFNULL(tipo_acceso, '') AS tipo_acceso FROM userlevels
 		WHERE userlevelid = '" . CurrentUserLevel() . "';"; 
-$grupo = trim(ExecuteScalar($sql));
+$grupo = trim(ExecuteScalar($sql) ?? '');
 
 $sql = "SELECT nombre, telefono, email, foto, asesor, cliente 
 		FROM usuario
@@ -28,8 +28,8 @@ if($row = ExecuteRow($sql)) {
 	$nombre = $row["nombre"];
 	$telefono = $row["telefono"];
 	$email = $row["email"];
-	$asesor = intval(trim($row["asesor"]));
-	$cliente = intval(trim($row["cliente"]));
+	$asesor = intval(trim($row["asesor"] ?? ''));
+	$cliente = intval(trim($row["cliente"] ?? ''));
 }
 else {
 	$nombre = "";
@@ -42,43 +42,32 @@ $foto = "carpetacarga/" . (!isset($row["foto"]) ? "silueta.jpg" : $row["foto"]);
 
 $tarifas = "";
 $where = "0=0";
-if($asesor > 0) {
-	$sql = "SELECT 
-				COUNT(f.tarifa) AS cantidad 
-			FROM 
-				(SELECT 
-					DISTINCT b.tarifa, c.nombre 
-				FROM 
-					asesor_cliente AS a 
-					JOIN cliente AS b ON b.id = a.cliente 
-					JOIN tarifa AS c ON c.id = b.tarifa 
-				WHERE a.asesor = $asesor) AS f;";
-	$cantidad = ExecuteScalar($sql);
 
-	for($i=0; $i<$cantidad; $i++) {
-		$sql = "SELECT 
-					DISTINCT b.tarifa, c.nombre 
-				FROM 
-					asesor_cliente AS a 
-					JOIN cliente AS b ON b.id = a.cliente 
-					JOIN tarifa AS c ON c.id = b.tarifa 
-				WHERE a.asesor = $asesor LIMIT $i, 1;";
-		$row = ExecuteRow($sql);
-		// href="reportes/listado_articulos_por_tarifa.php?codcliente=&tarifa=' . $row["tarifa"] . '"
-		$tarifas .= '<hr><a class="btn btn-info" target="_blank" onclick="js:print_to(' . $row["tarifa"] . ');" >Articulos Tarifa ' . $row["nombre"] . '</a><hr> ';
-	}
+if ($asesor > 0) {
+    // OPTIMIZACIÓN 1: Obtener todas las tarifas distintas en una sola consulta
+    $sqlTarifas = "SELECT DISTINCT b.tarifa, c.nombre 
+                   FROM asesor_cliente AS a 
+                   JOIN cliente AS b ON b.id = a.cliente 
+                   JOIN tarifa AS c ON c.id = b.tarifa 
+                   WHERE a.asesor = $asesor";
+    
+    $rsTarifas = ExecuteQuery($sqlTarifas);
+    if ($rsTarifas) {
+        while ($row = $rsTarifas->fetch()) {
+            $tarifas .= '<hr><a class="btn btn-info" target="_blank" onclick="js:print_to(' . $row["tarifa"] . ');" >Articulos Tarifa ' . $row["nombre"] . '</a><hr> ';
+        }
+    }
 
-	$sql = "SELECT COUNT(cliente) AS cantidad FROM asesor_cliente
-			WHERE asesor = '$asesor';";
-	$cantidad = ExecuteScalar($sql);
-	$clientes = "";
-	for($i=0; $i<$cantidad; $i++) {
-		$sql = "SELECT cliente FROM asesor_cliente
-			WHERE asesor = '$asesor' LIMIT $i, 1;";
-		$clientes .= ExecuteScalar($sql) . ",";
-	}
-	$clientes .= "0"; 
-	$where = "codcli IN ($clientes)";
+    // OPTIMIZACIÓN 2: Generar la lista de clientes para el WHERE usando GROUP_CONCAT
+    // Esto reemplaza el segundo ciclo for y las múltiples consultas a asesor_cliente
+    $sqlClientes = "SELECT GROUP_CONCAT(cliente) FROM asesor_cliente WHERE asesor = '$asesor'";
+    $listaClientes = ExecuteScalar($sqlClientes);
+
+    if (!empty($listaClientes)) {
+        $where = "codcli IN ($listaClientes)";
+    } else {
+        $where = "codcli IN (0)";
+    }
 }
 
 if($cliente > 0) {
@@ -96,19 +85,21 @@ if($cliente > 0) {
 
 $levelid = CurrentUserLevel();
 
-if($levelid == -1 or $levelid == 12) {
-	$sql = "SELECT count(id) AS cantidad FROM tarifa WHERE activo = 'S';";
-	$cantidad = ExecuteScalar($sql);
+if ($levelid == -1 || $levelid == 12) {
+    // OPTIMIZACIÓN: Consultamos directamente todas las tarifas activas
+    $sql = "SELECT id AS tarifa, nombre 
+            FROM tarifa 
+            WHERE activo = 'S' 
+            ORDER BY nombre ASC"; // Añadido un orden para mejor visualización
 
-	for($i=0; $i<$cantidad; $i++) {
-		$sql = "SELECT 
-					id AS tarifa, nombre 
-				FROM 
-					tarifa WHERE activo = 'S' LIMIT $i, 1;";
-		$row = ExecuteRow($sql);
-		
-		$tarifas .= '<hr><a class="btn btn-info" target="_blank" onclick="js:print_to(' . $row["tarifa"] . ');" >Articulos Tarifa ' . $row["nombre"] . '</a><hr> ';
-	}
+    $rs = ExecuteQuery($sql);
+
+    if ($rs) {
+        // Recorremos el set de resultados directamente
+        while ($row = $rs->fetch()) {
+            $tarifas .= '<hr><a class="btn btn-info" target="_blank" onclick="js:print_to(' . $row["tarifa"] . ');" >Articulos Tarifa ' . ($row["nombre"] ?? '') . '</a><hr> ';
+        }
+    }
 }
 
 $sql = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0, 1;";
@@ -193,26 +184,35 @@ $facturas_vencidas = intval(ExecuteScalar($sql));
 								</thead>-->
 								<tbody>
 									<?php
-										for($i=0; $i<7; $i++) {
-											$sql = "SELECT 
-														IFNULL(b.nombre, a.user) AS usuario, 
-														DATE_FORMAT(a.datetime, '%h:%i:%s %p') AS fecha, 
-														a.action 
-													FROM 
-														audittrail AS a  
-														LEFT OUTER JOIN usuario AS b ON b.username = a.user 
-													WHERE 
-														DATE_FORMAT(a.datetime, '%d/%m/%Y') = DATE_FORMAT('" . date("Y-m-d H:i:s") . "', '%d/%m/%Y') 
-														AND a.action IN ('login', 'logout') AND a.user <> '-1' 
-													ORDER BY a.datetime DESC LIMIT $i, 1;";
-											if($row = ExecuteRow($sql)) {
-												echo '<tr>';
-													echo '<td>' . $row["usuario"] . '</td>';
-													echo '<td>' . $row["fecha"] . '</td>';
-													echo '<td>' . $row["action"] . '</td>';
-												echo '</tr>';
-											}
-										}
+										// 1. Definimos la consulta única para traer los últimos 7 registros de hoy
+                                    $hoy = date("Y-m-d");
+                                    $sql = "SELECT 
+                                                IFNULL(b.nombre, a.user) AS usuario, 
+                                                DATE_FORMAT(a.datetime, '%h:%i:%s %p') AS fecha, 
+                                                a.action 
+                                            FROM 
+                                                audittrail AS a  
+                                                LEFT OUTER JOIN usuario AS b ON b.username = a.user 
+                                            WHERE 
+                                                DATE(a.datetime) = '$hoy' 
+                                                AND a.action IN ('login', 'logout') 
+                                                AND a.user <> '-1' 
+                                            ORDER BY a.datetime DESC 
+                                            LIMIT 7;";
+
+                                    // 2. Ejecutamos la consulta una sola vez
+                                    $rs = ExecuteQuery($sql);
+
+                                    // 3. Recorremos el set de resultados
+                                    if ($rs) {
+                                        while ($row = $rs->fetch()) {
+                                            echo '<tr>';
+                                            echo '<td>' . ($row["usuario"] ?? '') . '</td>';
+                                            echo '<td>' . ($row["fecha"] ?? '') . '</td>';
+                                            echo '<td>' . ($row["action"] ?? '') . '</td>';
+                                            echo '</tr>';
+                                        }
+                                    }
 									?>
 								</tbody>
 							</table>
@@ -241,39 +241,38 @@ $facturas_vencidas = intval(ExecuteScalar($sql));
 </div>
 
 <?php
+// 1. Consultar par谩metro de bloqueo
 $sql = "SELECT valor1 FROM parametro WHERE codigo = '013';";
-$bloquea = ExecuteScalar($sql);
+$bloquea = strtoupper(ExecuteScalar($sql));
 
-if($bloquea == "NO") { 
-    $rutas = [
-        "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/",
-        "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/"
-    ];
+if ($bloquea == "NO") { 
+    
+    // Definimos las rutas a monitorear
+    $ruta_pedidos = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
+    $ruta_salidas = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
 
+    // Función interna para contar archivos reales (ignorando . y ..)
+    $contarArchivos = function($path) {
+        if (!is_dir($path)) return 0;
+        $files = scandir($path);
+        // Filtramos para contar solo archivos reales, no los directorios "." y ".."
+        return count(array_diff($files, array('.', '..')));
+    };
+
+    // 2. Revisar archivos en ambas carpetas
     $total_archivos = 0;
+    $total_archivos += $contarArchivos($ruta_pedidos);
+    $total_archivos += $contarArchivos($ruta_salidas);
 
-    foreach ($rutas as $path) {
-        // En Windows esto dará falso y saltará al siguiente sin dar error
-        if (is_dir($path)) {
-            $files = @scandir($path);
-            if (is_array($files)) {
-                // Filtramos '.' y '..' para contar solo archivos reales
-                $archivos_reales = array_diff($files, array('.', '..'));
-                $total_archivos += count($archivos_reales);
-            }
+    // 3. Si hay archivos pendientes, redireccionamos al procesador FTP
+    if ($total_archivos > 0) {
+        // Asumo que $levelid viene del contexto de tu aplicaci贸n (Mandrake)
+        if (isset($levelid) && $levelid == -1) {
+            header("Location: FtpSubirPedidos");
+            exit(); // Es preferible exit() a die() en flujos de cabecera
         }
     }
-
-    // Si hay archivos en cualquiera de las carpetas de producción
-    if($total_archivos > 0) {
-        if(isset($levelid) && $levelid == -1) {
-            // Usamos redirección JS porque en el Home de PHPMaker 
-            // a veces ya se envió HTML y el header() fallaría
-            echo "<script>window.location.href='FtpSubirPedidos';</script>";
-            exit();
-        }
-    }
-} 
+}
 ?>
 
 <script>

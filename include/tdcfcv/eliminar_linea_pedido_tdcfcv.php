@@ -109,44 +109,47 @@ $sql = "SELECT * FROM entradas_salidas WHERE id_documento = '$pedido' AND tipo_d
 $rs = mysqli_query($link, $sql);
 if($row = mysqli_fetch_array($rs)) { 
 	//////////////// Actualizo Cabecera ////////////////
-	// Verifico si los artículos tienen una misma alicuota o varias por cada uno de ellos //
 	$sql = "SELECT 
 	    DISTINCT alicuota 
 	  FROM 
 	    entradas_salidas 
 	  WHERE 
-	    id_documento = '$pedido' AND tipo_documento = '$tipo_documento' ORDER BY 1 DESC LIMIT 0, 1;;";
+	    id_documento = '$pedido' AND tipo_documento = '$tipo_documento' 
+	  ORDER BY 1 DESC 
+	  LIMIT 0, 1;";
 	$rs = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($rs);
 	$xalicuota = floatval($row["alicuota"]);
 
-	// Se actualiza el encabezado del documento //
 	$sql = "SELECT
 				SUM(precio) AS precio_unidad_sin_desc, 
 				SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) AS exento, 
 				SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) AS gravado, 
 				SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100)) AS iva, 
-				SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) + SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) + (SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100))) AS total, 
-				COUNT(articulo) AS renglones, ABS(SUM(cantidad_movimiento)) AS unidades 
+				SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) + 
+				SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) + 
+				(SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100))) AS total, 
+				COUNT(articulo) AS renglones, 
+				ABS(SUM(cantidad_movimiento)) AS unidades 
 		    FROM 
 		      entradas_salidas 
-		    WHERE id_documento = '$pedido' AND tipo_documento = '$tipo_documento';"; 
+		    WHERE id_documento = '$pedido' 
+		      AND tipo_documento = '$tipo_documento';"; 
 	$rs = mysqli_query($link, $sql);
 	$row = mysqli_fetch_array($rs);
+
 	$monto_sin_descuento = floatval($row["precio_unidad_sin_desc"]);
 	$renglones = floatval($row["renglones"]);
 	$unidades = floatval($row["unidades"]);
-	/*
-	$costo = floatval($row["exento"]) + floatval($row["gravado"]);
-	$iva = floatval($row["iva"]);
-	$total = floatval($row["total"]);
-	*/
+
 	$xExento = floatval($row["exento"]);
-	$xExento = $xExento - ($xExento*($descTransferencista/100));
+	$xExento = $xExento - ($xExento * ($descTransferencista / 100));
+
 	$xGravado = floatval($row["gravado"]);
-	$xGravado = $xGravado - ($xGravado*($descTransferencista/100));
+	$xGravado = $xGravado - ($xGravado * ($descTransferencista / 100));
+
 	$costo = $xExento + $xGravado;
-	$iva = $xGravado * (floatval($xalicuota)/100);
+	$iva = $xGravado * (floatval($xalicuota) / 100);
 	$total = $costo + $iva;
 	
 	$total_usd = round((substr(strtolower(trim($moneda)), 0, 3)=="bs." ? ($total/$tasa_usd) : $total), 2);
@@ -158,46 +161,67 @@ if($row = mysqli_fetch_array($rs)) {
 		      iva = $iva,
 		      total = $total, 
 		      tasa_dia = $tasa_usd, 
-		      monto_usd = $total_usd, tasa_dia = $tasa_usd, moneda = '$moneda',  
+		      monto_usd = $total_usd, 
+		      moneda = '$moneda',  
 			  monto_sin_descuento = $monto_sin_descuento 
 		    WHERE id = '$pedido'";
 	mysqli_query($link, $sql);
 
+	/*
+	$html = array(
+		"pedido" => (string)$pedido,
+		"total" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? round(($costo/$tasa_usd),2) : $costo),
+		"renglones" => (string)$renglones,
+		"unidades" => (string)$unidades,
+		"total_usd" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? $costo : round(($costo*$tasa_usd),2)),
+		"monto_sin_descuento" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? round(($monto_sin_descuento/$tasa_usd),2) : $monto_sin_descuento),
+		"mensaje" => "Hello World",
+		"total_usd_sin_descuento" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? $monto_sin_descuento : round(($monto_sin_descuento*$tasa_usd),2)),
+		"estatus" => "1",
+		"consignacion" => $consignacion,
+		"doc_afectado" => $doc_afectado,
+		"nro_documento" => $nro_documento
+	);
+	*/
 
-	$html = '{
-				"pedido":"' . $pedido . '",
-				"total":"' . (strtoupper(substr($moneda, 0, 3)) == "BS." ? round(($costo/$tasa_usd),2) : $costo) . '",
-				"renglones":"' . $renglones . '",
-				"unidades":"' . $unidades . '",
-				"total_usd":"' . (strtoupper(substr($moneda, 0, 3)) == "BS." ? $costo : round(($costo*$tasa_usd),2)) . '",
-				"monto_sin_descuento":"' . (strtoupper(substr($moneda, 0, 3)) == "BS." ? round(($monto_sin_descuento/$tasa_usd),2) : $monto_sin_descuento) . '",
-	         	"mensaje":"Hello World", 
-	         	"total_usd_sin_descuento":"' . (strtoupper(substr($moneda, 0, 3)) == "BS." ? $monto_sin_descuento : round(($monto_sin_descuento*$tasa_usd),2)) . '", 
-	         	"estatus":"1",  
-	         	"consignacion":"' . $consignacion . '", 
-	         	"doc_afectado":"' . $doc_afectado . '", 
-	         	"nro_documento":"' . $nro_documento . '"  
-	        }';
+	$total_usd_final = (strtoupper(substr($moneda, 0, 3)) == "BS.") ? ($total / $tasa_usd) : $total;
+    $total_usd_sin_desc = (strtoupper(substr($moneda, 0, 3)) == "BS.") ? ($monto_sin_descuento / $tasa_usd) : $monto_sin_descuento;
+
+    $html = array(
+        "estatus" => "1",
+        "pedido" => (string)$pedido,
+        "total" => (string)$total, // El total en la moneda del documento
+        "total_usd" => (string)round($total_usd_final, 2),
+        "renglones" => (string)$renglones,
+        "unidades" => (string)$unidades,
+        "monto_sin_descuento" => (string)$monto_sin_descuento,
+        "total_usd_sin_descuento" => (string)round($total_usd_sin_desc, 2),
+        "nro_documento" => (string)$nro_documento,
+        "consignacion" => $consignacion,
+        "doc_afectado" => $doc_afectado,
+        "mensaje" => "Item eliminado correctamente"
+    );
+
 } 
 else {
 	$sql = "DELETE FROM salidas WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
 	mysqli_query($link, $sql);
 	// $nro_documento = "0000000";
 
-	$html = '{
-				"pedido":"0",
-				"total":"0.00",
-				"renglones":"0",
-				"unidades":"0",
-				"total_usd":"0.00",
-				"monto_sin_descuento":"0.00",
-	         	"mensaje":"Hello World", 
-	         	"total_usd_sin_descuento":"0.00", 
-	         	"estatus":"1", 
-	         	"consignacion":"' . $consignacion . '", 
-	         	"doc_afectado":"' . $doc_afectado . '", 
-	         	"nro_documento":"' . $nro_documento . '"  
-	        }';
+	$html = array(
+	    "pedido" => "0",
+	    "total" => "0.00",
+	    "renglones" => "0",
+	    "unidades" => "0",
+	    "total_usd" => "0.00",
+	    "monto_sin_descuento" => "0.00",
+	    "mensaje" => "Hello World", 
+	    "total_usd_sin_descuento" => "0.00", 
+	    "estatus" => "1", 
+	    "consignacion" => $consignacion, 
+	    "doc_afectado" => $doc_afectado, 
+	    "nro_documento" => $nro_documento
+	);
 }
 
 /// Actualizo el campo unidades ///

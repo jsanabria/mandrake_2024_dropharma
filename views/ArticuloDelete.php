@@ -92,6 +92,9 @@ $Page->showMessage();
 <?php if ($Page->activo->Visible) { // activo ?>
         <th class="<?= $Page->activo->headerCellClass() ?>"><span id="elh_articulo_activo" class="articulo_activo"><?= $Page->activo->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+        <th class="<?= $Page->indexado->headerCellClass() ?>"><span id="elh_articulo_indexado" class="articulo_indexado"><?= $Page->indexado->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -223,6 +226,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+        <td<?= $Page->indexado->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->indexado->viewAttributes() ?>>
+<?= $Page->indexado->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -207,6 +207,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->packer_date->Visible = false;
         $this->fotos->Visible = false;
         $this->descuento2->Visible = false;
+        $this->igtf->Visible = false;
+        $this->monto_base_igtf->Visible = false;
+        $this->monto_igtf->Visible = false;
     }
 
     // Constructor
@@ -768,6 +771,7 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
+        $this->setupLookupOptions($this->igtf);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1193,6 +1197,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $filterList = Concat($filterList, $this->packer_date->AdvancedSearch->toJson(), ","); // Field packer_date
         $filterList = Concat($filterList, $this->fotos->AdvancedSearch->toJson(), ","); // Field fotos
         $filterList = Concat($filterList, $this->descuento2->AdvancedSearch->toJson(), ","); // Field descuento2
+        $filterList = Concat($filterList, $this->igtf->AdvancedSearch->toJson(), ","); // Field igtf
+        $filterList = Concat($filterList, $this->monto_base_igtf->AdvancedSearch->toJson(), ","); // Field monto_base_igtf
+        $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1663,6 +1670,30 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->descuento2->AdvancedSearch->SearchValue2 = @$filter["y_descuento2"];
         $this->descuento2->AdvancedSearch->SearchOperator2 = @$filter["w_descuento2"];
         $this->descuento2->AdvancedSearch->save();
+
+        // Field igtf
+        $this->igtf->AdvancedSearch->SearchValue = @$filter["x_igtf"];
+        $this->igtf->AdvancedSearch->SearchOperator = @$filter["z_igtf"];
+        $this->igtf->AdvancedSearch->SearchCondition = @$filter["v_igtf"];
+        $this->igtf->AdvancedSearch->SearchValue2 = @$filter["y_igtf"];
+        $this->igtf->AdvancedSearch->SearchOperator2 = @$filter["w_igtf"];
+        $this->igtf->AdvancedSearch->save();
+
+        // Field monto_base_igtf
+        $this->monto_base_igtf->AdvancedSearch->SearchValue = @$filter["x_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchOperator = @$filter["z_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchCondition = @$filter["v_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->save();
+
+        // Field monto_igtf
+        $this->monto_igtf->AdvancedSearch->SearchValue = @$filter["x_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchOperator = @$filter["z_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchCondition = @$filter["v_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1729,6 +1760,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->buildSearchSql($where, $this->packer_date, $default, false); // packer_date
         $this->buildSearchSql($where, $this->fotos, $default, false); // fotos
         $this->buildSearchSql($where, $this->descuento2, $default, false); // descuento2
+        $this->buildSearchSql($where, $this->igtf, $default, false); // igtf
+        $this->buildSearchSql($where, $this->monto_base_igtf, $default, false); // monto_base_igtf
+        $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1789,6 +1823,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
             $this->packer_date->AdvancedSearch->save(); // packer_date
             $this->fotos->AdvancedSearch->save(); // fotos
             $this->descuento2->AdvancedSearch->save(); // descuento2
+            $this->igtf->AdvancedSearch->save(); // igtf
+            $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
+            $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1873,6 +1910,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
             $this->packer_date->AdvancedSearch->save(); // packer_date
             $this->fotos->AdvancedSearch->save(); // fotos
             $this->descuento2->AdvancedSearch->save(); // descuento2
+            $this->igtf->AdvancedSearch->save(); // igtf
+            $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
+            $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->setSessionRules($rules);
         }
 
@@ -2257,6 +2297,15 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         if ($this->descuento2->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_base_igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2346,6 +2395,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->packer_date->AdvancedSearch->unsetSession();
         $this->fotos->AdvancedSearch->unsetSession();
         $this->descuento2->AdvancedSearch->unsetSession();
+        $this->igtf->AdvancedSearch->unsetSession();
+        $this->monto_base_igtf->AdvancedSearch->unsetSession();
+        $this->monto_igtf->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2411,6 +2463,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->packer_date->AdvancedSearch->load();
         $this->fotos->AdvancedSearch->load();
         $this->descuento2->AdvancedSearch->load();
+        $this->igtf->AdvancedSearch->load();
+        $this->monto_base_igtf->AdvancedSearch->load();
+        $this->monto_igtf->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2516,6 +2571,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
                 $this->packer_date->setSort("");
                 $this->fotos->setSort("");
                 $this->descuento2->setSort("");
+                $this->igtf->setSort("");
+                $this->monto_base_igtf->setSort("");
+                $this->monto_igtf->setSort("");
             }
 
             // Reset start position
@@ -3675,6 +3733,30 @@ class ViewOutTdcasaList extends ViewOutTdcasa
                 $this->Command = "search";
             }
         }
+
+        // igtf
+        if ($this->igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->igtf->AdvancedSearch->SearchValue != "" || $this->igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_base_igtf
+        if ($this->monto_base_igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_base_igtf->AdvancedSearch->SearchValue != "" || $this->monto_base_igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_igtf
+        if ($this->monto_igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_igtf->AdvancedSearch->SearchValue != "" || $this->monto_igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3827,6 +3909,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
         $this->descuento2->setDbValue($row['descuento2']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
     }
 
     // Return a row with default values
@@ -3887,6 +3972,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
         $row['descuento2'] = $this->descuento2->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         return $row;
     }
 
@@ -4034,6 +4122,12 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         // fotos
 
         // descuento2
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -4439,6 +4533,21 @@ class ViewOutTdcasaList extends ViewOutTdcasa
             $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
             $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
 
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -4663,6 +4772,9 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         $this->packer_date->AdvancedSearch->load();
         $this->fotos->AdvancedSearch->load();
         $this->descuento2->AdvancedSearch->load();
+        $this->igtf->AdvancedSearch->load();
+        $this->monto_base_igtf->AdvancedSearch->load();
+        $this->monto_igtf->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -4945,6 +5057,8 @@ class ViewOutTdcasaList extends ViewOutTdcasa
                     break;
                 case "x_asesor_asignado":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_igtf":
                     break;
                 default:
                     $lookupFilter = "";

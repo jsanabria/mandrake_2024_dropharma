@@ -1,18 +1,17 @@
 <?php
 if(!isset($_COOKIE["strcon"])) {
-	session_destroy();
-	echo '<h2 style="color: blue;">Falla de Conexi&oacute;n! Reinicie su sesi&oacute;n...</h2>';
-	echo '<a href="../logout" 
-			style="background-color: #4CAF50; 
-					border: none;
-					color: white;
-					padding: 15px 32px;
-					text-align: center;
-					text-decoration: none;
-					display: inline-block;
-					font-size: 16px; border-radius: 25px;"
-		>Click aqu&iacute; para reiniciar la sesi&oacute;n</a>';
-	die();
+    // Si la petición es AJAX (Fetch), enviamos un error 401 y JSON
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' || strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false) {
+        header('Content-Type: application/json', true, 401);
+        echo json_encode(["estatus" => "error", "mensaje" => "Sesión expirada"]);
+        exit;
+    }
+
+    // Si es una carga normal de página, mostramos el HTML que ya tenías
+    session_destroy();
+    echo '<h2 style="color: blue;">Falla de Conexión! Reinicie su sesión...</h2>';
+    // ... tu código de botón ...
+    die();
 }
 
 $strcon = $_COOKIE["strcon"];

@@ -189,6 +189,21 @@ class Salida extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $fotos;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento2;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $igtf;
+
+    #[Column(name: "monto_base_igtf", type: "decimal", nullable: true)]
+    private ?string $montoBaseIgtf;
+
+    #[Column(name: "monto_igtf", type: "decimal", nullable: true)]
+    private ?string $montoIgtf;
+
+    #[Column(name: "doc_afe", type: "integer", nullable: true)]
+    private ?int $docAfe;
+
     public function __construct()
     {
         $this->entregado = "N";
@@ -798,6 +813,64 @@ class Salida extends AbstractEntity
     public function setFotos(?string $value): static
     {
         $this->fotos = RemoveXss($value);
+        return $this;
+    }
+
+    public function getDescuento2(): ?string
+    {
+        return $this->descuento2;
+    }
+
+    public function setDescuento2(?string $value): static
+    {
+        $this->descuento2 = $value;
+        return $this;
+    }
+
+    public function getIgtf(): ?string
+    {
+        return $this->igtf;
+    }
+
+    public function setIgtf(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'igtf' value");
+        }
+        $this->igtf = $value;
+        return $this;
+    }
+
+    public function getMontoBaseIgtf(): ?string
+    {
+        return $this->montoBaseIgtf;
+    }
+
+    public function setMontoBaseIgtf(?string $value): static
+    {
+        $this->montoBaseIgtf = $value;
+        return $this;
+    }
+
+    public function getMontoIgtf(): ?string
+    {
+        return $this->montoIgtf;
+    }
+
+    public function setMontoIgtf(?string $value): static
+    {
+        $this->montoIgtf = $value;
+        return $this;
+    }
+
+    public function getDocAfe(): ?int
+    {
+        return $this->docAfe;
+    }
+
+    public function setDocAfe(?int $value): static
+    {
+        $this->docAfe = $value;
         return $this;
     }
 }

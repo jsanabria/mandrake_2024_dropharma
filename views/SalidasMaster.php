@@ -340,6 +340,61 @@ $salidas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($salidas->descuento2->Visible) { // descuento2 ?>
+        <tr id="r_descuento2"<?= $salidas->descuento2->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->descuento2->caption() ?></td>
+            <td<?= $salidas->descuento2->cellAttributes() ?>>
+<span id="el_salidas_descuento2">
+<span<?= $salidas->descuento2->viewAttributes() ?>>
+<?= $salidas->descuento2->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->igtf->Visible) { // igtf ?>
+        <tr id="r_igtf"<?= $salidas->igtf->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->igtf->caption() ?></td>
+            <td<?= $salidas->igtf->cellAttributes() ?>>
+<span id="el_salidas_igtf">
+<span<?= $salidas->igtf->viewAttributes() ?>>
+<?= $salidas->igtf->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->monto_base_igtf->Visible) { // monto_base_igtf ?>
+        <tr id="r_monto_base_igtf"<?= $salidas->monto_base_igtf->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->monto_base_igtf->caption() ?></td>
+            <td<?= $salidas->monto_base_igtf->cellAttributes() ?>>
+<span id="el_salidas_monto_base_igtf">
+<span<?= $salidas->monto_base_igtf->viewAttributes() ?>>
+<?= $salidas->monto_base_igtf->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->monto_igtf->Visible) { // monto_igtf ?>
+        <tr id="r_monto_igtf"<?= $salidas->monto_igtf->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->monto_igtf->caption() ?></td>
+            <td<?= $salidas->monto_igtf->cellAttributes() ?>>
+<span id="el_salidas_monto_igtf">
+<span<?= $salidas->monto_igtf->viewAttributes() ?>>
+<?= $salidas->monto_igtf->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->doc_afe->Visible) { // doc_afe ?>
+        <tr id="r_doc_afe"<?= $salidas->doc_afe->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->doc_afe->caption() ?></td>
+            <td<?= $salidas->doc_afe->cellAttributes() ?>>
+<span id="el_salidas_doc_afe">
+<span<?= $salidas->doc_afe->viewAttributes() ?>>
+<?= $salidas->doc_afe->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

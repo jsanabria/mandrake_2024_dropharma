@@ -37,7 +37,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["ref_municipal", [fields.ref_municipal.visible && fields.ref_municipal.required ? ew.Validators.required(fields.ref_municipal.caption) : null], fields.ref_municipal.isInvalid],
             ["fecha_registro_retenciones", [fields.fecha_registro_retenciones.visible && fields.fecha_registro_retenciones.required ? ew.Validators.required(fields.fecha_registro_retenciones.caption) : null, ew.Validators.datetime(fields.fecha_registro_retenciones.clientFormatPattern)], fields.fecha_registro_retenciones.isInvalid],
             ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.float], fields.descuento.isInvalid],
-            ["archivo_pedido", [fields.archivo_pedido.visible && fields.archivo_pedido.required ? ew.Validators.fileRequired(fields.archivo_pedido.caption) : null], fields.archivo_pedido.isInvalid]
+            ["archivo_pedido", [fields.archivo_pedido.visible && fields.archivo_pedido.required ? ew.Validators.fileRequired(fields.archivo_pedido.caption) : null], fields.archivo_pedido.isInvalid],
+            ["unidades", [fields.unidades.visible && fields.unidades.required ? ew.Validators.required(fields.unidades.caption) : null, ew.Validators.integer], fields.unidades.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -355,6 +356,18 @@ loadjs.ready("fentradasadd", function() {
 <input type="hidden" name="fn_x_archivo_pedido" id= "fn_x_archivo_pedido" value="<?= $Page->archivo_pedido->Upload->FileName ?>">
 <input type="hidden" name="fa_x_archivo_pedido" id= "fa_x_archivo_pedido" value="0">
 <table id="ft_x_archivo_pedido" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->unidades->Visible) { // unidades ?>
+    <div id="r_unidades"<?= $Page->unidades->rowAttributes() ?>>
+        <label id="elh_entradas_unidades" for="x_unidades" class="<?= $Page->LeftColumnClass ?>"><?= $Page->unidades->caption() ?><?= $Page->unidades->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->unidades->cellAttributes() ?>>
+<span id="el_entradas_unidades">
+<input type="<?= $Page->unidades->getInputTextType() ?>" name="x_unidades" id="x_unidades" data-table="entradas" data-field="x_unidades" value="<?= $Page->unidades->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->unidades->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->unidades->formatPattern()) ?>"<?= $Page->unidades->editAttributes() ?> aria-describedby="x_unidades_help">
+<?= $Page->unidades->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->unidades->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

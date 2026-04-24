@@ -192,6 +192,15 @@ class ViewOutTdcasa extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $descuento2;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $igtf;
+
+    #[Column(name: "monto_base_igtf", type: "decimal", nullable: true)]
+    private ?string $montoBaseIgtf;
+
+    #[Column(name: "monto_igtf", type: "decimal", nullable: true)]
+    private ?string $montoIgtf;
+
     public function __construct()
     {
         $this->entregado = "N";
@@ -812,6 +821,42 @@ class ViewOutTdcasa extends AbstractEntity
     public function setDescuento2(?string $value): static
     {
         $this->descuento2 = $value;
+        return $this;
+    }
+
+    public function getIgtf(): ?string
+    {
+        return $this->igtf;
+    }
+
+    public function setIgtf(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'igtf' value");
+        }
+        $this->igtf = $value;
+        return $this;
+    }
+
+    public function getMontoBaseIgtf(): ?string
+    {
+        return $this->montoBaseIgtf;
+    }
+
+    public function setMontoBaseIgtf(?string $value): static
+    {
+        $this->montoBaseIgtf = $value;
+        return $this;
+    }
+
+    public function getMontoIgtf(): ?string
+    {
+        return $this->montoIgtf;
+    }
+
+    public function setMontoIgtf(?string $value): static
+    {
+        $this->montoIgtf = $value;
         return $this;
     }
 }

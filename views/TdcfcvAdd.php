@@ -84,7 +84,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     // alert(pedido + " - " + cliente + " - " + precioFull + " - " + descuento + " - " + precio + " - " + moneda + " - " + total + " - " + cantidad + " - " + username);
 
     if(isNaN(parseFloat(precioFull))) {
-        alert("Debe indicar precio full.");
+        ew.alert("Debe indicar precio full.");
         return false;
     }
     // Using the core $.ajax() method
@@ -122,12 +122,12 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     // Code to run if the request succeeds (is done); The response is passed to the function
     .done(function( json ) {
         // alert(json);
-        json = jQuery.parseJSON(json);
+        // json = jQuery.parseJSON(json);
 
         if(json.estatus == 1) {
           // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
 
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Documento Id.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
           $("#pedido").val(json.pedido);
           $("#xReglones").html(json.renglones);
           $("#xUnidades").html(json.unidades);
@@ -150,13 +150,13 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
           document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ', ' + json.id_item + ')"></i>';
         } 
         else {
-          alert("Error: !!! " + json.mensaje + " !!!");
+          ew.alert("Error: !!! " + json.mensaje + " !!!");
           document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
         }
     })
     // Code to run if the request fails; the raw request and status codes are passed to the function
     .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
+      ew.alert( "Sorry, there was a problem!" );
       console.log( "Error: " + errorThrown );
       console.log( "Status: " + status );
       console.dir( xhr );
@@ -167,96 +167,140 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     });  
   }
 
-  function eliminar(i, id_item) {
-    var pedido = $("#pedido").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
+function eliminar(i, id_item) {
+    var pedido = $("#pedido").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
-    var descuento = $("#PorDesAct").value();
+    var descuento = $("#PorDesAct").val();
     var descTransferencista = $("#descTransferencista").val();
-    var nota = $("#nota").value();
-    var consignacion = $("#consignacion").value();
-    var doc_afectado = $("#doc_afectado").value();
-    var nro_documento = $("#nro_documento").value();
+    var nota = $("#nota").val();
+    var consignacion = $("#consignacion").val();
+    var doc_afectado = $("#doc_afectado").val();
 
-    if(!confirm("ESTA SEGURO DE ELIMINAR EL ITEM?")) return false;
+    if (!confirm("ESTA SEGURO DE ELIMINAR EL ITEM?")) return false;
 
-    // alert(pedido + " - " + cliente + " - " + precio + " - " + descuento + " - " + precioFull + " - " + moneda + " - " + onhand + " - " + cantidad + " - " + username);
-    // Using the core $.ajax() method
-    document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
+    var btnRef = document.getElementById("x" + i + "_boton");
+    if (btnRef) {
+        btnRef.innerHTML = '<i class="fa-solid fa-spinner"></i>';
+    }
+
     $.ajax({
-      // The URL for the request
-      url: "include/tdcfcv/eliminar_linea_pedido_tdcfcv.php",
-      // The data to send (will be converted to a query string)
-      data: { 
-              pedido: pedido, 
-              articulo: articulo, 
-              moneda: moneda, 
-              tasa_usd: tasa_usd, 
-              username: username, 
-              descuento: descuento,
-              descTransferencista: descTransferencista, 
-              id_item: id_item, 
-              nota: nota,
-              consignacion: consignacion,
-              doc_afectado: doc_afectado,
-            },
-      // Whether this is a POST or GET request
-      type: "POST",
-      // The type of data we expect back
-      dataType : "json",
+    url: "include/tdcfcv/eliminar_linea_pedido_tdcfcv.php",
+    data: { 
+        pedido: pedido, 
+        articulo: articulo, 
+        moneda: moneda, 
+        tasa_usd: tasa_usd, 
+        username: username, 
+        descuento: descuento,
+        descTransferencista: descTransferencista, 
+        id_item: id_item, 
+        nota: nota,
+        consignacion: consignacion,
+        doc_afectado: doc_afectado
+    },
+    type: "POST",
+    dataType: "json"
     })
-    // Code to run if the request succeeds (is done); The response is passed to the function
-    .done(function( json ) {
-        // console.log( json );
-        json = jQuery.parseJSON(json);
-        // alert(json.pedido + " -- " + json.mensaje);
-
-        if(json.estatus == 1) {
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
-
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
-          $("#pedido").val(json.pedido);
-          $("#xReglones").html(json.renglones);
-          $("#xUnidades").html(json.unidades);
-          if(json.total == json.monto_sin_descuento) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          }
-          else {
-            $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
-          }
-          // $("#x" + i + "_cantidad").val("0");
-          myCalc(i);
-          $("#x" + i + "_cantidad").prop('disabled', false);
-          $("#x" + i + "_precioFull").prop('disabled', false);
-          $("#x" + i + "_descuento").prop('disabled', false);
-          $("#x" + i + "_lote").prop('disabled', false);
-          $("#x" + i + "_vence").prop('disabled', false);
-
-          // $("#consignacion").html(json.consignacion); 
-          $("#doc_afectado").html(json.doc_afectado); 
-          $("#nro_documento").html(json.nro_documento); 
-        } 
-        else {
-          alert("Error: !!! " + json.mensaje + " !!!");
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
+    .done(function(json) {
+        if (json.estatus == 1) {
+            if (parseInt(json.renglones) <= 0 || json.pedido == "0" || json.pedido == "") {
+                window.location.replace("ViewOutTdcfcvList");
+                return; 
+            } 
+            else {
+                getCodigos3(json.pedido);
+            }
+        } else {
+        alert("Error: !!! " + json.mensaje + " !!!");
+        document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ', ' + id_item + ')"></i>';
         }
     })
-    // Code to run if the request fails; the raw request and status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
-      console.log( "Error: " + errorThrown );
-      console.log( "Status: " + status );
-      console.dir( xhr );
+    .fail(function(xhr, status, errorThrown) {
+    ew.alert("Sorry, there was a problem!");
+    console.log("Error: " + errorThrown);
+    console.log("Status: " + status);
+    console.dir(xhr);
+    });
+}
+
+function guardarModificacion(i, id_item) {
+    var pedido = $("#pedido").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
+    var username = '<?= CurrentUserName() ?>';
+    var descuento = $("#PorDesAct").val(); // Descuento general de la factura
+    var descTransferencista = $("#descTransferencista").val();
+    var nota = $("#nota").val();
+    
+    // Valores específicos de la línea a modificar
+    var nueva_cantidad = $("#x" + i + "_cantidad").val();
+    var nuevo_precio_full = $("#x" + i + "_precioFull").val();
+    var nuevo_descuento_item = $("#x" + i + "_descuento").val();
+    var nuevo_lote = $("#x" + i + "_lote").val();
+    var nuevo_vence = $("#x" + i + "_vence").val();
+
+    if (!confirm("¿DESEA GUARDAR LOS CAMBIOS EN ESTE ARTÍCULO?")) return false;
+
+    // Cambiamos el icono a spinner para indicar progreso
+    $("#x" + i + "_boton_edit").html('<i class="fa-solid fa-spinner fa-spin"></i>');
+
+    $.ajax({
+        url: "include/tdcfcv/modificar_linea_pedido_tdcfcv.php",
+        data: { 
+            pedido: pedido, 
+            articulo: articulo, 
+            id_item: id_item,
+            cantidad: nueva_cantidad,
+            precio_full: nuevo_precio_full,
+            descuento_item: nuevo_descuento_item,
+            lote: nuevo_lote,
+            vence: nuevo_vence,
+            moneda: moneda, 
+            tasa_usd: tasa_usd, 
+            username: username, 
+            descuento_global: descuento, // El % de la cabecera
+            descTransferencista: descTransferencista, 
+            nota: nota
+        },
+        type: "POST",
+        dataType: "json"
     })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    });  
-  }
+    .done(function(json) {
+        if (json.estatus == 1) {
+            // 1. Deshabilitar campos nuevamente
+            $("#x" + i + "_cantidad, #x" + i + "_precioFull, #x" + i + "_descuento, #x" + i + "_lote, #x" + i + "_vence").prop('disabled', true);
+            $("#x" + i + "_cantidad").closest('tr').removeClass('table-warning');
+
+            // 2. Restaurar botón de edición (Lápiz)
+            $("#x" + i + "_boton_edit").html('<i class="fa-solid fa-pencil text-warning" style="cursor:pointer;" onclick="js:habilitarEdicion(' + i + ', ' + id_item + ')"></i>');
+
+            // 3. Actualizar totales globales en la interfaz
+            $("#xReglones").html(json.renglones);
+            $("#xUnidades").html(json.unidades);
+            
+            if (json.total == json.monto_sin_descuento) {
+                $("#xTotalBs").html(formatter.format(json.total));
+                $("#xTotalUSD").html(formatter.format(json.total_usd));
+            } else {
+                $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
+                $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
+            }
+            
+            ew.alert("¡Cambios guardados correctamente!");
+        } else {
+            ew.alert("Error: " + json.mensaje);
+            // Si falla, volvemos a poner el botón de guardar para reintentar
+            $("#x" + i + "_boton_edit").html('<i class="fa-solid fa-floppy-disk text-success" style="cursor:pointer;" onclick="js:guardarModificacion(' + i + ', ' + id_item + ')"></i>');
+        }
+    })
+    .fail(function() {
+        ew.alert("Error de conexión al intentar modificar.");
+    });
+}
 
   function vaciar(i) {
     var username = '<?= CurrentUserName() ?>';
@@ -288,7 +332,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
           json = jQuery.parseJSON(json);
           // alert(json.pedido + " -- " + json.mensaje);
 
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Documento Id.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
           // $("#consignacion").html(json.consignacion); 
           $("#doc_afectado").html(json.doc_afectado); 
           $("#nro_documento").html(json.nro_documento); 
@@ -341,7 +385,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
         // alert(json.pedido + " -- " + json.mensaje);
 
         if(json.estatus == 1) {
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:sendProccess(' + json.pedido + ')" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-microchip"></i> Procesar Documento </button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Documento Id.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:sendProccess(' + json.pedido + ')" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-microchip"></i> Procesar Documento </button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewOutTdcfcvList\');"><i class="fa-solid fa-list"></i> Facturas </button>');
           $("#pedido").val(json.pedido);
           $("#xReglones").html(json.renglones);
           $("#xUnidades").html(json.unidades);
@@ -511,6 +555,13 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 
     if(i == 0) return false;
 
+    if(tasa_usd <= 0) { 
+        ew.alert("La Tasa B.C.V. debe ser mayor a 0. Por defecto se pondrá 1");
+        $("#tasa_usd").val(1);
+        tasa_usd = 1;
+    }
+    
+
     $.ajax({
       // The URL for the request
       url: "include/tdcfcv/moneda_tdcfcv_totales.php",
@@ -585,11 +636,29 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     var cantidad_lote = parseInt(myArr[2]); 
     var cantidad = parseInt($("#x" + i + "_cantidad").value());
     if(cantidad > cantidad_lote) {
-      alert("La cantidad solicitada es mayor a la existencia del lote");
+      ew.alert("La cantidad solicitada es mayor a la existencia del lote");
       $("#x" + i + "_cantidad").val("");
     } 
     myCalc(i);
   }
+
+    function habilitarEdicion(i, id_item) {
+        // 1. Habilitamos los inputs de la fila
+        $("#x" + i + "_cantidad").prop('disabled', false).focus();
+        $("#x" + i + "_precioFull").prop('disabled', false);
+        $("#x" + i + "_descuento").prop('disabled', false);
+        $("#x" + i + "_lote").prop('disabled', false);
+        $("#x" + i + "_vence").prop('disabled', false);
+
+        // 2. Cambiamos el botón de lápiz por uno de "Guardar"
+        var btnGuardar = '<i class="fa-solid fa-floppy-disk text-success" style="cursor:pointer;" title="Guardar Cambios" onclick="js:guardarModificacion(' + i + ', ' + id_item + ')"></i>';
+        $("#x" + i + "_boton_edit").html(btnGuardar);
+
+        // Opcional: Resaltar la fila para saber que está en edición
+        $("#x" + i + "_cantidad").closest('tr').addClass('table-warning');
+    }  
+
+
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -597,7 +666,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     <div class="col-sm-8">
 		  <h5>Cliente: <?= $cliente ?></h5>
       <div id="nroPedido">
-          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: <?= $pedido ?> </button> 
+          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Documento Id.: <?= $pedido ?> </button> 
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:vaciar(' . $pedido . ')"' : ''); ?> class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> 
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:getCodigos3(' . $pedido . ')"' : ''); ?> class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace('ViewOutTdcfcvList');"><i class="fa-solid fa-list"></i> Facturas </button>
       </div>
@@ -896,45 +965,67 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
       }
   }
 
-  function getCodigos3(i) { 
-      if(i != 0) {
-        $("#laboratorio").prop("disabled", false);
-        $("#articulo").prop("disabled", false);
-        $("#consignacion").prop("disabled", true);
-      } 
-      else {
-        if($("#consignacion").val() != "") {
-          $("#laboratorio").prop("disabled", false);
-          $("#articulo").prop("disabled", false);
-          $("#consignacion").prop("disabled", true);
-        } 
-      }
+    function getCodigos3(i) {
+        if (i != 0) {
+            $("#laboratorio").prop("disabled", false);
+            $("#articulo").prop("disabled", false);
+            $("#consignacion").prop("disabled", true);
+        } else {
+            if ($("#consignacion").val() != "") {
+                $("#laboratorio").prop("disabled", false);
+                $("#articulo").prop("disabled", false);
+                $("#consignacion").prop("disabled", true);
+            } 
+            else {
+                $("#consignacion").val("FC").trigger("change");
+                limpiar();
+            }
+        }
 
-      let inputCP = i
-      let lista = document.getElementById("lista2")
-      document.getElementById("lista2").innerHTML = ""
+        let inputCP = i;
+        let lista = document.getElementById("lista2");
+        document.getElementById("lista2").innerHTML = "";
 
-      if (inputCP > 0) {
-          let url = "include/tdcfcv/listar_tdcfcv.php"
-          let formData = new FormData()
-          formData.append("pedido", inputCP)
+        if (inputCP > 0) {
+            let url = "include/tdcfcv/listar_tdcfcv.php";
+            let formData = new FormData();
+            formData.append("pedido", inputCP);
 
-          fetch(url, {
-              method: "POST",
-              body: formData,
-              mode: "cors" //Default cors, no-cors, same-origin
-          }).then(response => response.json()) 
-              .then(data => {
-                  // alert(inputCP + " | " + data)
-                  lista.style.display = 'block'
-                  lista.innerHTML = data
-                  listar_pedido(i)
-              })
-              .catch(err => console.log(err))
-      } else {
-          lista.style.display = 'none'
-      }
-  }
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors"
+            })
+            .then(response => {
+                // Validación de sesión expirada (Respuesta del nuevo connect.php)
+                if (response.status === 401) {
+                    ew.alert("Su sesión ha expirado. Será redireccionado al inicio.");
+                    window.location.href = "logout"; // Ajusta la ruta según tu estructura (ej: ../logout o logout)
+                    return;
+                }
+                
+                // Si la respuesta no es exitosa por otra razón
+                if (!response.ok) {
+                    throw new Error("Error en la respuesta del servidor");
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                // Solo procedemos si 'data' existe (evita errores si el 401 cortó el flujo)
+                if (data) {
+                    lista.style.display = 'block';
+                    lista.innerHTML = data;
+                    listar_pedido(i);
+                }
+            })
+            .catch(err => {
+                console.error("Error crítico en getCodigos3:", err);
+            });
+        } else {
+            lista.style.display = 'none';
+        }
+    }
 
 
   function limpiar() {
@@ -986,6 +1077,11 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 
     $("#x" + i + "_precio").val(precio);
     $("#x" + i + "_total").val(total);
+
+    if (parseFloat($("#x" + i + "_cantidad").val()) <= 0) {
+        ew.alert("La cantidad debe ser mayor a cero");
+        return false;
+    }    
   }
 
   function redondearDecimales(numero, decimales) {

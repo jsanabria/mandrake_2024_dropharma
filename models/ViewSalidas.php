@@ -63,6 +63,7 @@ class ViewSalidas extends DbTable
     public $monto_usd;
     public $unidades;
     public $dias_credito;
+    public $asesor_asignado;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -257,9 +258,9 @@ class ViewSalidas extends DbTable
             'x_fecha', // Variable name
             'fecha', // Name
             '`fecha`', // Expression
-            '`fecha`', // Basic search expression
-            200, // Type
-            10, // Size
+            CastDateFieldForLike("`fecha`", 7, "DB"), // Basic search expression
+            135, // Type
+            76, // Size
             7, // Date/Time format
             false, // Is upload field
             '`fecha`', // Virtual expression
@@ -270,7 +271,8 @@ class ViewSalidas extends DbTable
             'TEXT' // Edit Tag
         );
         $this->fecha->InputTextType = "text";
-        $this->fecha->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->fecha->Raw = true;
+        $this->fecha->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['fecha'] = &$this->fecha;
 
         // estatus
@@ -508,6 +510,28 @@ class ViewSalidas extends DbTable
         $this->dias_credito->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->dias_credito->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['dias_credito'] = &$this->dias_credito;
+
+        // asesor_asignado
+        $this->asesor_asignado = new DbField(
+            $this, // Table
+            'x_asesor_asignado', // Variable name
+            'asesor_asignado', // Name
+            '`asesor_asignado`', // Expression
+            '`asesor_asignado`', // Basic search expression
+            200, // Type
+            30, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`asesor_asignado`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->asesor_asignado->InputTextType = "text";
+        $this->asesor_asignado->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['asesor_asignado'] = &$this->asesor_asignado;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -779,7 +803,7 @@ class ViewSalidas extends DbTable
         $sqlwrk = $sql instanceof QueryBuilder // Query builder
             ? (clone $sql)->resetQueryPart("orderBy")->getSQL()
             : $sql;
-        $pattern = '/^SELECT\s([\s\S]+)\sFROM\s/i';
+        $pattern = '/^SELECT\s([\s\S]+?)\sFROM\s/i';
         // Skip Custom View / SubQuery / SELECT DISTINCT / ORDER BY
         if (
             in_array($this->TableType, ["TABLE", "VIEW", "LINKTABLE"]) &&
@@ -1126,6 +1150,7 @@ class ViewSalidas extends DbTable
         $this->monto_usd->DbValue = $row['monto_usd'];
         $this->unidades->DbValue = $row['unidades'];
         $this->dias_credito->DbValue = $row['dias_credito'];
+        $this->asesor_asignado->DbValue = $row['asesor_asignado'];
     }
 
     // Delete uploaded files
@@ -1503,6 +1528,7 @@ class ViewSalidas extends DbTable
         $this->monto_usd->setDbValue($row['monto_usd']);
         $this->unidades->setDbValue($row['unidades']);
         $this->dias_credito->setDbValue($row['dias_credito']);
+        $this->asesor_asignado->setDbValue($row['asesor_asignado']);
     }
 
     // Render list content
@@ -1567,6 +1593,8 @@ class ViewSalidas extends DbTable
 
         // dias_credito
 
+        // asesor_asignado
+
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
 
@@ -1608,6 +1636,7 @@ class ViewSalidas extends DbTable
 
         // fecha
         $this->fecha->ViewValue = $this->fecha->CurrentValue;
+        $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
 
         // estatus
         $this->estatus->ViewValue = $this->estatus->CurrentValue;
@@ -1647,6 +1676,9 @@ class ViewSalidas extends DbTable
         // dias_credito
         $this->dias_credito->ViewValue = $this->dias_credito->CurrentValue;
         $this->dias_credito->ViewValue = FormatNumber($this->dias_credito->ViewValue, $this->dias_credito->formatPattern());
+
+        // asesor_asignado
+        $this->asesor_asignado->ViewValue = $this->asesor_asignado->CurrentValue;
 
         // id
         $this->id->HrefValue = "";
@@ -1716,6 +1748,10 @@ class ViewSalidas extends DbTable
         $this->dias_credito->HrefValue = "";
         $this->dias_credito->TooltipValue = "";
 
+        // asesor_asignado
+        $this->asesor_asignado->HrefValue = "";
+        $this->asesor_asignado->TooltipValue = "";
+
         // Call Row Rendered event
         $this->rowRendered();
 
@@ -1774,10 +1810,7 @@ class ViewSalidas extends DbTable
 
         // fecha
         $this->fecha->setupEditAttributes();
-        if (!$this->fecha->Raw) {
-            $this->fecha->CurrentValue = HtmlDecode($this->fecha->CurrentValue);
-        }
-        $this->fecha->EditValue = $this->fecha->CurrentValue;
+        $this->fecha->EditValue = FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
         $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
 
         // estatus
@@ -1856,6 +1889,14 @@ class ViewSalidas extends DbTable
             $this->dias_credito->EditValue = FormatNumber($this->dias_credito->EditValue, null);
         }
 
+        // asesor_asignado
+        $this->asesor_asignado->setupEditAttributes();
+        if (!$this->asesor_asignado->Raw) {
+            $this->asesor_asignado->CurrentValue = HtmlDecode($this->asesor_asignado->CurrentValue);
+        }
+        $this->asesor_asignado->EditValue = $this->asesor_asignado->CurrentValue;
+        $this->asesor_asignado->PlaceHolder = RemoveHtml($this->asesor_asignado->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1895,6 +1936,7 @@ class ViewSalidas extends DbTable
                     $doc->exportCaption($this->monto_usd);
                     $doc->exportCaption($this->unidades);
                     $doc->exportCaption($this->dias_credito);
+                    $doc->exportCaption($this->asesor_asignado);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -1913,6 +1955,7 @@ class ViewSalidas extends DbTable
                     $doc->exportCaption($this->monto_usd);
                     $doc->exportCaption($this->unidades);
                     $doc->exportCaption($this->dias_credito);
+                    $doc->exportCaption($this->asesor_asignado);
                 }
                 $doc->endExportRow();
             }
@@ -1950,6 +1993,7 @@ class ViewSalidas extends DbTable
                         $doc->exportField($this->monto_usd);
                         $doc->exportField($this->unidades);
                         $doc->exportField($this->dias_credito);
+                        $doc->exportField($this->asesor_asignado);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -1968,6 +2012,7 @@ class ViewSalidas extends DbTable
                         $doc->exportField($this->monto_usd);
                         $doc->exportField($this->unidades);
                         $doc->exportField($this->dias_credito);
+                        $doc->exportField($this->asesor_asignado);
                     }
                     $doc->endExportRow($rowCnt);
                 }

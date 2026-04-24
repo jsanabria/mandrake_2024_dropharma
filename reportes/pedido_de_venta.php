@@ -34,10 +34,29 @@ else
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+// FunciÃ³n para la marca de agua
+    function MarcaDeAgua()
+    {
+        $this->SetFont('Arial','B',40);
+        $this->SetTextColor(230,230,230); // Color gris muy claro
+        $this->RotatedText(35, 190, mb_convert_encoding("SIN DERECHO A CRÃ‰DITO FISCAL", "ISO-8859-1"), 45);
+        // $this->RotatedText(20, 230, mb_convert_encoding("SIN DERECHO A CRÃ‰DITO FISCAL", "ISO-8859-1"), 45);
+    }
+
+    // FunciÃ³n auxiliar para rotar texto
+    function RotatedText($x, $y, $txt, $angle)
+    {
+        // RotaciÃ³n de texto
+        $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm CP n', cos(deg2rad($angle)), sin(deg2rad($angle)), -sin(deg2rad($angle)), cos(deg2rad($angle)), $x, $y, -$x, -$y));
+        $this->Text($x, $y, $txt);
+        $this->_out('Q');
+    }
+
+    // Cabecera de p?gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
+		// Consulto datos de la compa??a 
+
 		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -106,6 +125,11 @@ class PDF extends FPDF
 		
 		$this->SetFont('Arial','',12);
 		$this->Cell(200, 6, $row["descripcion"],0,0,'C');
+
+		$this->Ln();
+		$this->SetFont('Arial','B',10);
+		$this->Cell(200, 6, mb_convert_encoding("SIN DERECHO A CRÃ‰DITO FISCAL", "ISO-8859-1"), 0, 0, 'C');		
+
 		
 
 
@@ -171,16 +195,20 @@ class PDF extends FPDF
 		$this->Cell(10, 6, "DES %", 1, 0, 'R');
 		$this->Cell(30, 6, "TOTAL", 1, 0, 'R');
 		$this->Ln(6);
+
+		// LLAMAR A LA MARCA DE AGUA AL EMPEZAR EL HEADER
+		$this->MarcaDeAgua();
+
 	}
 	
-	// Pie de página
+	// Pie de p?gina
 	function Footer()
 	{
-		// Posición: a 1,5 cm del final
+		// Posici?n: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Arial','I',8);
-		// Número de página
+		// N?mero de p?gina
 		$this->Cell(0,10,'Pag '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
@@ -248,7 +276,7 @@ class PDF extends FPDF
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaci?n del objeto de la clase heredada
 $pdf = new PDF('P', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();

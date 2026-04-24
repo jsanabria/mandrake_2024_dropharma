@@ -515,20 +515,14 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_unidades" class="view_out_tdcfcv_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
 <?php } ?>
-<?php if ($Page->estatus->Visible) { // estatus ?>
-        <th data-name="estatus" class="<?= $Page->estatus->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_estatus" class="view_out_tdcfcv_estatus"><?= $Page->renderFieldHeader($Page->estatus) ?></div></th>
+<?php if ($Page->_username->Visible) { // username ?>
+        <th data-name="_username" class="<?= $Page->_username->headerCellClass() ?>"><div id="elh_view_out_tdcfcv__username" class="view_out_tdcfcv__username"><?= $Page->renderFieldHeader($Page->_username) ?></div></th>
 <?php } ?>
 <?php if ($Page->id_documento_padre->Visible) { // id_documento_padre ?>
         <th data-name="id_documento_padre" class="<?= $Page->id_documento_padre->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_id_documento_padre" class="view_out_tdcfcv_id_documento_padre"><?= $Page->renderFieldHeader($Page->id_documento_padre) ?></div></th>
 <?php } ?>
 <?php if ($Page->pagado->Visible) { // pagado ?>
         <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_pagado" class="view_out_tdcfcv_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
-<?php } ?>
-<?php if ($Page->descuento->Visible) { // descuento ?>
-        <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_descuento" class="view_out_tdcfcv_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
-<?php } ?>
-<?php if ($Page->descuento2->Visible) { // descuento2 ?>
-        <th data-name="descuento2" class="<?= $Page->descuento2->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_descuento2" class="view_out_tdcfcv_descuento2"><?= $Page->renderFieldHeader($Page->descuento2) ?></div></th>
 <?php } ?>
 <?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
         <th data-name="asesor_asignado" class="<?= $Page->asesor_asignado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_asesor_asignado" class="view_out_tdcfcv_asesor_asignado"><?= $Page->renderFieldHeader($Page->asesor_asignado) ?></div></th>
@@ -633,11 +627,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->estatus->Visible) { // estatus ?>
-        <td data-name="estatus"<?= $Page->estatus->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_estatus" class="el_view_out_tdcfcv_estatus">
-<span<?= $Page->estatus->viewAttributes() ?>>
-<?= $Page->estatus->getViewValue() ?></span>
+    <?php if ($Page->_username->Visible) { // username ?>
+        <td data-name="_username"<?= $Page->_username->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv__username" class="el_view_out_tdcfcv__username">
+<span<?= $Page->_username->viewAttributes() ?>>
+<?= $Page->_username->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -654,22 +648,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_pagado" class="el_view_out_tdcfcv_pagado">
 <span<?= $Page->pagado->viewAttributes() ?>>
 <?= $Page->pagado->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->descuento->Visible) { // descuento ?>
-        <td data-name="descuento"<?= $Page->descuento->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_descuento" class="el_view_out_tdcfcv_descuento">
-<span<?= $Page->descuento->viewAttributes() ?>>
-<?= $Page->descuento->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->descuento2->Visible) { // descuento2 ?>
-        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_descuento2" class="el_view_out_tdcfcv_descuento2">
-<span<?= $Page->descuento2->viewAttributes() ?>>
-<?= $Page->descuento2->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

@@ -94,6 +94,7 @@ class Entradas extends DbTable
     public $cerrado;
     public $descuento;
     public $archivo_pedido;
+    public $unidades;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -1131,6 +1132,30 @@ class Entradas extends DbTable
         $this->archivo_pedido->SearchOperators = ["=", "<>", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['archivo_pedido'] = &$this->archivo_pedido;
 
+        // unidades
+        $this->unidades = new DbField(
+            $this, // Table
+            'x_unidades', // Variable name
+            'unidades', // Name
+            '`unidades`', // Expression
+            '`unidades`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`unidades`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->unidades->InputTextType = "text";
+        $this->unidades->Raw = true;
+        $this->unidades->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->unidades->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['unidades'] = &$this->unidades;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1730,6 +1755,7 @@ class Entradas extends DbTable
         $this->cerrado->DbValue = $row['cerrado'];
         $this->descuento->DbValue = $row['descuento'];
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
+        $this->unidades->DbValue = $row['unidades'];
     }
 
     // Delete uploaded files
@@ -2136,6 +2162,7 @@ class Entradas extends DbTable
         $this->cerrado->setDbValue($row['cerrado']);
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
+        $this->unidades->setDbValue($row['unidades']);
     }
 
     // Render list content
@@ -2245,6 +2272,8 @@ class Entradas extends DbTable
         // descuento
 
         // archivo_pedido
+
+        // unidades
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2532,6 +2561,10 @@ class Entradas extends DbTable
             $this->archivo_pedido->ViewValue = "";
         }
 
+        // unidades
+        $this->unidades->ViewValue = $this->unidades->CurrentValue;
+        $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2724,6 +2757,10 @@ class Entradas extends DbTable
         }
         $this->archivo_pedido->ExportHrefValue = $this->archivo_pedido->UploadPath . $this->archivo_pedido->Upload->DbValue;
         $this->archivo_pedido->TooltipValue = "";
+
+        // unidades
+        $this->unidades->HrefValue = "";
+        $this->unidades->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3036,6 +3073,14 @@ class Entradas extends DbTable
             $this->archivo_pedido->Upload->FileName = $this->archivo_pedido->CurrentValue;
         }
 
+        // unidades
+        $this->unidades->setupEditAttributes();
+        $this->unidades->EditValue = $this->unidades->CurrentValue;
+        $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
+        if (strval($this->unidades->EditValue) != "" && is_numeric($this->unidades->EditValue)) {
+            $this->unidades->EditValue = FormatNumber($this->unidades->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3094,6 +3139,7 @@ class Entradas extends DbTable
                     $doc->exportCaption($this->fecha_libro_compra);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->archivo_pedido);
+                    $doc->exportCaption($this->unidades);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -3135,6 +3181,7 @@ class Entradas extends DbTable
                     $doc->exportCaption($this->cerrado);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->archivo_pedido);
+                    $doc->exportCaption($this->unidades);
                 }
                 $doc->endExportRow();
             }
@@ -3191,6 +3238,7 @@ class Entradas extends DbTable
                         $doc->exportField($this->fecha_libro_compra);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->archivo_pedido);
+                        $doc->exportField($this->unidades);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -3232,6 +3280,7 @@ class Entradas extends DbTable
                         $doc->exportField($this->cerrado);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->archivo_pedido);
+                        $doc->exportField($this->unidades);
                     }
                     $doc->endExportRow($rowCnt);
                 }

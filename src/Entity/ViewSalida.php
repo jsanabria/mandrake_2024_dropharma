@@ -48,8 +48,8 @@ class ViewSalida extends AbstractEntity
     #[Column(name: "nro_documento", type: "string", nullable: true)]
     private ?string $nroDocumento;
 
-    #[Column(type: "string", nullable: true)]
-    private ?string $fecha;
+    #[Column(type: "datetime", nullable: true)]
+    private ?DateTime $fecha;
 
     #[Column(type: "string", nullable: true)]
     private ?string $estatus;
@@ -80,6 +80,9 @@ class ViewSalida extends AbstractEntity
 
     #[Column(name: "dias_credito", type: "integer", nullable: true)]
     private ?int $diasCredito;
+
+    #[Column(name: "asesor_asignado", type: "string", nullable: true)]
+    private ?string $asesorAsignado;
 
     public function __construct()
     {
@@ -152,14 +155,14 @@ class ViewSalida extends AbstractEntity
         return $this;
     }
 
-    public function getFecha(): ?string
+    public function getFecha(): ?DateTime
     {
-        return HtmlDecode($this->fecha);
+        return $this->fecha;
     }
 
-    public function setFecha(?string $value): static
+    public function setFecha(?DateTime $value): static
     {
-        $this->fecha = RemoveXss($value);
+        $this->fecha = $value;
         return $this;
     }
 
@@ -273,6 +276,17 @@ class ViewSalida extends AbstractEntity
     public function setDiasCredito(?int $value): static
     {
         $this->diasCredito = $value;
+        return $this;
+    }
+
+    public function getAsesorAsignado(): ?string
+    {
+        return HtmlDecode($this->asesorAsignado);
+    }
+
+    public function setAsesorAsignado(?string $value): static
+    {
+        $this->asesorAsignado = RemoveXss($value);
         return $this;
     }
 }

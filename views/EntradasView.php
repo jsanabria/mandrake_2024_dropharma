@@ -189,6 +189,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->unidades->Visible) { // unidades ?>
+    <tr id="r_unidades"<?= $Page->unidades->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_entradas_unidades"><?= $Page->unidades->caption() ?></span></td>
+        <td data-name="unidades"<?= $Page->unidades->cellAttributes() ?>>
+<span id="el_entradas_unidades" data-page="1">
+<span<?= $Page->unidades->viewAttributes() ?>>
+<?= $Page->unidades->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

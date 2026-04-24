@@ -1882,14 +1882,7 @@ class ViewFacturaAsesorList extends ViewFacturaAsesor
                     }
                 }
             } else {
-                $errmsg = str_replace('%s', $userAction, $Language->phrase("CustomActionNotFound"));
-                if (Post("ajax") == $userAction) { // Ajax
-                    echo "<p class=\"text-danger\">" . $errmsg . "</p>";
-                    return true;
-                } else {
-                    $this->setFailureMessage($errmsg);
-                    return false;
-                }
+                // Skip checking, handle by Row_CustomAction
             }
             $rows = $this->loadRs($filter)->fetchAllAssociative();
             $this->SelectedCount = count($rows);
@@ -1903,9 +1896,11 @@ class ViewFacturaAsesorList extends ViewFacturaAsesor
                 $this->SelectedIndex = 0;
                 foreach ($rows as $row) {
                     $this->SelectedIndex++;
-                    $processed = $listAction->handle($row, $this);
-                    if (!$processed) {
-                        break;
+                    if ($listAction) {
+                        $processed = $listAction->handle($row, $this);
+                        if (!$processed) {
+                            break;
+                        }
                     }
                     $processed = $this->rowCustomAction($userAction, $row);
                     if (!$processed) {

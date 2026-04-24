@@ -455,7 +455,6 @@ class Login extends Usuario
             } else {
                 RemoveCookie("AutoLogin"); // Clear cookie
             }
-            $this->writeAuditTrailOnLogin();
 
             // Call loggedin event
             $this->userLoggedIn($this->Username->CurrentValue);
@@ -534,14 +533,6 @@ class Login extends Usuario
         return $validateForm;
     }
 
-    // Write audit trail on login
-    protected function writeAuditTrailOnLogin()
-    {
-        global $Language;
-        $usr = CurrentUserIdentifier();
-        WriteAuditLog($usr, $Language->phrase("AuditTrailLogin"), CurrentUserIP());
-    }
-
     // Page Load event
     public function pageLoad()
     {
@@ -612,15 +603,28 @@ class Login extends Usuario
     // User Logging In event
     public function userLoggingIn($usr, &$pwd)
     {
-        // Enter your code here
-        // To cancel, set return value to false
+        // 1. Consultamos el estatus del usuario en la base de datos
+        // Usamos QuotedValue para evitar inyecciones SQL
+        $sql = "SELECT activo FROM usuario WHERE username = " . QuotedValue($usr, DataType::STRING);
+        $activo = ExecuteScalar($sql);
+
+        // 2. Verificamos si el valor es 'N'
+        if ($activo === "N") {
+            // Establecemos un mensaje de error que se mostrará en la pantalla de login
+            $this->setFailureMessage("Su cuenta está inactiva. Por favor, contacte al administrador.");
+
+            // Retornamos false para cancelar el inicio de sesión
+            return false;
+        }
+
+        // Si está activo o el valor es distinto de 'N', permitimos la entrada
+        // WriteAuditTrail("", CurrentDateTime(), CurrentUserIP(), CurrentUserName(), "login", "usuario", "username", $usr, "", "");
         return true;
     }
-
     // User Logged In event
     public function userLoggedIn($usr)
     {
-        //Log("User Logged In");
+        WriteAuditTrail("", CurrentDateTime(), CurrentUserIP(), $usr, "login", "usuario", "username", $usr, "", "");
     }
 
     // User Login Error event

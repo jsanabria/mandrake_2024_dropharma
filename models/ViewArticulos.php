@@ -261,7 +261,7 @@ class ViewArticulos extends DbTable
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->cantidad_en_mano->addMethod("getDefault", fn() => 0);
+        $this->cantidad_en_mano->addMethod("getDefault", fn() => 0.00);
         $this->cantidad_en_mano->InputTextType = "text";
         $this->cantidad_en_mano->Raw = true;
         $this->cantidad_en_mano->Nullable = false; // NOT NULL field

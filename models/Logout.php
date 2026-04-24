@@ -272,7 +272,6 @@ class Logout
 
             // Password changed (after expired password)
             $isPasswordChanged = Config("USE_TWO_FACTOR_AUTHENTICATION") && Session(SESSION_STATUS) == "passwordchanged";
-            $this->writeAuditTrailOnLogout();
 
             // Call User LoggedOut event
             $this->userLoggedOut($username);
@@ -338,13 +337,6 @@ class Logout
         }
     }
 
-    // Write audit trail on logout
-    protected function writeAuditTrailOnLogout()
-    {
-        global $Language;
-        WriteAuditLog(CurrentUserIdentifier(), $Language->phrase("AuditTrailLogout"), CurrentUserIP());
-    }
-
     // Page Load event
     public function pageLoad()
     {
@@ -383,6 +375,7 @@ class Logout
     // User Logged Out event
     public function userLoggedOut($usr)
     {
-        //Log("User Logged Out");
+        // Registramos el logout antes de que se destruya la sesión
+        WriteAuditTrail("", CurrentDateTime(), CurrentUserIP(), $usr, "logout", "usuario", "username", $usr, "", "");
     }
 }

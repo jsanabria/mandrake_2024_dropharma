@@ -55,7 +55,12 @@ loadjs.ready(["wrapper", "head"], function () {
             ["checker_date", [fields.checker_date.visible && fields.checker_date.required ? ew.Validators.required(fields.checker_date.caption) : null], fields.checker_date.isInvalid],
             ["packer", [fields.packer.visible && fields.packer.required ? ew.Validators.required(fields.packer.caption) : null], fields.packer.isInvalid],
             ["packer_date", [fields.packer_date.visible && fields.packer_date.required ? ew.Validators.required(fields.packer_date.caption) : null], fields.packer_date.isInvalid],
-            ["fotos", [fields.fotos.visible && fields.fotos.required ? ew.Validators.fileRequired(fields.fotos.caption) : null], fields.fotos.isInvalid]
+            ["fotos", [fields.fotos.visible && fields.fotos.required ? ew.Validators.fileRequired(fields.fotos.caption) : null], fields.fotos.isInvalid],
+            ["descuento2", [fields.descuento2.visible && fields.descuento2.required ? ew.Validators.required(fields.descuento2.caption) : null, ew.Validators.float], fields.descuento2.isInvalid],
+            ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
+            ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
+            ["monto_igtf", [fields.monto_igtf.visible && fields.monto_igtf.required ? ew.Validators.required(fields.monto_igtf.caption) : null, ew.Validators.float], fields.monto_igtf.isInvalid],
+            ["doc_afe", [fields.doc_afe.visible && fields.doc_afe.required ? ew.Validators.required(fields.doc_afe.caption) : null, ew.Validators.integer], fields.doc_afe.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -83,6 +88,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "pagado": <?= $Page->pagado->toClientList($Page) ?>,
             "consignacion": <?= $Page->consignacion->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
+            "igtf": <?= $Page->igtf->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -347,6 +353,86 @@ loadjs.ready("fsalidasedit", function() {
 <input type="hidden" name="fn_x_archivo_pedido" id= "fn_x_archivo_pedido" value="<?= $Page->archivo_pedido->Upload->FileName ?>">
 <input type="hidden" name="fa_x_archivo_pedido" id= "fa_x_archivo_pedido" value="<?= (Post("fa_x_archivo_pedido") == "0") ? "0" : "1" ?>">
 <table id="ft_x_archivo_pedido" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+    <div id="r_descuento2"<?= $Page->descuento2->rowAttributes() ?>>
+        <label id="elh_salidas_descuento2" for="x_descuento2" class="<?= $Page->LeftColumnClass ?>"><?= $Page->descuento2->caption() ?><?= $Page->descuento2->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->descuento2->cellAttributes() ?>>
+<span id="el_salidas_descuento2">
+<input type="<?= $Page->descuento2->getInputTextType() ?>" name="x_descuento2" id="x_descuento2" data-table="salidas" data-field="x_descuento2" value="<?= $Page->descuento2->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->descuento2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento2->formatPattern()) ?>"<?= $Page->descuento2->editAttributes() ?> aria-describedby="x_descuento2_help">
+<?= $Page->descuento2->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->descuento2->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+    <div id="r_igtf"<?= $Page->igtf->rowAttributes() ?>>
+        <label id="elh_salidas_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->igtf->caption() ?><?= $Page->igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->igtf->cellAttributes() ?>>
+<span id="el_salidas_igtf">
+<template id="tp_x_igtf">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="salidas" data-field="x_igtf" name="x_igtf" id="x_igtf"<?= $Page->igtf->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_igtf" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_igtf"
+    name="x_igtf"
+    value="<?= HtmlEncode($Page->igtf->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_igtf"
+    data-target="dsl_x_igtf"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->igtf->isInvalidClass() ?>"
+    data-table="salidas"
+    data-field="x_igtf"
+    data-page="1"
+    data-value-separator="<?= $Page->igtf->displayValueSeparatorAttribute() ?>"
+    <?= $Page->igtf->editAttributes() ?>></selection-list>
+<?= $Page->igtf->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->igtf->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+    <div id="r_monto_base_igtf"<?= $Page->monto_base_igtf->rowAttributes() ?>>
+        <label id="elh_salidas_monto_base_igtf" for="x_monto_base_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_base_igtf->caption() ?><?= $Page->monto_base_igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_base_igtf->cellAttributes() ?>>
+<span id="el_salidas_monto_base_igtf">
+<input type="<?= $Page->monto_base_igtf->getInputTextType() ?>" name="x_monto_base_igtf" id="x_monto_base_igtf" data-table="salidas" data-field="x_monto_base_igtf" value="<?= $Page->monto_base_igtf->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->monto_base_igtf->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_base_igtf->formatPattern()) ?>"<?= $Page->monto_base_igtf->editAttributes() ?> aria-describedby="x_monto_base_igtf_help">
+<?= $Page->monto_base_igtf->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->monto_base_igtf->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+    <div id="r_monto_igtf"<?= $Page->monto_igtf->rowAttributes() ?>>
+        <label id="elh_salidas_monto_igtf" for="x_monto_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_igtf->caption() ?><?= $Page->monto_igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_igtf->cellAttributes() ?>>
+<span id="el_salidas_monto_igtf">
+<input type="<?= $Page->monto_igtf->getInputTextType() ?>" name="x_monto_igtf" id="x_monto_igtf" data-table="salidas" data-field="x_monto_igtf" value="<?= $Page->monto_igtf->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->monto_igtf->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_igtf->formatPattern()) ?>"<?= $Page->monto_igtf->editAttributes() ?> aria-describedby="x_monto_igtf_help">
+<?= $Page->monto_igtf->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->monto_igtf->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->doc_afe->Visible) { // doc_afe ?>
+    <div id="r_doc_afe"<?= $Page->doc_afe->rowAttributes() ?>>
+        <label id="elh_salidas_doc_afe" for="x_doc_afe" class="<?= $Page->LeftColumnClass ?>"><?= $Page->doc_afe->caption() ?><?= $Page->doc_afe->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->doc_afe->cellAttributes() ?>>
+<span id="el_salidas_doc_afe">
+<input type="<?= $Page->doc_afe->getInputTextType() ?>" name="x_doc_afe" id="x_doc_afe" data-table="salidas" data-field="x_doc_afe" value="<?= $Page->doc_afe->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->doc_afe->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afe->formatPattern()) ?>"<?= $Page->doc_afe->editAttributes() ?> aria-describedby="x_doc_afe_help">
+<?= $Page->doc_afe->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->doc_afe->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

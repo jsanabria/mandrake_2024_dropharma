@@ -56,7 +56,7 @@ class ViewArticulo extends AbstractEntity
 
     public function __construct()
     {
-        $this->cantidadEnMano = "0";
+        $this->cantidadEnMano = "0.00";
         $this->ultimoCosto = "0.00";
     }
 

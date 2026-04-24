@@ -169,6 +169,7 @@ class EntradasAdd extends Entradas
         $this->cerrado->Visible = false;
         $this->descuento->setVisibility();
         $this->archivo_pedido->setVisibility();
+        $this->unidades->setVisibility();
     }
 
     // Constructor
@@ -895,6 +896,16 @@ class EntradasAdd extends Entradas
             }
         }
 
+        // Check field name 'unidades' first before field var 'x_unidades'
+        $val = $CurrentForm->hasValue("unidades") ? $CurrentForm->getValue("unidades") : $CurrentForm->getValue("x_unidades");
+        if (!$this->unidades->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->unidades->Visible = false; // Disable update for API request
+            } else {
+                $this->unidades->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         $this->getUploadFiles(); // Get upload files
@@ -921,6 +932,7 @@ class EntradasAdd extends Entradas
         $this->fecha_registro_retenciones->CurrentValue = $this->fecha_registro_retenciones->FormValue;
         $this->fecha_registro_retenciones->CurrentValue = UnFormatDateTime($this->fecha_registro_retenciones->CurrentValue, $this->fecha_registro_retenciones->formatPattern());
         $this->descuento->CurrentValue = $this->descuento->FormValue;
+        $this->unidades->CurrentValue = $this->unidades->FormValue;
     }
 
     /**
@@ -1002,6 +1014,7 @@ class EntradasAdd extends Entradas
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
+        $this->unidades->setDbValue($row['unidades']);
     }
 
     // Return a row with default values
@@ -1048,6 +1061,7 @@ class EntradasAdd extends Entradas
         $row['cerrado'] = $this->cerrado->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
+        $row['unidades'] = $this->unidades->DefaultValue;
         return $row;
     }
 
@@ -1201,6 +1215,9 @@ class EntradasAdd extends Entradas
 
         // archivo_pedido
         $this->archivo_pedido->RowCssClass = "row";
+
+        // unidades
+        $this->unidades->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1490,6 +1507,10 @@ class EntradasAdd extends Entradas
                 $this->archivo_pedido->ViewValue = "";
             }
 
+            // unidades
+            $this->unidades->ViewValue = $this->unidades->CurrentValue;
+            $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1548,6 +1569,9 @@ class EntradasAdd extends Entradas
                 $this->archivo_pedido->HrefValue = "";
             }
             $this->archivo_pedido->ExportHrefValue = $this->archivo_pedido->UploadPath . $this->archivo_pedido->Upload->DbValue;
+
+            // unidades
+            $this->unidades->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -1753,6 +1777,14 @@ class EntradasAdd extends Entradas
                 RenderUploadField($this->archivo_pedido);
             }
 
+            // unidades
+            $this->unidades->setupEditAttributes();
+            $this->unidades->EditValue = $this->unidades->CurrentValue;
+            $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
+            if (strval($this->unidades->EditValue) != "" && is_numeric($this->unidades->EditValue)) {
+                $this->unidades->EditValue = FormatNumber($this->unidades->EditValue, null);
+            }
+
             // Add refer script
 
             // tipo_documento
@@ -1811,6 +1843,9 @@ class EntradasAdd extends Entradas
                 $this->archivo_pedido->HrefValue = "";
             }
             $this->archivo_pedido->ExportHrefValue = $this->archivo_pedido->UploadPath . $this->archivo_pedido->Upload->DbValue;
+
+            // unidades
+            $this->unidades->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1920,6 +1955,14 @@ class EntradasAdd extends Entradas
                 if ($this->archivo_pedido->Upload->FileName == "" && !$this->archivo_pedido->Upload->KeepFile) {
                     $this->archivo_pedido->addErrorMessage(str_replace("%s", $this->archivo_pedido->caption(), $this->archivo_pedido->RequiredErrorMessage));
                 }
+            }
+            if ($this->unidades->Visible && $this->unidades->Required) {
+                if (!$this->unidades->IsDetailKey && EmptyValue($this->unidades->FormValue)) {
+                    $this->unidades->addErrorMessage(str_replace("%s", $this->unidades->caption(), $this->unidades->RequiredErrorMessage));
+                }
+            }
+            if (!CheckInteger($this->unidades->FormValue)) {
+                $this->unidades->addErrorMessage($this->unidades->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -2107,6 +2150,9 @@ class EntradasAdd extends Entradas
                 $rsnew['archivo_pedido'] = $this->archivo_pedido->Upload->FileName;
             }
         }
+
+        // unidades
+        $this->unidades->setDbValueDef($rsnew, $this->unidades->CurrentValue, false);
         return $rsnew;
     }
 
@@ -2163,6 +2209,9 @@ class EntradasAdd extends Entradas
         }
         if (isset($row['archivo_pedido'])) { // archivo_pedido
             $this->archivo_pedido->setFormValue($row['archivo_pedido']);
+        }
+        if (isset($row['unidades'])) { // unidades
+            $this->unidades->setFormValue($row['unidades']);
         }
     }
 

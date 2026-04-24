@@ -156,6 +156,7 @@ class ArticuloDelete extends Articulo
         $this->activo->setVisibility();
         $this->lote->Visible = false;
         $this->fecha_vencimiento->Visible = false;
+        $this->indexado->setVisibility();
     }
 
     // Constructor
@@ -441,6 +442,7 @@ class ArticuloDelete extends Articulo
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->indexado);
 
         // Set up Breadcrumb
         $this->setupBreadcrumb();
@@ -652,6 +654,7 @@ class ArticuloDelete extends Articulo
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
+        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Return a row with default values
@@ -685,6 +688,7 @@ class ArticuloDelete extends Articulo
         $row['activo'] = $this->activo->DefaultValue;
         $row['lote'] = $this->lote->DefaultValue;
         $row['fecha_vencimiento'] = $this->fecha_vencimiento->DefaultValue;
+        $row['indexado'] = $this->indexado->DefaultValue;
         return $row;
     }
 
@@ -753,6 +757,8 @@ class ArticuloDelete extends Articulo
         // lote
 
         // fecha_vencimiento
+
+        // indexado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -922,6 +928,13 @@ class ArticuloDelete extends Articulo
             $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
             $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
 
+            // indexado
+            if (strval($this->indexado->CurrentValue) != "") {
+                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+            } else {
+                $this->indexado->ViewValue = null;
+            }
+
             // foto
             if (!EmptyValue($this->foto->Upload->DbValue)) {
                 $this->foto->HrefValue = GetFileUploadUrl($this->foto, $this->foto->htmlDecode($this->foto->Upload->DbValue)); // Add prefix/suffix
@@ -993,6 +1006,10 @@ class ArticuloDelete extends Articulo
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
+
+            // indexado
+            $this->indexado->HrefValue = "";
+            $this->indexado->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1154,6 +1171,8 @@ class ArticuloDelete extends Articulo
                 case "x_articulo_inventario":
                     break;
                 case "x_activo":
+                    break;
+                case "x_indexado":
                     break;
                 default:
                     $lookupFilter = "";

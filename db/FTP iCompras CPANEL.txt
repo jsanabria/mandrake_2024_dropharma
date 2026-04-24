@@ -1,0 +1,238 @@
+======================================================================================================================================
+ESTRUCTURA Y DEFINICION DE LAS TRAZA (TP3) 
+======================================================================================================================================
+FULLTECH360, C.A.
+REALIZADO POR: ING. MAURICIO BLANCO
+DATE         : 12-05-2025
+NOTA         : ESTA ESTRUCTURA ES IDENTICA A LA TABLA PRODUCTO DEL SEPED
+               EL CLIENTE (DROGUERIA O PROVEEDOR SUBIRA EL CATALOGO DE PRODUCTO VIA FTP
+               EL USUARIO Y CLAVE SERA SUMISTRADOR POR ISB SISTEMAS DONDE TENDRA DOS CARPETAS
+               /entrada     ->     colocar el catalogo de producto en el formato que se indica mas adelante
+               /salida      ->     icompras360 colocara los pedidos de los clientes en el formato q se indica mas adelante
+
+              FTP     : ftp.icompras360.net
+              USUARIO : icompras360_411939188   
+              CLAVE   : 411939188$.*
+
+
+	      * * * * * * * *   CREDENCIALES EXCLUSIVAS PARA DROPHARMA D&M, C.A. * * * * * * *
+
+
+CONSIDERACIONES GENERALES
+=============================================================================================================================================================================================
+A.- Todos los campos numericos deben ir sin separadpr de miles y el caracter decimal es el (.) punto. Ej. 1971.00
+B.- Todos los campos numericos decimales deben tener 2 cifras decimales. Ej. 16.00
+C.- Los campos de texto se deben de filtrar todos los caracteres especiales, retorno de carros, salto de linea, letras acentuadas
+    la letra ñ y Ñ. 
+D.- los campos de fecha deben de tener el siguiente formato YYYY-MM-DD HH:MM:SS Ej. 2023-12-31 00:00:00
+E.- Se debe generar un archivo con nombre tp3_rif.txt en una ruta de ftp que se le asigne por ISB SISTEMAS
+    Y copiar el archivo con la frecuencia que ustedes consideren necesario recomendamos de 30 a 60 minutos
+F.- El caracter separador es el "|".
+
+ 
+
+1.- INVENTARIO (inventario.txt, en minuscula todo)
+=============================================================================================================================================================================================
+6942189530159|000003|ACETAMINOFEN SUSP ORAL 125MG |M|0.00|N|J412639463|418.68|26.00|1|0.00 |0.00|0|0.00|418.68|0.00|0|2023-05-02 12:00:00|PRINCIPAL|0|0.00|211214 |2024-12-15 00:00:00|KMPLUS   |ACETAMINOFEN |33.23 |N/A|ACETAMINOFEN SUSP ORAL 125MG|404310975|2023-07-28 11:38:21|MEDICAMENTOS|CON PRESCRIPCION FACULTATIVA|N/A|N/A|N/A|N/A|400.94|0.00|0.00|0.00|0.00|1|99999999|0|0|26|0|0|N/A|N/A|0|NORMAL|BSS|29.30|0|0|0.00|N/A|0|0|0|0.00|N/A|
+  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+0  -> barra               varchar(20)         6942189530159                  CODIGO DE BARRA O REFERENCIA DEL PRODDUCTO, NO DEBERIA IR EN BLANCO)
+1  -> codprod             varchar(20)         000003                         CODIGO DEL PRODUCTO (CAMPO CLAVE VALOR UNICO)
+2  -> desprod             varchar(150)        ACETAMINOFEN SUSP ORAL 125MG   DESCRIPCION DEL PRODUCTO
+3  -> tipo                varchar(1)          M                              M-> MEDICIONA Y C->MISCELANEO (SI PAGA IVA ES MISCELANEO)
+4  -> iva                 decimal(18,2)       0.00                           IMPUSTO AL VALOR AGREGADO (0.00 o 16.00)
+5  -> regulado            varchar(1)          N                              (VALOR POR DEFECTO) 
+6  -> codprov             varchar(250)        J412639463                     CODIGO DEL PROVEEDOR
+7  -> precio1             decimal(18,2)       418.68                         PRECIO1 DEL PRODUCTO SIN IVA 
+8  -> cantidad            decimal(18,2)       26.00                          EXISTENCIA DEL PRODUCTO
+9  -> bulto               varchar(50)         1                              UNIDAD DE MANEJO DEL BULTO
+10 -> da                  decimal(18,2)       0.00                           DESCUENTO ADICCIONAL DEL PRODUCTO
+11 -> da2 (oferta)        decimal(18,2)       0.00                           DESCUENTO ADICCIONAL 2 DEL PRODUCTO                           
+12 -> upre                int                 0                              UNIDAD DE PREEMPAQUE
+13 -> ppre                decimal(18,2)       0.00                           PORCENTAJE DEL PREEMPAQUE    
+14 -> psugerido           decimal(18,2)       418.68                         PRECIO SUGERIDO
+15 -> pgris               decimal(18,2)       0.00                           PRECIO GRIS   
+16 -> nuevo               varchar(1)          0                              (VALOR POR DEFECTO)  
+17 -> fechaUltComp        datetime            2023-05-02 12:00:00            FECHA ULTIMA COMPRA DEL PRODUCTO
+18 -> tipocatalogo        varchar(20)         PRINCIPAL                      (VALOR POR DEFECTO)
+19 -> cuarentena          varchar(1)          0                              (VALOR POR DEFECTO)
+20 -> dctoneto            decimal(18,2)       0.00                           (VALOR POR DEFECTO)
+21 -> lote                varchar(100)        211214                         NUMERO DEL LOTE SI MANEJA, EN CASO CONTRARIO "N/A" 
+22 -> fecvence            varchar(100)        2024-12-15 00:00:00            FECHA DE VENCIMIENTO DEL LOTE, EN CASO CONTRARIO "N/A"
+23 -> marcamodelo         varchar(100)        KMPLUS                         MARCA DEL PRODUCTO   
+24 -> pactivo             varchar(100)        ACETAMINOFEN                   PRINCIPIO ACTIVO 
+25 -> costo               decimal(18,2)       33.23                          COSTO DEL PRODUCTO
+26 -> ubicacion           varchar(100)        N/A                            (VALOR POR DEFECTO)  
+27 -> descorta            varchar(100)        ACETAMINOFEN SUSP ORAL 125MG   DESCRIPCION CORTA DEL PRODUCTO
+28 -> codisb              varchar(20)         411939188                      RIF DEL CLIENTE (SOLO NUMERO), EN ESTE CASO DE LA DROGUERIA O PROVEEDOR
+29 -> feccatalogo         varchar(100)        2023-07-28 11:38:21            FECHA DEL CATALOGO
+30 -> departamento        varchar(100)        MEDICAMENTOS                   DEPARTAMENTO DEL PRODUCTO, EN CASO CONTRARIO "N/A" 
+31 -> grupo               varchar(100)        CON PRESCRIPCION FACULTATIVA   GRUPO DEL PRODUCTO, EN CASO CONTRARIO "N/A" 
+32 -> subgrupo            varchar(100)        N/A                            SUBGRUPO DEL PRODUCTO, EN CASO CONTRARIO "N/A" 
+33 -> opc1                varchar(100)        N/A                            (VALOR POR DEFECTO) 
+34 -> opc2                varchar(100)        N/A                            (VALOR POR DEFECTO)  
+35 -> opc3                varchar(100)        N/A                            (VALOR POR DEFECTO)
+36 -> precio2             decimal(18,2)       400.94                         PRECIO2 DEL PRODUCTO SIN IVA 
+37 -> precio3             decimal(18,2)       0.00                           PRECIO3 DEL PRODUCTO SIN IVA     
+38 -> precio4             decimal(18,2)       0.00                           PRECIO4 DEL PRODUCTO SIN IVA   
+39 -> precio5             decimal(18,2)       0.00                           PRECIO5 DEL PRODUCTO SIN IVA 
+40 -> precio6             decimal(18,2)       0.00                           PRECIO6 DEL PRODUCTO SIN IVA 
+41 -> undmin              int                 1                              (VALOR POR DEFECTO)
+42 -> undmax              int                 99999999                       (VALOR POR DEFECTO)
+43 -> undmultiplo         int                 0                              (VALOR POR DEFECTO)
+44 -> cantpub             int                 0                              (VALOR POR DEFECTO)
+45 -> cantreal            int                 26                      	     EXISTENCIA DEL PRODUCTO
+46 -> manejalote          int                 0                              (VALOR POR DEFECTO)
+47 -> indevolutivo        int                 0                              (VALOR POR DEFECTO) 
+48 -> codcolor            varchar(20)         N/A                            (VALOR POR DEFECTO) 
+49 -> codtalla            varchar(20)         N/A                            (VALOR POR DEFECTO)
+50 -> psicotropico        int                 0                              (VALOR POR DEFECTO)
+51 -> clase               varchar(20)         NORMAL                         (VALOR POR DEFECTO)
+52 -> moneda              varchar(20)         BSS                            (VALOR POR DEFECTO) 
+53 -> factorcambiario     decimal(18,2)       29.30                          VALOR DE LA TASA CAMBIARIA DEL DIA 
+54 -> refrigerado         int                 0                              (VALOR POR DEFECTO)
+55 -> FlagFactOM          varchar(20)         0                              (VALOR POR DEFECTO)
+56 -> dv                  decimal(18,2)       0.00                           (VALOR POR DEFECTO)
+57 -> dvDetalle           varchar(500)        N/A                            (VALOR POR DEFECTO)
+58 -> SuperOFertaMincp    int                 0                              (VALOR POR DEFECTO)
+59 -> dcredito            int                 0                              (VALOR POR DEFECTO)
+60 -> cantcomp            int                 0                              (VALOR POR DEFECTO)
+61 -> dct                 decimal(18,2)       0.00                           (VALOR POR DEFECTO)
+62 -> codac3              varchar(20)         N/A                            (VALOR POR DEFECTO)
+==============================================================================================================
+*10 (da) : DESCUENTO ADICIONAL, POR DEFECTO 0.00
+*11 (da2): DESCUENTO ADICIONAL2, POR DEFECTO 0.00
+
+*56 (dv)        -> 1.00 (DESCUENTO DEL VALOR DE LA PRIMERA ESCALA, POR DEFECTO 0.00)
+*57 (dvDetalle) -> ESTRUCTURA DE LOS DESCUENTO POR VOLUMEN, POR DEFECTO DEJAR EN BLANCO) 
+                   1-10-1.00;11-20-2.00;
+                   |  |  |
+                   |  |  └-----> PORCENTAJE APLICADO 
+                   |  |
+                   |  └--------> UNIDADES HASTA
+                   |
+                   └-----------> UNIDADES DESDE  
+
+NOTA: EL ICOMPRAS TIENE LAS OPCIONES DE PODER MANEJAR LOS DESCUENTOS (OPCIONAL) 
+* ESTOS DESCUENTOS SE PUEDEN MANEJAR DIRECTAMENTE DESDE EL PORTAL WEB, HACIENDO CASO OMISO AL LOS DESCUENTOS Q PUEDA ESTAR ENVIANDO DESDE SU ERP. PERO HAY QUE INDICARLE ALSOPORTE DE ICOMPRAS
+==============================================================================================================
+
+
+2.- CLIENTE (cliente.txt)
+    tabla de clientes de la drogueria, deben de cargar todos los clientes
+EJEMPLO Y EXPLICACION DEL CAMPO
+===========================================================================================================================================================
+
+0  -> codcli          : 11293757                                (CODIGO DEL CLIENTE)
+1  -> nombre          : KEILA NAVA                              (NOMBRE O DESCRIPCION DEL CLIENTE)
+2  -> rif             : V112937575                              (RIF DEL CLIENTE)
+3  -> direccion       : AV. 12 CALLE 82 80-50 SECTOR VERITAS    (DIRECCION DEL CLIENTE)
+4  -> entrega         : AV. 12 CALLE 82 80-50 SECTOR VERITAS    (DIRECCION DE ENTREGA)
+5  -> telefono        : 0414-6147039                            (TELEFONO CONTACTO DEL CLIENTE)
+6  -> contacto        : KEILA NAVA                              (NOMBRE DEL CONTACTO)
+7  -> zona            :                                         (CODIGO DE LA ZONA DEL CLIENTE, DEFECTO N/A)
+8  -> usuario         : N/A                                     (VALOR POR DEFECTO)
+9  -> clave           : N/A                                     (VALOR POR DEFECTO)
+10 -> ppago           : 0.00                                    (PORCENTAJE DE DESCUENTO DE PRONTO PAGO)
+11 -> dcredito        : 1                                       (DIAS DE CREDITO)
+12 -> estado          : ACTIVO                                  (ACTIVO O INACTIVO)
+13 -> canal           : OFICINA                                 (VALOR POR DEFECTO)
+14 -> limite          : 5.45                                    (MONTO LIMITE DE CREDITO EN BSS)
+15 -> tipo            : CREDITO                                 (TIPO DE CLIENTE, CREDITO O CONTADO)
+16 -> dcorte          : LUNES                                   (VALOR POR DEFECTO)
+17 -> dcomercial      : 0.00                                    (PORCENTAJE DE DESCUENTO COMERCIAL DEL CLIENTE)
+18 -> cadena          : N/A                                     (VALOR POR DEFECTO)
+19 -> agenda          : N/A                                     (VALOR POR DEFECTO)
+20 -> dinternet       : 0.00                                    (VALOR POR DEFECTO)
+21 -> ruta            : MARACAIBO                               (RUTA DE UBICACION DEL CLIENTE)
+22 -> cb              : N/A                                     (VALOR POR DEFECTO)
+23 -> especial        : 0.00                                    (VALOR POR DEFECTO)
+24 -> mpermiso        : 0.00                                    (VALOR POR DEFECTO)
+25 -> dotro           : 0.00                                    (VALOR POR DEFECTO)
+26 -> saldo           : 100.00                                  (MONTO SALDO DEUDOR EN BS)
+27 -> email           : keilanava93@gmail.com                   (CORREO DEL CLIENTE)
+28 -> tipocatalogo    : PRINCIPAL                               (VALOR POR DEFECTO)  
+29 -> codisb          : 409767205                               (RIF DE LA DROGUERIA, SOLO NUMERO)
+30 -> usaprecio       : 1                                       (TIPO DE PRECIO ASIGANDO AL CLIENTE)
+31 -> nuevo           : 0                                       (VALOR POR DEFECTO) 
+32 -> vencido         : 50.00                                   (MONTO VENCIDO EN BS)
+33 -> saldoDs         : 20.00                                   (MONTO SALDO DEUDOR EN DS)
+34 -> vencidoDs       : 10.00                                   (MONTO VENCIDO EN DS)
+35 -> limiteDs        : 1000.00                                 (LIMITE DR CREDITO EN DOLARES) 
+36 -> critSepMoneda   : 0                                       (VALOR POR DEFECTO) 
+37 -> DctoPreferencial: 0.00                                    (VALOR POR DEFECTO)  
+38 -> codisbactivo    : 0                                       (VALOR POR DEFECTO)  
+39 -> codac3          : N/A                                     (VALOR POR DEFECTO)  
+40 -> coderp          : N/A                                     (VALOR POR DEFECTO)  
+41 -> orden           : 0                                       (VALOR POR DEFECTO)  
+===========================================================================================================================================================
+
+
+3.- DA3 (da3.txt)
+    tabla de descuentos especiales por clientes y productos
+EJEMPLO Y EXPLICACION DEL CAMPO
+===========================================================================================================================================================
+
+21800001805|ACEITE DE ALMENDRA 30ML FSI|3208|2025-08-01|2025-12-31|10.00|
+
+0  -> codprod          : 21800001805                  (CODIGO DEL PRODUCTO)
+1  -> desprod          : ACEITE DE ALMENDRA 30ML FSI  (DESCRIPCION DEL PRODUCTO)
+2  -> codcli           : 3208                         (CODIGO DEL CLIENTE)
+3  -> desde            : 2025-08-01                   (FECHA INICIO DE LA PROMOCION)
+4  -> hasta            : 2025-12-31                   (FECHA FINAL DE LA PROMOCION)
+5  -> da3              : 10.00                        (DESCUENTO PORCENTAJE DA3)
+
+
+
+4.- EXTRUCTURA DEL PEDIDO 
+===========================================================================================================================================================
+
+PED + '-' +  CODCLI + '-' + ID + '-' + SEDE + '.txt'       =>          PED-#########-##-PR.txt
+===========================================================================================================================================================
+
+0     1                    2   3     4         5          6  7    8 9 10   11   12   13   14   15   16    17
+00001|MIOVIT TAB 30       |12 |45.00|PRINCIPAL|J404024212|10|0.00|0|P3|N|1.00|2.00|3.00|4.00|5.00|6.00|3.00|
+00002|ACETAMINOIFEN TAB 30|120|35.00|PRINCIPAL|J404024212|10|0.00|0|P3|N|1.00|2.00|3.00|4.00|5.00|6.00|3.00|
+00003|IBUPROFENO TAB 30   |1  |25.00|PRINCIPAL|J404024212|10|0.00|0|P3|N|1.00|2.00|3.00|4.00|5.00|6.00|3.00|
+00004|NAFAZOL GOTAS       |13 |58.00|PRINCIPAL|J404024212|10|0.00|0|P3|N|1.00|2.00|3.00|4.00|5.00|6.00|3.00|
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+0  -> CODPROD      : 0001                    (CODIGO DEL PRODUCTO)     
+1  -> DESPROD      : MIOVIT TAB 30           (DESCRIPCION DEL PRODUCTO)
+2  -> CANTIDAD     : 12                      (CANTIDAD SOLICITADA)
+3  -> PRECIO       : 45.00                   (PRECIO DE VENTA AL PUBLICO DEL PRODUCTO)
+4  -> SEDE         : PRINCIPAL               (SEDE DESTINO DEL PEDIDO)
+5  -> CODCLI       : J404024212              (CODIGO DEL CLIENTE, IDENTIFICADOR UNICO EN SU SISTEMA ERP)
+6  -> ID           : 10                      (IDENTIFICADOR DEL PEDIDO EN EL ICOMPRAS)
+7  -> DCT          : 0.00                    (DESCUENTO DEL CENTRO DE TRANSFERENCIA)
+8  -> DCREDITO     : 0                       (DIAS DE CREDITO DEL CENTRO DE TRANSFERENCIAS)
+9  -> ORIGEN       : P3                      (ORIGEN DEL PEDIDO, VALOR POR DEFECTO)
+10 -> TIPO PEDIDO  : N                       (TIPO DE PEDIDO, POR DEFECTO)
+11 -> DA           : 1.00                    (DESCUENTO ADCIONAL)
+12 -> DA2          : 2.00                    (DESCUENTO ADCIONAL 2)
+13 -> DV           : 3.00                    (DESCUENTO POR VOLUMEN DEL PRODUCTO)
+14 -> DP           : 4.00                    (DESCUENTO DE PRE-EMPAQUE)
+15 -> DN_CT        : 5.00                    (DESCUENTO NEGOCIADO POR EL CENTRO DE TRANSFERENCIA)
+16 -> DNV_CT       : 6.00                    (DESCUENTO NEGOCIADO POR VOLUMEN DEL CENTRO DE TRANSFERENCIA)
+17 -> DA3          : 3.00                    (DESCUENTO ADCIONALX PROVEEDOR DE TERCERO)
+
+
+
+
+INFORMACION DEL CLIENTE
+============================================================================================================================================================================================
+CODPROV  : TP3DPHAR
+RIF      : J411939188
+CLIENTE  : DROPHARMA D&M, C.A.
+CORREO   : dropharmadm@gmail.com
+DIRECCION: CALLE 11 EDIF PIONEER PISO 1 OF 1 URB LA URBINA CARACAS (PETARE) MIRANDA ZONA POSTAL 1073
+TELEFONO : +58 424-8818866
+CONTACTO : Anthony Moreno
+ZONA     : CARACAS-VENEZUELA
+RUTA     : https://www.dropharmadm.com
+
+
+CREDENCIALES PARA EL ICOMPRAS (PROVEEDOR)
+=============================================================================================================================================================================================
+USUARIO  :411939188@icompras360.com  
+CLAVE    : 411939188$.* 
+RUTA     : https://seped.icompras360.org

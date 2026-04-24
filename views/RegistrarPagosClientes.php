@@ -38,7 +38,7 @@ if ($accion == "refrescar") {
                             WHEN a.moneda <> 'Bs.' THEN a.total 
                             ELSE (a.total / NULLIF(a.tasa_dia, 0)) 
                         END AS totalDivisa, 
-                        a.tasa_dia  
+                        a.tasa_dia, a.total AS total_factura   
                 FROM salidas AS a 
                 JOIN cliente AS b ON b.id = a.cliente 
                 WHERE a.id = " . QuotedValue($id_compra, 1);
@@ -141,6 +141,8 @@ if ($accion == "refrescar") {
     }
 
     /////
+    $total_factura  = trim($factura["total_factura"] ?? "Bs.");
+
     $moneda_doc = trim($factura["moneda"] ?? "Bs.");
     $moneda_doc_sel = $moneda_doc == "Bs." ? "USD" : $moneda_doc;
     $tasa_dia   = floatval($factura["tasa_dia"] ?? 1);
@@ -151,32 +153,45 @@ if ($accion == "refrescar") {
     $total_bs  = floatval($factura["total"] ?? 0);
     $total_div = floatval($factura["totalDivisa"] ?? 0);
 
+// ... dentro del bloque if ($accion == "refrescar")
+
     $total_bs_pagado  = 0;
     $total_div_pagado = 0;
 
     foreach ($lista_pagos as $p) {
         $tipo_reg = trim($p["tipo"] ?? "");
-        if ($tipo_reg === "IG") continue;
-
+        // El IGTF (IG) no debe restar el saldo pendiente de la factura
+        if ($tipo_reg === "IG") { // continue;
+            $total_bs += floatval($p["monto"] ?? 0);
+            continue;
+        }
+        
         $monto_p = floatval($p["monto"] ?? 0);
         $mon_p   = trim($p["moneda"] ?? "Bs.");
+        
         if ($monto_p <= 0) continue;
 
         if ($mon_p === "Bs.") {
-            $bs = $monto_p;
-            $div = ($tasa_dia > 0) ? ($monto_p / $tasa_dia) : 0;
-        } else { 
-            // aquí mon_p debe ser = moneda_doc (USD o EURO)
-            $div = $monto_p;
-            $bs  = $monto_p * $tasa_dia;
+            $total_bs_pagado += $monto_p;
+        } else {
+            // IMPORTANTE: Usar la misma tasa que muestra la factura en pantalla
+            // Redondeamos a 2 decimales para evitar el arrastre de coma flotante
+            $total_bs_pagado += round($monto_p * $tasa_dia, 2);
         }
-
-        $total_bs_pagado  += $bs;
-        $total_div_pagado += $div;
     }
 
-    $saldo_bs  = max(0, $total_bs - $total_bs_pagado);
-    $saldo_div = max(0, $total_div - $total_div_pagado);
+    // Cálculo final restando del total original de la factura
+    $saldo_bs  = $total_bs - $total_bs_pagado;
+
+    // Para el saldo en divisas, lo ideal es recalcularlo en base al saldo BS 
+    // para que la relación con la tasa mostrada sea coherente al 100%
+    $saldo_div = ($tasa_dia > 0) ? ($saldo_bs / $tasa_dia) : 0;
+
+    // Proteccion contra decimales basura (ej: 0.000000001)
+    if ($saldo_bs < 0.01) {
+        $saldo_bs = 0;
+        $saldo_div = 0;
+    }
 
     $saldo_restante = $saldo_div;
     ?>
@@ -184,7 +199,11 @@ if ($accion == "refrescar") {
     <div class="card shadow-sm border-0 mb-3 bg-light">
         <div class="card-body p-3 text-center">
             <div class="row g-0">
-                <div class="col-4 border-end"><small class="text-muted d-block">CLIENTE</small><b><?= $factura['nombre_cliente'] ?></b></div>
+                <div class="col-4 border-end">
+                    <small class="text-muted d-block">CLIENTE</small>
+                    <b><?= $factura['nombre_cliente'] ?></b>
+                    <div class="small text-muted mt-1">Total Factura <?= HtmlEncode($moneda_doc) ?>: <b> <?= number_format($total_factura, 2, ".", ",") ?></b></div>
+                </div>
                 <div class="col-4 border-end">
                     <small class="text-muted d-block">FACTURA</small>
                     <b><?= $factura['nro_documento'] ?></b>
@@ -198,7 +217,8 @@ if ($accion == "refrescar") {
                     </div>
 
                     <div class="small text-muted">
-                        <?= HtmlEncode($moneda_doc) ?> <?= number_format($saldo_div, 2, ".", ",") ?>
+                        <!-- <?= HtmlEncode($moneda_doc) ?> <?= number_format($saldo_div, 2, ".", ",") ?> -->
+                        USD <?= number_format($saldo_div, 2, ".", ",") ?>
                     </div>
                 </div>
 
@@ -449,6 +469,12 @@ if ($accion == "finalizar") {
     $cliente_id = intval($factura["cliente"] ?? 0);
     $tasa_dia   = floatval($factura["tasa_dia"] ?? 1);
     $total_bs   = floatval($factura["total_bs"] ?? 0);
+
+    $lista_pagos = json_decode($pagos_json, true) ?: [];
+    foreach ($lista_pagos as $pp) {
+        if (trim($pp["tipo"] ?? "") === "IG") 
+            $total_bs += floatval($pp["monto"] ?? 0);
+    }
 
     // Recalcular pagado BS (ignorando IG)
     $pagado_bs = 0;

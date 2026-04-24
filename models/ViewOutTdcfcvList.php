@@ -172,8 +172,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->lista_pedido->Visible = false;
         $this->nota->Visible = false;
         $this->unidades->setVisibility();
-        $this->estatus->setVisibility();
-        $this->_username->Visible = false;
+        $this->estatus->Visible = false;
+        $this->_username->setVisibility();
         $this->id_documento_padre->setVisibility();
         $this->asesor->Visible = false;
         $this->tasa_dia->Visible = false;
@@ -188,8 +188,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->fecha_despacho->Visible = false;
         $this->user_despacho->Visible = false;
         $this->consignacion->Visible = false;
-        $this->descuento->setVisibility();
-        $this->descuento2->setVisibility();
+        $this->descuento->Visible = false;
+        $this->descuento2->Visible = false;
         $this->monto_sin_descuento->Visible = false;
         $this->factura->Visible = false;
         $this->ci_rif->Visible = false;
@@ -2051,13 +2051,13 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->unidades->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field estatus
-        $filter = $this->queryBuilderWhere("estatus");
+        // Field username
+        $filter = $this->queryBuilderWhere("username");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->estatus, false, false);
+            $this->buildSearchSql($filter, $this->_username, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->estatus->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->_username->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field id_documento_padre
@@ -2076,24 +2076,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pagado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field descuento
-        $filter = $this->queryBuilderWhere("descuento");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->descuento, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field descuento2
-        $filter = $this->queryBuilderWhere("descuento2");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->descuento2, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento2->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field asesor_asignado
@@ -2538,11 +2520,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->total); // total
             $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->unidades); // unidades
-            $this->updateSort($this->estatus); // estatus
+            $this->updateSort($this->_username); // username
             $this->updateSort($this->id_documento_padre); // id_documento_padre
             $this->updateSort($this->pagado); // pagado
-            $this->updateSort($this->descuento); // descuento
-            $this->updateSort($this->descuento2); // descuento2
             $this->updateSort($this->asesor_asignado); // asesor_asignado
             $this->setStartRecordNumber(1); // Reset start position
         }
@@ -2999,11 +2979,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "total");
             $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "unidades");
-            $this->createColumnOption($option, "estatus");
+            $this->createColumnOption($option, "username");
             $this->createColumnOption($option, "id_documento_padre");
             $this->createColumnOption($option, "pagado");
-            $this->createColumnOption($option, "descuento");
-            $this->createColumnOption($option, "descuento2");
             $this->createColumnOption($option, "asesor_asignado");
         }
 
@@ -4660,9 +4638,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->unidades->HrefValue = "";
             $this->unidades->TooltipValue = "";
 
-            // estatus
-            $this->estatus->HrefValue = "";
-            $this->estatus->TooltipValue = "";
+            // username
+            $this->_username->HrefValue = "";
+            $this->_username->TooltipValue = "";
 
             // id_documento_padre
             $this->id_documento_padre->HrefValue = "";
@@ -4671,14 +4649,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             // pagado
             $this->pagado->HrefValue = "";
             $this->pagado->TooltipValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
-            $this->descuento->TooltipValue = "";
-
-            // descuento2
-            $this->descuento2->HrefValue = "";
-            $this->descuento2->TooltipValue = "";
 
             // asesor_asignado
             $this->asesor_asignado->HrefValue = "";
@@ -4770,10 +4740,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->unidades->EditValue = $this->unidades->AdvancedSearch->SearchValue;
             $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
 
-            // estatus
-            $this->estatus->setupEditAttributes();
-            $this->estatus->EditValue = $this->estatus->options(true);
-            $this->estatus->PlaceHolder = RemoveHtml($this->estatus->caption());
+            // username
+            $this->_username->setupEditAttributes();
+            $this->_username->PlaceHolder = RemoveHtml($this->_username->caption());
 
             // id_documento_padre
             $this->id_documento_padre->setupEditAttributes();
@@ -4784,16 +4753,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->pagado->setupEditAttributes();
             $this->pagado->EditValue = $this->pagado->options(true);
             $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
-
-            // descuento
-            $this->descuento->setupEditAttributes();
-            $this->descuento->EditValue = $this->descuento->AdvancedSearch->SearchValue;
-            $this->descuento->PlaceHolder = RemoveHtml($this->descuento->caption());
-
-            // descuento2
-            $this->descuento2->setupEditAttributes();
-            $this->descuento2->EditValue = $this->descuento2->AdvancedSearch->SearchValue;
-            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
 
             // asesor_asignado
             $this->asesor_asignado->setupEditAttributes();
@@ -5513,7 +5472,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
     {
         // Example:
         $opt = &$this->ListOptions->add("unidades");
-        $opt->Header = "UNDS";
+        $opt->Header = "UNDS Hora";
         $opt->OnLeft = true; // Link on left
         $opt->moveTo(7); // Move to first column
         $opt = &$this->ListOptions->add("print");
@@ -5534,10 +5493,38 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
     public function listOptionsRendered()
     {
         // Example:
+        $fechaRaw = $this->fecha->CurrentValue ?? null; // Usar null coalescing
+        if ($fechaRaw !== null && $fechaRaw !== "") {
+            $timestamp = strtotime($fechaRaw);
+            if ($timestamp !== false) {
+                $hora = date("d/m/Y g:i a", $timestamp);
+            }
+        } else {
+            $hora = "--:--"; // Valor opcional si no hay fecha
+        }
         $sql = "SELECT ABS(SUM(cantidad_movimiento)) AS cantidad FROM entradas_salidas WHERE id_documento = '" . $this->id->CurrentValue . "' AND tipo_documento = '" . $this->tipo_documento->CurrentValue . "';";
-        $this->ListOptions["unidades"]->Body = '<a target="_blank" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <b>' . intval(ExecuteScalar($sql)) . ' UNDS</b></a>'; // intval(ExecuteScalar($sql));
+        $this->ListOptions["unidades"]->Body = '<a target="_blank" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <b>' . intval(ExecuteScalar($sql)) . ' Unidad(es) <br>' .  $hora .'</b></a>'; // intval(ExecuteScalar($sql));
+
+        ///
         $url = "reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=" . $this->tipo_documento->CurrentValue;
         $this->ListOptions->Items["print"]->Body ='<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <i class="fa-solid fa-print"></i> </a>';   
+        if ($this->estatus->CurrentValue == "PROCESADO") {
+            // Ocultamos el botón de Editar (edit)
+            $this->ListOptions["edit"]->Visible = false;
+
+            // Ocultamos el botón de Copiar (copy) si lo deseas
+            if (isset($this->ListOptions["copy"])) {
+                $this->ListOptions["copy"]->Visible = false;
+            }
+
+            // Ocultamos el botón de Borrar (delete)
+            if (isset($this->ListOptions["delete"])) {
+                $this->ListOptions["delete"]->Visible = false;
+            }
+        }
+        $this->fecha->Visible = false;
+        $this->unidades->Visible = false;
+        $this->asesor_asignado->Visible = false;
     }
 
     // Row Custom Action event

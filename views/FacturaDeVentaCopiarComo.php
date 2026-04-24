@@ -31,12 +31,13 @@ case "ND":
 
 <div class="container">
   <div class="row">
-      <h2>Copiar Documento <?= $titulo ?> # <?php echo $doc; ?> como</h2><br>
-      <h4>Proceso de copiado de documento tipo:</h4><br>
+      <h2>Emitir NC/ND de <?= $titulo ?> # <?php echo $doc; ?></h2><br>
+      <h4>Proceso de emitir documento tipo:</h4><br>
   </div>
   <form name="frm" method="post" class="form-inline" action="FacturaDeVentaDetalleCopia">
     <div class="row text-aling-center">
       <div class="list-group mx-0">
+        <!--
         <label class="list-group-item d-flex gap-2">
           <input class="form-check-input flex-shrink-0" type="radio" id="documento" name="documento" value="FC003">
           <span>
@@ -44,6 +45,7 @@ case "ND":
             <small class="d-block text-muted">Crea una Copia de la Factura de Ventas</small>
           </span>
         </label>
+        -->
         <label class="list-group-item d-flex gap-2">
           <input class="form-check-input flex-shrink-0" type="radio" id="documento" name="documento" value="NC010" <?= (($documento=="FC" or $documento=="ND") ? "checked" : "") ?>>
           <span>
@@ -65,7 +67,7 @@ case "ND":
         <input type="hidden" class="form-control" id="tipo_documento" name="tipo_documento" value="<?php echo $tipo_documento; ?>">
     </div>
     <br>
-    <button type="submit" class="btn btn-primary">Realizar Copia</button>
+    <button type="submit" class="btn btn-primary">Crear Documento</button>
   </form>
 
 </div>

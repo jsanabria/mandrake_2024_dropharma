@@ -1,0 +1,4 @@
+https://caura.ryz.tepuyserver.net:2083/cpsess4210376576/frontend/jupiter/team-manager/index.html#/list
+
+usuario: dropharm
+clave: Caracas123.*

@@ -160,6 +160,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+    <tr id="r_indexado"<?= $Page->indexado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_indexado"><?= $Page->indexado->caption() ?></span></td>
+        <td data-name="indexado"<?= $Page->indexado->cellAttributes() ?>>
+<span id="el_articulo_indexado" data-page="1">
+<span<?= $Page->indexado->viewAttributes() ?>>
+<?= $Page->indexado->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

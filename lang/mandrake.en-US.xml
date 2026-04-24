@@ -1,4 +1,4 @@
-<ew-language date="2026/3/6" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/4/16" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -69,7 +69,7 @@
       <phrase id="menutext" value="Pedido de Venta" />
     </menu>
     <menu id="1174">
-      <phrase id="menutext" value="Nota de Entrega" />
+      <phrase id="menutext" value="Orden de Entrega" />
     </menu>
     <menu id="1173">
       <phrase id="menutext" value="Factura de Venta" />
@@ -603,10 +603,10 @@
       <phrase id="menutext" value="Ajuste de Entrada Detalle copia" />
     </menu>
     <menu id="205">
-      <phrase id="menutext" value="Factura de Ventas Detalle copia" />
+      <phrase id="menutext" value="Emitir NC/ND" />
     </menu>
     <menu id="206">
-      <phrase id="menutext" value="Factura de Ventas copiar como" />
+      <phrase id="menutext" value="Emitir NC/ND" />
     </menu>
     <menu id="207">
       <phrase id="menutext" value="Imprimir Tarifa" />
@@ -966,6 +966,13 @@
       </field>
       <field id="fecha_vencimiento">
         <phrase id="fldcaption" value="fecha vencimiento" />
+      </field>
+      <field id="indexado">
+        <phrase id="fldcaption" value="Indexado" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
       </field>
     </table>
     <table id="articulo_anterior">
@@ -2214,10 +2221,10 @@
       <phrase id="tblcaption" value="Factura de Compra Detalle copia" />
     </table>
     <table id="factura_de_venta_copiar_como">
-      <phrase id="tblcaption" value="Factura de Ventas copiar como" />
+      <phrase id="tblcaption" value="Emitir NC/ND" />
     </table>
     <table id="factura_de_venta_detalle_copia">
-      <phrase id="tblcaption" value="Factura de Ventas Detalle copia" />
+      <phrase id="tblcaption" value="Emitir NC/ND" />
     </table>
     <table id="ftp_fact_pedi_procesado">
       <phrase id="tblcaption" value="ftp fact pedi procesado" />
@@ -3294,6 +3301,9 @@
       </field>
       <field id="monto_igtf">
         <phrase id="fldcaption" value="monto igtf" />
+      </field>
+      <field id="doc_afe">
+        <phrase id="fldcaption" value="doc afe" />
       </field>
     </table>
     <table id="sesiones">
@@ -5665,7 +5675,7 @@
       </field>
     </table>
     <table id="view_out_tdcnet">
-      <phrase id="tblcaption" value="Nota de Entrega" />
+      <phrase id="tblcaption" value="Orden de Entrega" />
       <field id="id">
         <phrase id="fldcaption" value="Id" />
       </field>

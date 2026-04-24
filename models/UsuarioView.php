@@ -1385,13 +1385,10 @@ class UsuarioView extends Usuario
     }
 
     // Page Data Rendering event
-    public function pageDataRendering(&$header) {
-    	// Example:
-    	if(IsAdmin()) {
-    		$sql = "SELECT password FROM usuario WHERE id = " . $this->id->CurrentValue;
-    		$pass = ExecuteScalar($sql);
-    		$header = "<h2><strong>Password: </strong>" . $pass . "</h2>";
-    	}  
+    public function pageDataRendering(&$header)
+    {
+        // Example:
+        //$header = "your header";
     }
 
     // Page Data Rendered event

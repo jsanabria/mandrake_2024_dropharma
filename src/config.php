@@ -24,7 +24,7 @@ $DATE_SEPARATOR = "/";
 $TIME_SEPARATOR = ":";
 $DATE_FORMAT = "y/MM/dd";
 $TIME_FORMAT = "HH:mm";
-$TIME_ZONE = "America/La_Paz";
+$TIME_ZONE = "UTC";
 
 /**
  * Global variables
@@ -122,7 +122,7 @@ require_once __DIR__ . "/userlevelsettings.php";
 $CONFIG = [
 
     // Debug
-    "DEBUG" => false, // Enabled
+    "DEBUG" => true, // Enabled
     "REPORT_ALL_ERRORS" => false, // Treat PHP warnings and notices as errors
     "LOG_ERROR_TO_FILE" => false, // Log error to file
     "LOG_ERROR_DETAILS" => true, // Log error details
@@ -303,7 +303,7 @@ $CONFIG = [
      * first before calculating hash. Otherwise, existing users will not be able
      * to login. Hashed password is irreversible, it will be reset during password recovery.
      */
-    "ENCRYPTED_PASSWORD" => false, // Use encrypted password
+    "ENCRYPTED_PASSWORD" => true, // Use encrypted password
     "CASE_SENSITIVE_PASSWORD" => false, // Case-sensitive password
 
     // Session timeout time

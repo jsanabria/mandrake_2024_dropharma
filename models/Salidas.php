@@ -107,6 +107,11 @@ class Salidas extends DbTable
     public $packer;
     public $packer_date;
     public $fotos;
+    public $descuento2;
+    public $igtf;
+    public $monto_base_igtf;
+    public $monto_igtf;
+    public $doc_afe;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -1474,6 +1479,127 @@ class Salidas extends DbTable
         $this->fotos->SearchOperators = ["=", "<>", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['fotos'] = &$this->fotos;
 
+        // descuento2
+        $this->descuento2 = new DbField(
+            $this, // Table
+            'x_descuento2', // Variable name
+            'descuento2', // Name
+            '`descuento2`', // Expression
+            '`descuento2`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento2->InputTextType = "text";
+        $this->descuento2->Raw = true;
+        $this->descuento2->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento2'] = &$this->descuento2;
+
+        // igtf
+        $this->igtf = new DbField(
+            $this, // Table
+            'x_igtf', // Variable name
+            'igtf', // Name
+            '`igtf`', // Expression
+            '`igtf`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->igtf->InputTextType = "text";
+        $this->igtf->Raw = true;
+        $this->igtf->Lookup = new Lookup($this->igtf, 'salidas', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->igtf->OptionCount = 2;
+        $this->igtf->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['igtf'] = &$this->igtf;
+
+        // monto_base_igtf
+        $this->monto_base_igtf = new DbField(
+            $this, // Table
+            'x_monto_base_igtf', // Variable name
+            'monto_base_igtf', // Name
+            '`monto_base_igtf`', // Expression
+            '`monto_base_igtf`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_base_igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_base_igtf->InputTextType = "text";
+        $this->monto_base_igtf->Raw = true;
+        $this->monto_base_igtf->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_base_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_base_igtf'] = &$this->monto_base_igtf;
+
+        // monto_igtf
+        $this->monto_igtf = new DbField(
+            $this, // Table
+            'x_monto_igtf', // Variable name
+            'monto_igtf', // Name
+            '`monto_igtf`', // Expression
+            '`monto_igtf`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_igtf->InputTextType = "text";
+        $this->monto_igtf->Raw = true;
+        $this->monto_igtf->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_igtf'] = &$this->monto_igtf;
+
+        // doc_afe
+        $this->doc_afe = new DbField(
+            $this, // Table
+            'x_doc_afe', // Variable name
+            'doc_afe', // Name
+            '`doc_afe`', // Expression
+            '`doc_afe`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`doc_afe`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->doc_afe->InputTextType = "text";
+        $this->doc_afe->Raw = true;
+        $this->doc_afe->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->doc_afe->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['doc_afe'] = &$this->doc_afe;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1749,7 +1875,7 @@ class Salidas extends DbTable
         $sqlwrk = $sql instanceof QueryBuilder // Query builder
             ? (clone $sql)->resetQueryPart("orderBy")->getSQL()
             : $sql;
-        $pattern = '/^SELECT\s([\s\S]+)\sFROM\s/i';
+        $pattern = '/^SELECT\s([\s\S]+?)\sFROM\s/i';
         // Skip Custom View / SubQuery / SELECT DISTINCT / ORDER BY
         if (
             in_array($this->TableType, ["TABLE", "VIEW", "LINKTABLE"]) &&
@@ -2091,6 +2217,11 @@ class Salidas extends DbTable
         $this->packer->DbValue = $row['packer'];
         $this->packer_date->DbValue = $row['packer_date'];
         $this->fotos->Upload->DbValue = $row['fotos'];
+        $this->descuento2->DbValue = $row['descuento2'];
+        $this->igtf->DbValue = $row['igtf'];
+        $this->monto_base_igtf->DbValue = $row['monto_base_igtf'];
+        $this->monto_igtf->DbValue = $row['monto_igtf'];
+        $this->doc_afe->DbValue = $row['doc_afe'];
     }
 
     // Delete uploaded files
@@ -2516,6 +2647,11 @@ class Salidas extends DbTable
         $this->packer->setDbValue($row['packer']);
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
+        $this->descuento2->setDbValue($row['descuento2']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Render list content
@@ -2651,6 +2787,16 @@ class Salidas extends DbTable
         // packer_date
 
         // fotos
+
+        // descuento2
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
+
+        // doc_afe
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -3125,6 +3271,29 @@ class Salidas extends DbTable
             $this->fotos->ViewValue = "";
         }
 
+        // descuento2
+        $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+        $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
+        // igtf
+        if (strval($this->igtf->CurrentValue) != "") {
+            $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+        } else {
+            $this->igtf->ViewValue = null;
+        }
+
+        // monto_base_igtf
+        $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+        $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+        // monto_igtf
+        $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+        $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
+        // doc_afe
+        $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+        $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -3377,6 +3546,26 @@ class Salidas extends DbTable
             $this->fotos->LinkAttrs["data-rel"] = "salidas_x_fotos";
             $this->fotos->LinkAttrs->appendClass("ew-lightbox");
         }
+
+        // descuento2
+        $this->descuento2->HrefValue = "";
+        $this->descuento2->TooltipValue = "";
+
+        // igtf
+        $this->igtf->HrefValue = "";
+        $this->igtf->TooltipValue = "";
+
+        // monto_base_igtf
+        $this->monto_base_igtf->HrefValue = "";
+        $this->monto_base_igtf->TooltipValue = "";
+
+        // monto_igtf
+        $this->monto_igtf->HrefValue = "";
+        $this->monto_igtf->TooltipValue = "";
+
+        // doc_afe
+        $this->doc_afe->HrefValue = "";
+        $this->doc_afe->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3725,6 +3914,42 @@ class Salidas extends DbTable
             $this->fotos->Upload->FileName = $this->fotos->CurrentValue;
         }
 
+        // descuento2
+        $this->descuento2->setupEditAttributes();
+        $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+        $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+        if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+            $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+        }
+
+        // igtf
+        $this->igtf->EditValue = $this->igtf->options(false);
+        $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+        // monto_base_igtf
+        $this->monto_base_igtf->setupEditAttributes();
+        $this->monto_base_igtf->EditValue = $this->monto_base_igtf->CurrentValue;
+        $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+        if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
+            $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
+        }
+
+        // monto_igtf
+        $this->monto_igtf->setupEditAttributes();
+        $this->monto_igtf->EditValue = $this->monto_igtf->CurrentValue;
+        $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
+        if (strval($this->monto_igtf->EditValue) != "" && is_numeric($this->monto_igtf->EditValue)) {
+            $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, null);
+        }
+
+        // doc_afe
+        $this->doc_afe->setupEditAttributes();
+        $this->doc_afe->EditValue = $this->doc_afe->CurrentValue;
+        $this->doc_afe->PlaceHolder = RemoveHtml($this->doc_afe->caption());
+        if (strval($this->doc_afe->EditValue) != "" && is_numeric($this->doc_afe->EditValue)) {
+            $this->doc_afe->EditValue = FormatNumber($this->doc_afe->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3793,6 +4018,11 @@ class Salidas extends DbTable
                     $doc->exportCaption($this->packer);
                     $doc->exportCaption($this->packer_date);
                     $doc->exportCaption($this->fotos);
+                    $doc->exportCaption($this->descuento2);
+                    $doc->exportCaption($this->igtf);
+                    $doc->exportCaption($this->monto_base_igtf);
+                    $doc->exportCaption($this->monto_igtf);
+                    $doc->exportCaption($this->doc_afe);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -3846,6 +4076,11 @@ class Salidas extends DbTable
                     $doc->exportCaption($this->checker_date);
                     $doc->exportCaption($this->packer);
                     $doc->exportCaption($this->packer_date);
+                    $doc->exportCaption($this->descuento2);
+                    $doc->exportCaption($this->igtf);
+                    $doc->exportCaption($this->monto_base_igtf);
+                    $doc->exportCaption($this->monto_igtf);
+                    $doc->exportCaption($this->doc_afe);
                 }
                 $doc->endExportRow();
             }
@@ -3912,6 +4147,11 @@ class Salidas extends DbTable
                         $doc->exportField($this->packer);
                         $doc->exportField($this->packer_date);
                         $doc->exportField($this->fotos);
+                        $doc->exportField($this->descuento2);
+                        $doc->exportField($this->igtf);
+                        $doc->exportField($this->monto_base_igtf);
+                        $doc->exportField($this->monto_igtf);
+                        $doc->exportField($this->doc_afe);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -3965,6 +4205,11 @@ class Salidas extends DbTable
                         $doc->exportField($this->checker_date);
                         $doc->exportField($this->packer);
                         $doc->exportField($this->packer_date);
+                        $doc->exportField($this->descuento2);
+                        $doc->exportField($this->igtf);
+                        $doc->exportField($this->monto_base_igtf);
+                        $doc->exportField($this->monto_igtf);
+                        $doc->exportField($this->doc_afe);
                     }
                     $doc->endExportRow($rowCnt);
                 }

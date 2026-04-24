@@ -108,6 +108,9 @@ class ViewOutTdcnet extends DbTable
     public $packer;
     public $packer_date;
     public $fotos;
+    public $igtf;
+    public $monto_base_igtf;
+    public $monto_igtf;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -1488,6 +1491,79 @@ class ViewOutTdcnet extends DbTable
         $this->fotos->SearchOperators = ["=", "<>", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['fotos'] = &$this->fotos;
 
+        // igtf
+        $this->igtf = new DbField(
+            $this, // Table
+            'x_igtf', // Variable name
+            'igtf', // Name
+            '`igtf`', // Expression
+            '`igtf`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->igtf->InputTextType = "text";
+        $this->igtf->Raw = true;
+        $this->igtf->Lookup = new Lookup($this->igtf, 'view_out_tdcnet', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->igtf->OptionCount = 2;
+        $this->igtf->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['igtf'] = &$this->igtf;
+
+        // monto_base_igtf
+        $this->monto_base_igtf = new DbField(
+            $this, // Table
+            'x_monto_base_igtf', // Variable name
+            'monto_base_igtf', // Name
+            '`monto_base_igtf`', // Expression
+            '`monto_base_igtf`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_base_igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_base_igtf->InputTextType = "text";
+        $this->monto_base_igtf->Raw = true;
+        $this->monto_base_igtf->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_base_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_base_igtf'] = &$this->monto_base_igtf;
+
+        // monto_igtf
+        $this->monto_igtf = new DbField(
+            $this, // Table
+            'x_monto_igtf', // Variable name
+            'monto_igtf', // Name
+            '`monto_igtf`', // Expression
+            '`monto_igtf`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_igtf`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_igtf->InputTextType = "text";
+        $this->monto_igtf->Raw = true;
+        $this->monto_igtf->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_igtf'] = &$this->monto_igtf;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -2101,6 +2177,9 @@ class ViewOutTdcnet extends DbTable
         $this->packer->DbValue = $row['packer'];
         $this->packer_date->DbValue = $row['packer_date'];
         $this->fotos->Upload->DbValue = $row['fotos'];
+        $this->igtf->DbValue = $row['igtf'];
+        $this->monto_base_igtf->DbValue = $row['monto_base_igtf'];
+        $this->monto_igtf->DbValue = $row['monto_igtf'];
     }
 
     // Delete uploaded files
@@ -2527,6 +2606,9 @@ class ViewOutTdcnet extends DbTable
         $this->packer->setDbValue($row['packer']);
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
     }
 
     // Render list content
@@ -2664,6 +2746,12 @@ class ViewOutTdcnet extends DbTable
         // packer_date
 
         // fotos
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -3098,6 +3186,21 @@ class ViewOutTdcnet extends DbTable
             $this->fotos->ViewValue = "";
         }
 
+        // igtf
+        if (strval($this->igtf->CurrentValue) != "") {
+            $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+        } else {
+            $this->igtf->ViewValue = null;
+        }
+
+        // monto_base_igtf
+        $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+        $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+        // monto_igtf
+        $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+        $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -3338,6 +3441,18 @@ class ViewOutTdcnet extends DbTable
             $this->fotos->LinkAttrs["data-rel"] = "view_out_tdcnet_x_fotos";
             $this->fotos->LinkAttrs->appendClass("ew-lightbox");
         }
+
+        // igtf
+        $this->igtf->HrefValue = "";
+        $this->igtf->TooltipValue = "";
+
+        // monto_base_igtf
+        $this->monto_base_igtf->HrefValue = "";
+        $this->monto_base_igtf->TooltipValue = "";
+
+        // monto_igtf
+        $this->monto_igtf->HrefValue = "";
+        $this->monto_igtf->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3720,6 +3835,26 @@ class ViewOutTdcnet extends DbTable
             $this->fotos->Upload->FileName = $this->fotos->CurrentValue;
         }
 
+        // igtf
+        $this->igtf->EditValue = $this->igtf->options(false);
+        $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+        // monto_base_igtf
+        $this->monto_base_igtf->setupEditAttributes();
+        $this->monto_base_igtf->EditValue = $this->monto_base_igtf->CurrentValue;
+        $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+        if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
+            $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
+        }
+
+        // monto_igtf
+        $this->monto_igtf->setupEditAttributes();
+        $this->monto_igtf->EditValue = $this->monto_igtf->CurrentValue;
+        $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
+        if (strval($this->monto_igtf->EditValue) != "" && is_numeric($this->monto_igtf->EditValue)) {
+            $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3826,6 +3961,9 @@ class ViewOutTdcnet extends DbTable
                     $doc->exportCaption($this->checker_date);
                     $doc->exportCaption($this->packer);
                     $doc->exportCaption($this->packer_date);
+                    $doc->exportCaption($this->igtf);
+                    $doc->exportCaption($this->monto_base_igtf);
+                    $doc->exportCaption($this->monto_igtf);
                 }
                 $doc->endExportRow();
             }
@@ -3930,6 +4068,9 @@ class ViewOutTdcnet extends DbTable
                         $doc->exportField($this->checker_date);
                         $doc->exportField($this->packer);
                         $doc->exportField($this->packer_date);
+                        $doc->exportField($this->igtf);
+                        $doc->exportField($this->monto_base_igtf);
+                        $doc->exportField($this->monto_igtf);
                     }
                     $doc->endExportRow($rowCnt);
                 }

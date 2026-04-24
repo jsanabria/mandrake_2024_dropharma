@@ -2018,13 +2018,10 @@ class UsuarioEdit extends Usuario
     }
 
     // Page Data Rendering event
-    public function pageDataRendering(&$header) {
-    	// Example:
-    	if(IsAdmin()) {
-    		//$sql = "SELECT password FROM usuario WHERE id = " . $_REQUEST["id"] . "";
-    		//$pass = ExecuteScalar($sql);
-    		$header = "<h2><strong>Password: </strong>" . $this->_password->CurrentValue . "</h2>";
-    	} 
+    public function pageDataRendering(&$header)
+    {
+        // Example:
+        //$header = "your header";
     }
 
     // Page Data Rendered event

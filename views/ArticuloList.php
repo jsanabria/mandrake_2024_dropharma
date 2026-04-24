@@ -575,6 +575,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->activo->Visible) { // activo ?>
         <th data-name="activo" class="<?= $Page->activo->headerCellClass() ?>"><div id="elh_articulo_activo" class="articulo_activo"><?= $Page->renderFieldHeader($Page->activo) ?></div></th>
 <?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+        <th data-name="indexado" class="<?= $Page->indexado->headerCellClass() ?>"><div id="elh_articulo_indexado" class="articulo_indexado"><?= $Page->renderFieldHeader($Page->indexado) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -713,6 +716,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_activo" class="el_articulo_activo">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->indexado->Visible) { // indexado ?>
+        <td data-name="indexado"<?= $Page->indexado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_indexado" class="el_articulo_indexado">
+<span<?= $Page->indexado->viewAttributes() ?>>
+<?= $Page->indexado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

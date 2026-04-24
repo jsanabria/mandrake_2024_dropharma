@@ -207,6 +207,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->packer->Visible = false;
         $this->packer_date->Visible = false;
         $this->fotos->Visible = false;
+        $this->igtf->Visible = false;
+        $this->monto_base_igtf->Visible = false;
+        $this->monto_igtf->Visible = false;
     }
 
     // Constructor
@@ -768,6 +771,7 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
+        $this->setupLookupOptions($this->igtf);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1193,6 +1197,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $filterList = Concat($filterList, $this->packer->AdvancedSearch->toJson(), ","); // Field packer
         $filterList = Concat($filterList, $this->packer_date->AdvancedSearch->toJson(), ","); // Field packer_date
         $filterList = Concat($filterList, $this->fotos->AdvancedSearch->toJson(), ","); // Field fotos
+        $filterList = Concat($filterList, $this->igtf->AdvancedSearch->toJson(), ","); // Field igtf
+        $filterList = Concat($filterList, $this->monto_base_igtf->AdvancedSearch->toJson(), ","); // Field monto_base_igtf
+        $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1663,6 +1670,30 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->fotos->AdvancedSearch->SearchValue2 = @$filter["y_fotos"];
         $this->fotos->AdvancedSearch->SearchOperator2 = @$filter["w_fotos"];
         $this->fotos->AdvancedSearch->save();
+
+        // Field igtf
+        $this->igtf->AdvancedSearch->SearchValue = @$filter["x_igtf"];
+        $this->igtf->AdvancedSearch->SearchOperator = @$filter["z_igtf"];
+        $this->igtf->AdvancedSearch->SearchCondition = @$filter["v_igtf"];
+        $this->igtf->AdvancedSearch->SearchValue2 = @$filter["y_igtf"];
+        $this->igtf->AdvancedSearch->SearchOperator2 = @$filter["w_igtf"];
+        $this->igtf->AdvancedSearch->save();
+
+        // Field monto_base_igtf
+        $this->monto_base_igtf->AdvancedSearch->SearchValue = @$filter["x_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchOperator = @$filter["z_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchCondition = @$filter["v_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_base_igtf"];
+        $this->monto_base_igtf->AdvancedSearch->save();
+
+        // Field monto_igtf
+        $this->monto_igtf->AdvancedSearch->SearchValue = @$filter["x_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchOperator = @$filter["z_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchCondition = @$filter["v_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_igtf"];
+        $this->monto_igtf->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1729,6 +1760,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->buildSearchSql($where, $this->packer, $default, false); // packer
         $this->buildSearchSql($where, $this->packer_date, $default, false); // packer_date
         $this->buildSearchSql($where, $this->fotos, $default, false); // fotos
+        $this->buildSearchSql($where, $this->igtf, $default, false); // igtf
+        $this->buildSearchSql($where, $this->monto_base_igtf, $default, false); // monto_base_igtf
+        $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1789,6 +1823,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->packer->AdvancedSearch->save(); // packer
             $this->packer_date->AdvancedSearch->save(); // packer_date
             $this->fotos->AdvancedSearch->save(); // fotos
+            $this->igtf->AdvancedSearch->save(); // igtf
+            $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
+            $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1873,6 +1910,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->packer->AdvancedSearch->save(); // packer
             $this->packer_date->AdvancedSearch->save(); // packer_date
             $this->fotos->AdvancedSearch->save(); // fotos
+            $this->igtf->AdvancedSearch->save(); // igtf
+            $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
+            $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->setSessionRules($rules);
         }
 
@@ -2266,6 +2306,15 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         if ($this->fotos->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_base_igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_igtf->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2355,6 +2404,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->packer->AdvancedSearch->unsetSession();
         $this->packer_date->AdvancedSearch->unsetSession();
         $this->fotos->AdvancedSearch->unsetSession();
+        $this->igtf->AdvancedSearch->unsetSession();
+        $this->monto_base_igtf->AdvancedSearch->unsetSession();
+        $this->monto_igtf->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2420,6 +2472,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->packer->AdvancedSearch->load();
         $this->packer_date->AdvancedSearch->load();
         $this->fotos->AdvancedSearch->load();
+        $this->igtf->AdvancedSearch->load();
+        $this->monto_base_igtf->AdvancedSearch->load();
+        $this->monto_igtf->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2526,6 +2581,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 $this->packer->setSort("");
                 $this->packer_date->setSort("");
                 $this->fotos->setSort("");
+                $this->igtf->setSort("");
+                $this->monto_base_igtf->setSort("");
+                $this->monto_igtf->setSort("");
             }
 
             // Reset start position
@@ -3686,6 +3744,30 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 $this->Command = "search";
             }
         }
+
+        // igtf
+        if ($this->igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->igtf->AdvancedSearch->SearchValue != "" || $this->igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_base_igtf
+        if ($this->monto_base_igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_base_igtf->AdvancedSearch->SearchValue != "" || $this->monto_base_igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_igtf
+        if ($this->monto_igtf->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_igtf->AdvancedSearch->SearchValue != "" || $this->monto_igtf->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3838,6 +3920,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
     }
 
     // Return a row with default values
@@ -3898,6 +3983,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $row['packer'] = $this->packer->DefaultValue;
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         return $row;
     }
 
@@ -4045,6 +4133,12 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         // packer_date
 
         // fotos
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -4450,6 +4544,21 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->packer_date->ViewValue = $this->packer_date->CurrentValue;
             $this->packer_date->ViewValue = FormatDateTime($this->packer_date->ViewValue, $this->packer_date->formatPattern());
 
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -4698,6 +4807,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->packer->AdvancedSearch->load();
         $this->packer_date->AdvancedSearch->load();
         $this->fotos->AdvancedSearch->load();
+        $this->igtf->AdvancedSearch->load();
+        $this->monto_base_igtf->AdvancedSearch->load();
+        $this->monto_igtf->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -4980,6 +5092,8 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                     break;
                 case "x_asesor_asignado":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_igtf":
                     break;
                 default:
                     $lookupFilter = "";

@@ -662,6 +662,10 @@ loadjs.ready("load", function () {
                 }
             }
         });
+        $("#x_nro_documento").prop('readonly', true);
+        $('#x_fecha').prop('readonly', true);
+        $('#x_nro_control').prop('readonly', true);
+        $(".btn[data-target='#datetimepicker_fview_out_tdcfcvedit_x_fecha']").css("pointer-events", "none");
     });
 });
 </script>

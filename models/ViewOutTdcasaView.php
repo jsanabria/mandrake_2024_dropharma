@@ -201,6 +201,9 @@ class ViewOutTdcasaView extends ViewOutTdcasa
         $this->packer_date->setVisibility();
         $this->fotos->setVisibility();
         $this->descuento2->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
     }
 
     // Constructor
@@ -607,6 +610,7 @@ class ViewOutTdcasaView extends ViewOutTdcasa
         $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
+        $this->setupLookupOptions($this->igtf);
 
         // Check modal
         if ($this->IsModal) {
@@ -1023,6 +1027,9 @@ class ViewOutTdcasaView extends ViewOutTdcasa
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
         $this->descuento2->setDbValue($row['descuento2']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
     }
 
     // Return a row with default values
@@ -1083,6 +1090,9 @@ class ViewOutTdcasaView extends ViewOutTdcasa
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
         $row['descuento2'] = $this->descuento2->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         return $row;
     }
 
@@ -1211,6 +1221,12 @@ class ViewOutTdcasaView extends ViewOutTdcasa
         // fotos
 
         // descuento2
+
+        // igtf
+
+        // monto_base_igtf
+
+        // monto_igtf
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1616,6 +1632,21 @@ class ViewOutTdcasaView extends ViewOutTdcasa
             $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
             $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
 
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -1796,6 +1827,8 @@ class ViewOutTdcasaView extends ViewOutTdcasa
                     break;
                 case "x_asesor_asignado":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_igtf":
                     break;
                 default:
                     $lookupFilter = "";

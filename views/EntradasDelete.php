@@ -92,6 +92,9 @@ $Page->showMessage();
 <?php if ($Page->archivo_pedido->Visible) { // archivo_pedido ?>
         <th class="<?= $Page->archivo_pedido->headerCellClass() ?>"><span id="elh_entradas_archivo_pedido" class="entradas_archivo_pedido"><?= $Page->archivo_pedido->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->unidades->Visible) { // unidades ?>
+        <th class="<?= $Page->unidades->headerCellClass() ?>"><span id="elh_entradas_unidades" class="entradas_unidades"><?= $Page->unidades->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -233,6 +236,14 @@ while ($Page->fetch()) {
 <span<?= $Page->archivo_pedido->viewAttributes() ?>>
 <?= GetFileViewTag($Page->archivo_pedido, $Page->archivo_pedido->getViewValue(), false) ?>
 </span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->unidades->Visible) { // unidades ?>
+        <td<?= $Page->unidades->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->unidades->viewAttributes() ?>>
+<?= $Page->unidades->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

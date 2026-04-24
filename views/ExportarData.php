@@ -8,249 +8,99 @@ $ExportarData = &$Page;
 <?php
 $Page->showMessage();
 ?>
-<h2>Preceso efectuado</h2>
 <?php
+// 1. LÓGICA DEL PROCESADOR (BACKEND)
+if (isset($_GET['ejecutar']) && $_GET['ejecutar'] == 1) {
+    while (ob_get_level()) ob_end_clean();
+    header('Content-Type: application/json');
 
-
-function _fputcsv($handle, $fields, $delimiter = ";", $enclosure = '', $escape_char = "\\", $record_seperator = "\r\n")
-{
-    $result = [];
-    foreach ($fields as $field) {
-        $result[] = $enclosure . str_replace($enclosure, $escape_char . $enclosure, $field) . $enclosure;
+    if (!IsLoggedIn()) {
+        echo json_encode(["status" => "error", "message" => "Acceso denegado"]);
+        exit;
     }
-    return fwrite($handle, implode($delimiter, $result) . $record_seperator);
+
+    $comando = '/usr/local/bin/php /home2/dropharm/public_html/mandrake.dropharmadm.com.ve/tareas/ExportDataCronTab.php 2>&1';
+    
+    if (function_exists('shell_exec')) {
+        $salida = shell_exec($comando);
+        $status = "ok";
+    } else {
+        $salida = "Error: shell_exec está desactivada.";
+        $status = "error";
+    }
+    
+    echo json_encode([
+        "status" => $status, 
+        "output" => $salida,
+        "fecha" => date("Y-m-d H:i:s")
+    ]);
+    exit; 
 }
-
-$sql = "SELECT valor1 FROM parametro WHERE codigo = '022';";
-$fecha = ExecuteScalar($sql);
-
-// $salida = shell_exec('sh /home/parcelassh.sh');
-
-$path = "/home4/drophqsc/dropharmadm.com/profit/";
-// $path = "C:/laragon/www/mandrake/maker/";
-
-// Clientes
-$sql = "SELECT 
-			a.id AS CODIGO, replace(a.nombre, ';', '') AS NOMBRE, replace(replace(direccion, ';', ''), '\r\n', ' ') AS DIRECCION, a.telefono1 AS TELEFONOS, 
-			a.ci_rif AS RIF, b.nombre AS TIPO 
-		FROM 
-			cliente AS a LEFT OUTER JOIN tarifa AS b ON b.id = a.tarifa ORDER BY a.id;";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "clientes.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['CODIGO'], $value['NOMBRE'], $value['DIRECCION'], $value['TELEFONOS'], $value['RIF'], $value['TIPO']); 
-        //fputcsv($f, $lineData, $delimiter);
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Asesores
-$sql = "SELECT 
-	a.id AS CODIGO, a.nombre AS NOMBRE, a.ci_rif AS CEDULA, IFNULL(a.telefono1, '') AS TELEFONO, 
-	'' AS comentario 
-FROM 
-	asesor AS a ORDER BY a.id;";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "asesores.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['CODIGO'], $value['NOMBRE'], $value['CEDULA'], $value['TELEFONO'], $value['comentario']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Monedas
-$sql = "SELECT 
-	valor1 AS CODIGO, valor1 AS NOMBRE 
-FROM parametro WHERE codigo = '006';";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "monedas.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['CODIGO'], $value['NOMBRE']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Proveedores
-$sql = "SELECT 
-	id AS CODIGO, nombre AS NOMBRE, replace(replace(IFNULL(direccion, ''), ';', ''), '\r\n', ' ') AS DIRECCION, IFNULL(telefono1, '') AS TELEFONO, 
-	IFNULL(ci_rif, '') AS RIF 
-FROM 
-	proveedor ORDER BY id;";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "proveedores.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['CODIGO'], $value['NOMBRE'], $value['DIRECCION'], $value['TELEFONO'], $value['RIF']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Ventas
-$sql = "SELECT 
-	nro_documento AS NUMERO_FACTURA, cliente AS CODIGO_CLIENTE, 
-	REPLACE(moneda, 'Bs. S', 'Bs.') AS MONEDA, IFNULL(tasa_dia, 1) AS TASA_MONEDA, (SELECT users.asesor FROM usuario AS users WHERE rtrim(ltrim(users.username)) = rtrim(ltrim(salidas.asesor)) LIMIT 0, 1) AS CODIGO_VENDEDOR, 
-	-- asesor AS CODIGO_VENDEDOR, 
-	fecha AS FECHA_EMISION, 
-	DATE_ADD(IFNULL(fecha , '0000-00-00'), INTERVAL dias_credito DAY) AS FECHA_VENCIMIENTO, 
-	IFNULL(nro_control, '') AS NUMERO_DE_CONTROL, monto_total AS TOTAL_BRUTO, iva AS MONTO_IMPUESTO, 
-	total AS TOTAL_NETO, IFNULL(documento, 'FC') AS tipo_movimiento, IF(estatus = 'ANULADO', 1, 0) AS ANULADO, IFNULL(descuento, 0) AS DESCUENTO, IF(IFNULL(descuento, 0) = 0, 0, IFNULL(monto_sin_descuento, 0)-IFNULL(monto_total, 0)) AS MONTO_DESC
-FROM salidas 
-WHERE tipo_documento = 'TDCFCV' AND estatus IN ('PROCESADO','ANULADO') AND IFNULL(nro_control, '') <> '' AND fecha >= '$fecha';";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "FacturasVentas.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['NUMERO_FACTURA'], $value['CODIGO_CLIENTE'], $value['MONEDA'], $value['TASA_MONEDA'], $value['CODIGO_VENDEDOR'], $value['FECHA_EMISION'], $value['FECHA_VENCIMIENTO'], $value['NUMERO_DE_CONTROL'], $value['TOTAL_BRUTO'], $value['MONTO_IMPUESTO'], $value['TOTAL_NETO'], $value['tipo_movimiento'], $value['ANULADO'], $value['DESCUENTO'], $value['MONTO_DESC']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Ventas Renglones
-/*
-	IF(@fila=b.nro_documento, @rownum:=@rownum+1, @rownum:=1) AS NUMERO_RENGLON, 
-	@fila:=b.nro_documento AS NUMERO_FACTURA, IFNULL(a.alicuota, 0) AS PORCENTAJE_DEL_IMPUESTO, 
-	ROUND((IFNULL(a.alicuota, 0)/100)*IFNULL(a.precio, 0)+ 0.0000000001, 2) AS MONTO_IMPUESTO, 
-	ROUND(((IFNULL(a.alicuota, 0)/100)*IFNULL(a.precio, 0))+IFNULL(a.precio, 0)+ 0.0000000001, 2) AS MONTO_NETO,
-	a.articulo AS ARTICULO, ABS(a.cantidad_movimiento) AS CANTIDAD
-*/
-$sql = "SELECT 
-	IF(@fila=b.nro_documento, @rownum:=@rownum+1, @rownum:=1) AS NUMERO_RENGLON, 
-	@fila:=b.nro_documento AS NUMERO_FACTURA, 
-	a.articulo AS ARTICULO, 
-	ABS(a.cantidad_movimiento) AS CANTIDAD, 
-	ROUND(IFNULL(a.costo_unidad, 0)+ 0.0000000001, 2) AS COSTO_UNITARIO,
-	ROUND(IFNULL(a.costo, 0)+ 0.0000000001, 2) AS COSTO_TOTAL,
-	IFNULL(a.alicuota, 0) AS PORCENTAJE_DEL_IMPUESTO, 
-	ROUND((IFNULL(a.alicuota, 0)/100)*IFNULL(a.precio_unidad, 0)+ 0.0000000001, 2) AS MONTO_IMPUESTO, 
-	ROUND(((IFNULL(a.alicuota, 0)/100)*IFNULL(a.precio_unidad, 0))+IFNULL(a.precio_unidad, 0)+ 0.0000000001, 2) AS MONTO_UNITARIO,
-	ROUND(((IFNULL(a.alicuota, 0)/100)*IFNULL(a.precio, 0))+IFNULL(a.precio, 0)+ 0.0000000001, 2) AS MONTO_TOTAL, 
-	b.doc_afectado  
-FROM 
-	(SELECT @rownum:=1) r, 
-	(SELECT @fila:='') v, 
-	entradas_salidas AS a 
-	JOIN salidas AS b ON b.id = a.id_documento AND b.tipo_documento = a.tipo_documento 
-WHERE 
-	a.tipo_documento = 'TDCFCV' AND b.estatus IN ('PROCESADO','ANULADO') AND IFNULL(b.nro_control, '') <> '' AND a.precio IS NOT NULL AND b.fecha >= '$fecha' ORDER BY a.id_documento, 1;";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "FacturasVentasRenglones.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['NUMERO_RENGLON'], $value['NUMERO_FACTURA'], $value['ARTICULO'], $value['CANTIDAD'], $value['COSTO_UNITARIO'], $value['COSTO_TOTAL'], $value['PORCENTAJE_DEL_IMPUESTO'], $value['MONTO_IMPUESTO'], $value['MONTO_UNITARIO'], $value['MONTO_TOTAL'], $value['doc_afectado']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Compras
-$sql = "SELECT 
-	id AS NUMERO_FACTURA_SISTEMA, 
-	nro_documento AS NUMERO_FACTURA, proveedor AS CODIGO_PROVEEDOR, 
-	REPLACE(moneda, 'Bs. S', 'Bs.') AS MONEDA, IFNULL(tasa_dia, 0) AS TASA_MONEDA, 
-	fecha AS FECHA_EMISION, 
-	IFNULL(fecha, '0000-00-00') AS FECHA_VENCIMIENTO, 
-	IFNULL(nro_control, '') AS NUMERO_DE_CONTROL, monto_total AS TOTAL_BRUTO, iva AS MONTO_IMPUESTO, 
-	total AS TOTAL_NETO, IFNULL(documento, 'FC') AS tipo_movimiento, IF(estatus = 'ANULADO', 1, 0) AS ANULADO   
-FROM entradas 
-WHERE tipo_documento = 'TDCFCC' AND estatus IN ('PROCESADO','ANULADO') AND IFNULL(nro_control, '') <> '' AND fecha >= '$fecha';";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "FacturasCompras.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['NUMERO_FACTURA_SISTEMA'], $value['NUMERO_FACTURA'], $value['CODIGO_PROVEEDOR'], $value['MONEDA'], $value['TASA_MONEDA'], $value['FECHA_EMISION'], $value['FECHA_VENCIMIENTO'], $value['NUMERO_DE_CONTROL'], $value['TOTAL_BRUTO'], $value['MONTO_IMPUESTO'], $value['TOTAL_NETO'], $value['tipo_movimiento'], $value['ANULADO']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Compras Renglones
-/*
-	IF(@fila=a.id_documento, @rownum:=@rownum+1, @rownum:=1) AS NUMERO_RENGLON, 
-	@fila:=a.id_documento AS NUMERO_FACTURA_SISTEMA, 
-	b.nro_documento AS NUMERO_FACTURA, IFNULL(a.alicuota, 0) AS PORCENTAJE_DEL_IMPUESTO, 
-	ROUND((IFNULL(a.alicuota, 0)/100)*IFNULL(a.costo, 0) + 0.0000000001, 2) AS MONTO_IMPUESTO, 
-	ROUND(((IFNULL(a.alicuota, 0)/100)*IFNULL(a.costo, 0))+IFNULL(a.costo, 0)+ 0.0000000001, 2) AS MONTO_NETO,
-	a.articulo AS ARTICULO, ABS(a.cantidad_movimiento) AS CANTIDAD
-*/
-$sql = "SELECT 
-	IF(@fila=a.id_documento, @rownum:=@rownum+1, @rownum:=1) AS NUMERO_RENGLON, 
-	@fila:=a.id_documento AS NUMERO_FACTURA_SISTEMA, 
-	b.nro_documento AS NUMERO_FACTURA, 
-	a.articulo AS ARTICULO, 
-	ABS(a.cantidad_movimiento) AS CANTIDAD, 
-	IFNULL(a.alicuota, 0) AS PORCENTAJE_DEL_IMPUESTO, 
-	ROUND((IFNULL(a.alicuota, 0)/100)*IFNULL(a.costo_unidad, 0) + 0.0000000001, 2) AS MONTO_IMPUESTO, 
-	ROUND(((IFNULL(a.alicuota, 0)/100)*IFNULL(a.costo_unidad, 0))+IFNULL(a.costo_unidad, 0)+ 0.0000000001, 2) AS MONTO_NETO, 
-	ABS(a.cantidad_movimiento) * ROUND(((IFNULL(a.alicuota, 0)/100)*IFNULL(a.costo_unidad, 0))+IFNULL(a.costo_unidad, 0)+ 0.0000000001, 2) AS MONTO_TOTAL 
-FROM 
-	(SELECT @rownum:=1) r, 
-	(SELECT @fila:=0) v, 
-	entradas_salidas AS a 
-	JOIN entradas AS b ON b.id = a.id_documento AND b.tipo_documento = a.tipo_documento 
-WHERE 
-	a.tipo_documento = 'TDCFCC' AND b.estatus IN ('PROCESADO','ANULADO') AND IFNULL(nro_control, '') <> '' AND b.fecha >= '$fecha' ORDER BY a.id_documento, 1 ASC;";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "FacturasComprasRenglones.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['NUMERO_RENGLON'], $value['NUMERO_FACTURA_SISTEMA'], $value['NUMERO_FACTURA'], $value['ARTICULO'], $value['CANTIDAD'], $value['PORCENTAJE_DEL_IMPUESTO'], $value['MONTO_IMPUESTO'], $value['MONTO_NETO'], $value['MONTO_TOTAL']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-// Articulos
-$sql = "SELECT 
-		a.id AS CODIGO, a.codigo AS CODIGO_ARTICULO, 
-		IF(RTRIM(IFNULL(a.nombre_comercial, '')) = '', a.principio_activo, a.nombre_comercial) AS NOMBRE_COMERCIAL, 
-		IFNULL(a.principio_activo, '') AS PRINCIPIO_ACTIVO,
-		IFNULL(a.presentacion, '') AS PRESENTACION,
-		IFNULL(b.nombre, '') AS FABRICANTE, 
-		a.ultimo_costo AS COSTO, c.precio AS PRECIO, (SELECT alicuota FROM alicuota WHERE codigo = a.alicuota AND activo = 'S') AS TIPO_IVA 
-FROM 
-	articulo AS a 
-	LEFT OUTER JOIN fabricante AS b ON b.id = a.fabricante
-	LEFT OUTER JOIN tarifa_articulo AS c ON c.articulo = a.id AND c.fabricante = a.fabricante AND c.tarifa = 2 
-	LEFT OUTER JOIN tarifa AS d ON d.id = c.tarifa AND d.patron = 'S';";
-$rows = ExecuteRows($sql);
-if($rows > 0) {
-	$filename = $path . "Articulos.csv";
-	$f = fopen($filename, 'w'); 
-
-	foreach ($rows as $key => $value) {
-		$lineData = array($value['CODIGO'], $value['CODIGO_ARTICULO'], $value['NOMBRE_COMERCIAL'], $value['PRINCIPIO_ACTIVO'], $value['PRESENTACION'], $value['FABRICANTE'], $value['COSTO'], $value['PRECIO'], $value['TIPO_IVA']); 
-        _fputcsv($f, $lineData);
-	}
-    fseek($f, 0); 
-}
-
-echo '<div class="alert alert-success">
-  		<strong>Proceso finalizado!</strong> ...
-  	</div>';
 ?>
 
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fa fa-exchange"></i> Exportación Manual de Datos</h3>
+        </div>
+        <div class="card-body">
+            <p>Este proceso ejecutará el script de exportación fuera del horario programado del Cron.</p>
+            <button type="button" id="btnExportar" class="btn btn-primary btn-lg">
+                <i class="fa fa-play-circle"></i> Ejecutar Proceso Ahora
+            </button>
+        </div>
+        <div id="resultadoLog" class="card-footer" style="display:none;">
+            <strong>Consola del Servidor:</strong>
+            <pre id="outputConsole" style="background: #222; color: #0f0; padding: 15px; margin-top: 10px; border-radius: 5px; font-size: 12px; overflow: auto; max-height: 400px;"></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+// Usamos una función autoejecutable para asegurar que jQuery ($) esté disponible
+// sin interferir con las rutas internas de PHPMaker
+(function($) {
+    $(function() {
+        // Delegación de evento directa al document para evitar problemas de carga
+        $(document).off("click", "#btnExportar").on("click", "#btnExportar", function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: '¿Confirmar ejecución?',
+                text: "Se lanzará el script en el servidor.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, ejecutar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Procesando...',
+                        allowOutsideClick: false,
+                        didOpen: () => { Swal.showLoading(); }
+                    });
+
+                    // Construimos la URL de forma limpia
+                    var urlEjecucion = ew.currentPage() + '?ejecutar=1';
+
+                    $.getJSON(urlEjecucion)
+                        .done(function(data) {
+                            $("#resultadoLog").show();
+                            if(data.status == "ok") {
+                                Swal.fire('¡Éxito!', 'Proceso finalizado', 'success');
+                                $("#outputConsole").css("color", "#0f0").text(data.output);
+                            } else {
+                                Swal.fire('Error', 'Problema en el servidor', 'error');
+                                $("#outputConsole").css("color", "#ff9900").text(data.output || data.message);
+                            }
+                        })
+                        .fail(function() {
+                            Swal.fire('Error', 'No se pudo comunicar con el servidor.', 'error');
+                        });
+                }
+            });
+        });
+    });
+})(jQuery);
+</script>
 <?= GetDebugMessage() ?>

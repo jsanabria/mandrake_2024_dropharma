@@ -162,6 +162,7 @@ class ViewSalidasList extends ViewSalidas
         $this->monto_usd->Visible = false;
         $this->unidades->setVisibility();
         $this->dias_credito->Visible = false;
+        $this->asesor_asignado->setVisibility();
     }
 
     // Constructor
@@ -1089,6 +1090,7 @@ class ViewSalidasList extends ViewSalidas
         $filterList = Concat($filterList, $this->monto_usd->AdvancedSearch->toJson(), ","); // Field monto_usd
         $filterList = Concat($filterList, $this->unidades->AdvancedSearch->toJson(), ","); // Field unidades
         $filterList = Concat($filterList, $this->dias_credito->AdvancedSearch->toJson(), ","); // Field dias_credito
+        $filterList = Concat($filterList, $this->asesor_asignado->AdvancedSearch->toJson(), ","); // Field asesor_asignado
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1263,6 +1265,14 @@ class ViewSalidasList extends ViewSalidas
         $this->dias_credito->AdvancedSearch->SearchValue2 = @$filter["y_dias_credito"];
         $this->dias_credito->AdvancedSearch->SearchOperator2 = @$filter["w_dias_credito"];
         $this->dias_credito->AdvancedSearch->save();
+
+        // Field asesor_asignado
+        $this->asesor_asignado->AdvancedSearch->SearchValue = @$filter["x_asesor_asignado"];
+        $this->asesor_asignado->AdvancedSearch->SearchOperator = @$filter["z_asesor_asignado"];
+        $this->asesor_asignado->AdvancedSearch->SearchCondition = @$filter["v_asesor_asignado"];
+        $this->asesor_asignado->AdvancedSearch->SearchValue2 = @$filter["y_asesor_asignado"];
+        $this->asesor_asignado->AdvancedSearch->SearchOperator2 = @$filter["w_asesor_asignado"];
+        $this->asesor_asignado->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1292,6 +1302,7 @@ class ViewSalidasList extends ViewSalidas
         $this->buildSearchSql($where, $this->monto_usd, $default, false); // monto_usd
         $this->buildSearchSql($where, $this->unidades, $default, false); // unidades
         $this->buildSearchSql($where, $this->dias_credito, $default, false); // dias_credito
+        $this->buildSearchSql($where, $this->asesor_asignado, $default, false); // asesor_asignado
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1315,6 +1326,7 @@ class ViewSalidasList extends ViewSalidas
             $this->monto_usd->AdvancedSearch->save(); // monto_usd
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->dias_credito->AdvancedSearch->save(); // dias_credito
+            $this->asesor_asignado->AdvancedSearch->save(); // asesor_asignado
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1362,6 +1374,7 @@ class ViewSalidasList extends ViewSalidas
             $this->monto_usd->AdvancedSearch->save(); // monto_usd
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->dias_credito->AdvancedSearch->save(); // dias_credito
+            $this->asesor_asignado->AdvancedSearch->save(); // asesor_asignado
             $this->setSessionRules($rules);
         }
 
@@ -1489,6 +1502,15 @@ class ViewSalidasList extends ViewSalidas
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->unidades->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field asesor_asignado
+        $filter = $this->queryBuilderWhere("asesor_asignado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->asesor_asignado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->asesor_asignado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -1524,6 +1546,7 @@ class ViewSalidasList extends ViewSalidas
         $searchFlds[] = &$this->_username;
         $searchFlds[] = &$this->nota;
         $searchFlds[] = &$this->cerrado;
+        $searchFlds[] = &$this->asesor_asignado;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1603,6 +1626,9 @@ class ViewSalidasList extends ViewSalidas
         if ($this->dias_credito->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->asesor_asignado->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1655,6 +1681,7 @@ class ViewSalidasList extends ViewSalidas
         $this->monto_usd->AdvancedSearch->unsetSession();
         $this->unidades->AdvancedSearch->unsetSession();
         $this->dias_credito->AdvancedSearch->unsetSession();
+        $this->asesor_asignado->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1683,6 +1710,7 @@ class ViewSalidasList extends ViewSalidas
         $this->monto_usd->AdvancedSearch->load();
         $this->unidades->AdvancedSearch->load();
         $this->dias_credito->AdvancedSearch->load();
+        $this->asesor_asignado->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1708,6 +1736,7 @@ class ViewSalidasList extends ViewSalidas
             $this->updateSort($this->consignacion); // consignacion
             $this->updateSort($this->tasa_dia); // tasa_dia
             $this->updateSort($this->unidades); // unidades
+            $this->updateSort($this->asesor_asignado); // asesor_asignado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1749,6 +1778,7 @@ class ViewSalidasList extends ViewSalidas
                 $this->monto_usd->setSort("");
                 $this->unidades->setSort("");
                 $this->dias_credito->setSort("");
+                $this->asesor_asignado->setSort("");
             }
 
             // Reset start position
@@ -2062,6 +2092,7 @@ class ViewSalidasList extends ViewSalidas
             $this->createColumnOption($option, "consignacion");
             $this->createColumnOption($option, "tasa_dia");
             $this->createColumnOption($option, "unidades");
+            $this->createColumnOption($option, "asesor_asignado");
         }
 
         // Set up custom actions
@@ -2195,14 +2226,7 @@ class ViewSalidasList extends ViewSalidas
                     }
                 }
             } else {
-                $errmsg = str_replace('%s', $userAction, $Language->phrase("CustomActionNotFound"));
-                if (Post("ajax") == $userAction) { // Ajax
-                    echo "<p class=\"text-danger\">" . $errmsg . "</p>";
-                    return true;
-                } else {
-                    $this->setFailureMessage($errmsg);
-                    return false;
-                }
+                // Skip checking, handle by Row_CustomAction
             }
             $rows = $this->loadRs($filter)->fetchAllAssociative();
             $this->SelectedCount = count($rows);
@@ -2216,9 +2240,11 @@ class ViewSalidasList extends ViewSalidas
                 $this->SelectedIndex = 0;
                 foreach ($rows as $row) {
                     $this->SelectedIndex++;
-                    $processed = $listAction->handle($row, $this);
-                    if (!$processed) {
-                        break;
+                    if ($listAction) {
+                        $processed = $listAction->handle($row, $this);
+                        if (!$processed) {
+                            break;
+                        }
                     }
                     $processed = $this->rowCustomAction($userAction, $row);
                     if (!$processed) {
@@ -2555,6 +2581,14 @@ class ViewSalidasList extends ViewSalidas
                 $this->Command = "search";
             }
         }
+
+        // asesor_asignado
+        if ($this->asesor_asignado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->asesor_asignado->AdvancedSearch->SearchValue != "" || $this->asesor_asignado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -2668,6 +2702,7 @@ class ViewSalidasList extends ViewSalidas
         $this->monto_usd->setDbValue($row['monto_usd']);
         $this->unidades->setDbValue($row['unidades']);
         $this->dias_credito->setDbValue($row['dias_credito']);
+        $this->asesor_asignado->setDbValue($row['asesor_asignado']);
     }
 
     // Return a row with default values
@@ -2691,6 +2726,7 @@ class ViewSalidasList extends ViewSalidas
         $row['monto_usd'] = $this->monto_usd->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['dias_credito'] = $this->dias_credito->DefaultValue;
+        $row['asesor_asignado'] = $this->asesor_asignado->DefaultValue;
         return $row;
     }
 
@@ -2765,6 +2801,8 @@ class ViewSalidasList extends ViewSalidas
 
         // dias_credito
 
+        // asesor_asignado
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -2808,6 +2846,7 @@ class ViewSalidasList extends ViewSalidas
 
             // fecha
             $this->fecha->ViewValue = $this->fecha->CurrentValue;
+            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
 
             // estatus
             $this->estatus->ViewValue = $this->estatus->CurrentValue;
@@ -2848,6 +2887,9 @@ class ViewSalidasList extends ViewSalidas
             $this->dias_credito->ViewValue = $this->dias_credito->CurrentValue;
             $this->dias_credito->ViewValue = FormatNumber($this->dias_credito->ViewValue, $this->dias_credito->formatPattern());
 
+            // asesor_asignado
+            $this->asesor_asignado->ViewValue = $this->asesor_asignado->CurrentValue;
+
             // nombre_documento
             $this->nombre_documento->HrefValue = "";
             $this->nombre_documento->TooltipValue = "";
@@ -2879,6 +2921,10 @@ class ViewSalidasList extends ViewSalidas
             // unidades
             $this->unidades->HrefValue = "";
             $this->unidades->TooltipValue = "";
+
+            // asesor_asignado
+            $this->asesor_asignado->HrefValue = "";
+            $this->asesor_asignado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // nombre_documento
             $this->nombre_documento->setupEditAttributes();
@@ -2924,10 +2970,7 @@ class ViewSalidasList extends ViewSalidas
 
             // fecha
             $this->fecha->setupEditAttributes();
-            if (!$this->fecha->Raw) {
-                $this->fecha->AdvancedSearch->SearchValue = HtmlDecode($this->fecha->AdvancedSearch->SearchValue);
-            }
-            $this->fecha->EditValue = HtmlEncode($this->fecha->AdvancedSearch->SearchValue);
+            $this->fecha->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha->AdvancedSearch->SearchValue, $this->fecha->formatPattern()), $this->fecha->formatPattern()));
             $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
 
             // nota
@@ -2951,6 +2994,14 @@ class ViewSalidasList extends ViewSalidas
             $this->unidades->setupEditAttributes();
             $this->unidades->EditValue = $this->unidades->AdvancedSearch->SearchValue;
             $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
+
+            // asesor_asignado
+            $this->asesor_asignado->setupEditAttributes();
+            if (!$this->asesor_asignado->Raw) {
+                $this->asesor_asignado->AdvancedSearch->SearchValue = HtmlDecode($this->asesor_asignado->AdvancedSearch->SearchValue);
+            }
+            $this->asesor_asignado->EditValue = HtmlEncode($this->asesor_asignado->AdvancedSearch->SearchValue);
+            $this->asesor_asignado->PlaceHolder = RemoveHtml($this->asesor_asignado->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3005,6 +3056,7 @@ class ViewSalidasList extends ViewSalidas
         $this->monto_usd->AdvancedSearch->load();
         $this->unidades->AdvancedSearch->load();
         $this->dias_credito->AdvancedSearch->load();
+        $this->asesor_asignado->AdvancedSearch->load();
     }
 
     // Get export HTML tag

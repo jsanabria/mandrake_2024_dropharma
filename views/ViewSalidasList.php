@@ -319,6 +319,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_view_salidas_unidades" class="view_salidas_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
 <?php } ?>
+<?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
+        <th data-name="asesor_asignado" class="<?= $Page->asesor_asignado->headerCellClass() ?>"><div id="elh_view_salidas_asesor_asignado" class="view_salidas_asesor_asignado"><?= $Page->renderFieldHeader($Page->asesor_asignado) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -408,6 +411,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_salidas_unidades" class="el_view_salidas_unidades">
 <span<?= $Page->unidades->viewAttributes() ?>>
 <?= $Page->unidades->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
+        <td data-name="asesor_asignado"<?= $Page->asesor_asignado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_salidas_asesor_asignado" class="el_view_salidas_asesor_asignado">
+<span<?= $Page->asesor_asignado->viewAttributes() ?>>
+<?= $Page->asesor_asignado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

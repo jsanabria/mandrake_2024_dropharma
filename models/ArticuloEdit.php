@@ -156,6 +156,7 @@ class ArticuloEdit extends Articulo
         $this->activo->setVisibility();
         $this->lote->Visible = false;
         $this->fecha_vencimiento->Visible = false;
+        $this->indexado->setVisibility();
     }
 
     // Constructor
@@ -556,6 +557,7 @@ class ArticuloEdit extends Articulo
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->indexado);
 
         // Check modal
         if ($this->IsModal) {
@@ -982,6 +984,16 @@ class ArticuloEdit extends Articulo
             }
         }
 
+        // Check field name 'indexado' first before field var 'x_indexado'
+        $val = $CurrentForm->hasValue("indexado") ? $CurrentForm->getValue("indexado") : $CurrentForm->getValue("x_indexado");
+        if (!$this->indexado->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->indexado->Visible = false; // Disable update for API request
+            } else {
+                $this->indexado->setFormValue($val);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -1012,6 +1024,7 @@ class ArticuloEdit extends Articulo
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
         $this->articulo_inventario->CurrentValue = $this->articulo_inventario->FormValue;
         $this->activo->CurrentValue = $this->activo->FormValue;
+        $this->indexado->CurrentValue = $this->indexado->FormValue;
     }
 
     /**
@@ -1135,6 +1148,7 @@ class ArticuloEdit extends Articulo
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
+        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Return a row with default values
@@ -1168,6 +1182,7 @@ class ArticuloEdit extends Articulo
         $row['activo'] = $this->activo->DefaultValue;
         $row['lote'] = $this->lote->DefaultValue;
         $row['fecha_vencimiento'] = $this->fecha_vencimiento->DefaultValue;
+        $row['indexado'] = $this->indexado->DefaultValue;
         return $row;
     }
 
@@ -1282,6 +1297,9 @@ class ArticuloEdit extends Articulo
 
         // fecha_vencimiento
         $this->fecha_vencimiento->RowCssClass = "row";
+
+        // indexado
+        $this->indexado->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1513,6 +1531,13 @@ class ArticuloEdit extends Articulo
             $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
             $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
 
+            // indexado
+            if (strval($this->indexado->CurrentValue) != "") {
+                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+            } else {
+                $this->indexado->ViewValue = null;
+            }
+
             // foto
             if (!EmptyValue($this->foto->Upload->DbValue)) {
                 $this->foto->HrefValue = GetFileUploadUrl($this->foto, $this->foto->htmlDecode($this->foto->Upload->DbValue)); // Add prefix/suffix
@@ -1575,6 +1600,9 @@ class ArticuloEdit extends Articulo
 
             // activo
             $this->activo->HrefValue = "";
+
+            // indexado
+            $this->indexado->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // foto
             $this->foto->setupEditAttributes();
@@ -1864,6 +1892,11 @@ class ArticuloEdit extends Articulo
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
+            // indexado
+            $this->indexado->setupEditAttributes();
+            $this->indexado->EditValue = $this->indexado->options(true);
+            $this->indexado->PlaceHolder = RemoveHtml($this->indexado->caption());
+
             // Edit refer script
 
             // foto
@@ -1928,6 +1961,9 @@ class ArticuloEdit extends Articulo
 
             // activo
             $this->activo->HrefValue = "";
+
+            // indexado
+            $this->indexado->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2049,6 +2085,11 @@ class ArticuloEdit extends Articulo
             if ($this->activo->Visible && $this->activo->Required) {
                 if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
                     $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
+                }
+            }
+            if ($this->indexado->Visible && $this->indexado->Required) {
+                if (!$this->indexado->IsDetailKey && EmptyValue($this->indexado->FormValue)) {
+                    $this->indexado->addErrorMessage(str_replace("%s", $this->indexado->caption(), $this->indexado->RequiredErrorMessage));
                 }
             }
 
@@ -2262,6 +2303,9 @@ class ArticuloEdit extends Articulo
 
         // activo
         $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, $this->activo->ReadOnly);
+
+        // indexado
+        $this->indexado->setDbValueDef($rsnew, $this->indexado->CurrentValue, $this->indexado->ReadOnly);
         return $rsnew;
     }
 
@@ -2324,6 +2368,9 @@ class ArticuloEdit extends Articulo
         }
         if (isset($row['activo'])) { // activo
             $this->activo->CurrentValue = $row['activo'];
+        }
+        if (isset($row['indexado'])) { // indexado
+            $this->indexado->CurrentValue = $row['indexado'];
         }
     }
 
@@ -2434,6 +2481,8 @@ class ArticuloEdit extends Articulo
                 case "x_articulo_inventario":
                     break;
                 case "x_activo":
+                    break;
+                case "x_indexado":
                     break;
                 default:
                     $lookupFilter = "";

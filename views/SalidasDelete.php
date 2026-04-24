@@ -137,6 +137,21 @@ $Page->showMessage();
 <?php if ($Page->packer_date->Visible) { // packer_date ?>
         <th class="<?= $Page->packer_date->headerCellClass() ?>"><span id="elh_salidas_packer_date" class="salidas_packer_date"><?= $Page->packer_date->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <th class="<?= $Page->descuento2->headerCellClass() ?>"><span id="elh_salidas_descuento2" class="salidas_descuento2"><?= $Page->descuento2->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+        <th class="<?= $Page->igtf->headerCellClass() ?>"><span id="elh_salidas_igtf" class="salidas_igtf"><?= $Page->igtf->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+        <th class="<?= $Page->monto_base_igtf->headerCellClass() ?>"><span id="elh_salidas_monto_base_igtf" class="salidas_monto_base_igtf"><?= $Page->monto_base_igtf->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+        <th class="<?= $Page->monto_igtf->headerCellClass() ?>"><span id="elh_salidas_monto_igtf" class="salidas_monto_igtf"><?= $Page->monto_igtf->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->doc_afe->Visible) { // doc_afe ?>
+        <th class="<?= $Page->doc_afe->headerCellClass() ?>"><span id="elh_salidas_doc_afe" class="salidas_doc_afe"><?= $Page->doc_afe->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -398,6 +413,46 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->packer_date->viewAttributes() ?>>
 <?= $Page->packer_date->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <td<?= $Page->descuento2->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+        <td<?= $Page->igtf->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->igtf->viewAttributes() ?>>
+<?= $Page->igtf->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+        <td<?= $Page->monto_base_igtf->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->monto_base_igtf->viewAttributes() ?>>
+<?= $Page->monto_base_igtf->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+        <td<?= $Page->monto_igtf->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->monto_igtf->viewAttributes() ?>>
+<?= $Page->monto_igtf->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->doc_afe->Visible) { // doc_afe ?>
+        <td<?= $Page->doc_afe->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->doc_afe->viewAttributes() ?>>
+<?= $Page->doc_afe->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

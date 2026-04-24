@@ -1997,7 +1997,16 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
     // Page Render event
     public function pageRender()
     {
-        //Log("Page Render");
+        // Verificamos el valor actual del campo estatus
+        if ($this->estatus->CurrentValue == "PROCESADO") {
+            // Desactivamos la opción de editar en la barra de herramientas superior
+            $this->OtherOptions["action"]->Items["edit"]->Visible = false;
+
+            // Opcional: Ocultar también el botón de borrar en View
+            if (isset($this->OtherOptions["action"]->Items["delete"])) {
+                $this->OtherOptions["action"]->Items["delete"]->Visible = false;
+            }
+        }
     }
 
     public function pageDataRendering(&$header)
@@ -2016,8 +2025,20 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $html .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $urlImprimir . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
 
         // 3. Botón Copiar
-        $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
-        $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Copiar Documento</a>';
+        if($this->estatus->CurrentValue == "PROCESADO") {
+            $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
+            switch ($this->documento->CurrentValue) {
+            case "FC":
+                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
+                break;
+            case "NC":
+                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                break;
+            case "ND":
+                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                break;
+            }
+        }
 
         // Lógica de Pagos
         $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";

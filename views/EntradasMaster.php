@@ -175,6 +175,17 @@ $entradas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($entradas->unidades->Visible) { // unidades ?>
+        <tr id="r_unidades"<?= $entradas->unidades->rowAttributes() ?>>
+            <td class="<?= $entradas->TableLeftColumnClass ?>"><?= $entradas->unidades->caption() ?></td>
+            <td<?= $entradas->unidades->cellAttributes() ?>>
+<span id="el_entradas_unidades">
+<span<?= $entradas->unidades->viewAttributes() ?>>
+<?= $entradas->unidades->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

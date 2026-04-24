@@ -182,6 +182,11 @@ class SalidasAdd extends Salidas
         $this->packer->setVisibility();
         $this->packer_date->setVisibility();
         $this->fotos->setVisibility();
+        $this->descuento2->setVisibility();
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
+        $this->doc_afe->setVisibility();
     }
 
     // Constructor
@@ -588,6 +593,7 @@ class SalidasAdd extends Salidas
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->id_documento_padre);
+        $this->setupLookupOptions($this->igtf);
 
         // Load default values for add
         $this->loadDefaultValues();
@@ -943,6 +949,56 @@ class SalidasAdd extends Salidas
             $this->packer_date->CurrentValue = UnFormatDateTime($this->packer_date->CurrentValue, $this->packer_date->formatPattern());
         }
 
+        // Check field name 'descuento2' first before field var 'x_descuento2'
+        $val = $CurrentForm->hasValue("descuento2") ? $CurrentForm->getValue("descuento2") : $CurrentForm->getValue("x_descuento2");
+        if (!$this->descuento2->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->descuento2->Visible = false; // Disable update for API request
+            } else {
+                $this->descuento2->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'igtf' first before field var 'x_igtf'
+        $val = $CurrentForm->hasValue("igtf") ? $CurrentForm->getValue("igtf") : $CurrentForm->getValue("x_igtf");
+        if (!$this->igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->igtf->setFormValue($val);
+            }
+        }
+
+        // Check field name 'monto_base_igtf' first before field var 'x_monto_base_igtf'
+        $val = $CurrentForm->hasValue("monto_base_igtf") ? $CurrentForm->getValue("monto_base_igtf") : $CurrentForm->getValue("x_monto_base_igtf");
+        if (!$this->monto_base_igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_base_igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_base_igtf->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'monto_igtf' first before field var 'x_monto_igtf'
+        $val = $CurrentForm->hasValue("monto_igtf") ? $CurrentForm->getValue("monto_igtf") : $CurrentForm->getValue("x_monto_igtf");
+        if (!$this->monto_igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_igtf->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'doc_afe' first before field var 'x_doc_afe'
+        $val = $CurrentForm->hasValue("doc_afe") ? $CurrentForm->getValue("doc_afe") : $CurrentForm->getValue("x_doc_afe");
+        if (!$this->doc_afe->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->doc_afe->Visible = false; // Disable update for API request
+            } else {
+                $this->doc_afe->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         $this->getUploadFiles(); // Get upload files
@@ -970,6 +1026,11 @@ class SalidasAdd extends Salidas
         $this->packer->CurrentValue = $this->packer->FormValue;
         $this->packer_date->CurrentValue = $this->packer_date->FormValue;
         $this->packer_date->CurrentValue = UnFormatDateTime($this->packer_date->CurrentValue, $this->packer_date->formatPattern());
+        $this->descuento2->CurrentValue = $this->descuento2->FormValue;
+        $this->igtf->CurrentValue = $this->igtf->FormValue;
+        $this->monto_base_igtf->CurrentValue = $this->monto_base_igtf->FormValue;
+        $this->monto_igtf->CurrentValue = $this->monto_igtf->FormValue;
+        $this->doc_afe->CurrentValue = $this->doc_afe->FormValue;
     }
 
     /**
@@ -1065,6 +1126,11 @@ class SalidasAdd extends Salidas
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
+        $this->descuento2->setDbValue($row['descuento2']);
+        $this->igtf->setDbValue($row['igtf']);
+        $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
+        $this->monto_igtf->setDbValue($row['monto_igtf']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Return a row with default values
@@ -1124,6 +1190,11 @@ class SalidasAdd extends Salidas
         $row['packer'] = $this->packer->DefaultValue;
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
+        $row['igtf'] = $this->igtf->DefaultValue;
+        $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
+        $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
+        $row['doc_afe'] = $this->doc_afe->DefaultValue;
         return $row;
     }
 
@@ -1316,6 +1387,21 @@ class SalidasAdd extends Salidas
 
         // fotos
         $this->fotos->RowCssClass = "row";
+
+        // descuento2
+        $this->descuento2->RowCssClass = "row";
+
+        // igtf
+        $this->igtf->RowCssClass = "row";
+
+        // monto_base_igtf
+        $this->monto_base_igtf->RowCssClass = "row";
+
+        // monto_igtf
+        $this->monto_igtf->RowCssClass = "row";
+
+        // doc_afe
+        $this->doc_afe->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1792,6 +1878,29 @@ class SalidasAdd extends Salidas
                 $this->fotos->ViewValue = "";
             }
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
+            // igtf
+            if (strval($this->igtf->CurrentValue) != "") {
+                $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
+            } else {
+                $this->igtf->ViewValue = null;
+            }
+
+            // monto_base_igtf
+            $this->monto_base_igtf->ViewValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->ViewValue = FormatNumber($this->monto_base_igtf->ViewValue, $this->monto_base_igtf->formatPattern());
+
+            // monto_igtf
+            $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
+            // doc_afe
+            $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
 
@@ -1868,6 +1977,21 @@ class SalidasAdd extends Salidas
                 $this->fotos->HrefValue = "";
             }
             $this->fotos->ExportHrefValue = $this->fotos->UploadPath . $this->fotos->Upload->DbValue;
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+
+            // igtf
+            $this->igtf->HrefValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+
+            // doc_afe
+            $this->doc_afe->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -2153,6 +2277,42 @@ class SalidasAdd extends Salidas
                 RenderUploadField($this->fotos);
             }
 
+            // descuento2
+            $this->descuento2->setupEditAttributes();
+            $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+            if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+                $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+            }
+
+            // igtf
+            $this->igtf->EditValue = $this->igtf->options(false);
+            $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+            // monto_base_igtf
+            $this->monto_base_igtf->setupEditAttributes();
+            $this->monto_base_igtf->EditValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+            if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
+                $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
+            }
+
+            // monto_igtf
+            $this->monto_igtf->setupEditAttributes();
+            $this->monto_igtf->EditValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
+            if (strval($this->monto_igtf->EditValue) != "" && is_numeric($this->monto_igtf->EditValue)) {
+                $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, null);
+            }
+
+            // doc_afe
+            $this->doc_afe->setupEditAttributes();
+            $this->doc_afe->EditValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->PlaceHolder = RemoveHtml($this->doc_afe->caption());
+            if (strval($this->doc_afe->EditValue) != "" && is_numeric($this->doc_afe->EditValue)) {
+                $this->doc_afe->EditValue = FormatNumber($this->doc_afe->EditValue, null);
+            }
+
             // Add refer script
 
             // tipo_documento
@@ -2226,6 +2386,21 @@ class SalidasAdd extends Salidas
                 $this->fotos->HrefValue = "";
             }
             $this->fotos->ExportHrefValue = $this->fotos->UploadPath . $this->fotos->Upload->DbValue;
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+
+            // igtf
+            $this->igtf->HrefValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+
+            // doc_afe
+            $this->doc_afe->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2342,6 +2517,43 @@ class SalidasAdd extends Salidas
                 if ($this->fotos->Upload->FileName == "" && !$this->fotos->Upload->KeepFile) {
                     $this->fotos->addErrorMessage(str_replace("%s", $this->fotos->caption(), $this->fotos->RequiredErrorMessage));
                 }
+            }
+            if ($this->descuento2->Visible && $this->descuento2->Required) {
+                if (!$this->descuento2->IsDetailKey && EmptyValue($this->descuento2->FormValue)) {
+                    $this->descuento2->addErrorMessage(str_replace("%s", $this->descuento2->caption(), $this->descuento2->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->descuento2->FormValue)) {
+                $this->descuento2->addErrorMessage($this->descuento2->getErrorMessage(false));
+            }
+            if ($this->igtf->Visible && $this->igtf->Required) {
+                if ($this->igtf->FormValue == "") {
+                    $this->igtf->addErrorMessage(str_replace("%s", $this->igtf->caption(), $this->igtf->RequiredErrorMessage));
+                }
+            }
+            if ($this->monto_base_igtf->Visible && $this->monto_base_igtf->Required) {
+                if (!$this->monto_base_igtf->IsDetailKey && EmptyValue($this->monto_base_igtf->FormValue)) {
+                    $this->monto_base_igtf->addErrorMessage(str_replace("%s", $this->monto_base_igtf->caption(), $this->monto_base_igtf->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_base_igtf->FormValue)) {
+                $this->monto_base_igtf->addErrorMessage($this->monto_base_igtf->getErrorMessage(false));
+            }
+            if ($this->monto_igtf->Visible && $this->monto_igtf->Required) {
+                if (!$this->monto_igtf->IsDetailKey && EmptyValue($this->monto_igtf->FormValue)) {
+                    $this->monto_igtf->addErrorMessage(str_replace("%s", $this->monto_igtf->caption(), $this->monto_igtf->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_igtf->FormValue)) {
+                $this->monto_igtf->addErrorMessage($this->monto_igtf->getErrorMessage(false));
+            }
+            if ($this->doc_afe->Visible && $this->doc_afe->Required) {
+                if (!$this->doc_afe->IsDetailKey && EmptyValue($this->doc_afe->FormValue)) {
+                    $this->doc_afe->addErrorMessage(str_replace("%s", $this->doc_afe->caption(), $this->doc_afe->RequiredErrorMessage));
+                }
+            }
+            if (!CheckInteger($this->doc_afe->FormValue)) {
+                $this->doc_afe->addErrorMessage($this->doc_afe->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -2573,6 +2785,21 @@ class SalidasAdd extends Salidas
                 $rsnew['fotos'] = $this->fotos->Upload->FileName;
             }
         }
+
+        // descuento2
+        $this->descuento2->setDbValueDef($rsnew, $this->descuento2->CurrentValue, false);
+
+        // igtf
+        $this->igtf->setDbValueDef($rsnew, $this->igtf->CurrentValue, false);
+
+        // monto_base_igtf
+        $this->monto_base_igtf->setDbValueDef($rsnew, $this->monto_base_igtf->CurrentValue, false);
+
+        // monto_igtf
+        $this->monto_igtf->setDbValueDef($rsnew, $this->monto_igtf->CurrentValue, false);
+
+        // doc_afe
+        $this->doc_afe->setDbValueDef($rsnew, $this->doc_afe->CurrentValue, false);
         return $rsnew;
     }
 
@@ -2635,6 +2862,21 @@ class SalidasAdd extends Salidas
         }
         if (isset($row['fotos'])) { // fotos
             $this->fotos->setFormValue($row['fotos']);
+        }
+        if (isset($row['descuento2'])) { // descuento2
+            $this->descuento2->setFormValue($row['descuento2']);
+        }
+        if (isset($row['igtf'])) { // igtf
+            $this->igtf->setFormValue($row['igtf']);
+        }
+        if (isset($row['monto_base_igtf'])) { // monto_base_igtf
+            $this->monto_base_igtf->setFormValue($row['monto_base_igtf']);
+        }
+        if (isset($row['monto_igtf'])) { // monto_igtf
+            $this->monto_igtf->setFormValue($row['monto_igtf']);
+        }
+        if (isset($row['doc_afe'])) { // doc_afe
+            $this->doc_afe->setFormValue($row['doc_afe']);
         }
     }
 
@@ -2783,6 +3025,8 @@ class SalidasAdd extends Salidas
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_id_documento_padre":
+                    break;
+                case "x_igtf":
                     break;
                 default:
                     $lookupFilter = "";

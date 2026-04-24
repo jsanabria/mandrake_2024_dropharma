@@ -530,6 +530,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->archivo_pedido->Visible) { // archivo_pedido ?>
         <th data-name="archivo_pedido" class="<?= $Page->archivo_pedido->headerCellClass() ?>"><div id="elh_entradas_archivo_pedido" class="entradas_archivo_pedido"><?= $Page->renderFieldHeader($Page->archivo_pedido) ?></div></th>
 <?php } ?>
+<?php if ($Page->unidades->Visible) { // unidades ?>
+        <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_entradas_unidades" class="entradas_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -678,6 +681,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span<?= $Page->archivo_pedido->viewAttributes() ?>>
 <?= GetFileViewTag($Page->archivo_pedido, $Page->archivo_pedido->getViewValue(), false) ?>
 </span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->unidades->Visible) { // unidades ?>
+        <td data-name="unidades"<?= $Page->unidades->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_unidades" class="el_entradas_unidades">
+<span<?= $Page->unidades->viewAttributes() ?>>
+<?= $Page->unidades->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
