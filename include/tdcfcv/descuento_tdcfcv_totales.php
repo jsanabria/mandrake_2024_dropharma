@@ -4,6 +4,7 @@ include "../connect.php";
 $pedido = intval($_REQUEST["pedido"]); 
 $descuentoG = floatval($_REQUEST["descuentoG"]); 
 $descTransferencista = floatval($_REQUEST["descTransferencista"]); 
+$descFabricante = floatval($_REQUEST["descFabricante"]); 
 $username = $_REQUEST["username"]; 
 
 $moneda = $_REQUEST["moneda"]; 
@@ -17,7 +18,7 @@ $row = mysqli_fetch_array($rs);
 $tasa_usd = floatval($row["tasa"]);
 */
 
-$sql = "UPDATE salidas SET descuento = $descuentoG, descuento2 = $descTransferencista WHERE id = $pedido;";
+$sql = "UPDATE salidas SET descuento = $descuentoG, descuento2 = $descTransferencista, descuento3 = $descFabricante WHERE id = $pedido;";
 mysqli_query($link, $sql);
 
 $sql = "SELECT IFNULL(nro_documento, '') AS nro_documento FROM salidas WHERE id = $pedido;"; 
@@ -80,8 +81,10 @@ if($row = mysqli_fetch_array($rs)) {
 	*/
 	$xExento = floatval($row["exento"]);
 	$xExento = $xExento - ($xExento*($descTransferencista/100));
+	$xExento = $xExento - ($xExento*($descFabricante/100));
 	$xGravado = floatval($row["gravado"]);
 	$xGravado = $xGravado - ($xGravado*($descTransferencista/100));
+	$xGravado = $xGravado - ($xGravado*($descFabricante/100));
 	$precio = $xExento + $xGravado;
 	$iva = $xGravado * (floatval($alicuota)/100);
 	$total = $precio + $iva;

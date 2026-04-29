@@ -14,6 +14,7 @@ $tasa_usd = floatval($_REQUEST["tasa_usd"]);
 $username = $_REQUEST["username"]; 
 $descuentoG = floatval($_REQUEST["descuentoG"]); // Cambiado a floatval para precisión
 $descTransferencista = floatval($_REQUEST["descTransferencista"]); 
+$descFabricante = floatval($_REQUEST["descFabricante"]);
 $nota = $_REQUEST["nota"]; 
 $consignacion = $_REQUEST["consignacion"]; 
 $doc_afectado = (isset($_REQUEST["doc_afectado"]) && $_REQUEST["doc_afectado"] != "") ? intval($_REQUEST["doc_afectado"]) : ""; 
@@ -42,6 +43,11 @@ if ($descuento == 100) {
 
 if ($descTransferencista == 100) {
     echo json_encode(array("estatus" => "0", "mensaje" => "El descuento transferencista no puede ser 100%."), JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+if ($descFabricante == 100) {
+    echo json_encode(array("estatus" => "0", "mensaje" => "El descuento fabricante no puede ser 100%."), JSON_UNESCAPED_UNICODE);
     exit();
 }
 // --- VALIDACIÓN ESPECÍFICA PARA NOTA DE CRÉDITO (NC) ---
@@ -131,13 +137,13 @@ $costo_total_item = $cantidad * $costo_unidad;
 
 // --- MANEJO DE CABECERA ---
 if($pedido == 0) {
-    $sql = "INSERT INTO salidas (id, tipo_documento, username, fecha, cliente, nota, estatus, moneda, consignacion, descuento, descuento2, documento, doc_afectado, doc_afe) 
-            VALUES (NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "', $cliente, '$nota', 'NUEVO', '$moneda', 'N', $descuentoG, $descTransferencista, '$consignacion', '$doc_afectado', $doc_afectado_id);";
+    $sql = "INSERT INTO salidas (id, tipo_documento, username, fecha, cliente, nota, estatus, moneda, consignacion, descuento, descuento2, descuento3, documento, doc_afectado, doc_afe) 
+            VALUES (NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "', $cliente, '$nota', 'NUEVO', '$moneda', 'N', $descuentoG, $descTransferencista, $descFabricante, '$consignacion', '$doc_afectado', $doc_afectado_id);";
     mysqli_query($link, $sql);
     $pedido = mysqli_insert_id($link);
     $nro_documento = "";
 } else {
-    $sql = "UPDATE salidas SET descuento = $descuentoG, descuento2 = $descTransferencista WHERE id = $pedido;";
+    $sql = "UPDATE salidas SET descuento = $descuentoG, descuento2 = $descTransferencista, descuento3 = $descFabricante WHERE id = $pedido;";
     mysqli_query($link, $sql);
 }
 
@@ -173,9 +179,11 @@ if($row_c = mysqli_fetch_array($rs_calc)) {
     // Aplicar descuento de transferencista sobre bases
     $xExento = floatval($row_c["exento"]);
     $xExento = $xExento - ($xExento * ($descTransferencista/100));
+    $xExento = $xExento - ($xExento * ($descFabricante/100));
     
     $xGravado = floatval($row_c["gravado"]);
     $xGravado = $xGravado - ($xGravado * ($descTransferencista/100));
+    $xGravado = $xGravado - ($xGravado * ($descFabricante/100));
     
     $costo_final = $xExento + $xGravado;
     $iva_final = $xGravado * ($xalicuota / 100);

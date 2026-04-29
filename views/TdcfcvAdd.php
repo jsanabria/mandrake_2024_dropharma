@@ -32,9 +32,10 @@ $nota = "";
 $doc_afectado = "";
 $nro_documento = "";
 $descTransferencista = 0.00;
+$descFabricante = 0.00;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2 FROM salidas WHERE id = $pedido;";
+    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3 FROM salidas WHERE id = $pedido;";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -45,6 +46,7 @@ if(isset($_REQUEST["pedido"])) {
       $doc_afectado = $row["doc_afectado"]; 
       $nro_documento = $row["nro_documento"]; 
       $descTransferencista = floatval($row["descuento2"]);
+      $descFabricante = floatval($row["descuento3"]);
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -76,6 +78,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     var username = '<?= CurrentUserName() ?>';
     var descuentoG = $("#PorDesAct").value();
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
     var nota = $("#nota").value();
     var consignacion = $("#consignacion").value();
     var lote = $("#x" + i + "_lote").value();
@@ -108,6 +111,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
               username: username, 
               descuentoG: descuentoG,
               descTransferencista: descTransferencista, 
+              descFabricante: descFabricante, 
               nota: nota,
               consignacion: consignacion, 
               lote: lote, 
@@ -175,6 +179,7 @@ function eliminar(i, id_item) {
     var username = '<?= CurrentUserName() ?>';
     var descuento = $("#PorDesAct").val();
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
     var nota = $("#nota").val();
     var consignacion = $("#consignacion").val();
     var doc_afectado = $("#doc_afectado").val();
@@ -196,6 +201,7 @@ function eliminar(i, id_item) {
         username: username, 
         descuento: descuento,
         descTransferencista: descTransferencista, 
+        descFabricante: descFabricante, 
         id_item: id_item, 
         nota: nota,
         consignacion: consignacion,
@@ -234,6 +240,7 @@ function guardarModificacion(i, id_item) {
     var username = '<?= CurrentUserName() ?>';
     var descuento = $("#PorDesAct").val(); // Descuento general de la factura
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
     var nota = $("#nota").val();
     
     // Valores específicos de la línea a modificar
@@ -264,6 +271,7 @@ function guardarModificacion(i, id_item) {
             username: username, 
             descuento_global: descuento, // El % de la cabecera
             descTransferencista: descTransferencista, 
+            descFabricante: descFabricante, 
             nota: nota
         },
         type: "POST",
@@ -493,7 +501,19 @@ function guardarModificacion(i, id_item) {
     var tasa_usd = $("#tasa_usd").value();
     var username = '<?= CurrentUserName() ?>';
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
    
+    if(descTransferencista == 100) {
+      ew.alert("El descuento de transferencista no puede ser 100%");
+      $("#descTransferencista").val(0.00);
+      return false
+    }
+
+    if(descFabricante == 100) {
+      ew.alert("El descuento de fabricante no puede ser 100%");
+      $("#descFabricante").val(0.00);
+      return false
+    }
 
     $.ajax({
       // The URL for the request
@@ -505,7 +525,8 @@ function guardarModificacion(i, id_item) {
               moneda: moneda, 
               tasa_usd: tasa_usd, 
               username: username, 
-              descTransferencista: descTransferencista 
+              descTransferencista: descTransferencista, 
+              descFabricante: descFabricante 
             },
       // Whether this is a POST or GET request
       type: "POST",
@@ -704,28 +725,43 @@ function guardarModificacion(i, id_item) {
     <span><a onclick="js:ProgPlus();"><i class="fa-solid fa-plus"></i></a></span>
   </div>
 
+  <!-- Transferencista (igual que lo tienes) -->
   <div class="col-sm-2">
     <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
     <?php if(trim($doc_afectado) != "") echo "Doc Afect.:" . $doc_afectado; ?>
     <?php
-    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();"> % Transferencista';
+    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();">
+    <small>% Transferencista</small>';
     ?>   
   </div>
 
+  <!-- Fabricante (ajustado como Transferencista) -->
   <div class="col-sm-2">
-      <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()">
-        <?php
-        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-        $rows = ExecuteRows($sql);
-        foreach ($rows as $key => $value) {
-          echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-        }
-        ?>
-      </select>
+    <?php
+    echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();">
+    <small>% Fabricante</small>';
+    ?>   
   </div>
 
-  <div class="col-sm-2">
-    Tasa B.C.V.:<input name="tasa_usd" id="tasa_usd" type="number" class="form-control" value="<?= $tasa ?>" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()" />
+  <!-- Moneda -->
+  <div class="col-sm-1">
+    <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()">
+      <?php
+      $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
+      $rows = ExecuteRows($sql);
+      foreach ($rows as $value) {
+        echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
+      }
+      ?>
+    </select>
+  </div>
+
+  <!-- Tasa (ahora con label abajo) -->
+  <div class="col-sm-1">
+    <?php
+    echo '<input name="tasa_usd" id="tasa_usd" type="number" class="form-control form-control-sm" value="' . $tasa . '" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()">
+    <small>Tasa B.C.V.</small>';
+    ?>
   </div>
 </div>
 

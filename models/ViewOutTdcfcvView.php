@@ -2011,7 +2011,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
 
     public function pageDataRendering(&$header)
     {
-        // Iniciamos el contenedor alineado
+        // Iniciamos el contenedor alineado con el espaciado estándar
         $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
 
         // 1. Botón Editar (Solo si es NUEVO)
@@ -2028,32 +2028,37 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         if($this->estatus->CurrentValue == "PROCESADO") {
             $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
             switch ($this->documento->CurrentValue) {
-            case "FC":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
-                break;
-            case "NC":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
-                break;
-            case "ND":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
-                break;
+                case "FC":
+                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
+                    break;
+                case "NC":
+                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                    break;
+                case "ND":
+                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                    break;
             }
         }
 
-        // Lógica de Pagos
+        // Lógica de Pagos y Comprobante
         $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
-        if ($row = ExecuteRow($sql)) {
+        $rowPago = ExecuteRow($sql);
+        if ($rowPago) {
             // 4. Botón Ver Pagos
-            $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $row["id"];
+            $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $rowPago["id"];
             $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
 
-            // 5. Botón Revertir (Si tiene permiso)
+            // 5. Botón Imprimir Comprobante (Adaptado al estilo del grupo)
+            $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+            $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
+
+            // 6. Botón Revertir (Si tiene permiso)
             if (VerificaFuncion('014')) {
-                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName(). '\'); " style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
             }
         } else {
-            // 6. Botón Registrar Pago
-            if ($this->estatus->CurrentValue != "ANULADO") {
+            // 7. Botón Registrar Pago
+            if ($this->estatus->CurrentValue == "PROCESADO") {
                 $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
                 $html .= '<a class="btn btn-outline-primary" href="' . $urlAddPago . '"><span class="fas fa-money-bill-wave"></span> Registrar Pago</a>';
             }

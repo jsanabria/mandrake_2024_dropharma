@@ -8,12 +8,13 @@ $moneda = $_REQUEST["moneda"];
 $tasa_usd = floatval($_REQUEST["tasa_usd"]); 
 
 
-$sql = "SELECT descuento, descuento2 FROM salidas WHERE id = $pedido;";
+$sql = "SELECT descuento, descuento2, descuento3 FROM salidas WHERE id = $pedido;";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $descuento = floatval($row["descuento"]);
 $descuentoG = $descuento;
 $descTransferencista = floatval($row["descuento2"]);
+$descFabricante = floatval($row["descuento3"]);
 
 $tipo_documento = "TDCFCV";
 
@@ -76,8 +77,10 @@ if($row = mysqli_fetch_array($rs)) {
 	*/
 	$xExento = floatval($row["exento"]);
 	$xExento = $xExento - ($xExento*($descTransferencista/100));
+	$xExento = $xExento - ($xExento*($descFabricante/100));
 	$xGravado = floatval($row["gravado"]);
 	$xGravado = $xGravado - ($xGravado*($descTransferencista/100));
+	$xGravado = $xGravado - ($xGravado*($descFabricante/100));
 	$costo = $xExento + $xGravado;
 	$iva = $xGravado * (floatval($xalicuota)/100);
 	$total = $costo + $iva;

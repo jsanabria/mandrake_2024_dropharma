@@ -809,6 +809,7 @@
       <Field FldName="monto_base_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="monto base igtf" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="monto igtf" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="doc_afe" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="doc afe" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento3" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="descuento 3" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="sesiones.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Inicios de Sesion" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="subir_costo.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Subir Costo de Artículos" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -1718,7 +1719,7 @@
     <Table TblName="tdcaen_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Entrada" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcasa_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcasa_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -1761,7 +1762,7 @@
       <Field FldName="username2" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Usuario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagLnkDisp2="username" FldTagLnkOrderBy="nombre" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
     </Table>
     <Table TblName="articulos_costos_precios.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Actualizar Costo Precios" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="cobros_cliente_detalle" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,view=0,view|class=0" TblList="1" TblView="1" TblCaption="Cobros Detalle" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="cobros_cliente_detalle" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,view=0,view|class=0" TblList="1" TblView="1" TblCaption="Cobros Detalle" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="cobros_cliente" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cobros cliente" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="metodo_pago" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="10" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Tipo de Pago" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="10" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor2" FldTagLnkOrderBy="valor2" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '009'&quot;" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
@@ -1776,7 +1777,7 @@
       <Field FldName="banco" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Banco Destino" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="view_banco" FldTagLnkFld="id" FldTagLnkDisplay="banco" FldTagLnkDisp2="numero" FldTagLnkOrderBy="banco" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="anticipo_id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Anticipo" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="registrar_pagos_clientes.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Registrar Pagos de Clientes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="registrar_pagos_clientes.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Registrar Pagos de Clientes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="anticipos_aplicaciones" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblDelete="1" TblCaption="Anticipos Aplicaciones" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="anticipo_cobro_id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="anticipo cobro id" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -3366,6 +3367,9 @@
           <ExtField FldName="doc_afe">
             <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
           </ExtField>
+          <ExtField FldName="descuento3">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="entradas">
@@ -4338,6 +4342,9 @@
             <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
           </ExtField>
           <ExtField FldName="doc_afe">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="descuento3">
             <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
           </ExtField>
           <Properties><![CDATA[[]]]></Properties>
@@ -31421,9 +31428,10 @@ $nota = "";
 $doc_afectado = "";
 $nro_documento = "";
 $descTransferencista = 0.00;
+$descFabricante = 0.00;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2 FROM salidas WHERE id = $pedido;";
+    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3 FROM salidas WHERE id = $pedido;";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -31434,6 +31442,7 @@ if(isset($_REQUEST["pedido"])) {
       $doc_afectado = $row["doc_afectado"]; 
       $nro_documento = $row["nro_documento"]; 
       $descTransferencista = floatval($row["descuento2"]);
+      $descFabricante = floatval($row["descuento3"]);
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -31465,6 +31474,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     var username = '<?= CurrentUserName() ?>';
     var descuentoG = $("#PorDesAct").value();
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
     var nota = $("#nota").value();
     var consignacion = $("#consignacion").value();
     var lote = $("#x" + i + "_lote").value();
@@ -31497,6 +31507,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
               username: username, 
               descuentoG: descuentoG,
               descTransferencista: descTransferencista, 
+              descFabricante: descFabricante, 
               nota: nota,
               consignacion: consignacion, 
               lote: lote, 
@@ -31564,6 +31575,7 @@ function eliminar(i, id_item) {
     var username = '<?= CurrentUserName() ?>';
     var descuento = $("#PorDesAct").val();
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
     var nota = $("#nota").val();
     var consignacion = $("#consignacion").val();
     var doc_afectado = $("#doc_afectado").val();
@@ -31585,6 +31597,7 @@ function eliminar(i, id_item) {
         username: username, 
         descuento: descuento,
         descTransferencista: descTransferencista, 
+        descFabricante: descFabricante, 
         id_item: id_item, 
         nota: nota,
         consignacion: consignacion,
@@ -31623,6 +31636,7 @@ function guardarModificacion(i, id_item) {
     var username = '<?= CurrentUserName() ?>';
     var descuento = $("#PorDesAct").val(); // Descuento general de la factura
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
     var nota = $("#nota").val();
     
     // Valores específicos de la línea a modificar
@@ -31653,6 +31667,7 @@ function guardarModificacion(i, id_item) {
             username: username, 
             descuento_global: descuento, // El % de la cabecera
             descTransferencista: descTransferencista, 
+            descFabricante: descFabricante, 
             nota: nota
         },
         type: "POST",
@@ -31882,7 +31897,19 @@ function guardarModificacion(i, id_item) {
     var tasa_usd = $("#tasa_usd").value();
     var username = '<?= CurrentUserName() ?>';
     var descTransferencista = $("#descTransferencista").val();
+    var descFabricante = $("#descFabricante").val();
    
+    if(descTransferencista == 100) {
+      ew.alert("El descuento de transferencista no puede ser 100%");
+      $("#descTransferencista").val(0.00);
+      return false
+    }
+
+    if(descFabricante == 100) {
+      ew.alert("El descuento de fabricante no puede ser 100%");
+      $("#descFabricante").val(0.00);
+      return false
+    }
 
     $.ajax({
       // The URL for the request
@@ -31894,7 +31921,8 @@ function guardarModificacion(i, id_item) {
               moneda: moneda, 
               tasa_usd: tasa_usd, 
               username: username, 
-              descTransferencista: descTransferencista 
+              descTransferencista: descTransferencista, 
+              descFabricante: descFabricante 
             },
       // Whether this is a POST or GET request
       type: "POST",
@@ -32093,28 +32121,43 @@ function guardarModificacion(i, id_item) {
     <span><a onclick="js:ProgPlus();"><i class="fa-solid fa-plus"></i></a></span>
   </div>
 
+  <!-- Transferencista (igual que lo tienes) -->
   <div class="col-sm-2">
     <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
     <?php if(trim($doc_afectado) != "") echo "Doc Afect.:" . $doc_afectado; ?>
     <?php
-    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();"> % Transferencista';
+    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();">
+    <small>% Transferencista</small>';
     ?>   
   </div>
 
+  <!-- Fabricante (ajustado como Transferencista) -->
   <div class="col-sm-2">
-      <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()">
-        <?php
-        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-        $rows = ExecuteRows($sql);
-        foreach ($rows as $key => $value) {
-          echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-        }
-        ?>
-      </select>
+    <?php
+    echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();">
+    <small>% Fabricante</small>';
+    ?>   
   </div>
 
-  <div class="col-sm-2">
-    Tasa B.C.V.:<input name="tasa_usd" id="tasa_usd" type="number" class="form-control" value="<?= $tasa ?>" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()" />
+  <!-- Moneda -->
+  <div class="col-sm-1">
+    <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()">
+      <?php
+      $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
+      $rows = ExecuteRows($sql);
+      foreach ($rows as $value) {
+        echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
+      }
+      ?>
+    </select>
+  </div>
+
+  <!-- Tasa (ahora con label abajo) -->
+  <div class="col-sm-1">
+    <?php
+    echo '<input name="tasa_usd" id="tasa_usd" type="number" class="form-control form-control-sm" value="' . $tasa . '" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()">
+    <small>Tasa B.C.V.</small>';
+    ?>
   </div>
 </div>
 
@@ -33824,7 +33867,7 @@ function Row_Updating($rsold, &$rsnew)
 }]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="view" ScriptL1Key="view_out_tdcfcv"><![CDATA[function Page_DataRendering(&$header)
 {
-    // Iniciamos el contenedor alineado
+    // Iniciamos el contenedor alineado con el espaciado estándar
     $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
 
     // 1. Botón Editar (Solo si es NUEVO)
@@ -33841,32 +33884,38 @@ function Row_Updating($rsold, &$rsnew)
     if($this->estatus->CurrentValue == "PROCESADO") {
         $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
         switch ($this->documento->CurrentValue) {
-        case "FC":
-            $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
-            break;
-        case "NC":
-            $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
-            break;
-        case "ND":
-            $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
-            break;
+            case "FC":
+                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
+                break;
+            case "NC":
+                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                break;
+            case "ND":
+                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                break;
         }
     }
 
-    // Lógica de Pagos
+    // Lógica de Pagos y Comprobante
     $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
-    if ($row = ExecuteRow($sql)) {
+    $rowPago = ExecuteRow($sql);
+
+    if ($rowPago) {
         // 4. Botón Ver Pagos
-        $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $row["id"];
+        $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $rowPago["id"];
         $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
 
-        // 5. Botón Revertir (Si tiene permiso)
+        // 5. Botón Imprimir Comprobante (Adaptado al estilo del grupo)
+        $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+        $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
+
+        // 6. Botón Revertir (Si tiene permiso)
         if (VerificaFuncion('014')) {
-            $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName(). '\'); " style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+            $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
         }
     } else {
-        // 6. Botón Registrar Pago
-        if ($this->estatus->CurrentValue != "ANULADO") {
+        // 7. Botón Registrar Pago
+        if ($this->estatus->CurrentValue == "PROCESADO") {
             $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
             $html .= '<a class="btn btn-outline-primary" href="' . $urlAddPago . '"><span class="fas fa-money-bill-wave"></span> Registrar Pago</a>';
         }
@@ -39734,6 +39783,58 @@ function User_LoggedOut($usr)
 function User_LoggedIn($usr)
 {
     WriteAuditTrail("", CurrentDateTime(), CurrentUserIP(), $usr, "login", "usuario", "username", $usr, "", "");
+}]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendered" ScriptCtrlID="list" ScriptL1Key="cobros_cliente_detalle"><![CDATA[// Page Data Rendered event
+function Page_DataRendered(&$footer)
+{
+    global $total_pagos_sin_ig, $total_igtf;
+
+    // Si la sumatoria es cero, no mostramos nada
+    $total_general = ($total_pagos_sin_ig ?? 0) - ($total_igtf ?? 0);
+    if ($total_general <= 0) {
+        return;
+    }
+
+    $footer = '
+    <div class="row justify-content-end mt-3">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body p-2">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted small fw-bold">TOTAL MONTO PAGOS EFECTUADOS:</span>
+                        <span class="fw-bold text-dark">Bs. ' . number_format($total_pagos_sin_ig, 2, ",", ".") . '</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-top pt-1 mt-1">
+                        <span class="text-danger small fw-bold">TOTAL IGTF (3%):</span>
+                        <span class="fw-bold text-danger">Bs. ' . number_format($total_igtf, 2, ",", ".") . '</span>
+                    </div>
+                    <div class="d-flex justify-content-between border-top pt-2 mt-1 border-dark">
+                        <span class="fw-bold text-uppercase small">Total General Factura:</span>
+                        <span class="fw-bold text-primary" style="font-size: 1.1rem;">
+                            Bs. ' . number_format($total_general, 2, ",", ".") . '
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>';
+}]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Row_Rendering" ScriptL1Key="cobros_cliente_detalle"><![CDATA[// Row Rendering event
+function Row_Rendering()
+{
+    // Accedemos a las globales
+    global $total_pagos_sin_ig, $total_igtf;
+
+    // Obtenemos los valores de la fila actual
+    // IMPORTANTE: CurrentValue solo tiene datos AQUÍ, en cada fila
+    $metodo = $this->metodo_pago->CurrentValue;
+    $monto = floatval($this->monto_bs->CurrentValue);
+
+    if ($metodo !== "IG") {
+        $total_pagos_sin_ig += $monto;
+    } else {
+        $total_igtf += $monto;
+    }
 }]]></CustomScript>
   <Menu MenuID="19" MenuText="Maestros" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="" MenuType="" MenuCustomUrl="1" MenuLevel="0" MenuShow="1" MenuDisplayOrder="100" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="53" MenuText="Fabricante" MenuParentID="19" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="fabricante" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="100" MenuIconClass="" MenuNavbar="0" />

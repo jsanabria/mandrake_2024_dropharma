@@ -8,6 +8,7 @@ $moneda = $_REQUEST["moneda"];
 $username = $_REQUEST["username"]; 
 $descuento = floatval($_REQUEST["descuento"]); 
 $descTransferencista = floatval($_REQUEST["descTransferencista"]); 
+$descFabricante = floatval($_REQUEST["descFabricante"]); 
 $id_item = intval($_REQUEST["id_item"]); 
 $nota = $_REQUEST["nota"]; 
 $consignacion = $_REQUEST["consignacion"]; 
@@ -84,7 +85,7 @@ if($consignacion == "S") {
 
 
 /**** ----- Actualizo el campo descuento en la cabecera del pedido ----- ****/
-$sql = "UPDATE salidas SET descuento = $descuento, descuento2 = $descTransferencista, nota = '$nota', tasa_dia = $tasa_usd, moneda = '$moneda' WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
+$sql = "UPDATE salidas SET descuento = $descuento, descuento2 = $descTransferencista, descuento3 = $descFabricante, nota = '$nota', tasa_dia = $tasa_usd, moneda = '$moneda' WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
 mysqli_query($link, $sql);
 
 /**** ----- Elimino el item ----- ****/
@@ -144,9 +145,11 @@ if($row = mysqli_fetch_array($rs)) {
 
 	$xExento = floatval($row["exento"]);
 	$xExento = $xExento - ($xExento * ($descTransferencista / 100));
+	$xExento = $xExento - ($xExento*($descFabricante/100));
 
 	$xGravado = floatval($row["gravado"]);
 	$xGravado = $xGravado - ($xGravado * ($descTransferencista / 100));
+	$xGravado = $xGravado - ($xGravado*($descFabricante/100));
 
 	$costo = $xExento + $xGravado;
 	$iva = $xGravado * (floatval($xalicuota) / 100);

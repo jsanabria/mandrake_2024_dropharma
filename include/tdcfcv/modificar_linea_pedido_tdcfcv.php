@@ -16,6 +16,7 @@ $moneda = $_REQUEST["moneda"];
 $username = $_REQUEST["username"]; 
 $descuento_global = floatval($_REQUEST["descuento_global"]); 
 $descTransferencista = floatval($_REQUEST["descTransferencista"]); 
+$descFabricante = floatval($_REQUEST["descFabricante"]); 
 $nota = $_REQUEST["nota"]; 
 
 $tipo_documento = "TDCFCV";
@@ -39,6 +40,11 @@ if ($desc_item == 100) {
 
 if ($descTransferencista == 100) {
     echo json_encode(array("estatus" => "0", "mensaje" => "El descuento transferencista no puede ser 100%."), JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+if ($descFabricante == 100) {
+    echo json_encode(array("estatus" => "0", "mensaje" => "El descuento fabricante no puede ser 100%."), JSON_UNESCAPED_UNICODE);
     exit();
 }
 // 1. Obtener datos actuales del encabezado
@@ -128,9 +134,11 @@ if($row_t = mysqli_fetch_array($rs_t)) {
     // Aplicar descuento de transferencista sobre bases
     $xExento = floatval($row_t["exento"]);
     $xExento = $xExento - ($xExento * ($descTransferencista / 100));
+    $xExento = $xExento - ($xExento * ($descFabricante / 100));
 
     $xGravado = floatval($row_t["gravado"]);
     $xGravado = $xGravado - ($xGravado * ($descTransferencista / 100));
+    $xGravado = $xGravado - ($xGravado * ($descFabricante / 100));
 
     $costo = $xExento + $xGravado;
     $iva = $xGravado * ($xalicuota / 100);

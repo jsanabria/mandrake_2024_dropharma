@@ -15,11 +15,14 @@ $tasa_usd = floatval($row["tasa"]);
 
 $tipo_documento = "TDCFCV";
 
-$sql = "SELECT IFNULL(descuento, 0) AS descuento, IFNULL(descuento2, 0) AS descuento2, nro_documento, moneda, tasa_dia FROM salidas WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
+$sql = "SELECT 
+			IFNULL(descuento, 0) AS descuento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, 
+			nro_documento, moneda, tasa_dia FROM salidas WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
 $rs = mysqli_query($link, $sql);
 if($row = mysqli_fetch_array($rs)) { 
 	$descuento = $row["descuento"];
 	$descTransferencista = $row["descuento2"];
+	$descFabricante = $row["descuento3"];
 	$nro_documento = $row["nro_documento"];
 	$moneda = $row["moneda"];
 	$tasa_usd = floatval($row["tasa_dia"]);
@@ -28,6 +31,7 @@ else  {
 	$descuento = 0.00;
 	$nro_documento = "0000000";
 	$descTransferencista = 0.00;
+	$descFabricante = 0.00;
 }
 $tasa_usd = ($tasa_usd == 0 ? 1 : $tasa_usd);
 
@@ -66,8 +70,10 @@ $total = floatval($row["total"]);
 */
 $xExento = floatval($row["exento"]);
 $xExento = $xExento - ($xExento*($descTransferencista/100));
+$xExento = $xExento - ($xExento*($descFabricante/100));
 $xGravado = floatval($row["gravado"]);
 $xGravado = $xGravado - ($xGravado*($descTransferencista/100));
+$xGravado = $xGravado - ($xGravado*($descFabricante/100));
 $costo = $xExento + $xGravado;
 $iva = $xGravado * (floatval($xalicuota)/100);
 $total = $costo + $iva;
@@ -97,7 +103,8 @@ $html = '{
          	"total_usd_sin_descuento":"' . (strtoupper(substr($moneda, 0, 3)) == "BS." ? $monto_sin_descuento : round(($monto_sin_descuento*$tasa_usd),2)) . '", 
          	"estatus":"1",  
 	        "nro_documento":"' . $nro_documento . '", 
-	        "descTransferencista":"' . $descTransferencista . '"  
+	        "descTransferencista":"' . $descTransferencista . '",  
+	        "descFabricante":"' . $descFabricante . '" 
         }';
 
 echo json_encode($html, JSON_UNESCAPED_UNICODE);

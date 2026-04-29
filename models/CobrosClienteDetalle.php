@@ -1945,7 +1945,18 @@ class CobrosClienteDetalle extends DbTable
     // Row Rendering event
     public function rowRendering()
     {
-        // Enter your code here
+        // Accedemos a las globales
+        global $total_pagos_sin_ig, $total_igtf;
+
+        // Obtenemos los valores de la fila actual
+        // IMPORTANTE: CurrentValue solo tiene datos AQUÍ, en cada fila
+        $metodo = $this->metodo_pago->CurrentValue;
+        $monto = floatval($this->monto_bs->CurrentValue);
+        if ($metodo !== "IG") {
+            $total_pagos_sin_ig += $monto;
+        } else {
+            $total_igtf += $monto;
+        }
     }
 
     // Row Rendered event
