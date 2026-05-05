@@ -204,6 +204,9 @@ class Salida extends AbstractEntity
     #[Column(name: "doc_afe", type: "integer", nullable: true)]
     private ?int $docAfe;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento3;
+
     public function __construct()
     {
         $this->entregado = "N";
@@ -871,6 +874,17 @@ class Salida extends AbstractEntity
     public function setDocAfe(?int $value): static
     {
         $this->docAfe = $value;
+        return $this;
+    }
+
+    public function getDescuento3(): ?string
+    {
+        return $this->descuento3;
+    }
+
+    public function setDescuento3(?string $value): static
+    {
+        $this->descuento3 = $value;
         return $this;
     }
 }

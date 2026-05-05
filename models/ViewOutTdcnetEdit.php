@@ -186,6 +186,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->igtf->Visible = false;
         $this->monto_base_igtf->Visible = false;
         $this->monto_igtf->Visible = false;
+        $this->descuento3->Visible = false;
+        $this->impreso->Visible = false;
+        $this->doc_afe->Visible = false;
     }
 
     // Constructor
@@ -595,6 +598,7 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->igtf);
+        $this->setupLookupOptions($this->impreso);
 
         // Check modal
         if ($this->IsModal) {
@@ -1148,6 +1152,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->igtf->setDbValue($row['igtf']);
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
+        $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Return a row with default values
@@ -1211,6 +1218,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $row['igtf'] = $this->igtf->DefaultValue;
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
+        $row['doc_afe'] = $this->doc_afe->DefaultValue;
         return $row;
     }
 
@@ -1415,6 +1425,15 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
 
         // monto_igtf
         $this->monto_igtf->RowCssClass = "row";
+
+        // descuento3
+        $this->descuento3->RowCssClass = "row";
+
+        // impreso
+        $this->impreso->RowCssClass = "row";
+
+        // doc_afe
+        $this->doc_afe->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1854,6 +1873,21 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             // monto_igtf
             $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
             $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
+
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+
+            // doc_afe
+            $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
             // fecha
             $this->fecha->HrefValue = "";
@@ -2400,6 +2434,8 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_igtf":
+                    break;
+                case "x_impreso":
                     break;
                 default:
                     $lookupFilter = "";

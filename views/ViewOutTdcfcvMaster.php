@@ -142,6 +142,17 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($view_out_tdcfcv->impreso->Visible) { // impreso ?>
+        <tr id="r_impreso"<?= $view_out_tdcfcv->impreso->rowAttributes() ?>>
+            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->impreso->caption() ?></td>
+            <td<?= $view_out_tdcfcv->impreso->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_impreso">
+<span<?= $view_out_tdcfcv->impreso->viewAttributes() ?>>
+<?= $view_out_tdcfcv->impreso->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
 <?php if ($view_out_tdcfcv->asesor_asignado->Visible) { // asesor_asignado ?>
         <tr id="r_asesor_asignado"<?= $view_out_tdcfcv->asesor_asignado->rowAttributes() ?>>
             <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->asesor_asignado->caption() ?></td>

@@ -159,12 +159,12 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->alicuota_iva->setVisibility();
         $this->iva->setVisibility();
         $this->total->setVisibility();
+        $this->nota->setVisibility();
         $this->igtf->setVisibility();
         $this->monto_base_igtf->setVisibility();
         $this->monto_igtf->setVisibility();
         $this->moneda->setVisibility();
         $this->lista_pedido->setVisibility();
-        $this->nota->setVisibility();
         $this->unidades->setVisibility();
         $this->estatus->setVisibility();
         $this->_username->setVisibility();
@@ -176,6 +176,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->entregado->setVisibility();
         $this->fecha_entrega->setVisibility();
         $this->pagado->setVisibility();
+        $this->impreso->setVisibility();
         $this->bultos->setVisibility();
         $this->fecha_bultos->setVisibility();
         $this->user_bultos->setVisibility();
@@ -204,6 +205,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->packer->setVisibility();
         $this->packer_date->setVisibility();
         $this->fotos->setVisibility();
+        $this->descuento3->setVisibility();
+        $this->doc_afe->setVisibility();
     }
 
     // Constructor
@@ -609,6 +612,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->setupLookupOptions($this->dias_credito);
         $this->setupLookupOptions($this->entregado);
         $this->setupLookupOptions($this->pagado);
+        $this->setupLookupOptions($this->impreso);
         $this->setupLookupOptions($this->user_bultos);
         $this->setupLookupOptions($this->user_despacho);
         $this->setupLookupOptions($this->consignacion);
@@ -988,12 +992,12 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->nota->setDbValue($row['nota']);
         $this->igtf->setDbValue($row['igtf']);
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->_username->setDbValue($row['username']);
@@ -1005,6 +1009,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->entregado->setDbValue($row['entregado']);
         $this->fecha_entrega->setDbValue($row['fecha_entrega']);
         $this->pagado->setDbValue($row['pagado']);
+        $this->impreso->setDbValue($row['impreso']);
         $this->bultos->setDbValue($row['bultos']);
         $this->fecha_bultos->setDbValue($row['fecha_bultos']);
         $this->user_bultos->setDbValue($row['user_bultos']);
@@ -1035,6 +1040,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
+        $this->descuento3->setDbValue($row['descuento3']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Return a row with default values
@@ -1053,12 +1060,12 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['nota'] = $this->nota->DefaultValue;
         $row['igtf'] = $this->igtf->DefaultValue;
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
-        $row['nota'] = $this->nota->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['estatus'] = $this->estatus->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
@@ -1070,6 +1077,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $row['entregado'] = $this->entregado->DefaultValue;
         $row['fecha_entrega'] = $this->fecha_entrega->DefaultValue;
         $row['pagado'] = $this->pagado->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
         $row['bultos'] = $this->bultos->DefaultValue;
         $row['fecha_bultos'] = $this->fecha_bultos->DefaultValue;
         $row['user_bultos'] = $this->user_bultos->DefaultValue;
@@ -1098,6 +1106,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $row['packer'] = $this->packer->DefaultValue;
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['doc_afe'] = $this->doc_afe->DefaultValue;
         return $row;
     }
 
@@ -1143,6 +1153,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
 
         // total
 
+        // nota
+
         // igtf
 
         // monto_base_igtf
@@ -1152,8 +1164,6 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         // moneda
 
         // lista_pedido
-
-        // nota
 
         // unidades
 
@@ -1176,6 +1186,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         // fecha_entrega
 
         // pagado
+
+        // impreso
 
         // bultos
 
@@ -1232,6 +1244,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         // packer_date
 
         // fotos
+
+        // descuento3
+
+        // doc_afe
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1300,6 +1316,9 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+            // nota
+            $this->nota->ViewValue = $this->nota->CurrentValue;
+
             // igtf
             if (strval($this->igtf->CurrentValue) != "") {
                 $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
@@ -1362,9 +1381,6 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             } else {
                 $this->lista_pedido->ViewValue = null;
             }
-
-            // nota
-            $this->nota->ViewValue = $this->nota->CurrentValue;
 
             // unidades
             $this->unidades->ViewValue = $this->unidades->CurrentValue;
@@ -1497,6 +1513,14 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
                 $this->pagado->ViewValue = null;
             }
             $this->pagado->CssClass = "fw-bold fst-italic";
+
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+            $this->impreso->CssClass = "fw-bold fst-italic";
 
             // bultos
             $this->bultos->ViewValue = $this->bultos->CurrentValue;
@@ -1672,6 +1696,14 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->packer_date->ViewValue = $this->packer_date->CurrentValue;
             $this->packer_date->ViewValue = FormatDateTime($this->packer_date->ViewValue, $this->packer_date->formatPattern());
 
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
+            // doc_afe
+            $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -1712,6 +1744,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->total->HrefValue = "";
             $this->total->TooltipValue = "";
 
+            // nota
+            $this->nota->HrefValue = "";
+            $this->nota->TooltipValue = "";
+
             // igtf
             $this->igtf->HrefValue = "";
             $this->igtf->TooltipValue = "";
@@ -1731,10 +1767,6 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             // lista_pedido
             $this->lista_pedido->HrefValue = "";
             $this->lista_pedido->TooltipValue = "";
-
-            // nota
-            $this->nota->HrefValue = "";
-            $this->nota->TooltipValue = "";
 
             // estatus
             $this->estatus->HrefValue = "";
@@ -1759,6 +1791,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             // pagado
             $this->pagado->HrefValue = "";
             $this->pagado->TooltipValue = "";
+
+            // impreso
+            $this->impreso->HrefValue = "";
+            $this->impreso->TooltipValue = "";
 
             // descuento
             $this->descuento->HrefValue = "";
@@ -1881,6 +1917,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
                 case "x_entregado":
                     break;
                 case "x_pagado":
+                    break;
+                case "x_impreso":
                     break;
                 case "x_user_bultos":
                     break;
@@ -2052,9 +2090,11 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
             $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
 
-            // 6. Botón Revertir (Si tiene permiso)
-            if (VerificaFuncion('014')) {
-                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+            // 6. Botón Revertir (Si no está impreso y si tiene permiso)
+            if ($this->impreso->CurrentValue == "N") {
+                if (VerificaFuncion('014')) {
+                    $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+                }
             }
         } else {
             // 7. Botón Registrar Pago

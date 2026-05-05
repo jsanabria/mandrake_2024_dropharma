@@ -66,12 +66,12 @@ class ViewOutTdcfcv extends DbTable
     public $alicuota_iva;
     public $iva;
     public $total;
+    public $nota;
     public $igtf;
     public $monto_base_igtf;
     public $monto_igtf;
     public $moneda;
     public $lista_pedido;
-    public $nota;
     public $unidades;
     public $estatus;
     public $_username;
@@ -83,6 +83,7 @@ class ViewOutTdcfcv extends DbTable
     public $entregado;
     public $fecha_entrega;
     public $pagado;
+    public $impreso;
     public $bultos;
     public $fecha_bultos;
     public $user_bultos;
@@ -111,6 +112,8 @@ class ViewOutTdcfcv extends DbTable
     public $packer;
     public $packer_date;
     public $fotos;
+    public $descuento3;
+    public $doc_afe;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -450,6 +453,28 @@ class ViewOutTdcfcv extends DbTable
         $this->total->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['total'] = &$this->total;
 
+        // nota
+        $this->nota = new DbField(
+            $this, // Table
+            'x_nota', // Variable name
+            'nota', // Name
+            '`nota`', // Expression
+            '`nota`', // Basic search expression
+            200, // Type
+            255, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`nota`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXTAREA' // Edit Tag
+        );
+        $this->nota->InputTextType = "text";
+        $this->nota->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['nota'] = &$this->nota;
+
         // igtf
         $this->igtf = new DbField(
             $this, // Table
@@ -581,28 +606,6 @@ class ViewOutTdcfcv extends DbTable
         $this->lista_pedido->Lookup = new Lookup($this->lista_pedido, 'tabla', false, 'campo_codigo', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion` ASC', '', "`campo_descripcion`");
         $this->lista_pedido->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['lista_pedido'] = &$this->lista_pedido;
-
-        // nota
-        $this->nota = new DbField(
-            $this, // Table
-            'x_nota', // Variable name
-            'nota', // Name
-            '`nota`', // Expression
-            '`nota`', // Basic search expression
-            200, // Type
-            255, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`nota`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXTAREA' // Edit Tag
-        );
-        $this->nota->InputTextType = "text";
-        $this->nota->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['nota'] = &$this->nota;
 
         // unidades
         $this->unidades = new DbField(
@@ -894,6 +897,32 @@ class ViewOutTdcfcv extends DbTable
         $this->pagado->OptionCount = 2;
         $this->pagado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['pagado'] = &$this->pagado;
+
+        // impreso
+        $this->impreso = new DbField(
+            $this, // Table
+            'x_impreso', // Variable name
+            'impreso', // Name
+            '`impreso`', // Expression
+            '`impreso`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`impreso`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->impreso->addMethod("getDefault", fn() => "N");
+        $this->impreso->InputTextType = "text";
+        $this->impreso->Raw = true;
+        $this->impreso->Lookup = new Lookup($this->impreso, 'view_out_tdcfcv', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->impreso->OptionCount = 2;
+        $this->impreso->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['impreso'] = &$this->impreso;
 
         // bultos
         $this->bultos = new DbField(
@@ -1567,6 +1596,54 @@ class ViewOutTdcfcv extends DbTable
         $this->fotos->SearchOperators = ["=", "<>", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['fotos'] = &$this->fotos;
 
+        // descuento3
+        $this->descuento3 = new DbField(
+            $this, // Table
+            'x_descuento3', // Variable name
+            'descuento3', // Name
+            '`descuento3`', // Expression
+            '`descuento3`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento3`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento3->InputTextType = "text";
+        $this->descuento3->Raw = true;
+        $this->descuento3->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento3->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento3'] = &$this->descuento3;
+
+        // doc_afe
+        $this->doc_afe = new DbField(
+            $this, // Table
+            'x_doc_afe', // Variable name
+            'doc_afe', // Name
+            '`doc_afe`', // Expression
+            '`doc_afe`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`doc_afe`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->doc_afe->InputTextType = "text";
+        $this->doc_afe->Raw = true;
+        $this->doc_afe->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->doc_afe->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['doc_afe'] = &$this->doc_afe;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -2138,12 +2215,12 @@ class ViewOutTdcfcv extends DbTable
         $this->alicuota_iva->DbValue = $row['alicuota_iva'];
         $this->iva->DbValue = $row['iva'];
         $this->total->DbValue = $row['total'];
+        $this->nota->DbValue = $row['nota'];
         $this->igtf->DbValue = $row['igtf'];
         $this->monto_base_igtf->DbValue = $row['monto_base_igtf'];
         $this->monto_igtf->DbValue = $row['monto_igtf'];
         $this->moneda->DbValue = $row['moneda'];
         $this->lista_pedido->DbValue = $row['lista_pedido'];
-        $this->nota->DbValue = $row['nota'];
         $this->unidades->DbValue = $row['unidades'];
         $this->estatus->DbValue = $row['estatus'];
         $this->_username->DbValue = $row['username'];
@@ -2155,6 +2232,7 @@ class ViewOutTdcfcv extends DbTable
         $this->entregado->DbValue = $row['entregado'];
         $this->fecha_entrega->DbValue = $row['fecha_entrega'];
         $this->pagado->DbValue = $row['pagado'];
+        $this->impreso->DbValue = $row['impreso'];
         $this->bultos->DbValue = $row['bultos'];
         $this->fecha_bultos->DbValue = $row['fecha_bultos'];
         $this->user_bultos->DbValue = $row['user_bultos'];
@@ -2183,6 +2261,8 @@ class ViewOutTdcfcv extends DbTable
         $this->packer->DbValue = $row['packer'];
         $this->packer_date->DbValue = $row['packer_date'];
         $this->fotos->Upload->DbValue = $row['fotos'];
+        $this->descuento3->DbValue = $row['descuento3'];
+        $this->doc_afe->DbValue = $row['doc_afe'];
     }
 
     // Delete uploaded files
@@ -2567,12 +2647,12 @@ class ViewOutTdcfcv extends DbTable
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->nota->setDbValue($row['nota']);
         $this->igtf->setDbValue($row['igtf']);
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->_username->setDbValue($row['username']);
@@ -2584,6 +2664,7 @@ class ViewOutTdcfcv extends DbTable
         $this->entregado->setDbValue($row['entregado']);
         $this->fecha_entrega->setDbValue($row['fecha_entrega']);
         $this->pagado->setDbValue($row['pagado']);
+        $this->impreso->setDbValue($row['impreso']);
         $this->bultos->setDbValue($row['bultos']);
         $this->fecha_bultos->setDbValue($row['fecha_bultos']);
         $this->user_bultos->setDbValue($row['user_bultos']);
@@ -2612,6 +2693,8 @@ class ViewOutTdcfcv extends DbTable
         $this->packer->setDbValue($row['packer']);
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
+        $this->descuento3->setDbValue($row['descuento3']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Render list content
@@ -2666,6 +2749,8 @@ class ViewOutTdcfcv extends DbTable
 
         // total
 
+        // nota
+
         // igtf
 
         // monto_base_igtf
@@ -2675,8 +2760,6 @@ class ViewOutTdcfcv extends DbTable
         // moneda
 
         // lista_pedido
-
-        // nota
 
         // unidades
 
@@ -2699,6 +2782,8 @@ class ViewOutTdcfcv extends DbTable
         // fecha_entrega
 
         // pagado
+
+        // impreso
 
         // bultos
 
@@ -2755,6 +2840,10 @@ class ViewOutTdcfcv extends DbTable
         // packer_date
 
         // fotos
+
+        // descuento3
+
+        // doc_afe
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2821,6 +2910,9 @@ class ViewOutTdcfcv extends DbTable
         $this->total->ViewValue = $this->total->CurrentValue;
         $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+        // nota
+        $this->nota->ViewValue = $this->nota->CurrentValue;
+
         // igtf
         if (strval($this->igtf->CurrentValue) != "") {
             $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
@@ -2883,9 +2975,6 @@ class ViewOutTdcfcv extends DbTable
         } else {
             $this->lista_pedido->ViewValue = null;
         }
-
-        // nota
-        $this->nota->ViewValue = $this->nota->CurrentValue;
 
         // unidades
         $this->unidades->ViewValue = $this->unidades->CurrentValue;
@@ -3018,6 +3107,14 @@ class ViewOutTdcfcv extends DbTable
             $this->pagado->ViewValue = null;
         }
         $this->pagado->CssClass = "fw-bold fst-italic";
+
+        // impreso
+        if (strval($this->impreso->CurrentValue) != "") {
+            $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+        } else {
+            $this->impreso->ViewValue = null;
+        }
+        $this->impreso->CssClass = "fw-bold fst-italic";
 
         // bultos
         $this->bultos->ViewValue = $this->bultos->CurrentValue;
@@ -3204,6 +3301,14 @@ class ViewOutTdcfcv extends DbTable
             $this->fotos->ViewValue = "";
         }
 
+        // descuento3
+        $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+        $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
+        // doc_afe
+        $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+        $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -3252,6 +3357,10 @@ class ViewOutTdcfcv extends DbTable
         $this->total->HrefValue = "";
         $this->total->TooltipValue = "";
 
+        // nota
+        $this->nota->HrefValue = "";
+        $this->nota->TooltipValue = "";
+
         // igtf
         $this->igtf->HrefValue = "";
         $this->igtf->TooltipValue = "";
@@ -3271,10 +3380,6 @@ class ViewOutTdcfcv extends DbTable
         // lista_pedido
         $this->lista_pedido->HrefValue = "";
         $this->lista_pedido->TooltipValue = "";
-
-        // nota
-        $this->nota->HrefValue = "";
-        $this->nota->TooltipValue = "";
 
         // unidades
         $this->unidades->HrefValue = "";
@@ -3319,6 +3424,10 @@ class ViewOutTdcfcv extends DbTable
         // pagado
         $this->pagado->HrefValue = "";
         $this->pagado->TooltipValue = "";
+
+        // impreso
+        $this->impreso->HrefValue = "";
+        $this->impreso->TooltipValue = "";
 
         // bultos
         $this->bultos->HrefValue = "";
@@ -3457,6 +3566,14 @@ class ViewOutTdcfcv extends DbTable
             $this->fotos->LinkAttrs->appendClass("ew-lightbox");
         }
 
+        // descuento3
+        $this->descuento3->HrefValue = "";
+        $this->descuento3->TooltipValue = "";
+
+        // doc_afe
+        $this->doc_afe->HrefValue = "";
+        $this->doc_afe->TooltipValue = "";
+
         // Call Row Rendered event
         $this->rowRendered();
 
@@ -3490,11 +3607,7 @@ class ViewOutTdcfcv extends DbTable
 
         // nro_documento
         $this->nro_documento->setupEditAttributes();
-        if (!$this->nro_documento->Raw) {
-            $this->nro_documento->CurrentValue = HtmlDecode($this->nro_documento->CurrentValue);
-        }
         $this->nro_documento->EditValue = $this->nro_documento->CurrentValue;
-        $this->nro_documento->PlaceHolder = RemoveHtml($this->nro_documento->caption());
 
         // fecha
         $this->fecha->setupEditAttributes();
@@ -3503,23 +3616,35 @@ class ViewOutTdcfcv extends DbTable
 
         // nro_control
         $this->nro_control->setupEditAttributes();
-        if (!$this->nro_control->Raw) {
-            $this->nro_control->CurrentValue = HtmlDecode($this->nro_control->CurrentValue);
-        }
         $this->nro_control->EditValue = $this->nro_control->CurrentValue;
-        $this->nro_control->PlaceHolder = RemoveHtml($this->nro_control->caption());
 
         // cliente
         $this->cliente->setupEditAttributes();
-        $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
+        $curVal = strval($this->cliente->CurrentValue);
+        if ($curVal != "") {
+            $this->cliente->EditValue = $this->cliente->lookupCacheOption($curVal);
+            if ($this->cliente->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->cliente->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->cliente->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $sqlWrk = $this->cliente->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->cliente->Lookup->renderViewRow($rswrk[0]);
+                    $this->cliente->EditValue = $this->cliente->displayValue($arwrk);
+                } else {
+                    $this->cliente->EditValue = $this->cliente->CurrentValue;
+                }
+            }
+        } else {
+            $this->cliente->EditValue = null;
+        }
 
         // doc_afectado
         $this->doc_afectado->setupEditAttributes();
-        if (!$this->doc_afectado->Raw) {
-            $this->doc_afectado->CurrentValue = HtmlDecode($this->doc_afectado->CurrentValue);
-        }
         $this->doc_afectado->EditValue = $this->doc_afectado->CurrentValue;
-        $this->doc_afectado->PlaceHolder = RemoveHtml($this->doc_afectado->caption());
 
         // monto_total
         $this->monto_total->setupEditAttributes();
@@ -3540,6 +3665,11 @@ class ViewOutTdcfcv extends DbTable
         $this->total->setupEditAttributes();
         $this->total->EditValue = $this->total->CurrentValue;
         $this->total->EditValue = FormatNumber($this->total->EditValue, $this->total->formatPattern());
+
+        // nota
+        $this->nota->setupEditAttributes();
+        $this->nota->EditValue = $this->nota->CurrentValue;
+        $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
 
         // igtf
         $this->igtf->setupEditAttributes();
@@ -3570,11 +3700,6 @@ class ViewOutTdcfcv extends DbTable
         $this->lista_pedido->setupEditAttributes();
         $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
 
-        // nota
-        $this->nota->setupEditAttributes();
-        $this->nota->EditValue = $this->nota->CurrentValue;
-        $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
-
         // unidades
         $this->unidades->setupEditAttributes();
         $this->unidades->EditValue = $this->unidades->CurrentValue;
@@ -3585,8 +3710,11 @@ class ViewOutTdcfcv extends DbTable
 
         // estatus
         $this->estatus->setupEditAttributes();
-        $this->estatus->EditValue = $this->estatus->options(true);
-        $this->estatus->PlaceHolder = RemoveHtml($this->estatus->caption());
+        if (strval($this->estatus->CurrentValue) != "") {
+            $this->estatus->EditValue = $this->estatus->optionCaption($this->estatus->CurrentValue);
+        } else {
+            $this->estatus->EditValue = null;
+        }
 
         // username
         $this->_username->setupEditAttributes();
@@ -3635,6 +3763,10 @@ class ViewOutTdcfcv extends DbTable
         $this->pagado->setupEditAttributes();
         $this->pagado->EditValue = $this->pagado->options(true);
         $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
+
+        // impreso
+        $this->impreso->EditValue = $this->impreso->options(false);
+        $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
 
         // bultos
         $this->bultos->setupEditAttributes();
@@ -3831,6 +3963,22 @@ class ViewOutTdcfcv extends DbTable
             $this->fotos->Upload->FileName = $this->fotos->CurrentValue;
         }
 
+        // descuento3
+        $this->descuento3->setupEditAttributes();
+        $this->descuento3->EditValue = $this->descuento3->CurrentValue;
+        $this->descuento3->PlaceHolder = RemoveHtml($this->descuento3->caption());
+        if (strval($this->descuento3->EditValue) != "" && is_numeric($this->descuento3->EditValue)) {
+            $this->descuento3->EditValue = FormatNumber($this->descuento3->EditValue, null);
+        }
+
+        // doc_afe
+        $this->doc_afe->setupEditAttributes();
+        $this->doc_afe->EditValue = $this->doc_afe->CurrentValue;
+        $this->doc_afe->PlaceHolder = RemoveHtml($this->doc_afe->caption());
+        if (strval($this->doc_afe->EditValue) != "" && is_numeric($this->doc_afe->EditValue)) {
+            $this->doc_afe->EditValue = FormatNumber($this->doc_afe->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3869,18 +4017,19 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
                     $doc->exportCaption($this->total);
+                    $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->igtf);
                     $doc->exportCaption($this->monto_base_igtf);
                     $doc->exportCaption($this->monto_igtf);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->lista_pedido);
-                    $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->estatus);
                     $doc->exportCaption($this->_username);
                     $doc->exportCaption($this->tasa_dia);
                     $doc->exportCaption($this->monto_usd);
                     $doc->exportCaption($this->dias_credito);
                     $doc->exportCaption($this->pagado);
+                    $doc->exportCaption($this->impreso);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->nro_despacho);
@@ -3898,12 +4047,12 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
                     $doc->exportCaption($this->total);
+                    $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->igtf);
                     $doc->exportCaption($this->monto_base_igtf);
                     $doc->exportCaption($this->monto_igtf);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->lista_pedido);
-                    $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->unidades);
                     $doc->exportCaption($this->estatus);
                     $doc->exportCaption($this->_username);
@@ -3915,6 +4064,7 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->entregado);
                     $doc->exportCaption($this->fecha_entrega);
                     $doc->exportCaption($this->pagado);
+                    $doc->exportCaption($this->impreso);
                     $doc->exportCaption($this->bultos);
                     $doc->exportCaption($this->fecha_bultos);
                     $doc->exportCaption($this->user_bultos);
@@ -3942,6 +4092,8 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->checker_date);
                     $doc->exportCaption($this->packer);
                     $doc->exportCaption($this->packer_date);
+                    $doc->exportCaption($this->descuento3);
+                    $doc->exportCaption($this->doc_afe);
                 }
                 $doc->endExportRow();
             }
@@ -3978,18 +4130,19 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);
                         $doc->exportField($this->total);
+                        $doc->exportField($this->nota);
                         $doc->exportField($this->igtf);
                         $doc->exportField($this->monto_base_igtf);
                         $doc->exportField($this->monto_igtf);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->lista_pedido);
-                        $doc->exportField($this->nota);
                         $doc->exportField($this->estatus);
                         $doc->exportField($this->_username);
                         $doc->exportField($this->tasa_dia);
                         $doc->exportField($this->monto_usd);
                         $doc->exportField($this->dias_credito);
                         $doc->exportField($this->pagado);
+                        $doc->exportField($this->impreso);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->descuento2);
                         $doc->exportField($this->nro_despacho);
@@ -4007,12 +4160,12 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);
                         $doc->exportField($this->total);
+                        $doc->exportField($this->nota);
                         $doc->exportField($this->igtf);
                         $doc->exportField($this->monto_base_igtf);
                         $doc->exportField($this->monto_igtf);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->lista_pedido);
-                        $doc->exportField($this->nota);
                         $doc->exportField($this->unidades);
                         $doc->exportField($this->estatus);
                         $doc->exportField($this->_username);
@@ -4024,6 +4177,7 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->entregado);
                         $doc->exportField($this->fecha_entrega);
                         $doc->exportField($this->pagado);
+                        $doc->exportField($this->impreso);
                         $doc->exportField($this->bultos);
                         $doc->exportField($this->fecha_bultos);
                         $doc->exportField($this->user_bultos);
@@ -4051,6 +4205,8 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->checker_date);
                         $doc->exportField($this->packer);
                         $doc->exportField($this->packer_date);
+                        $doc->exportField($this->descuento3);
+                        $doc->exportField($this->doc_afe);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -4411,7 +4567,9 @@ class ViewOutTdcfcv extends DbTable
             $rsnew["monto_igtf"] = 0.00;
             $rsnew["monto_base_igtf"] = 0.00; 
         }
-        $rsnew["fecha"] = $rsnew["fecha"] . " 00:00:00";
+        if (array_key_exists("fecha", $rsnew)) {
+            unset($rsnew["fecha"]);
+        }
         return true;
     }
 
@@ -4511,6 +4669,9 @@ class ViewOutTdcfcv extends DbTable
     		$this->fecha->CellAttrs["style"] = $color;
     		$this->total->CellAttrs["style"] = $color;
     	}
+        if ($this->impreso->CurrentValue == "S") $color = "background-color: #77dd77; color: #ffffff;";
+        else $color = "background-color: #fff8cc; color: #7a6a00;";
+        $this->impreso->CellAttrs["style"] = $color;
     }
 
     // User ID Filtering event

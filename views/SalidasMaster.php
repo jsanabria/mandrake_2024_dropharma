@@ -395,6 +395,17 @@ $salidas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($salidas->descuento3->Visible) { // descuento3 ?>
+        <tr id="r_descuento3"<?= $salidas->descuento3->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->descuento3->caption() ?></td>
+            <td<?= $salidas->descuento3->cellAttributes() ?>>
+<span id="el_salidas_descuento3">
+<span<?= $salidas->descuento3->viewAttributes() ?>>
+<?= $salidas->descuento3->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

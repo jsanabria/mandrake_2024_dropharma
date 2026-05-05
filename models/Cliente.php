@@ -2851,6 +2851,8 @@ class Cliente extends DbTable
     	$rsnew["ci_rif"] = trim(strtoupper($rsnew["ci_rif"]));
     	$rsnew["email2"] = trim($rsnew["email2"]);
     	$rsnew["web"] = trim(strtoupper($rsnew["web"]));
+
+        /*
     	if(trim($rsnew["ci_rif"]) != "") {
     		$sql = "SELECT COUNT(ci_rif) AS cantidad FROM cliente WHERE ci_rif = '" . $rsnew["ci_rif"] . "';";
     		$cantidad = ExecuteScalar($sql);
@@ -2859,6 +2861,7 @@ class Cliente extends DbTable
     			return FALSE;
     		}
     	}
+        */
     	return TRUE;
     }
 

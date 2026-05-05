@@ -211,6 +211,7 @@ class SalidasList extends Salidas
         $this->monto_base_igtf->setVisibility();
         $this->monto_igtf->setVisibility();
         $this->doc_afe->setVisibility();
+        $this->descuento3->setVisibility();
     }
 
     // Constructor
@@ -1205,6 +1206,7 @@ class SalidasList extends Salidas
         $filterList = Concat($filterList, $this->monto_base_igtf->AdvancedSearch->toJson(), ","); // Field monto_base_igtf
         $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
         $filterList = Concat($filterList, $this->doc_afe->AdvancedSearch->toJson(), ","); // Field doc_afe
+        $filterList = Concat($filterList, $this->descuento3->AdvancedSearch->toJson(), ","); // Field descuento3
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1707,6 +1709,14 @@ class SalidasList extends Salidas
         $this->doc_afe->AdvancedSearch->SearchValue2 = @$filter["y_doc_afe"];
         $this->doc_afe->AdvancedSearch->SearchOperator2 = @$filter["w_doc_afe"];
         $this->doc_afe->AdvancedSearch->save();
+
+        // Field descuento3
+        $this->descuento3->AdvancedSearch->SearchValue = @$filter["x_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchOperator = @$filter["z_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchCondition = @$filter["v_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchValue2 = @$filter["y_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchOperator2 = @$filter["w_descuento3"];
+        $this->descuento3->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1777,6 +1787,7 @@ class SalidasList extends Salidas
         $this->buildSearchSql($where, $this->monto_base_igtf, $default, false); // monto_base_igtf
         $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
         $this->buildSearchSql($where, $this->doc_afe, $default, false); // doc_afe
+        $this->buildSearchSql($where, $this->descuento3, $default, false); // descuento3
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1841,6 +1852,7 @@ class SalidasList extends Salidas
             $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
+            $this->descuento3->AdvancedSearch->save(); // descuento3
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1929,6 +1941,7 @@ class SalidasList extends Salidas
             $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
+            $this->descuento3->AdvancedSearch->save(); // descuento3
             $this->setSessionRules($rules);
         }
 
@@ -2290,6 +2303,15 @@ class SalidasList extends Salidas
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->doc_afe->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field descuento3
+        $filter = $this->queryBuilderWhere("descuento3");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->descuento3, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento3->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -2541,6 +2563,9 @@ class SalidasList extends Salidas
         if ($this->doc_afe->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->descuento3->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2634,6 +2659,7 @@ class SalidasList extends Salidas
         $this->monto_base_igtf->AdvancedSearch->unsetSession();
         $this->monto_igtf->AdvancedSearch->unsetSession();
         $this->doc_afe->AdvancedSearch->unsetSession();
+        $this->descuento3->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2703,6 +2729,7 @@ class SalidasList extends Salidas
         $this->monto_base_igtf->AdvancedSearch->load();
         $this->monto_igtf->AdvancedSearch->load();
         $this->doc_afe->AdvancedSearch->load();
+        $this->descuento3->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2754,6 +2781,7 @@ class SalidasList extends Salidas
             $this->updateSort($this->monto_base_igtf); // monto_base_igtf
             $this->updateSort($this->monto_igtf); // monto_igtf
             $this->updateSort($this->doc_afe); // doc_afe
+            $this->updateSort($this->descuento3); // descuento3
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2836,6 +2864,7 @@ class SalidasList extends Salidas
                 $this->monto_base_igtf->setSort("");
                 $this->monto_igtf->setSort("");
                 $this->doc_afe->setSort("");
+                $this->descuento3->setSort("");
             }
 
             // Reset start position
@@ -3400,6 +3429,7 @@ class SalidasList extends Salidas
             $this->createColumnOption($option, "monto_base_igtf");
             $this->createColumnOption($option, "monto_igtf");
             $this->createColumnOption($option, "doc_afe");
+            $this->createColumnOption($option, "descuento3");
         }
 
         // Set up custom actions
@@ -4216,6 +4246,14 @@ class SalidasList extends Salidas
                 $this->Command = "search";
             }
         }
+
+        // descuento3
+        if ($this->descuento3->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->descuento3->AdvancedSearch->SearchValue != "" || $this->descuento3->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -4372,6 +4410,7 @@ class SalidasList extends Salidas
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
+        $this->descuento3->setDbValue($row['descuento3']);
     }
 
     // Return a row with default values
@@ -4436,6 +4475,7 @@ class SalidasList extends Salidas
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
         return $row;
     }
 
@@ -4591,6 +4631,8 @@ class SalidasList extends Salidas
         // monto_igtf
 
         // doc_afe
+
+        // descuento3
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -5079,6 +5121,10 @@ class SalidasList extends Salidas
             $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
             $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -5239,6 +5285,10 @@ class SalidasList extends Salidas
             // doc_afe
             $this->doc_afe->HrefValue = "";
             $this->doc_afe->TooltipValue = "";
+
+            // descuento3
+            $this->descuento3->HrefValue = "";
+            $this->descuento3->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -5516,6 +5566,11 @@ class SalidasList extends Salidas
             $this->doc_afe->setupEditAttributes();
             $this->doc_afe->EditValue = $this->doc_afe->AdvancedSearch->SearchValue;
             $this->doc_afe->PlaceHolder = RemoveHtml($this->doc_afe->caption());
+
+            // descuento3
+            $this->descuento3->setupEditAttributes();
+            $this->descuento3->EditValue = $this->descuento3->AdvancedSearch->SearchValue;
+            $this->descuento3->PlaceHolder = RemoveHtml($this->descuento3->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -5614,6 +5669,7 @@ class SalidasList extends Salidas
         $this->monto_base_igtf->AdvancedSearch->load();
         $this->monto_igtf->AdvancedSearch->load();
         $this->doc_afe->AdvancedSearch->load();
+        $this->descuento3->AdvancedSearch->load();
     }
 
     // Get export HTML tag

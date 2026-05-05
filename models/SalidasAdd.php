@@ -187,6 +187,7 @@ class SalidasAdd extends Salidas
         $this->monto_base_igtf->setVisibility();
         $this->monto_igtf->setVisibility();
         $this->doc_afe->setVisibility();
+        $this->descuento3->setVisibility();
     }
 
     // Constructor
@@ -999,6 +1000,16 @@ class SalidasAdd extends Salidas
             }
         }
 
+        // Check field name 'descuento3' first before field var 'x_descuento3'
+        $val = $CurrentForm->hasValue("descuento3") ? $CurrentForm->getValue("descuento3") : $CurrentForm->getValue("x_descuento3");
+        if (!$this->descuento3->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->descuento3->Visible = false; // Disable update for API request
+            } else {
+                $this->descuento3->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         $this->getUploadFiles(); // Get upload files
@@ -1031,6 +1042,7 @@ class SalidasAdd extends Salidas
         $this->monto_base_igtf->CurrentValue = $this->monto_base_igtf->FormValue;
         $this->monto_igtf->CurrentValue = $this->monto_igtf->FormValue;
         $this->doc_afe->CurrentValue = $this->doc_afe->FormValue;
+        $this->descuento3->CurrentValue = $this->descuento3->FormValue;
     }
 
     /**
@@ -1131,6 +1143,7 @@ class SalidasAdd extends Salidas
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
+        $this->descuento3->setDbValue($row['descuento3']);
     }
 
     // Return a row with default values
@@ -1195,6 +1208,7 @@ class SalidasAdd extends Salidas
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
         return $row;
     }
 
@@ -1402,6 +1416,9 @@ class SalidasAdd extends Salidas
 
         // doc_afe
         $this->doc_afe->RowCssClass = "row";
+
+        // descuento3
+        $this->descuento3->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1901,6 +1918,10 @@ class SalidasAdd extends Salidas
             $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
             $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
 
@@ -1992,6 +2013,9 @@ class SalidasAdd extends Salidas
 
             // doc_afe
             $this->doc_afe->HrefValue = "";
+
+            // descuento3
+            $this->descuento3->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -2313,6 +2337,14 @@ class SalidasAdd extends Salidas
                 $this->doc_afe->EditValue = FormatNumber($this->doc_afe->EditValue, null);
             }
 
+            // descuento3
+            $this->descuento3->setupEditAttributes();
+            $this->descuento3->EditValue = $this->descuento3->CurrentValue;
+            $this->descuento3->PlaceHolder = RemoveHtml($this->descuento3->caption());
+            if (strval($this->descuento3->EditValue) != "" && is_numeric($this->descuento3->EditValue)) {
+                $this->descuento3->EditValue = FormatNumber($this->descuento3->EditValue, null);
+            }
+
             // Add refer script
 
             // tipo_documento
@@ -2401,6 +2433,9 @@ class SalidasAdd extends Salidas
 
             // doc_afe
             $this->doc_afe->HrefValue = "";
+
+            // descuento3
+            $this->descuento3->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2554,6 +2589,14 @@ class SalidasAdd extends Salidas
             }
             if (!CheckInteger($this->doc_afe->FormValue)) {
                 $this->doc_afe->addErrorMessage($this->doc_afe->getErrorMessage(false));
+            }
+            if ($this->descuento3->Visible && $this->descuento3->Required) {
+                if (!$this->descuento3->IsDetailKey && EmptyValue($this->descuento3->FormValue)) {
+                    $this->descuento3->addErrorMessage(str_replace("%s", $this->descuento3->caption(), $this->descuento3->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->descuento3->FormValue)) {
+                $this->descuento3->addErrorMessage($this->descuento3->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -2800,6 +2843,9 @@ class SalidasAdd extends Salidas
 
         // doc_afe
         $this->doc_afe->setDbValueDef($rsnew, $this->doc_afe->CurrentValue, false);
+
+        // descuento3
+        $this->descuento3->setDbValueDef($rsnew, $this->descuento3->CurrentValue, false);
         return $rsnew;
     }
 
@@ -2877,6 +2923,9 @@ class SalidasAdd extends Salidas
         }
         if (isset($row['doc_afe'])) { // doc_afe
             $this->doc_afe->setFormValue($row['doc_afe']);
+        }
+        if (isset($row['descuento3'])) { // descuento3
+            $this->descuento3->setFormValue($row['descuento3']);
         }
     }
 

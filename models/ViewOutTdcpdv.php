@@ -111,6 +111,9 @@ class ViewOutTdcpdv extends DbTable
     public $igtf;
     public $monto_base_igtf;
     public $monto_igtf;
+    public $descuento3;
+    public $impreso;
+    public $doc_afe;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -1563,6 +1566,80 @@ class ViewOutTdcpdv extends DbTable
         $this->monto_igtf->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['monto_igtf'] = &$this->monto_igtf;
 
+        // descuento3
+        $this->descuento3 = new DbField(
+            $this, // Table
+            'x_descuento3', // Variable name
+            'descuento3', // Name
+            '`descuento3`', // Expression
+            '`descuento3`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento3`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento3->InputTextType = "text";
+        $this->descuento3->Raw = true;
+        $this->descuento3->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento3->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento3'] = &$this->descuento3;
+
+        // impreso
+        $this->impreso = new DbField(
+            $this, // Table
+            'x_impreso', // Variable name
+            'impreso', // Name
+            '`impreso`', // Expression
+            '`impreso`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`impreso`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->impreso->addMethod("getDefault", fn() => "N");
+        $this->impreso->InputTextType = "text";
+        $this->impreso->Raw = true;
+        $this->impreso->Lookup = new Lookup($this->impreso, 'view_out_tdcpdv', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->impreso->OptionCount = 2;
+        $this->impreso->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['impreso'] = &$this->impreso;
+
+        // doc_afe
+        $this->doc_afe = new DbField(
+            $this, // Table
+            'x_doc_afe', // Variable name
+            'doc_afe', // Name
+            '`doc_afe`', // Expression
+            '`doc_afe`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`doc_afe`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->doc_afe->InputTextType = "text";
+        $this->doc_afe->Raw = true;
+        $this->doc_afe->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->doc_afe->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['doc_afe'] = &$this->doc_afe;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -2179,6 +2256,9 @@ class ViewOutTdcpdv extends DbTable
         $this->igtf->DbValue = $row['igtf'];
         $this->monto_base_igtf->DbValue = $row['monto_base_igtf'];
         $this->monto_igtf->DbValue = $row['monto_igtf'];
+        $this->descuento3->DbValue = $row['descuento3'];
+        $this->impreso->DbValue = $row['impreso'];
+        $this->doc_afe->DbValue = $row['doc_afe'];
     }
 
     // Delete uploaded files
@@ -2608,6 +2688,9 @@ class ViewOutTdcpdv extends DbTable
         $this->igtf->setDbValue($row['igtf']);
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
+        $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Render list content
@@ -2751,6 +2834,12 @@ class ViewOutTdcpdv extends DbTable
         // monto_base_igtf
 
         // monto_igtf
+
+        // descuento3
+
+        // impreso
+
+        // doc_afe
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -3180,6 +3269,21 @@ class ViewOutTdcpdv extends DbTable
         $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
         $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
 
+        // descuento3
+        $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+        $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
+        // impreso
+        if (strval($this->impreso->CurrentValue) != "") {
+            $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+        } else {
+            $this->impreso->ViewValue = null;
+        }
+
+        // doc_afe
+        $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+        $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -3432,6 +3536,18 @@ class ViewOutTdcpdv extends DbTable
         // monto_igtf
         $this->monto_igtf->HrefValue = "";
         $this->monto_igtf->TooltipValue = "";
+
+        // descuento3
+        $this->descuento3->HrefValue = "";
+        $this->descuento3->TooltipValue = "";
+
+        // impreso
+        $this->impreso->HrefValue = "";
+        $this->impreso->TooltipValue = "";
+
+        // doc_afe
+        $this->doc_afe->HrefValue = "";
+        $this->doc_afe->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3837,6 +3953,26 @@ class ViewOutTdcpdv extends DbTable
             $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, null);
         }
 
+        // descuento3
+        $this->descuento3->setupEditAttributes();
+        $this->descuento3->EditValue = $this->descuento3->CurrentValue;
+        $this->descuento3->PlaceHolder = RemoveHtml($this->descuento3->caption());
+        if (strval($this->descuento3->EditValue) != "" && is_numeric($this->descuento3->EditValue)) {
+            $this->descuento3->EditValue = FormatNumber($this->descuento3->EditValue, null);
+        }
+
+        // impreso
+        $this->impreso->EditValue = $this->impreso->options(false);
+        $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
+
+        // doc_afe
+        $this->doc_afe->setupEditAttributes();
+        $this->doc_afe->EditValue = $this->doc_afe->CurrentValue;
+        $this->doc_afe->PlaceHolder = RemoveHtml($this->doc_afe->caption());
+        if (strval($this->doc_afe->EditValue) != "" && is_numeric($this->doc_afe->EditValue)) {
+            $this->doc_afe->EditValue = FormatNumber($this->doc_afe->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3946,6 +4082,9 @@ class ViewOutTdcpdv extends DbTable
                     $doc->exportCaption($this->igtf);
                     $doc->exportCaption($this->monto_base_igtf);
                     $doc->exportCaption($this->monto_igtf);
+                    $doc->exportCaption($this->descuento3);
+                    $doc->exportCaption($this->impreso);
+                    $doc->exportCaption($this->doc_afe);
                 }
                 $doc->endExportRow();
             }
@@ -4053,6 +4192,9 @@ class ViewOutTdcpdv extends DbTable
                         $doc->exportField($this->igtf);
                         $doc->exportField($this->monto_base_igtf);
                         $doc->exportField($this->monto_igtf);
+                        $doc->exportField($this->descuento3);
+                        $doc->exportField($this->impreso);
+                        $doc->exportField($this->doc_afe);
                     }
                     $doc->endExportRow($rowCnt);
                 }

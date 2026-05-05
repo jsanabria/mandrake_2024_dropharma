@@ -286,6 +286,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->descuento3->Visible) { // descuento3 ?>
+    <tr id="r_descuento3"<?= $Page->descuento3->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_descuento3"><?= $Page->descuento3->caption() ?></span></td>
+        <td data-name="descuento3"<?= $Page->descuento3->cellAttributes() ?>>
+<span id="el_salidas_descuento3" data-page="1">
+<span<?= $Page->descuento3->viewAttributes() ?>>
+<?= $Page->descuento3->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

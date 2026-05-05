@@ -187,6 +187,7 @@ class SalidasDelete extends Salidas
         $this->monto_base_igtf->setVisibility();
         $this->monto_igtf->setVisibility();
         $this->doc_afe->setVisibility();
+        $this->descuento3->setVisibility();
     }
 
     // Constructor
@@ -728,6 +729,7 @@ class SalidasDelete extends Salidas
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
+        $this->descuento3->setDbValue($row['descuento3']);
     }
 
     // Return a row with default values
@@ -792,6 +794,7 @@ class SalidasDelete extends Salidas
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
         return $row;
     }
 
@@ -922,6 +925,8 @@ class SalidasDelete extends Salidas
         // monto_igtf
 
         // doc_afe
+
+        // descuento3
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1410,6 +1415,10 @@ class SalidasDelete extends Salidas
             $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
             $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1570,6 +1579,10 @@ class SalidasDelete extends Salidas
             // doc_afe
             $this->doc_afe->HrefValue = "";
             $this->doc_afe->TooltipValue = "";
+
+            // descuento3
+            $this->descuento3->HrefValue = "";
+            $this->descuento3->TooltipValue = "";
         }
 
         // Call Row Rendered event

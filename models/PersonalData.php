@@ -44,7 +44,7 @@ class PersonalData
     public $RenderingView = false;
 
     // CSS class/style
-    public $CurrentPageName = "ViewContAsientoResumenMdkList";
+    public $CurrentPageName = "YaFueProcesadoController";
 
     // Page headings
     public $Heading = "";

@@ -71,11 +71,12 @@ if(trim($nro_documento) == "") {
             Execute($sql);
     ///////////////////
 
-    $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
-    $faltan_datos = ExecuteScalar($sql);
-    if($faltan_datos == "N") $estatus = "PROCESADO";
+    // $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
+    // $faltan_datos = ExecuteScalar($sql);
+    // if($faltan_datos == "N") $estatus = "PROCESADO";
+    $estatus = "PROCESADO";
 
-    $sql = "UPDATE salidas SET nro_documento = '$factura', nro_control = '$facturaCTRL', estatus = '$estatus', username = '" . CurrentUserName() . "' WHERE id = $pedido;";
+    $sql = "UPDATE salidas SET fecha = '" . date("Y-m-d H:i:s") . "', nro_documento = '$factura', nro_control = '$facturaCTRL', estatus = '$estatus', username = '" . CurrentUserName() . "' WHERE id = $pedido;";
     Execute($sql);
 } 
 else {

@@ -2651,7 +2651,24 @@ class ClienteEdit extends Cliente
     public function pageDataRendering(&$header)
     {
         // Example:
-        //$header = "your header";
+        $header = '<!-- Modal para RIF Duplicado -->
+            <div class="modal fade" id="modalRifDuplicado" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-warning">
+                        <div class="modal-header bg-warning">
+                            <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> RIF Duplicado detectado</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p id="msgRifDuplicado" class="fs-5"></p>
+                            <p>¿Desea crear otro registro con este mismo número de identificación?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" id="btnCancelarRif">No, corregir</button>
+                            <button type="button" class="btn btn-success" id="btnContinuarRif">Sí, permitir duplicado</button>
+                        </div>
+                    </div>
+                </div>
+            </div>';
     }
 
     // Page Data Rendered event

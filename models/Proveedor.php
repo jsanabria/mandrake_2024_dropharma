@@ -2426,6 +2426,8 @@ class Proveedor extends DbTable
     	// Enter your code here
     	// To cancel, set return value to FALSE
     	$rsnew["ci_rif"] = trim(strtoupper($rsnew["ci_rif"]));
+
+        /*
     	if(trim($rsnew["ci_rif"]) != "") {
     		$sql = "SELECT COUNT(ci_rif) AS cantidad FROM proveedor WHERE ci_rif = '" . $rsnew["ci_rif"] . "';";
     		$cantidad = ExecuteScalar($sql);
@@ -2434,6 +2436,7 @@ class Proveedor extends DbTable
     			return FALSE;
     		}
     	}
+        */
     	return TRUE;
     }
 
@@ -2491,6 +2494,8 @@ class Proveedor extends DbTable
     	// Enter your code here
     	// To cancel, set return value to FALSE
     	$rsnew["ci_rif"] = trim(strtoupper($rsnew["ci_rif"]));
+
+        /*
     	if(trim($rsnew["ci_rif"]) != "" and $rsold["ci_rif"] <> $rsnew["ci_rif"]) {
     		$sql = "SELECT COUNT(ci_rif) AS cantidad FROM proveedor WHERE ci_rif = '" . $rsnew["ci_rif"] . "';";
     		$cantidad = ExecuteScalar($sql);
@@ -2507,6 +2512,7 @@ class Proveedor extends DbTable
     			return FALSE;
     		}
     	}
+        */
     	return TRUE;
     }
 

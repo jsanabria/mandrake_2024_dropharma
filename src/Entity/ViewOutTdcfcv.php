@@ -67,6 +67,9 @@ class ViewOutTdcfcv extends AbstractEntity
     private ?string $total;
 
     #[Column(type: "string", nullable: true)]
+    private ?string $nota;
+
+    #[Column(type: "string", nullable: true)]
     private ?string $igtf;
 
     #[Column(name: "monto_base_igtf", type: "decimal", nullable: true)]
@@ -80,9 +83,6 @@ class ViewOutTdcfcv extends AbstractEntity
 
     #[Column(name: "lista_pedido", type: "string", nullable: true)]
     private ?string $listaPedido;
-
-    #[Column(type: "string", nullable: true)]
-    private ?string $nota;
 
     #[Column(type: "integer", nullable: true)]
     private ?int $unidades;
@@ -116,6 +116,9 @@ class ViewOutTdcfcv extends AbstractEntity
 
     #[Column(type: "string", nullable: true)]
     private ?string $pagado;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $impreso;
 
     #[Column(type: "integer", nullable: true)]
     private ?int $bultos;
@@ -201,11 +204,18 @@ class ViewOutTdcfcv extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $fotos;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento3;
+
+    #[Column(name: "doc_afe", type: "integer", nullable: true)]
+    private ?int $docAfe;
+
     public function __construct()
     {
         $this->igtf = N;
         $this->entregado = "N";
         $this->pagado = "N";
+        $this->impreso = "N";
         $this->bultos = 0;
         $this->consignacion = "N";
         $this->factura = "N";
@@ -345,6 +355,17 @@ class ViewOutTdcfcv extends AbstractEntity
         return $this;
     }
 
+    public function getNota(): ?string
+    {
+        return HtmlDecode($this->nota);
+    }
+
+    public function setNota(?string $value): static
+    {
+        $this->nota = RemoveXss($value);
+        return $this;
+    }
+
     public function getIgtf(): ?string
     {
         return $this->igtf;
@@ -400,17 +421,6 @@ class ViewOutTdcfcv extends AbstractEntity
     public function setListaPedido(?string $value): static
     {
         $this->listaPedido = RemoveXss($value);
-        return $this;
-    }
-
-    public function getNota(): ?string
-    {
-        return HtmlDecode($this->nota);
-    }
-
-    public function setNota(?string $value): static
-    {
-        $this->nota = RemoveXss($value);
         return $this;
     }
 
@@ -538,6 +548,20 @@ class ViewOutTdcfcv extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'pagado' value");
         }
         $this->pagado = $value;
+        return $this;
+    }
+
+    public function getImpreso(): ?string
+    {
+        return $this->impreso;
+    }
+
+    public function setImpreso(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'impreso' value");
+        }
+        $this->impreso = $value;
         return $this;
     }
 
@@ -858,6 +882,28 @@ class ViewOutTdcfcv extends AbstractEntity
     public function setFotos(?string $value): static
     {
         $this->fotos = RemoveXss($value);
+        return $this;
+    }
+
+    public function getDescuento3(): ?string
+    {
+        return $this->descuento3;
+    }
+
+    public function setDescuento3(?string $value): static
+    {
+        $this->descuento3 = $value;
+        return $this;
+    }
+
+    public function getDocAfe(): ?int
+    {
+        return $this->docAfe;
+    }
+
+    public function setDocAfe(?int $value): static
+    {
+        $this->docAfe = $value;
         return $this;
     }
 }

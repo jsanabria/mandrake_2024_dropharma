@@ -165,12 +165,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->Visible = false;
         $this->iva->Visible = false;
         $this->total->setVisibility();
+        $this->nota->Visible = false;
         $this->igtf->Visible = false;
         $this->monto_base_igtf->Visible = false;
         $this->monto_igtf->Visible = false;
         $this->moneda->setVisibility();
         $this->lista_pedido->Visible = false;
-        $this->nota->Visible = false;
         $this->unidades->setVisibility();
         $this->estatus->Visible = false;
         $this->_username->setVisibility();
@@ -182,6 +182,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->entregado->Visible = false;
         $this->fecha_entrega->Visible = false;
         $this->pagado->setVisibility();
+        $this->impreso->setVisibility();
         $this->bultos->Visible = false;
         $this->fecha_bultos->Visible = false;
         $this->user_bultos->Visible = false;
@@ -210,6 +211,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->packer->Visible = false;
         $this->packer_date->Visible = false;
         $this->fotos->Visible = false;
+        $this->descuento3->Visible = false;
+        $this->doc_afe->Visible = false;
     }
 
     // Constructor
@@ -766,6 +769,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->setupLookupOptions($this->dias_credito);
         $this->setupLookupOptions($this->entregado);
         $this->setupLookupOptions($this->pagado);
+        $this->setupLookupOptions($this->impreso);
         $this->setupLookupOptions($this->user_bultos);
         $this->setupLookupOptions($this->user_despacho);
         $this->setupLookupOptions($this->consignacion);
@@ -1156,12 +1160,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $filterList = Concat($filterList, $this->alicuota_iva->AdvancedSearch->toJson(), ","); // Field alicuota_iva
         $filterList = Concat($filterList, $this->iva->AdvancedSearch->toJson(), ","); // Field iva
         $filterList = Concat($filterList, $this->total->AdvancedSearch->toJson(), ","); // Field total
+        $filterList = Concat($filterList, $this->nota->AdvancedSearch->toJson(), ","); // Field nota
         $filterList = Concat($filterList, $this->igtf->AdvancedSearch->toJson(), ","); // Field igtf
         $filterList = Concat($filterList, $this->monto_base_igtf->AdvancedSearch->toJson(), ","); // Field monto_base_igtf
         $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
         $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
         $filterList = Concat($filterList, $this->lista_pedido->AdvancedSearch->toJson(), ","); // Field lista_pedido
-        $filterList = Concat($filterList, $this->nota->AdvancedSearch->toJson(), ","); // Field nota
         $filterList = Concat($filterList, $this->unidades->AdvancedSearch->toJson(), ","); // Field unidades
         $filterList = Concat($filterList, $this->estatus->AdvancedSearch->toJson(), ","); // Field estatus
         $filterList = Concat($filterList, $this->_username->AdvancedSearch->toJson(), ","); // Field username
@@ -1173,6 +1177,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $filterList = Concat($filterList, $this->entregado->AdvancedSearch->toJson(), ","); // Field entregado
         $filterList = Concat($filterList, $this->fecha_entrega->AdvancedSearch->toJson(), ","); // Field fecha_entrega
         $filterList = Concat($filterList, $this->pagado->AdvancedSearch->toJson(), ","); // Field pagado
+        $filterList = Concat($filterList, $this->impreso->AdvancedSearch->toJson(), ","); // Field impreso
         $filterList = Concat($filterList, $this->bultos->AdvancedSearch->toJson(), ","); // Field bultos
         $filterList = Concat($filterList, $this->fecha_bultos->AdvancedSearch->toJson(), ","); // Field fecha_bultos
         $filterList = Concat($filterList, $this->user_bultos->AdvancedSearch->toJson(), ","); // Field user_bultos
@@ -1201,6 +1206,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $filterList = Concat($filterList, $this->packer->AdvancedSearch->toJson(), ","); // Field packer
         $filterList = Concat($filterList, $this->packer_date->AdvancedSearch->toJson(), ","); // Field packer_date
         $filterList = Concat($filterList, $this->fotos->AdvancedSearch->toJson(), ","); // Field fotos
+        $filterList = Concat($filterList, $this->descuento3->AdvancedSearch->toJson(), ","); // Field descuento3
+        $filterList = Concat($filterList, $this->doc_afe->AdvancedSearch->toJson(), ","); // Field doc_afe
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1336,6 +1343,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->total->AdvancedSearch->SearchOperator2 = @$filter["w_total"];
         $this->total->AdvancedSearch->save();
 
+        // Field nota
+        $this->nota->AdvancedSearch->SearchValue = @$filter["x_nota"];
+        $this->nota->AdvancedSearch->SearchOperator = @$filter["z_nota"];
+        $this->nota->AdvancedSearch->SearchCondition = @$filter["v_nota"];
+        $this->nota->AdvancedSearch->SearchValue2 = @$filter["y_nota"];
+        $this->nota->AdvancedSearch->SearchOperator2 = @$filter["w_nota"];
+        $this->nota->AdvancedSearch->save();
+
         // Field igtf
         $this->igtf->AdvancedSearch->SearchValue = @$filter["x_igtf"];
         $this->igtf->AdvancedSearch->SearchOperator = @$filter["z_igtf"];
@@ -1375,14 +1390,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->lista_pedido->AdvancedSearch->SearchValue2 = @$filter["y_lista_pedido"];
         $this->lista_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_lista_pedido"];
         $this->lista_pedido->AdvancedSearch->save();
-
-        // Field nota
-        $this->nota->AdvancedSearch->SearchValue = @$filter["x_nota"];
-        $this->nota->AdvancedSearch->SearchOperator = @$filter["z_nota"];
-        $this->nota->AdvancedSearch->SearchCondition = @$filter["v_nota"];
-        $this->nota->AdvancedSearch->SearchValue2 = @$filter["y_nota"];
-        $this->nota->AdvancedSearch->SearchOperator2 = @$filter["w_nota"];
-        $this->nota->AdvancedSearch->save();
 
         // Field unidades
         $this->unidades->AdvancedSearch->SearchValue = @$filter["x_unidades"];
@@ -1471,6 +1478,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->pagado->AdvancedSearch->SearchValue2 = @$filter["y_pagado"];
         $this->pagado->AdvancedSearch->SearchOperator2 = @$filter["w_pagado"];
         $this->pagado->AdvancedSearch->save();
+
+        // Field impreso
+        $this->impreso->AdvancedSearch->SearchValue = @$filter["x_impreso"];
+        $this->impreso->AdvancedSearch->SearchOperator = @$filter["z_impreso"];
+        $this->impreso->AdvancedSearch->SearchCondition = @$filter["v_impreso"];
+        $this->impreso->AdvancedSearch->SearchValue2 = @$filter["y_impreso"];
+        $this->impreso->AdvancedSearch->SearchOperator2 = @$filter["w_impreso"];
+        $this->impreso->AdvancedSearch->save();
 
         // Field bultos
         $this->bultos->AdvancedSearch->SearchValue = @$filter["x_bultos"];
@@ -1695,6 +1710,22 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->fotos->AdvancedSearch->SearchValue2 = @$filter["y_fotos"];
         $this->fotos->AdvancedSearch->SearchOperator2 = @$filter["w_fotos"];
         $this->fotos->AdvancedSearch->save();
+
+        // Field descuento3
+        $this->descuento3->AdvancedSearch->SearchValue = @$filter["x_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchOperator = @$filter["z_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchCondition = @$filter["v_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchValue2 = @$filter["y_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchOperator2 = @$filter["w_descuento3"];
+        $this->descuento3->AdvancedSearch->save();
+
+        // Field doc_afe
+        $this->doc_afe->AdvancedSearch->SearchValue = @$filter["x_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchOperator = @$filter["z_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchCondition = @$filter["v_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchValue2 = @$filter["y_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchOperator2 = @$filter["w_doc_afe"];
+        $this->doc_afe->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1719,12 +1750,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->buildSearchSql($where, $this->alicuota_iva, $default, false); // alicuota_iva
         $this->buildSearchSql($where, $this->iva, $default, false); // iva
         $this->buildSearchSql($where, $this->total, $default, false); // total
+        $this->buildSearchSql($where, $this->nota, $default, false); // nota
         $this->buildSearchSql($where, $this->igtf, $default, false); // igtf
         $this->buildSearchSql($where, $this->monto_base_igtf, $default, false); // monto_base_igtf
         $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
         $this->buildSearchSql($where, $this->moneda, $default, false); // moneda
         $this->buildSearchSql($where, $this->lista_pedido, $default, false); // lista_pedido
-        $this->buildSearchSql($where, $this->nota, $default, false); // nota
         $this->buildSearchSql($where, $this->unidades, $default, false); // unidades
         $this->buildSearchSql($where, $this->estatus, $default, false); // estatus
         $this->buildSearchSql($where, $this->_username, $default, false); // username
@@ -1736,6 +1767,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->buildSearchSql($where, $this->entregado, $default, false); // entregado
         $this->buildSearchSql($where, $this->fecha_entrega, $default, false); // fecha_entrega
         $this->buildSearchSql($where, $this->pagado, $default, false); // pagado
+        $this->buildSearchSql($where, $this->impreso, $default, false); // impreso
         $this->buildSearchSql($where, $this->bultos, $default, false); // bultos
         $this->buildSearchSql($where, $this->fecha_bultos, $default, false); // fecha_bultos
         $this->buildSearchSql($where, $this->user_bultos, $default, false); // user_bultos
@@ -1764,6 +1796,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->buildSearchSql($where, $this->packer, $default, false); // packer
         $this->buildSearchSql($where, $this->packer_date, $default, false); // packer_date
         $this->buildSearchSql($where, $this->fotos, $default, false); // fotos
+        $this->buildSearchSql($where, $this->descuento3, $default, false); // descuento3
+        $this->buildSearchSql($where, $this->doc_afe, $default, false); // doc_afe
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1782,12 +1816,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->alicuota_iva->AdvancedSearch->save(); // alicuota_iva
             $this->iva->AdvancedSearch->save(); // iva
             $this->total->AdvancedSearch->save(); // total
+            $this->nota->AdvancedSearch->save(); // nota
             $this->igtf->AdvancedSearch->save(); // igtf
             $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->moneda->AdvancedSearch->save(); // moneda
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
-            $this->nota->AdvancedSearch->save(); // nota
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->estatus->AdvancedSearch->save(); // estatus
             $this->_username->AdvancedSearch->save(); // username
@@ -1799,6 +1833,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->entregado->AdvancedSearch->save(); // entregado
             $this->fecha_entrega->AdvancedSearch->save(); // fecha_entrega
             $this->pagado->AdvancedSearch->save(); // pagado
+            $this->impreso->AdvancedSearch->save(); // impreso
             $this->bultos->AdvancedSearch->save(); // bultos
             $this->fecha_bultos->AdvancedSearch->save(); // fecha_bultos
             $this->user_bultos->AdvancedSearch->save(); // user_bultos
@@ -1827,6 +1862,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->packer->AdvancedSearch->save(); // packer
             $this->packer_date->AdvancedSearch->save(); // packer_date
             $this->fotos->AdvancedSearch->save(); // fotos
+            $this->descuento3->AdvancedSearch->save(); // descuento3
+            $this->doc_afe->AdvancedSearch->save(); // doc_afe
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1869,12 +1906,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->alicuota_iva->AdvancedSearch->save(); // alicuota_iva
             $this->iva->AdvancedSearch->save(); // iva
             $this->total->AdvancedSearch->save(); // total
+            $this->nota->AdvancedSearch->save(); // nota
             $this->igtf->AdvancedSearch->save(); // igtf
             $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->moneda->AdvancedSearch->save(); // moneda
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
-            $this->nota->AdvancedSearch->save(); // nota
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->estatus->AdvancedSearch->save(); // estatus
             $this->_username->AdvancedSearch->save(); // username
@@ -1886,6 +1923,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->entregado->AdvancedSearch->save(); // entregado
             $this->fecha_entrega->AdvancedSearch->save(); // fecha_entrega
             $this->pagado->AdvancedSearch->save(); // pagado
+            $this->impreso->AdvancedSearch->save(); // impreso
             $this->bultos->AdvancedSearch->save(); // bultos
             $this->fecha_bultos->AdvancedSearch->save(); // fecha_bultos
             $this->user_bultos->AdvancedSearch->save(); // user_bultos
@@ -1914,6 +1952,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->packer->AdvancedSearch->save(); // packer
             $this->packer_date->AdvancedSearch->save(); // packer_date
             $this->fotos->AdvancedSearch->save(); // fotos
+            $this->descuento3->AdvancedSearch->save(); // descuento3
+            $this->doc_afe->AdvancedSearch->save(); // doc_afe
             $this->setSessionRules($rules);
         }
 
@@ -2078,6 +2118,15 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pagado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field impreso
+        $filter = $this->queryBuilderWhere("impreso");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->impreso, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->impreso->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field asesor_asignado
         $filter = $this->queryBuilderWhere("asesor_asignado");
         if (!$filter) {
@@ -2117,8 +2166,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $searchFlds[] = &$this->nro_documento;
         $searchFlds[] = &$this->nro_control;
         $searchFlds[] = &$this->doc_afectado;
-        $searchFlds[] = &$this->moneda;
         $searchFlds[] = &$this->nota;
+        $searchFlds[] = &$this->moneda;
         $searchFlds[] = &$this->estatus;
         $searchFlds[] = &$this->_username;
         $searchFlds[] = &$this->asesor;
@@ -2199,6 +2248,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if ($this->total->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->nota->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->igtf->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -2212,9 +2264,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             return true;
         }
         if ($this->lista_pedido->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->nota->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->unidades->AdvancedSearch->issetSession()) {
@@ -2248,6 +2297,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             return true;
         }
         if ($this->pagado->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->impreso->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->bultos->AdvancedSearch->issetSession()) {
@@ -2334,6 +2386,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if ($this->fotos->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->descuento3->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->doc_afe->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2381,12 +2439,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->AdvancedSearch->unsetSession();
         $this->iva->AdvancedSearch->unsetSession();
         $this->total->AdvancedSearch->unsetSession();
+        $this->nota->AdvancedSearch->unsetSession();
         $this->igtf->AdvancedSearch->unsetSession();
         $this->monto_base_igtf->AdvancedSearch->unsetSession();
         $this->monto_igtf->AdvancedSearch->unsetSession();
         $this->moneda->AdvancedSearch->unsetSession();
         $this->lista_pedido->AdvancedSearch->unsetSession();
-        $this->nota->AdvancedSearch->unsetSession();
         $this->unidades->AdvancedSearch->unsetSession();
         $this->estatus->AdvancedSearch->unsetSession();
         $this->_username->AdvancedSearch->unsetSession();
@@ -2398,6 +2456,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->entregado->AdvancedSearch->unsetSession();
         $this->fecha_entrega->AdvancedSearch->unsetSession();
         $this->pagado->AdvancedSearch->unsetSession();
+        $this->impreso->AdvancedSearch->unsetSession();
         $this->bultos->AdvancedSearch->unsetSession();
         $this->fecha_bultos->AdvancedSearch->unsetSession();
         $this->user_bultos->AdvancedSearch->unsetSession();
@@ -2426,6 +2485,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->packer->AdvancedSearch->unsetSession();
         $this->packer_date->AdvancedSearch->unsetSession();
         $this->fotos->AdvancedSearch->unsetSession();
+        $this->descuento3->AdvancedSearch->unsetSession();
+        $this->doc_afe->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2449,12 +2510,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->AdvancedSearch->load();
         $this->iva->AdvancedSearch->load();
         $this->total->AdvancedSearch->load();
+        $this->nota->AdvancedSearch->load();
         $this->igtf->AdvancedSearch->load();
         $this->monto_base_igtf->AdvancedSearch->load();
         $this->monto_igtf->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
-        $this->nota->AdvancedSearch->load();
         $this->unidades->AdvancedSearch->load();
         $this->estatus->AdvancedSearch->load();
         $this->_username->AdvancedSearch->load();
@@ -2466,6 +2527,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->entregado->AdvancedSearch->load();
         $this->fecha_entrega->AdvancedSearch->load();
         $this->pagado->AdvancedSearch->load();
+        $this->impreso->AdvancedSearch->load();
         $this->bultos->AdvancedSearch->load();
         $this->fecha_bultos->AdvancedSearch->load();
         $this->user_bultos->AdvancedSearch->load();
@@ -2494,6 +2556,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->packer->AdvancedSearch->load();
         $this->packer_date->AdvancedSearch->load();
         $this->fotos->AdvancedSearch->load();
+        $this->descuento3->AdvancedSearch->load();
+        $this->doc_afe->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2523,6 +2587,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->_username); // username
             $this->updateSort($this->id_documento_padre); // id_documento_padre
             $this->updateSort($this->pagado); // pagado
+            $this->updateSort($this->impreso); // impreso
             $this->updateSort($this->asesor_asignado); // asesor_asignado
             $this->setStartRecordNumber(1); // Reset start position
         }
@@ -2560,12 +2625,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 $this->alicuota_iva->setSort("");
                 $this->iva->setSort("");
                 $this->total->setSort("");
+                $this->nota->setSort("");
                 $this->igtf->setSort("");
                 $this->monto_base_igtf->setSort("");
                 $this->monto_igtf->setSort("");
                 $this->moneda->setSort("");
                 $this->lista_pedido->setSort("");
-                $this->nota->setSort("");
                 $this->unidades->setSort("");
                 $this->estatus->setSort("");
                 $this->_username->setSort("");
@@ -2577,6 +2642,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 $this->entregado->setSort("");
                 $this->fecha_entrega->setSort("");
                 $this->pagado->setSort("");
+                $this->impreso->setSort("");
                 $this->bultos->setSort("");
                 $this->fecha_bultos->setSort("");
                 $this->user_bultos->setSort("");
@@ -2605,6 +2671,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 $this->packer->setSort("");
                 $this->packer_date->setSort("");
                 $this->fotos->setSort("");
+                $this->descuento3->setSort("");
+                $this->doc_afe->setSort("");
             }
 
             // Reset start position
@@ -2982,6 +3050,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "username");
             $this->createColumnOption($option, "id_documento_padre");
             $this->createColumnOption($option, "pagado");
+            $this->createColumnOption($option, "impreso");
             $this->createColumnOption($option, "asesor_asignado");
         }
 
@@ -3432,6 +3501,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             }
         }
 
+        // nota
+        if ($this->nota->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->nota->AdvancedSearch->SearchValue != "" || $this->nota->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // igtf
         if ($this->igtf->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3468,14 +3545,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if ($this->lista_pedido->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->lista_pedido->AdvancedSearch->SearchValue != "" || $this->lista_pedido->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // nota
-        if ($this->nota->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->nota->AdvancedSearch->SearchValue != "" || $this->nota->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -3564,6 +3633,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if ($this->pagado->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->pagado->AdvancedSearch->SearchValue != "" || $this->pagado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // impreso
+        if ($this->impreso->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->impreso->AdvancedSearch->SearchValue != "" || $this->impreso->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -3791,6 +3868,22 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 $this->Command = "search";
             }
         }
+
+        // descuento3
+        if ($this->descuento3->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->descuento3->AdvancedSearch->SearchValue != "" || $this->descuento3->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // doc_afe
+        if ($this->doc_afe->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->doc_afe->AdvancedSearch->SearchValue != "" || $this->doc_afe->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3899,12 +3992,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->nota->setDbValue($row['nota']);
         $this->igtf->setDbValue($row['igtf']);
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->_username->setDbValue($row['username']);
@@ -3916,6 +4009,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->entregado->setDbValue($row['entregado']);
         $this->fecha_entrega->setDbValue($row['fecha_entrega']);
         $this->pagado->setDbValue($row['pagado']);
+        $this->impreso->setDbValue($row['impreso']);
         $this->bultos->setDbValue($row['bultos']);
         $this->fecha_bultos->setDbValue($row['fecha_bultos']);
         $this->user_bultos->setDbValue($row['user_bultos']);
@@ -3946,6 +4040,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->packer_date->setDbValue($row['packer_date']);
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
+        $this->descuento3->setDbValue($row['descuento3']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Return a row with default values
@@ -3964,12 +4060,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['nota'] = $this->nota->DefaultValue;
         $row['igtf'] = $this->igtf->DefaultValue;
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
-        $row['nota'] = $this->nota->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['estatus'] = $this->estatus->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
@@ -3981,6 +4077,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $row['entregado'] = $this->entregado->DefaultValue;
         $row['fecha_entrega'] = $this->fecha_entrega->DefaultValue;
         $row['pagado'] = $this->pagado->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
         $row['bultos'] = $this->bultos->DefaultValue;
         $row['fecha_bultos'] = $this->fecha_bultos->DefaultValue;
         $row['user_bultos'] = $this->user_bultos->DefaultValue;
@@ -4009,6 +4106,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $row['packer'] = $this->packer->DefaultValue;
         $row['packer_date'] = $this->packer_date->DefaultValue;
         $row['fotos'] = $this->fotos->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['doc_afe'] = $this->doc_afe->DefaultValue;
         return $row;
     }
 
@@ -4073,6 +4172,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
 
         // total
 
+        // nota
+
         // igtf
 
         // monto_base_igtf
@@ -4082,8 +4183,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         // moneda
 
         // lista_pedido
-
-        // nota
 
         // unidades
 
@@ -4106,6 +4205,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         // fecha_entrega
 
         // pagado
+
+        // impreso
 
         // bultos
 
@@ -4162,6 +4263,10 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         // packer_date
 
         // fotos
+
+        // descuento3
+
+        // doc_afe
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -4230,6 +4335,9 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+            // nota
+            $this->nota->ViewValue = $this->nota->CurrentValue;
+
             // igtf
             if (strval($this->igtf->CurrentValue) != "") {
                 $this->igtf->ViewValue = $this->igtf->optionCaption($this->igtf->CurrentValue);
@@ -4292,9 +4400,6 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             } else {
                 $this->lista_pedido->ViewValue = null;
             }
-
-            // nota
-            $this->nota->ViewValue = $this->nota->CurrentValue;
 
             // unidades
             $this->unidades->ViewValue = $this->unidades->CurrentValue;
@@ -4427,6 +4532,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 $this->pagado->ViewValue = null;
             }
             $this->pagado->CssClass = "fw-bold fst-italic";
+
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+            $this->impreso->CssClass = "fw-bold fst-italic";
 
             // bultos
             $this->bultos->ViewValue = $this->bultos->CurrentValue;
@@ -4602,6 +4715,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->packer_date->ViewValue = $this->packer_date->CurrentValue;
             $this->packer_date->ViewValue = FormatDateTime($this->packer_date->ViewValue, $this->packer_date->formatPattern());
 
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
+            // doc_afe
+            $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -4649,6 +4770,10 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             // pagado
             $this->pagado->HrefValue = "";
             $this->pagado->TooltipValue = "";
+
+            // impreso
+            $this->impreso->HrefValue = "";
+            $this->impreso->TooltipValue = "";
 
             // asesor_asignado
             $this->asesor_asignado->HrefValue = "";
@@ -4754,6 +4879,10 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->pagado->EditValue = $this->pagado->options(true);
             $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
 
+            // impreso
+            $this->impreso->EditValue = $this->impreso->options(false);
+            $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
+
             // asesor_asignado
             $this->asesor_asignado->setupEditAttributes();
             $this->asesor_asignado->PlaceHolder = RemoveHtml($this->asesor_asignado->caption());
@@ -4809,12 +4938,12 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->alicuota_iva->AdvancedSearch->load();
         $this->iva->AdvancedSearch->load();
         $this->total->AdvancedSearch->load();
+        $this->nota->AdvancedSearch->load();
         $this->igtf->AdvancedSearch->load();
         $this->monto_base_igtf->AdvancedSearch->load();
         $this->monto_igtf->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
-        $this->nota->AdvancedSearch->load();
         $this->unidades->AdvancedSearch->load();
         $this->estatus->AdvancedSearch->load();
         $this->_username->AdvancedSearch->load();
@@ -4826,6 +4955,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->entregado->AdvancedSearch->load();
         $this->fecha_entrega->AdvancedSearch->load();
         $this->pagado->AdvancedSearch->load();
+        $this->impreso->AdvancedSearch->load();
         $this->bultos->AdvancedSearch->load();
         $this->fecha_bultos->AdvancedSearch->load();
         $this->user_bultos->AdvancedSearch->load();
@@ -4854,6 +4984,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->packer->AdvancedSearch->load();
         $this->packer_date->AdvancedSearch->load();
         $this->fotos->AdvancedSearch->load();
+        $this->descuento3->AdvancedSearch->load();
+        $this->doc_afe->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -5125,6 +5257,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
                 case "x_entregado":
                     break;
                 case "x_pagado":
+                    break;
+                case "x_impreso":
                     break;
                 case "x_user_bultos":
                     break;
@@ -5507,7 +5641,23 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
 
         ///
         $url = "reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=" . $this->tipo_documento->CurrentValue;
-        $this->ListOptions->Items["print"]->Body ='<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <i class="fa-solid fa-print"></i> </a>';   
+        // $this->ListOptions->Items["print"]->Body ='<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <i class="fa-solid fa-print"></i> </a>';   
+        if ($this->impreso->CurrentValue == "S") {
+            $iconoPrint = '
+                <span style="position: relative; display:inline-block;">
+                    <i class="fa-solid fa-print text-success"></i>
+                    <i class="fa-solid fa-check"
+                    style="position:absolute; top:-7px; right:-8px; font-size:10px; color:#28a745;"></i>
+                </span>';
+            $tituloPrint = "Documento impreso";
+        } else {
+            $iconoPrint = '<i class="fa-solid fa-print"></i>';
+            $tituloPrint = "Imprimir";
+        }
+        $this->ListOptions->Items["print"]->Body =
+            '<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="' . $tituloPrint . '" data-placement="bottom">'
+            . $iconoPrint .
+            '</a>';
         if ($this->estatus->CurrentValue == "PROCESADO") {
             // Ocultamos el botón de Editar (edit)
             $this->ListOptions["edit"]->Visible = false;

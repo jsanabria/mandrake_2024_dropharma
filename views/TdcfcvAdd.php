@@ -738,14 +738,17 @@ function guardarModificacion(i, id_item) {
   <!-- Fabricante (ajustado como Transferencista) -->
   <div class="col-sm-2">
     <?php
-    echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();">
+    echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();" readonly="yes">
     <small>% Fabricante</small>';
     ?>   
   </div>
 
   <!-- Moneda -->
   <div class="col-sm-1">
-    <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()">
+    <!-- <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()"> -->
+    <select id="moneda" name="moneda" class="form-select form-select-sm" 
+        onfocus="this.defaultIndex=this.selectedIndex;" 
+        onchange="this.selectedIndex=this.defaultIndex;">
       <?php
       $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
       $rows = ExecuteRows($sql);
@@ -759,7 +762,7 @@ function guardarModificacion(i, id_item) {
   <!-- Tasa (ahora con label abajo) -->
   <div class="col-sm-1">
     <?php
-    echo '<input name="tasa_usd" id="tasa_usd" type="number" class="form-control form-control-sm" value="' . $tasa . '" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()">
+    echo '<input name="tasa_usd" id="tasa_usd" type="number" class="form-control form-control-sm" value="' . $tasa . '" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()" readonly="yes">
     <small>Tasa B.C.V.</small>';
     ?>
   </div>

@@ -210,6 +210,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->igtf->Visible = false;
         $this->monto_base_igtf->Visible = false;
         $this->monto_igtf->Visible = false;
+        $this->descuento3->Visible = false;
+        $this->impreso->Visible = false;
+        $this->doc_afe->Visible = false;
     }
 
     // Constructor
@@ -772,6 +775,7 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->igtf);
+        $this->setupLookupOptions($this->impreso);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1200,6 +1204,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $filterList = Concat($filterList, $this->igtf->AdvancedSearch->toJson(), ","); // Field igtf
         $filterList = Concat($filterList, $this->monto_base_igtf->AdvancedSearch->toJson(), ","); // Field monto_base_igtf
         $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
+        $filterList = Concat($filterList, $this->descuento3->AdvancedSearch->toJson(), ","); // Field descuento3
+        $filterList = Concat($filterList, $this->impreso->AdvancedSearch->toJson(), ","); // Field impreso
+        $filterList = Concat($filterList, $this->doc_afe->AdvancedSearch->toJson(), ","); // Field doc_afe
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1694,6 +1701,30 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->monto_igtf->AdvancedSearch->SearchValue2 = @$filter["y_monto_igtf"];
         $this->monto_igtf->AdvancedSearch->SearchOperator2 = @$filter["w_monto_igtf"];
         $this->monto_igtf->AdvancedSearch->save();
+
+        // Field descuento3
+        $this->descuento3->AdvancedSearch->SearchValue = @$filter["x_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchOperator = @$filter["z_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchCondition = @$filter["v_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchValue2 = @$filter["y_descuento3"];
+        $this->descuento3->AdvancedSearch->SearchOperator2 = @$filter["w_descuento3"];
+        $this->descuento3->AdvancedSearch->save();
+
+        // Field impreso
+        $this->impreso->AdvancedSearch->SearchValue = @$filter["x_impreso"];
+        $this->impreso->AdvancedSearch->SearchOperator = @$filter["z_impreso"];
+        $this->impreso->AdvancedSearch->SearchCondition = @$filter["v_impreso"];
+        $this->impreso->AdvancedSearch->SearchValue2 = @$filter["y_impreso"];
+        $this->impreso->AdvancedSearch->SearchOperator2 = @$filter["w_impreso"];
+        $this->impreso->AdvancedSearch->save();
+
+        // Field doc_afe
+        $this->doc_afe->AdvancedSearch->SearchValue = @$filter["x_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchOperator = @$filter["z_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchCondition = @$filter["v_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchValue2 = @$filter["y_doc_afe"];
+        $this->doc_afe->AdvancedSearch->SearchOperator2 = @$filter["w_doc_afe"];
+        $this->doc_afe->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1763,6 +1794,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->buildSearchSql($where, $this->igtf, $default, false); // igtf
         $this->buildSearchSql($where, $this->monto_base_igtf, $default, false); // monto_base_igtf
         $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
+        $this->buildSearchSql($where, $this->descuento3, $default, false); // descuento3
+        $this->buildSearchSql($where, $this->impreso, $default, false); // impreso
+        $this->buildSearchSql($where, $this->doc_afe, $default, false); // doc_afe
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1826,6 +1860,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->igtf->AdvancedSearch->save(); // igtf
             $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
+            $this->descuento3->AdvancedSearch->save(); // descuento3
+            $this->impreso->AdvancedSearch->save(); // impreso
+            $this->doc_afe->AdvancedSearch->save(); // doc_afe
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1913,6 +1950,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->igtf->AdvancedSearch->save(); // igtf
             $this->monto_base_igtf->AdvancedSearch->save(); // monto_base_igtf
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
+            $this->descuento3->AdvancedSearch->save(); // descuento3
+            $this->impreso->AdvancedSearch->save(); // impreso
+            $this->doc_afe->AdvancedSearch->save(); // doc_afe
             $this->setSessionRules($rules);
         }
 
@@ -2315,6 +2355,15 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         if ($this->monto_igtf->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->descuento3->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->impreso->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->doc_afe->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2407,6 +2456,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->igtf->AdvancedSearch->unsetSession();
         $this->monto_base_igtf->AdvancedSearch->unsetSession();
         $this->monto_igtf->AdvancedSearch->unsetSession();
+        $this->descuento3->AdvancedSearch->unsetSession();
+        $this->impreso->AdvancedSearch->unsetSession();
+        $this->doc_afe->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2475,6 +2527,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->igtf->AdvancedSearch->load();
         $this->monto_base_igtf->AdvancedSearch->load();
         $this->monto_igtf->AdvancedSearch->load();
+        $this->descuento3->AdvancedSearch->load();
+        $this->impreso->AdvancedSearch->load();
+        $this->doc_afe->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2584,6 +2639,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 $this->igtf->setSort("");
                 $this->monto_base_igtf->setSort("");
                 $this->monto_igtf->setSort("");
+                $this->descuento3->setSort("");
+                $this->impreso->setSort("");
+                $this->doc_afe->setSort("");
             }
 
             // Reset start position
@@ -3768,6 +3826,30 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 $this->Command = "search";
             }
         }
+
+        // descuento3
+        if ($this->descuento3->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->descuento3->AdvancedSearch->SearchValue != "" || $this->descuento3->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // impreso
+        if ($this->impreso->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->impreso->AdvancedSearch->SearchValue != "" || $this->impreso->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // doc_afe
+        if ($this->doc_afe->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->doc_afe->AdvancedSearch->SearchValue != "" || $this->doc_afe->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3923,6 +4005,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->igtf->setDbValue($row['igtf']);
         $this->monto_base_igtf->setDbValue($row['monto_base_igtf']);
         $this->monto_igtf->setDbValue($row['monto_igtf']);
+        $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
+        $this->doc_afe->setDbValue($row['doc_afe']);
     }
 
     // Return a row with default values
@@ -3986,6 +4071,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $row['igtf'] = $this->igtf->DefaultValue;
         $row['monto_base_igtf'] = $this->monto_base_igtf->DefaultValue;
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
+        $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
+        $row['doc_afe'] = $this->doc_afe->DefaultValue;
         return $row;
     }
 
@@ -4139,6 +4227,12 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         // monto_base_igtf
 
         // monto_igtf
+
+        // descuento3
+
+        // impreso
+
+        // doc_afe
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -4559,6 +4653,21 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->monto_igtf->ViewValue = $this->monto_igtf->CurrentValue;
             $this->monto_igtf->ViewValue = FormatNumber($this->monto_igtf->ViewValue, $this->monto_igtf->formatPattern());
 
+            // descuento3
+            $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
+            $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
+
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+
+            // doc_afe
+            $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
+            $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -4810,6 +4919,9 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->igtf->AdvancedSearch->load();
         $this->monto_base_igtf->AdvancedSearch->load();
         $this->monto_igtf->AdvancedSearch->load();
+        $this->descuento3->AdvancedSearch->load();
+        $this->impreso->AdvancedSearch->load();
+        $this->doc_afe->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -5094,6 +5206,8 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_igtf":
+                    break;
+                case "x_impreso":
                     break;
                 default:
                     $lookupFilter = "";

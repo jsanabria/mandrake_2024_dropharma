@@ -782,6 +782,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->doc_afe->Visible) { // doc_afe ?>
         <th data-name="doc_afe" class="<?= $Page->doc_afe->headerCellClass() ?>"><div id="elh_salidas_doc_afe" class="salidas_doc_afe"><?= $Page->renderFieldHeader($Page->doc_afe) ?></div></th>
 <?php } ?>
+<?php if ($Page->descuento3->Visible) { // descuento3 ?>
+        <th data-name="descuento3" class="<?= $Page->descuento3->headerCellClass() ?>"><div id="elh_salidas_descuento3" class="salidas_descuento3"><?= $Page->renderFieldHeader($Page->descuento3) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -1090,6 +1093,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_doc_afe" class="el_salidas_doc_afe">
 <span<?= $Page->doc_afe->viewAttributes() ?>>
 <?= $Page->doc_afe->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->descuento3->Visible) { // descuento3 ?>
+        <td data-name="descuento3"<?= $Page->descuento3->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_descuento3" class="el_salidas_descuento3">
+<span<?= $Page->descuento3->viewAttributes() ?>>
+<?= $Page->descuento3->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

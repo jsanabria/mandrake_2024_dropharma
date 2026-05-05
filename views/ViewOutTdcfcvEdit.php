@@ -33,7 +33,6 @@ loadjs.ready(["wrapper", "head"], function () {
         .setFields([
             ["documento", [fields.documento.visible && fields.documento.required ? ew.Validators.required(fields.documento.caption) : null], fields.documento.isInvalid],
             ["nro_documento", [fields.nro_documento.visible && fields.nro_documento.required ? ew.Validators.required(fields.nro_documento.caption) : null], fields.nro_documento.isInvalid],
-            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
             ["cliente", [fields.cliente.visible && fields.cliente.required ? ew.Validators.required(fields.cliente.caption) : null], fields.cliente.isInvalid],
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
@@ -41,10 +40,10 @@ loadjs.ready(["wrapper", "head"], function () {
             ["alicuota_iva", [fields.alicuota_iva.visible && fields.alicuota_iva.required ? ew.Validators.required(fields.alicuota_iva.caption) : null], fields.alicuota_iva.isInvalid],
             ["iva", [fields.iva.visible && fields.iva.required ? ew.Validators.required(fields.iva.caption) : null], fields.iva.isInvalid],
             ["total", [fields.total.visible && fields.total.required ? ew.Validators.required(fields.total.caption) : null], fields.total.isInvalid],
+            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
             ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
             ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
-            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
             ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
             ["nro_despacho", [fields.nro_despacho.visible && fields.nro_despacho.required ? ew.Validators.required(fields.nro_despacho.caption) : null], fields.nro_despacho.isInvalid],
@@ -67,10 +66,8 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
-            "cliente": <?= $Page->cliente->toClientList($Page) ?>,
             "igtf": <?= $Page->igtf->toClientList($Page) ?>,
             "moneda": <?= $Page->moneda->toClientList($Page) ?>,
-            "estatus": <?= $Page->estatus->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
         })
@@ -123,50 +120,9 @@ loadjs.ready("head", function () {
         <label id="elh_view_out_tdcfcv_nro_documento" for="x_nro_documento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_documento->caption() ?><?= $Page->nro_documento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_documento->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_nro_documento">
-<input type="<?= $Page->nro_documento->getInputTextType() ?>" name="x_nro_documento" id="x_nro_documento" data-table="view_out_tdcfcv" data-field="x_nro_documento" value="<?= $Page->nro_documento->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_documento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_documento->formatPattern()) ?>"<?= $Page->nro_documento->editAttributes() ?> aria-describedby="x_nro_documento_help">
-<?= $Page->nro_documento->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->nro_documento->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->fecha->Visible) { // fecha ?>
-    <div id="r_fecha"<?= $Page->fecha->rowAttributes() ?>>
-        <label id="elh_view_out_tdcfcv_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_fecha">
-<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="view_out_tdcfcv" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
-<?= $Page->fecha->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
-<?php if (!$Page->fecha->ReadOnly && !$Page->fecha->Disabled && !isset($Page->fecha->EditAttrs["readonly"]) && !isset($Page->fecha->EditAttrs["disabled"])) { ?>
-<script>
-loadjs.ready(["fview_out_tdcfcvedit", "datetimepicker"], function () {
-    let format = "<?= DateFormat(7) ?>",
-        options = {
-            localization: {
-                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
-                hourCycle: format.match(/H/) ? "h24" : "h12",
-                format,
-                ...ew.language.phrase("datetimepicker")
-            },
-            display: {
-                icons: {
-                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
-                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
-                },
-                components: {
-                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
-                    hours: !!format.match(/h/i),
-                    minutes: !!format.match(/m/),
-                    seconds: !!format.match(/s/i)
-                },
-                theme: ew.getPreferredTheme()
-            }
-        };
-    ew.createDateTimePicker("fview_out_tdcfcvedit", "x_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
-});
-</script>
-<?php } ?>
+<span<?= $Page->nro_documento->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->nro_documento->getDisplayValue($Page->nro_documento->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_nro_documento" data-hidden="1" data-page="1" name="x_nro_documento" id="x_nro_documento" value="<?= HtmlEncode($Page->nro_documento->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -176,9 +132,9 @@ loadjs.ready(["fview_out_tdcfcvedit", "datetimepicker"], function () {
         <label id="elh_view_out_tdcfcv_nro_control" for="x_nro_control" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_control->caption() ?><?= $Page->nro_control->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_control->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_nro_control">
-<input type="<?= $Page->nro_control->getInputTextType() ?>" name="x_nro_control" id="x_nro_control" data-table="view_out_tdcfcv" data-field="x_nro_control" value="<?= $Page->nro_control->EditValue ?>" data-page="1" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->nro_control->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_control->formatPattern()) ?>"<?= $Page->nro_control->editAttributes() ?> aria-describedby="x_nro_control_help">
-<?= $Page->nro_control->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->nro_control->getErrorMessage() ?></div>
+<span<?= $Page->nro_control->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->nro_control->getDisplayValue($Page->nro_control->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_nro_control" data-hidden="1" data-page="1" name="x_nro_control" id="x_nro_control" value="<?= HtmlEncode($Page->nro_control->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -188,41 +144,9 @@ loadjs.ready(["fview_out_tdcfcvedit", "datetimepicker"], function () {
         <label id="elh_view_out_tdcfcv_cliente" for="x_cliente" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cliente->caption() ?><?= $Page->cliente->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cliente->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_cliente">
-<div class="input-group flex-nowrap">
-    <select
-        id="x_cliente"
-        name="x_cliente"
-        class="form-control ew-select<?= $Page->cliente->isInvalidClass() ?>"
-        data-select2-id="fview_out_tdcfcvedit_x_cliente"
-        data-table="view_out_tdcfcv"
-        data-field="x_cliente"
-        data-caption="<?= HtmlEncode(RemoveHtml($Page->cliente->caption())) ?>"
-        data-modal-lookup="true"
-        data-page="1"
-        data-value-separator="<?= $Page->cliente->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->cliente->getPlaceHolder()) ?>"
-        <?= $Page->cliente->editAttributes() ?>>
-        <?= $Page->cliente->selectOptionListHtml("x_cliente") ?>
-    </select>
-    <?php if (AllowAdd(CurrentProjectID() . "cliente") && !$Page->cliente->ReadOnly) { ?>
-    <button type="button" class="btn btn-default ew-add-opt-btn" id="aol_x_cliente" title="<?= HtmlTitle($Language->phrase("AddLink")) . "&nbsp;" . $Page->cliente->caption() ?>" data-title="<?= $Page->cliente->caption() ?>" data-ew-action="add-option" data-el="x_cliente" data-url="<?= GetUrl("ClienteAddopt") ?>"><i class="fa-solid fa-plus ew-icon"></i></button>
-    <?php } ?>
-</div>
-<?= $Page->cliente->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->cliente->getErrorMessage() ?></div>
-<?= $Page->cliente->Lookup->getParamTag($Page, "p_x_cliente") ?>
-<script>
-loadjs.ready("fview_out_tdcfcvedit", function() {
-    var options = { name: "x_cliente", selectId: "fview_out_tdcfcvedit_x_cliente" };
-    if (fview_out_tdcfcvedit.lists.cliente?.lookupOptions.length) {
-        options.data = { id: "x_cliente", form: "fview_out_tdcfcvedit" };
-    } else {
-        options.ajax = { id: "x_cliente", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.view_out_tdcfcv.fields.cliente.modalLookupOptions);
-    ew.createModalLookup(options);
-});
-</script>
+<span<?= $Page->cliente->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->cliente->getDisplayValue($Page->cliente->EditValue) ?></span></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_cliente" data-hidden="1" data-page="1" name="x_cliente" id="x_cliente" value="<?= HtmlEncode($Page->cliente->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -232,9 +156,9 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <label id="elh_view_out_tdcfcv_doc_afectado" for="x_doc_afectado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->doc_afectado->caption() ?><?= $Page->doc_afectado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->doc_afectado->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_doc_afectado">
-<input type="<?= $Page->doc_afectado->getInputTextType() ?>" name="x_doc_afectado" id="x_doc_afectado" data-table="view_out_tdcfcv" data-field="x_doc_afectado" value="<?= $Page->doc_afectado->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->doc_afectado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afectado->formatPattern()) ?>"<?= $Page->doc_afectado->editAttributes() ?> aria-describedby="x_doc_afectado_help">
-<?= $Page->doc_afectado->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->doc_afectado->getErrorMessage() ?></div>
+<span<?= $Page->doc_afectado->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->doc_afectado->getDisplayValue($Page->doc_afectado->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_doc_afectado" data-hidden="1" data-page="1" name="x_doc_afectado" id="x_doc_afectado" value="<?= HtmlEncode($Page->doc_afectado->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -256,43 +180,9 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <label id="elh_view_out_tdcfcv_estatus" for="x_estatus" class="<?= $Page->LeftColumnClass ?>"><?= $Page->estatus->caption() ?><?= $Page->estatus->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->estatus->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_estatus">
-    <select
-        id="x_estatus"
-        name="x_estatus"
-        class="form-select ew-select<?= $Page->estatus->isInvalidClass() ?>"
-        <?php if (!$Page->estatus->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcfcvedit_x_estatus"
-        <?php } ?>
-        data-table="view_out_tdcfcv"
-        data-field="x_estatus"
-        data-page="1"
-        data-value-separator="<?= $Page->estatus->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->estatus->getPlaceHolder()) ?>"
-        <?= $Page->estatus->editAttributes() ?>>
-        <?= $Page->estatus->selectOptionListHtml("x_estatus") ?>
-    </select>
-    <?= $Page->estatus->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->estatus->getErrorMessage() ?></div>
-<?php if (!$Page->estatus->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fview_out_tdcfcvedit", function() {
-    var options = { name: "x_estatus", selectId: "fview_out_tdcfcvedit_x_estatus" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcfcvedit.lists.estatus?.lookupOptions.length) {
-        options.data = { id: "x_estatus", form: "fview_out_tdcfcvedit" };
-    } else {
-        options.ajax = { id: "x_estatus", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.estatus.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
+<span<?= $Page->estatus->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->estatus->getDisplayValue($Page->estatus->EditValue) ?></span></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_estatus" data-hidden="1" data-page="1" name="x_estatus" id="x_estatus" value="<?= HtmlEncode($Page->estatus->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -662,10 +552,13 @@ loadjs.ready("load", function () {
                 }
             }
         });
+
+        /*
         $("#x_nro_documento").prop('readonly', true);
         $('#x_fecha').prop('readonly', true);
         $('#x_nro_control').prop('readonly', true);
         $(".btn[data-target='#datetimepicker_fview_out_tdcfcvedit_x_fecha']").css("pointer-events", "none");
+        */
     });
 });
 </script>

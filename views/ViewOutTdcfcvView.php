@@ -193,6 +193,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->impreso->Visible) { // impreso ?>
+    <tr id="r_impreso"<?= $Page->impreso->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcfcv_impreso"><?= $Page->impreso->caption() ?></span></td>
+        <td data-name="impreso"<?= $Page->impreso->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_impreso" data-page="1">
+<span<?= $Page->impreso->viewAttributes() ?>>
+<?= $Page->impreso->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

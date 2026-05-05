@@ -594,38 +594,45 @@ loadjs.ready("load", function () {
     // Startup script
     // Write your table-specific startup script here
     // document.write("page loaded");
-    $("#x_telefono1").mask("(9999) 999-99-99");
-    $("#x_telefono2").mask("(9999) 999-99-99");
-    $("#x_ci_rif").change(function(){
-    	if($("#x_ci_rif").val().trim() == '') {
-    		return true;
-    	}
-    	var parametros = { //cada parámetro se pasa con un nombre en un array asociativo
-    		"ci_rif": $("#x_ci_rif").val(),
-    		"tipo": 'CLIENTE',
-    		"accion": 'U'
-    	};
-    	var url = "rif_buscar.php";
-    	$.ajax({
-    		data: parametros,
-    		url: url,
-    		type: 'get',
-    		beforeSend: function () {//elemento que queramos poner mientras ajax carga
-    			//$("#message").html('<img src="images/ajax.gif" width="60" />');
-    		},
-    		success: function (response) {//resultado de la función
-    			var content = $(response).find('#outtext').text();
-    			if(content == "1") {
-    				alert("RIF / CI \"" + $("#x_ci_rif").val() + "\" ya existe.");
-    				$("#x_ci_rif").val("");
-    				$("#x_ci_rif").focus();
-    				return false;
-    			}
-    			else {
-    				return true;
-    			}
-    		}
-    	});
+    // document.write("page loaded");
+    function formatearRIF(valor) {
+        var limpio = valor.replace(/[.,-]/g, "").trim();
+        if (limpio.length > 1 && limpio.charAt(1) !== '-') {
+            return limpio.charAt(0).toUpperCase() + "-" + limpio.substring(1);
+        }
+        return limpio.toUpperCase();
+    }
+    $("#x_ci_rif").change(function() {
+        var $input = $(this);
+        var rifOriginal = $input.val();
+        if (rifOriginal.trim() == '') return;
+        var tipoEntidad = (window.location.href.toLowerCase().indexOf("proveedor") > -1) ? 'PROVEEDOR' : 'CLIENTE';
+
+        // Obtenemos el ID actual para enviarlo al PHP (ajusta "x_id" al nombre de tu campo clave)
+        var idActual = $("#x_id").val() || 0; 
+        $.getJSON("../RifBuscar", { 
+            "ci_rif": rifOriginal, 
+            "tipo": tipoEntidad, 
+            "accion": 'E', // 'E' de Edit
+            "id": idActual 
+        }, function(data) {
+            if (data.existe) {
+                $("#msgRifDuplicado").html("Atención: El RIF/CI <b>" + rifOriginal + "</b> ya está asignado a OTRO registro.");
+                var modalRif = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRifDuplicado'));
+                modalRif.show();
+                $("#btnCancelarRif").off("click").on("click", function() {
+                    // Al ser edición, quizás prefieras restaurar el valor anterior si lo guardaste
+                    $input.val("").focus(); 
+                    modalRif.hide();
+                });
+                $("#btnContinuarRif").off("click").on("click", function() {
+                    $input.val(formatearRIF(rifOriginal));
+                    modalRif.hide();
+                });
+            } else {
+                $input.val(formatearRIF(rifOriginal));
+            }
+        });
     });
 });
 </script>

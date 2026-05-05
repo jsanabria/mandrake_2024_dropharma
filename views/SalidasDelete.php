@@ -152,6 +152,9 @@ $Page->showMessage();
 <?php if ($Page->doc_afe->Visible) { // doc_afe ?>
         <th class="<?= $Page->doc_afe->headerCellClass() ?>"><span id="elh_salidas_doc_afe" class="salidas_doc_afe"><?= $Page->doc_afe->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->descuento3->Visible) { // descuento3 ?>
+        <th class="<?= $Page->descuento3->headerCellClass() ?>"><span id="elh_salidas_descuento3" class="salidas_descuento3"><?= $Page->descuento3->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -453,6 +456,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->doc_afe->viewAttributes() ?>>
 <?= $Page->doc_afe->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->descuento3->Visible) { // descuento3 ?>
+        <td<?= $Page->descuento3->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->descuento3->viewAttributes() ?>>
+<?= $Page->descuento3->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

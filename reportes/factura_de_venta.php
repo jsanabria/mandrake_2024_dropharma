@@ -12,9 +12,13 @@ $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $GLOBALS["moneda_default"] = $row["moneda"];
 
-if(trim($_COOKIE["strcon"]) != "drophqsc_medrika") $GLOBALS["moneda_default"] = "Bs.";
 
+$sql = "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S';";
+$rs = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($rs);
+$GLOBALS["alicuota_dinamica"] = $row["alicuota"];
 
+/////////////////////////////
 $sql = "SELECT 
 			cantidad_articulo, cantidad_movimiento 
 		FROM 
@@ -33,12 +37,14 @@ if($row = mysqli_fetch_array($rs)) {
 				AND cantidad_movimiento IS NULL;";
 	mysqli_query($link, $sql);
 }
+/////////////////////////////
 
 $sql = "SELECT 
 			id, date_format(fecha, '%d/%m/%Y') as fecha, 
 			date_format(fecha, '%Y/%m/%d') AS fech, cliente, nro_documento, nro_control, tipo_documento, estatus, 
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito, 
-			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado, descuento, descuento2, descuento3 
+			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado, 
+			descuento, descuento2, moneda, impreso   
 		FROM salidas where id = '$id_invoice';"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -53,13 +59,27 @@ $GLOBALS["documento"] = $row["documento"];
 $GLOBALS["dias_credito"] = $row["dias_credito"];
 $GLOBALS["fec_venc"] = $row["fec_venc"];
 $GLOBALS["doc_afectado"] = $row["doc_afectado"];
+$GLOBALS["moneda"] = $row["moneda"];
+$GLOBALS["impreso"] = $row["impreso"];
+
+if(trim($GLOBALS["nro_documento"] ?? "") != "") {
+	if ($row["impreso"] != "S") {
+	    $sql_impreso = "UPDATE salidas 
+	                    SET impreso = 'S' 
+	                    WHERE id = '$id_invoice'";
+	    mysqli_query($link, $sql_impreso);
+	}	
+}
+
+if(trim($GLOBALS["nro_documento"] ?? "") == "") $GLOBALS["impreso"] = "S"; // Esto por si se imprime sin nro de dccumento o control
+
 $descuento_comercial = floatval($row["descuento"]);
 $descuento_comercial2 = floatval($row["descuento2"]);
-$descuento_comercial3 = floatval($row["descuento3"]);
 
 $monto_usd = floatval($row["monto_usd"]);
 $tasa_dia = floatval($row["tasa_dia"]);
 
+// $asesor = $row["asesor"];
 $asesor = isset($row["asesor"]) ? $row["asesor"] : "";
 $asesor_asignado = isset($row["asesor_asignado"]) ? $row["asesor_asignado"] : "";
 
@@ -90,9 +110,43 @@ if($row = mysqli_fetch_array($rs))
 else 
 	$GLOBALS["asesor"] = "";
 
+/*
+$sql = "SELECT a.nombre  
+		FROM 
+			usuario AS u 
+			JOIN asesor AS a ON a.id = u.asesor 
+		WHERE 
+			u.username = '$asesor_asignado';"; 
+$rs = mysqli_query($link, $sql);
+if($row = mysqli_fetch_array($rs))
+	$GLOBALS["asesor"] .= " / " . substr($row["nombre"], 0, 15);
+*/
+	
 
 class PDF extends FPDF
 {
+	function MarcaDeAgua()
+	{
+	    $this->SetFont('Courier','B',40);
+	    $this->SetTextColor(230,230,230);
+	    $this->RotatedText(35, 190, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 45);
+	}
+
+	function RotatedText($x, $y, $txt, $angle)
+	{
+	    $this->_out(sprintf(
+	        'q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm CP n',
+	        cos(deg2rad($angle)),
+	        sin(deg2rad($angle)),
+	        -sin(deg2rad($angle)),
+	        cos(deg2rad($angle)),
+	        $x, $y, -$x, -$y
+	    ));
+	    $this->Text($x, $y, $txt);
+	    $this->_out('Q');
+	}
+
+	// Cabecera de p?gina
 	function Header()
 	{
 		// Consulto datos de la compa??a 
@@ -158,7 +212,10 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$this->Cell(10, 5);
 		$this->Cell(50, 5);
-
+		//$this->Cell(100, 6, $GLOBALS["estatus"] . "CIUDAD: $ciudad,",0,0,'R');
+		/*$this->Cell(10, 6, substr(($GLOBALS["fecha"]),0,2),0,0,'L');
+		$this->Cell(10, 6, substr(($GLOBALS["fecha"]),3,2),0,0,'C');
+		$this->Cell(20, 6, substr(($GLOBALS["fecha"]),6,4),0,0,'C');*/
 		$this->Ln(18);
 
 		$this->Cell(5, 3);
@@ -175,12 +232,19 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$this->Ln();
 		
+		/*
+		if(trim($GLOBALS["doc_afectado"]) != "" and ($GLOBALS["documento"]=="NC" or $GLOBALS["documento"]=="ND")) {
+			$this->Cell(150, 3);
+			$this->SetFont('Courier','B',8);
+			$this->Cell(30, 3,'Documento Afectado: ','0','0','R');
+			$this->SetFont('Courier','',8);
+			$this->Cell(30, 3, $GLOBALS["doc_afectado"], 0, 0, 'L');
+		} 
+		*/
+		
 
 		$this->Cell(40, 3);
-		$this->Cell(112, 3, mb_convert_encoding(substr($razon_social, 55, strlen($razon_social)), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
-		$this->SetFont('Courier','B',8);
-		$this->Cell(50, 4,'Fecha: ','0','0','R');
-		$this->SetFont('Courier','',8);
+		$this->Cell(110, 3, mb_convert_encoding(substr($razon_social, 55, strlen($razon_social)), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
 		$this->Ln();
 
 		$this->Cell(5, 4);
@@ -190,11 +254,9 @@ class PDF extends FPDF
 		$direccion_cliente = "$direccion_cliente. $ciudad_cliente";
 		$this->Cell(120, 4, substr($direccion_cliente, 0, 60), '0', '0', 'L');
 		$this->SetFont('Courier','B',8);
-		$this->Cell(33, 4,' ','0','0','R');
+		$this->Cell(33, 4,'Fecha: ','0','0','R');
 		$this->SetFont('Courier','',8);
 		$this->Cell(30, 4, $GLOBALS["fecha"], 0, 0, 'L');
-
-		$this->Image('../images/leyenda_descuentos.png', 145, 52, 45);
 
 		$this->Ln();		
 		$this->Cell(5, 5);
@@ -226,30 +288,37 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$this->Cell(5,4,$GLOBALS["dias_credito"] . " " . $GLOBALS["fec_venc"],'0','0','L');
 
+		if ($GLOBALS["impreso"] == "S") {
+			$this->Ln();
+		    $this->SetFont('Courier','B',8);
+		    $this->Cell(0, 4, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 0, 1, 'C');
+		}
+
 		require("../include/desconnect.php");
 		$this->Ln();
 
 		$this->SetFont('Courier','B',8);
 		$this->Cell(5, 5);
-		
-		$this->Cell(37, 5, "ARTICULO", 1, 0, 'L');
+		$this->Cell(16, 5, "LAB", 1, 0, 'L');
+		$this->Cell(45, 5, "ARTICULO", 1, 0, 'L');
 		$this->Cell(16, 5, "LOTE", 1, 0, 'C');
 		$this->Cell(10, 5, "VENC", 1, 0, 'C');
-		
-		$this->Cell(6, 5, "CAN", 1, 0, 'R');
-		$this->Cell(8, 5, "IVA%", 1, 0, 'R');
-		$this->Cell(19, 5, "PRECIO Bs.", 1, 0, 'R');
+		//$this->Cell(20, 5, "MED./CAN.", 1, 0, 'L');
+		$this->Cell(8, 5, "CAN", 1, 0, 'R');
+		$this->Cell(10, 5, "IVA %", 1, 0, 'R');
+		$this->Cell(22, 5, "PRECIO Bs.", 1, 0, 'R');
 		$this->Cell(11, 5, "PREC $", 1, 0, 'R');
 		$this->Cell(8, 5, "DES1", 1, 0, 'R');
 		$this->Cell(8, 5, "DES2", 1, 0, 'R');
 		$this->Cell(8, 5, "DES3", 1, 0, 'R');
-		$this->Cell(8, 5, "DES4", 1, 0, 'R');
-		$this->Cell(19, 5, "P/U Bs.", 1, 0, 'R');
-		$this->Cell(11, 5, "P/U $", 1, 0, 'R');
-		$this->Cell(21, 5, "TOTAL Bs.", 1, 0, 'R');
-		$this->Cell(14, 5, "TOTAL $", 1, 0, 'R');
+		$this->Cell(23, 5, "TOTAL Bs.", 1, 0, 'R');
+		$this->Cell(15, 5, "TOTAL $", 1, 0, 'R');
 		$this->SetFont('Courier','',8);
 		$this->Ln(5);
+
+		if ($GLOBALS["impreso"] == "S") {
+		    $this->MarcaDeAgua();
+		}
 	}
 	
 	// Pie de p?gina
@@ -265,225 +334,189 @@ class PDF extends FPDF
 	
 	function EndReport($id_invoice)
 	{
-		//$this->AddPage();
-		$asociado = "";
-		require("../include/connect2.php");
-		$doc = "";
+	    $asociado = "";
+	    require("../include/connect2.php");
+	    $doc = "";
 
-		$sql = "SELECT 
-		    DISTINCT alicuota 
-		  FROM 
-		    entradas_salidas 
-		  WHERE 
-		    id_documento = '$id_invoice' AND tipo_documento = 'TDCFCV' ORDER BY 1 DESC LIMIT 0, 1;";
-		$rs = mysqli_query($link, $sql);
-		$row = mysqli_fetch_array($rs);
-		$xalicuota = floatval($row["alicuota"]);
+	    // 1. Obtención de datos de la factura y moneda
+	    $sql = "SELECT a.alicuota_iva, a.total, a.igtf, a.monto_base_igtf, a.monto_igtf, 
+	                   IFNULL(a.nota, '') AS nota, a.moneda, a.id_documento_padre, 
+	                   a.monto_usd, IFNULL(a.tasa_dia, 0) AS tasa_dia, a.descuento, a.descuento2, a.unidades, 
+	                   IFNULL(a.nro_despacho, '') as nro_despacho  
+	            FROM salidas a where a.id = '$id_invoice'"; 
+	    $rs = mysqli_query($link, $sql);
+	    $row = mysqli_fetch_array($rs);
+	    
+	    $moneda = mb_convert_encoding($row["moneda"], "UTF-8", mb_detect_encoding($row["moneda"]));
+	    $tasa_dia = ($row["tasa_dia"] == 0) ? 1 : $row["tasa_dia"];
+	    $descuento = floatval($row["descuento"]);
+	    $descuento2 = floatval($row["descuento2"]);
+	    $igtf_status = $row["igtf"];
+	    $monto_base_igtf = floatval($row["monto_base_igtf"]);
+	    $monto_igtf = floatval($row["monto_igtf"]);
+	    $monto_total_bs_db = floatval($row["total"]);
+	    $nota = mb_convert_encoding($row["nota"], "UTF-8", mb_detect_encoding($row["nota"]));
+	    $nro_despacho = $row["nro_despacho"];
 
+	    // 2. Totales de artículos
+	    $sql = "SELECT SUM(IF(IFNULL(alicuota, 0) = 0, precio_unidad, 0) * cantidad_articulo) AS exento,  
+	                   SUM(IF(IFNULL(alicuota, 0) = 0, 0, precio_unidad) * cantidad_articulo) AS gravado,
+	                   MAX(IFNULL(alicuota,0)) AS alicuota_act  
+	            FROM entradas_salidas WHERE tipo_documento = 'TDCFCV' AND id_documento = '$id_invoice';"; 
+	    $rs = mysqli_query($link, $sql);
+	    $row_tot = mysqli_fetch_array($rs);
+	    
+	    $exento = floatval($row_tot["exento"]);
+	    $gravado = floatval($row_tot["gravado"]);
+	    $xalicuota = floatval($row_tot["alicuota_act"]);
 
-		$sql = "SELECT 
-					a.alicuota_iva, 
-					a.iva,
-					a.monto_total, 
-					a.total, 
-					IFNULL(a.nota, '') AS nota, IFNULL(a.doc_afectado, '') AS doc_afectado,  
-					a.moneda, 
-					IFNULL(a.asesor, '') as asesor, a.id_documento_padre, 
-					a.monto_usd, IFNULL(a.tasa_dia, 0) AS tasa_dia, a.descuento, a.descuento2, a.descuento3, a.monto_sin_descuento, a.unidades, 
-					IFNULL(a.nro_despacho, '') as  nro_despacho  
-				FROM salidas a where a.id = '$id_invoice'"; 
-		$rs = mysqli_query($link, $sql);
-		$row = mysqli_fetch_array($rs);
-		$alicuota = $row["alicuota_iva"];
-		$nota = mb_convert_encoding($row["nota"], "UTF-8", mb_detect_encoding($row["nota"]));
-		if(trim($row["doc_afectado"]) != "" and ($GLOBALS["documento"]=="NC" or $GLOBALS["documento"]=="ND")) $nota = "Doc. Afectado: " . trim($row["doc_afectado"]) . " " . $nota;
-		$doc_afectado = mb_convert_encoding($row["doc_afectado"], "UTF-8", mb_detect_encoding($row["doc_afectado"]));
-		$moneda = mb_convert_encoding($row["moneda"], "UTF-8", mb_detect_encoding($row["moneda"]));
-		$asesor = mb_convert_encoding($row["asesor"], "UTF-8", mb_detect_encoding($row["asesor"]));
-		$monto_total = $row["monto_total"];
-		$monto_sin_descuento = $row["monto_sin_descuento"];
+	    // Aplicar descuentos en cascada
+	    $exento = ($exento - ($exento * ($descuento/100))) - (($exento - ($exento * ($descuento/100))) * ($descuento2/100));
+	    $gravado = ($gravado - ($gravado * ($descuento/100))) - (($gravado - ($gravado * ($descuento/100))) * ($descuento2/100));
 
-		$id_documento_padre = $row["id_documento_padre"];
+        if($igtf_status == "S") 
+            $this->Ln(215 - $this->GetY());
+        else 
+            $this->Ln(225 - $this->GetY());
 
-		$monto_usd = $row["monto_usd"];
-		$tasa_dia = $row["tasa_dia"];
-		if($tasa_dia == 0) $tasa_dia = 1;
+	    // --- SUB-TOTAL ---
+	    $this->SetFont('Courier','B',8);
+	    $this->Cell(149, 4, "SUB-TOTAL:", 0, 0, 'R');
+	    $val_subtotal = $exento + $gravado;
+	    $sub_bs = ($moneda != 'Bs.') ? $val_subtotal * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal * $tasa_dia : $val_subtotal);
+		$sub_usd = ($moneda != 'Bs.') ? $val_subtotal : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal : $val_subtotal / $tasa_dia);
+	    $this->SetFont('Courier','',8);
+	    $this->Cell(40, 4, number_format($sub_bs, 2, ",", "."), 0, 0, 'R');
+	    $this->Cell(19, 4, number_format($sub_usd, 2, ",", "."), 0, 0, 'R');
+	    $this->Ln(4);
 
-		$descuento = floatval($row["descuento"]);
-		$descuento2 = floatval($row["descuento2"]);
-		$descuento3 = floatval($row["descuento3"]);
-		$descuento4 = 0.00;
+	    // --- TOTAL EXENTO ---
+	    $this->SetFont('Courier','B',8);
+	    $this->Cell(149, 4, "TOTAL EXENTO:", 0, 0, 'R');
+	    $exe_bs = ($moneda != 'Bs.') ? $exento * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $exento * $tasa_dia : $exento);
+		$exe_usd = ($moneda != 'Bs.') ? $exento : ($GLOBALS["moneda_default"] != "Bs." ? $exento : $exento / $tasa_dia);
+	    $this->SetFont('Courier','',8);
+	    $this->Cell(40, 4, number_format($exe_bs, 2, ",", "."), 0, 0, 'R');
+	    $this->Cell(19, 4, number_format($exe_usd, 2, ",", "."), 0, 0, 'R');
+	    $this->Ln(4);
 
-		$unidades = $row["unidades"];
-		$nro_despacho = $row["nro_despacho"];
+	    $xIVA = $gravado * ($xalicuota / 100);
+	    $xTotal = $exento + $gravado + $xIVA;
 
+	    // --- LÍNEA DE IGTF (CUADRO ROJO IZQUIERDO) ---
+	    $this->SetFont('Courier', 'BI', 10);
+// --- INICIO BLOQUE CONDICIONAL IGTF ---
 
-		$sql = "SELECT
-					SUM(precio) AS precio, 
-					SUM(IF(IFNULL(alicuota, 0) = 0, precio_unidad, 0) * cantidad_articulo) AS exento,  
-					SUM(IF(IFNULL(alicuota, 0) = 0, 0, precio_unidad) * cantidad_articulo) AS gravado, 
-					MAX(IFNULL(alicuota,0)) AS alicuota, 
-					SUM(ABS(cantidad_movimiento)) AS cantidad  
-				FROM entradas_salidas
-				WHERE tipo_documento = 'TDCFCV' AND 
-					id_documento = '$id_invoice';"; 
+$alicuota_dinamica = $GLOBALS["alicuota_dinamica"];
+if ($igtf_status == "S") {
+	$total_con_igtf_bs = $xTotal + $monto_igtf;
+	$total_indexado_usd = $total_con_igtf_bs / $tasa_dia;
+	$this->Cell(65, 4, "", 0, 0, 'L');
+} 
+else {
+    // Lógica original: Si NO es 'S', se muestra el cálculo estándar de referencia
+    $this->SetFont('Courier', 'BI', 10);
+    // $monto_referencia_igtf = ($xTotal * $tasa_dia) * ($alicuota_dinamica / 100);
+    // $monto_total_referencia = ($xTotal * $tasa_dia) + $monto_referencia_igtf;
+    $monto_referencia_igtf = $xTotal * ($alicuota_dinamica / 100);
+    $monto_total_referencia = $xTotal + $monto_referencia_igtf;
+    
+	if($moneda != "Bs.") {
+        $this->Cell(65, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: $moneda " . number_format($monto_referencia_igtf, 2, ",", "."), 0, 0, 'L');
+    } else {
+        $this->Cell(65, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: USD " . number_format($monto_referencia_igtf / $tasa_dia, 2, ",", "."), 0, 0, 'L');
+    }
 
-		$rs = mysqli_query($link, $sql);
-		$row = mysqli_fetch_array($rs);
-		$exento = floatval($row["exento"]);
-		$gravado = floatval($row["gravado"]);
-		$unidades = intval($row["cantidad"]);
-
-		$exento = $exento - ($exento * ($descuento/100));
-		$gravado = $gravado - ($gravado * ($descuento/100));
-
-		$exento = $exento - ($exento * ($descuento2/100));
-		$gravado = $gravado - ($gravado * ($descuento2/100));
-
-		$exento = $exento - ($exento * ($descuento3/100));
-		$gravado = $gravado - ($gravado * ($descuento3/100));
-		
-
-		$alicuota = floatval($row["alicuota"]);
-		$iva = $gravado*($alicuota/100);
-
-		$sql2 = "SELECT b.descripcion, a.nro_documento
-				FROM salidas AS a JOIN tipo_documento AS b ON b.codigo = a.tipo_documento 
-				 where a.id = '$id_documento_padre';";
-		$rs2 = mysqli_query($link, $sql2);
-		$sw = false;
-		while($row2 = mysqli_fetch_array($rs2)) {
-			$doc .= " #" . $row2["nro_documento"];
-			$tdoc = $row2["descripcion"];
-			$sw = true;
-		}
-
-		if($sw) $asociado = "Documento(s) Asociado(s): $tdoc $doc / ";
-
-		$this->Ln(225-$this->GetY());
-
-		
-
-		$this->SetFont('Courier','B',8);
-		if($GLOBALS["documento"]=="ND") { 
-			$sql = "SELECT nro_documento, DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha, tasa_dia, total FROM salidas WHERE nro_documento = '" . $GLOBALS["doc_afectado"] . "';";
-			$rs = mysqli_query($link, $sql);
-			if($row = mysqli_fetch_array($rs)) 
-				$this->Cell(100, 4, "Afect: " . $row["nro_documento"] . " Tasa Emision: " . $row["tasa_dia"] . " Fec: " . $row["fecha"] . " Monto: " . number_format($row["total"], 2, ",", ".") . "", 0, 0, 'L');
-			else 
-				$this->Cell(100, 4, "", 0, 0, 'L');
-			$this->Cell(49, 4, "SUB-TOTAL:", 0, 0, 'R');
-		} 
-		else 
-			$this->Cell(149, 4, "SUB-TOTAL:", 0, 0, 'R');
-		$this->SetFont('Courier','',8);
-		$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? (($exento+$gravado)*$tasa_dia) : ($exento+$gravado), 2, ",", "."), 0, 0, 'R');
-		$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? ($exento+$gravado) : (($exento+$gravado)/$tasa_dia), 2, ",", "."), 0, 0, 'R');
-		$this->Ln(4);
+}
 
 
-		// Se imprime el descuento si aplica
-		if($descuento4 > 0) { 
-			$descuento = $descuento3;
-			$this->SetFont('Courier','BI',10);
-			$this->Cell(101,4, "", 0, 0, 'R');
-			$this->SetFont('Courier','B',8);
+	    // Tasa de Cambio y Base Imponible
+	    $this->SetFont('Courier', 'B', 8);
+	    $this->Cell(26, 4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
+	    $this->Cell(58, 4, "TOTAL BASE IMPONIBLE:", 0, 0, 'R');
+	    $grav_bs = ($moneda == 'USD') ? $gravado * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $gravado * $tasa_dia : $gravado);
+	    $grav_usd = ($moneda == 'USD') ? $gravado : ($GLOBALS["moneda_default"] == "USD" ? $gravado : $gravado / $tasa_dia);
+	    $this->SetFont('Courier','',8);
+	    $this->Cell(40, 4, number_format($grav_bs, 2, ",", "."), 0, 0, 'R');
+	    $this->Cell(19, 4, number_format($grav_usd, 2, ",", "."), 0, 0, 'R');
+	    $this->Ln(4);
 
-			$this->Cell(48,4, "Descuento " . number_format($descuento, 2, ",", ".") . "% Adicional:", 0, 0, 'R');
-			$this->SetFont('Courier','',8);
-			//$this->Cell(40, 4, number_format($monto_total, 2, ",", "."), 0, 0, 'R');
-			$monto_descuento = (-1) * (($exento*($descuento/100)) + ($gravado*($descuento/100)));
-			$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $monto_descuento*$tasa_dia : $monto_descuento, 2, ",", "."), 0, 0, 'R');
-			$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $monto_descuento : $monto_descuento/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-			$this->Ln(4);
+	    // --- IVA Y NOTA BCV ---
+	    $this->SetFont('Courier','',6);
+	    $this->Cell(91, 4, mb_convert_encoding("Tasa de cambio Publicada por el B.C.V. segun la fecha de emision de esta factura.", "UTF-8"), 0, 0, 'L');
+	    $this->SetFont('Courier','B',8);
+	    $this->Cell(58,4, "IVA:", 0, 0, 'R');
+	    $iva_bs = ($moneda == 'USD') ? $xIVA * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $xIVA * $tasa_dia : $xIVA);
+	    $iva_usd = ($moneda == 'USD') ? $xIVA : ($GLOBALS["moneda_default"] == "USD" ? $xIVA : $xIVA / $tasa_dia);
+	    $this->SetFont('Courier','',8);
+	    $this->Cell(40, 4, number_format($iva_bs, 2, ",", "."), 0, 0, 'R');
+	    $this->Cell(19, 4, number_format($iva_usd, 2, ",", "."), 0, 0, 'R');
+	    $this->Ln(4);
 
-			$this->SetFont('Courier','B',8);
-			$this->Cell(149, 4, $asociado . " " . "TOTAL EXENTO:", 0, 0, 'R');
-			$this->SetFont('Courier','',8);
-			$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? ($exento-($exento*($descuento/100)))*$tasa_dia : $exento-($exento*($descuento/100)), 2, ",", "."), 0, 0, 'R');
-			$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $exento-($exento*($descuento/100)) : ($exento-($exento*($descuento/100)))/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-			$this->Ln(4);
+	    // --- TOTAL FINAL Y GACETA IGTF ---
+	    $this->SetFont('Courier','B',7);
+	    $this->Cell(5, 4);
+	    $this->Cell(110, 4, mb_convert_encoding("IGTF Sujeto a Pago Recibido (Efectivo $) segun Art 1 GO 42339 17/03/2022.", "UTF-8"), 0, 0, 'R');
+	    $this->SetFont('Courier','B',8);
+	    $this->Cell(34, 4, "TOTAL Bs./USD $:", 0, 0, 'R');
+	    $total_final_bs = ($moneda == 'USD') ? $xTotal * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $xTotal * $tasa_dia : $xTotal);
+	    $total_final_usd = ($moneda == 'USD') ? $xTotal : ($GLOBALS["moneda_default"] == "USD" ? $xTotal : $xTotal / $tasa_dia);
+	    $this->SetFont('Courier','',8);
+	    $this->Cell(40, 4, number_format($total_final_bs, 2, ",", "."), 0, 0, 'R');
+	    $this->Cell(19, 4, number_format($total_final_usd, 2, ",", "."), 0, 0, 'R');
+	    $this->Ln(4);
 
-			$this->SetFont('Courier','BI',10);
-			$this->Cell(10,4, "", 0, 0, 'R');
-			$this->Cell(51,4, "I.G.T.F. 3%: USD " . number_format($GLOBALS["moneda_default"]=="USD" ? ($monto_usd*$tasa_dia)+(($monto_usd*$tasa_dia)*(3/100)) : $monto_usd+($monto_usd*(3/100)), 2, ",", "."), 0, 0, 'L');
-			$this->Cell(40,4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
-			$this->SetFont('Courier','B',8);
+// --- CONDICIÓN IGTF ---
+        if ($igtf_status == "S") {
+            // Línea 1: IGTF 3%
+            $this->SetFont('Courier', 'B', 8);
+            
+            if($moneda == "USD") {
+	            $this->Cell(149, 4, "I.G.T.F. $alicuota_dinamica% s/Base: " . number_format($monto_base_igtf * $tasa_dia, 2, ",", ".") . " Bs./USD $:", 0, 0, 'R');
+	           	$igtf_bs = ($tasa_dia > 0) ? $monto_igtf * $tasa_dia : 0;
+	            $igtf_usd = $monto_igtf;
+            } 
+            else {
+	            $this->Cell(149, 4, "I.G.T.F. $alicuota_dinamica% s/Base: " . number_format($monto_base_igtf, 2, ",", ".") . " Bs./USD $:", 0, 0, 'R');
+	           	$igtf_bs = $monto_igtf;
+	            $igtf_usd = ($tasa_dia > 0) ? $monto_igtf / $tasa_dia : 0;
+            }
+            
+            $this->SetFont('Courier', '', 8);
+            $this->Cell(40, 4, number_format($igtf_bs, 2, ",", "."), 0, 0, 'R');
+            $this->Cell(19, 4, number_format($igtf_usd, 2, ",", "."), 0, 0, 'R');
+            $this->Ln(4);
 
-			$this->Cell(48,4, "TOTAL BASE IMPONIBLE:", 0, 0, 'R');
-			$this->SetFont('Courier','',8);
-			$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? ($gravado-($gravado*($descuento/100)))*$tasa_dia : $gravado-($gravado*($descuento/100)), 2, ",", "."), 0, 0, 'R');
-			$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $gravado-($gravado*($descuento/100)) : ($gravado-($gravado*($descuento/100)))/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-			$this->Ln(4);
-		} 
-		else {
-			$this->SetFont('Courier','B',8);
-			$this->Cell(149, 4, $asociado . " " . "TOTAL EXENTO:", 0, 0, 'R');
-			$this->SetFont('Courier','',8);
-			$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $exento*$tasa_dia : $exento, 2, ",", "."), 0, 0, 'R');
-			$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $exento : $exento/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-			$this->Ln(4);
+            // Línea 2: TOTAL FINAL CON IGTF
+            $this->SetFont('Courier', 'B', 9);
+            $this->Cell(149, 4, "TOTAL CON IGTF Bs./USD $:", 0, 0, 'R');
+            
+            if($moneda == "USD") {
+            	$total_con_igtf_usd = $total_con_igtf_bs;
+            	$total_con_igtf_bs = ($tasa_dia > 0) ? $total_con_igtf_bs * $tasa_dia : 0;
+            } 
+            else {
+            	$total_con_igtf_usd = ($tasa_dia > 0) ? $total_con_igtf_bs / $tasa_dia : 0;
+            }
 
-			$this->SetFont('Courier','BI',10);
-			$this->Cell(10,4, "", 0, 0, 'R');
-			$this->Cell(51,4, "I.G.T.F. 3%: USD " . number_format($GLOBALS["moneda_default"]=="USD" ? ($monto_usd*$tasa_dia)+(($monto_usd*$tasa_dia)*(3/100)) : $monto_usd+($monto_usd*(3/100)), 2, ",", "."), 0, 0, 'L');
-			$this->Cell(40,4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
-			$this->SetFont('Courier','B',8);
+            $this->Cell(40, 4, number_format($total_con_igtf_bs, 2, ",", "."), 0, 0, 'R');
+            $this->Cell(19, 4, number_format($total_con_igtf_usd, 2, ",", "."), 0, 0, 'R');
+            $this->Ln(4);
+        }
+//
 
-			$this->Cell(48,4, "TOTAL BASE IMPONIBLE:", 0, 0, 'R');
-			$this->SetFont('Courier','',8);
-			$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $gravado*$tasa_dia : $gravado, 2, ",", "."), 0, 0, 'R');
-			$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $gravado : $gravado/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-			$this->Ln(4);
-		}
-		//
-
-		$this->SetFont('Courier','',6);
-		$bcv = "Tasa de cambio Publicada por el B.C.V. segun la fecha de emision de esta factura.";
-		$bcv = mb_convert_encoding($bcv, "UTF-8", mb_detect_encoding($bcv));
-		$this->Cell(91, 4, $bcv, 0, 0, 'L');
-
-		$this->SetFont('Courier','B',8);
-		$this->Cell(58,4, "IVA:", 0, 0, 'R');
-		$this->SetFont('Courier','',8);
-
-		$xIVA = ($gravado-($gravado*($descuento4/100)))*($xalicuota/100);
-		$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $xIVA*$tasa_dia : $xIVA, 2, ",", "."), 0, 0, 'R');
-		$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $xIVA : $xIVA/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-		$this->Ln(4);
-		$this->SetFont('Courier','B',7);
-		$this->Cell(5, 4);
-		$this->Cell(110, 4, "IGTF Sujeto a Pago Recibido (Efectivo $) segun Art 1 GO 42339 17/03/2022.", 0, 0, 'R');
-		$this->SetFont('Courier','B',8);
-		
-		$this->Cell(34, 4, "TOTAL Bs./USD $:", 0, 0, 'R');
-		$this->SetFont('Courier','',8);
-
-		$xTotal = ($exento-($exento*($descuento4/100))) + ($gravado-($gravado*($descuento4/100))) + $xIVA;
-
-		$this->Cell(40, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $xTotal*$tasa_dia : $xTotal, 2, ",", "."), 0, 0, 'R');
-		$this->Cell(19, 4, number_format($GLOBALS["moneda_default"]=="USD" ? $xTotal : $xTotal/$tasa_dia, 2, ",", "."), 0, 0, 'R');
-
-		$IGFT_por_bs = floatval($GLOBALS["moneda_default"]=="USD" ? $xTotal*$tasa_dia : $xTotal) * (3/100);
-		$IGFT_bs = floatval($GLOBALS["moneda_default"]=="USD" ? $xTotal*$tasa_dia : $xTotal) + $IGFT_por_bs;
-		$IGFT_por_usd = floatval($GLOBALS["moneda_default"]=="USD" ? $xTotal : $xTotal/$tasa_dia) * (3/100);
-		$IGFT_usd = floatval($GLOBALS["moneda_default"]=="USD" ? $xTotal : $xTotal/$tasa_dia) + $IGFT_por_usd;
-		
-		$this->ln();
-		$this->SetFont('Courier','B',8);
-		$this->Cell(30, 4, "Unidades:$unidades", 0, 0, 'C');
-		$this->Cell(71, 4, strtoupper($nota), 0, 0, 'R');
-		$psicotropico = "Nro. Despacho Psicotrópico: ";
-		$psicotropico = mb_convert_encoding($psicotropico, "UTF-8", mb_detect_encoding($psicotropico));
-		if(trim($nro_despacho) != "") { $this->Cell(90, 4, $psicotropico . $nro_despacho, 0, 0, 'C'); } 
-		$this->Ln();
-		$this->Cell(10, 4);
-		$indexada = "Esta factura ser indexada a la tasa de cambio expresada por el B.C.V. al momento de recibir el pago.";
-		// $indexada = "Esta factura aplica una condicion variable indexada a partir del dia 15 de su emision a la tasa BCV del dia de pago.";
-		$indexada = mb_convert_encoding($indexada, "UTF-8", mb_detect_encoding($indexada));
-		$this->Cell(100, 4, $indexada, 0, 0, 'L');
-		
-		require("../include/desconnect.php");
+	    // --- UNIDADES Y NOTA DE INDEXACIÓN (CUADRO ROJO INFERIOR) ---
+	    $this->SetFont('Courier','B',8);
+	    $this->Cell(30, 4, "Unidades: " . intval($row["unidades"]), 0, 0, 'C');
+	    $this->Cell(71, 4, strtoupper($nota), 0, 0, 'R');
+	    if(trim($nro_despacho) != "") { $this->Cell(90, 4, "Nro. Despacho: " . $nro_despacho, 0, 0, 'C'); } 
+	    $this->Ln(4);
+	    
+	    $this->Cell(10, 4);
+	    $this->SetFont('Courier','B',8);
+	    $this->Cell(180, 4, mb_convert_encoding("Esta factura sera indexada a la tasa de cambio expresada por el B.C.V. al momento de recibir el pago.", "UTF-8"), 0, 0, 'L');
+	    
+	    require("../include/desconnect.php");
 	}
 }
 
@@ -497,7 +530,7 @@ $pdf->SetFont('Courier','',8);
 
 $sql = "SELECT 
 			IFNULL(b.codigo, '') AS codigo, 
-			LTRIM(RTRIM(CONCAT(IFNULL(b.nombre_comercial, ''), ' ', IFNULL(b.principio_activo, ''), ' ', IFNULL(b.presentacion, ''), '. LAB: ', IFNULL(c.nombre, '')))) AS articulo, 
+			LTRIM(RTRIM(CONCAT(IFNULL(b.nombre_comercial, ''), ' ', IFNULL(b.principio_activo, ''), ' ', IFNULL(b.presentacion, '')))) AS articulo, 
 			a.lote, date_format(a.fecha_vencimiento, '%m/%y') as vencimiento, 
 			a.cantidad_articulo AS cantidad, 
 			(SELECT SUBSTRING(descripcion,1,3) FROM unidad_medida WHERE codigo = a.articulo_unidad_medida) AS unidad_medida, 
@@ -516,62 +549,98 @@ $sql = "SELECT
 
 $rs = mysqli_query($link, $sql) or die(mysqli_error());
 $sw = false;
-$printE = "";	
+$printE = "";
 while($row = mysqli_fetch_array($rs))
 {
 	$printE = floatval($row["alicuota"]) == 0.00 ? " (E)" : "";
 	$pdf->SetFont('Courier', '', 7);
 	$pdf->Cell(5, 3);
-	$nomart = $row["articulo"] . $printE;
-	$nomart = mb_convert_encoding($nomart, "UTF-8", mb_detect_encoding($nomart));
-	if(strlen($nomart) < 23) 
-		$pdf->Cell(37, 3, trim($nomart), 0, 0, 'L');
+	$pdf->Cell(16, 3, substr($row["fabricante"], 0, 10), 0, 0, 'L');
+	if(strlen($row["articulo"]) < 28) 
+		$pdf->Cell(45, 3, trim($row["articulo"]), 0, 0, 'L');
 	else 
-		$pdf->Cell(37, 3, substr(trim($nomart), 0, 23), 0, 0, 'L');
+		$pdf->Cell(45, 3, substr(trim($row["articulo"]), 0, 28), 0, 0, 'L');
 
 	$pdf->Cell(16, 3, $row["lote"], 0, 0, 'R');
 	$pdf->Cell(10, 3, (($row["vencimiento"]=="01/01/1990" or $row["vencimiento"]=="01/90") ? "" : $row["vencimiento"]), 0, 0, 'R');
-	$pdf->Cell(6, 3, number_format($row["cantidad"], 0, "", ""), 0, 0, 'R');
-	$pdf->Cell(8, 3, number_format($row["alicuota"], 0, ",", "."), 0, 0, 'R');
+	$pdf->Cell(8, 3, number_format($row["cantidad"], 0, "", ""), 0, 0, 'R');
+	//$pdf->Cell(20, 4, $row["unidad_medida"] . " " . $row["cantidad"], 0, 0, 'L');
+	$pdf->Cell(10, 3, number_format($row["alicuota"], 0, ",", "."), 0, 0, 'R');
+	// $pdf->Cell(22, 3, $printE . number_format(($GLOBALS["moneda_default"]=="USD" ? ($row["precio_ful"]*$tasa_dia): $row["precio_ful"]) , 2, ",", "."), 0, 0, 'R');
+	// $precio_full = (floatval($row["precio_ful"])-(floatval($row["precio_ful"])*floatval($row["descuento"])/100));
+
+/*
 	$precio_full = floatval($row["precio_unidad"]);
 	$x_precio_full = $precio_full/(1-(floatval($row["descuento"])/100));
-	$pdf->Cell(19, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $x_precio_full*$tasa_dia : $x_precio_full) , 2, ",", "."), 0, 0, 'R');
+	$pdf->Cell(22, 3, $printE . number_format(($GLOBALS["moneda_default"]=="USD" ? $x_precio_full*$tasa_dia : $x_precio_full) , 2, ",", "."), 0, 0, 'R');
 	$pdf->Cell(11, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $x_precio_full : $x_precio_full/$tasa_dia), 2, ",", "."), 0, 0, 'R');
+*/
+// ... dentro del while($row = mysqli_fetch_array($rs)) ...
+
+$precio_full = floatval($row["precio_unidad"]);
+$x_precio_full = $precio_full / (1 - (floatval($row["descuento"]) / 100));
+
+// Lógica para PRECIO Bs.
+// Si la moneda de la factura es USD, multiplicamos por la tasa para mostrar el equivalente en Bs.
+if ($moneda != 'Bs.') {
+    $val_precio_bs = $x_precio_full * $tasa_dia;
+    $val_precio_usd = $x_precio_full; 
+} else {
+    $val_precio_bs = ($GLOBALS["moneda_default"] != "Bs." ? $x_precio_full * $tasa_dia : $x_precio_full);
+    $val_precio_usd = ($GLOBALS["moneda_default"] != "Bs." ? $x_precio_full : $x_precio_full / $tasa_dia);
+}
+
+$pdf->Cell(22, 3, $printE . number_format($val_precio_bs, 2, ",", "."), 0, 0, 'R');
+$pdf->Cell(11, 3, number_format($val_precio_usd, 2, ",", "."), 0, 0, 'R');
+
+
 	$pdf->Cell(8, 3, floatval($row["descuento"])>0 ? number_format($row["descuento"], 0, ",", ".") . "%" : "", 0, 0, 'R');
 	$pdf->SetFillColor(255, 0, 0);
 	$pdf->Cell(8, 3, floatval($descuento_comercial)>0 ? number_format($descuento_comercial, 0, ",", ".") . "%" : "", 0, 0, 'R');
 	$pdf->SetFillColor(255, 0, 0);
 	$pdf->Cell(8, 3, floatval($descuento_comercial2)>0 ? number_format($descuento_comercial2, 0, ",", ".") . "%" : "", 0, 0, 'R');
 	$pdf->SetFillColor(255, 0, 0);
-	$pdf->Cell(8, 3, floatval($descuento_comercial3)>0 ? number_format($descuento_comercial3, 0, ",", ".") . "%" : "", 0, 0, 'R');
-	$pdf->SetFillColor(255, 0, 0);
+	// $precio = (floatval($row["precio"])-(floatval($row["precio"])*floatval($row["descuento"])/100));
+	// $precio = ($precio_full-($precio_full*$descuento_comercial/100))*(intval($row["cantidad"]));
 
+// Cálculo del TOTAL de la línea (con descuentos comerciales)
+$precio_linea = $precio_full - ($precio_full * $descuento_comercial / 100);
+$precio_linea = $precio_linea - ($precio_linea * $descuento_comercial2 / 100);
+$precio_linea_total = $precio_linea * (intval($row["cantidad"]));
+
+if ($moneda != 'Bs.') {
+    $val_total_bs = $precio_linea_total * $tasa_dia;
+    $val_total_usd = $precio_linea_total;
+} else {
+    $val_total_bs = ($GLOBALS["moneda_default"] != "Bs." ? $precio_linea_total * $tasa_dia : $precio_linea_total);
+    $val_total_usd = ($GLOBALS["moneda_default"] != "Bs." ? $precio_linea_total : $precio_linea_total / $tasa_dia);
+}
+
+$pdf->Cell(23, 3, number_format($val_total_bs, 2, ",", "."), 0, 0, 'R');
+$pdf->Cell(15, 3, number_format($val_total_usd, 2, ",", "."), 0, 0, 'R');
+/*
 	$precio = $precio_full-($precio_full*$descuento_comercial/100);
 	$precio = $precio-($precio*$descuento_comercial2/100);
-	$precio = $precio-($precio*$descuento_comercial3/100);
-
-	$pdf->Cell(19, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $precio*$tasa_dia : $precio) , 2, ",", "."), 0, 0, 'R');
-	$pdf->Cell(11, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $precio : $precio/$tasa_dia), 2, ",", "."), 0, 0, 'R');
-
 	$precio = $precio*(intval($row["cantidad"])); 
-	$pdf->Cell(21, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $precio * $tasa_dia : $precio), 2, ",", "."), 0, 0, 'R', ($row["precio"] == 0 ? true: false));
-	$pdf->Cell(14, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $precio  : $precio/$tasa_dia), 2, ",", "."), 0, 0, 'R', ($row["precio"] == 0 ? true: false));
+	$pdf->Cell(23, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $precio * $tasa_dia : $precio), 2, ",", "."), 0, 0, 'R', ($row["precio"] == 0 ? true: false));
+	$pdf->Cell(15, 3, number_format(($GLOBALS["moneda_default"]=="USD" ? $precio  : $precio /$tasa_dia), 2, ",", "."), 0, 0, 'R', ($row["precio"] == 0 ? true: false));
+*/
 	$pdf->SetFillColor(0, 0, 0);	
 
-	if(trim(substr($nomart, 23, 23)) != "") {
-		if(strlen($nomart) >= 23) {
+	if(trim(substr($row["articulo"], 28, 28)) != "") {
+		if(strlen($row["articulo"]) >= 28) {
 			$pdf->Ln();
-			$pdf->Cell(5, 4);
-			$pdf->MultiCell(39, 3, substr(trim($nomart), 23, 23), 0, 'L');
+			$pdf->Cell(21, 4);
+			$pdf->MultiCell(47, 3, substr(trim($row["articulo"]), 28, 28), 0, 'L');
 			$sw = true;
 		}
 	}
 
-	if(trim(substr($nomart, 46, strlen($nomart))) != "") {
-		if(strlen($nomart) >= 46) {
+	if(trim(substr($row["articulo"], 56, strlen($row["articulo"]))) != "") {
+		if(strlen($row["articulo"]) >= 56) {
 			//$pdf->Ln();
-			$pdf->Cell(5, 4);
-			$pdf->MultiCell(39, 3, substr(trim($nomart), 46, strlen(trim($nomart))), 0, 'L');
+			$pdf->Cell(21, 4);
+			$pdf->MultiCell(47, 3, substr(trim($row["articulo"]), 56, strlen(trim($row["articulo"]))), 0, 'L');
 			$sw = true;
 		}
 	}

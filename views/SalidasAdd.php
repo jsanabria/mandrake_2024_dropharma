@@ -44,7 +44,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
             ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
             ["monto_igtf", [fields.monto_igtf.visible && fields.monto_igtf.required ? ew.Validators.required(fields.monto_igtf.caption) : null, ew.Validators.float], fields.monto_igtf.isInvalid],
-            ["doc_afe", [fields.doc_afe.visible && fields.doc_afe.required ? ew.Validators.required(fields.doc_afe.caption) : null, ew.Validators.integer], fields.doc_afe.isInvalid]
+            ["doc_afe", [fields.doc_afe.visible && fields.doc_afe.required ? ew.Validators.required(fields.doc_afe.caption) : null, ew.Validators.integer], fields.doc_afe.isInvalid],
+            ["descuento3", [fields.descuento3.visible && fields.descuento3.required ? ew.Validators.required(fields.descuento3.caption) : null, ew.Validators.float], fields.descuento3.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -432,6 +433,18 @@ loadjs.ready("fsalidasadd", function() {
 <input type="<?= $Page->doc_afe->getInputTextType() ?>" name="x_doc_afe" id="x_doc_afe" data-table="salidas" data-field="x_doc_afe" value="<?= $Page->doc_afe->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->doc_afe->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afe->formatPattern()) ?>"<?= $Page->doc_afe->editAttributes() ?> aria-describedby="x_doc_afe_help">
 <?= $Page->doc_afe->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->doc_afe->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->descuento3->Visible) { // descuento3 ?>
+    <div id="r_descuento3"<?= $Page->descuento3->rowAttributes() ?>>
+        <label id="elh_salidas_descuento3" for="x_descuento3" class="<?= $Page->LeftColumnClass ?>"><?= $Page->descuento3->caption() ?><?= $Page->descuento3->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->descuento3->cellAttributes() ?>>
+<span id="el_salidas_descuento3">
+<input type="<?= $Page->descuento3->getInputTextType() ?>" name="x_descuento3" id="x_descuento3" data-table="salidas" data-field="x_descuento3" value="<?= $Page->descuento3->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->descuento3->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento3->formatPattern()) ?>"<?= $Page->descuento3->editAttributes() ?> aria-describedby="x_descuento3_help">
+<?= $Page->descuento3->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->descuento3->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

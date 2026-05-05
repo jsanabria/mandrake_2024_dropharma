@@ -138,7 +138,7 @@ $costo_total_item = $cantidad * $costo_unidad;
 // --- MANEJO DE CABECERA ---
 if($pedido == 0) {
     $sql = "INSERT INTO salidas (id, tipo_documento, username, fecha, cliente, nota, estatus, moneda, consignacion, descuento, descuento2, descuento3, documento, doc_afectado, doc_afe) 
-            VALUES (NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "', $cliente, '$nota', 'NUEVO', '$moneda', 'N', $descuentoG, $descTransferencista, $descFabricante, '$consignacion', '$doc_afectado', $doc_afectado_id);";
+            VALUES (NULL, '$tipo_documento', '$username', NULL, $cliente, '$nota', 'NUEVO', '$moneda', 'N', $descuentoG, $descTransferencista, $descFabricante, '$consignacion', '$doc_afectado', $doc_afectado_id);";
     mysqli_query($link, $sql);
     $pedido = mysqli_insert_id($link);
     $nro_documento = "";

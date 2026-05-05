@@ -201,6 +201,15 @@ class ViewOutTdcpdv extends AbstractEntity
     #[Column(name: "monto_igtf", type: "decimal", nullable: true)]
     private ?string $montoIgtf;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento3;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $impreso;
+
+    #[Column(name: "doc_afe", type: "integer", nullable: true)]
+    private ?int $docAfe;
+
     public function __construct()
     {
         $this->entregado = "N";
@@ -210,6 +219,7 @@ class ViewOutTdcpdv extends AbstractEntity
         $this->factura = "N";
         $this->activo = "S";
         $this->cerrado = "N";
+        $this->impreso = "N";
     }
 
     public function getId(): int
@@ -857,6 +867,42 @@ class ViewOutTdcpdv extends AbstractEntity
     public function setMontoIgtf(?string $value): static
     {
         $this->montoIgtf = $value;
+        return $this;
+    }
+
+    public function getDescuento3(): ?string
+    {
+        return $this->descuento3;
+    }
+
+    public function setDescuento3(?string $value): static
+    {
+        $this->descuento3 = $value;
+        return $this;
+    }
+
+    public function getImpreso(): ?string
+    {
+        return $this->impreso;
+    }
+
+    public function setImpreso(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'impreso' value");
+        }
+        $this->impreso = $value;
+        return $this;
+    }
+
+    public function getDocAfe(): ?int
+    {
+        return $this->docAfe;
+    }
+
+    public function setDocAfe(?int $value): static
+    {
+        $this->docAfe = $value;
         return $this;
     }
 }

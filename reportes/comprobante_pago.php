@@ -118,18 +118,18 @@ foreach ($detalle_pagos as $p) {
 $pdf->Ln(5);
 $pdf->SetX(120);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(40, 7, "Sub-Total:", 0, 0, 'R');
+$pdf->Cell(40, 7, "TOTAL MONTO PAGOS EFECTUADOS:", 0, 0, 'R');
 $pdf->Cell(35, 7, "Bs. ".number_format($total_pagos, 2, ',', '.'), 0, 1, 'R');
 
 $pdf->SetX(120);
 $pdf->SetTextColor(200, 0, 0);
-$pdf->Cell(40, 7, "IGTF (3%):", 0, 0, 'R');
+$pdf->Cell(40, 7, "TOTAL IGTF (3%):", 0, 0, 'R');
 $pdf->Cell(35, 7, "Bs. ".number_format($total_igtf, 2, ',', '.'), 0, 1, 'R');
 
 $pdf->SetX(120);
 $pdf->SetTextColor(0, 0, 150);
 $pdf->SetFont('Arial', 'B', 11);
-$pdf->Cell(40, 10, "TOTAL PAGADO:", 'T', 0, 'R');
+$pdf->Cell(40, 10, "Total General Factura:", 'T', 0, 'R');
 $pdf->Cell(35, 10, "Bs. ".number_format($total_pagos - $total_igtf, 2, ',', '.'), 'T', 1, 'R');
 
 // Limpiar el buffer para asegurar que solo salga el PDF

@@ -524,6 +524,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->pagado->Visible) { // pagado ?>
         <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_pagado" class="view_out_tdcfcv_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
 <?php } ?>
+<?php if ($Page->impreso->Visible) { // impreso ?>
+        <th data-name="impreso" class="<?= $Page->impreso->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_impreso" class="view_out_tdcfcv_impreso"><?= $Page->renderFieldHeader($Page->impreso) ?></div></th>
+<?php } ?>
 <?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
         <th data-name="asesor_asignado" class="<?= $Page->asesor_asignado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_asesor_asignado" class="view_out_tdcfcv_asesor_asignado"><?= $Page->renderFieldHeader($Page->asesor_asignado) ?></div></th>
 <?php } ?>
@@ -648,6 +651,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_pagado" class="el_view_out_tdcfcv_pagado">
 <span<?= $Page->pagado->viewAttributes() ?>>
 <?= $Page->pagado->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->impreso->Visible) { // impreso ?>
+        <td data-name="impreso"<?= $Page->impreso->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_impreso" class="el_view_out_tdcfcv_impreso">
+<span<?= $Page->impreso->viewAttributes() ?>>
+<?= $Page->impreso->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
