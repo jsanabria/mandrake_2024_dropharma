@@ -1,191 +1,221 @@
 <?php
-// 1. ELIMINAR CUALQUIER SALIDA PREVIA
-ob_start();
 
-// Evitar que cualquier error previo ensucie la salida
-error_reporting(0);
-ini_set('display_errors', 0);
+namespace PHPMaker2024\mandrake;
 
-include "../connect.php";
+require_once __DIR__ . "/tdcfcv_bootstrap.php";
 
-
-$pedido = intval($_REQUEST["pedido"]); 
-
+$pedido = TdcfcvRequestInt("pedido");
 $tipo_documento = "TDCFCV";
+$lineByPage = 50;
 
-$sql = "SELECT valor1 AS ppal from parametro WHERE codigo = '002';";
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result);
-$almacen = $row["ppal"] ?? "";
+function TdcfcvHtmlResponse(string $html): void
+{
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
 
-$sql = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0, 1;"; 
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs); 
-$tasa = floatval($row["tasa"] ?? 1);
+    header("Content-Type: application/json; charset=utf-8");
+    echo json_encode($html, JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
-$sql = "SELECT valor1 AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs); 
-$moneda = $row["moneda"] ?? "Bs.";
+function TdcfcvH($value): string
+{
+    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
+}
 
-$sql = "SELECT a.cliente FROM salidas AS a WHERE a.id = $pedido AND a.tipo_documento = '$tipo_documento';";
+if ($pedido <= 0) {
+    TdcfcvHtmlResponse("");
+}
 
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs); 
-$cliente = $row["cliente"];
+$moneda = ExecuteScalar("
+    SELECT valor1
+    FROM parametro
+    WHERE codigo = '006'
+      AND valor2 = 'default'
+    LIMIT 1
+");
 
-/*** Busco la tarifa del cliente ***/
-$sql = "SELECT tarifa FROM cliente WHERE id = '$cliente';"; 
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs);
-$tarifa = intval($row["tarifa"]);
+$moneda = $moneda ?: "Bs.";
 
-$pagina = intval(trim(isset($_REQUEST["pagina"])?$_REQUEST["pagina"]:"0"));
-//////////////////
-$pagination = "Hello World";
-$sql = "SELECT 
-          COUNT(a.id) AS cantidad 
-        FROM 
-           entradas_salidas AS z 
-          INNER JOIN articulo AS a ON a.id = z.articulo 
-          LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante 
-        WHERE 
-         z.id_documento = $pedido AND z.tipo_documento = '$tipo_documento'"; 
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result);
+$tasa = floatval(ExecuteScalar("
+    SELECT tasa
+    FROM tasa_usd
+    WHERE moneda = 'USD'
+    ORDER BY id DESC
+    LIMIT 1
+"));
 
-$cantidad = $row["cantidad"];
+$tasa = ($tasa <= 0 ? 1 : $tasa);
 
-$LineByPage = 100;
-$Pages = intval($cantidad/$LineByPage);
-if((($cantidad/$LineByPage) - intval($cantidad/$LineByPage)) > 0) $Pages++;
+$cliente = ExecuteScalar("
+    SELECT cliente
+    FROM salidas
+    WHERE id = {$pedido}
+      AND tipo_documento = '{$tipo_documento}'
+    LIMIT 1
+");
 
-$LineByPage = 50;
+if (!$cliente) {
+    TdcfcvHtmlResponse(
+        '<div class="alert alert-warning mb-0">No se encontró el documento solicitado.</div>'
+    );
+}
 
-$html = "";
-$sql = "SELECT 
-          a.id, z.id AS id_item, 
-          a.foto, a.nombre_comercial, b.nombre AS fabricante, 
-          a.principio_activo, a.presentacion, z.precio_unidad_sin_desc AS precio_ful, 
-          z.cantidad_articulo AS cantidad, 
-          z.descuento, z.precio_unidad AS precio, z.precio as total, z.lote, z.fecha_vencimiento, z.almacen  
-        FROM 
-          entradas_salidas AS z 
-          INNER JOIN articulo AS a ON a.id = z.articulo 
-          LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante 
-        WHERE 
-         z.id_documento = $pedido AND tipo_documento = '$tipo_documento' 
-        ORDER BY a.principio_activo, a.presentacion LIMIT 0, $LineByPage;"; 
-// $html = "$consignacion - $fabricante - $articulo - $sql";
-// die(json_encode($sql, JSON_UNESCAPED_UNICODE)); 
-$result = mysqli_query($link, $sql);
-$i = 0;
+$cantidad = intval(ExecuteScalar("
+    SELECT COUNT(z.id)
+    FROM entradas_salidas AS z
+    INNER JOIN articulo AS a ON a.id = z.articulo
+    LEFT JOIN fabricante AS b ON b.Id = a.fabricante
+    WHERE z.id_documento = {$pedido}
+      AND z.tipo_documento = '{$tipo_documento}'
+"));
 
-         $html .= '<table class="table table-bordered table-hover table-striped table-sm">
-          <thead>
-            <tr>
-              <th width="10%">&nbsp</th>
-              <th width="20%">At&iacute;culo</th>
-              <th width="10%" class="text-center">Cant.</th>
-              <th width="10%" class="text-center">Lote</th>
-              <th width="10%" class="text-center">Vence</th>
-              <th width="10%" class="text-center">Precio Full</th>
-              <th width="10%" class="text-center">% Desc.</th>
-              <th width="10%" class="text-center">Precio</th>
-              <th width="10%" class="text-center">Total</th>
-              <th width="10%" class="text-center">Agr/Eli</th>
-            </tr>
-          </thead>
-          <tbody>';
+if ($cantidad <= 0) {
+    TdcfcvHtmlResponse(
+        '<div class="alert alert-info mb-0">La cesta no tiene artículos cargados.</div>'
+    );
+}
+
+$rows = ExecuteRows("
+    SELECT
+        a.id,
+        z.id AS id_item,
+        IFNULL(a.foto, '') AS foto,
+        IFNULL(a.nombre_comercial, '') AS nombre_comercial,
+        IFNULL(b.nombre, '') AS fabricante,
+        IFNULL(a.principio_activo, '') AS principio_activo,
+        IFNULL(a.presentacion, '') AS presentacion,
+        IFNULL(z.precio_unidad_sin_desc, 0) AS precio_ful,
+        IFNULL(z.cantidad_articulo, 0) AS cantidad,
+        IFNULL(z.descuento, 0) AS descuento,
+        IFNULL(z.precio_unidad, 0) AS precio,
+        IFNULL(z.precio, 0) AS total,
+        IFNULL(z.lote, '') AS lote,
+        IFNULL(z.fecha_vencimiento, '') AS fecha_vencimiento,
+        IFNULL(z.almacen, '') AS almacen
+    FROM entradas_salidas AS z
+    INNER JOIN articulo AS a ON a.id = z.articulo
+    LEFT JOIN fabricante AS b ON b.Id = a.fabricante
+    WHERE z.id_documento = {$pedido}
+      AND z.tipo_documento = '{$tipo_documento}'
+    ORDER BY a.principio_activo, a.presentacion
+    LIMIT 0, {$lineByPage}
+");
+
+$html = '';
+
+$html .= '<table class="table table-bordered table-hover table-striped table-sm">';
+$html .= '<thead>';
+$html .= '<tr>';
+$html .= '<th width="10%">&nbsp;</th>';
+$html .= '<th width="20%">Art&iacute;culo</th>';
+$html .= '<th width="10%" class="text-center">Cant.</th>';
+$html .= '<th width="10%" class="text-center">Lote</th>';
+$html .= '<th width="10%" class="text-center">Vence</th>';
+$html .= '<th width="10%" class="text-center">Precio Full</th>';
+$html .= '<th width="10%" class="text-center">% Desc.</th>';
+$html .= '<th width="10%" class="text-center">Precio</th>';
+$html .= '<th width="10%" class="text-center">Total</th>';
+$html .= '<th width="10%" class="text-center">Agr/Eli</th>';
+$html .= '</tr>';
+$html .= '</thead>';
+$html .= '<tbody>';
+
 $i = 1;
-while ($row = mysqli_fetch_array($result)) { 
-    // $url = 'https://www.dropharmadm.com/dropharma/carpetacarga/';
-  $url = '../carpetacarga/';
+$url = './carpetacarga/';
+
+foreach ($rows as $row) {
+    $idArticulo = intval($row["id"]);
+    $idItem = intval($row["id_item"]);
+
+    $xCant = intval($row["cantidad"]);
+    $xPrecioFull = floatval($row["precio_ful"]);
+    $xDescuento = floatval($row["descuento"]);
+    $xPrecio = floatval($row["precio"]);
+    $xTotal = floatval($row["total"]);
+    $xLote = (string)$row["lote"];
+    $xVence = (string)$row["fecha_vencimiento"];
+
+    $foto = TdcfcvH($row["foto"]);
+    $nombreComercial = TdcfcvH($row["nombre_comercial"]);
+    $principioActivo = TdcfcvH($row["principio_activo"]);
+    $presentacion = TdcfcvH($row["presentacion"]);
+    $fabricante = TdcfcvH($row["fabricante"]);
+
+    $disabled = ($xCant == 0 ? '' : ' disabled="disabled"');
+
     $html .= '<tr>';
-      $html .= '<td>';
-              
-              // if(file_exists($url . $row["foto"]) and trim($row["foto"]) != "") {
-                $html .= '<div class="thumbnail">
-                  <a href="' . $url . $row["foto"] . '" target="_blank">
-                    <img src="' . $url . $row["foto"] . '" alt="' . $row["nombre_comercial"] . '" width="100" class="img-thumbnail">
-                  </a>
-                </div>';
-      
-      $html .= '</td>';
-      $html .= '<td><strong>' . $row["nombre_comercial"] . 
-                    '</strong><br><small>' . $row["principio_activo"] . '</small><br>
-                    <small><i>' . $row["presentacion"] . '</i></small><br>
-                    <strong><small>Fabricante: ' . $row["fabricante"] . '<strong></small><br>
-                    <small> Unidad</small>
-                </td>';
-      $html .= '<td class="text-center">'; 
-                  $xCant = intval($row["cantidad"]);
-                  $xultimo_precio_ful = floatval($row["precio_ful"]);
-                  $xdescuentoG = floatval($row["descuento"]);
-                  $xultimo_precio = floatval($row["precio"]);
-                  $precio = floatval($row["total"]);
-                  $xlote = $row["lote"];
-                  $xvence = $row["fecha_vencimiento"];
-  // die(json_encode("Hello World - 13", JSON_UNESCAPED_UNICODE));
-                  $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xCant==0 ? "" : $xCant) . '" style="width: 80px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-               // die(json_encode("TEST " . $row["ultimo_precio_ful"], JSON_UNESCAPED_UNICODE)); 
-                  $html .= '<input type="hidden" id="x' . $i . '_moneda" name="x' . $i . '_moneda" value="' . $moneda . '">';
-                  $html .= '<input type="hidden" id="x' . $i . '_articulo" name="x' . $i . '_articulo" value="' . $row["id"] . '">';
-// die(json_encode($sql3, JSON_UNESCAPED_UNICODE)); 
 
-      $html .= '</td>';
-      $html .= '<td class="text-center">';  
-                  $html .= '<input type="text" class="form-control" id="x' . $i . '_lote" name="x' . $i . '_lote" size="4" value="' . $xlote . '" style="width: 100px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-      $html .= '</td>';
-      $html .= '<td class="text-center">';  
-                  $html .= '<input type="date" class="form-control" id="x' . $i . '_vence" name="x' . $i . '_vence" size="4" value="' . $xvence . '" style="width: 140px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-      $html .= '</td>';
-      $html .= '<td class="text-center">';  
-                  $html .= '<input type="text" class="form-control" id="x' . $i . '_precioFull" name="x' . $i . '_precioFull" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xultimo_precio_ful==0 ? "" : number_format($xultimo_precio_ful, 2, ".", "")) . '" style="width: 100px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-      $html .= '</td>';
-      $html .= '<td class="text-center">';  
-                  $html .= '<input type="number" class="form-control" id="x' . $i . '_descuento" name="x' . $i . '_descuento" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xdescuentoG . '" style="width: 60px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-      $html .= '</td>';
-      $html .= '<td class="text-center">';  
-                  $html .= '<input type="number" class="form-control" id="x' . $i . '_precio" name="x' . $i . '_precio" size="4" readonly="yes" value="' . ($xultimo_precio==0 ? "" : number_format($xultimo_precio, 2, ".", "")) . '" style="width: 100px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-      $html .= '</td>';
-      $html .= '<td class="text-center">';  
-                  $html .= '<input type="number" class="form-control" id="x' . $i . '_total" name="x' . $i . '_total" size="4" readonly="yes" value="' . ($precio==0 ? "" : $precio) . '" style="width: 120px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
-      $html .= '</td>';
+    $html .= '<td>';
+    if (trim($foto) !== '') {
+        $html .= '<div class="thumbnail">';
+        $html .= '<a href="' . $url . $foto . '" target="_blank">';
+        $html .= '<img src="' . $url . $foto . '" alt="' . $nombreComercial . '" width="100" class="img-thumbnail">';
+        $html .= '</a>';
+        $html .= '</div>';
+    }
+    $html .= '</td>';
 
-      $html .= '<td class="text-center">';  
-          if($xCant == 0) {
-              // Si no existe el item, mostrar opción de insertar
-              $html .= '<span id="x' . $i . '_boton">
-                          <i class="fa-solid fa-cart-shopping text-primary" style="cursor:pointer;" title="Insertar" onclick="js:insertar(' . $i . ')"></i>
-                        </span>';
-          }
-          else {
-              // Si existe, mostrar botones de Editar y Eliminar
-              $html .= '<div id="x' . $i . '_contenedor_botones" class="d-flex justify-content-around">
-                          
-                          <span id="x' . $i . '_boton_edit">
-                              <i class="fa-solid fa-pencil text-warning" style="cursor:pointer;" title="Modificar" onclick="js:habilitarEdicion(' . $i . ', ' . $row["id_item"] . ')"></i>
-                          </span>
+    $html .= '<td>';
+    $html .= '<strong>' . $nombreComercial . '</strong><br>';
+    $html .= '<small>' . $principioActivo . '</small><br>';
+    $html .= '<small><i>' . $presentacion . '</i></small><br>';
+    $html .= '<strong><small>Fabricante: ' . $fabricante . '</small></strong><br>';
+    $html .= '<small>Unidad</small>';
+    $html .= '</td>';
 
-                          <span id="x' . $i . '_boton_delete">
-                              <i class="fa-solid fa-trash text-danger" style="cursor:pointer;" title="Eliminar" onclick="js:eliminar(' . $i . ', ' . $row["id_item"] . ')"></i>
-                          </span>
+    $html .= '<td class="text-center">';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xCant == 0 ? '' : $xCant) . '" style="width: 80px;"' . $disabled . '>';
+    $html .= '<input type="hidden" id="x' . $i . '_moneda" name="x' . $i . '_moneda" value="' . TdcfcvH($moneda) . '">';
+    $html .= '<input type="hidden" id="x' . $i . '_articulo" name="x' . $i . '_articulo" value="' . $idArticulo . '">';
+    $html .= '</td>';
 
-                        </div>';
-          }
-      $html .= '</td>';
+    $html .= '<td class="text-center">';
+    $html .= '<input type="text" class="form-control" id="x' . $i . '_lote" name="x' . $i . '_lote" size="4" value="' . TdcfcvH($xLote) . '" style="width: 100px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
+    $html .= '<input type="date" class="form-control" id="x' . $i . '_vence" name="x' . $i . '_vence" size="4" value="' . TdcfcvH($xVence) . '" style="width: 140px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
+    $html .= '<input type="text" class="form-control" id="x' . $i . '_precioFull" name="x' . $i . '_precioFull" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xPrecioFull == 0 ? '' : number_format($xPrecioFull, 2, ".", "")) . '" style="width: 100px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_descuento" name="x' . $i . '_descuento" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento . '" style="width: 60px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_precio" name="x' . $i . '_precio" size="4" readonly="yes" value="' . ($xPrecio == 0 ? '' : number_format($xPrecio, 2, ".", "")) . '" style="width: 100px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_total" name="x' . $i . '_total" size="4" readonly="yes" value="' . ($xTotal == 0 ? '' : number_format($xTotal, 2, ".", "")) . '" style="width: 120px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
+    $html .= '<div id="x' . $i . '_contenedor_botones" class="d-flex justify-content-around">';
+    $html .= '<span id="x' . $i . '_boton_edit">';
+    $html .= '<i class="fa-solid fa-pencil text-warning" style="cursor:pointer;" title="Modificar" onclick="js:habilitarEdicion(' . $i . ', ' . $idItem . ')"></i>';
+    $html .= '</span>';
+    $html .= '<span id="x' . $i . '_boton_delete">';
+    $html .= '<i class="fa-solid fa-trash text-danger" style="cursor:pointer;" title="Eliminar" onclick="js:eliminar(' . $i . ', ' . $idItem . ')"></i>';
+    $html .= '</span>';
+    $html .= '</div>';
+    $html .= '</td>';
+
     $html .= '</tr>';
 
     $i++;
 }
-      $html .= '<tr><td colspan="10"> <center><b>Registros ' . $i-1 . ' de ' . $cantidad . '</b></center> </td></tr>';
 
-// 3. LIMPIAR EL BUFFER ANTES DE ENVIAR EL JSON
-// Esto borra cualquier <h2... o error de conexión que se haya colado
-ob_clean();
+$html .= '<tr>';
+$html .= '<td colspan="10"><center><b>Registros ' . ($i - 1) . ' de ' . $cantidad . '</b></center></td>';
+$html .= '</tr>';
 
-header('Content-Type: application/json');
-echo json_encode($html, JSON_UNESCAPED_UNICODE);
-exit();
-?>
+$html .= '</tbody>';
+$html .= '</table>';
+
+TdcfcvHtmlResponse($html);

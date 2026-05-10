@@ -1,246 +1,278 @@
 <?php
-include "../connect.php";
 
-$pedido = intval($_REQUEST["pedido"]); 
-$articulo = intval($_REQUEST["articulo"]); 
-$tasa_usd = floatval($_REQUEST["tasa_usd"]); 
-$moneda = $_REQUEST["moneda"]; 
-$username = $_REQUEST["username"]; 
-$descuento = floatval($_REQUEST["descuento"]); 
-$descTransferencista = floatval($_REQUEST["descTransferencista"]); 
-$descFabricante = floatval($_REQUEST["descFabricante"]); 
-$id_item = intval($_REQUEST["id_item"]); 
-$nota = $_REQUEST["nota"]; 
-$consignacion = $_REQUEST["consignacion"]; 
-$doc_afectado = $_REQUEST["doc_afectado"]; 
+namespace PHPMaker2024\mandrake;
+
+require_once __DIR__ . "/tdcfcv_bootstrap.php";
+
+$pedido = TdcfcvRequestInt("pedido");
+$articulo = TdcfcvRequestInt("articulo");
+$id_item = TdcfcvRequestInt("id_item");
+
+$tasa_usd = TdcfcvRequestFloat("tasa_usd", 1);
+$moneda = TdcfcvRequestText("moneda", "Bs.");
+$username = TdcfcvCurrentUser();
+
+$descuento = TdcfcvRequestFloat("descuento");
+$descTransferencista = TdcfcvRequestFloat("descTransferencista");
+$descFabricante = TdcfcvRequestFloat("descFabricante");
+$nota = TdcfcvRequestText("nota");
 
 $tipo_documento = "TDCFCV";
-$tasa_usd = ($tasa_usd == 0 ? 1 : $tasa_usd);
+$tasa_usd = ($tasa_usd <= 0 ? 1 : $tasa_usd);
 
-// Verifico si los artículos tienen una misma alicuota o varias por cada uno de ellos //
-$sql = "SELECT 
-	      COUNT(DISTINCT alicuota) AS cantidad  
-	    FROM 
-	      entradas_salidas 
-	    WHERE 
-	      id_documento = '$pedido' AND tipo_documento = '$tipo_documento';";
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs);
-if(intval($row["cantidad"]) > 1) $alicuota = 0;
-else {
-  $sql = "SELECT 
-        DISTINCT alicuota 
-      FROM 
-        entradas_salidas 
-      WHERE 
-        id_documento = '$pedido' AND tipo_documento = '$tipo_documento';";
-  $rs = mysqli_query($link, $sql);
-  $row = mysqli_fetch_array($rs);
-  $alicuota = floatval($row["alicuota"]);
+if ($pedido <= 0) {
+    TdcfcvJsonError("Pedido no válido.");
 }
 
-
-///////// INI - Pare reversar consignaciones /////////////
-$sql = "SELECT consignacion, IFNULL(id_documento_padre, 0) AS id_documento_padre, IFNULL(direccion, '') AS direccion FROM salidas WHERE id = $pedido;";
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs);  
-$consignacion = $row["consignacion"];
-$id_documento_padre = intval($row["id_documento_padre"]);
-$direccion = $row["direccion"];
-
-if($consignacion == "S") {
-	$sql = "SELECT 
-				cantidad_movimiento, id_consignacion
-			FROM 	
-				entradas_salidas 			
-			WHERE 
-				id = '$id_item';";
-	$rs = mysqli_query($link, $sql);  
-	if ($row = mysqli_fetch_array($rs)) {
-		if(intval($row["id_consignacion"]) > 0) {
-			$cantidad = intval($row["cantidad_movimiento"]);
-			$sql = "UPDATE entradas_salidas
-					SET cantidad_movimiento_consignacion = (cantidad_movimiento_consignacion + ($cantidad))
-					WHERE id = " . $row["id_consignacion"] . ";";
-			mysqli_query($link, $sql); 
-		}		# code...
-	}
-
-	if($id_documento_padre > 0) {
-		$sql = "UPDATE salidas
-			SET estatus = 'NUEVO'
-			WHERE id = $id_documento_padre;";
-		mysqli_query($link, $sql); 
-	}
-
-	if(trim($direccion) != "") {
-		// Naso en que hayan varias notas de entrega en la misma factura. Informacion Guardada en el campo direccion
-		$sql = "UPDATE salidas
-				SET estatus = 'NUEVO'
-				WHERE id IN ($direccion);";
-		mysqli_query($link, $sql); 
-	}
+if ($id_item <= 0) {
+    TdcfcvJsonError("Item no válido.");
 }
-///////// FIN - Pare reversar consignaciones /////////////
 
+if ($articulo <= 0) {
+    TdcfcvJsonError("Artículo no válido.");
+}
 
-/**** ----- Actualizo el campo descuento en la cabecera del pedido ----- ****/
-$sql = "UPDATE salidas SET descuento = $descuento, descuento2 = $descTransferencista, descuento3 = $descFabricante, nota = '$nota', tasa_dia = $tasa_usd, moneda = '$moneda' WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
-mysqli_query($link, $sql);
+$rowItem = ExecuteRow("
+    SELECT
+        IFNULL(cantidad_movimiento, 0) AS cantidad_movimiento,
+        IFNULL(id_consignacion, 0) AS id_consignacion,
+        IFNULL(cantidad_articulo, 0) AS cantidad_articulo,
+        IFNULL(precio_unidad, 0) AS precio_unidad,
+        IFNULL(precio, 0) AS precio,
+        IFNULL(lote, '') AS lote,
+        IFNULL(fecha_vencimiento, '') AS fecha_vencimiento
+    FROM entradas_salidas
+    WHERE id = {$id_item}
+      AND id_documento = {$pedido}
+      AND tipo_documento = '{$tipo_documento}'
+    LIMIT 1
+");
 
-/**** ----- Elimino el item ----- ****/
-$sql = "DELETE FROM entradas_salidas WHERE id = $id_item;";
-// die(json_encode($sql, JSON_UNESCAPED_UNICODE)); 
-mysqli_query($link, $sql);
+if (!$rowItem) {
+    TdcfcvJsonError("No se encontró el item a eliminar.");
+}
 
-$sql = "SELECT IFNULL(nro_documento, '') AS nro_documento FROM salidas WHERE id = '$pedido' AND tipo_documento = '$tipo_documento';";
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs);
-$nro_documento = $row["nro_documento"];
+$rowCab = ExecuteRow("
+    SELECT
+        IFNULL(nro_documento, '') AS nro_documento,
+        IFNULL(consignacion, '') AS consignacion,
+        IFNULL(id_documento_padre, 0) AS id_documento_padre,
+        IFNULL(direccion, '') AS direccion
+    FROM salidas
+    WHERE id = {$pedido}
+      AND tipo_documento = '{$tipo_documento}'
+    LIMIT 1
+");
 
-/// Obtengo el $nro_documento  /////
-$sql = "INSERT INTO audittrail
-	(id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
-	VALUES (NULL, '" . date("Y-m-d H:i:s") . "', 'Eliminar Articulo de Factura de Venta NRO/ID $nro_documento/($pedido) Articulo $articulo', '$username', 'D', 'view_out_tdcfcv', 'id', '$pedido', '$articulo', '');";
-mysqli_query($link, $sql);
+if (!$rowCab) {
+    TdcfcvJsonError("No se encontró la cabecera del documento.");
+}
 
+$nro_documento = $rowCab["nro_documento"];
+$consignacion = $rowCab["consignacion"];
+$id_documento_padre = intval($rowCab["id_documento_padre"]);
+$direccion = trim((string)$rowCab["direccion"]);
 
-/**** ----- Valido si elimino la cabecera ----- ****/
-$sql = "SELECT * FROM entradas_salidas WHERE id_documento = '$pedido' AND tipo_documento = '$tipo_documento';";
-$rs = mysqli_query($link, $sql);
-if($row = mysqli_fetch_array($rs)) { 
-	//////////////// Actualizo Cabecera ////////////////
-	$sql = "SELECT 
-	    DISTINCT alicuota 
-	  FROM 
-	    entradas_salidas 
-	  WHERE 
-	    id_documento = '$pedido' AND tipo_documento = '$tipo_documento' 
-	  ORDER BY 1 DESC 
-	  LIMIT 0, 1;";
-	$rs = mysqli_query($link, $sql);
-	$row = mysqli_fetch_array($rs);
-	$xalicuota = floatval($row["alicuota"]);
+$monedaSql = AdjustSql($moneda);
+$notaSql = AdjustSql($nota);
+$usernameSql = AdjustSql($username);
 
-	$sql = "SELECT
-				SUM(precio) AS precio_unidad_sin_desc, 
-				SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) AS exento, 
-				SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) AS gravado, 
-				SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100)) AS iva, 
-				SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) + 
-				SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) + 
-				(SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100))) AS total, 
-				COUNT(articulo) AS renglones, 
-				ABS(SUM(cantidad_movimiento)) AS unidades 
-		    FROM 
-		      entradas_salidas 
-		    WHERE id_documento = '$pedido' 
-		      AND tipo_documento = '$tipo_documento';"; 
-	$rs = mysqli_query($link, $sql);
-	$row = mysqli_fetch_array($rs);
+$conn = Conn();
 
-	$monto_sin_descuento = floatval($row["precio_unidad_sin_desc"]);
-	$renglones = floatval($row["renglones"]);
-	$unidades = floatval($row["unidades"]);
+try {
+    $conn->beginTransaction();
 
-	$xExento = floatval($row["exento"]);
-	$xExento = $xExento - ($xExento * ($descTransferencista / 100));
-	$xExento = $xExento - ($xExento*($descFabricante/100));
+    /**
+     * Reversar consignación si aplica.
+     */
+    if ($consignacion == "S") {
+        $id_consignacion = intval($rowItem["id_consignacion"]);
+        $cantidad_mov = intval($rowItem["cantidad_movimiento"]);
 
-	$xGravado = floatval($row["gravado"]);
-	$xGravado = $xGravado - ($xGravado * ($descTransferencista / 100));
-	$xGravado = $xGravado - ($xGravado*($descFabricante/100));
+        if ($id_consignacion > 0) {
+            ExecuteStatement("
+                UPDATE entradas_salidas
+                SET cantidad_movimiento_consignacion = cantidad_movimiento_consignacion + ({$cantidad_mov})
+                WHERE id = {$id_consignacion}
+            ");
+        }
 
-	$costo = $xExento + $xGravado;
-	$iva = $xGravado * (floatval($xalicuota) / 100);
-	$total = $costo + $iva;
-	
-	$total_usd = round((substr(strtolower(trim($moneda)), 0, 3)=="bs." ? ($total/$tasa_usd) : $total), 2);
+        if ($id_documento_padre > 0) {
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'NUEVO'
+                WHERE id = {$id_documento_padre}
+            ");
+        }
 
-	$sql = "UPDATE salidas 
-		    SET
-		      monto_total = $costo,
-		      alicuota_iva = $alicuota, 
-		      iva = $iva,
-		      total = $total, 
-		      tasa_dia = $tasa_usd, 
-		      monto_usd = $total_usd, 
-		      moneda = '$moneda',  
-			  monto_sin_descuento = $monto_sin_descuento 
-		    WHERE id = '$pedido'";
-	mysqli_query($link, $sql);
+        if ($direccion !== "") {
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'NUEVO'
+                WHERE id IN ({$direccion})
+            ");
+        }
+    }
 
-	/*
-	$html = array(
-		"pedido" => (string)$pedido,
-		"total" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? round(($costo/$tasa_usd),2) : $costo),
-		"renglones" => (string)$renglones,
-		"unidades" => (string)$unidades,
-		"total_usd" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? $costo : round(($costo*$tasa_usd),2)),
-		"monto_sin_descuento" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? round(($monto_sin_descuento/$tasa_usd),2) : $monto_sin_descuento),
-		"mensaje" => "Hello World",
-		"total_usd_sin_descuento" => (string)(strtoupper(substr($moneda, 0, 3)) == "BS." ? $monto_sin_descuento : round(($monto_sin_descuento*$tasa_usd),2)),
-		"estatus" => "1",
-		"consignacion" => $consignacion,
-		"doc_afectado" => $doc_afectado,
-		"nro_documento" => $nro_documento
-	);
-	*/
+    /**
+     * Actualizar cabecera antes de eliminar.
+     */
+    ExecuteStatement("
+        UPDATE salidas
+        SET
+            descuento = {$descuento},
+            descuento2 = {$descTransferencista},
+            descuento3 = {$descFabricante},
+            nota = '{$notaSql}',
+            tasa_dia = {$tasa_usd},
+            moneda = '{$monedaSql}'
+        WHERE id = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+    ");
 
-	$total_usd_final = (strtoupper(substr($moneda, 0, 3)) == "BS.") ? ($total / $tasa_usd) : $total;
-    $total_usd_sin_desc = (strtoupper(substr($moneda, 0, 3)) == "BS.") ? ($monto_sin_descuento / $tasa_usd) : $monto_sin_descuento;
+    /**
+     * Eliminar item.
+     */
+    ExecuteStatement("
+        DELETE FROM entradas_salidas
+        WHERE id = {$id_item}
+          AND id_documento = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+    ");
 
-    $html = array(
-        "estatus" => "1",
-        "pedido" => (string)$pedido,
-        "total" => (string)$total, // El total en la moneda del documento
-        "total_usd" => (string)round($total_usd_final, 2),
-        "renglones" => (string)$renglones,
-        "unidades" => (string)$unidades,
-        "monto_sin_descuento" => (string)$monto_sin_descuento,
-        "total_usd_sin_descuento" => (string)round($total_usd_sin_desc, 2),
-        "nro_documento" => (string)$nro_documento,
-        "consignacion" => $consignacion,
-        "doc_afectado" => $doc_afectado,
-        "mensaje" => "Item eliminado correctamente"
+    $mensajeAudit = AdjustSql(
+        "Eliminar Articulo de Factura de Venta NRO/ID {$nro_documento}/({$pedido}) Articulo {$articulo}"
     );
 
-} 
-else {
-	$sql = "DELETE FROM salidas WHERE id = $pedido AND tipo_documento = '$tipo_documento';";
-	mysqli_query($link, $sql);
-	// $nro_documento = "0000000";
+    ExecuteStatement("
+        INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (
+                NULL,
+                '" . date("Y-m-d H:i:s") . "',
+                '{$mensajeAudit}',
+                '{$usernameSql}',
+                'D',
+                'view_out_tdcfcv',
+                'id',
+                '{$pedido}',
+                '{$articulo}',
+                ''
+            )
+    ");
 
-	$html = array(
-	    "pedido" => "0",
-	    "total" => "0.00",
-	    "renglones" => "0",
-	    "unidades" => "0",
-	    "total_usd" => "0.00",
-	    "monto_sin_descuento" => "0.00",
-	    "mensaje" => "Hello World", 
-	    "total_usd_sin_descuento" => "0.00", 
-	    "estatus" => "1", 
-	    "consignacion" => $consignacion, 
-	    "doc_afectado" => $doc_afectado, 
-	    "nro_documento" => $nro_documento
-	);
+    /**
+     * Verificar si quedan renglones.
+     */
+    $renglonesRestantes = intval(ExecuteScalar("
+        SELECT COUNT(*)
+        FROM entradas_salidas
+        WHERE id_documento = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+    "));
+
+    if ($renglonesRestantes <= 0) {
+        ExecuteStatement("
+            DELETE FROM salidas
+            WHERE id = {$pedido}
+              AND tipo_documento = '{$tipo_documento}'
+        ");
+
+        $conn->commit();
+
+        TdcfcvJsonOk([
+            "pedido" => "0",
+            "total" => "0.00",
+            "total_usd" => "0.00",
+            "monto_sin_descuento" => "0.00",
+            "total_usd_sin_descuento" => "0.00",
+            "renglones" => "0",
+            "unidades" => "0",
+            "nro_documento" => "0000000",
+            "mensaje" => "Item eliminado. Documento vacío eliminado."
+        ]);
+    }
+
+    /**
+     * Recalcular totales.
+     */
+    $xalicuota = floatval(ExecuteScalar("
+        SELECT DISTINCT IFNULL(alicuota, 0)
+        FROM entradas_salidas
+        WHERE id_documento = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+        ORDER BY 1 DESC
+        LIMIT 1
+    "));
+
+    $rowTot = ExecuteRow("
+        SELECT
+            IFNULL(SUM(precio), 0) AS precio_sin_desc_total,
+            IFNULL(SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ({$descuento}/100)), 0)), 0) AS exento,
+            IFNULL(SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ({$descuento}/100)))), 0) AS gravado,
+            IFNULL(COUNT(articulo), 0) AS renglones,
+            IFNULL(ABS(SUM(cantidad_movimiento)), 0) AS unidades
+        FROM entradas_salidas
+        WHERE id_documento = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+    ");
+
+    $monto_sin_descuento = floatval($rowTot["precio_sin_desc_total"] ?? 0);
+    $renglones = intval($rowTot["renglones"] ?? 0);
+    $unidades = floatval($rowTot["unidades"] ?? 0);
+
+    $xExento = floatval($rowTot["exento"] ?? 0);
+    $xExento = $xExento - ($xExento * ($descTransferencista / 100));
+    $xExento = $xExento - ($xExento * ($descFabricante / 100));
+
+    $xGravado = floatval($rowTot["gravado"] ?? 0);
+    $xGravado = $xGravado - ($xGravado * ($descTransferencista / 100));
+    $xGravado = $xGravado - ($xGravado * ($descFabricante / 100));
+
+    $costo = $xExento + $xGravado;
+    $iva = $xGravado * ($xalicuota / 100);
+    $total_final = $costo + $iva;
+
+    $esBs = (strtoupper(substr(trim($moneda), 0, 3)) == "BS.");
+
+    $total_usd_real = $esBs
+        ? round(($total_final / $tasa_usd), 2)
+        : round($total_final, 2);
+
+    ExecuteStatement("
+        UPDATE salidas
+        SET
+            tasa_dia = {$tasa_usd},
+            monto_total = {$costo},
+            alicuota_iva = {$xalicuota},
+            iva = {$iva},
+            total = {$total_final},
+            unidades = {$unidades},
+            monto_usd = {$total_usd_real},
+            moneda = '{$monedaSql}',
+            monto_sin_descuento = {$monto_sin_descuento}
+        WHERE id = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+    ");
+
+    $conn->commit();
+
+    TdcfcvJsonOk([
+        "pedido" => (string)$pedido,
+        "total" => (string)($esBs ? round(($costo / $tasa_usd), 2) : round($costo, 2)),
+        "total_usd" => (string)($esBs ? round($costo, 2) : round(($costo * $tasa_usd), 2)),
+        "monto_sin_descuento" => (string)($esBs ? round(($monto_sin_descuento / $tasa_usd), 2) : round($monto_sin_descuento, 2)),
+        "total_usd_sin_descuento" => (string)($esBs ? round($monto_sin_descuento, 2) : round(($monto_sin_descuento * $tasa_usd), 2)),
+        "renglones" => (string)$renglones,
+        "unidades" => (string)$unidades,
+        "nro_documento" => (string)$nro_documento,
+        "mensaje" => "Item eliminado y totales actualizados"
+    ]);
+} catch (\Throwable $e) {
+    if ($conn->isTransactionActive()) {
+        $conn->rollBack();
+    }
+
+    TdcfcvJsonError("Error eliminando línea: " . $e->getMessage());
 }
-
-/// Actualizo el campo unidades ///
-$sql = "UPDATE 
-			salidas AS a 
-			JOIN (SELECT 
-						id_documento, tipo_documento, ABS(SUM(cantidad_movimiento)) AS cantidad 
-					FROM 
-						entradas_salidas 
-					WHERE tipo_documento = '$tipo_documento' AND id_documento = $pedido 
-					GROUP BY id_documento, tipo_documento) AS b ON b.id_documento = a.id AND b.tipo_documento = a.tipo_documento 
-		SET 
-			a.unidades = b.cantidad 
-		WHERE a.id = $pedido;";
-mysqli_query($link, $sql);
-
-
-echo json_encode($html, JSON_UNESCAPED_UNICODE);
-?>
