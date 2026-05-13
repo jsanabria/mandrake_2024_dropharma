@@ -1105,6 +1105,11 @@ class PagosProveedorFacturaList extends PagosProveedorFactura
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fpagos_proveedor_facturasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->pagos_proveedor->AdvancedSearch->toJson(), ","); // Field pagos_proveedor
         $filterList = Concat($filterList, $this->tipo_documento->AdvancedSearch->toJson(), ","); // Field tipo_documento

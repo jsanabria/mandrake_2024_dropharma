@@ -785,6 +785,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->descuento3->Visible) { // descuento3 ?>
         <th data-name="descuento3" class="<?= $Page->descuento3->headerCellClass() ?>"><div id="elh_salidas_descuento3" class="salidas_descuento3"><?= $Page->renderFieldHeader($Page->descuento3) ?></div></th>
 <?php } ?>
+<?php if ($Page->impreso->Visible) { // impreso ?>
+        <th data-name="impreso" class="<?= $Page->impreso->headerCellClass() ?>"><div id="elh_salidas_impreso" class="salidas_impreso"><?= $Page->renderFieldHeader($Page->impreso) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -1101,6 +1104,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_descuento3" class="el_salidas_descuento3">
 <span<?= $Page->descuento3->viewAttributes() ?>>
 <?= $Page->descuento3->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->impreso->Visible) { // impreso ?>
+        <td data-name="impreso"<?= $Page->impreso->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_impreso" class="el_salidas_impreso">
+<span<?= $Page->impreso->viewAttributes() ?>>
+<?= $Page->impreso->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

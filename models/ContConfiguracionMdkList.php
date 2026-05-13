@@ -1036,6 +1036,11 @@ class ContConfiguracionMdkList extends ContConfiguracionMdk
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_configuracion_mdksrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->clave->AdvancedSearch->toJson(), ","); // Field clave
         $filterList = Concat($filterList, $this->descripcion->AdvancedSearch->toJson(), ","); // Field descripcion

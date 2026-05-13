@@ -1540,6 +1540,11 @@ class ArticuloUnidadMedidaList extends ArticuloUnidadMedida
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("farticulo_unidad_medidasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->articulo->AdvancedSearch->toJson(), ","); // Field articulo
         $filterList = Concat($filterList, $this->unidad_medida->AdvancedSearch->toJson(), ","); // Field unidad_medida

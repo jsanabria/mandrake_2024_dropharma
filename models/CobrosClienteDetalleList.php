@@ -1043,6 +1043,11 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcobros_cliente_detallesrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->cobros_cliente->AdvancedSearch->toJson(), ","); // Field cobros_cliente
         $filterList = Concat($filterList, $this->metodo_pago->AdvancedSearch->toJson(), ","); // Field metodo_pago

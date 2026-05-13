@@ -1147,6 +1147,11 @@ class ViewOutTdcasaList extends ViewOutTdcasa
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_out_tdcasasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->tipo_documento->AdvancedSearch->toJson(), ","); // Field tipo_documento
         $filterList = Concat($filterList, $this->nro_documento->AdvancedSearch->toJson(), ","); // Field nro_documento

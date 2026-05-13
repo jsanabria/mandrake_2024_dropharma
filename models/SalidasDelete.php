@@ -188,6 +188,7 @@ class SalidasDelete extends Salidas
         $this->monto_igtf->setVisibility();
         $this->doc_afe->setVisibility();
         $this->descuento3->setVisibility();
+        $this->impreso->setVisibility();
     }
 
     // Constructor
@@ -486,6 +487,7 @@ class SalidasDelete extends Salidas
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->id_documento_padre);
         $this->setupLookupOptions($this->igtf);
+        $this->setupLookupOptions($this->impreso);
 
         // Set up Breadcrumb
         $this->setupBreadcrumb();
@@ -730,6 +732,7 @@ class SalidasDelete extends Salidas
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
         $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
     }
 
     // Return a row with default values
@@ -795,6 +798,7 @@ class SalidasDelete extends Salidas
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
         $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
         return $row;
     }
 
@@ -927,6 +931,8 @@ class SalidasDelete extends Salidas
         // doc_afe
 
         // descuento3
+
+        // impreso
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1419,6 +1425,13 @@ class SalidasDelete extends Salidas
             $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
             $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
 
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1583,6 +1596,10 @@ class SalidasDelete extends Salidas
             // descuento3
             $this->descuento3->HrefValue = "";
             $this->descuento3->TooltipValue = "";
+
+            // impreso
+            $this->impreso->HrefValue = "";
+            $this->impreso->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1770,6 +1787,8 @@ class SalidasDelete extends Salidas
                 case "x_id_documento_padre":
                     break;
                 case "x_igtf":
+                    break;
+                case "x_impreso":
                     break;
                 default:
                     $lookupFilter = "";

@@ -1041,6 +1041,11 @@ class ContReglasHrList extends ContReglasHr
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_reglas_hrsrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->descripcion->AdvancedSearch->toJson(), ","); // Field descripcion
         if ($this->BasicSearch->Keyword != "") {

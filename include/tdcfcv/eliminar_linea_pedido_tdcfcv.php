@@ -144,6 +144,20 @@ try {
         "Eliminar Articulo de Factura de Venta NRO/ID {$nro_documento}/({$pedido}) Articulo {$articulo}"
     );
 
+    $oldJson = AdjustSql(json_encode([
+        "id_item" => $id_item,
+        "pedido" => $pedido,
+        "tipo_documento" => $tipo_documento,
+        "articulo" => $articulo,
+        "cantidad_movimiento" => $rowItem["cantidad_movimiento"],
+        "id_consignacion" => $rowItem["id_consignacion"],
+        "cantidad_articulo" => $rowItem["cantidad_articulo"],
+        "precio_unidad" => $rowItem["precio_unidad"],
+        "precio" => $rowItem["precio"],
+        "lote" => $rowItem["lote"],
+        "fecha_vencimiento" => $rowItem["fecha_vencimiento"]
+    ], JSON_UNESCAPED_UNICODE));    
+
     ExecuteStatement("
         INSERT INTO audittrail
             (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
@@ -157,7 +171,7 @@ try {
                 'view_out_tdcfcv',
                 'id',
                 '{$pedido}',
-                '{$articulo}',
+                '{$oldJson}',
                 ''
             )
     ");

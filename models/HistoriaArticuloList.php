@@ -1075,6 +1075,11 @@ class HistoriaArticuloList extends HistoriaArticulo
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fhistoria_articulosrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->fabricante->AdvancedSearch->toJson(), ","); // Field fabricante
         $filterList = Concat($filterList, $this->articulo->AdvancedSearch->toJson(), ","); // Field articulo

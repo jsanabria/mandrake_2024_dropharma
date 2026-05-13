@@ -1056,6 +1056,11 @@ class NotificacionesList extends Notificaciones
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fnotificacionessrch");
+        }
         $filterList = Concat($filterList, $this->Nnotificaciones->AdvancedSearch->toJson(), ","); // Field Nnotificaciones
         $filterList = Concat($filterList, $this->tipo->AdvancedSearch->toJson(), ","); // Field tipo
         $filterList = Concat($filterList, $this->notificar->AdvancedSearch->toJson(), ","); // Field notificar

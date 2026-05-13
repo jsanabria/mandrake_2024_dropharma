@@ -1051,6 +1051,11 @@ class FabricanteList extends Fabricante
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("ffabricantesrch");
+        }
         $filterList = Concat($filterList, $this->Id->AdvancedSearch->toJson(), ","); // Field Id
         $filterList = Concat($filterList, $this->nombre->AdvancedSearch->toJson(), ","); // Field nombre
         $filterList = Concat($filterList, $this->tipo->AdvancedSearch->toJson(), ","); // Field tipo

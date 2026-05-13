@@ -1023,6 +1023,11 @@ class ViewTarifaList extends ViewTarifa
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_tarifasrch");
+        }
         $filterList = Concat($filterList, $this->articulo->AdvancedSearch->toJson(), ","); // Field articulo
         $filterList = Concat($filterList, $this->precio->AdvancedSearch->toJson(), ","); // Field precio
         $filterList = Concat($filterList, $this->tarifa->AdvancedSearch->toJson(), ","); // Field tarifa

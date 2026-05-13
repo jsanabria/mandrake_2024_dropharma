@@ -215,7 +215,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 
   <div class="row">
     <div class="col-sm-3">
-      <select id="consignacion" name="consignacion" class="form-select form-select-sm">
+      <select id="consignacion" name="consignacion" class="form-select form-select-sm" disabled="disabled">
         <option value="">TIPO DOCUMENTO</option>
         <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
         <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>

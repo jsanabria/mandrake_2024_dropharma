@@ -121,6 +121,95 @@ $sql_detalle = "INSERT INTO entradas_salidas (tipo_documento, id_documento, fabr
 
 Execute($sql_detalle);
 
+/* Auditoría */
+
+// ---------------------------------------------------------
+// 5. REGISTRO DE AUDITORÍA / INCIDENCIA
+// ---------------------------------------------------------
+if ($documento == "NC" || $documento == "ND") {
+
+    $rowOrigen = ExecuteRow("
+        SELECT 
+            id,
+            tipo_documento,
+            documento,
+            nro_documento,
+            cliente,
+            total,
+            moneda,
+            tasa_dia
+        FROM salidas
+        WHERE id = $id
+        LIMIT 1
+    ");
+
+    $rowNuevo = ExecuteRow("
+        SELECT 
+            id,
+            tipo_documento,
+            documento,
+            nro_documento,
+            doc_afectado,
+            doc_afe,
+            fecha,
+            cliente,
+            monto_total,
+            alicuota_iva,
+            iva,
+            total,
+            nota,
+            estatus,
+            asesor,
+            moneda,
+            tasa_dia,
+            monto_usd,
+            asesor_asignado,
+            descuento,
+            descuento2
+        FROM salidas
+        WHERE id = $newid
+        LIMIT 1
+    ");
+
+    $tipoNotaTexto = ($documento == "NC") ? "Nota de Crédito" : "Nota de Débito";
+    $nroOrigen = $rowOrigen["nro_documento"] ?? $doc;
+
+    $mensajeAudit = AdjustSql(
+        "Se creó {$tipoNotaTexto} del documento origen {$nroOrigen}"
+    );
+
+    $jsonAudit = AdjustSql(json_encode([
+        "tipo" => "INCIDENCIA",
+        "codigo" => ($documento == "NC" ? "CREACION_NOTA_CREDITO" : "CREACION_NOTA_DEBITO"),
+        "descripcion" => "Se creó {$tipoNotaTexto} del documento origen {$nroOrigen}",
+        "documento_origen" => $rowOrigen,
+        "documento_nuevo" => $rowNuevo,
+        "fecha" => date("Y-m-d"),
+        "hora" => date("H:i:s"),
+        "usuario" => $username
+    ], JSON_UNESCAPED_UNICODE));
+
+    Execute("
+        INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (
+                NULL,
+                '" . date("Y-m-d H:i:s") . "',
+                '{$mensajeAudit}',
+                '" . AdjustSql($username) . "',
+                '" . AdjustSql("CREO {$tipoNotaTexto}") . "',
+                'salidas',
+                'id',
+                '{$newid}',
+                '',
+                '{$jsonAudit}'
+            )
+    ");
+}
+
+/*************/
+
 header("Location: TdcfcvAdd?tipo_documento=TDCFCV&pedido=$newid");
 exit();
 

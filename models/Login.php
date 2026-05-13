@@ -391,6 +391,13 @@ class Login extends Usuario
                 $_SESSION[SESSION_USER_LOGIN_TYPE] = $this->LoginType->CurrentValue; // Save user login type
                 $_SESSION[SESSION_USER_PROFILE_USER_NAME] = $this->Username->CurrentValue; // Save login user name
                 $_SESSION[SESSION_USER_PROFILE_LOGIN_TYPE] = $this->LoginType->CurrentValue; // Save login type
+
+                // Max login attempt checking
+                Profile()->setUserName($this->Username->CurrentValue)->loadFromStorage();
+                if (Profile()->exceedLoginRetry()) {
+                    $validate = false;
+                    $this->setFailureMessage(str_replace("%t", UserProfile::$RETRY_LOCKOUT, $Language->phrase("ExceedMaxRetry")));
+                }
             }
             $validPwd = false;
             if ($validate) {
@@ -626,11 +633,35 @@ class Login extends Usuario
     {
         WriteAuditTrail("", CurrentDateTime(), CurrentUserIP(), $usr, "login", "usuario", "username", $usr, "", "");
     }
-
     // User Login Error event
     public function userLoginError($usr, $pwd)
     {
-        //Log("User Login Error");
+        $usrSql = AdjustSql((string)$usr);
+        $ipSql = AdjustSql($_SERVER["REMOTE_ADDR"] ?? "");
+        $uaSql = AdjustSql($_SERVER["HTTP_USER_AGENT"] ?? "");
+        $detalle = AdjustSql(json_encode([
+            "usuario" => $usr,
+            "ip" => $_SERVER["REMOTE_ADDR"] ?? "",
+            "user_agent" => $_SERVER["HTTP_USER_AGENT"] ?? "",
+            "fecha" => date("Y-m-d H:i:s")
+        ], JSON_UNESCAPED_UNICODE));
+        ExecuteStatement("
+            INSERT INTO audittrail
+                (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+            VALUES
+                (
+                    NULL,
+                    '" . date("Y-m-d H:i:s") . "',
+                    'Intento fallido de inicio de sesión',
+                    '{$usrSql}',
+                    'LOGIN_ERROR',
+                    'users',
+                    'username',
+                    '{$usrSql}',
+                    '',
+                    '{$detalle}'
+                )
+        ");
     }
 
     // Form Custom Validate event

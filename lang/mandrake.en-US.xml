@@ -1,4 +1,4 @@
-<ew-language date="2026/5/7" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/5/12" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -4394,6 +4394,9 @@
       </field>
       <field id="userlevelid2">
         <phrase id="fldcaption" value="userlevelid 2" />
+      </field>
+      <field id="_profile">
+        <phrase id="fldcaption" value="profile" />
       </field>
     </table>
     <table id="usuario_master2">

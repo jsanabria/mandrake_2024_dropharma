@@ -1069,6 +1069,11 @@ class ViewTransferenciasList extends ViewTransferencias
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_transferenciassrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->tipo_documento->AdvancedSearch->toJson(), ","); // Field tipo_documento
         $filterList = Concat($filterList, $this->_username->AdvancedSearch->toJson(), ","); // Field username

@@ -1077,6 +1077,11 @@ class ViewFacturaAsesorList extends ViewFacturaAsesor
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_factura_asesorsrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->nro_documento->AdvancedSearch->toJson(), ","); // Field nro_documento
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha

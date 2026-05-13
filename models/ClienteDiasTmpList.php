@@ -1023,6 +1023,11 @@ class ClienteDiasTmpList extends ClienteDiasTmp
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcliente_dias_tmpsrch");
+        }
         $filterList = Concat($filterList, $this->ci_rif->AdvancedSearch->toJson(), ","); // Field ci_rif
         $filterList = Concat($filterList, $this->dias_credito->AdvancedSearch->toJson(), ","); // Field dias_credito
         $filterList = Concat($filterList, $this->descuento->AdvancedSearch->toJson(), ","); // Field descuento

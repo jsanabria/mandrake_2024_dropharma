@@ -1080,6 +1080,11 @@ class TasaUsdList extends TasaUsd
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("ftasa_usdsrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
         $filterList = Concat($filterList, $this->tasa->AdvancedSearch->toJson(), ","); // Field tasa

@@ -67,6 +67,7 @@ class Usuario extends DbTable
     public $foto;
     public $activo;
     public $userlevelid2;
+    public $_profile;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -444,6 +445,28 @@ class Usuario extends DbTable
         $this->userlevelid2->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->userlevelid2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['userlevelid2'] = &$this->userlevelid2;
+
+        // profile
+        $this->_profile = new DbField(
+            $this, // Table
+            'x__profile', // Variable name
+            'profile', // Name
+            '`profile`', // Expression
+            '`profile`', // Basic search expression
+            201, // Type
+            2147483647, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`profile`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXTAREA' // Edit Tag
+        );
+        $this->_profile->InputTextType = "text";
+        $this->_profile->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['profile'] = &$this->_profile;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1025,6 +1048,7 @@ class Usuario extends DbTable
         $this->foto->Upload->DbValue = $row['foto'];
         $this->activo->DbValue = $row['activo'];
         $this->userlevelid2->DbValue = $row['userlevelid2'];
+        $this->_profile->DbValue = $row['profile'];
     }
 
     // Delete uploaded files
@@ -1404,6 +1428,7 @@ class Usuario extends DbTable
         $this->foto->Upload->DbValue = $row['foto'];
         $this->activo->setDbValue($row['activo']);
         $this->userlevelid2->setDbValue($row['userlevelid2']);
+        $this->_profile->setDbValue($row['profile']);
     }
 
     // Render list content
@@ -1459,6 +1484,8 @@ class Usuario extends DbTable
         // activo
 
         // userlevelid2
+
+        // profile
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1596,6 +1623,9 @@ class Usuario extends DbTable
         $this->userlevelid2->ViewValue = $this->userlevelid2->CurrentValue;
         $this->userlevelid2->ViewValue = FormatNumber($this->userlevelid2->ViewValue, $this->userlevelid2->formatPattern());
 
+        // profile
+        $this->_profile->ViewValue = $this->_profile->CurrentValue;
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -1663,6 +1693,10 @@ class Usuario extends DbTable
         // userlevelid2
         $this->userlevelid2->HrefValue = "";
         $this->userlevelid2->TooltipValue = "";
+
+        // profile
+        $this->_profile->HrefValue = "";
+        $this->_profile->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1768,6 +1802,11 @@ class Usuario extends DbTable
             $this->userlevelid2->EditValue = FormatNumber($this->userlevelid2->EditValue, null);
         }
 
+        // profile
+        $this->_profile->setupEditAttributes();
+        $this->_profile->EditValue = $this->_profile->CurrentValue;
+        $this->_profile->PlaceHolder = RemoveHtml($this->_profile->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1806,7 +1845,6 @@ class Usuario extends DbTable
                     $doc->exportCaption($this->proveedor);
                     $doc->exportCaption($this->foto);
                     $doc->exportCaption($this->activo);
-                    $doc->exportCaption($this->userlevelid2);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->_username);
@@ -1857,7 +1895,6 @@ class Usuario extends DbTable
                         $doc->exportField($this->proveedor);
                         $doc->exportField($this->foto);
                         $doc->exportField($this->activo);
-                        $doc->exportField($this->userlevelid2);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->_username);

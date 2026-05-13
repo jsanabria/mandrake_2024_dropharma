@@ -69,6 +69,9 @@ class Usuario extends AbstractEntity
     #[Column(type: "integer", nullable: true)]
     private ?int $userlevelid2;
 
+    #[Column(type: "text", nullable: true)]
+    private ?string $profile;
+
     public function __construct()
     {
         $this->activo = "S";
@@ -217,6 +220,17 @@ class Usuario extends AbstractEntity
     public function setUserlevelid2(?int $value): static
     {
         $this->userlevelid2 = $value;
+        return $this;
+    }
+
+    public function getProfile(): ?string
+    {
+        return HtmlDecode($this->profile);
+    }
+
+    public function setProfile(?string $value): static
+    {
+        $this->profile = RemoveXss($value);
         return $this;
     }
 

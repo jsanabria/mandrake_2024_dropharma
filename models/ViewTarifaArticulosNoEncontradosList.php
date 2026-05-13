@@ -1022,6 +1022,11 @@ class ViewTarifaArticulosNoEncontradosList extends ViewTarifaArticulosNoEncontra
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_tarifa_articulos_no_encontradossrch");
+        }
         $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo
         $filterList = Concat($filterList, $this->precio->AdvancedSearch->toJson(), ","); // Field precio
         if ($this->BasicSearch->Keyword != "") {

@@ -1023,6 +1023,11 @@ class LimiteClienteList extends LimiteCliente
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("flimite_clientesrch");
+        }
         $filterList = Concat($filterList, $this->rif->AdvancedSearch->toJson(), ","); // Field rif
         $filterList = Concat($filterList, $this->limite->AdvancedSearch->toJson(), ","); // Field limite
         $filterList = Concat($filterList, $this->condicion->AdvancedSearch->toJson(), ","); // Field condicion

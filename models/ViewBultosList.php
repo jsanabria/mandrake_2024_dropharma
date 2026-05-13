@@ -1041,6 +1041,11 @@ class ViewBultosList extends ViewBultos
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_bultossrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->cliente->AdvancedSearch->toJson(), ","); // Field cliente
         $filterList = Concat($filterList, $this->ciudad->AdvancedSearch->toJson(), ","); // Field ciudad

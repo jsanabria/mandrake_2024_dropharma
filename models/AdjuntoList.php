@@ -1100,6 +1100,11 @@ class AdjuntoList extends Adjunto
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fadjuntosrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->articulo->AdvancedSearch->toJson(), ","); // Field articulo
         $filterList = Concat($filterList, $this->cliente->AdvancedSearch->toJson(), ","); // Field cliente

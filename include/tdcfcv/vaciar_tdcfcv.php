@@ -105,6 +105,13 @@ try {
     /**
      * Eliminar todos los renglones del documento.
      */
+    $oldItems = ExecuteRows("
+        SELECT *
+        FROM entradas_salidas
+        WHERE id_documento = {$pedido}
+          AND tipo_documento = '{$tipo_documento}'
+    ");
+
     ExecuteStatement("
         DELETE FROM entradas_salidas
         WHERE id_documento = {$pedido}
@@ -120,12 +127,17 @@ try {
           AND tipo_documento = '{$tipo_documento}'
     ");
 
-    /**
-     * Auditoría.
-     */
     $mensajeAudit = AdjustSql(
         "Eliminar Factura de Venta NRO/ID {$nro_documento}/{$pedido}"
     );
+
+    $oldCab = $rowCab;
+
+    $oldJson = AdjustSql(json_encode([
+        "cabecera" => $oldCab,
+        "items" => $oldItems
+    ], JSON_UNESCAPED_UNICODE));    
+
 
     ExecuteStatement("
         INSERT INTO audittrail
@@ -140,7 +152,7 @@ try {
                 'view_out_tdcfcv',
                 'id',
                 '{$pedido}',
-                '{$nro_documento}',
+                '{$oldJson}',
                 ''
             )
     ");

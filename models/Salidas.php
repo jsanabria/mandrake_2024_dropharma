@@ -113,6 +113,7 @@ class Salidas extends DbTable
     public $monto_igtf;
     public $doc_afe;
     public $descuento3;
+    public $impreso;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -1625,6 +1626,32 @@ class Salidas extends DbTable
         $this->descuento3->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['descuento3'] = &$this->descuento3;
 
+        // impreso
+        $this->impreso = new DbField(
+            $this, // Table
+            'x_impreso', // Variable name
+            'impreso', // Name
+            '`impreso`', // Expression
+            '`impreso`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`impreso`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->impreso->addMethod("getDefault", fn() => "N");
+        $this->impreso->InputTextType = "text";
+        $this->impreso->Raw = true;
+        $this->impreso->Lookup = new Lookup($this->impreso, 'salidas', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->impreso->OptionCount = 2;
+        $this->impreso->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['impreso'] = &$this->impreso;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -2248,6 +2275,7 @@ class Salidas extends DbTable
         $this->monto_igtf->DbValue = $row['monto_igtf'];
         $this->doc_afe->DbValue = $row['doc_afe'];
         $this->descuento3->DbValue = $row['descuento3'];
+        $this->impreso->DbValue = $row['impreso'];
     }
 
     // Delete uploaded files
@@ -2679,6 +2707,7 @@ class Salidas extends DbTable
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
         $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
     }
 
     // Render list content
@@ -2826,6 +2855,8 @@ class Salidas extends DbTable
         // doc_afe
 
         // descuento3
+
+        // impreso
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -3327,6 +3358,13 @@ class Salidas extends DbTable
         $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
         $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
 
+        // impreso
+        if (strval($this->impreso->CurrentValue) != "") {
+            $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+        } else {
+            $this->impreso->ViewValue = null;
+        }
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -3603,6 +3641,10 @@ class Salidas extends DbTable
         // descuento3
         $this->descuento3->HrefValue = "";
         $this->descuento3->TooltipValue = "";
+
+        // impreso
+        $this->impreso->HrefValue = "";
+        $this->impreso->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3995,6 +4037,10 @@ class Salidas extends DbTable
             $this->descuento3->EditValue = FormatNumber($this->descuento3->EditValue, null);
         }
 
+        // impreso
+        $this->impreso->EditValue = $this->impreso->options(false);
+        $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -4069,6 +4115,7 @@ class Salidas extends DbTable
                     $doc->exportCaption($this->monto_igtf);
                     $doc->exportCaption($this->doc_afe);
                     $doc->exportCaption($this->descuento3);
+                    $doc->exportCaption($this->impreso);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -4128,6 +4175,7 @@ class Salidas extends DbTable
                     $doc->exportCaption($this->monto_igtf);
                     $doc->exportCaption($this->doc_afe);
                     $doc->exportCaption($this->descuento3);
+                    $doc->exportCaption($this->impreso);
                 }
                 $doc->endExportRow();
             }
@@ -4200,6 +4248,7 @@ class Salidas extends DbTable
                         $doc->exportField($this->monto_igtf);
                         $doc->exportField($this->doc_afe);
                         $doc->exportField($this->descuento3);
+                        $doc->exportField($this->impreso);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -4259,6 +4308,7 @@ class Salidas extends DbTable
                         $doc->exportField($this->monto_igtf);
                         $doc->exportField($this->doc_afe);
                         $doc->exportField($this->descuento3);
+                        $doc->exportField($this->impreso);
                     }
                     $doc->endExportRow($rowCnt);
                 }

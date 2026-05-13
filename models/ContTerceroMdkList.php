@@ -1036,6 +1036,11 @@ class ContTerceroMdkList extends ContTerceroMdk
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_tercero_mdksrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->tipo->AdvancedSearch->toJson(), ","); // Field tipo
         $filterList = Concat($filterList, $this->origen_tabla->AdvancedSearch->toJson(), ","); // Field origen_tabla

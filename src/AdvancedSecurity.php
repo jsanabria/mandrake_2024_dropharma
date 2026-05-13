@@ -673,6 +673,18 @@ class AdvancedSecurity
                         $valid = ComparePassword($user->get(Config("LOGIN_PASSWORD_FIELD_NAME")), $pwd);
                     }
                 }
+
+                // Set up retry count
+                if (!$loginType) {
+                    if (!$valid) {
+                        $retrycount = $userProfile->getLoginRetryCount() + 1;
+                        $userProfile->setLoginRetryCount($retrycount)
+                            ->setLastBadLoginDateTime(StdCurrentDateTime())
+                            ->saveToStorage();
+                    } else {
+                        $userProfile->setLoginRetryCount(0)->saveToStorage();
+                    }
+                }
                 if ($valid) {
                     // Check two factor authentication
                     if (Config("USE_TWO_FACTOR_AUTHENTICATION")) {

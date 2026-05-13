@@ -167,17 +167,6 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->userlevelid2->Visible) { // userlevelid2 ?>
-    <tr id="r_userlevelid2"<?= $Page->userlevelid2->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_usuario_userlevelid2"><?= $Page->userlevelid2->caption() ?></span></td>
-        <td data-name="userlevelid2"<?= $Page->userlevelid2->cellAttributes() ?>>
-<span id="el_usuario_userlevelid2">
-<span<?= $Page->userlevelid2->viewAttributes() ?>>
-<?= $Page->userlevelid2->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 </table>
 <?php
     if (in_array("usuario_master2", explode(",", $Page->getCurrentDetailTable())) && $usuario_master2->DetailView) {

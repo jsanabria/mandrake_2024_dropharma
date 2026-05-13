@@ -1040,6 +1040,11 @@ class PagoDestinoReglaList extends PagoDestinoRegla
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fpago_destino_reglasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->compania->AdvancedSearch->toJson(), ","); // Field compania
         $filterList = Concat($filterList, $this->metodo->AdvancedSearch->toJson(), ","); // Field metodo

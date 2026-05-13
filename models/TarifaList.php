@@ -1075,6 +1075,11 @@ class TarifaList extends Tarifa
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("ftarifasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->nombre->AdvancedSearch->toJson(), ","); // Field nombre
         $filterList = Concat($filterList, $this->patron->AdvancedSearch->toJson(), ","); // Field patron

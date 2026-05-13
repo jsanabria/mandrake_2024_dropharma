@@ -1076,6 +1076,11 @@ class AudittrailList extends Audittrail
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("faudittrailsrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->datetime->AdvancedSearch->toJson(), ","); // Field datetime
         $filterList = Concat($filterList, $this->script->AdvancedSearch->toJson(), ","); // Field script

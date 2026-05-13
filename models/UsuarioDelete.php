@@ -142,6 +142,7 @@ class UsuarioDelete extends Usuario
         $this->foto->setVisibility();
         $this->activo->setVisibility();
         $this->userlevelid2->Visible = false;
+        $this->_profile->Visible = false;
     }
 
     // Constructor
@@ -621,6 +622,7 @@ class UsuarioDelete extends Usuario
         $this->foto->setDbValue($this->foto->Upload->DbValue);
         $this->activo->setDbValue($row['activo']);
         $this->userlevelid2->setDbValue($row['userlevelid2']);
+        $this->_profile->setDbValue($row['profile']);
     }
 
     // Return a row with default values
@@ -640,6 +642,7 @@ class UsuarioDelete extends Usuario
         $row['foto'] = $this->foto->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['userlevelid2'] = $this->userlevelid2->DefaultValue;
+        $row['profile'] = $this->_profile->DefaultValue;
         return $row;
     }
 
@@ -680,6 +683,8 @@ class UsuarioDelete extends Usuario
         // activo
 
         // userlevelid2
+
+        // profile
 
         // View row
         if ($this->RowType == RowType::VIEW) {

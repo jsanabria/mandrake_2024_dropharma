@@ -1158,6 +1158,11 @@ class ContAsientoList extends ContAsiento
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_asientosrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->comprobante->AdvancedSearch->toJson(), ","); // Field comprobante
         $filterList = Concat($filterList, $this->cuenta->AdvancedSearch->toJson(), ","); // Field cuenta

@@ -1072,6 +1072,11 @@ class ContReglasList extends ContReglas
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_reglassrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->regla->AdvancedSearch->toJson(), ","); // Field regla
         $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo

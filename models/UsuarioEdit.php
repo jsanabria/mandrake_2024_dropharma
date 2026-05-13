@@ -142,6 +142,7 @@ class UsuarioEdit extends Usuario
         $this->foto->setVisibility();
         $this->activo->setVisibility();
         $this->userlevelid2->Visible = false;
+        $this->_profile->Visible = false;
     }
 
     // Constructor
@@ -1027,6 +1028,7 @@ class UsuarioEdit extends Usuario
         $this->foto->setDbValue($this->foto->Upload->DbValue);
         $this->activo->setDbValue($row['activo']);
         $this->userlevelid2->setDbValue($row['userlevelid2']);
+        $this->_profile->setDbValue($row['profile']);
     }
 
     // Return a row with default values
@@ -1046,6 +1048,7 @@ class UsuarioEdit extends Usuario
         $row['foto'] = $this->foto->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['userlevelid2'] = $this->userlevelid2->DefaultValue;
+        $row['profile'] = $this->_profile->DefaultValue;
         return $row;
     }
 
@@ -1118,6 +1121,9 @@ class UsuarioEdit extends Usuario
 
         // userlevelid2
         $this->userlevelid2->RowCssClass = "row";
+
+        // profile
+        $this->_profile->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {

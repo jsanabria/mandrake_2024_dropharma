@@ -1058,6 +1058,11 @@ class ContPeriodoContableList extends ContPeriodoContable
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_periodo_contablesrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->fecha_inicio->AdvancedSearch->toJson(), ","); // Field fecha_inicio
         $filterList = Concat($filterList, $this->fecha_fin->AdvancedSearch->toJson(), ","); // Field fecha_fin

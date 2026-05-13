@@ -160,6 +160,7 @@ class UsuarioView extends Usuario
         $this->foto->setVisibility();
         $this->activo->setVisibility();
         $this->userlevelid2->setVisibility();
+        $this->_profile->setVisibility();
     }
 
     // Constructor
@@ -947,6 +948,7 @@ class UsuarioView extends Usuario
         $this->foto->setDbValue($this->foto->Upload->DbValue);
         $this->activo->setDbValue($row['activo']);
         $this->userlevelid2->setDbValue($row['userlevelid2']);
+        $this->_profile->setDbValue($row['profile']);
     }
 
     // Return a row with default values
@@ -966,6 +968,7 @@ class UsuarioView extends Usuario
         $row['foto'] = $this->foto->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['userlevelid2'] = $this->userlevelid2->DefaultValue;
+        $row['profile'] = $this->_profile->DefaultValue;
         return $row;
     }
 
@@ -1012,6 +1015,8 @@ class UsuarioView extends Usuario
         // activo
 
         // userlevelid2
+
+        // profile
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1206,10 +1211,6 @@ class UsuarioView extends Usuario
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
-
-            // userlevelid2
-            $this->userlevelid2->HrefValue = "";
-            $this->userlevelid2->TooltipValue = "";
         }
 
         // Call Row Rendered event

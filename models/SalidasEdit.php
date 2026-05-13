@@ -188,6 +188,7 @@ class SalidasEdit extends Salidas
         $this->monto_igtf->setVisibility();
         $this->doc_afe->setVisibility();
         $this->descuento3->setVisibility();
+        $this->impreso->setVisibility();
     }
 
     // Constructor
@@ -602,6 +603,7 @@ class SalidasEdit extends Salidas
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->id_documento_padre);
         $this->setupLookupOptions($this->igtf);
+        $this->setupLookupOptions($this->impreso);
 
         // Check modal
         if ($this->IsModal) {
@@ -1121,6 +1123,16 @@ class SalidasEdit extends Salidas
             }
         }
 
+        // Check field name 'impreso' first before field var 'x_impreso'
+        $val = $CurrentForm->hasValue("impreso") ? $CurrentForm->getValue("impreso") : $CurrentForm->getValue("x_impreso");
+        if (!$this->impreso->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->impreso->Visible = false; // Disable update for API request
+            } else {
+                $this->impreso->setFormValue($val);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -1168,6 +1180,7 @@ class SalidasEdit extends Salidas
         $this->monto_igtf->CurrentValue = $this->monto_igtf->FormValue;
         $this->doc_afe->CurrentValue = $this->doc_afe->FormValue;
         $this->descuento3->CurrentValue = $this->descuento3->FormValue;
+        $this->impreso->CurrentValue = $this->impreso->FormValue;
     }
 
     /**
@@ -1269,6 +1282,7 @@ class SalidasEdit extends Salidas
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
         $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
     }
 
     // Return a row with default values
@@ -1334,6 +1348,7 @@ class SalidasEdit extends Salidas
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
         $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
         return $row;
     }
 
@@ -1544,6 +1559,9 @@ class SalidasEdit extends Salidas
 
         // descuento3
         $this->descuento3->RowCssClass = "row";
+
+        // impreso
+        $this->impreso->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2047,6 +2065,13 @@ class SalidasEdit extends Salidas
             $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
             $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
 
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
 
@@ -2183,6 +2208,9 @@ class SalidasEdit extends Salidas
 
             // descuento3
             $this->descuento3->HrefValue = "";
+
+            // impreso
+            $this->impreso->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -2543,6 +2571,10 @@ class SalidasEdit extends Salidas
                 $this->descuento3->EditValue = FormatNumber($this->descuento3->EditValue, null);
             }
 
+            // impreso
+            $this->impreso->EditValue = $this->impreso->options(false);
+            $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
+
             // Edit refer script
 
             // tipo_documento
@@ -2681,6 +2713,9 @@ class SalidasEdit extends Salidas
 
             // descuento3
             $this->descuento3->HrefValue = "";
+
+            // impreso
+            $this->impreso->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2895,6 +2930,11 @@ class SalidasEdit extends Salidas
             }
             if (!CheckNumber($this->descuento3->FormValue)) {
                 $this->descuento3->addErrorMessage($this->descuento3->getErrorMessage(false));
+            }
+            if ($this->impreso->Visible && $this->impreso->Required) {
+                if ($this->impreso->FormValue == "") {
+                    $this->impreso->addErrorMessage(str_replace("%s", $this->impreso->caption(), $this->impreso->RequiredErrorMessage));
+                }
             }
 
         // Validate detail grid
@@ -3147,6 +3187,9 @@ class SalidasEdit extends Salidas
 
         // descuento3
         $this->descuento3->setDbValueDef($rsnew, $this->descuento3->CurrentValue, $this->descuento3->ReadOnly);
+
+        // impreso
+        $this->impreso->setDbValueDef($rsnew, $this->impreso->CurrentValue, $this->impreso->ReadOnly);
         return $rsnew;
     }
 
@@ -3230,6 +3273,9 @@ class SalidasEdit extends Salidas
         }
         if (isset($row['descuento3'])) { // descuento3
             $this->descuento3->CurrentValue = $row['descuento3'];
+        }
+        if (isset($row['impreso'])) { // impreso
+            $this->impreso->CurrentValue = $row['impreso'];
         }
     }
 
@@ -3372,6 +3418,8 @@ class SalidasEdit extends Salidas
                 case "x_id_documento_padre":
                     break;
                 case "x_igtf":
+                    break;
+                case "x_impreso":
                     break;
                 default:
                     $lookupFilter = "";

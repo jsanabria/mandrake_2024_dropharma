@@ -1074,6 +1074,11 @@ class TablaList extends Tabla
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("ftablasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->tabla->AdvancedSearch->toJson(), ","); // Field tabla
         $filterList = Concat($filterList, $this->campo_codigo->AdvancedSearch->toJson(), ","); // Field campo_codigo

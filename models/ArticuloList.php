@@ -1105,6 +1105,11 @@ class ArticuloList extends Articulo
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("farticulosrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->foto->AdvancedSearch->toJson(), ","); // Field foto
         $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo

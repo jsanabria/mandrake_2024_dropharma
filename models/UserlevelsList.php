@@ -1069,6 +1069,11 @@ class UserlevelsList extends Userlevels
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fuserlevelssrch");
+        }
         $filterList = Concat($filterList, $this->userlevelid->AdvancedSearch->toJson(), ","); // Field userlevelid
         $filterList = Concat($filterList, $this->userlevelname->AdvancedSearch->toJson(), ","); // Field userlevelname
         $filterList = Concat($filterList, $this->tipo_acceso->AdvancedSearch->toJson(), ","); // Field tipo_acceso

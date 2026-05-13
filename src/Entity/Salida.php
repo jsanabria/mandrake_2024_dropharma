@@ -207,6 +207,9 @@ class Salida extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $descuento3;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $impreso;
+
     public function __construct()
     {
         $this->entregado = "N";
@@ -216,6 +219,7 @@ class Salida extends AbstractEntity
         $this->factura = "N";
         $this->activo = "S";
         $this->cerrado = "N";
+        $this->impreso = "N";
     }
 
     public function getId(): int
@@ -885,6 +889,20 @@ class Salida extends AbstractEntity
     public function setDescuento3(?string $value): static
     {
         $this->descuento3 = $value;
+        return $this;
+    }
+
+    public function getImpreso(): ?string
+    {
+        return $this->impreso;
+    }
+
+    public function setImpreso(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'impreso' value");
+        }
+        $this->impreso = $value;
         return $this;
     }
 }

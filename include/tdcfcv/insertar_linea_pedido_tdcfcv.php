@@ -204,7 +204,7 @@ try {
     $conn->beginTransaction();
 
     if ($pedido == 0) {
-        ExecuteStatement("
+        $conn->executeStatement("
             INSERT INTO salidas
                 (id, tipo_documento, username, fecha, cliente, nota, estatus, moneda, consignacion,
                  descuento, descuento2, descuento3, documento, doc_afectado, doc_afe)
@@ -214,6 +214,21 @@ try {
         ");
 
         $pedido = intval($conn->lastInsertId());
+
+        if ($pedido <= 0) {
+            $pedido = intval(ExecuteScalar("
+                SELECT MAX(id)
+                FROM salidas
+                WHERE tipo_documento = '{$tipo_documento}'
+                  AND cliente = {$cliente}
+                  AND username = '{$usernameSql}'
+            "));
+        }
+
+        if ($pedido <= 0) {
+            throw new \Exception("No se pudo obtener el ID del documento creado.");
+        }
+
         $nro_documento = "";
     } else {
         ExecuteStatement("
@@ -237,7 +252,7 @@ try {
         ");
     }
 
-    ExecuteStatement("
+    $conn->executeStatement("
         INSERT INTO entradas_salidas
             (id, tipo_documento, id_documento, fabricante, articulo, almacen,
              cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida,
@@ -251,6 +266,16 @@ try {
     ");
 
     $id_item = intval($conn->lastInsertId());
+
+    if ($id_item <= 0) {
+        $id_item = intval(ExecuteScalar("
+            SELECT MAX(id)
+            FROM entradas_salidas
+            WHERE tipo_documento = '{$tipo_documento}'
+              AND id_documento = {$pedido}
+              AND articulo = {$articulo}
+        "));
+    }
 
     $xalicuota = floatval(ExecuteScalar("
         SELECT DISTINCT IFNULL(alicuota, 0)

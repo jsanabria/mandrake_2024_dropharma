@@ -1028,6 +1028,11 @@ class FtpFactPediProcesadoList extends FtpFactPediProcesado
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fftp_fact_pedi_procesadosrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->factura->AdvancedSearch->toJson(), ","); // Field factura
         $filterList = Concat($filterList, $this->pedido->AdvancedSearch->toJson(), ","); // Field pedido

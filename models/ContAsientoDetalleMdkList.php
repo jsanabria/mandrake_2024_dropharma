@@ -1062,6 +1062,11 @@ class ContAsientoDetalleMdkList extends ContAsientoDetalleMdk
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_asiento_detalle_mdksrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->asiento_id->AdvancedSearch->toJson(), ","); // Field asiento_id
         $filterList = Concat($filterList, $this->cuenta_id->AdvancedSearch->toJson(), ","); // Field cuenta_id

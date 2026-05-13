@@ -1034,6 +1034,11 @@ class BannerList extends Banner
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fbannersrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->tipo->AdvancedSearch->toJson(), ","); // Field tipo
         $filterList = Concat($filterList, $this->titulo->AdvancedSearch->toJson(), ","); // Field titulo

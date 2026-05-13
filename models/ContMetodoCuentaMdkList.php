@@ -1038,6 +1038,11 @@ class ContMetodoCuentaMdkList extends ContMetodoCuentaMdk
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_metodo_cuenta_mdksrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->metodo_pago->AdvancedSearch->toJson(), ","); // Field metodo_pago
         $filterList = Concat($filterList, $this->descripcion->AdvancedSearch->toJson(), ","); // Field descripcion

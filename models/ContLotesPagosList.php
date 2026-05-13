@@ -1049,6 +1049,11 @@ class ContLotesPagosList extends ContLotesPagos
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcont_lotes_pagossrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
         $filterList = Concat($filterList, $this->procesado->AdvancedSearch->toJson(), ","); // Field procesado

@@ -1105,6 +1105,11 @@ class CompaniaCuentaList extends CompaniaCuenta
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fcompania_cuentasrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->banco->AdvancedSearch->toJson(), ","); // Field banco
         $filterList = Concat($filterList, $this->titular->AdvancedSearch->toJson(), ","); // Field titular

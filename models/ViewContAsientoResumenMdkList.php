@@ -1036,6 +1036,11 @@ class ViewContAsientoResumenMdkList extends ViewContAsientoResumenMdk
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_cont_asiento_resumen_mdksrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
         $filterList = Concat($filterList, $this->referencia->AdvancedSearch->toJson(), ","); // Field referencia

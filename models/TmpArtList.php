@@ -1023,6 +1023,11 @@ class TmpArtList extends TmpArt
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("ftmp_artsrch");
+        }
         $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo
         $filterList = Concat($filterList, $this->lote->AdvancedSearch->toJson(), ","); // Field lote
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha

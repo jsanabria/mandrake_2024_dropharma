@@ -1116,6 +1116,11 @@ class RecargaList extends Recarga
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("frecargasrch");
+        }
         $filterList = Concat($filterList, $this->nro_recibo->AdvancedSearch->toJson(), ","); // Field nro_recibo
         $filterList = Concat($filterList, $this->cliente->AdvancedSearch->toJson(), ","); // Field cliente
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha

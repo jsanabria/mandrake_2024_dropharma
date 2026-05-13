@@ -151,7 +151,33 @@ function Page_Loading()
 // Page Rendering event
 function Page_Rendering()
 {
-    //Log("Page Rendering");
+    $sql = "
+        SELECT COUNT(*) AS cantidad_documentos
+        FROM salidas AS a
+        WHERE 
+            a.tipo_documento = 'TDCNET'
+            AND a.estatus = 'NUEVO'
+            AND EXISTS (
+                SELECT 1
+                FROM entradas_salidas AS b
+                WHERE b.id_documento = a.id
+                  AND b.tipo_documento = a.tipo_documento
+                  AND b.newdata = 'S'
+            )
+    ";
+    $cantidad = intval(ExecuteScalar($sql));
+    if ($cantidad > 0) {
+        $mensaje = '
+            <div class="alert alert-warning alert-dismissible fade show mb-2" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <strong>Atención:</strong> Existen <strong>' . $cantidad . '</strong> nota(s) de entrega pendiente(s) por facturar.
+                <a href="ViewOutTdcnetList?cmd=search&x_estatus=NUEVO" class="alert-link ms-2">
+                    Ver notas pendientes
+                </a>
+            </div>
+        ';
+        $this->setMessage($mensaje);
+    }
 }
 
 // Page Unloaded event

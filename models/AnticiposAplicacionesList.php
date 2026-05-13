@@ -1033,6 +1033,11 @@ class AnticiposAplicacionesList extends AnticiposAplicaciones
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fanticipos_aplicacionessrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->anticipo_cobro_id->AdvancedSearch->toJson(), ","); // Field anticipo_cobro_id
         $filterList = Concat($filterList, $this->cobro_factura_id->AdvancedSearch->toJson(), ","); // Field cobro_factura_id

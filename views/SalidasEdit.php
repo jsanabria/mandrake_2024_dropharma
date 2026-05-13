@@ -61,7 +61,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
             ["monto_igtf", [fields.monto_igtf.visible && fields.monto_igtf.required ? ew.Validators.required(fields.monto_igtf.caption) : null, ew.Validators.float], fields.monto_igtf.isInvalid],
             ["doc_afe", [fields.doc_afe.visible && fields.doc_afe.required ? ew.Validators.required(fields.doc_afe.caption) : null, ew.Validators.integer], fields.doc_afe.isInvalid],
-            ["descuento3", [fields.descuento3.visible && fields.descuento3.required ? ew.Validators.required(fields.descuento3.caption) : null, ew.Validators.float], fields.descuento3.isInvalid]
+            ["descuento3", [fields.descuento3.visible && fields.descuento3.required ? ew.Validators.required(fields.descuento3.caption) : null, ew.Validators.float], fields.descuento3.isInvalid],
+            ["impreso", [fields.impreso.visible && fields.impreso.required ? ew.Validators.required(fields.impreso.caption) : null], fields.impreso.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -90,6 +91,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "consignacion": <?= $Page->consignacion->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
             "igtf": <?= $Page->igtf->toClientList($Page) ?>,
+            "impreso": <?= $Page->impreso->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -446,6 +448,38 @@ loadjs.ready("fsalidasedit", function() {
 <input type="<?= $Page->descuento3->getInputTextType() ?>" name="x_descuento3" id="x_descuento3" data-table="salidas" data-field="x_descuento3" value="<?= $Page->descuento3->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->descuento3->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento3->formatPattern()) ?>"<?= $Page->descuento3->editAttributes() ?> aria-describedby="x_descuento3_help">
 <?= $Page->descuento3->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->descuento3->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->impreso->Visible) { // impreso ?>
+    <div id="r_impreso"<?= $Page->impreso->rowAttributes() ?>>
+        <label id="elh_salidas_impreso" class="<?= $Page->LeftColumnClass ?>"><?= $Page->impreso->caption() ?><?= $Page->impreso->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->impreso->cellAttributes() ?>>
+<span id="el_salidas_impreso">
+<template id="tp_x_impreso">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="salidas" data-field="x_impreso" name="x_impreso" id="x_impreso"<?= $Page->impreso->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_impreso" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_impreso"
+    name="x_impreso"
+    value="<?= HtmlEncode($Page->impreso->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_impreso"
+    data-target="dsl_x_impreso"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->impreso->isInvalidClass() ?>"
+    data-table="salidas"
+    data-field="x_impreso"
+    data-page="1"
+    data-value-separator="<?= $Page->impreso->displayValueSeparatorAttribute() ?>"
+    <?= $Page->impreso->editAttributes() ?>></selection-list>
+<?= $Page->impreso->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->impreso->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

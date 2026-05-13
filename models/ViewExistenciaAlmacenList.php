@@ -1066,6 +1066,11 @@ class ViewExistenciaAlmacenList extends ViewExistenciaAlmacen
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_existencia_almacensrch");
+        }
         $filterList = Concat($filterList, $this->codalm->AdvancedSearch->toJson(), ","); // Field codalm
         $filterList = Concat($filterList, $this->codfab->AdvancedSearch->toJson(), ","); // Field codfab
         $filterList = Concat($filterList, $this->codart->AdvancedSearch->toJson(), ","); // Field codart

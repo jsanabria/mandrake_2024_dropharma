@@ -212,6 +212,7 @@ class SalidasList extends Salidas
         $this->monto_igtf->setVisibility();
         $this->doc_afe->setVisibility();
         $this->descuento3->setVisibility();
+        $this->impreso->setVisibility();
     }
 
     // Constructor
@@ -777,6 +778,7 @@ class SalidasList extends Salidas
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->id_documento_padre);
         $this->setupLookupOptions($this->igtf);
+        $this->setupLookupOptions($this->impreso);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1148,6 +1150,11 @@ class SalidasList extends Salidas
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fsalidassrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->tipo_documento->AdvancedSearch->toJson(), ","); // Field tipo_documento
         $filterList = Concat($filterList, $this->nro_documento->AdvancedSearch->toJson(), ","); // Field nro_documento
@@ -1207,6 +1214,7 @@ class SalidasList extends Salidas
         $filterList = Concat($filterList, $this->monto_igtf->AdvancedSearch->toJson(), ","); // Field monto_igtf
         $filterList = Concat($filterList, $this->doc_afe->AdvancedSearch->toJson(), ","); // Field doc_afe
         $filterList = Concat($filterList, $this->descuento3->AdvancedSearch->toJson(), ","); // Field descuento3
+        $filterList = Concat($filterList, $this->impreso->AdvancedSearch->toJson(), ","); // Field impreso
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1717,6 +1725,14 @@ class SalidasList extends Salidas
         $this->descuento3->AdvancedSearch->SearchValue2 = @$filter["y_descuento3"];
         $this->descuento3->AdvancedSearch->SearchOperator2 = @$filter["w_descuento3"];
         $this->descuento3->AdvancedSearch->save();
+
+        // Field impreso
+        $this->impreso->AdvancedSearch->SearchValue = @$filter["x_impreso"];
+        $this->impreso->AdvancedSearch->SearchOperator = @$filter["z_impreso"];
+        $this->impreso->AdvancedSearch->SearchCondition = @$filter["v_impreso"];
+        $this->impreso->AdvancedSearch->SearchValue2 = @$filter["y_impreso"];
+        $this->impreso->AdvancedSearch->SearchOperator2 = @$filter["w_impreso"];
+        $this->impreso->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1788,6 +1804,7 @@ class SalidasList extends Salidas
         $this->buildSearchSql($where, $this->monto_igtf, $default, false); // monto_igtf
         $this->buildSearchSql($where, $this->doc_afe, $default, false); // doc_afe
         $this->buildSearchSql($where, $this->descuento3, $default, false); // descuento3
+        $this->buildSearchSql($where, $this->impreso, $default, false); // impreso
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1853,6 +1870,7 @@ class SalidasList extends Salidas
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
             $this->descuento3->AdvancedSearch->save(); // descuento3
+            $this->impreso->AdvancedSearch->save(); // impreso
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1942,6 +1960,7 @@ class SalidasList extends Salidas
             $this->monto_igtf->AdvancedSearch->save(); // monto_igtf
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
             $this->descuento3->AdvancedSearch->save(); // descuento3
+            $this->impreso->AdvancedSearch->save(); // impreso
             $this->setSessionRules($rules);
         }
 
@@ -2312,6 +2331,15 @@ class SalidasList extends Salidas
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento3->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field impreso
+        $filter = $this->queryBuilderWhere("impreso");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->impreso, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->impreso->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -2566,6 +2594,9 @@ class SalidasList extends Salidas
         if ($this->descuento3->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->impreso->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2660,6 +2691,7 @@ class SalidasList extends Salidas
         $this->monto_igtf->AdvancedSearch->unsetSession();
         $this->doc_afe->AdvancedSearch->unsetSession();
         $this->descuento3->AdvancedSearch->unsetSession();
+        $this->impreso->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2730,6 +2762,7 @@ class SalidasList extends Salidas
         $this->monto_igtf->AdvancedSearch->load();
         $this->doc_afe->AdvancedSearch->load();
         $this->descuento3->AdvancedSearch->load();
+        $this->impreso->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2782,6 +2815,7 @@ class SalidasList extends Salidas
             $this->updateSort($this->monto_igtf); // monto_igtf
             $this->updateSort($this->doc_afe); // doc_afe
             $this->updateSort($this->descuento3); // descuento3
+            $this->updateSort($this->impreso); // impreso
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2865,6 +2899,7 @@ class SalidasList extends Salidas
                 $this->monto_igtf->setSort("");
                 $this->doc_afe->setSort("");
                 $this->descuento3->setSort("");
+                $this->impreso->setSort("");
             }
 
             // Reset start position
@@ -3430,6 +3465,7 @@ class SalidasList extends Salidas
             $this->createColumnOption($option, "monto_igtf");
             $this->createColumnOption($option, "doc_afe");
             $this->createColumnOption($option, "descuento3");
+            $this->createColumnOption($option, "impreso");
         }
 
         // Set up custom actions
@@ -4254,6 +4290,14 @@ class SalidasList extends Salidas
                 $this->Command = "search";
             }
         }
+
+        // impreso
+        if ($this->impreso->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->impreso->AdvancedSearch->SearchValue != "" || $this->impreso->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -4411,6 +4455,7 @@ class SalidasList extends Salidas
         $this->monto_igtf->setDbValue($row['monto_igtf']);
         $this->doc_afe->setDbValue($row['doc_afe']);
         $this->descuento3->setDbValue($row['descuento3']);
+        $this->impreso->setDbValue($row['impreso']);
     }
 
     // Return a row with default values
@@ -4476,6 +4521,7 @@ class SalidasList extends Salidas
         $row['monto_igtf'] = $this->monto_igtf->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
         $row['descuento3'] = $this->descuento3->DefaultValue;
+        $row['impreso'] = $this->impreso->DefaultValue;
         return $row;
     }
 
@@ -4633,6 +4679,8 @@ class SalidasList extends Salidas
         // doc_afe
 
         // descuento3
+
+        // impreso
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -5125,6 +5173,13 @@ class SalidasList extends Salidas
             $this->descuento3->ViewValue = $this->descuento3->CurrentValue;
             $this->descuento3->ViewValue = FormatNumber($this->descuento3->ViewValue, $this->descuento3->formatPattern());
 
+            // impreso
+            if (strval($this->impreso->CurrentValue) != "") {
+                $this->impreso->ViewValue = $this->impreso->optionCaption($this->impreso->CurrentValue);
+            } else {
+                $this->impreso->ViewValue = null;
+            }
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -5289,6 +5344,10 @@ class SalidasList extends Salidas
             // descuento3
             $this->descuento3->HrefValue = "";
             $this->descuento3->TooltipValue = "";
+
+            // impreso
+            $this->impreso->HrefValue = "";
+            $this->impreso->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -5571,6 +5630,10 @@ class SalidasList extends Salidas
             $this->descuento3->setupEditAttributes();
             $this->descuento3->EditValue = $this->descuento3->AdvancedSearch->SearchValue;
             $this->descuento3->PlaceHolder = RemoveHtml($this->descuento3->caption());
+
+            // impreso
+            $this->impreso->EditValue = $this->impreso->options(false);
+            $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -5670,6 +5733,7 @@ class SalidasList extends Salidas
         $this->monto_igtf->AdvancedSearch->load();
         $this->doc_afe->AdvancedSearch->load();
         $this->descuento3->AdvancedSearch->load();
+        $this->impreso->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -5962,6 +6026,8 @@ class SalidasList extends Salidas
                 case "x_id_documento_padre":
                     break;
                 case "x_igtf":
+                    break;
+                case "x_impreso":
                     break;
                 default:
                     $lookupFilter = "";

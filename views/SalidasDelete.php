@@ -155,6 +155,9 @@ $Page->showMessage();
 <?php if ($Page->descuento3->Visible) { // descuento3 ?>
         <th class="<?= $Page->descuento3->headerCellClass() ?>"><span id="elh_salidas_descuento3" class="salidas_descuento3"><?= $Page->descuento3->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->impreso->Visible) { // impreso ?>
+        <th class="<?= $Page->impreso->headerCellClass() ?>"><span id="elh_salidas_impreso" class="salidas_impreso"><?= $Page->impreso->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -464,6 +467,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->descuento3->viewAttributes() ?>>
 <?= $Page->descuento3->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->impreso->Visible) { // impreso ?>
+        <td<?= $Page->impreso->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->impreso->viewAttributes() ?>>
+<?= $Page->impreso->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -406,6 +406,17 @@ $salidas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($salidas->impreso->Visible) { // impreso ?>
+        <tr id="r_impreso"<?= $salidas->impreso->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->impreso->caption() ?></td>
+            <td<?= $salidas->impreso->cellAttributes() ?>>
+<span id="el_salidas_impreso">
+<span<?= $salidas->impreso->viewAttributes() ?>>
+<?= $salidas->impreso->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

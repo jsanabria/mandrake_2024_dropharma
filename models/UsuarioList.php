@@ -166,6 +166,7 @@ class UsuarioList extends Usuario
         $this->foto->setVisibility();
         $this->activo->setVisibility();
         $this->userlevelid2->Visible = false;
+        $this->_profile->Visible = false;
     }
 
     // Constructor
@@ -1086,6 +1087,11 @@ class UsuarioList extends Usuario
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fusuariosrch");
+        }
         $filterList = Concat($filterList, $this->id->AdvancedSearch->toJson(), ","); // Field id
         $filterList = Concat($filterList, $this->_username->AdvancedSearch->toJson(), ","); // Field username
         $filterList = Concat($filterList, $this->_password->AdvancedSearch->toJson(), ","); // Field password
@@ -1099,6 +1105,7 @@ class UsuarioList extends Usuario
         $filterList = Concat($filterList, $this->foto->AdvancedSearch->toJson(), ","); // Field foto
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
         $filterList = Concat($filterList, $this->userlevelid2->AdvancedSearch->toJson(), ","); // Field userlevelid2
+        $filterList = Concat($filterList, $this->_profile->AdvancedSearch->toJson(), ","); // Field profile
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1241,6 +1248,14 @@ class UsuarioList extends Usuario
         $this->userlevelid2->AdvancedSearch->SearchValue2 = @$filter["y_userlevelid2"];
         $this->userlevelid2->AdvancedSearch->SearchOperator2 = @$filter["w_userlevelid2"];
         $this->userlevelid2->AdvancedSearch->save();
+
+        // Field profile
+        $this->_profile->AdvancedSearch->SearchValue = @$filter["x__profile"];
+        $this->_profile->AdvancedSearch->SearchOperator = @$filter["z__profile"];
+        $this->_profile->AdvancedSearch->SearchCondition = @$filter["v__profile"];
+        $this->_profile->AdvancedSearch->SearchValue2 = @$filter["y__profile"];
+        $this->_profile->AdvancedSearch->SearchOperator2 = @$filter["w__profile"];
+        $this->_profile->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1266,6 +1281,7 @@ class UsuarioList extends Usuario
         $this->buildSearchSql($where, $this->foto, $default, false); // foto
         $this->buildSearchSql($where, $this->activo, $default, false); // activo
         $this->buildSearchSql($where, $this->userlevelid2, $default, false); // userlevelid2
+        $this->buildSearchSql($where, $this->_profile, $default, false); // profile
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1285,6 +1301,7 @@ class UsuarioList extends Usuario
             $this->foto->AdvancedSearch->save(); // foto
             $this->activo->AdvancedSearch->save(); // activo
             $this->userlevelid2->AdvancedSearch->save(); // userlevelid2
+            $this->_profile->AdvancedSearch->save(); // profile
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1328,6 +1345,7 @@ class UsuarioList extends Usuario
             $this->foto->AdvancedSearch->save(); // foto
             $this->activo->AdvancedSearch->save(); // activo
             $this->userlevelid2->AdvancedSearch->save(); // userlevelid2
+            $this->_profile->AdvancedSearch->save(); // profile
             $this->setSessionRules($rules);
         }
 
@@ -1487,6 +1505,7 @@ class UsuarioList extends Usuario
         $searchFlds[] = &$this->telefono;
         $searchFlds[] = &$this->_email;
         $searchFlds[] = &$this->foto;
+        $searchFlds[] = &$this->_profile;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1554,6 +1573,9 @@ class UsuarioList extends Usuario
         if ($this->userlevelid2->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->_profile->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1602,6 +1624,7 @@ class UsuarioList extends Usuario
         $this->foto->AdvancedSearch->unsetSession();
         $this->activo->AdvancedSearch->unsetSession();
         $this->userlevelid2->AdvancedSearch->unsetSession();
+        $this->_profile->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1626,6 +1649,7 @@ class UsuarioList extends Usuario
         $this->foto->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->userlevelid2->AdvancedSearch->load();
+        $this->_profile->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1688,6 +1712,7 @@ class UsuarioList extends Usuario
                 $this->foto->setSort("");
                 $this->activo->setSort("");
                 $this->userlevelid2->setSort("");
+                $this->_profile->setSort("");
             }
 
             // Reset start position
@@ -1861,6 +1886,24 @@ class UsuarioList extends Usuario
                 if ($listAction->Select == ACTION_SINGLE && $allowed) {
                     $caption = $listAction->Caption;
                     $title = HtmlTitle($caption);
+                    $profile = UserProfile::create()->setUserName(strval($this->_username->CurrentValue))
+                        ->load(HtmlDecode($this->_profile->CurrentValue));
+                    if ($action == "forcelogoutuser") {
+                        $totalCount = $profile->activeUserSessionCount(false);
+                        $activeCount = $profile->activeUserSessionCount();
+                        if ($totalCount == 0 && $activeCount == 0) { // Do not show link if no active sessions
+                            $action = ""; // Disable action
+                        } else {
+                            if ($profile->isForceLogout()) { // Being force logout
+                                $caption = $Language->phrase("ForceLogoutInProgress");
+                                $title = HtmlTitle($caption);
+                                $disabled = true;
+                            }
+                            // Show active session count next to user name
+                            $message = str_replace("%t", $totalCount, str_replace("%a", $activeCount, $Language->phrase("ActiveUserSessions")));
+                            $this->_username->ViewValue .= '&nbsp;<span class="badge rounded-pill text-bg-info">' . $message . '</span>';
+                        }
+                    }
                     if ($action != "") {
                         $icon = ($listAction->Icon != "") ? "<i class=\"" . HtmlEncode(str_replace(" ew-icon", "", $listAction->Icon)) . "\" data-caption=\"" . $title . "\"></i> " : "";
                         $link = $disabled
@@ -2606,6 +2649,14 @@ class UsuarioList extends Usuario
                 $this->Command = "search";
             }
         }
+
+        // profile
+        if ($this->_profile->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->_profile->AdvancedSearch->SearchValue != "" || $this->_profile->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -2716,6 +2767,7 @@ class UsuarioList extends Usuario
         $this->foto->setDbValue($this->foto->Upload->DbValue);
         $this->activo->setDbValue($row['activo']);
         $this->userlevelid2->setDbValue($row['userlevelid2']);
+        $this->_profile->setDbValue($row['profile']);
     }
 
     // Return a row with default values
@@ -2735,6 +2787,7 @@ class UsuarioList extends Usuario
         $row['foto'] = $this->foto->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['userlevelid2'] = $this->userlevelid2->DefaultValue;
+        $row['profile'] = $this->_profile->DefaultValue;
         return $row;
     }
 
@@ -2800,6 +2853,8 @@ class UsuarioList extends Usuario
         // activo
 
         // userlevelid2
+
+        // profile
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3198,6 +3253,7 @@ class UsuarioList extends Usuario
         $this->foto->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->userlevelid2->AdvancedSearch->load();
+        $this->_profile->AdvancedSearch->load();
     }
 
     // Get export HTML tag

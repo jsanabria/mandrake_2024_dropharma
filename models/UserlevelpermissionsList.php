@@ -1040,6 +1040,11 @@ class UserlevelpermissionsList extends Userlevelpermissions
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fuserlevelpermissionssrch");
+        }
         $filterList = Concat($filterList, $this->userlevelid->AdvancedSearch->toJson(), ","); // Field userlevelid
         $filterList = Concat($filterList, $this->_tablename->AdvancedSearch->toJson(), ","); // Field tablename
         $filterList = Concat($filterList, $this->_permission->AdvancedSearch->toJson(), ","); // Field permission

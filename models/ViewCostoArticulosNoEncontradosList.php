@@ -1022,6 +1022,11 @@ class ViewCostoArticulosNoEncontradosList extends ViewCostoArticulosNoEncontrado
         // Initialize
         $filterList = "";
         $savedFilterList = "";
+
+        // Load server side filters
+        if (Config("SEARCH_FILTER_OPTION") == "Server") {
+            $savedFilterList = Profile()->getSearchFilters("fview_costo_articulos_no_encontradossrch");
+        }
         $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo
         $filterList = Concat($filterList, $this->costo->AdvancedSearch->toJson(), ","); // Field costo
         if ($this->BasicSearch->Keyword != "") {

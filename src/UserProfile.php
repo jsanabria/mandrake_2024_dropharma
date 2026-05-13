@@ -13,7 +13,7 @@ class UserProfile implements \Stringable
     public static $SESSION_CLEANUP_TIME = 60 * 24; // Clean up unused sessions if idle more than 1 day
     public static $SESSION_TIMEOUT = -1;
     public static $MAX_RETRY = 3;
-    public static $RETRY_LOCKOUT = 20;
+    public static $RETRY_LOCKOUT = 5;
     public static $PASSWORD_EXPIRE = 90;
     public static $CONCURRENT_SESSIONS = "Sessions";
     public static $SESSION_ID = "SessionID";
