@@ -129,7 +129,7 @@ class PDF extends FPDF
 	{
 	    $this->SetFont('Courier','B',40);
 	    $this->SetTextColor(230,230,230);
-	    $this->RotatedText(35, 190, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 45);
+	    $this->RotatedText(25, 220, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 45);
 	}
 
 	function RotatedText($x, $y, $txt, $angle)
@@ -383,8 +383,10 @@ class PDF extends FPDF
 	    $this->SetFont('Courier','B',8);
 	    $this->Cell(149, 4, "SUB-TOTAL:", 0, 0, 'R');
 	    $val_subtotal = $exento + $gravado;
-	    $sub_bs = ($moneda != 'Bs.') ? $val_subtotal * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal * $tasa_dia : $val_subtotal);
-		$sub_usd = ($moneda != 'Bs.') ? $val_subtotal : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal : $val_subtotal / $tasa_dia);
+	    // $sub_bs = ($moneda != 'Bs.') ? $val_subtotal * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal * $tasa_dia : $val_subtotal);
+	    $sub_bs = ($moneda != 'Bs.') ? $val_subtotal * $tasa_dia : $val_subtotal;
+		// $sub_usd = ($moneda != 'Bs.') ? $val_subtotal : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal : $val_subtotal / $tasa_dia);
+		$sub_usd = ($moneda != 'Bs.') ? $val_subtotal : $val_subtotal / $tasa_dia;
 	    $this->SetFont('Courier','',8);
 	    $this->Cell(40, 4, number_format($sub_bs, 2, ",", "."), 0, 0, 'R');
 	    $this->Cell(19, 4, number_format($sub_usd, 2, ",", "."), 0, 0, 'R');
@@ -393,8 +395,10 @@ class PDF extends FPDF
 	    // --- TOTAL EXENTO ---
 	    $this->SetFont('Courier','B',8);
 	    $this->Cell(149, 4, "TOTAL EXENTO:", 0, 0, 'R');
-	    $exe_bs = ($moneda != 'Bs.') ? $exento * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $exento * $tasa_dia : $exento);
-		$exe_usd = ($moneda != 'Bs.') ? $exento : ($GLOBALS["moneda_default"] != "Bs." ? $exento : $exento / $tasa_dia);
+	    // $exe_bs = ($moneda != 'Bs.') ? $exento * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $exento * $tasa_dia : $exento);
+	    $exe_bs = ($moneda != 'Bs.') ? $exento * $tasa_dia : $exento;
+		// $exe_usd = ($moneda != 'Bs.') ? $exento : ($GLOBALS["moneda_default"] != "Bs." ? $exento : $exento / $tasa_dia);
+		$exe_usd = ($moneda != 'Bs.') ? $exento : $exento / $tasa_dia;
 	    $this->SetFont('Courier','',8);
 	    $this->Cell(40, 4, number_format($exe_bs, 2, ",", "."), 0, 0, 'R');
 	    $this->Cell(19, 4, number_format($exe_usd, 2, ",", "."), 0, 0, 'R');
@@ -409,7 +413,7 @@ class PDF extends FPDF
 
 $alicuota_dinamica = $GLOBALS["alicuota_dinamica"];
 if ($igtf_status == "S") {
-	$total_con_igtf_bs = $xTotal + $monto_igtf;
+	$total_con_igtf_bs = ($moneda == "Bs.") ? $xTotal + $monto_igtf : $xTotal * $tasa_dia + $monto_igtf;
 	$total_indexado_usd = $total_con_igtf_bs / $tasa_dia;
 	$this->Cell(65, 4, "", 0, 0, 'L');
 } 
@@ -422,9 +426,9 @@ else {
     $monto_total_referencia = $xTotal + $monto_referencia_igtf;
     
 	if($moneda != "Bs.") {
-        $this->Cell(65, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: $moneda " . number_format($monto_referencia_igtf, 2, ",", "."), 0, 0, 'L');
+        $this->Cell(65, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: $moneda " . number_format($monto_total_referencia, 2, ",", "."), 0, 0, 'L');
     } else {
-        $this->Cell(65, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: USD " . number_format($monto_referencia_igtf / $tasa_dia, 2, ",", "."), 0, 0, 'L');
+        $this->Cell(65, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: USD " . number_format($monto_total_referencia / $tasa_dia, 2, ",", "."), 0, 0, 'L');
     }
 
 }
@@ -434,8 +438,10 @@ else {
 	    $this->SetFont('Courier', 'B', 8);
 	    $this->Cell(26, 4, "TC: " . number_format($tasa_dia, 2, ",", "."), 0, 0, 'C');
 	    $this->Cell(58, 4, "TOTAL BASE IMPONIBLE:", 0, 0, 'R');
-	    $grav_bs = ($moneda == 'USD') ? $gravado * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $gravado * $tasa_dia : $gravado);
-	    $grav_usd = ($moneda == 'USD') ? $gravado : ($GLOBALS["moneda_default"] == "USD" ? $gravado : $gravado / $tasa_dia);
+	    // $grav_bs = ($moneda == 'USD') ? $gravado * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $gravado * $tasa_dia : $gravado);
+	    $grav_bs = ($moneda == 'USD') ? $gravado * $tasa_dia : $gravado;
+	    // $grav_usd = ($moneda == 'USD') ? $gravado : ($GLOBALS["moneda_default"] == "USD" ? $gravado : $gravado / $tasa_dia);
+	    $grav_usd = ($moneda == 'USD') ? $gravado : $gravado / $tasa_dia;
 	    $this->SetFont('Courier','',8);
 	    $this->Cell(40, 4, number_format($grav_bs, 2, ",", "."), 0, 0, 'R');
 	    $this->Cell(19, 4, number_format($grav_usd, 2, ",", "."), 0, 0, 'R');
@@ -446,8 +452,10 @@ else {
 	    $this->Cell(91, 4, mb_convert_encoding("Tasa de cambio Publicada por el B.C.V. segun la fecha de emision de esta factura.", "UTF-8"), 0, 0, 'L');
 	    $this->SetFont('Courier','B',8);
 	    $this->Cell(58,4, "IVA:", 0, 0, 'R');
-	    $iva_bs = ($moneda == 'USD') ? $xIVA * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $xIVA * $tasa_dia : $xIVA);
-	    $iva_usd = ($moneda == 'USD') ? $xIVA : ($GLOBALS["moneda_default"] == "USD" ? $xIVA : $xIVA / $tasa_dia);
+	    // $iva_bs = ($moneda == 'USD') ? $xIVA * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $xIVA * $tasa_dia : $xIVA);
+	    $iva_bs = ($moneda == 'USD') ? $xIVA * $tasa_dia : $xIVA;
+	    // $iva_usd = ($moneda == 'USD') ? $xIVA : ($GLOBALS["moneda_default"] == "USD" ? $xIVA : $xIVA / $tasa_dia);
+	    $iva_usd = ($moneda == 'USD') ? $xIVA : $xIVA / $tasa_dia;
 	    $this->SetFont('Courier','',8);
 	    $this->Cell(40, 4, number_format($iva_bs, 2, ",", "."), 0, 0, 'R');
 	    $this->Cell(19, 4, number_format($iva_usd, 2, ",", "."), 0, 0, 'R');
@@ -459,8 +467,10 @@ else {
 	    $this->Cell(110, 4, mb_convert_encoding("IGTF Sujeto a Pago Recibido (Efectivo $) segun Art 1 GO 42339 17/03/2022.", "UTF-8"), 0, 0, 'R');
 	    $this->SetFont('Courier','B',8);
 	    $this->Cell(34, 4, "TOTAL Bs./USD $:", 0, 0, 'R');
-	    $total_final_bs = ($moneda == 'USD') ? $xTotal * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $xTotal * $tasa_dia : $xTotal);
-	    $total_final_usd = ($moneda == 'USD') ? $xTotal : ($GLOBALS["moneda_default"] == "USD" ? $xTotal : $xTotal / $tasa_dia);
+	    // $total_final_bs = ($moneda == 'USD') ? $xTotal * $tasa_dia : ($GLOBALS["moneda_default"] == "USD" ? $xTotal * $tasa_dia : $xTotal);
+	    $total_final_bs = ($moneda == 'USD') ? $xTotal * $tasa_dia : $xTotal;
+	    // $total_final_usd = ($moneda == 'USD') ? $xTotal : ($GLOBALS["moneda_default"] == "USD" ? $xTotal : $xTotal / $tasa_dia);
+	    $total_final_usd = ($moneda == 'USD') ? $xTotal : $xTotal / $tasa_dia;
 	    $this->SetFont('Courier','',8);
 	    $this->Cell(40, 4, number_format($total_final_bs, 2, ",", "."), 0, 0, 'R');
 	    $this->Cell(19, 4, number_format($total_final_usd, 2, ",", "."), 0, 0, 'R');
@@ -471,13 +481,13 @@ else {
             // Línea 1: IGTF 3%
             $this->SetFont('Courier', 'B', 8);
             
-            if($moneda == "USD") {
-	            $this->Cell(149, 4, "I.G.T.F. $alicuota_dinamica% s/Base: " . number_format($monto_base_igtf * $tasa_dia, 2, ",", ".") . " Bs./USD $:", 0, 0, 'R');
-	           	$igtf_bs = ($tasa_dia > 0) ? $monto_igtf * $tasa_dia : 0;
-	            $igtf_usd = $monto_igtf;
+            if($moneda == "Bs.") {
+	            $this->Cell(149, 4, "I.G.T.F. $alicuota_dinamica% s/Base: " . number_format($monto_base_igtf, 2, ",", ".") . " Bs./USD $:", 0, 0, 'R');
+	           	$igtf_bs = ($tasa_dia > 0) ? $monto_igtf : 0;
+	            $igtf_usd = $monto_igtf / $tasa_dia;
             } 
             else {
-	            $this->Cell(149, 4, "I.G.T.F. $alicuota_dinamica% s/Base: " . number_format($monto_base_igtf, 2, ",", ".") . " Bs./USD $:", 0, 0, 'R');
+	            $this->Cell(149, 4, "I.G.T.F. $alicuota_dinamica% s/Base: " . number_format($monto_base_igtf / $tasa_dia, 2, ",", ".") . " Bs./USD $:", 0, 0, 'R');
 	           	$igtf_bs = $monto_igtf;
 	            $igtf_usd = ($tasa_dia > 0) ? $monto_igtf / $tasa_dia : 0;
             }
@@ -491,12 +501,12 @@ else {
             $this->SetFont('Courier', 'B', 9);
             $this->Cell(149, 4, "TOTAL CON IGTF Bs./USD $:", 0, 0, 'R');
             
-            if($moneda == "USD") {
-            	$total_con_igtf_usd = $total_con_igtf_bs;
-            	$total_con_igtf_bs = ($tasa_dia > 0) ? $total_con_igtf_bs * $tasa_dia : 0;
+            if($moneda == "Bs.") {
+            	$total_con_igtf_usd = $total_indexado_usd; //$total_con_igtf_bs;
+            	// $total_con_igtf_bs = $total_indexado_usd; // ($tasa_dia > 0) ? $total_con_igtf_bs * $tasa_dia : 0;
             } 
             else {
-            	$total_con_igtf_usd = ($tasa_dia > 0) ? $total_con_igtf_bs / $tasa_dia : 0;
+            	$total_con_igtf_usd = $total_indexado_usd; // ($tasa_dia > 0) ? $total_con_igtf_bs / $tasa_dia : 0;
             }
 
             $this->Cell(40, 4, number_format($total_con_igtf_bs, 2, ",", "."), 0, 0, 'R');
@@ -586,8 +596,8 @@ if ($moneda != 'Bs.') {
     $val_precio_bs = $x_precio_full * $tasa_dia;
     $val_precio_usd = $x_precio_full; 
 } else {
-    $val_precio_bs = ($GLOBALS["moneda_default"] != "Bs." ? $x_precio_full * $tasa_dia : $x_precio_full);
-    $val_precio_usd = ($GLOBALS["moneda_default"] != "Bs." ? $x_precio_full : $x_precio_full / $tasa_dia);
+    $val_precio_bs = $x_precio_full;
+    $val_precio_usd = $x_precio_full / $tasa_dia;
 }
 
 $pdf->Cell(22, 3, $printE . number_format($val_precio_bs, 2, ",", "."), 0, 0, 'R');
@@ -612,8 +622,12 @@ if ($moneda != 'Bs.') {
     $val_total_bs = $precio_linea_total * $tasa_dia;
     $val_total_usd = $precio_linea_total;
 } else {
+    $val_total_bs = $precio_linea_total;
+    $val_total_usd = $precio_linea_total / $tasa_dia;
+	/*
     $val_total_bs = ($GLOBALS["moneda_default"] != "Bs." ? $precio_linea_total * $tasa_dia : $precio_linea_total);
     $val_total_usd = ($GLOBALS["moneda_default"] != "Bs." ? $precio_linea_total : $precio_linea_total / $tasa_dia);
+    */
 }
 
 $pdf->Cell(23, 3, number_format($val_total_bs, 2, ",", "."), 0, 0, 'R');

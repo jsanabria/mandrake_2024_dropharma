@@ -151,6 +151,12 @@ function Page_Loading()
 // Page Rendering event
 function Page_Rendering()
 {
+    $pagina = strtolower(CurrentPageName());
+
+    // No mostrar alerta en login/logout
+    if (in_array($pagina, ["login.php", "logout.php"])) {
+        return;
+    }
     $sql = "
         SELECT COUNT(*) AS cantidad_documentos
         FROM salidas AS a

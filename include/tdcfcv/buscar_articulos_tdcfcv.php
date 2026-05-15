@@ -27,6 +27,7 @@ $pedido = TdcfcvRequestInt("pedido");
 $tipo_documento = TdcfcvRequestText("tipo_documento", "TDCFCV");
 $hubb = TdcfcvRequestText("hubb", "NO");
 $cliente = TdcfcvRequestInt("cliente");
+$moneda = TdcfcvRequestText("moneda");
 
 $lineByPage = 50;
 
@@ -55,6 +56,7 @@ if ($tarifa <= 0) {
     TdcfcvHtmlResponse('<div class="alert alert-warning mb-0">El cliente no tiene tarifa configurada.</div>');
 }
 
+/*
 $moneda = ExecuteScalar("
     SELECT valor1
     FROM parametro
@@ -63,6 +65,7 @@ $moneda = ExecuteScalar("
     LIMIT 1
 ");
 
+*/
 $moneda = $moneda ?: "Bs.";
 
 $tasa = floatval(ExecuteScalar("
@@ -75,6 +78,7 @@ $tasa = floatval(ExecuteScalar("
 
 $tasa = ($tasa <= 0 ? 1 : $tasa);
 
+/*
 $fact_bs = ExecuteScalar("
     SELECT valor1
     FROM parametro
@@ -87,6 +91,9 @@ if ($fact_bs == "S") {
 } else {
     $tasa = 1;
 }
+*/
+
+if($moneda != "Bs.") $tasa = 1;
 
 $tipo_documento_inventario = ExecuteScalar("
     SELECT valor1

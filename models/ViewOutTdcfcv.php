@@ -805,7 +805,6 @@ class ViewOutTdcfcv extends DbTable
         $this->dias_credito->addMethod("getSelectFilter", fn() => "`codigo` = '007'");
         $this->dias_credito->InputTextType = "text";
         $this->dias_credito->Raw = true;
-        $this->dias_credito->Required = true; // Required field
         $this->dias_credito->setSelectMultiple(false); // Select one
         $this->dias_credito->UsePleaseSelect = true; // Use PleaseSelect by default
         $this->dias_credito->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
@@ -1402,7 +1401,6 @@ class ViewOutTdcfcv extends DbTable
         );
         $this->asesor_asignado->addMethod("getSelectFilter", fn() => "IFNULl(asesor, 0) > 0");
         $this->asesor_asignado->InputTextType = "text";
-        $this->asesor_asignado->Required = true; // Required field
         $this->asesor_asignado->setSelectMultiple(false); // Select one
         $this->asesor_asignado->UsePleaseSelect = true; // Use PleaseSelect by default
         $this->asesor_asignado->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
@@ -3694,7 +3692,28 @@ class ViewOutTdcfcv extends DbTable
 
         // moneda
         $this->moneda->setupEditAttributes();
-        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+        $curVal = strval($this->moneda->CurrentValue);
+        if ($curVal != "") {
+            $this->moneda->EditValue = $this->moneda->lookupCacheOption($curVal);
+            if ($this->moneda->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                    $this->moneda->EditValue = $this->moneda->displayValue($arwrk);
+                } else {
+                    $this->moneda->EditValue = $this->moneda->CurrentValue;
+                }
+            }
+        } else {
+            $this->moneda->EditValue = null;
+        }
 
         // lista_pedido
         $this->lista_pedido->setupEditAttributes();

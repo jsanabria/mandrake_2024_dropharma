@@ -118,7 +118,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
   </div>
 
   <!-- Fabricante (ajustado como Transferencista) -->
-  <div class="col-sm-2">
+  <div class="col-sm-2" style="display:none;>
     <?php
     echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();" readonly="yes">
     <small>% Fabricante</small>';
@@ -126,20 +126,24 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
   </div>
 
   <!-- Moneda -->
-  <div class="col-sm-1">
-    <!-- <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()"> -->
-    <select id="moneda" name="moneda" class="form-select form-select-sm" 
-        onfocus="this.defaultIndex=this.selectedIndex;" 
-        onchange="this.selectedIndex=this.defaultIndex;">
-      <?php
-      $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-      $rows = ExecuteRows($sql);
-      foreach ($rows as $value) {
-        echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-      }
-      ?>
-    </select>
-  </div>
+    <div class="col-sm-1">
+        <select id="moneda" name="moneda" class="form-select form-select-sm"
+            <?php if (intval($pedido) == 0) { ?>
+                onchange="js:RefreshMonedaTasa()"
+            <?php } else { ?>
+                onfocus="this.defaultIndex=this.selectedIndex;"
+                onchange="this.selectedIndex=this.defaultIndex;"
+            <?php } ?>
+        >
+        <?php
+        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
+        $rows = ExecuteRows($sql);
+        foreach ($rows as $value) {
+            echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"] == $moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
+        }
+        ?>
+        </select>
+    </div>
 
   <!-- Tasa (ahora con label abajo) -->
   <div class="col-sm-1">
@@ -402,6 +406,7 @@ loadjs.ready(["jquery"], function () {
                     '<i class="fa-solid fa-cart-shopping text-primary" style="cursor:pointer;" onclick="js:insertar(' + i + ')"></i>'
                 );
             }
+            controlarMoneda();
         }).fail(function (xhr, status, errorThrown) {
             console.log(xhr.responseText);
             alertMsg("Error de conexión al insertar: " + errorThrown);
@@ -661,6 +666,8 @@ loadjs.ready(["jquery"], function () {
         formData.append("tipo_documento", getVal("tipo_documento"));
         formData.append("descuentoG", getVal("PorDesAct"));
         formData.append("hubb", $("#hubb").is(":checked") ? "SI" : "NO");
+        formData.append("moneda", getVal("moneda"));
+        
 
         console.log("Enviando a buscar_articulos_tdcfcv.php");
 
@@ -962,6 +969,27 @@ loadjs.ready(["jquery"], function () {
 
         myCalc(i);
     };
+
+    window.controlarMoneda = function() {
+        const pedido = parseInt(document.getElementById("pedido")?.value || 0);
+        const moneda = document.getElementById("moneda");
+
+        if (!moneda) return;
+
+        moneda.onchange = null; // limpiar eventos anteriores
+
+        if (pedido > 0) {
+            moneda.dataset.original = moneda.value;
+
+            moneda.onchange = function () {
+                this.value = this.dataset.original;
+            };
+        } else {
+            moneda.onchange = function () {
+                RefreshMonedaTasa();
+            };
+        }
+    };   
 
     $(document).on("keyup change", "#articulo", function () {
         console.log("Buscando artículo:", $(this).val());

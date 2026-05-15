@@ -357,7 +357,7 @@ try {
     TdcfcvJsonOk([
         "pedido" => (string)$pedido,
         "id_item" => (string)$id_item,
-        "total" => (string)($esBs ? round(($costo_final / $tasa_usd), 2) : round($total_final, 2)),
+        "total" => (string)($esBs ? round(($total_final / $tasa_usd), 2) : round($total_final, 2)),
         "total_usd" => (string)($esBs ? round($total_final, 2) : round(($total_final * $tasa_usd), 2)),
         "monto_sin_descuento" => (string)($esBs ? round(($monto_sin_descuento / $tasa_usd), 2) : round($monto_sin_descuento, 2)),
         "total_usd_sin_descuento" => (string)($esBs ? round($monto_sin_descuento, 2) : round(($monto_sin_descuento * $tasa_usd), 2)),

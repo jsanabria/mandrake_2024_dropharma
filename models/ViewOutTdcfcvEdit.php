@@ -1994,6 +1994,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
 
             // moneda
             $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
 
             // estatus
             $this->estatus->HrefValue = "";
@@ -2092,31 +2093,28 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
 
             // moneda
             $this->moneda->setupEditAttributes();
-            $curVal = trim(strval($this->moneda->CurrentValue));
+            $curVal = strval($this->moneda->CurrentValue);
             if ($curVal != "") {
-                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-            } else {
-                $this->moneda->ViewValue = $this->moneda->Lookup !== null && is_array($this->moneda->lookupOptions()) && count($this->moneda->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->moneda->ViewValue !== null) { // Load from cache
-                $this->moneda->EditValue = array_values($this->moneda->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $this->moneda->CurrentValue, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $this->moneda->EditValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->EditValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->EditValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->EditValue = $this->moneda->CurrentValue;
+                    }
                 }
-                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                $sqlWrk = $this->moneda->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->moneda->EditValue = $arwrk;
+            } else {
+                $this->moneda->EditValue = null;
             }
-            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
             // estatus
             $this->estatus->setupEditAttributes();
@@ -2247,6 +2245,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
 
             // moneda
             $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
 
             // estatus
             $this->estatus->HrefValue = "";
@@ -2506,9 +2505,6 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         // monto_base_igtf
         $this->monto_base_igtf->setDbValueDef($rsnew, $this->monto_base_igtf->CurrentValue, $this->monto_base_igtf->ReadOnly);
 
-        // moneda
-        $this->moneda->setDbValueDef($rsnew, $this->moneda->CurrentValue, $this->moneda->ReadOnly);
-
         // dias_credito
         $this->dias_credito->setDbValueDef($rsnew, $this->dias_credito->CurrentValue, $this->dias_credito->ReadOnly);
 
@@ -2534,9 +2530,6 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         }
         if (isset($row['monto_base_igtf'])) { // monto_base_igtf
             $this->monto_base_igtf->CurrentValue = $row['monto_base_igtf'];
-        }
-        if (isset($row['moneda'])) { // moneda
-            $this->moneda->CurrentValue = $row['moneda'];
         }
         if (isset($row['dias_credito'])) { // dias_credito
             $this->dias_credito->CurrentValue = $row['dias_credito'];

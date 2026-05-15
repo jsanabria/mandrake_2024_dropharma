@@ -67,7 +67,6 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "igtf": <?= $Page->igtf->toClientList($Page) ?>,
-            "moneda": <?= $Page->moneda->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
         })
@@ -302,44 +301,9 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
         <label id="elh_view_out_tdcfcv_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->moneda->cellAttributes() ?>>
 <span id="el_view_out_tdcfcv_moneda">
-    <select
-        id="x_moneda"
-        name="x_moneda"
-        class="form-select ew-select<?= $Page->moneda->isInvalidClass() ?>"
-        <?php if (!$Page->moneda->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcfcvedit_x_moneda"
-        <?php } ?>
-        data-table="view_out_tdcfcv"
-        data-field="x_moneda"
-        data-page="2"
-        data-value-separator="<?= $Page->moneda->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>"
-        <?= $Page->moneda->editAttributes() ?>>
-        <?= $Page->moneda->selectOptionListHtml("x_moneda") ?>
-    </select>
-    <?= $Page->moneda->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
-<?= $Page->moneda->Lookup->getParamTag($Page, "p_x_moneda") ?>
-<?php if (!$Page->moneda->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fview_out_tdcfcvedit", function() {
-    var options = { name: "x_moneda", selectId: "fview_out_tdcfcvedit_x_moneda" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcfcvedit.lists.moneda?.lookupOptions.length) {
-        options.data = { id: "x_moneda", form: "fview_out_tdcfcvedit" };
-    } else {
-        options.ajax = { id: "x_moneda", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.moneda.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
+<span<?= $Page->moneda->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->moneda->getDisplayValue($Page->moneda->EditValue) ?></span></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_moneda" data-hidden="1" data-page="2" name="x_moneda" id="x_moneda" value="<?= HtmlEncode($Page->moneda->CurrentValue) ?>">
 </span>
 </div></div>
     </div>

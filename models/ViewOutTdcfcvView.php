@@ -2070,10 +2070,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
                     $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
                     break;
                 case "NC":
-                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                    // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
                     break;
                 case "ND":
-                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                    // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
                     break;
             }
         }

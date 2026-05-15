@@ -1,7 +1,10 @@
-<ew-language date="2026/5/12" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/5/15" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1443">
+      <phrase id="menutext" value="reporte seniat ne" />
+    </menu>
     <menu id="19">
       <phrase id="menutext" value="Maestros" />
     </menu>
@@ -7014,6 +7017,30 @@
     </table>
     <table id="ya_fue_procesado">
       <phrase id="tblcaption" value="Nota de Entrega" />
+    </table>
+    <table id="reporte_seniat_ne">
+      <phrase id="tblcaption" value="reporte seniat ne" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="periodo">
+        <phrase id="fldcaption" value="periodo" />
+      </field>
+      <field id="cantidad">
+        <phrase id="fldcaption" value="cantidad" />
+      </field>
+      <field id="monto_total">
+        <phrase id="fldcaption" value="monto total" />
+      </field>
+      <field id="email_destino">
+        <phrase id="fldcaption" value="email destino" />
+      </field>
+      <field id="enviado_en">
+        <phrase id="fldcaption" value="enviado en" />
+      </field>
+      <field id="usuario">
+        <phrase id="fldcaption" value="usuario" />
+      </field>
     </table>
   </project>
 </ew-language>
