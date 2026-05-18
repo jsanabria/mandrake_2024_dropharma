@@ -193,6 +193,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->entregado->Visible) { // entregado ?>
+    <tr id="r_entregado"<?= $Page->entregado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcfcv_entregado"><?= $Page->entregado->caption() ?></span></td>
+        <td data-name="entregado"<?= $Page->entregado->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_entregado" data-page="1">
+<span<?= $Page->entregado->viewAttributes() ?>>
+<?= $Page->entregado->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->impreso->Visible) { // impreso ?>
     <tr id="r_impreso"<?= $Page->impreso->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcfcv_impreso"><?= $Page->impreso->caption() ?></span></td>

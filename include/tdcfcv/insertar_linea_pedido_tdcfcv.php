@@ -8,6 +8,7 @@ $pedido = TdcfcvRequestInt("pedido");
 $cliente = TdcfcvRequestInt("cliente");
 $precioFull = TdcfcvRequestFloat("precioFull");
 $descuento = TdcfcvRequestFloat("descuento");
+$descuento2 = TdcfcvRequestFloat("descuento2");
 $precio = TdcfcvRequestFloat("precio");
 $moneda = TdcfcvRequestText("moneda", "Bs.");
 $total = TdcfcvRequestFloat("total");
@@ -57,6 +58,10 @@ if ($precioFull <= 0) {
 
 if ($descuento == 100) {
     TdcfcvJsonError("El descuento del item no puede ser 100%.");
+}
+
+if ($descuento2 == 100) {
+    TdcfcvJsonError("El descuento fabricante del item no puede ser 100%.");
 }
 
 if ($descTransferencista == 100) {
@@ -257,12 +262,12 @@ try {
             (id, tipo_documento, id_documento, fabricante, articulo, almacen,
              cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida,
              cantidad_movimiento, costo_unidad, costo, precio_unidad, precio,
-             alicuota, descuento, precio_unidad_sin_desc, newdata, lote, fecha_vencimiento)
+             alicuota, descuento, descuento2, precio_unidad_sin_desc, newdata, lote, fecha_vencimiento)
         VALUES
             (NULL, '{$tipo_documento}', {$pedido}, {$fabricante}, {$articulo}, '{$almacenSql}',
              {$cantidad}, '{$unidad_medida}', {$cantidad_unidad},
              {$cantidad_movimiento}, {$costo_unidad}, {$costo_total_item}, {$precio}, {$total},
-             {$alicuota_item}, {$descuento}, {$precioFull}, 'S', '{$loteSql}', '{$venceSql}')
+             {$alicuota_item}, {$descuento}, {$descuento2}, {$precioFull}, 'S', '{$loteSql}', '{$venceSql}')
     ");
 
     $id_item = intval($conn->lastInsertId());

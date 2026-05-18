@@ -71,13 +71,13 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				(id, tipo_documento, username, fecha,
 				cliente, nro_documento,
 				nota, estatus, moneda, tasa_dia,
-				id_documento_padre, asesor, documento, dias_credito, consignacion, nro_control, asesor_asignado)
+				id_documento_padre, asesor, documento, dias_credito, consignacion, nro_control, asesor_asignado, descuento, descuento2)
 			SELECT 
 				NULL, 'TDCFCV', '" . CurrentUserName() . "', '" . date("Y-m-d H:i:s") . "',
 				cliente, NULL AS factura,
 				'$nota' AS nota, 
 				'NUEVO' AS estatus, '$moneda', $tasa_usd, 
-                id, asesor, 'FC', dias_credito, 'S', NULL, asesor_asignado 
+                id, asesor, 'FC', dias_credito, 'S', NULL, asesor_asignado, IFNULL(descuento, 0), IFNULL(descuento2, 0)  
 			FROM salidas 
 			WHERE id = '$id';";
 	ExecuteScalar($sql);
@@ -99,13 +99,33 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 			 		$cantd = (-1) * intval($value);
 
 					$sql = "SELECT 
-								(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
-								((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS($cantd)) AS costo,
-								((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) - ((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * (IFNULL(a.descuento, 0)/100))) * $tasa AS precio_unidad, 
-								(((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) - ((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * (IFNULL(a.descuento, 0)/100))) * $tasa) * ABS($cantd) AS precio, 
-								(SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * $tasa AS precio_unidad_sin_desc
-								FROM entradas_salidas AS a 
-							WHERE a.id = $idd;"; 
+                                x.costo_unidad,
+                                x.costo,
+                                (
+                                    (x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100)))
+                                    -
+                                    ((x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))) * (IFNULL(x.descuento2, 0) / 100))
+                                ) * $tasa AS precio_unidad,
+                                (
+                                    (
+                                        (x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100)))
+                                        -
+                                        ((x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))) * (IFNULL(x.descuento2, 0) / 100))
+                                    ) * $tasa
+                                ) * ABS($cantd) AS precio,
+                                x.precio_base * $tasa AS precio_unidad_sin_desc
+                            FROM (
+                                SELECT 
+                                    a.articulo,
+                                    IFNULL(a.descuento, 0) AS descuento,
+                                    IFNULL(a.descuento2, 0) AS descuento2,
+                                    (SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
+                                    ((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS($cantd)) AS costo,
+                                    (SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 1) AS precio_base
+                                FROM entradas_salidas AS a 
+                                WHERE a.id = $idd
+                            ) AS x;";
+
 				    $rows100 = ExecuteRow($sql);
 				    $xcosto_unidad = floatval($rows100["costo_unidad"]);
 				    $xcosto = floatval($rows100["costo"]);
@@ -118,7 +138,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 								cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 								cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 								costo_unidad, costo, cantidad_movimiento_consignacion, id_consignacion,
-								id_compra, descuento, precio_unidad_sin_desc)
+								id_compra, descuento, descuento2, precio_unidad_sin_desc)
 							SELECT 
 								NULL, 'TDCFCV', '$factura_id', 
 								a.fabricante, a.articulo, a.almacen, 
@@ -128,7 +148,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 								$xprecio AS precio, a.alicuota,
 								$xcosto_unidad AS costo_unidad,
 								$xcosto AS costo, 
-								0, a.id, a.id_compra, IFNULL(a.descuento, 0) AS descuento, $xprecio_unidad_sin_desc AS precio_unidad_sin_desc  
+								0, a.id, a.id_compra, IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, $xprecio_unidad_sin_desc AS precio_unidad_sin_desc 
 							FROM entradas_salidas AS a 
 							WHERE a.id = $idd;"; 
 

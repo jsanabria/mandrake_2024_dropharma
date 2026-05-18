@@ -77,7 +77,7 @@ $sql = "SELECT
             descuento,
             descuento2,
             IFNULL(entregado, 'N') AS formato_usd,
-            impreso
+            impreso, IFNULL(doc_afe, 0) AS doc_afe  
         FROM salidas
         WHERE id = '{$id_invoice}'
         LIMIT 1";
@@ -100,6 +100,7 @@ $GLOBALS["moneda"] = $row["moneda"] ?: "USD";
 $GLOBALS["dias_credito"] = $row["dias_credito"];
 $GLOBALS["fec_venc"] = $row["fec_venc"];
 $GLOBALS["doc_afectado"] = $row["doc_afectado"];
+$GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["impreso"] = $row["impreso"];
 
 if (trim($GLOBALS["nro_documento"] ?? "") != "") {
@@ -174,11 +175,15 @@ class PDF extends FPDF
         $this->SetFont('Arial', 'B', 34);
         $this->SetTextColor(225, 225, 225);
         $this->RotatedText(75, 115, enc_pdf("SIN DERECHO A CRÉDITO FISCAL"), 25);
+
         $this->SetTextColor(0, 0, 0);
     }
 
     function Header()
     {
+        if ($GLOBALS["impreso"] == "S") {
+            $this->MarcaDeAgua();
+        }
         require("../include/connect2.php");
 
         $sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 1";
@@ -270,7 +275,7 @@ class PDF extends FPDF
         $this->SetFont('Arial', '', 7);
         $this->MultiCell(160, 4, enc_pdf($direccion_cliente), 0, 'L');
 
-        $this->Ln();
+        $this->Ln(1);
         $this->Cell(10, 4);
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(20, 4, 'TELEFONOS:', 0, 0, 'L');
@@ -292,9 +297,51 @@ class PDF extends FPDF
         $this->Cell(15, 4, number_format($GLOBALS["tasa_dia"], 4, ".", ","), 0, 0, 'R');
         $this->SetFont('Arial', '', 7);
 
+        if($GLOBALS["doc_afe"] != 0 && ($GLOBALS["documento"] == "NC" || $GLOBALS["documento"] == "ND")) {
+
+            $sql = "SELECT 
+                        DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha,
+                        nro_documento,
+                        total
+                    FROM salidas
+                    WHERE id = " . intval($GLOBALS["doc_afe"]) . "
+                    LIMIT 1";
+
+            $rs = mysqli_query($link, $sql);
+            $rowDoc = mysqli_fetch_array($rs);
+
+            $docAfectado = $rowDoc["nro_documento"] ?? $GLOBALS["doc_afectado"];
+            $fechaAfectado = $rowDoc["fecha"] ?? "";
+            $montoAfectado = floatval($rowDoc["total"] ?? 0);
+
+            $this->Ln(3);
+
+            $this->Cell(4, 4);
+
+            $this->SetFont('Courier', 'B', 8);
+            $this->Cell(32, 4, 'Doc. Afectado:', 0, 0, 'R');
+
+            $this->SetFont('Courier', '', 8);
+            $this->Cell(28, 4, $docAfectado, 0, 0, 'L');
+
+            $this->SetFont('Courier', 'B', 8);
+            $this->Cell(18, 4, 'Fecha:', 0, 0, 'R');
+
+            $this->SetFont('Courier', '', 8);
+            $this->Cell(22, 4, $fechaAfectado, 0, 0, 'L');
+
+            $this->SetFont('Courier', 'B', 8);
+            $this->Cell(18, 4, 'Monto:', 0, 0, 'R');
+
+            $this->SetFont('Courier', '', 8);
+            $this->Cell(28, 4, number_format($montoAfectado, 2, ",", "."), 0, 0, 'L');
+
+            $this->Ln(1);
+        }
+
         require("../include/desconnect.php");
 
-        $this->Ln();
+        $this->Ln(3);
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(10, 4);
         $this->Cell(15, 4, "CANT", "B", 0, 'C');
@@ -304,10 +351,6 @@ class PDF extends FPDF
         $this->Cell(20, 4, "TOT. Bs.", "B", 0, 'R');
         $this->Cell(15, 4, "TOT. " . $GLOBALS["moneda"], "B", 0, 'R');
         $this->Ln(5);
-
-        if ($GLOBALS["impreso"] == "S") {
-            $this->MarcaDeAgua();
-        }
     }
 
     function Footer()

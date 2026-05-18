@@ -1,30 +1,14 @@
 <?php
 /**** Tasa del día ****/
-$sql = "SELECT descuento, tasa_dia FROM salidas WHERE tipo_documento = '$tipo_documento' AND id = $id;"; 
+$sql = "SELECT IFNULL(descuento,0) AS descuento, IFNULL(descuento2,0) AS descuento2, tasa_dia 
+        FROM salidas 
+        WHERE tipo_documento = '$tipo_documento' AND id = $id;";
+
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $descuento = floatval($row["descuento"]);
+$descuento2 = floatval($row["descuento2"]);
 $tasa = floatval($row["tasa_dia"]);
-
-/**** Totalizo Movimiento ****/
-$sql = "SELECT
-			SUM(precio) AS precio, 
-			SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) AS exento, 
-			SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) AS gravado, 
-			SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100)) AS iva, 
-			SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) + SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) + (SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100))) AS total 
-		FROM entradas_salidas
-		WHERE tipo_documento = '$tipo_documento' AND 
-			id_documento = '$id'"; 
-$rs = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($rs);
-$exento = floatval($row["exento"]);
-$gravado = floatval($row["gravado"]);
-$monto_sin_descuento = floatval($row["precio"]);
-$precio = floatval($row["exento"]) + floatval($row["gravado"]);
-$iva = floatval($row["iva"]);
-$total = floatval($row["total"]);
-
 
 /*** Indico que alicuota iva se coloca en el encabezado del documento ***/
 $sql = "SELECT 
@@ -50,6 +34,29 @@ else {
 	if($row = mysqli_fetch_array($rs)) $alicuota = floatval($row["alicuota"]);
 	else $alicuota = 0;
 }
+
+/**** Totalizo Movimiento ****/
+$sql = "SELECT
+			SUM(precio) AS precio, 
+			SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) AS exento, 
+			SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) AS gravado, 
+			SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100)) AS iva, 
+			SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * ($descuento/100)), 0)) + SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100)))) + (SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * ($descuento/100))) * (IFNULL(alicuota,0)/100))) AS total 
+		FROM entradas_salidas
+		WHERE tipo_documento = '$tipo_documento' AND 
+			id_documento = '$id'"; 
+$rs = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($rs);
+$exento = floatval($row["exento"]);
+$gravado = floatval($row["gravado"]);
+
+$exento = $exento - ($exento * ($descuento2 / 100));
+$gravado = $gravado - ($gravado * ($descuento2 / 100));
+
+$monto_sin_descuento = floatval($row["precio"]);
+$precio = $exento + $gravado;
+$iva = $gravado * ($alicuota / 100);
+$total = $precio + $iva;
 
 
 $sql = "UPDATE salidas 

@@ -1788,6 +1788,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->dias_credito->HrefValue = "";
             $this->dias_credito->TooltipValue = "";
 
+            // entregado
+            $this->entregado->HrefValue = "";
+            $this->entregado->TooltipValue = "";
+
             // pagado
             $this->pagado->HrefValue = "";
             $this->pagado->TooltipValue = "";

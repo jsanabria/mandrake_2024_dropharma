@@ -45,10 +45,17 @@ $tipo_documento_inventario = 'TDCNET';
 $rs = mysqli_query($link, $sql);
 if($row = mysqli_fetch_array($rs)) $tipo_documento_inventario = $row["tipo_documento"];
 
-$sql = "SELECT descuento, fabricante FROM articulo WHERE id = $articulo;";
+$sql = "SELECT 
+            a.descuento,
+            IFNULL(b.descuento, 0) AS descuento2,
+            a.fabricante
+        FROM articulo AS a
+        LEFT JOIN fabricante AS b ON b.Id = a.fabricante
+        WHERE a.id = $articulo;";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $descuento = floatval($row["descuento"]);
+$descuento2 = floatval($row["descuento2"]);
 $fabricante = $row["fabricante"];
 
 $sql = "SELECT cantidad FROM unidad_medida WHERE codigo = '$un';";
@@ -82,7 +89,11 @@ $tarifa = $row["tarifa"];
 /*** Consultar precio según tarifa y cliente ***/
 $sql = "SELECT 
 			a.precio AS precio_ful, 
-			(a.precio - (a.precio * ($descuento/100))) AS precio 
+			ROUND((
+				(a.precio - (a.precio * ($descuento / 100)))
+				-
+				((a.precio - (a.precio * ($descuento / 100))) * ($descuento2 / 100))
+			), 2) AS precio
 		FROM tarifa_articulo AS a WHERE a.tarifa = $tarifa AND a.articulo = $articulo;";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -152,21 +163,21 @@ if(trim($fecha_vencimiento) === "") {
 	$sql = "INSERT INTO entradas_salidas 
 				(id, tipo_documento, id_documento, 
 				fabricante, articulo, lote, almacen, cantidad_articulo, costo_unidad, costo, 
-				articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, precio_unidad, precio, alicuota, descuento, precio_unidad_sin_desc) 
+				articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, precio_unidad, precio, alicuota, descuento, descuento2, precio_unidad_sin_desc) 
 			VALUES 
 				(NULL, '$tipo_documento', '$id', 
 				'$fabricante', '$articulo', '$lote', '$almacen', '$cnt', $costo_unidad, $costo, 
-				'$un', '$cantidad_um', '$asignado', '$precio_unidad', '$precio', '$alicuota', $descuento, $precio_ful);"; 	
+				'$un', '$cantidad_um', '$asignado', '$precio_unidad', '$precio', '$alicuota', $descuento, $descuento2, $precio_ful);"; 	
 } 
 else {
 	$sql = "INSERT INTO entradas_salidas 
 				(id, tipo_documento, id_documento, 
 				fabricante, articulo, lote, fecha_vencimiento, almacen, cantidad_articulo, costo_unidad, costo, 
-				articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, precio_unidad, precio, alicuota, descuento, precio_unidad_sin_desc) 
+				articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, precio_unidad, precio, alicuota, descuento, descuento2, precio_unidad_sin_desc) 
 			VALUES 
 				(NULL, '$tipo_documento', '$id', 
 				'$fabricante', '$articulo', '$lote', '$fecha_vencimiento', '$almacen', '$cnt', $costo_unidad, $costo, 
-				'$un', '$cantidad_um', '$asignado', '$precio_unidad', '$precio', '$alicuota', $descuento, $precio_ful);"; 	
+				'$un', '$cantidad_um', '$asignado', '$precio_unidad', '$precio', '$alicuota', $descuento, $descuento2, $precio_ful);"; 	
 }
 mysqli_query($link, $sql);
 

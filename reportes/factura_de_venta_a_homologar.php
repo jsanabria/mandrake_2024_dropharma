@@ -44,7 +44,7 @@ $sql = "SELECT
 			date_format(fecha, '%Y/%m/%d') AS fech, cliente, nro_documento, nro_control, tipo_documento, estatus, 
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito, 
 			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado, 
-			descuento, descuento2, moneda, impreso   
+			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe   
 		FROM salidas where id = '$id_invoice';"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -59,6 +59,7 @@ $GLOBALS["documento"] = $row["documento"];
 $GLOBALS["dias_credito"] = $row["dias_credito"];
 $GLOBALS["fec_venc"] = $row["fec_venc"];
 $GLOBALS["doc_afectado"] = $row["doc_afectado"];
+$GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["moneda"] = $row["moneda"];
 $GLOBALS["impreso"] = $row["impreso"];
 
@@ -130,6 +131,8 @@ class PDF extends FPDF
 	    $this->SetFont('Courier','B',40);
 	    $this->SetTextColor(230,230,230);
 	    $this->RotatedText(25, 220, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 45);
+
+	    $this->SetTextColor(0, 0, 0);
 	}
 
 	function RotatedText($x, $y, $txt, $angle)
@@ -149,6 +152,10 @@ class PDF extends FPDF
 	// Cabecera de p?gina
 	function Header()
 	{
+		if ($GLOBALS["impreso"] == "S") {
+		    $this->MarcaDeAgua();
+		}
+
 		// Consulto datos de la compa??a 
 		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
@@ -232,16 +239,6 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$this->Ln();
 		
-		/*
-		if(trim($GLOBALS["doc_afectado"]) != "" and ($GLOBALS["documento"]=="NC" or $GLOBALS["documento"]=="ND")) {
-			$this->Cell(150, 3);
-			$this->SetFont('Courier','B',8);
-			$this->Cell(30, 3,'Documento Afectado: ','0','0','R');
-			$this->SetFont('Courier','',8);
-			$this->Cell(30, 3, $GLOBALS["doc_afectado"], 0, 0, 'L');
-		} 
-		*/
-		
 
 		$this->Cell(40, 3);
 		$this->Cell(110, 3, mb_convert_encoding(substr($razon_social, 55, strlen($razon_social)), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
@@ -288,14 +285,56 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$this->Cell(5,4,$GLOBALS["dias_credito"] . " " . $GLOBALS["fec_venc"],'0','0','L');
 
+		$this->Ln(2);
 		if ($GLOBALS["impreso"] == "S") {
-			$this->Ln();
 		    $this->SetFont('Courier','B',8);
 		    $this->Cell(0, 4, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 0, 1, 'C');
 		}
 
+
+		if($GLOBALS["doc_afe"] != 0 && ($GLOBALS["documento"] == "NC" || $GLOBALS["documento"] == "ND")) {
+
+		    $sql = "SELECT 
+		                DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha,
+		                nro_documento,
+		                total
+		            FROM salidas
+		            WHERE id = " . intval($GLOBALS["doc_afe"]) . "
+		            LIMIT 1";
+
+		    $rs = mysqli_query($link, $sql);
+		    $rowDoc = mysqli_fetch_array($rs);
+
+		    $docAfectado = $rowDoc["nro_documento"] ?? $GLOBALS["doc_afectado"];
+		    $fechaAfectado = $rowDoc["fecha"] ?? "";
+		    $montoAfectado = floatval($rowDoc["total"] ?? 0);
+
+		    $this->Ln(1);
+
+		    $this->Cell(1, 4);
+
+		    $this->SetFont('Courier', 'B', 8);
+		    $this->Cell(32, 4, 'Doc. Afectado:', 0, 0, 'R');
+
+		    $this->SetFont('Courier', '', 8);
+		    $this->Cell(28, 4, $docAfectado, 0, 0, 'L');
+
+		    $this->SetFont('Courier', 'B', 8);
+		    $this->Cell(18, 4, 'Fecha:', 0, 0, 'R');
+
+		    $this->SetFont('Courier', '', 8);
+		    $this->Cell(22, 4, $fechaAfectado, 0, 0, 'L');
+
+		    $this->SetFont('Courier', 'B', 8);
+		    $this->Cell(18, 4, 'Monto:', 0, 0, 'R');
+
+		    $this->SetFont('Courier', '', 8);
+		    $this->Cell(28, 4, number_format($montoAfectado, 2, ",", "."), 0, 0, 'L');
+
+		    $this->Ln();
+		}
+		
 		require("../include/desconnect.php");
-		$this->Ln();
 
 		$this->SetFont('Courier','B',8);
 		$this->Cell(5, 5);
@@ -315,10 +354,6 @@ class PDF extends FPDF
 		$this->Cell(15, 5, "TOTAL $", 1, 0, 'R');
 		$this->SetFont('Courier','',8);
 		$this->Ln(5);
-
-		if ($GLOBALS["impreso"] == "S") {
-		    $this->MarcaDeAgua();
-		}
 	}
 	
 	// Pie de p?gina

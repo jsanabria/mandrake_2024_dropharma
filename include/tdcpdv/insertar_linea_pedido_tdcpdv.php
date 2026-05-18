@@ -4,7 +4,8 @@ include "../connect.php";
 $pedido = intval($_REQUEST["pedido"]); 
 $cliente = $_REQUEST["cliente"]; 
 $precioFull = $_REQUEST["precioFull"]; 
-$descuento = $_REQUEST["descuento"]; 
+$descuento = isset($_REQUEST["descuento"]) ? floatval($_REQUEST["descuento"]) : 0;
+$descuento2 = isset($_REQUEST["descuento2"]) ? floatval($_REQUEST["descuento2"]) : 0;
 $precio = $_REQUEST["precio"]; 
 $moneda = $_REQUEST["moneda"]; 
 $cantidad = intval($_REQUEST["cantidad"]); 
@@ -132,12 +133,12 @@ $sql = "INSERT INTO entradas_salidas
 			(id, tipo_documento, id_documento, fabricante, articulo, 
 			almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, 
 			costo_unidad, costo, 
-			precio_unidad, precio, alicuota, descuento, precio_unidad_sin_desc, newdata)
+			precio_unidad, precio, alicuota, descuento, descuento2, precio_unidad_sin_desc, newdata)
 		VALUES 
 			(NULL, '$tipo_documento', $pedido, $fabricante, $articulo, 
 			'$almacen', $cantidad, '$unidad_medida', $cantidad_unidad_medida, $cantidad_movimiento, 
 			$costo_unidad, $costo, 
-			$precio, $total, $alicuota, $descuento, $precioFull, 'S');"; 
+			$precio, $total, $alicuota, $descuento, $descuento2, $precioFull, 'S');"; 
 // die(json_encode($sql, JSON_UNESCAPED_UNICODE));
 mysqli_query($link, $sql);
 

@@ -8,6 +8,7 @@ $username = $_REQUEST["username"];
 
 $moneda = $_REQUEST["moneda"]; 
 $tasa_usd = floatval($_REQUEST["tasa_usd"]); 
+$tasa_usd = ($tasa_usd <= 0 ? 1 : $tasa_usd);
 
 $tipo_documento = "TDCPDV";
 /*
@@ -78,15 +79,15 @@ if($row = mysqli_fetch_array($rs)) {
 	$total_usd = round((substr(strtolower(trim($moneda)), 0, 3)=="bs." ? ($total/$tasa_usd) : $total), 2);
 
 	$sql = "UPDATE salidas 
-		    SET
-		      monto_total = $precio,
-		      alicuota_iva = $alicuota, 
-		      iva = $iva,
-		      total = $total, 
-		      tasa_dia = $tasa_usd, 
-		      monto_usd = $total_usd, 
-			  monto_sin_descuento = $monto_sin_descuento 
-		    WHERE id = '$pedido'";
+			SET
+			monto_total = $precio,
+			alicuota_iva = $xalicuota, 
+			iva = $iva,
+			total = $total, 
+			tasa_dia = $tasa_usd, 
+			monto_usd = $total_usd, 
+			monto_sin_descuento = $monto_sin_descuento 
+			WHERE id = '$pedido'";
 	mysqli_query($link, $sql);
 
 

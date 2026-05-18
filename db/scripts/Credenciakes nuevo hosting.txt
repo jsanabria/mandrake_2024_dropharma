@@ -2,3 +2,13 @@ https://caura.ryz.tepuyserver.net:2083/cpsess4210376576/frontend/jupiter/team-ma
 
 usuario: dropharm
 clave: Caracas123.*
+
+02127828820
+
+ALTER TABLE `entradas_salidas`
+	ADD COLUMN `descuento2` DECIMAL(6,2) NULL DEFAULT NULL AFTER `descuento`;
+
+
+ALTER TABLE `pedidos_detalles_online`
+	ADD COLUMN `descuento2` DECIMAL(6,2) NULL DEFAULT NULL AFTER `descuento`;
+

@@ -100,23 +100,38 @@ for($xy = 0; $xy < $cantidad; $xy++) {
     	# code...
     	$ultimo_costo = floatval(ExecuteScalar("SELECT ultimo_costo FROM articulo WHERE id = " . $value["articulo"]));
 	    $sql = "INSERT INTO entradas_salidas
-	                (id, tipo_documento, id_documento, 
-	                fabricante, articulo, almacen, 
-	                cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
-	                cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
-	                costo_unidad, costo, id_compra,
-	                descuento, precio_unidad_sin_desc)
-	            SELECT 
-	                NULL, 'TDCFCV', '$factura_id', 
-	                a.fabricante, a.articulo, '$almacen', 
-	                ABS(a.cantidad_articulo), a.articulo_unidad_medida, a.cantidad_unidad_medida, 
-	                a.cantidad_movimiento, a.lote, a.fecha_vencimiento, (a.precio_unidad_sin_desc-(a.precio_unidad_sin_desc*(a.descuento/100)))*$tasa AS precio_unidad, 
-	                ABS(a.cantidad_articulo)*((a.precio_unidad_sin_desc-(a.precio_unidad_sin_desc*(a.descuento/100)))*$tasa) AS precio, a.alicuota,
-	                $ultimo_costo AS costo_unidad,
-	                ($ultimo_costo * ABS(cantidad_articulo)) AS costo, id_compra, 
-	                a.descuento, a.precio_unidad_sin_desc*$tasa 
-	            FROM entradas_salidas AS a 
-	            WHERE a.id = '" . $value["id"] . "';"; 
+                    (id, tipo_documento, id_documento, 
+                    fabricante, articulo, almacen, 
+                    cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
+                    cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
+                    costo_unidad, costo, id_compra,
+                    descuento, descuento2, precio_unidad_sin_desc)
+                SELECT 
+                    NULL, 'TDCFCV', '$factura_id', 
+                    a.fabricante, a.articulo, '$almacen', 
+                    ABS(a.cantidad_articulo), a.articulo_unidad_medida, a.cantidad_unidad_medida, 
+                    a.cantidad_movimiento, a.lote, a.fecha_vencimiento, 
+                    (
+                        (a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100)))
+                        -
+                        ((a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100))) * (IFNULL(a.descuento2,0) / 100))
+                    ) * $tasa AS precio_unidad,
+                    ABS(a.cantidad_articulo) * (
+                        (
+                            (a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100)))
+                            -
+                            ((a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100))) * (IFNULL(a.descuento2,0) / 100))
+                        ) * $tasa
+                    ) AS precio,
+                    a.alicuota,
+                    $ultimo_costo AS costo_unidad,
+                    ($ultimo_costo * ABS(a.cantidad_articulo)) AS costo,
+                    a.id_compra,
+                    IFNULL(a.descuento, 0) AS descuento,
+                    IFNULL(a.descuento2, 0) AS descuento2,
+                    a.precio_unidad_sin_desc * $tasa AS precio_unidad_sin_desc
+                FROM entradas_salidas AS a 
+                WHERE a.id = '" . $value["id"] . "';";
 		Execute($sql);
 	}
 

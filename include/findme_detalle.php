@@ -27,6 +27,8 @@
 											$sql= "SELECT 
 														a.id, 
 														b.nombre AS fabricante, 
+														IFNULL(a.descuento,0) AS descuento,
+														IFNULL(a.descuento2,0) AS descuento2,
 														CONCAT(IFNULL(c.principio_activo, ''), ', ', 
 																IFNULL(c.presentacion, ''), ', ', 
 																IFNULL(c.nombre_comercial, '')) AS articulo, 

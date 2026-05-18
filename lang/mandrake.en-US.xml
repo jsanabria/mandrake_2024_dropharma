@@ -1,4 +1,4 @@
-<ew-language date="2026/5/15" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/5/16" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -6091,7 +6091,7 @@
         <phrase id="fldcaption" value="Días Crédito" />
       </field>
       <field id="entregado">
-        <phrase id="fldcaption" value="Entregado" />
+        <phrase id="fldcaption" value="Imp. Ambas Monedas" />
         <phrase id="fldtagvalue1" value="S" />
         <phrase id="fldtagcaption1" value="SI" />
         <phrase id="fldtagvalue2" value="N" />

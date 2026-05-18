@@ -155,7 +155,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->tasa_dia->Visible = false;
         $this->monto_usd->Visible = false;
         $this->dias_credito->setVisibility();
-        $this->entregado->Visible = false;
+        $this->entregado->setVisibility();
         $this->fecha_entrega->Visible = false;
         $this->pagado->Visible = false;
         $this->impreso->Visible = false;
@@ -1006,6 +1006,16 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
         }
 
+        // Check field name 'entregado' first before field var 'x_entregado'
+        $val = $CurrentForm->hasValue("entregado") ? $CurrentForm->getValue("entregado") : $CurrentForm->getValue("x_entregado");
+        if (!$this->entregado->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->entregado->Visible = false; // Disable update for API request
+            } else {
+                $this->entregado->setFormValue($val);
+            }
+        }
+
         // Check field name 'nro_despacho' first before field var 'x_nro_despacho'
         $val = $CurrentForm->hasValue("nro_despacho") ? $CurrentForm->getValue("nro_despacho") : $CurrentForm->getValue("x_nro_despacho");
         if (!$this->nro_despacho->IsDetailKey) {
@@ -1053,6 +1063,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->moneda->CurrentValue = $this->moneda->FormValue;
         $this->estatus->CurrentValue = $this->estatus->FormValue;
         $this->dias_credito->CurrentValue = $this->dias_credito->FormValue;
+        $this->entregado->CurrentValue = $this->entregado->FormValue;
         $this->nro_despacho->CurrentValue = $this->nro_despacho->FormValue;
         $this->asesor_asignado->CurrentValue = $this->asesor_asignado->FormValue;
     }
@@ -2003,6 +2014,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // dias_credito
             $this->dias_credito->HrefValue = "";
 
+            // entregado
+            $this->entregado->HrefValue = "";
+
             // nro_despacho
             $this->nro_despacho->HrefValue = "";
 
@@ -2152,6 +2166,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
             $this->dias_credito->PlaceHolder = RemoveHtml($this->dias_credito->caption());
 
+            // entregado
+            $this->entregado->setupEditAttributes();
+            $this->entregado->EditValue = $this->entregado->options(true);
+            $this->entregado->PlaceHolder = RemoveHtml($this->entregado->caption());
+
             // nro_despacho
             $this->nro_despacho->setupEditAttributes();
             if (!$this->nro_despacho->Raw) {
@@ -2253,6 +2272,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
 
             // dias_credito
             $this->dias_credito->HrefValue = "";
+
+            // entregado
+            $this->entregado->HrefValue = "";
 
             // nro_despacho
             $this->nro_despacho->HrefValue = "";
@@ -2356,6 +2378,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             if ($this->dias_credito->Visible && $this->dias_credito->Required) {
                 if (!$this->dias_credito->IsDetailKey && EmptyValue($this->dias_credito->FormValue)) {
                     $this->dias_credito->addErrorMessage(str_replace("%s", $this->dias_credito->caption(), $this->dias_credito->RequiredErrorMessage));
+                }
+            }
+            if ($this->entregado->Visible && $this->entregado->Required) {
+                if (!$this->entregado->IsDetailKey && EmptyValue($this->entregado->FormValue)) {
+                    $this->entregado->addErrorMessage(str_replace("%s", $this->entregado->caption(), $this->entregado->RequiredErrorMessage));
                 }
             }
             if ($this->nro_despacho->Visible && $this->nro_despacho->Required) {
@@ -2508,6 +2535,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         // dias_credito
         $this->dias_credito->setDbValueDef($rsnew, $this->dias_credito->CurrentValue, $this->dias_credito->ReadOnly);
 
+        // entregado
+        $this->entregado->setDbValueDef($rsnew, $this->entregado->CurrentValue, $this->entregado->ReadOnly);
+
         // nro_despacho
         $this->nro_despacho->setDbValueDef($rsnew, $this->nro_despacho->CurrentValue, $this->nro_despacho->ReadOnly);
 
@@ -2533,6 +2563,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         }
         if (isset($row['dias_credito'])) { // dias_credito
             $this->dias_credito->CurrentValue = $row['dias_credito'];
+        }
+        if (isset($row['entregado'])) { // entregado
+            $this->entregado->CurrentValue = $row['entregado'];
         }
         if (isset($row['nro_despacho'])) { // nro_despacho
             $this->nro_despacho->CurrentValue = $row['nro_despacho'];

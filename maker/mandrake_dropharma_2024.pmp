@@ -184,7 +184,7 @@
     </Table>
     <Table TblName="cliente_consignacion_articulos.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Clientes con Consignaciones" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="cliente_consignacion_lista.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Clientes con Consignaciones" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="cliente_consignacion_procesar.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Clientes con Consignaciones" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="cliente_consignacion_procesar.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Clientes con Consignaciones" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="cliente_consignacion_ver.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Clientes con Consignaciones" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="cliente_dias_tmp" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0" TblList="1" TblCaption="cliente dias tmp" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="ci_rif" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="ci rif" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -498,11 +498,11 @@
       <Field FldName="costo" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="15" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="costo" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="crear_factura_compra.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Factura de Compra desde Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="crear_factura_venta.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Factura desde Pedido de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="crear_factura_venta2.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura Fiscal desde Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="crear_factura_venta.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Crear Factura desde Pedido de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="crear_factura_venta2.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura Fiscal desde Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="crear_nota_entrada_update.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nueva Nota de Entrega Actualizar" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="crear_nota_entrega.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nueva Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="crear_nota_entrega_guardar.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nueva Nota de Entrega Guardar" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="crear_nota_entrega_guardar.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Nueva Nota de Entrega Guardar" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="crear_nota_recepcion.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota Recpeción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="eliminar_linea.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Eliminar Lineas de Entradas Salidas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="entradas" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblDelete="1" TblCaption="Entradas" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblGridAddReturnPage="_GRIDEDIT" TblGridEditReturnPage="_GRIDEDIT" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblBottomPageLink="0" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblMultiPageSearch="1" TblMultiPageType="Tabs" TblPageCaptions="&quot;Datos 1&quot;|&quot;Datos 2&quot;|&quot;Datos 3&quot;|&quot;Datos 4&quot;">
@@ -563,7 +563,8 @@
       <Field FldName="cantidad_unidad_medida" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cantidad unidad medida" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldTagValues="&quot;1&quot;,&quot;1&quot;" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cantidad_movimiento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cantidad movimiento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad_sin_desc" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Costo Full" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="descuento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Desc%" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="6" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Desc%" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="6" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento2" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Desc 2%" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="costo_unidad" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Costo Unidad" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="costo" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Costo" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Precio Unidad" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -588,11 +589,11 @@
       <Field FldName="activo" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Activo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="factura_consignacion.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Facturas a Consignación" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="factura_consignacion_guardar.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Facturas a Consignación" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="factura_consignacion_guardar.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Facturas a Consignación" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="factura_de_compra_copiar_como.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Copiar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="factura_de_compra_detalle_copia.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra Detalle copia" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="factura_de_venta_copiar_como.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Emitir NC/ND" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="factura_de_venta_detalle_copia.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Emitir NC/ND" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="factura_de_venta_detalle_copia.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Emitir NC/ND" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="ftp_fact_pedi_procesado" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblDelete="1" TblCaption="ftp fact pedi procesado" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblCopy="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="factura" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="factura" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -802,6 +803,7 @@
       <Field FldName="alicuota" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="7" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="descuento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="descuento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad_sin_desc" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="precio unidad sin desc" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento2" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="descuento 2" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="pedidos_detalles_online_bitacora" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblDelete="1" TblCaption="pedidos detalles online bitacora" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblCopy="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
@@ -1051,7 +1053,7 @@
     <Table TblName="tdcasa_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -1059,7 +1061,7 @@
     <Table TblName="tdcnrp_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Pedido de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Pedido de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcpdv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Pedidos de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcpdv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Pedidos de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Pedido de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="temp_consignacion" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblDelete="1" TblCaption="temp consignacion" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblCopy="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
@@ -1209,7 +1211,7 @@
       <Field FldName="consignacion" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="consignacion" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="consignacion_reportada" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="consignacion reportada" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_entradas_salidas" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,preview=0,preview|class=0" TblList="1" TblIsDetail="1" TblCaption="Movimientos" TblUpdatable="1" TblSQL="select `entradas_salidas`.`id` AS `id`,`entradas_salidas`.`tipo_documento` AS `tipo_documento`,`entradas_salidas`.`id_documento` AS `id_documento`,`entradas_salidas`.`fabricante` AS `fabricante`,`entradas_salidas`.`articulo` AS `articulo`,`entradas_salidas`.`lote` AS `lote`,`entradas_salidas`.`fecha_vencimiento` AS `fecha_vencimiento`,`entradas_salidas`.`almacen` AS `almacen`,`entradas_salidas`.`cantidad_articulo` AS `cantidad_articulo`,`entradas_salidas`.`articulo_unidad_medida` AS `articulo_unidad_medida`,`entradas_salidas`.`cantidad_unidad_medida` AS `cantidad_unidad_medida`,`entradas_salidas`.`cantidad_movimiento` AS `cantidad_movimiento`,`entradas_salidas`.`costo_unidad` AS `costo_unidad`,`entradas_salidas`.`costo` AS `costo`,`entradas_salidas`.`precio_unidad` AS `precio_unidad`,`entradas_salidas`.`precio` AS `precio`,`entradas_salidas`.`id_compra` AS `id_compra`,`entradas_salidas`.`alicuota` AS `alicuota`,`entradas_salidas`.`cantidad_movimiento_consignacion` AS `cantidad_movimiento_consignacion`,`entradas_salidas`.`id_consignacion` AS `id_consignacion`,`entradas_salidas`.`descuento` AS `descuento`,`entradas_salidas`.`precio_unidad_sin_desc` AS `precio_unidad_sin_desc`,`entradas_salidas`.`check_ne` AS `check_ne`,`entradas_salidas`.`packer_cantidad` AS `packer_cantidad`,`entradas_salidas`.`newdata` AS `newdata` from `entradas_salidas`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblDetailView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_entradas_salidas" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,preview=0,preview|class=0" TblList="1" TblIsDetail="1" TblCaption="Movimientos" TblUpdatable="1" TblSQL="select `entradas_salidas`.`id` AS `id`,`entradas_salidas`.`tipo_documento` AS `tipo_documento`,`entradas_salidas`.`id_documento` AS `id_documento`,`entradas_salidas`.`fabricante` AS `fabricante`,`entradas_salidas`.`articulo` AS `articulo`,`entradas_salidas`.`lote` AS `lote`,`entradas_salidas`.`fecha_vencimiento` AS `fecha_vencimiento`,`entradas_salidas`.`almacen` AS `almacen`,`entradas_salidas`.`cantidad_articulo` AS `cantidad_articulo`,`entradas_salidas`.`articulo_unidad_medida` AS `articulo_unidad_medida`,`entradas_salidas`.`cantidad_unidad_medida` AS `cantidad_unidad_medida`,`entradas_salidas`.`cantidad_movimiento` AS `cantidad_movimiento`,`entradas_salidas`.`costo_unidad` AS `costo_unidad`,`entradas_salidas`.`costo` AS `costo`,`entradas_salidas`.`precio_unidad` AS `precio_unidad`,`entradas_salidas`.`precio` AS `precio`,`entradas_salidas`.`id_compra` AS `id_compra`,`entradas_salidas`.`alicuota` AS `alicuota`,`entradas_salidas`.`cantidad_movimiento_consignacion` AS `cantidad_movimiento_consignacion`,`entradas_salidas`.`id_consignacion` AS `id_consignacion`,`entradas_salidas`.`descuento` AS `descuento`,`entradas_salidas`.`descuento2` AS `descuento2`,`entradas_salidas`.`precio_unidad_sin_desc` AS `precio_unidad_sin_desc`,`entradas_salidas`.`check_ne` AS `check_ne`,`entradas_salidas`.`packer_cantidad` AS `packer_cantidad`,`entradas_salidas`.`newdata` AS `newdata` from `entradas_salidas`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblDetailView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_documento" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="id documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1231,6 +1233,7 @@
       <Field FldName="cantidad_movimiento_consignacion" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cantidad movimiento consignacion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_consignacion" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="id consignacion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="descuento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="descuento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento2" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="descuento 2" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad_sin_desc" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="precio unidad sin desc" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="check_ne" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Check ne" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="packer_cantidad" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="VF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1317,7 +1320,7 @@
       <Field FldName="dias_credito" FldType="16" FldTypeName="tinyint" NativeDataType="1" FldSupport="1" FldSize="4" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Crédito" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="dias_vencidos" FldType="20" FldTypeName="bigint" NativeDataType="8" FldSupport="1" FldSize="22" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Vencidos" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="2" FldOrder="DESC" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_in" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,view=0,view|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Detalle Entradas" TblUpdatable="1" TblSQL="select `entradas_salidas`.`id` AS `id`,`entradas_salidas`.`tipo_documento` AS `tipo_documento`,`entradas_salidas`.`id_documento` AS `id_documento`,`entradas_salidas`.`fabricante` AS `fabricante`,`entradas_salidas`.`articulo` AS `articulo`,`entradas_salidas`.`lote` AS `lote`,`entradas_salidas`.`fecha_vencimiento` AS `fecha_vencimiento`,`entradas_salidas`.`almacen` AS `almacen`,`entradas_salidas`.`cantidad_articulo` AS `cantidad_articulo`,`entradas_salidas`.`articulo_unidad_medida` AS `articulo_unidad_medida`,`entradas_salidas`.`cantidad_unidad_medida` AS `cantidad_unidad_medida`,`entradas_salidas`.`cantidad_movimiento` AS `cantidad_movimiento`,`entradas_salidas`.`costo_unidad` AS `costo_unidad`,`entradas_salidas`.`costo` AS `costo`,`entradas_salidas`.`precio_unidad` AS `precio_unidad`,`entradas_salidas`.`precio` AS `precio`,`entradas_salidas`.`id_compra` AS `id_compra`,`entradas_salidas`.`alicuota` AS `alicuota`,`entradas_salidas`.`cantidad_movimiento_consignacion` AS `cantidad_movimiento_consignacion`,`entradas_salidas`.`id_consignacion` AS `id_consignacion`,`entradas_salidas`.`descuento` AS `descuento`,`entradas_salidas`.`precio_unidad_sin_desc` AS `precio_unidad_sin_desc`,`entradas_salidas`.`check_ne` AS `check_ne`,`entradas_salidas`.`packer_cantidad` AS `packer_cantidad`,`entradas_salidas`.`newdata` AS `newdata` from `entradas_salidas` where (`entradas_salidas`.`tipo_documento` in ('TDCPDC','TDCNRP','TDCFCC','TDCAEN'))" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_in" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,view=0,view|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Detalle Entradas" TblUpdatable="1" TblSQL="select `entradas_salidas`.`id` AS `id`,`entradas_salidas`.`tipo_documento` AS `tipo_documento`,`entradas_salidas`.`id_documento` AS `id_documento`,`entradas_salidas`.`fabricante` AS `fabricante`,`entradas_salidas`.`articulo` AS `articulo`,`entradas_salidas`.`lote` AS `lote`,`entradas_salidas`.`fecha_vencimiento` AS `fecha_vencimiento`,`entradas_salidas`.`almacen` AS `almacen`,`entradas_salidas`.`cantidad_articulo` AS `cantidad_articulo`,`entradas_salidas`.`articulo_unidad_medida` AS `articulo_unidad_medida`,`entradas_salidas`.`cantidad_unidad_medida` AS `cantidad_unidad_medida`,`entradas_salidas`.`cantidad_movimiento` AS `cantidad_movimiento`,`entradas_salidas`.`costo_unidad` AS `costo_unidad`,`entradas_salidas`.`costo` AS `costo`,`entradas_salidas`.`precio_unidad` AS `precio_unidad`,`entradas_salidas`.`precio` AS `precio`,`entradas_salidas`.`id_compra` AS `id_compra`,`entradas_salidas`.`alicuota` AS `alicuota`,`entradas_salidas`.`cantidad_movimiento_consignacion` AS `cantidad_movimiento_consignacion`,`entradas_salidas`.`id_consignacion` AS `id_consignacion`,`entradas_salidas`.`descuento` AS `descuento`,`entradas_salidas`.`descuento2` AS `descuento2`,`entradas_salidas`.`precio_unidad_sin_desc` AS `precio_unidad_sin_desc`,`entradas_salidas`.`check_ne` AS `check_ne`,`entradas_salidas`.`packer_cantidad` AS `packer_cantidad`,`entradas_salidas`.`newdata` AS `newdata` from `entradas_salidas` where (`entradas_salidas`.`tipo_documento` in ('TDCPDC','TDCNRP','TDCFCC','TDCAEN'))" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="ASC" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_documento" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="id documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1332,6 +1335,7 @@
       <Field FldName="cantidad_movimiento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cantidad movimiento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad_sin_desc" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Costo Final" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="descuento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="% Desc." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento2" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="% Desc. 2" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="costo_unidad" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Cost UND" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="costo" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Costo TOT" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="precio unidad" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1528,7 +1532,7 @@
       <Field FldName="id" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cantidad_movimiento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="34" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cantidad movimiento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_out" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,view=0,view|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Detalle Salidas" TblUpdatable="1" TblSQL="select `entradas_salidas`.`id` AS `id`,`entradas_salidas`.`tipo_documento` AS `tipo_documento`,`entradas_salidas`.`id_documento` AS `id_documento`,`entradas_salidas`.`fabricante` AS `fabricante`,`entradas_salidas`.`articulo` AS `articulo`,`entradas_salidas`.`lote` AS `lote`,`entradas_salidas`.`fecha_vencimiento` AS `fecha_vencimiento`,`entradas_salidas`.`almacen` AS `almacen`,`entradas_salidas`.`cantidad_articulo` AS `cantidad_articulo`,`entradas_salidas`.`articulo_unidad_medida` AS `articulo_unidad_medida`,`entradas_salidas`.`cantidad_unidad_medida` AS `cantidad_unidad_medida`,`entradas_salidas`.`cantidad_movimiento` AS `cantidad_movimiento`,`entradas_salidas`.`costo_unidad` AS `costo_unidad`,`entradas_salidas`.`costo` AS `costo`,`entradas_salidas`.`precio_unidad` AS `precio_unidad`,`entradas_salidas`.`precio` AS `precio`,`entradas_salidas`.`id_compra` AS `id_compra`,`entradas_salidas`.`alicuota` AS `alicuota`,`entradas_salidas`.`cantidad_movimiento_consignacion` AS `cantidad_movimiento_consignacion`,`entradas_salidas`.`id_consignacion` AS `id_consignacion`,`entradas_salidas`.`descuento` AS `descuento`,`entradas_salidas`.`precio_unidad_sin_desc` AS `precio_unidad_sin_desc`,`entradas_salidas`.`check_ne` AS `check_ne`,`entradas_salidas`.`packer_cantidad` AS `packer_cantidad`,`entradas_salidas`.`newdata` AS `newdata` from `entradas_salidas` where (`entradas_salidas`.`tipo_documento` in ('TDCPDV','TDCNET','TDCFCV','TDCASA'))" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_out" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,view=0,view|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Detalle Salidas" TblUpdatable="1" TblSQL="select `entradas_salidas`.`id` AS `id`,`entradas_salidas`.`tipo_documento` AS `tipo_documento`,`entradas_salidas`.`id_documento` AS `id_documento`,`entradas_salidas`.`fabricante` AS `fabricante`,`entradas_salidas`.`articulo` AS `articulo`,`entradas_salidas`.`lote` AS `lote`,`entradas_salidas`.`fecha_vencimiento` AS `fecha_vencimiento`,`entradas_salidas`.`almacen` AS `almacen`,`entradas_salidas`.`cantidad_articulo` AS `cantidad_articulo`,`entradas_salidas`.`articulo_unidad_medida` AS `articulo_unidad_medida`,`entradas_salidas`.`cantidad_unidad_medida` AS `cantidad_unidad_medida`,`entradas_salidas`.`cantidad_movimiento` AS `cantidad_movimiento`,`entradas_salidas`.`costo_unidad` AS `costo_unidad`,`entradas_salidas`.`costo` AS `costo`,`entradas_salidas`.`precio_unidad` AS `precio_unidad`,`entradas_salidas`.`precio` AS `precio`,`entradas_salidas`.`id_compra` AS `id_compra`,`entradas_salidas`.`alicuota` AS `alicuota`,`entradas_salidas`.`cantidad_movimiento_consignacion` AS `cantidad_movimiento_consignacion`,`entradas_salidas`.`id_consignacion` AS `id_consignacion`,`entradas_salidas`.`descuento` AS `descuento`,`entradas_salidas`.`descuento2` AS `descuento2`,`entradas_salidas`.`precio_unidad_sin_desc` AS `precio_unidad_sin_desc`,`entradas_salidas`.`check_ne` AS `check_ne`,`entradas_salidas`.`packer_cantidad` AS `packer_cantidad`,`entradas_salidas`.`newdata` AS `newdata` from `entradas_salidas` where (`entradas_salidas`.`tipo_documento` in ('TDCPDV','TDCNET','TDCFCV','TDCASA'))" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="ASC" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_documento" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="id documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1550,6 +1554,7 @@
       <Field FldName="cantidad_movimiento_consignacion" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cantidad movimiento consignacion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_consignacion" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="id consignacion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="descuento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="% Desc." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="descuento2" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="% Desc. 2" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="precio_unidad_sin_desc" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Costo Final" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="check_ne" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Check" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="packer_cantidad" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="12" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="packer cantidad" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1634,7 +1639,7 @@
       <Field FldName="igtf" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="N" FldCaption="IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_base_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto a Aplicar IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="moneda" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Moneda" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '006'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="moneda" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Moneda" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="6" FldHtmlTagReadOnly="1" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '006'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="lista_pedido" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Lista Pedido" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Table" FldTagLnkTbl="tabla" FldTagLnkFld="campo_codigo" FldTagLnkDisplay="campo_descripcion" FldTagLnkOrderBy="campo_descripcion" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`tabla` = 'LISTA_PEDIDO'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="unidades" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Unidades" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="estatus" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="10" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Estatus" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="10" FldTagValues="&quot;NUEVO&quot;,&quot;NUEVO&quot;|&quot;PROCESADO&quot;,&quot;PROCESADO&quot;|&quot;ANULADO&quot;,&quot;ANULADO&quot;" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1643,8 +1648,8 @@
       <Field FldName="asesor" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Asesor/Cliente" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="tasa_dia" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Tasa del Día" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_usd" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto USD" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="dias_credito" FldType="16" FldTypeName="tinyint" NativeDataType="1" FldSupport="1" FldSize="4" FldAttribute="36" FldValidate="INTEGER" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Crédito" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '007'&quot;" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldDropdownHeight="60" />
-      <Field FldName="entregado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Entregado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="dias_credito" FldType="16" FldTypeName="tinyint" NativeDataType="1" FldSupport="1" FldSize="4" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Crédito" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '007'&quot;" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldDropdownHeight="60" />
+      <Field FldName="entregado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Imp. Ambas Monedas" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha_entrega" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="40" FldAttribute="36" FldValidate="DATE" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha Entrega" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pagado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Pagado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldResizeQuality="75" />
       <Field FldName="impreso" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Impreso" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1667,7 +1672,7 @@
       <Field FldName="comprobante" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="comprobante" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="nro_despacho" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Nro Despacho" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cerrado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="cerrado" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="asesor_asignado" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Asesor Asignado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagLnkOrderBy="nombre" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;IFNULl(asesor, 0) &gt; 0&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
+      <Field FldName="asesor_asignado" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Asesor Asignado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagLnkOrderBy="nombre" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;IFNULl(asesor, 0) &gt; 0&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="tasa_indexada" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="22" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="tasa indexada" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_documento_padre_nd" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Nro N.E. no va" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagLnkTbl="salidas" FldTagLnkFld="id" FldTagLnkDisplay="nro_documento" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="archivo_pedido" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Carga Masiva" FldViewTag="FORMATTED TEXT" FldHtmlTag="FILE" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FileNameFld="archivo_pedido" FldHrefFld="archivo_pedido" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -3474,6 +3479,9 @@
           <ExtField FldName="newdata">
             <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
           </ExtField>
+          <ExtField FldName="descuento2">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="tipo_documento">
@@ -3523,6 +3531,9 @@
             <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
           </ExtField>
           <ExtField FldName="newdata">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="descuento2">
             <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
           </ExtField>
           <Properties><![CDATA[[]]]></Properties>
@@ -3795,6 +3806,9 @@
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="pedidos_detalles_online">
+          <ExtField FldName="descuento2">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="pedidos_online">
@@ -3957,10 +3971,16 @@
           <ExtField FldName="newdata">
             <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
           </ExtField>
+          <ExtField FldName="descuento2">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="view_out">
           <ExtField FldName="newdata">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="descuento2">
             <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
           </ExtField>
           <Properties><![CDATA[[]]]></Properties>
@@ -4139,6 +4159,9 @@
     <ExtProject>
       <ExtDatabase>
         <ExtTable TblName="pedidos_detalles_online">
+          <ExtField FldName="descuento2">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="pedidos_online">
@@ -4316,10 +4339,16 @@
           <ExtField FldName="newdata">
             <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
           </ExtField>
+          <ExtField FldName="descuento2">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="view_out">
           <ExtField FldName="newdata">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="descuento2">
             <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
           </ExtField>
           <Properties><![CDATA[[]]]></Properties>
@@ -4376,10 +4405,16 @@
           <ExtField FldName="newdata">
             <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
           </ExtField>
+          <ExtField FldName="descuento2">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="view_entradas_salidas">
           <ExtField FldName="newdata">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="descuento2">
             <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
           </ExtField>
           <Properties><![CDATA[[]]]></Properties>
@@ -12293,23 +12328,38 @@ for($xy = 0; $xy < $cantidad; $xy++) {
     	# code...
     	$ultimo_costo = floatval(ExecuteScalar("SELECT ultimo_costo FROM articulo WHERE id = " . $value["articulo"]));
 	    $sql = "INSERT INTO entradas_salidas
-	                (id, tipo_documento, id_documento, 
-	                fabricante, articulo, almacen, 
-	                cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
-	                cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
-	                costo_unidad, costo, id_compra,
-	                descuento, precio_unidad_sin_desc)
-	            SELECT 
-	                NULL, 'TDCFCV', '$factura_id', 
-	                a.fabricante, a.articulo, '$almacen', 
-	                ABS(a.cantidad_articulo), a.articulo_unidad_medida, a.cantidad_unidad_medida, 
-	                a.cantidad_movimiento, a.lote, a.fecha_vencimiento, (a.precio_unidad_sin_desc-(a.precio_unidad_sin_desc*(a.descuento/100)))*$tasa AS precio_unidad, 
-	                ABS(a.cantidad_articulo)*((a.precio_unidad_sin_desc-(a.precio_unidad_sin_desc*(a.descuento/100)))*$tasa) AS precio, a.alicuota,
-	                $ultimo_costo AS costo_unidad,
-	                ($ultimo_costo * ABS(cantidad_articulo)) AS costo, id_compra, 
-	                a.descuento, a.precio_unidad_sin_desc*$tasa 
-	            FROM entradas_salidas AS a 
-	            WHERE a.id = '" . $value["id"] . "';"; 
+                    (id, tipo_documento, id_documento, 
+                    fabricante, articulo, almacen, 
+                    cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
+                    cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
+                    costo_unidad, costo, id_compra,
+                    descuento, descuento2, precio_unidad_sin_desc)
+                SELECT 
+                    NULL, 'TDCFCV', '$factura_id', 
+                    a.fabricante, a.articulo, '$almacen', 
+                    ABS(a.cantidad_articulo), a.articulo_unidad_medida, a.cantidad_unidad_medida, 
+                    a.cantidad_movimiento, a.lote, a.fecha_vencimiento, 
+                    (
+                        (a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100)))
+                        -
+                        ((a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100))) * (IFNULL(a.descuento2,0) / 100))
+                    ) * $tasa AS precio_unidad,
+                    ABS(a.cantidad_articulo) * (
+                        (
+                            (a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100)))
+                            -
+                            ((a.precio_unidad_sin_desc - (a.precio_unidad_sin_desc * (IFNULL(a.descuento,0) / 100))) * (IFNULL(a.descuento2,0) / 100))
+                        ) * $tasa
+                    ) AS precio,
+                    a.alicuota,
+                    $ultimo_costo AS costo_unidad,
+                    ($ultimo_costo * ABS(a.cantidad_articulo)) AS costo,
+                    a.id_compra,
+                    IFNULL(a.descuento, 0) AS descuento,
+                    IFNULL(a.descuento2, 0) AS descuento2,
+                    a.precio_unidad_sin_desc * $tasa AS precio_unidad_sin_desc
+                FROM entradas_salidas AS a 
+                WHERE a.id = '" . $value["id"] . "';";
 		Execute($sql);
 	}
 
@@ -13111,13 +13161,17 @@ for($i = 0; $i < $cantidad; $i++) {
 		/*** Consulto la cantidad solicitada por el cliente y precio dado al mismo por el artículo ***/
 		$sql = "SELECT 
 					a.cantidad_movimiento, a.precio_unidad, a.alicuota,
-					a.precio_unidad, IFNULL(a.descuento, 0.00) AS descuento, a.precio_unidad_sin_desc 
-				FROM entradas_salidas AS a 
+					a.precio_unidad,
+                    IFNULL(a.descuento, 0.00) AS descuento,
+                    IFNULL(a.descuento2, 0.00) AS descuento2,
+                    a.precio_unidad_sin_desc
+                FROM entradas_salidas AS a 
 				WHERE a.id = '$dt';";
 		$row = ExecuteRow($sql);
 		$solicitado = $row["cantidad_movimiento"];
 		$precio_unidad = $row["precio_unidad"];
 		$descuento = floatval($row["descuento"]);
+        $descuento2 = floatval($row["descuento2"]);
 		$precio_unidad_sin_desc = floatval($row["precio_unidad_sin_desc"]);
 		
 
@@ -13130,12 +13184,12 @@ for($i = 0; $i < $cantidad; $i++) {
 					(id, tipo_documento, id_documento, 
 					fabricante, articulo, lote, fecha_vencimiento, almacen, cantidad_articulo, 
 					articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, precio_unidad, precio, alicuota, id_compra,
-					descuento, precio_unidad_sin_desc) 
+					descuento, descuento2, precio_unidad_sin_desc) 
 				VALUES 
 					(NULL, '$tipo_documento', '$new_id', 
 					'$fabricante', '$articulo', '$lote', '$fecha_vencimiento', '$almacen', '$cnt', 
 					'$un', '$cantidad_um', '$asignado', '$precio_unidad', '$precio', '$alicuota', '0',
-					$descuento, $precio_unidad_sin_desc);";  
+					$descuento, $descuento2, $precio_unidad_sin_desc);";  
 		Execute($sql);
 
 		if((abs($solicitado) - abs($asignado)) > 0) {
@@ -18783,13 +18837,13 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				(id, tipo_documento, username, fecha,
 				cliente, nro_documento,
 				nota, estatus, moneda, tasa_dia,
-				id_documento_padre, asesor, documento, dias_credito, consignacion, nro_control, asesor_asignado)
+				id_documento_padre, asesor, documento, dias_credito, consignacion, nro_control, asesor_asignado, descuento, descuento2)
 			SELECT 
 				NULL, 'TDCFCV', '" . CurrentUserName() . "', '" . date("Y-m-d H:i:s") . "',
 				cliente, NULL AS factura,
 				'$nota' AS nota, 
 				'NUEVO' AS estatus, '$moneda', $tasa_usd, 
-                id, asesor, 'FC', dias_credito, 'S', NULL, asesor_asignado 
+                id, asesor, 'FC', dias_credito, 'S', NULL, asesor_asignado, IFNULL(descuento, 0), IFNULL(descuento2, 0)  
 			FROM salidas 
 			WHERE id = '$id';";
 	ExecuteScalar($sql);
@@ -18811,13 +18865,33 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 			 		$cantd = (-1) * intval($value);
 
 					$sql = "SELECT 
-								(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
-								((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS($cantd)) AS costo,
-								((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) - ((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * (IFNULL(a.descuento, 0)/100))) * $tasa AS precio_unidad, 
-								(((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) - ((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * (IFNULL(a.descuento, 0)/100))) * $tasa) * ABS($cantd) AS precio, 
-								(SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * $tasa AS precio_unidad_sin_desc
-								FROM entradas_salidas AS a 
-							WHERE a.id = $idd;"; 
+                                x.costo_unidad,
+                                x.costo,
+                                (
+                                    (x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100)))
+                                    -
+                                    ((x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))) * (IFNULL(x.descuento2, 0) / 100))
+                                ) * $tasa AS precio_unidad,
+                                (
+                                    (
+                                        (x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100)))
+                                        -
+                                        ((x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))) * (IFNULL(x.descuento2, 0) / 100))
+                                    ) * $tasa
+                                ) * ABS($cantd) AS precio,
+                                x.precio_base * $tasa AS precio_unidad_sin_desc
+                            FROM (
+                                SELECT 
+                                    a.articulo,
+                                    IFNULL(a.descuento, 0) AS descuento,
+                                    IFNULL(a.descuento2, 0) AS descuento2,
+                                    (SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
+                                    ((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS($cantd)) AS costo,
+                                    (SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 1) AS precio_base
+                                FROM entradas_salidas AS a 
+                                WHERE a.id = $idd
+                            ) AS x;";
+
 				    $rows100 = ExecuteRow($sql);
 				    $xcosto_unidad = floatval($rows100["costo_unidad"]);
 				    $xcosto = floatval($rows100["costo"]);
@@ -18830,7 +18904,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 								cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 								cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 								costo_unidad, costo, cantidad_movimiento_consignacion, id_consignacion,
-								id_compra, descuento, precio_unidad_sin_desc)
+								id_compra, descuento, descuento2, precio_unidad_sin_desc)
 							SELECT 
 								NULL, 'TDCFCV', '$factura_id', 
 								a.fabricante, a.articulo, a.almacen, 
@@ -18840,7 +18914,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 								$xprecio AS precio, a.alicuota,
 								$xcosto_unidad AS costo_unidad,
 								$xcosto AS costo, 
-								0, a.id, a.id_compra, IFNULL(a.descuento, 0) AS descuento, $xprecio_unidad_sin_desc AS precio_unidad_sin_desc  
+								0, a.id, a.id_compra, IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, $xprecio_unidad_sin_desc AS precio_unidad_sin_desc 
 							FROM entradas_salidas AS a 
 							WHERE a.id = $idd;"; 
 
@@ -24244,7 +24318,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 				cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 				costo_unidad, costo, id_compra,
-				descuento, precio_unidad_sin_desc)
+				descuento, descuento2, precio_unidad_sin_desc)
 			SELECT 
 				NULL, 'TDCFCV', '$factura_id', 
 				a.fabricante, a.articulo, '$almacen', 
@@ -24252,7 +24326,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				a.cantidad_movimiento, a.lote, a.fecha_vencimiento, a.precio_unidad, a.precio, a.alicuota,
 				(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * $tasa AS costo_unidad,
 				((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS(cantidad_articulo)) * $tasa AS costo, id_compra, 
-				descuento, precio_unidad_sin_desc * $tasa
+				IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, a.precio_unidad_sin_desc * $tasa AS precio_unidad_sin_desc 
 			FROM entradas_salidas AS a 
 			WHERE a.id_documento = '$id' AND a.tipo_documento = '$tipo' LIMIT $limite, $LineasFactura;";
 	}
@@ -24263,7 +24337,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 				cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 				costo_unidad, costo, id_compra,
-				descuento, precio_unidad_sin_desc)
+				descuento, descuento2, precio_unidad_sin_desc)
 			SELECT 
 				NULL, 'TDCFCV', '$factura_id', 
 				a.fabricante, a.articulo, '$almacen', 
@@ -24274,7 +24348,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				(SELECT al2.alicuota FROM articulo AS al1 JOIN alicuota AS al2 ON al2.codigo = al1.alicuota WHERE al1.id = a.articulo AND al2.activo = 'S') AS alicuota,
 				(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
 				((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS(cantidad_articulo)) AS costo, id_compra, 
-				descuento, precio_unidad_sin_desc * $tasa 
+				IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, a.precio_unidad_sin_desc * $tasa AS precio_unidad_sin_desc 
 			FROM entradas_salidas AS a 
 			WHERE a.id_documento = '$id' AND a.tipo_documento = '$tipo' LIMIT $limite, $LineasFactura;";
 	}
@@ -25387,14 +25461,48 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 			 		$idd = substr($key, 9, strlen($key));
 			 		$cantd = (-1) * intval($value);
 
-					$sql = "SELECT 
-								(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
-								((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS($cantd)) AS costo,
-								((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) - ((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * (IFNULL(a.descuento, 0)/100))) * $tasa AS precio_unidad, 
-								(((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) - ((SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * (IFNULL(a.descuento, 0)/100))) * $tasa) * ABS($cantd) AS precio, 
-								(SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 0, 1) * $tasa AS precio_unidad_sin_desc
-								FROM entradas_salidas AS a 
-							WHERE a.id = $idd;"; 
+                    $sql = "SELECT 
+                                x.costo_unidad,
+                                x.costo,
+
+                                (
+                                    (
+                                        x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))
+                                    )
+                                    -
+                                    (
+                                        (
+                                            x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))
+                                        ) * (IFNULL(x.descuento2, 0) / 100)
+                                    )
+                                ) * $tasa AS precio_unidad,
+
+                                (
+                                    (
+                                        (
+                                            x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))
+                                        )
+                                        -
+                                        (
+                                            (
+                                                x.precio_base - (x.precio_base * (IFNULL(x.descuento, 0) / 100))
+                                            ) * (IFNULL(x.descuento2, 0) / 100)
+                                        )
+                                    ) * $tasa
+                                ) * ABS($cantd) AS precio,
+                                x.precio_base * $tasa AS precio_unidad_sin_desc
+                            FROM (
+                                SELECT 
+                                    a.articulo,
+                                    IFNULL(a.descuento, 0) AS descuento,
+                                    IFNULL(a.descuento2, 0) AS descuento2,
+                                    (SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
+                                    ((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS($cantd)) AS costo,
+                                    (SELECT precio FROM tarifa_articulo WHERE tarifa = $tarifa AND articulo = a.articulo LIMIT 1) AS precio_base
+                                FROM entradas_salidas AS a 
+                                WHERE a.id = $idd
+                            ) AS x;";                            
+
 				    $rows100 = ExecuteRow($sql);
 				    $xcosto_unidad = floatval($rows100["costo_unidad"]);
 				    $xcosto = floatval($rows100["costo"]);
@@ -25407,7 +25515,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 								cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 								cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 								costo_unidad, costo, cantidad_movimiento_consignacion, id_consignacion,
-								id_compra, descuento, precio_unidad_sin_desc)
+								id_compra, descuento, descuento2, precio_unidad_sin_desc)
 							SELECT 
 								NULL, 'TDCFCV', '$factura_id', 
 								a.fabricante, a.articulo, a.almacen, 
@@ -25417,7 +25525,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 								$xprecio AS precio, a.alicuota,
 								$xcosto_unidad AS costo_unidad,
 								$xcosto AS costo, 
-								0, a.id, a.id_compra, IFNULL(a.descuento, 0) AS descuento, $xprecio_unidad_sin_desc AS precio_unidad_sin_desc  
+								0, a.id, a.id_compra, IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, $xprecio_unidad_sin_desc AS precio_unidad_sin_desc  
 							FROM entradas_salidas AS a 
 							WHERE a.id = $idd;"; 
 
@@ -31851,7 +31959,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
   </div>
 
   <!-- Fabricante (ajustado como Transferencista) -->
-  <div class="col-sm-2">
+  <div class="col-sm-2" style="display:none;>
     <?php
     echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();" readonly="yes">
     <small>% Fabricante</small>';
@@ -31859,20 +31967,24 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
   </div>
 
   <!-- Moneda -->
-  <div class="col-sm-1">
-    <!-- <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()"> -->
-    <select id="moneda" name="moneda" class="form-select form-select-sm" 
-        onfocus="this.defaultIndex=this.selectedIndex;" 
-        onchange="this.selectedIndex=this.defaultIndex;">
-      <?php
-      $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-      $rows = ExecuteRows($sql);
-      foreach ($rows as $value) {
-        echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-      }
-      ?>
-    </select>
-  </div>
+    <div class="col-sm-1">
+        <select id="moneda" name="moneda" class="form-select form-select-sm"
+            <?php if (intval($pedido) == 0) { ?>
+                onchange="js:RefreshMonedaTasa()"
+            <?php } else { ?>
+                onfocus="this.defaultIndex=this.selectedIndex;"
+                onchange="this.selectedIndex=this.defaultIndex;"
+            <?php } ?>
+        >
+        <?php
+        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
+        $rows = ExecuteRows($sql);
+        foreach ($rows as $value) {
+            echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"] == $moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
+        }
+        ?>
+        </select>
+    </div>
 
   <!-- Tasa (ahora con label abajo) -->
   <div class="col-sm-1">
@@ -32099,6 +32211,7 @@ loadjs.ready(["jquery"], function () {
                 cliente: getVal("codcli"),
                 precioFull: precioFull,
                 descuento: $("#x" + i + "_descuento").val(),
+                descuento2: $("#x" + i + "_descuento2").val(),
                 precio: $("#x" + i + "_precio").val(),
                 moneda: getVal("moneda"),
                 total: $("#x" + i + "_total").val(),
@@ -32135,6 +32248,7 @@ loadjs.ready(["jquery"], function () {
                     '<i class="fa-solid fa-cart-shopping text-primary" style="cursor:pointer;" onclick="js:insertar(' + i + ')"></i>'
                 );
             }
+            controlarMoneda();
         }).fail(function (xhr, status, errorThrown) {
             console.log(xhr.responseText);
             alertMsg("Error de conexión al insertar: " + errorThrown);
@@ -32219,6 +32333,7 @@ loadjs.ready(["jquery"], function () {
                 cantidad: $("#x" + i + "_cantidad").val(),
                 precio_full: $("#x" + i + "_precioFull").val(),
                 descuento_item: $("#x" + i + "_descuento").val(),
+                descuento2_item: $("#x" + i + "_descuento2").val(),
                 lote: $("#x" + i + "_lote").val(),
                 vence: $("#x" + i + "_vence").val(),
                 moneda: getVal("moneda"),
@@ -32394,6 +32509,8 @@ loadjs.ready(["jquery"], function () {
         formData.append("tipo_documento", getVal("tipo_documento"));
         formData.append("descuentoG", getVal("PorDesAct"));
         formData.append("hubb", $("#hubb").is(":checked") ? "SI" : "NO");
+        formData.append("moneda", getVal("moneda"));
+        
 
         console.log("Enviando a buscar_articulos_tdcfcv.php");
 
@@ -32512,8 +32629,12 @@ loadjs.ready(["jquery"], function () {
         const cantidad = parseFloat($("#x" + i + "_cantidad").val() || 0);
         const precioFull = parseFloat($("#x" + i + "_precioFull").val() || 0);
         const descuento = parseFloat($("#x" + i + "_descuento").val() || 0);
+        const descuento2 = parseFloat($("#x" + i + "_descuento2").val() || 0);
 
-        const precio = redondearDecimales(precioFull - (precioFull * (descuento / 100)), 2);
+        let precio = precioFull - (precioFull * (descuento / 100));
+        precio = precio - (precio * (descuento2 / 100));
+        precio = redondearDecimales(precio, 2);
+
         const total = redondearDecimales(cantidad * precio, 2);
 
         $("#x" + i + "_precio").val(precio);
@@ -32695,6 +32816,27 @@ loadjs.ready(["jquery"], function () {
 
         myCalc(i);
     };
+
+    window.controlarMoneda = function() {
+        const pedido = parseInt(document.getElementById("pedido")?.value || 0);
+        const moneda = document.getElementById("moneda");
+
+        if (!moneda) return;
+
+        moneda.onchange = null; // limpiar eventos anteriores
+
+        if (pedido > 0) {
+            moneda.dataset.original = moneda.value;
+
+            moneda.onchange = function () {
+                this.value = this.dataset.original;
+            };
+        } else {
+            moneda.onchange = function () {
+                RefreshMonedaTasa();
+            };
+        }
+    };   
 
     $(document).on("keyup change", "#articulo", function () {
         console.log("Buscando artículo:", $(this).val());
@@ -34077,10 +34219,10 @@ function Row_Updating($rsold, &$rsnew)
                 $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
                 break;
             case "NC":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
                 break;
             case "ND":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
                 break;
         }
     }
@@ -35306,6 +35448,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
     var cliente = $("#codcli").value();
     var precioFull = $("#x" + i + "_precioFull").value();
     var descuento = $("#x" + i + "_descuento").value();
+    var descuento2 = $("#x" + i + "_descuento2").value();
     var precio = $("#x" + i + "_precio").value();
     var moneda = $("#moneda").value();
     var cantidad = $("#x" + i + "_cantidad").value();
@@ -35335,6 +35478,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
               cliente: cliente, 
               precioFull: precioFull, 
               descuento: descuento, 
+              descuento2: descuento2,
               precio: precio, 
               moneda: moneda, 
               cantidad: cantidad, 
@@ -35895,7 +36039,8 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
               <th width="10%" class="text-center">Lote</th>
               <th width="10%" class="text-center">Vence</th>
               <th width="10%" class="text-center">Precio Full</th>
-              <th width="10%" class="text-center">% Desc.</th>
+            <th width="10%" class="text-center">% Desc.1</th>
+            <th width="10%" class="text-center">% Desc.2</th>
               <th width="10%" class="text-center">Precio</th>
               <th width="10%" class="text-center">Total</th>
               <th width="10%" class="text-center">Agr/Eli</th>
@@ -40174,6 +40319,13 @@ function User_LoginError($usr, $pwd)
   <CustomScript ScriptType="Server" ScriptCodeType="Global" ScriptName="Page_Rendering"><![CDATA[// Page Rendering event
 function Page_Rendering()
 {
+    $pagina = strtolower(CurrentPageName());
+
+    // No mostrar alerta en login/logout
+    if (in_array($pagina, ["login.php", "logout.php"])) {
+        return;
+    }
+        
     $sql = "
         SELECT COUNT(*) AS cantidad_documentos
         FROM salidas AS a

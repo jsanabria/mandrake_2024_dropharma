@@ -4047,6 +4047,7 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->tasa_dia);
                     $doc->exportCaption($this->monto_usd);
                     $doc->exportCaption($this->dias_credito);
+                    $doc->exportCaption($this->entregado);
                     $doc->exportCaption($this->pagado);
                     $doc->exportCaption($this->impreso);
                     $doc->exportCaption($this->descuento);
@@ -4160,6 +4161,7 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->tasa_dia);
                         $doc->exportField($this->monto_usd);
                         $doc->exportField($this->dias_credito);
+                        $doc->exportField($this->entregado);
                         $doc->exportField($this->pagado);
                         $doc->exportField($this->impreso);
                         $doc->exportField($this->descuento);

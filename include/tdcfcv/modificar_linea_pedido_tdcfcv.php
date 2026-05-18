@@ -11,6 +11,7 @@ $articulo = TdcfcvRequestInt("articulo");
 $cantidad = TdcfcvRequestFloat("cantidad");
 $precio_full = TdcfcvRequestFloat("precio_full");
 $desc_item = TdcfcvRequestFloat("descuento_item");
+$desc_item2 = TdcfcvRequestFloat("descuento2_item");
 
 $lote = TdcfcvRequestText("lote");
 $vence = TdcfcvRequestText("vence");
@@ -52,6 +53,10 @@ if ($desc_item == 100) {
     TdcfcvJsonError("El descuento del item no puede ser 100%.");
 }
 
+if ($desc_item2 == 100) {
+    TdcfcvJsonError("El descuento fabricante del item no puede ser 100%.");
+}
+
 if ($descTransferencista == 100) {
     TdcfcvJsonError("El descuento transferencista no puede ser 100%.");
 }
@@ -84,6 +89,7 @@ $rowItemActual = ExecuteRow("
         IFNULL(cantidad_articulo, 0) AS cantidad_articulo,
         IFNULL(precio_unidad_sin_desc, 0) AS precio_unidad_sin_desc,
         IFNULL(descuento, 0) AS descuento,
+        IFNULL(descuento2, 0) AS descuento2,
         IFNULL(precio_unidad, 0) AS precio_unidad,
         IFNULL(precio, 0) AS precio,
         IFNULL(lote, '') AS lote,
@@ -102,12 +108,14 @@ if (!$rowItemActual) {
 $oldCantidad = floatval($rowItemActual["cantidad_articulo"]);
 $oldPrecioFull = floatval($rowItemActual["precio_unidad_sin_desc"]);
 $oldDescItem = floatval($rowItemActual["descuento"]);
+$oldDescItem2 = floatval($rowItemActual["descuento2"]);
 $oldPrecio = floatval($rowItemActual["precio_unidad"]);
 $oldTotal = floatval($rowItemActual["precio"]);
 $oldLote = $rowItemActual["lote"];
 $oldVence = $rowItemActual["fecha_vencimiento"];
 
 $nuevo_precio_neto = $precio_full - ($precio_full * ($desc_item / 100));
+$nuevo_precio_neto = $nuevo_precio_neto - ($nuevo_precio_neto * ($desc_item2 / 100));
 $nuevo_total_linea = $nuevo_precio_neto * $cantidad;
 
 /**
@@ -175,6 +183,7 @@ try {
             cantidad_movimiento = {$cant_mov},
             precio_unidad_sin_desc = {$precio_full},
             descuento = {$desc_item},
+            descuento2 = {$desc_item2},
             precio_unidad = {$nuevo_precio_neto},
             precio = {$nuevo_total_linea},
             lote = '{$loteSql}',
@@ -265,11 +274,11 @@ try {
     ");
 
     $oldValue = AdjustSql(
-        "Cant: {$oldCantidad}; PrecioFull: {$oldPrecioFull}; Desc: {$oldDescItem}; Precio: {$oldPrecio}; Total: {$oldTotal}; Lote: {$oldLote}; Vence: {$oldVence}"
+        "Cant: {$oldCantidad}; PrecioFull: {$oldPrecioFull}; Desc1: {$oldDescItem}; Desc2: {$oldDescItem2}; Precio: {$oldPrecio}; Total: {$oldTotal}; Lote: {$oldLote}; Vence: {$oldVence}"
     );
 
     $newValue = AdjustSql(
-        "Cant: {$cantidad}; PrecioFull: {$precio_full}; Desc: {$desc_item}; Precio: {$nuevo_precio_neto}; Total: {$nuevo_total_linea}; Lote: {$lote}; Vence: {$vence}"
+        "Cant: {$cantidad}; PrecioFull: {$precio_full}; Desc1: {$desc_item}; Desc2: {$desc_item2}; Precio: {$nuevo_precio_neto}; Total: {$nuevo_total_linea}; Lote: {$lote}; Vence: {$vence}"
     );
 
     $mensajeAudit = AdjustSql(

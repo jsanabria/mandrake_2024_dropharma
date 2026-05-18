@@ -142,7 +142,14 @@ $rows = ExecuteRows("
         IFNULL(c.precio, 0) AS precio_ful,
         IFNULL(d.descripcion, '') AS unidad_medida,
         IFNULL(a.descuento, 0) AS descuento,
-        IFNULL((c.precio - (c.precio * (a.descuento / 100))), 0) AS precio
+        IFNULL(b.descuento, 0) AS descuento2,
+        IFNULL(
+            (
+                (c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100)))
+                -
+                ((c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100))) * (IFNULL(b.descuento, 0) / 100))
+            ), 0
+        ) AS precio 
     FROM articulo AS a
     LEFT JOIN fabricante AS b ON b.Id = a.fabricante
     INNER JOIN tarifa_articulo AS c ON c.articulo = a.id AND c.tarifa = {$tarifa}
@@ -170,7 +177,8 @@ $html .= '<th width="10%" class="text-center">Cant.</th>';
 $html .= '<th width="10%" class="text-center">Lote</th>';
 $html .= '<th width="10%" class="text-center">Vence</th>';
 $html .= '<th width="10%" class="text-center">Precio Full</th>';
-$html .= '<th width="10%" class="text-center">% Desc.</th>';
+$html .= '<th width="10%" class="text-center">% Desc.1</th>';
+$html .= '<th width="10%" class="text-center">% Desc.2</th>';
 $html .= '<th width="10%" class="text-center">Precio</th>';
 $html .= '<th width="10%" class="text-center">Total</th>';
 $html .= '<th width="10%" class="text-center">Agr/Eli</th>';
@@ -187,7 +195,9 @@ foreach ($rows as $row) {
     $xCant = 0;
     $xPrecioFull = floatval($row["precio_ful"]) * $tasa;
     $xDescuento = floatval($row["descuento"]);
+    $xDescuento2 = floatval($row["descuento2"]);
     $xPrecio = $xPrecioFull - ($xPrecioFull * ($xDescuento / 100));
+    $xPrecio = $xPrecio - ($xPrecio * ($xDescuento2 / 100));
     $xTotal = 0.00;
     $xLote = "";
     $xVence = "";
@@ -199,6 +209,7 @@ foreach ($rows as $row) {
                 IFNULL(cantidad_articulo, 0) AS cantidad,
                 IFNULL(precio_unidad_sin_desc, 0) AS precio_unidad_sin_desc,
                 IFNULL(descuento, 0) AS descuento,
+                IFNULL(descuento2, 0) AS descuento2,
                 IFNULL(precio_unidad, 0) AS precio_unidad,
                 IFNULL(precio, 0) AS precio,
                 IFNULL(lote, '') AS lote,
@@ -215,6 +226,7 @@ foreach ($rows as $row) {
             $xCant = intval($rowItem["cantidad"]);
             $xPrecioFull = floatval($rowItem["precio_unidad_sin_desc"]);
             $xDescuento = floatval($rowItem["descuento"]);
+            $xDescuento2 = floatval($rowItem["descuento2"]);
             $xPrecio = floatval($rowItem["precio_unidad"]);
             $xTotal = floatval($rowItem["precio"]);
             $xLote = (string)$rowItem["lote"];
@@ -354,6 +366,10 @@ foreach ($rows as $row) {
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_descuento2" name="x' . $i . '_descuento2" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento2 . '" style="width:60px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
     $html .= '<input type="number" class="form-control" id="x' . $i . '_precio" name="x' . $i . '_precio" size="4" readonly="yes" value="' . ($xPrecio == 0 ? "" : number_format($xPrecio, 2, ".", "")) . '" style="width:100px;"' . $disabled . '>';
     $html .= '</td>';
 
@@ -375,7 +391,7 @@ foreach ($rows as $row) {
 }
 
 $html .= '<tr>';
-$html .= '<td colspan="10"><center><b>Registros ' . ($i - 1) . ' de ' . $cantidad . '</b></center></td>';
+$html .= '<td colspan="11"><center><b>Registros ' . ($i - 1) . ' de ' . $cantidad . '</b></center></td>';
 $html .= '</tr>';
 
 $html .= '</tbody>';

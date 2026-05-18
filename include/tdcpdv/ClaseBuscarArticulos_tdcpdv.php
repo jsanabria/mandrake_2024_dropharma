@@ -113,7 +113,15 @@ class BuscarArticulos {
                 CAST(a.cantidad_en_mano AS SIGNED) AS cantidad_en_mano, 
                 -- (CAST(a.cantidad_en_mano AS SIGNED)-CAST(a.cantidad_en_pedido AS SIGNED)) AS cantidad_en_mano, 
                 d.descripcion AS unidad_medida, 
-                a.descuento, (c.precio - (c.precio * (a.descuento/100))) AS precio, 0 AS cantidad, a.codigo, 
+                a.descuento,
+                IFNULL(b.descuento, 0) AS descuento2,
+                (
+                    (c.precio - (c.precio * (a.descuento / 100)))
+                    -
+                    ((c.precio - (c.precio * (a.descuento / 100))) * (IFNULL(b.descuento, 0) / 100))
+                ) AS precio,
+                0 AS cantidad,
+                a.codigo,
                 a.lote, a.fecha_vencimiento      
               FROM 
                 articulo AS a 
@@ -156,12 +164,27 @@ class BuscarArticulos {
               
               $html .= '</td>';
               $html .= '<td><strong>' . $row["nombre_comercial"] . 
-                            '</strong><br><small>' . $row["principio_activo"] . ' (Cod.: ' . $row["codigo"]  . ')</small><br>
-                            <small><i>' . $row["presentacion"] . '</i></small><br>
-                            <strong><small>Fabricante: ' . $row["fabricante"] . '<strong></small><br>
-                            <small><strong> Fec. Venc. ' . $FechaVencimiento . '</strong></small>' . (floatval($row["descuento"]) > 0 ? ' | Descuento: <span class="badge text-bg-info">' . number_format(floatval($row["descuento"]), 2, "," ,".") . '%</span>' : '') . ' | <small>Unidad</small></td>';
+                        '</strong><br><small>' . $row["principio_activo"] . ' (Cod.: ' . $row["codigo"]  . ')</small><br>
+                        <small><i>' . $row["presentacion"] . '</i></small><br>
+                        <strong><small>Fabricante: ' . $row["fabricante"] . '</small></strong><br>
+                        <small><strong>Fec. Venc. ' . $FechaVencimiento . '</strong></small>';
+
+              if (floatval($row["descuento"]) > 0) {
+                  $html .= ' | Desc. Artículo: <span class="badge text-bg-info">' .
+                          number_format(floatval($row["descuento"]), 2, ",", ".") .
+                          '%</span>';
+              }
+
+              if (floatval($row["descuento2"]) > 0) {
+                  $html .= ' | Desc. Fabricante: <span class="badge text-bg-warning">' .
+                          number_format(floatval($row["descuento2"]), 2, ",", ".") .
+                          '%</span>';
+              }
+
+              $html .= ' | <small>Unidad</small></td>';
+
               $html .= '<td class="text-center">';  
-                          if(floatval($row["descuento"]) > 0) {
+                          if(floatval($row["descuento"]) > 0 || floatval($row["descuento2"]) > 0) {
                             if($this->moneda == "USD") {
                               $html .= '<span class="text-primary"><strong>' . number_format(round($row["precio"], 2)*$this->tasa, 2, ".", ",") . '</strong></span><br>';
                               // $html .= '<span class="text-dark"><strong><del>' . number_format(floatval($row["precio_ful"]*$tasa), 2, "," ,".") . '</del></strong></span>';
@@ -179,7 +202,7 @@ class BuscarArticulos {
                           }
               $html .= '</td>';
               $html .= '<td class="text-center">';  
-                          if(floatval($row["descuento"]) > 0) { 
+                          if(floatval($row["descuento"]) > 0 || floatval($row["descuento2"]) > 0) {
                             if($this->moneda == "USD") { 
                               $html .= '<span class="text-primary"><strong>' . number_format($row["precio"], 2, ".", ",") . '</strong></span><br>';
                               $html .= '<span class="text-dark"><strong><del>' . number_format($row["precio_ful"], 2, "," ,".") . '</del></strong></span>';  
@@ -206,6 +229,7 @@ class BuscarArticulos {
                           $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" value="' . ($xCant==0 ? "" : $xCant) . '" style="width: 80px;" ' . ($xCant==0 ? '' : 'disabled="disabled"') . '>';
                           $html .= '<input type="hidden" id="x' . $i . '_precio" name="x' . $i . '_precio" value="' . round($row["precio"], 2) . '">';
                           $html .= '<input type="hidden" id="x' . $i . '_descuento" name="x' . $i . '_descuento" value="' . round($row["descuento"], 2) . '">';
+                          $html .= '<input type="hidden" id="x' . $i . '_descuento2" name="x' . $i . '_descuento2" value="' . round($row["descuento2"], 2) . '">';
                           $html .= '<input type="hidden" id="x' . $i . '_precioFull" name="x' . $i . '_precioFull" value="' . round($row["precio_ful"], 2) . '">';
                           $html .= '<input type="hidden" id="x' . $i . '_moneda" name="x' . $i . '_moneda" value="' . $this->moneda . '">';
                           $html .= '<input type="hidden" id="x' . $i . '_onhand" name="x' . $i . '_onhand" value="' . $onHand . '">';

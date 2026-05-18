@@ -75,6 +75,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
     var cliente = $("#codcli").value();
     var precioFull = $("#x" + i + "_precioFull").value();
     var descuento = $("#x" + i + "_descuento").value();
+    var descuento2 = $("#x" + i + "_descuento2").value();
     var precio = $("#x" + i + "_precio").value();
     var moneda = $("#moneda").value();
     var cantidad = $("#x" + i + "_cantidad").value();
@@ -104,6 +105,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
               cliente: cliente, 
               precioFull: precioFull, 
               descuento: descuento, 
+              descuento2: descuento2,
               precio: precio, 
               moneda: moneda, 
               cantidad: cantidad, 
@@ -664,7 +666,8 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
               <th width="10%" class="text-center">Lote</th>
               <th width="10%" class="text-center">Vence</th>
               <th width="10%" class="text-center">Precio Full</th>
-              <th width="10%" class="text-center">% Desc.</th>
+            <th width="10%" class="text-center">% Desc.1</th>
+            <th width="10%" class="text-center">% Desc.2</th>
               <th width="10%" class="text-center">Precio</th>
               <th width="10%" class="text-center">Total</th>
               <th width="10%" class="text-center">Agr/Eli</th>

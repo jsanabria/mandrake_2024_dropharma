@@ -63,7 +63,13 @@ $sql = "SELECT
           a.foto, a.nombre_comercial, b.nombre AS fabricante, 
           a.principio_activo, a.presentacion, z.precio_unidad_sin_desc AS precio_ful, 
           z.cantidad_articulo AS cantidad, a.cantidad_en_mano, 
-          z.descuento, z.precio_unidad AS precio, z.precio as total, a.lote, a.fecha_vencimiento, z.almacen  
+          z.descuento,
+          IFNULL(z.descuento2, 0) AS descuento2,
+          z.precio_unidad AS precio,
+          z.precio as total,
+          a.lote,
+          a.fecha_vencimiento,
+          z.almacen 
         FROM 
           entradas_salidas AS z 
           INNER JOIN articulo AS a ON a.id = z.articulo 
@@ -120,12 +126,27 @@ while ($row = mysqli_fetch_array($result)) {
       
       $html .= '</td>';
       $html .= '<td><strong>' . $row["nombre_comercial"] . 
-                    '</strong><br><small>' . $row["principio_activo"] . '</small><br>
-                    <small><i>' . $row["presentacion"] . '</i></small><br>
-                    <strong><small>Fabricante: ' . $row["fabricante"] . '<strong></small><br>
-                    <small><strong> Fec. Venc. ' . $FechaVencimiento . '</strong></small>' . (floatval($row["descuento"]) > 0 ? ' | Descuento: <span class="badge text-bg-info">' . number_format(floatval($row["descuento"]), 2, "," ,".") . '%</span>' : '') . ' | <small>Unidad</small></td>';
+                '</strong><br><small>' . $row["principio_activo"] . '</small><br>
+                <small><i>' . $row["presentacion"] . '</i></small><br>
+                <strong><small>Fabricante: ' . $row["fabricante"] . '</small></strong><br>
+                <small><strong>Fec. Venc. ' . $FechaVencimiento . '</strong></small>';
+
+      if (floatval($row["descuento"]) > 0) {
+          $html .= ' | Desc. Artículo: <span class="badge text-bg-info">' .
+                  number_format(floatval($row["descuento"]), 2, ",", ".") .
+                  '%</span>';
+      }
+
+      if (floatval($row["descuento2"]) > 0) {
+          $html .= ' | Desc. Fabricante: <span class="badge text-bg-warning">' .
+                  number_format(floatval($row["descuento2"]), 2, ",", ".") .
+                  '%</span>';
+      }
+
+      $html .= ' | <small>Unidad</small></td>';
+
       $html .= '<td class="text-center">';  
-                  if(floatval($row["descuento"]) > 0) {
+                  if(floatval($row["descuento"]) > 0 || floatval($row["descuento2"]) > 0) {
                     if($moneda == "USD") {
                       $html .= '<span class="text-primary"><strong>' . number_format(round($row["precio"], 2)*$tasa, 2, ".", ",") . '</strong></span><br>';
                       // $html .= '<span class="text-dark"><strong><del>' . number_format(floatval($row["precio_ful"]*$tasa), 2, "," ,".") . '</del></strong></span>';
@@ -143,7 +164,7 @@ while ($row = mysqli_fetch_array($result)) {
                   }
       $html .= '</td>';
       $html .= '<td class="text-center">';  
-                  if(floatval($row["descuento"]) > 0) { 
+                  if(floatval($row["descuento"]) > 0 || floatval($row["descuento2"]) > 0) {
                     if($moneda == "USD") { 
                       $html .= '<span class="text-primary"><strong>' . number_format($row["precio"], 2, ".", ",") . '</strong></span><br>';
                       $html .= '<span class="text-dark"><strong><del>' . number_format($row["precio_ful"], 2, "," ,".") . '</del></strong></span>';  
@@ -167,6 +188,7 @@ while ($row = mysqli_fetch_array($result)) {
                   $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" value="' . (intval($row["cantidad"])==0 ? "" : intval($row["cantidad"])) . '" style="width: 80px;" ' . (intval($row["cantidad"])==0 ? '' : 'disabled="disabled"') . '>';
                   $html .= '<input type="hidden" id="x' . $i . '_precio" name="x' . $i . '_precio" value="' . round($row["precio"], 2) . '">';
                   $html .= '<input type="hidden" id="x' . $i . '_descuento" name="x' . $i . '_descuento" value="' . round($row["descuento"], 2) . '">';
+                  $html .= '<input type="hidden" id="x' . $i . '_descuento2" name="x' . $i . '_descuento2" value="' . round($row["descuento2"], 2) . '">';
                   $html .= '<input type="hidden" id="x' . $i . '_precioFull" name="x' . $i . '_precioFull" value="' . round($row["precio_ful"], 2) . '">';
                   $html .= '<input type="hidden" id="x' . $i . '_moneda" name="x' . $i . '_moneda" value="' . $moneda . '">';
                   $html .= '<input type="hidden" id="x' . $i . '_onhand" name="x' . $i . '_onhand" value="' . $onHand . '">';

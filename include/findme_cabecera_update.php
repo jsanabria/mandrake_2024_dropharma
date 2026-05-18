@@ -14,7 +14,8 @@ $nombre = $_POST["nombre"];
 $direccion = $_POST["direccion"];
 $telefono = $_POST["telefono"];
 
-$descuento = floatval($_POST["descuento"]);
+$descuento = isset($_POST["descuento"]) ? floatval($_POST["descuento"]) : 0;
+$descuento2 = isset($_POST["descuento2"]) ? floatval($_POST["descuento2"]) : 0;
 $tasa_dia = floatval($_POST["tasa"]);
 
 if($tasa_dia == 0) {
@@ -32,6 +33,7 @@ $tipo_documento = $row["tipo_documento"];
 $sql = "UPDATE salidas 
 		SET 
 			descuento = $descuento, 
+			descuento2 = $descuento2,
 			tasa_dia = $tasa_dia, 
 			estatus = 'PROCESADO', 
 			factura = '$factura', 

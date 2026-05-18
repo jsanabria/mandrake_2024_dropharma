@@ -192,8 +192,9 @@ class PDF extends FPDF
 		$this->Cell(10, 6, "CAN.", 1, 0, 'R');
 		$this->Cell(15, 6, "IVA %", 1, 0, 'R');
 		$this->Cell(25, 6, "PRECIO", 1, 0, 'R');
-		$this->Cell(10, 6, "DES %", 1, 0, 'R');
-		$this->Cell(30, 6, "TOTAL", 1, 0, 'R');
+		$this->Cell(10, 6, "DS1%", 1, 0, 'R');
+		$this->Cell(10, 6, "DS2%", 1, 0, 'R');
+		$this->Cell(20, 6, "TOTAL", 1, 0, 'R');
 		$this->Ln(6);
 
 		// LLAMAR A LA MARCA DE AGUA AL EMPEZAR EL HEADER
@@ -293,8 +294,9 @@ $sql = "SELECT
 			a.cantidad_articulo AS cantidad, 
 			(SELECT descripcion FROM unidad_medida WHERE codigo = a.articulo_unidad_medida) AS unidad_medida, 
 			(SELECT alicuota FROM alicuota WHERE codigo = b.alicuota AND activo = 'S') alicuota, 
-			a.descuento, 
-			a.precio_unidad_sin_desc AS precio_unidad, 
+			a.descuento,
+			IFNULL(a.descuento2, 0) AS descuento2,
+			a.precio_unidad_sin_desc AS precio_unidad,
 			a.precio
 		FROM 
 			entradas_salidas AS a 
@@ -320,8 +322,9 @@ while($row = mysqli_fetch_array($rs))
 	//$pdf->Cell(20, 4, substr($row["unidad_medida"], 0, 3) . " " . $row["cantidad"], 0, 0, 'L');
 	$pdf->Cell(15, 4, number_format($row["alicuota"], 2, ".", ","), 0, 0, 'R');
 	$pdf->Cell(25, 4, number_format($row["precio_unidad"], 2, ".", ","), 0, 0, 'R');
-	$pdf->Cell(10, 4, floatval($row["descuento"])>0 ? number_format($row["descuento"], 2, ",", ".") : "", 0, 0, 'R');
-	$pdf->Cell(30, 4, number_format($row["precio"], 2, ".", ","), 0, 0, 'R');
+	$pdf->Cell(10, 4, floatval($row["descuento"]) > 0 ? number_format($row["descuento"], 2, ",", ".") : "", 0, 0, 'R');
+	$pdf->Cell(10, 4, floatval($row["descuento2"]) > 0 ? number_format($row["descuento2"], 2, ",", ".") : "", 0, 0, 'R');
+	$pdf->Cell(20, 4, number_format($row["precio"], 2, ".", ","), 0, 0, 'R');
 
 	if(strlen($row["articulo"]) >= 47) {
 		$pdf->Ln();

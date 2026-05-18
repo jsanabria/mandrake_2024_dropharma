@@ -113,13 +113,17 @@ for($i = 0; $i < $cantidad; $i++) {
 		/*** Consulto la cantidad solicitada por el cliente y precio dado al mismo por el artículo ***/
 		$sql = "SELECT 
 					a.cantidad_movimiento, a.precio_unidad, a.alicuota,
-					a.precio_unidad, IFNULL(a.descuento, 0.00) AS descuento, a.precio_unidad_sin_desc 
-				FROM entradas_salidas AS a 
+					a.precio_unidad,
+                    IFNULL(a.descuento, 0.00) AS descuento,
+                    IFNULL(a.descuento2, 0.00) AS descuento2,
+                    a.precio_unidad_sin_desc
+                FROM entradas_salidas AS a 
 				WHERE a.id = '$dt';";
 		$row = ExecuteRow($sql);
 		$solicitado = $row["cantidad_movimiento"];
 		$precio_unidad = $row["precio_unidad"];
 		$descuento = floatval($row["descuento"]);
+        $descuento2 = floatval($row["descuento2"]);
 		$precio_unidad_sin_desc = floatval($row["precio_unidad_sin_desc"]);
 		
 
@@ -132,12 +136,12 @@ for($i = 0; $i < $cantidad; $i++) {
 					(id, tipo_documento, id_documento, 
 					fabricante, articulo, lote, fecha_vencimiento, almacen, cantidad_articulo, 
 					articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, precio_unidad, precio, alicuota, id_compra,
-					descuento, precio_unidad_sin_desc) 
+					descuento, descuento2, precio_unidad_sin_desc) 
 				VALUES 
 					(NULL, '$tipo_documento', '$new_id', 
 					'$fabricante', '$articulo', '$lote', '$fecha_vencimiento', '$almacen', '$cnt', 
 					'$un', '$cantidad_um', '$asignado', '$precio_unidad', '$precio', '$alicuota', '0',
-					$descuento, $precio_unidad_sin_desc);";  
+					$descuento, $descuento2, $precio_unidad_sin_desc);";  
 		Execute($sql);
 
 		if((abs($solicitado) - abs($asignado)) > 0) {

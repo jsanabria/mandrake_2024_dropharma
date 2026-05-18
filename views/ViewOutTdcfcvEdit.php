@@ -46,6 +46,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
+            ["entregado", [fields.entregado.visible && fields.entregado.required ? ew.Validators.required(fields.entregado.caption) : null], fields.entregado.isInvalid],
             ["nro_despacho", [fields.nro_despacho.visible && fields.nro_despacho.required ? ew.Validators.required(fields.nro_despacho.caption) : null], fields.nro_despacho.isInvalid],
             ["asesor_asignado", [fields.asesor_asignado.visible && fields.asesor_asignado.required ? ew.Validators.required(fields.asesor_asignado.caption) : null], fields.asesor_asignado.isInvalid]
         ])
@@ -68,6 +69,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "igtf": <?= $Page->igtf->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
+            "entregado": <?= $Page->entregado->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
         })
         .build();
@@ -182,6 +184,52 @@ loadjs.ready("head", function () {
 <span<?= $Page->estatus->viewAttributes() ?>>
 <span class="form-control-plaintext"><?= $Page->estatus->getDisplayValue($Page->estatus->EditValue) ?></span></span>
 <input type="hidden" data-table="view_out_tdcfcv" data-field="x_estatus" data-hidden="1" data-page="1" name="x_estatus" id="x_estatus" value="<?= HtmlEncode($Page->estatus->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->entregado->Visible) { // entregado ?>
+    <div id="r_entregado"<?= $Page->entregado->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_entregado" for="x_entregado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->entregado->caption() ?><?= $Page->entregado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->entregado->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_entregado">
+    <select
+        id="x_entregado"
+        name="x_entregado"
+        class="form-select ew-select<?= $Page->entregado->isInvalidClass() ?>"
+        <?php if (!$Page->entregado->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcfcvedit_x_entregado"
+        <?php } ?>
+        data-table="view_out_tdcfcv"
+        data-field="x_entregado"
+        data-page="1"
+        data-value-separator="<?= $Page->entregado->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->entregado->getPlaceHolder()) ?>"
+        <?= $Page->entregado->editAttributes() ?>>
+        <?= $Page->entregado->selectOptionListHtml("x_entregado") ?>
+    </select>
+    <?= $Page->entregado->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->entregado->getErrorMessage() ?></div>
+<?php if (!$Page->entregado->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcfcvedit", function() {
+    var options = { name: "x_entregado", selectId: "fview_out_tdcfcvedit_x_entregado" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcfcvedit.lists.entregado?.lookupOptions.length) {
+        options.data = { id: "x_entregado", form: "fview_out_tdcfcvedit" };
+    } else {
+        options.ajax = { id: "x_entregado", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.entregado.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>

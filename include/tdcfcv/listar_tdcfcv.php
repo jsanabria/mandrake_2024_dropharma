@@ -89,6 +89,7 @@ $rows = ExecuteRows("
         IFNULL(z.precio_unidad_sin_desc, 0) AS precio_ful,
         IFNULL(z.cantidad_articulo, 0) AS cantidad,
         IFNULL(z.descuento, 0) AS descuento,
+        IFNULL(z.descuento2, 0) AS descuento2,
         IFNULL(z.precio_unidad, 0) AS precio,
         IFNULL(z.precio, 0) AS total,
         IFNULL(z.lote, '') AS lote,
@@ -114,7 +115,8 @@ $html .= '<th width="10%" class="text-center">Cant.</th>';
 $html .= '<th width="10%" class="text-center">Lote</th>';
 $html .= '<th width="10%" class="text-center">Vence</th>';
 $html .= '<th width="10%" class="text-center">Precio Full</th>';
-$html .= '<th width="10%" class="text-center">% Desc.</th>';
+$html .= '<th width="10%" class="text-center">% Desc.1</th>';
+$html .= '<th width="10%" class="text-center">% Desc.2</th>';
 $html .= '<th width="10%" class="text-center">Precio</th>';
 $html .= '<th width="10%" class="text-center">Total</th>';
 $html .= '<th width="10%" class="text-center">Agr/Eli</th>';
@@ -132,6 +134,7 @@ foreach ($rows as $row) {
     $xCant = intval($row["cantidad"]);
     $xPrecioFull = floatval($row["precio_ful"]);
     $xDescuento = floatval($row["descuento"]);
+    $xDescuento2 = floatval($row["descuento2"]);
     $xPrecio = floatval($row["precio"]);
     $xTotal = floatval($row["total"]);
     $xLote = (string)$row["lote"];
@@ -188,6 +191,10 @@ foreach ($rows as $row) {
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_descuento2" name="x' . $i . '_descuento2" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento2 . '" style="width: 60px;"' . $disabled . '>';
+    $html .= '</td>';
+
+    $html .= '<td class="text-center">';
     $html .= '<input type="number" class="form-control" id="x' . $i . '_precio" name="x' . $i . '_precio" size="4" readonly="yes" value="' . ($xPrecio == 0 ? '' : number_format($xPrecio, 2, ".", "")) . '" style="width: 100px;"' . $disabled . '>';
     $html .= '</td>';
 
@@ -212,7 +219,7 @@ foreach ($rows as $row) {
 }
 
 $html .= '<tr>';
-$html .= '<td colspan="10"><center><b>Registros ' . ($i - 1) . ' de ' . $cantidad . '</b></center></td>';
+$html .= '<td colspan="11"><center><b>Registros ' . ($i - 1) . ' de ' . $cantidad . '</b></center></td>';
 $html .= '</tr>';
 
 $html .= '</tbody>';

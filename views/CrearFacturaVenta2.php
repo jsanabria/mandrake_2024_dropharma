@@ -97,7 +97,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 				cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 				costo_unidad, costo, id_compra,
-				descuento, precio_unidad_sin_desc)
+				descuento, descuento2, precio_unidad_sin_desc)
 			SELECT 
 				NULL, 'TDCFCV', '$factura_id', 
 				a.fabricante, a.articulo, '$almacen', 
@@ -105,7 +105,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				a.cantidad_movimiento, a.lote, a.fecha_vencimiento, a.precio_unidad, a.precio, a.alicuota,
 				(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * $tasa AS costo_unidad,
 				((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS(cantidad_articulo)) * $tasa AS costo, id_compra, 
-				descuento, precio_unidad_sin_desc * $tasa
+				IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, a.precio_unidad_sin_desc * $tasa AS precio_unidad_sin_desc 
 			FROM entradas_salidas AS a 
 			WHERE a.id_documento = '$id' AND a.tipo_documento = '$tipo' LIMIT $limite, $LineasFactura;";
 	}
@@ -116,7 +116,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
 				cantidad_movimiento, lote, fecha_vencimiento, precio_unidad, precio, alicuota,
 				costo_unidad, costo, id_compra,
-				descuento, precio_unidad_sin_desc)
+				descuento, descuento2, precio_unidad_sin_desc)
 			SELECT 
 				NULL, 'TDCFCV', '$factura_id', 
 				a.fabricante, a.articulo, '$almacen', 
@@ -127,7 +127,7 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 				(SELECT al2.alicuota FROM articulo AS al1 JOIN alicuota AS al2 ON al2.codigo = al1.alicuota WHERE al1.id = a.articulo AND al2.activo = 'S') AS alicuota,
 				(SELECT ultimo_costo FROM articulo WHERE id = a.articulo) AS costo_unidad,
 				((SELECT ultimo_costo FROM articulo WHERE id = a.articulo) * ABS(cantidad_articulo)) AS costo, id_compra, 
-				descuento, precio_unidad_sin_desc * $tasa 
+				IFNULL(a.descuento, 0) AS descuento, IFNULL(a.descuento2, 0) AS descuento2, a.precio_unidad_sin_desc * $tasa AS precio_unidad_sin_desc 
 			FROM entradas_salidas AS a 
 			WHERE a.id_documento = '$id' AND a.tipo_documento = '$tipo' LIMIT $limite, $LineasFactura;";
 	}

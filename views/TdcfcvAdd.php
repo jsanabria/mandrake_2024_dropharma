@@ -370,6 +370,7 @@ loadjs.ready(["jquery"], function () {
                 cliente: getVal("codcli"),
                 precioFull: precioFull,
                 descuento: $("#x" + i + "_descuento").val(),
+                descuento2: $("#x" + i + "_descuento2").val(),
                 precio: $("#x" + i + "_precio").val(),
                 moneda: getVal("moneda"),
                 total: $("#x" + i + "_total").val(),
@@ -491,6 +492,7 @@ loadjs.ready(["jquery"], function () {
                 cantidad: $("#x" + i + "_cantidad").val(),
                 precio_full: $("#x" + i + "_precioFull").val(),
                 descuento_item: $("#x" + i + "_descuento").val(),
+                descuento2_item: $("#x" + i + "_descuento2").val(),
                 lote: $("#x" + i + "_lote").val(),
                 vence: $("#x" + i + "_vence").val(),
                 moneda: getVal("moneda"),
@@ -786,8 +788,12 @@ loadjs.ready(["jquery"], function () {
         const cantidad = parseFloat($("#x" + i + "_cantidad").val() || 0);
         const precioFull = parseFloat($("#x" + i + "_precioFull").val() || 0);
         const descuento = parseFloat($("#x" + i + "_descuento").val() || 0);
+        const descuento2 = parseFloat($("#x" + i + "_descuento2").val() || 0);
 
-        const precio = redondearDecimales(precioFull - (precioFull * (descuento / 100)), 2);
+        let precio = precioFull - (precioFull * (descuento / 100));
+        precio = precio - (precio * (descuento2 / 100));
+        precio = redondearDecimales(precio, 2);
+
         const total = redondearDecimales(cantidad * precio, 2);
 
         $("#x" + i + "_precio").val(precio);
