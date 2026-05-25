@@ -468,7 +468,7 @@ class ViewInTdcnrp extends DbTable
             '`nota`', // Expression
             '`nota`', // Basic search expression
             200, // Type
-            255, // Size
+            65535, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`nota`', // Virtual expression

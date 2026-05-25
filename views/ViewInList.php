@@ -243,6 +243,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_view_in_descuento" class="view_in_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <th data-name="descuento2" class="<?= $Page->descuento2->headerCellClass() ?>"><div id="elh_view_in_descuento2" class="view_in_descuento2"><?= $Page->renderFieldHeader($Page->descuento2) ?></div></th>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
         <th data-name="costo_unidad" class="<?= $Page->costo_unidad->headerCellClass() ?>"><div id="elh_view_in_costo_unidad" class="view_in_costo_unidad"><?= $Page->renderFieldHeader($Page->costo_unidad) ?></div></th>
 <?php } ?>
@@ -344,6 +347,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_in_descuento" class="el_view_in_descuento">
 <span<?= $Page->descuento->viewAttributes() ?>>
 <?= $Page->descuento->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_in_descuento2" class="el_view_in_descuento2">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

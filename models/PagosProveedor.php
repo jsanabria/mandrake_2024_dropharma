@@ -68,6 +68,7 @@ class PagosProveedor extends DbTable
     public $fecha_registro;
     public $_username;
     public $comprobante;
+    public $cont_lotes;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -473,6 +474,30 @@ class PagosProveedor extends DbTable
         $this->comprobante->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->comprobante->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['comprobante'] = &$this->comprobante;
+
+        // cont_lotes
+        $this->cont_lotes = new DbField(
+            $this, // Table
+            'x_cont_lotes', // Variable name
+            'cont_lotes', // Name
+            '`cont_lotes`', // Expression
+            '`cont_lotes`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cont_lotes`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cont_lotes->InputTextType = "text";
+        $this->cont_lotes->Raw = true;
+        $this->cont_lotes->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->cont_lotes->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cont_lotes'] = &$this->cont_lotes;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1070,6 +1095,7 @@ class PagosProveedor extends DbTable
         $this->fecha_registro->DbValue = $row['fecha_registro'];
         $this->_username->DbValue = $row['username'];
         $this->comprobante->DbValue = $row['comprobante'];
+        $this->cont_lotes->DbValue = $row['cont_lotes'];
     }
 
     // Delete uploaded files
@@ -1444,6 +1470,7 @@ class PagosProveedor extends DbTable
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->cont_lotes->setDbValue($row['cont_lotes']);
     }
 
     // Render list content
@@ -1501,6 +1528,8 @@ class PagosProveedor extends DbTable
         // username
 
         // comprobante
+
+        // cont_lotes
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1656,6 +1685,10 @@ class PagosProveedor extends DbTable
             $this->comprobante->ViewValue = null;
         }
 
+        // cont_lotes
+        $this->cont_lotes->ViewValue = $this->cont_lotes->CurrentValue;
+        $this->cont_lotes->ViewValue = FormatNumber($this->cont_lotes->ViewValue, $this->cont_lotes->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -1719,6 +1752,10 @@ class PagosProveedor extends DbTable
             $this->comprobante->HrefValue = "";
         }
         $this->comprobante->TooltipValue = "";
+
+        // cont_lotes
+        $this->cont_lotes->HrefValue = "";
+        $this->cont_lotes->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1835,6 +1872,14 @@ class PagosProveedor extends DbTable
         $this->comprobante->EditValue = $this->comprobante->options(false);
         $this->comprobante->PlaceHolder = RemoveHtml($this->comprobante->caption());
 
+        // cont_lotes
+        $this->cont_lotes->setupEditAttributes();
+        $this->cont_lotes->EditValue = $this->cont_lotes->CurrentValue;
+        $this->cont_lotes->PlaceHolder = RemoveHtml($this->cont_lotes->caption());
+        if (strval($this->cont_lotes->EditValue) != "" && is_numeric($this->cont_lotes->EditValue)) {
+            $this->cont_lotes->EditValue = FormatNumber($this->cont_lotes->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1874,6 +1919,7 @@ class PagosProveedor extends DbTable
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->fecha_registro);
                     $doc->exportCaption($this->_username);
+                    $doc->exportCaption($this->cont_lotes);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->proveedor);
@@ -1889,6 +1935,7 @@ class PagosProveedor extends DbTable
                     $doc->exportCaption($this->fecha_registro);
                     $doc->exportCaption($this->_username);
                     $doc->exportCaption($this->comprobante);
+                    $doc->exportCaption($this->cont_lotes);
                 }
                 $doc->endExportRow();
             }
@@ -1926,6 +1973,7 @@ class PagosProveedor extends DbTable
                         $doc->exportField($this->nota);
                         $doc->exportField($this->fecha_registro);
                         $doc->exportField($this->_username);
+                        $doc->exportField($this->cont_lotes);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->proveedor);
@@ -1941,6 +1989,7 @@ class PagosProveedor extends DbTable
                         $doc->exportField($this->fecha_registro);
                         $doc->exportField($this->_username);
                         $doc->exportField($this->comprobante);
+                        $doc->exportField($this->cont_lotes);
                     }
                     $doc->endExportRow($rowCnt);
                 }

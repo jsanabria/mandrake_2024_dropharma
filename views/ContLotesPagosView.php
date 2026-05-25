@@ -111,6 +111,50 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->banco->Visible) { // banco ?>
+    <tr id="r_banco"<?= $Page->banco->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cont_lotes_pagos_banco"><?= $Page->banco->caption() ?></span></td>
+        <td data-name="banco"<?= $Page->banco->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_banco">
+<span<?= $Page->banco->viewAttributes() ?>>
+<?= $Page->banco->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->referencia->Visible) { // referencia ?>
+    <tr id="r_referencia"<?= $Page->referencia->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cont_lotes_pagos_referencia"><?= $Page->referencia->caption() ?></span></td>
+        <td data-name="referencia"<?= $Page->referencia->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_referencia">
+<span<?= $Page->referencia->viewAttributes() ?>>
+<?= $Page->referencia->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+    <tr id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cont_lotes_pagos_moneda"><?= $Page->moneda->caption() ?></span></td>
+        <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_moneda">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->comprobante->Visible) { // comprobante ?>
+    <tr id="r_comprobante"<?= $Page->comprobante->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cont_lotes_pagos_comprobante"><?= $Page->comprobante->caption() ?></span></td>
+        <td data-name="comprobante"<?= $Page->comprobante->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_comprobante">
+<span<?= $Page->comprobante->viewAttributes() ?>>
+<?= $Page->comprobante->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php
     if (in_array("cont_lotes_pagos_detalle", explode(",", $Page->getCurrentDetailTable())) && $cont_lotes_pagos_detalle->DetailView) {

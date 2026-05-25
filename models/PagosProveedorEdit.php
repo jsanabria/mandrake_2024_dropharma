@@ -143,6 +143,7 @@ class PagosProveedorEdit extends PagosProveedor
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
+        $this->cont_lotes->setVisibility();
     }
 
     // Constructor
@@ -872,6 +873,16 @@ class PagosProveedorEdit extends PagosProveedor
             }
         }
 
+        // Check field name 'cont_lotes' first before field var 'x_cont_lotes'
+        $val = $CurrentForm->hasValue("cont_lotes") ? $CurrentForm->getValue("cont_lotes") : $CurrentForm->getValue("x_cont_lotes");
+        if (!$this->cont_lotes->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->cont_lotes->Visible = false; // Disable update for API request
+            } else {
+                $this->cont_lotes->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -893,6 +904,7 @@ class PagosProveedorEdit extends PagosProveedor
         $this->moneda->CurrentValue = $this->moneda->FormValue;
         $this->monto_dado->CurrentValue = $this->monto_dado->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
+        $this->cont_lotes->CurrentValue = $this->cont_lotes->FormValue;
     }
 
     /**
@@ -1002,6 +1014,7 @@ class PagosProveedorEdit extends PagosProveedor
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->cont_lotes->setDbValue($row['cont_lotes']);
     }
 
     // Return a row with default values
@@ -1022,6 +1035,7 @@ class PagosProveedorEdit extends PagosProveedor
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['cont_lotes'] = $this->cont_lotes->DefaultValue;
         return $row;
     }
 
@@ -1097,6 +1111,9 @@ class PagosProveedorEdit extends PagosProveedor
 
         // comprobante
         $this->comprobante->RowCssClass = "row";
+
+        // cont_lotes
+        $this->cont_lotes->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1254,6 +1271,10 @@ class PagosProveedorEdit extends PagosProveedor
                 $this->comprobante->ViewValue = null;
             }
 
+            // cont_lotes
+            $this->cont_lotes->ViewValue = $this->cont_lotes->CurrentValue;
+            $this->cont_lotes->ViewValue = FormatNumber($this->cont_lotes->ViewValue, $this->cont_lotes->formatPattern());
+
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
@@ -1278,6 +1299,9 @@ class PagosProveedorEdit extends PagosProveedor
 
             // nota
             $this->nota->HrefValue = "";
+
+            // cont_lotes
+            $this->cont_lotes->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // proveedor
             $this->proveedor->setupEditAttributes();
@@ -1413,6 +1437,14 @@ class PagosProveedorEdit extends PagosProveedor
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
             $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
 
+            // cont_lotes
+            $this->cont_lotes->setupEditAttributes();
+            $this->cont_lotes->EditValue = $this->cont_lotes->CurrentValue;
+            $this->cont_lotes->PlaceHolder = RemoveHtml($this->cont_lotes->caption());
+            if (strval($this->cont_lotes->EditValue) != "" && is_numeric($this->cont_lotes->EditValue)) {
+                $this->cont_lotes->EditValue = FormatNumber($this->cont_lotes->EditValue, null);
+            }
+
             // Edit refer script
 
             // proveedor
@@ -1439,6 +1471,9 @@ class PagosProveedorEdit extends PagosProveedor
 
             // nota
             $this->nota->HrefValue = "";
+
+            // cont_lotes
+            $this->cont_lotes->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1505,6 +1540,14 @@ class PagosProveedorEdit extends PagosProveedor
                 if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
                     $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
                 }
+            }
+            if ($this->cont_lotes->Visible && $this->cont_lotes->Required) {
+                if (!$this->cont_lotes->IsDetailKey && EmptyValue($this->cont_lotes->FormValue)) {
+                    $this->cont_lotes->addErrorMessage(str_replace("%s", $this->cont_lotes->caption(), $this->cont_lotes->RequiredErrorMessage));
+                }
+            }
+            if (!CheckInteger($this->cont_lotes->FormValue)) {
+                $this->cont_lotes->addErrorMessage($this->cont_lotes->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -1654,6 +1697,9 @@ class PagosProveedorEdit extends PagosProveedor
 
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
+
+        // cont_lotes
+        $this->cont_lotes->setDbValueDef($rsnew, $this->cont_lotes->CurrentValue, $this->cont_lotes->ReadOnly);
         return $rsnew;
     }
 
@@ -1683,6 +1729,9 @@ class PagosProveedorEdit extends PagosProveedor
         }
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];
+        }
+        if (isset($row['cont_lotes'])) { // cont_lotes
+            $this->cont_lotes->CurrentValue = $row['cont_lotes'];
         }
     }
 

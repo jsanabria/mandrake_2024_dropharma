@@ -184,6 +184,18 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->usuario->Visible) { // usuario ?>
         <th data-name="usuario" class="<?= $Page->usuario->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_usuario" class="cont_lotes_pagos_usuario"><?= $Page->renderFieldHeader($Page->usuario) ?></div></th>
 <?php } ?>
+<?php if ($Page->banco->Visible) { // banco ?>
+        <th data-name="banco" class="<?= $Page->banco->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_banco" class="cont_lotes_pagos_banco"><?= $Page->renderFieldHeader($Page->banco) ?></div></th>
+<?php } ?>
+<?php if ($Page->referencia->Visible) { // referencia ?>
+        <th data-name="referencia" class="<?= $Page->referencia->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_referencia" class="cont_lotes_pagos_referencia"><?= $Page->renderFieldHeader($Page->referencia) ?></div></th>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+        <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_moneda" class="cont_lotes_pagos_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
+<?php } ?>
+<?php if ($Page->comprobante->Visible) { // comprobante ?>
+        <th data-name="comprobante" class="<?= $Page->comprobante->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_comprobante" class="cont_lotes_pagos_comprobante"><?= $Page->renderFieldHeader($Page->comprobante) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -249,6 +261,38 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_usuario" class="el_cont_lotes_pagos_usuario">
 <span<?= $Page->usuario->viewAttributes() ?>>
 <?= $Page->usuario->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->banco->Visible) { // banco ?>
+        <td data-name="banco"<?= $Page->banco->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_banco" class="el_cont_lotes_pagos_banco">
+<span<?= $Page->banco->viewAttributes() ?>>
+<?= $Page->banco->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->referencia->Visible) { // referencia ?>
+        <td data-name="referencia"<?= $Page->referencia->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_referencia" class="el_cont_lotes_pagos_referencia">
+<span<?= $Page->referencia->viewAttributes() ?>>
+<?= $Page->referencia->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->moneda->Visible) { // moneda ?>
+        <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_moneda" class="el_cont_lotes_pagos_moneda">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->comprobante->Visible) { // comprobante ?>
+        <td data-name="comprobante"<?= $Page->comprobante->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_comprobante" class="el_cont_lotes_pagos_comprobante">
+<span<?= $Page->comprobante->viewAttributes() ?>>
+<?= $Page->comprobante->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

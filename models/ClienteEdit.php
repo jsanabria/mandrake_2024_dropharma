@@ -148,6 +148,7 @@ class ClienteEdit extends Cliente
         $this->consignacion->setVisibility();
         $this->limite_credito->setVisibility();
         $this->condicion->setVisibility();
+        $this->codigo->setVisibility();
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->foto1->setVisibility();
@@ -983,6 +984,16 @@ class ClienteEdit extends Cliente
             }
         }
 
+        // Check field name 'codigo' first before field var 'x_codigo'
+        $val = $CurrentForm->hasValue("codigo") ? $CurrentForm->getValue("codigo") : $CurrentForm->getValue("x_codigo");
+        if (!$this->codigo->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->codigo->Visible = false; // Disable update for API request
+            } else {
+                $this->codigo->setFormValue($val);
+            }
+        }
+
         // Check field name 'cuenta' first before field var 'x_cuenta'
         $val = $CurrentForm->hasValue("cuenta") ? $CurrentForm->getValue("cuenta") : $CurrentForm->getValue("x_cuenta");
         if (!$this->cuenta->IsDetailKey) {
@@ -1053,6 +1064,7 @@ class ClienteEdit extends Cliente
         $this->consignacion->CurrentValue = $this->consignacion->FormValue;
         $this->limite_credito->CurrentValue = $this->limite_credito->FormValue;
         $this->condicion->CurrentValue = $this->condicion->FormValue;
+        $this->codigo->CurrentValue = $this->codigo->FormValue;
         $this->cuenta->CurrentValue = $this->cuenta->FormValue;
         $this->activo->CurrentValue = $this->activo->FormValue;
         $this->dias_credito->CurrentValue = $this->dias_credito->FormValue;
@@ -1171,6 +1183,7 @@ class ClienteEdit extends Cliente
         $this->consignacion->setDbValue($row['consignacion']);
         $this->limite_credito->setDbValue($row['limite_credito']);
         $this->condicion->setDbValue($row['condicion']);
+        $this->codigo->setDbValue($row['codigo']);
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->foto1->Upload->DbValue = $row['foto1'];
@@ -1204,6 +1217,7 @@ class ClienteEdit extends Cliente
         $row['consignacion'] = $this->consignacion->DefaultValue;
         $row['limite_credito'] = $this->limite_credito->DefaultValue;
         $row['condicion'] = $this->condicion->DefaultValue;
+        $row['codigo'] = $this->codigo->DefaultValue;
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['foto1'] = $this->foto1->DefaultValue;
@@ -1300,6 +1314,9 @@ class ClienteEdit extends Cliente
 
         // condicion
         $this->condicion->RowCssClass = "row";
+
+        // codigo
+        $this->codigo->RowCssClass = "row";
 
         // cuenta
         $this->cuenta->RowCssClass = "row";
@@ -1451,6 +1468,9 @@ class ClienteEdit extends Cliente
                 $this->condicion->ViewValue = null;
             }
 
+            // codigo
+            $this->codigo->ViewValue = $this->codigo->CurrentValue;
+
             // cuenta
             $curVal = strval($this->cuenta->CurrentValue);
             if ($curVal != "") {
@@ -1582,6 +1602,9 @@ class ClienteEdit extends Cliente
 
             // condicion
             $this->condicion->HrefValue = "";
+
+            // codigo
+            $this->codigo->HrefValue = "";
 
             // cuenta
             $this->cuenta->HrefValue = "";
@@ -1807,6 +1830,14 @@ class ClienteEdit extends Cliente
             $this->condicion->EditValue = $this->condicion->options(false);
             $this->condicion->PlaceHolder = RemoveHtml($this->condicion->caption());
 
+            // codigo
+            $this->codigo->setupEditAttributes();
+            if (!$this->codigo->Raw) {
+                $this->codigo->CurrentValue = HtmlDecode($this->codigo->CurrentValue);
+            }
+            $this->codigo->EditValue = HtmlEncode($this->codigo->CurrentValue);
+            $this->codigo->PlaceHolder = RemoveHtml($this->codigo->caption());
+
             // cuenta
             $curVal = trim(strval($this->cuenta->CurrentValue));
             if ($curVal != "") {
@@ -1973,6 +2004,9 @@ class ClienteEdit extends Cliente
             // condicion
             $this->condicion->HrefValue = "";
 
+            // codigo
+            $this->codigo->HrefValue = "";
+
             // cuenta
             $this->cuenta->HrefValue = "";
 
@@ -2118,6 +2152,11 @@ class ClienteEdit extends Cliente
             if ($this->condicion->Visible && $this->condicion->Required) {
                 if ($this->condicion->FormValue == "") {
                     $this->condicion->addErrorMessage(str_replace("%s", $this->condicion->caption(), $this->condicion->RequiredErrorMessage));
+                }
+            }
+            if ($this->codigo->Visible && $this->codigo->Required) {
+                if (!$this->codigo->IsDetailKey && EmptyValue($this->codigo->FormValue)) {
+                    $this->codigo->addErrorMessage(str_replace("%s", $this->codigo->caption(), $this->codigo->RequiredErrorMessage));
                 }
             }
             if ($this->cuenta->Visible && $this->cuenta->Required) {
@@ -2356,6 +2395,9 @@ class ClienteEdit extends Cliente
         // condicion
         $this->condicion->setDbValueDef($rsnew, $this->condicion->CurrentValue, $this->condicion->ReadOnly);
 
+        // codigo
+        $this->codigo->setDbValueDef($rsnew, $this->codigo->CurrentValue, $this->codigo->ReadOnly);
+
         // cuenta
         $this->cuenta->setDbValueDef($rsnew, $this->cuenta->CurrentValue, $this->cuenta->ReadOnly);
 
@@ -2446,6 +2488,9 @@ class ClienteEdit extends Cliente
         }
         if (isset($row['condicion'])) { // condicion
             $this->condicion->CurrentValue = $row['condicion'];
+        }
+        if (isset($row['codigo'])) { // codigo
+            $this->codigo->CurrentValue = $row['codigo'];
         }
         if (isset($row['cuenta'])) { // cuenta
             $this->cuenta->CurrentValue = $row['cuenta'];
@@ -2611,6 +2656,7 @@ class ClienteEdit extends Cliente
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event
@@ -2647,15 +2693,13 @@ class ClienteEdit extends Cliente
         //Log("Page Render");
     }
 
-    // Page Data Rendering event
     public function pageDataRendering(&$header)
     {
-        // Example:
         $header = '<!-- Modal para RIF Duplicado -->
             <div class="modal fade" id="modalRifDuplicado" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content border-warning">
-                        <div class="modal-header bg-warning">
+                        <div class="modal-header bg-warning text-dark">
                             <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> RIF Duplicado detectado</h5>
                         </div>
                         <div class="modal-body">

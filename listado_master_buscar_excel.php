@@ -2,124 +2,140 @@
 session_start();
 
 include 'include/connect.php';
-$id = $_GET["id"];
-$fecha_desde = $_REQUEST["fd"];
-$fecha_hasta = $_REQUEST["fh"];
 
-$tipo = isset($_REQUEST["tipo"]) ? $_REQUEST["tipo"] : "";
+$id          = isset($_GET["id"]) ? $_GET["id"] : "";
+$fecha_desde = isset($_REQUEST["fd"]) ? $_REQUEST["fd"] : "";
+$fecha_hasta = isset($_REQUEST["fh"]) ? $_REQUEST["fh"] : "";
 
-$cliente = isset($_REQUEST["cliente"]) ? $_REQUEST["cliente"] : "";
-$asesor = isset($_REQUEST["asesor"]) ? $_REQUEST["asesor"] : "";
+$tipo        = isset($_REQUEST["tipo"]) ? $_REQUEST["tipo"] : "";
+$articulo    = isset($_REQUEST["articulo"]) ? $_REQUEST["articulo"] : "";
+$cliente     = isset($_REQUEST["cliente"]) ? $_REQUEST["cliente"] : "";
+$asesor      = isset($_REQUEST["asesor"]) ? $_REQUEST["asesor"] : "";
 
 $where = "";
 $excel = true;
+
+// Variable de respaldo por si el include no define un nombre de archivo dinámico
+$filename = "reporte_" . htmlspecialchars($id) . "_" . date('Ymd_His') . ".xls";
+
+// Matriz de datos que llenarán los scripts incluidos
+$developer_records = []; 
+
 switch($id) {
-case "CLIENTES IMS":
-	include("include/clientes_ims_excel.php");
-	break;
-case "ARTICULOS IMS":
-	include("include/articulos_ims_excel.php");
-	break;
-case "FACTURAS IMS":
-	include("include/facturas_ims_excel.php");
-	break;
-case "LIBRO COMPRA":
-	include("include/libro_de_compra_excel.php");
-	break;
-case "LIBRO VENTA":
-	include("include/libro_de_ventas_excel.php");
-	break;
-case "VENTAS POR LABORATORIO":
-	include("include/ventas_por_laboratorio_rp_excel.php");
-	break;
-case "VENTAS POR ARTICULO":
-	include("include/ventas_por_articulo_excel.php");
-	break;
-case "VENTAS POR ARTICULO UTILIDAD":
-	include("include/ventas_por_articulo_utilidad_excel.php");
-	break;
-case "SALIDAS GENERALES POR LABORATORIO":
-	include("include/salidas_genreales_por_laboratorio_excel.php");
-	break;
-case "SALIDAS GENERALES POR ARTICULO":
-	include("include/salidas_genreales_por_articulo_excel.php");
-	break;
-case "SALIDAS GENERALES POR ARTICULO DETALLADO":
-	include("include/salidas_genreales_por_articulo_detallado_excel.php");
-	break;
-case "CLIENTES CON COMPRAS RECIENTES":
-	include("include/clientes_con_compras_recientes_excel.php");
-	break;
-case "CLIENTES SIN COMPRAS RECIENTES":
-	include("include/clientes_sin_compras_recientes_excel.php");
-	break;
-case "FACTURAS COSTO VS PRECIO":
-	include("include/factura_costo_vs_precio_excel.php");
-	break;
-case "KARDEX DE INVENTARIO":
-	include("include/kardex_de_inventario_excel.php");
-	break;
-case "INVENTARIO ENTRE FECHA":
-	include("include/inventario_entre_fecha_excel.php");
-	break;
-case "CONSIGNACIONES POR CLIENTE":
-	include("include/consignacion_por_cliente_excel.php");
-	break;
-case "FACTURAS POR CONSIGNACION":
-	include("include/facturas_por_consignacion_excel.php");
-	break;
-case "VENTAS POR CLIENTE":
-	include("include/ventas_por_cliente_excel.php");
-	break;
-case "DESCARGA ENTRADAS A CONSIGNACION":
-	include("include/descarga_entradas_consignacion_excel.php");
-	break;
-case "ENTRADAS GENERALES POR ARTICULO DETALLADO":
-	include("include/entradas_genreales_por_articulo_detallado_excel.php");
-	break;
-case "NOTAS DE ENTREGA DETALLADO":
-	include("include/notas_de_entrega_detallado_excel.php");
-	break;
-case "PEDIDOS DE VENTAS DETALLADO":
-	include("include/pedidos_de_ventas_detallado_excel.php");
-	break;
-case "otros": // Para configurarlo más adelante, por los momnetos funcionara el primero
-	break;
-default:
-	die("Report does not exist...");
+    case "ims_clientes":
+        include("include/clientes_ims_excel.php");
+        break;
+    case "ims_articulos":
+        include("include/articulos_ims_excel.php");
+        break;
+    case "ims_facturas":
+        include("include/facturas_ims_excel.php");
+        break;
+    case "tax_libro_compra":
+        include("include/libro_de_compra_excel.php");
+        break;
+    case "tax_libro_venta":
+        include("include/libro_de_ventas_excel.php");
+        break;
+    case "vta_laboratorio":
+        include("include/ventas_por_laboratorio_rp_excel.php");
+        break;
+    case "vta_articulo":
+        include("include/ventas_por_articulo_excel.php");
+        break;
+    case "vta_articulo_utilidad":
+        include("include/ventas_por_articulo_utilidad_excel.php");
+        break;
+    case "sal_laboratorio":
+        include("include/salidas_genreales_por_laboratorio_excel.php");
+        break;
+    case "sal_articulo":
+        include("include/salidas_genreales_por_articulo_excel.php");
+        break;
+    case "sal_articulo_detallado":
+        include("include/salidas_genreales_por_articulo_detallado_excel.php");
+        break;
+    case "cli_compras_recientes":
+        include("include/clientes_con_compras_recientes_excel.php");
+        break;
+    case "cli_sin_compras":
+        include("include/clientes_sin_compras_recientes_excel.php");
+        break;
+    case "aud_costo_vs_precio":
+        include("include/factura_costo_vs_precio_excel.php");
+        break;
+    case "inv_kardex":
+        include("include/kardex_de_inventario_excel.php");
+        break;
+    case "inv_entre_fechas":
+        include("include/inventario_entre_fecha_excel.php");
+        break;
+    case "cng_cliente":
+        include("include/consignacion_por_cliente_excel.php");
+        break;
+    case "cng_facturas":
+        include("include/facturas_por_consignacion_excel.php");
+        break;
+    case "vta_cliente":
+        include("include/ventas_por_cliente_excel.php");
+        break;
+    case "cng_descarga_entradas":
+        include("include/descarga_entradas_consignacion_excel.php");
+        break;
+    case "det_entradas_general":
+        include("include/entradas_genreales_por_articulo_detallado_excel.php");
+        break;
+    case "det_notas_entrega":
+        include("include/notas_de_entrega_detallado_excel.php");
+        break;
+    case "det_pedidos_venta":
+        include("include/pedidos_de_ventas_detallado_excel.php");
+        break;
+    case "sal_articulo_neas":
+        include("include/salidas_genreales_por_articulo_neas_excel.php");
+        break;
+    case "otros":
+        break;
+    default:
+        die("El reporte solicitado no existe.");
 }
 
-if($excel) {
-	header("Content-Type: application/vnd.ms-excel");}
-else {
-	header("Content-Type: text/html; charset=utf-8");
+// Configuración dinámica de cabeceras según el tipo de salida solicitado
+if ($excel) {
+    header("Content-Type: application/vnd.ms-excel; charset=utf-8");
+} else {
+    header("Content-Type: text/html; charset=utf-8");
 }
-header("Content-Disposition: attachment; filename=$filename");
+header("Content-Disposition: attachment; filename=" . $filename);
 
-if($excel) {
-	$show_coloumn = false;
-	foreach($developer_records as $record) {
-		if(!$show_coloumn) {
-			// display field/column names in first row
-			echo implode("\t", array_keys($record)) . "\n";
-			$show_coloumn = true;
-		}
-		echo implode("\t", array_values($record)) . "\n";
-	}
-}
-else {
-	$show_coloumn = true;
-	foreach($developer_records as $record) {
-		if(!$show_coloumn) {
-			// display field/column names in first row
-			echo implode("", array_keys($record)) . "\n";
-			$show_coloumn = true;
-		}
-		echo implode("", array_values($record)) . "\n";
-	}
-}
+// Renderizado y formateo de la matriz de registros
+if (!empty($developer_records) && is_array($developer_records)) {
+    if ($excel) {
+        $show_column = false;
+        foreach ($developer_records as $record) {
+            if (!$show_column) {
+                // Cabeceras del Excel usando las llaves asociativas del primer registro
+                echo implode("\t", array_keys($record)) . "\n";
+                $show_column = true;
+            }
+            // Saneamos los datos para que saltos de línea internos no rompan las celdas de Excel
+            $clean_values = array_map(function($value) {
+                return preg_replace("/\r|\n/", " ", $value ?? '');
+            }, array_values($record));
 
+            echo implode("\t", $clean_values) . "\n";
+        }
+    } else {
+        $show_column = true;
+        foreach ($developer_records as $record) {
+            if (!$show_column) {
+                echo implode("", array_keys($record)) . "\n";
+                $show_column = true;
+            }
+            echo implode("", array_values($record)) . "\n";
+        }
+    }
+}
 
 exit;
-
 ?>

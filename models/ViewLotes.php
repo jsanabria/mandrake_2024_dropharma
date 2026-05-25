@@ -157,7 +157,7 @@ class ViewLotes extends DbTable
             '`lote`', // Expression
             '`lote`', // Basic search expression
             200, // Type
-            20, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`lote`', // Virtual expression

@@ -39,15 +39,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["telefono2", [fields.telefono2.visible && fields.telefono2.required ? ew.Validators.required(fields.telefono2.caption) : null], fields.telefono2.isInvalid],
             ["email1", [fields.email1.visible && fields.email1.required ? ew.Validators.required(fields.email1.caption) : null, ew.Validators.email], fields.email1.isInvalid],
             ["email2", [fields.email2.visible && fields.email2.required ? ew.Validators.required(fields.email2.caption) : null, ew.Validators.email], fields.email2.isInvalid],
-            ["cuenta_auxiliar", [fields.cuenta_auxiliar.visible && fields.cuenta_auxiliar.required ? ew.Validators.required(fields.cuenta_auxiliar.caption) : null], fields.cuenta_auxiliar.isInvalid],
-            ["cuenta_gasto", [fields.cuenta_gasto.visible && fields.cuenta_gasto.required ? ew.Validators.required(fields.cuenta_gasto.caption) : null], fields.cuenta_gasto.isInvalid],
-            ["tipo_iva", [fields.tipo_iva.visible && fields.tipo_iva.required ? ew.Validators.required(fields.tipo_iva.caption) : null], fields.tipo_iva.isInvalid],
-            ["tipo_islr", [fields.tipo_islr.visible && fields.tipo_islr.required ? ew.Validators.required(fields.tipo_islr.caption) : null], fields.tipo_islr.isInvalid],
-            ["sustraendo", [fields.sustraendo.visible && fields.sustraendo.required ? ew.Validators.required(fields.sustraendo.caption) : null], fields.sustraendo.isInvalid],
-            ["tipo_impmun", [fields.tipo_impmun.visible && fields.tipo_impmun.required ? ew.Validators.required(fields.tipo_impmun.caption) : null], fields.tipo_impmun.isInvalid],
             ["cta_bco", [fields.cta_bco.visible && fields.cta_bco.required ? ew.Validators.required(fields.cta_bco.caption) : null], fields.cta_bco.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
-            ["fabricante", [fields.fabricante.visible && fields.fabricante.required ? ew.Validators.required(fields.fabricante.caption) : null, ew.Validators.integer], fields.fabricante.isInvalid]
+            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -64,12 +57,6 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "ciudad": <?= $Page->ciudad->toClientList($Page) ?>,
-            "cuenta_auxiliar": <?= $Page->cuenta_auxiliar->toClientList($Page) ?>,
-            "cuenta_gasto": <?= $Page->cuenta_gasto->toClientList($Page) ?>,
-            "tipo_iva": <?= $Page->tipo_iva->toClientList($Page) ?>,
-            "tipo_islr": <?= $Page->tipo_islr->toClientList($Page) ?>,
-            "sustraendo": <?= $Page->sustraendo->toClientList($Page) ?>,
-            "tipo_impmun": <?= $Page->tipo_impmun->toClientList($Page) ?>,
             "activo": <?= $Page->activo->toClientList($Page) ?>,
         })
         .build();
@@ -217,266 +204,6 @@ loadjs.ready("fproveedoredit", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-    <div id="r_cuenta_auxiliar"<?= $Page->cuenta_auxiliar->rowAttributes() ?>>
-        <label id="elh_proveedor_cuenta_auxiliar" for="x_cuenta_auxiliar" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cuenta_auxiliar->caption() ?><?= $Page->cuenta_auxiliar->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cuenta_auxiliar->cellAttributes() ?>>
-<span id="el_proveedor_cuenta_auxiliar">
-    <select
-        id="x_cuenta_auxiliar"
-        name="x_cuenta_auxiliar"
-        class="form-control ew-select<?= $Page->cuenta_auxiliar->isInvalidClass() ?>"
-        data-select2-id="fproveedoredit_x_cuenta_auxiliar"
-        data-table="proveedor"
-        data-field="x_cuenta_auxiliar"
-        data-caption="<?= HtmlEncode(RemoveHtml($Page->cuenta_auxiliar->caption())) ?>"
-        data-modal-lookup="true"
-        data-value-separator="<?= $Page->cuenta_auxiliar->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->cuenta_auxiliar->getPlaceHolder()) ?>"
-        <?= $Page->cuenta_auxiliar->editAttributes() ?>>
-        <?= $Page->cuenta_auxiliar->selectOptionListHtml("x_cuenta_auxiliar") ?>
-    </select>
-    <?= $Page->cuenta_auxiliar->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->cuenta_auxiliar->getErrorMessage() ?></div>
-<?= $Page->cuenta_auxiliar->Lookup->getParamTag($Page, "p_x_cuenta_auxiliar") ?>
-<script>
-loadjs.ready("fproveedoredit", function() {
-    var options = { name: "x_cuenta_auxiliar", selectId: "fproveedoredit_x_cuenta_auxiliar" };
-    if (fproveedoredit.lists.cuenta_auxiliar?.lookupOptions.length) {
-        options.data = { id: "x_cuenta_auxiliar", form: "fproveedoredit" };
-    } else {
-        options.ajax = { id: "x_cuenta_auxiliar", form: "fproveedoredit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.proveedor.fields.cuenta_auxiliar.modalLookupOptions);
-    ew.createModalLookup(options);
-});
-</script>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->cuenta_gasto->Visible) { // cuenta_gasto ?>
-    <div id="r_cuenta_gasto"<?= $Page->cuenta_gasto->rowAttributes() ?>>
-        <label id="elh_proveedor_cuenta_gasto" for="x_cuenta_gasto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cuenta_gasto->caption() ?><?= $Page->cuenta_gasto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cuenta_gasto->cellAttributes() ?>>
-<span id="el_proveedor_cuenta_gasto">
-    <select
-        id="x_cuenta_gasto"
-        name="x_cuenta_gasto"
-        class="form-control ew-select<?= $Page->cuenta_gasto->isInvalidClass() ?>"
-        data-select2-id="fproveedoredit_x_cuenta_gasto"
-        data-table="proveedor"
-        data-field="x_cuenta_gasto"
-        data-caption="<?= HtmlEncode(RemoveHtml($Page->cuenta_gasto->caption())) ?>"
-        data-modal-lookup="true"
-        data-value-separator="<?= $Page->cuenta_gasto->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->cuenta_gasto->getPlaceHolder()) ?>"
-        <?= $Page->cuenta_gasto->editAttributes() ?>>
-        <?= $Page->cuenta_gasto->selectOptionListHtml("x_cuenta_gasto") ?>
-    </select>
-    <?= $Page->cuenta_gasto->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->cuenta_gasto->getErrorMessage() ?></div>
-<?= $Page->cuenta_gasto->Lookup->getParamTag($Page, "p_x_cuenta_gasto") ?>
-<script>
-loadjs.ready("fproveedoredit", function() {
-    var options = { name: "x_cuenta_gasto", selectId: "fproveedoredit_x_cuenta_gasto" };
-    if (fproveedoredit.lists.cuenta_gasto?.lookupOptions.length) {
-        options.data = { id: "x_cuenta_gasto", form: "fproveedoredit" };
-    } else {
-        options.ajax = { id: "x_cuenta_gasto", form: "fproveedoredit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.proveedor.fields.cuenta_gasto.modalLookupOptions);
-    ew.createModalLookup(options);
-});
-</script>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo_iva->Visible) { // tipo_iva ?>
-    <div id="r_tipo_iva"<?= $Page->tipo_iva->rowAttributes() ?>>
-        <label id="elh_proveedor_tipo_iva" for="x_tipo_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_iva->caption() ?><?= $Page->tipo_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_iva->cellAttributes() ?>>
-<span id="el_proveedor_tipo_iva">
-    <select
-        id="x_tipo_iva"
-        name="x_tipo_iva"
-        class="form-select ew-select<?= $Page->tipo_iva->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_iva->IsNativeSelect) { ?>
-        data-select2-id="fproveedoredit_x_tipo_iva"
-        <?php } ?>
-        data-table="proveedor"
-        data-field="x_tipo_iva"
-        data-value-separator="<?= $Page->tipo_iva->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_iva->getPlaceHolder()) ?>"
-        <?= $Page->tipo_iva->editAttributes() ?>>
-        <?= $Page->tipo_iva->selectOptionListHtml("x_tipo_iva") ?>
-    </select>
-    <?= $Page->tipo_iva->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_iva->getErrorMessage() ?></div>
-<?= $Page->tipo_iva->Lookup->getParamTag($Page, "p_x_tipo_iva") ?>
-<?php if (!$Page->tipo_iva->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fproveedoredit", function() {
-    var options = { name: "x_tipo_iva", selectId: "fproveedoredit_x_tipo_iva" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fproveedoredit.lists.tipo_iva?.lookupOptions.length) {
-        options.data = { id: "x_tipo_iva", form: "fproveedoredit" };
-    } else {
-        options.ajax = { id: "x_tipo_iva", form: "fproveedoredit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.tipo_iva.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo_islr->Visible) { // tipo_islr ?>
-    <div id="r_tipo_islr"<?= $Page->tipo_islr->rowAttributes() ?>>
-        <label id="elh_proveedor_tipo_islr" for="x_tipo_islr" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_islr->caption() ?><?= $Page->tipo_islr->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_islr->cellAttributes() ?>>
-<span id="el_proveedor_tipo_islr">
-    <select
-        id="x_tipo_islr"
-        name="x_tipo_islr"
-        class="form-select ew-select<?= $Page->tipo_islr->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_islr->IsNativeSelect) { ?>
-        data-select2-id="fproveedoredit_x_tipo_islr"
-        <?php } ?>
-        data-table="proveedor"
-        data-field="x_tipo_islr"
-        data-value-separator="<?= $Page->tipo_islr->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_islr->getPlaceHolder()) ?>"
-        <?= $Page->tipo_islr->editAttributes() ?>>
-        <?= $Page->tipo_islr->selectOptionListHtml("x_tipo_islr") ?>
-    </select>
-    <?= $Page->tipo_islr->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_islr->getErrorMessage() ?></div>
-<?= $Page->tipo_islr->Lookup->getParamTag($Page, "p_x_tipo_islr") ?>
-<?php if (!$Page->tipo_islr->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fproveedoredit", function() {
-    var options = { name: "x_tipo_islr", selectId: "fproveedoredit_x_tipo_islr" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fproveedoredit.lists.tipo_islr?.lookupOptions.length) {
-        options.data = { id: "x_tipo_islr", form: "fproveedoredit" };
-    } else {
-        options.ajax = { id: "x_tipo_islr", form: "fproveedoredit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.tipo_islr.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->sustraendo->Visible) { // sustraendo ?>
-    <div id="r_sustraendo"<?= $Page->sustraendo->rowAttributes() ?>>
-        <label id="elh_proveedor_sustraendo" for="x_sustraendo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->sustraendo->caption() ?><?= $Page->sustraendo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->sustraendo->cellAttributes() ?>>
-<span id="el_proveedor_sustraendo">
-    <select
-        id="x_sustraendo"
-        name="x_sustraendo"
-        class="form-select ew-select<?= $Page->sustraendo->isInvalidClass() ?>"
-        <?php if (!$Page->sustraendo->IsNativeSelect) { ?>
-        data-select2-id="fproveedoredit_x_sustraendo"
-        <?php } ?>
-        data-table="proveedor"
-        data-field="x_sustraendo"
-        data-value-separator="<?= $Page->sustraendo->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->sustraendo->getPlaceHolder()) ?>"
-        <?= $Page->sustraendo->editAttributes() ?>>
-        <?= $Page->sustraendo->selectOptionListHtml("x_sustraendo") ?>
-    </select>
-    <?= $Page->sustraendo->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->sustraendo->getErrorMessage() ?></div>
-<?= $Page->sustraendo->Lookup->getParamTag($Page, "p_x_sustraendo") ?>
-<?php if (!$Page->sustraendo->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fproveedoredit", function() {
-    var options = { name: "x_sustraendo", selectId: "fproveedoredit_x_sustraendo" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fproveedoredit.lists.sustraendo?.lookupOptions.length) {
-        options.data = { id: "x_sustraendo", form: "fproveedoredit" };
-    } else {
-        options.ajax = { id: "x_sustraendo", form: "fproveedoredit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.sustraendo.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo_impmun->Visible) { // tipo_impmun ?>
-    <div id="r_tipo_impmun"<?= $Page->tipo_impmun->rowAttributes() ?>>
-        <label id="elh_proveedor_tipo_impmun" for="x_tipo_impmun" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_impmun->caption() ?><?= $Page->tipo_impmun->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_impmun->cellAttributes() ?>>
-<span id="el_proveedor_tipo_impmun">
-    <select
-        id="x_tipo_impmun"
-        name="x_tipo_impmun"
-        class="form-select ew-select<?= $Page->tipo_impmun->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_impmun->IsNativeSelect) { ?>
-        data-select2-id="fproveedoredit_x_tipo_impmun"
-        <?php } ?>
-        data-table="proveedor"
-        data-field="x_tipo_impmun"
-        data-value-separator="<?= $Page->tipo_impmun->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_impmun->getPlaceHolder()) ?>"
-        <?= $Page->tipo_impmun->editAttributes() ?>>
-        <?= $Page->tipo_impmun->selectOptionListHtml("x_tipo_impmun") ?>
-    </select>
-    <?= $Page->tipo_impmun->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_impmun->getErrorMessage() ?></div>
-<?= $Page->tipo_impmun->Lookup->getParamTag($Page, "p_x_tipo_impmun") ?>
-<?php if (!$Page->tipo_impmun->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fproveedoredit", function() {
-    var options = { name: "x_tipo_impmun", selectId: "fproveedoredit_x_tipo_impmun" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fproveedoredit.lists.tipo_impmun?.lookupOptions.length) {
-        options.data = { id: "x_tipo_impmun", form: "fproveedoredit" };
-    } else {
-        options.ajax = { id: "x_tipo_impmun", form: "fproveedoredit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.tipo_impmun.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->cta_bco->Visible) { // cta_bco ?>
     <div id="r_cta_bco"<?= $Page->cta_bco->rowAttributes() ?>>
         <label id="elh_proveedor_cta_bco" for="x_cta_bco" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cta_bco->caption() ?><?= $Page->cta_bco->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -534,18 +261,6 @@ loadjs.ready("fproveedoredit", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->fabricante->Visible) { // fabricante ?>
-    <div id="r_fabricante"<?= $Page->fabricante->rowAttributes() ?>>
-        <label id="elh_proveedor_fabricante" for="x_fabricante" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fabricante->caption() ?><?= $Page->fabricante->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fabricante->cellAttributes() ?>>
-<span id="el_proveedor_fabricante">
-<input type="<?= $Page->fabricante->getInputTextType() ?>" name="x_fabricante" id="x_fabricante" data-table="proveedor" data-field="x_fabricante" value="<?= $Page->fabricante->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->fabricante->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fabricante->formatPattern()) ?>"<?= $Page->fabricante->editAttributes() ?> aria-describedby="x_fabricante_help">
-<?= $Page->fabricante->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fabricante->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 </div><!-- /page* -->
     <input type="hidden" data-table="proveedor" data-field="x_id" data-hidden="1" name="x_id" id="x_id" value="<?= HtmlEncode($Page->id->CurrentValue) ?>">
 <?php
@@ -592,11 +307,9 @@ loadjs.ready("head", function() {
 <script>
 loadjs.ready("load", function () {
     // Startup script
-    // Write your table-specific startup script here
-    // document.write("page loaded");
-    // document.write("page loaded");
+    // Funcionalidad de formateo estandarizado (Ej: V-12345678)
     function formatearRIF(valor) {
-        var limpio = valor.replace(/[.,-]/g, "").trim();
+        var limpio = valor.replace(/[.,-\s]/g, "").trim(); // Limpia puntos, comas, guiones y espacios
         if (limpio.length > 1 && limpio.charAt(1) !== '-') {
             return limpio.charAt(0).toUpperCase() + "-" + limpio.substring(1);
         }
@@ -606,32 +319,42 @@ loadjs.ready("load", function () {
         var $input = $(this);
         var rifOriginal = $input.val();
         if (rifOriginal.trim() == '') return;
+
+        // Detectar automáticamente el entorno mediante la URL para que sirva en ambos formularios
         var tipoEntidad = (window.location.href.toLowerCase().indexOf("proveedor") > -1) ? 'PROVEEDOR' : 'CLIENTE';
 
-        // Obtenemos el ID actual para enviarlo al PHP (ajusta "x_id" al nombre de tu campo clave)
-        var idActual = $("#x_id").val() || 0; 
-        $.getJSON("../RifBuscar", { 
-            "ci_rif": rifOriginal, 
-            "tipo": tipoEntidad, 
-            "accion": 'E', // 'E' de Edit
-            "id": idActual 
-        }, function(data) {
-            if (data.existe) {
-                $("#msgRifDuplicado").html("Atención: El RIF/CI <b>" + rifOriginal + "</b> ya está asignado a OTRO registro.");
-                var modalRif = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRifDuplicado'));
-                modalRif.show();
-                $("#btnCancelarRif").off("click").on("click", function() {
-                    // Al ser edición, quizás prefieras restaurar el valor anterior si lo guardaste
-                    $input.val("").focus(); 
-                    modalRif.hide();
-                });
-                $("#btnContinuarRif").off("click").on("click", function() {
-                    $input.val(formatearRIF(rifOriginal));
-                    modalRif.hide();
-                });
+        // Realizar la petición esperando el JSON estructurado
+        $.getJSON("RifBuscar", { "ci_rif": rifOriginal, "tipo": tipoEntidad, "accion": 'I' })
+        .done(function(data) {
+            // Validación basada en la respuesta del nuevo backend JSON
+            if (data && data.existe) {
+                $("#msgRifDuplicado").html("El RIF/CI <b>" + rifOriginal + "</b> ya se encuentra registrado en " + tipoEntidad.toLowerCase() + "s.");
+
+                // Instanciar y levantar la modal de Bootstrap
+                var modalElement = document.getElementById('modalRifDuplicado');
+                if (modalElement) {
+                    var modalRif = bootstrap.Modal.getOrCreateInstance(modalElement);
+                    modalRif.show();
+
+                    // Manejo de acciones en los botones
+                    $("#btnCancelarRif").off("click").on("click", function() {
+                        $input.val("").focus();
+                        modalRif.hide();
+                    });
+                    $("#btnContinuarRif").off("click").on("click", function() {
+                        $input.val(formatearRIF(rifOriginal));
+                        modalRif.hide();
+                    });
+                }
             } else {
+                // Si no existe, aplicar formato visual limpio de forma estándar
                 $input.val(formatearRIF(rifOriginal));
             }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("Error en la validación de RIF: ", textStatus, errorThrown);
+            // Resguardo: si falla la red o el script, al menos se le da formato al campo
+            $input.val(formatearRIF(rifOriginal));
         });
     });
 });

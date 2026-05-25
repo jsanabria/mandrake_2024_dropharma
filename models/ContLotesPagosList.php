@@ -159,6 +159,10 @@ class ContLotesPagosList extends ContLotesPagos
         $this->nota->setVisibility();
         $this->fecha_registro->Visible = false;
         $this->usuario->setVisibility();
+        $this->banco->setVisibility();
+        $this->referencia->setVisibility();
+        $this->moneda->setVisibility();
+        $this->comprobante->setVisibility();
     }
 
     // Constructor
@@ -705,6 +709,7 @@ class ContLotesPagosList extends ContLotesPagos
         // Set up lookup cache
         $this->setupLookupOptions($this->procesado);
         $this->setupLookupOptions($this->usuario);
+        $this->setupLookupOptions($this->comprobante);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1060,6 +1065,10 @@ class ContLotesPagosList extends ContLotesPagos
         $filterList = Concat($filterList, $this->nota->AdvancedSearch->toJson(), ","); // Field nota
         $filterList = Concat($filterList, $this->fecha_registro->AdvancedSearch->toJson(), ","); // Field fecha_registro
         $filterList = Concat($filterList, $this->usuario->AdvancedSearch->toJson(), ","); // Field usuario
+        $filterList = Concat($filterList, $this->banco->AdvancedSearch->toJson(), ","); // Field banco
+        $filterList = Concat($filterList, $this->referencia->AdvancedSearch->toJson(), ","); // Field referencia
+        $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
+        $filterList = Concat($filterList, $this->comprobante->AdvancedSearch->toJson(), ","); // Field comprobante
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1146,6 +1155,38 @@ class ContLotesPagosList extends ContLotesPagos
         $this->usuario->AdvancedSearch->SearchValue2 = @$filter["y_usuario"];
         $this->usuario->AdvancedSearch->SearchOperator2 = @$filter["w_usuario"];
         $this->usuario->AdvancedSearch->save();
+
+        // Field banco
+        $this->banco->AdvancedSearch->SearchValue = @$filter["x_banco"];
+        $this->banco->AdvancedSearch->SearchOperator = @$filter["z_banco"];
+        $this->banco->AdvancedSearch->SearchCondition = @$filter["v_banco"];
+        $this->banco->AdvancedSearch->SearchValue2 = @$filter["y_banco"];
+        $this->banco->AdvancedSearch->SearchOperator2 = @$filter["w_banco"];
+        $this->banco->AdvancedSearch->save();
+
+        // Field referencia
+        $this->referencia->AdvancedSearch->SearchValue = @$filter["x_referencia"];
+        $this->referencia->AdvancedSearch->SearchOperator = @$filter["z_referencia"];
+        $this->referencia->AdvancedSearch->SearchCondition = @$filter["v_referencia"];
+        $this->referencia->AdvancedSearch->SearchValue2 = @$filter["y_referencia"];
+        $this->referencia->AdvancedSearch->SearchOperator2 = @$filter["w_referencia"];
+        $this->referencia->AdvancedSearch->save();
+
+        // Field moneda
+        $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
+        $this->moneda->AdvancedSearch->SearchCondition = @$filter["v_moneda"];
+        $this->moneda->AdvancedSearch->SearchValue2 = @$filter["y_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
+        $this->moneda->AdvancedSearch->save();
+
+        // Field comprobante
+        $this->comprobante->AdvancedSearch->SearchValue = @$filter["x_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchOperator = @$filter["z_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchCondition = @$filter["v_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchValue2 = @$filter["y_comprobante"];
+        $this->comprobante->AdvancedSearch->SearchOperator2 = @$filter["w_comprobante"];
+        $this->comprobante->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1187,6 +1228,8 @@ class ContLotesPagosList extends ContLotesPagos
         $searchFlds = [];
         $searchFlds[] = &$this->nota;
         $searchFlds[] = &$this->usuario;
+        $searchFlds[] = &$this->referencia;
+        $searchFlds[] = &$this->moneda;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1270,6 +1313,10 @@ class ContLotesPagosList extends ContLotesPagos
             $this->updateSort($this->procesado); // procesado
             $this->updateSort($this->nota); // nota
             $this->updateSort($this->usuario); // usuario
+            $this->updateSort($this->banco); // banco
+            $this->updateSort($this->referencia); // referencia
+            $this->updateSort($this->moneda); // moneda
+            $this->updateSort($this->comprobante); // comprobante
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1300,6 +1347,10 @@ class ContLotesPagosList extends ContLotesPagos
                 $this->nota->setSort("");
                 $this->fecha_registro->setSort("");
                 $this->usuario->setSort("");
+                $this->banco->setSort("");
+                $this->referencia->setSort("");
+                $this->moneda->setSort("");
+                $this->comprobante->setSort("");
             }
 
             // Reset start position
@@ -1700,6 +1751,10 @@ class ContLotesPagosList extends ContLotesPagos
             $this->createColumnOption($option, "procesado");
             $this->createColumnOption($option, "nota");
             $this->createColumnOption($option, "usuario");
+            $this->createColumnOption($option, "banco");
+            $this->createColumnOption($option, "referencia");
+            $this->createColumnOption($option, "moneda");
+            $this->createColumnOption($option, "comprobante");
         }
 
         // Set up custom actions
@@ -2139,6 +2194,10 @@ class ContLotesPagosList extends ContLotesPagos
         $this->nota->setDbValue($row['nota']);
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->usuario->setDbValue($row['usuario']);
+        $this->banco->setDbValue($row['banco']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->comprobante->setDbValue($row['comprobante']);
     }
 
     // Return a row with default values
@@ -2151,6 +2210,10 @@ class ContLotesPagosList extends ContLotesPagos
         $row['nota'] = $this->nota->DefaultValue;
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['usuario'] = $this->usuario->DefaultValue;
+        $row['banco'] = $this->banco->DefaultValue;
+        $row['referencia'] = $this->referencia->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['comprobante'] = $this->comprobante->DefaultValue;
         return $row;
     }
 
@@ -2203,6 +2266,14 @@ class ContLotesPagosList extends ContLotesPagos
 
         // usuario
 
+        // banco
+
+        // referencia
+
+        // moneda
+
+        // comprobante
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -2250,6 +2321,23 @@ class ContLotesPagosList extends ContLotesPagos
                 $this->usuario->ViewValue = null;
             }
 
+            // banco
+            $this->banco->ViewValue = $this->banco->CurrentValue;
+            $this->banco->ViewValue = FormatNumber($this->banco->ViewValue, $this->banco->formatPattern());
+
+            // referencia
+            $this->referencia->ViewValue = $this->referencia->CurrentValue;
+
+            // moneda
+            $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+            // comprobante
+            if (strval($this->comprobante->CurrentValue) != "") {
+                $this->comprobante->ViewValue = $this->comprobante->optionCaption($this->comprobante->CurrentValue);
+            } else {
+                $this->comprobante->ViewValue = null;
+            }
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -2269,6 +2357,22 @@ class ContLotesPagosList extends ContLotesPagos
             // usuario
             $this->usuario->HrefValue = "";
             $this->usuario->TooltipValue = "";
+
+            // banco
+            $this->banco->HrefValue = "";
+            $this->banco->TooltipValue = "";
+
+            // referencia
+            $this->referencia->HrefValue = "";
+            $this->referencia->TooltipValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
+
+            // comprobante
+            $this->comprobante->HrefValue = "";
+            $this->comprobante->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -2523,6 +2627,8 @@ class ContLotesPagosList extends ContLotesPagos
                 case "x_procesado":
                     break;
                 case "x_usuario":
+                    break;
+                case "x_comprobante":
                     break;
                 default:
                     $lookupFilter = "";

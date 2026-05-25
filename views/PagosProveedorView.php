@@ -177,6 +177,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->cont_lotes->Visible) { // cont_lotes ?>
+    <tr id="r_cont_lotes"<?= $Page->cont_lotes->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_proveedor_cont_lotes"><?= $Page->cont_lotes->caption() ?></span></td>
+        <td data-name="cont_lotes"<?= $Page->cont_lotes->cellAttributes() ?>>
+<span id="el_pagos_proveedor_cont_lotes">
+<span<?= $Page->cont_lotes->viewAttributes() ?>>
+<?= $Page->cont_lotes->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php
     if (in_array("pagos_proveedor_factura", explode(",", $Page->getCurrentDetailTable())) && $pagos_proveedor_factura->DetailView) {

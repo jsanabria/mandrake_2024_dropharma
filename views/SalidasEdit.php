@@ -62,7 +62,15 @@ loadjs.ready(["wrapper", "head"], function () {
             ["monto_igtf", [fields.monto_igtf.visible && fields.monto_igtf.required ? ew.Validators.required(fields.monto_igtf.caption) : null, ew.Validators.float], fields.monto_igtf.isInvalid],
             ["doc_afe", [fields.doc_afe.visible && fields.doc_afe.required ? ew.Validators.required(fields.doc_afe.caption) : null, ew.Validators.integer], fields.doc_afe.isInvalid],
             ["descuento3", [fields.descuento3.visible && fields.descuento3.required ? ew.Validators.required(fields.descuento3.caption) : null, ew.Validators.float], fields.descuento3.isInvalid],
-            ["impreso", [fields.impreso.visible && fields.impreso.required ? ew.Validators.required(fields.impreso.caption) : null], fields.impreso.isInvalid]
+            ["impreso", [fields.impreso.visible && fields.impreso.required ? ew.Validators.required(fields.impreso.caption) : null], fields.impreso.isInvalid],
+            ["nacionalizacion", [fields.nacionalizacion.visible && fields.nacionalizacion.required ? ew.Validators.required(fields.nacionalizacion.caption) : null, ew.Validators.float], fields.nacionalizacion.isInvalid],
+            ["arquitecto", [fields.arquitecto.visible && fields.arquitecto.required ? ew.Validators.required(fields.arquitecto.caption) : null, ew.Validators.float], fields.arquitecto.isInvalid],
+            ["ganancia", [fields.ganancia.visible && fields.ganancia.required ? ew.Validators.required(fields.ganancia.caption) : null, ew.Validators.float], fields.ganancia.isInvalid],
+            ["intermediario", [fields.intermediario.visible && fields.intermediario.required ? ew.Validators.required(fields.intermediario.caption) : null], fields.intermediario.isInvalid],
+            ["telefeno_intermediario", [fields.telefeno_intermediario.visible && fields.telefeno_intermediario.required ? ew.Validators.required(fields.telefeno_intermediario.caption) : null], fields.telefeno_intermediario.isInvalid],
+            ["email_intermediario", [fields.email_intermediario.visible && fields.email_intermediario.required ? ew.Validators.required(fields.email_intermediario.caption) : null], fields.email_intermediario.isInvalid],
+            ["genera_ne", [fields.genera_ne.visible && fields.genera_ne.required ? ew.Validators.required(fields.genera_ne.caption) : null], fields.genera_ne.isInvalid],
+            ["visita", [fields.visita.visible && fields.visita.required ? ew.Validators.required(fields.visita.caption) : null, ew.Validators.integer], fields.visita.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -92,6 +100,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
             "igtf": <?= $Page->igtf->toClientList($Page) ?>,
             "impreso": <?= $Page->impreso->toClientList($Page) ?>,
+            "genera_ne": <?= $Page->genera_ne->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -480,6 +489,122 @@ loadjs.ready("fsalidasedit", function() {
     <?= $Page->impreso->editAttributes() ?>></selection-list>
 <?= $Page->impreso->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->impreso->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->nacionalizacion->Visible) { // nacionalizacion ?>
+    <div id="r_nacionalizacion"<?= $Page->nacionalizacion->rowAttributes() ?>>
+        <label id="elh_salidas_nacionalizacion" for="x_nacionalizacion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nacionalizacion->caption() ?><?= $Page->nacionalizacion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nacionalizacion->cellAttributes() ?>>
+<span id="el_salidas_nacionalizacion">
+<input type="<?= $Page->nacionalizacion->getInputTextType() ?>" name="x_nacionalizacion" id="x_nacionalizacion" data-table="salidas" data-field="x_nacionalizacion" value="<?= $Page->nacionalizacion->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->nacionalizacion->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nacionalizacion->formatPattern()) ?>"<?= $Page->nacionalizacion->editAttributes() ?> aria-describedby="x_nacionalizacion_help">
+<?= $Page->nacionalizacion->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->nacionalizacion->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->arquitecto->Visible) { // arquitecto ?>
+    <div id="r_arquitecto"<?= $Page->arquitecto->rowAttributes() ?>>
+        <label id="elh_salidas_arquitecto" for="x_arquitecto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->arquitecto->caption() ?><?= $Page->arquitecto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->arquitecto->cellAttributes() ?>>
+<span id="el_salidas_arquitecto">
+<input type="<?= $Page->arquitecto->getInputTextType() ?>" name="x_arquitecto" id="x_arquitecto" data-table="salidas" data-field="x_arquitecto" value="<?= $Page->arquitecto->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->arquitecto->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->arquitecto->formatPattern()) ?>"<?= $Page->arquitecto->editAttributes() ?> aria-describedby="x_arquitecto_help">
+<?= $Page->arquitecto->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->arquitecto->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->ganancia->Visible) { // ganancia ?>
+    <div id="r_ganancia"<?= $Page->ganancia->rowAttributes() ?>>
+        <label id="elh_salidas_ganancia" for="x_ganancia" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ganancia->caption() ?><?= $Page->ganancia->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ganancia->cellAttributes() ?>>
+<span id="el_salidas_ganancia">
+<input type="<?= $Page->ganancia->getInputTextType() ?>" name="x_ganancia" id="x_ganancia" data-table="salidas" data-field="x_ganancia" value="<?= $Page->ganancia->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->ganancia->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ganancia->formatPattern()) ?>"<?= $Page->ganancia->editAttributes() ?> aria-describedby="x_ganancia_help">
+<?= $Page->ganancia->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->ganancia->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->intermediario->Visible) { // intermediario ?>
+    <div id="r_intermediario"<?= $Page->intermediario->rowAttributes() ?>>
+        <label id="elh_salidas_intermediario" for="x_intermediario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->intermediario->caption() ?><?= $Page->intermediario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->intermediario->cellAttributes() ?>>
+<span id="el_salidas_intermediario">
+<input type="<?= $Page->intermediario->getInputTextType() ?>" name="x_intermediario" id="x_intermediario" data-table="salidas" data-field="x_intermediario" value="<?= $Page->intermediario->EditValue ?>" data-page="1" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->intermediario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->intermediario->formatPattern()) ?>"<?= $Page->intermediario->editAttributes() ?> aria-describedby="x_intermediario_help">
+<?= $Page->intermediario->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->intermediario->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->telefeno_intermediario->Visible) { // telefeno_intermediario ?>
+    <div id="r_telefeno_intermediario"<?= $Page->telefeno_intermediario->rowAttributes() ?>>
+        <label id="elh_salidas_telefeno_intermediario" for="x_telefeno_intermediario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->telefeno_intermediario->caption() ?><?= $Page->telefeno_intermediario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->telefeno_intermediario->cellAttributes() ?>>
+<span id="el_salidas_telefeno_intermediario">
+<input type="<?= $Page->telefeno_intermediario->getInputTextType() ?>" name="x_telefeno_intermediario" id="x_telefeno_intermediario" data-table="salidas" data-field="x_telefeno_intermediario" value="<?= $Page->telefeno_intermediario->EditValue ?>" data-page="1" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->telefeno_intermediario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->telefeno_intermediario->formatPattern()) ?>"<?= $Page->telefeno_intermediario->editAttributes() ?> aria-describedby="x_telefeno_intermediario_help">
+<?= $Page->telefeno_intermediario->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->telefeno_intermediario->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->email_intermediario->Visible) { // email_intermediario ?>
+    <div id="r_email_intermediario"<?= $Page->email_intermediario->rowAttributes() ?>>
+        <label id="elh_salidas_email_intermediario" for="x_email_intermediario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->email_intermediario->caption() ?><?= $Page->email_intermediario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->email_intermediario->cellAttributes() ?>>
+<span id="el_salidas_email_intermediario">
+<input type="<?= $Page->email_intermediario->getInputTextType() ?>" name="x_email_intermediario" id="x_email_intermediario" data-table="salidas" data-field="x_email_intermediario" value="<?= $Page->email_intermediario->EditValue ?>" data-page="1" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->email_intermediario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->email_intermediario->formatPattern()) ?>"<?= $Page->email_intermediario->editAttributes() ?> aria-describedby="x_email_intermediario_help">
+<?= $Page->email_intermediario->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->email_intermediario->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->genera_ne->Visible) { // genera_ne ?>
+    <div id="r_genera_ne"<?= $Page->genera_ne->rowAttributes() ?>>
+        <label id="elh_salidas_genera_ne" class="<?= $Page->LeftColumnClass ?>"><?= $Page->genera_ne->caption() ?><?= $Page->genera_ne->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->genera_ne->cellAttributes() ?>>
+<span id="el_salidas_genera_ne">
+<template id="tp_x_genera_ne">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="salidas" data-field="x_genera_ne" name="x_genera_ne" id="x_genera_ne"<?= $Page->genera_ne->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_genera_ne" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_genera_ne"
+    name="x_genera_ne"
+    value="<?= HtmlEncode($Page->genera_ne->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_genera_ne"
+    data-target="dsl_x_genera_ne"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->genera_ne->isInvalidClass() ?>"
+    data-table="salidas"
+    data-field="x_genera_ne"
+    data-page="1"
+    data-value-separator="<?= $Page->genera_ne->displayValueSeparatorAttribute() ?>"
+    <?= $Page->genera_ne->editAttributes() ?>></selection-list>
+<?= $Page->genera_ne->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->genera_ne->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->visita->Visible) { // visita ?>
+    <div id="r_visita"<?= $Page->visita->rowAttributes() ?>>
+        <label id="elh_salidas_visita" for="x_visita" class="<?= $Page->LeftColumnClass ?>"><?= $Page->visita->caption() ?><?= $Page->visita->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->visita->cellAttributes() ?>>
+<span id="el_salidas_visita">
+<input type="<?= $Page->visita->getInputTextType() ?>" name="x_visita" id="x_visita" data-table="salidas" data-field="x_visita" value="<?= $Page->visita->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->visita->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->visita->formatPattern()) ?>"<?= $Page->visita->editAttributes() ?> aria-describedby="x_visita_help">
+<?= $Page->visita->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->visita->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

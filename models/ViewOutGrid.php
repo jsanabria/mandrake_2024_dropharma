@@ -164,6 +164,7 @@ class ViewOutGrid extends ViewOut
         $this->cantidad_movimiento_consignacion->Visible = false;
         $this->id_consignacion->Visible = false;
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->precio_unidad_sin_desc->Visible = false;
         $this->check_ne->Visible = false;
         $this->packer_cantidad->Visible = false;
@@ -926,6 +927,7 @@ class ViewOutGrid extends ViewOut
         $this->precio->FormValue = ""; // Clear form value
         $this->alicuota->FormValue = ""; // Clear form value
         $this->descuento->FormValue = ""; // Clear form value
+        $this->descuento2->FormValue = ""; // Clear form value
         $this->LastAction = $this->CurrentAction; // Save last action
         $this->CurrentAction = ""; // Clear action
         $_SESSION[SESSION_INLINE_MODE] = ""; // Clear inline mode
@@ -1261,6 +1263,14 @@ class ViewOutGrid extends ViewOut
             $CurrentForm->hasValue("o_descuento") &&
             $this->descuento->CurrentValue != $this->descuento->DefaultValue &&
             !($this->descuento->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->descuento->CurrentValue == $this->descuento->getSessionValue())
+        ) {
+            return false;
+        }
+        if (
+            $CurrentForm->hasValue("x_descuento2") &&
+            $CurrentForm->hasValue("o_descuento2") &&
+            $this->descuento2->CurrentValue != $this->descuento2->DefaultValue &&
+            !($this->descuento2->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->descuento2->CurrentValue == $this->descuento2->getSessionValue())
         ) {
             return false;
         }
@@ -1891,6 +1901,19 @@ class ViewOutGrid extends ViewOut
             $this->descuento->setOldValue($CurrentForm->getValue("o_descuento"));
         }
 
+        // Check field name 'descuento2' first before field var 'x_descuento2'
+        $val = $CurrentForm->hasValue("descuento2") ? $CurrentForm->getValue("descuento2") : $CurrentForm->getValue("x_descuento2");
+        if (!$this->descuento2->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->descuento2->Visible = false; // Disable update for API request
+            } else {
+                $this->descuento2->setFormValue($val, true, $validate);
+            }
+        }
+        if ($CurrentForm->hasValue("o_descuento2")) {
+            $this->descuento2->setOldValue($CurrentForm->getValue("o_descuento2"));
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey && !$this->isGridAdd() && !$this->isAdd()) {
@@ -1916,6 +1939,7 @@ class ViewOutGrid extends ViewOut
         $this->precio->CurrentValue = $this->precio->FormValue;
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
         $this->descuento->CurrentValue = $this->descuento->FormValue;
+        $this->descuento2->CurrentValue = $this->descuento2->FormValue;
     }
 
     /**
@@ -2032,6 +2056,7 @@ class ViewOutGrid extends ViewOut
         $this->cantidad_movimiento_consignacion->setDbValue($row['cantidad_movimiento_consignacion']);
         $this->id_consignacion->setDbValue($row['id_consignacion']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
@@ -2063,6 +2088,7 @@ class ViewOutGrid extends ViewOut
         $row['cantidad_movimiento_consignacion'] = $this->cantidad_movimiento_consignacion->DefaultValue;
         $row['id_consignacion'] = $this->id_consignacion->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
@@ -2146,6 +2172,8 @@ class ViewOutGrid extends ViewOut
         // id_consignacion
 
         // descuento
+
+        // descuento2
 
         // precio_unidad_sin_desc
 
@@ -2295,6 +2323,10 @@ class ViewOutGrid extends ViewOut
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // precio_unidad_sin_desc
             $this->precio_unidad_sin_desc->ViewValue = $this->precio_unidad_sin_desc->CurrentValue;
             $this->precio_unidad_sin_desc->ViewValue = FormatNumber($this->precio_unidad_sin_desc->ViewValue, $this->precio_unidad_sin_desc->formatPattern());
@@ -2356,6 +2388,10 @@ class ViewOutGrid extends ViewOut
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // fabricante
             $this->fabricante->setupEditAttributes();
@@ -2490,6 +2526,14 @@ class ViewOutGrid extends ViewOut
                 $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
             }
 
+            // descuento2
+            $this->descuento2->setupEditAttributes();
+            $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+            if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+                $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+            }
+
             // Add refer script
 
             // fabricante
@@ -2521,6 +2565,9 @@ class ViewOutGrid extends ViewOut
 
             // descuento
             $this->descuento->HrefValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // fabricante
             $this->fabricante->setupEditAttributes();
@@ -2655,6 +2702,14 @@ class ViewOutGrid extends ViewOut
                 $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
             }
 
+            // descuento2
+            $this->descuento2->setupEditAttributes();
+            $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+            if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+                $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+            }
+
             // Edit refer script
 
             // fabricante
@@ -2686,6 +2741,9 @@ class ViewOutGrid extends ViewOut
 
             // descuento
             $this->descuento->HrefValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2777,6 +2835,14 @@ class ViewOutGrid extends ViewOut
             }
             if (!CheckNumber($this->descuento->FormValue)) {
                 $this->descuento->addErrorMessage($this->descuento->getErrorMessage(false));
+            }
+            if ($this->descuento2->Visible && $this->descuento2->Required) {
+                if (!$this->descuento2->IsDetailKey && EmptyValue($this->descuento2->FormValue)) {
+                    $this->descuento2->addErrorMessage(str_replace("%s", $this->descuento2->caption(), $this->descuento2->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->descuento2->FormValue)) {
+                $this->descuento2->addErrorMessage($this->descuento2->getErrorMessage(false));
             }
 
         // Return validate result
@@ -2960,6 +3026,9 @@ class ViewOutGrid extends ViewOut
 
         // descuento
         $this->descuento->setDbValueDef($rsnew, $this->descuento->CurrentValue, $this->descuento->ReadOnly);
+
+        // descuento2
+        $this->descuento2->setDbValueDef($rsnew, $this->descuento2->CurrentValue, $this->descuento2->ReadOnly);
         return $rsnew;
     }
 
@@ -2998,6 +3067,9 @@ class ViewOutGrid extends ViewOut
         }
         if (isset($row['descuento'])) { // descuento
             $this->descuento->CurrentValue = $row['descuento'];
+        }
+        if (isset($row['descuento2'])) { // descuento2
+            $this->descuento2->CurrentValue = $row['descuento2'];
         }
     }
 
@@ -3108,6 +3180,9 @@ class ViewOutGrid extends ViewOut
         // descuento
         $this->descuento->setDbValueDef($rsnew, $this->descuento->CurrentValue, false);
 
+        // descuento2
+        $this->descuento2->setDbValueDef($rsnew, $this->descuento2->CurrentValue, false);
+
         // tipo_documento
         if ($this->tipo_documento->getSessionValue() != "") {
             $rsnew['tipo_documento'] = $this->tipo_documento->getSessionValue();
@@ -3155,6 +3230,9 @@ class ViewOutGrid extends ViewOut
         }
         if (isset($row['descuento'])) { // descuento
             $this->descuento->setFormValue($row['descuento']);
+        }
+        if (isset($row['descuento2'])) { // descuento2
+            $this->descuento2->setFormValue($row['descuento2']);
         }
         if (isset($row['tipo_documento'])) { // tipo_documento
             $this->tipo_documento->setFormValue($row['tipo_documento']);

@@ -57,12 +57,16 @@ class CompaniaCuenta extends AbstractEntity
     #[Column(type: "integer")]
     private int $compania;
 
+    #[Column(name: "pago_electronico", type: "string")]
+    private string $pagoElectronico;
+
     public function __construct()
     {
         $this->mostrar = "S";
         $this->cuenta = 0;
         $this->activo = "S";
         $this->compania = 0;
+        $this->pagoElectronico = "S";
     }
 
     public function getId(): int
@@ -167,6 +171,20 @@ class CompaniaCuenta extends AbstractEntity
     public function setCompania(int $value): static
     {
         $this->compania = $value;
+        return $this;
+    }
+
+    public function getPagoElectronico(): string
+    {
+        return $this->pagoElectronico;
+    }
+
+    public function setPagoElectronico(string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'pago_electronico' value");
+        }
+        $this->pagoElectronico = $value;
         return $this;
     }
 }

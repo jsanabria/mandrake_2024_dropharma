@@ -59,17 +59,8 @@ $Page->showMessage();
 <?php if ($Page->ciudad->Visible) { // ciudad ?>
         <th class="<?= $Page->ciudad->headerCellClass() ?>"><span id="elh_proveedor_ciudad" class="proveedor_ciudad"><?= $Page->ciudad->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-        <th class="<?= $Page->cuenta_auxiliar->headerCellClass() ?>"><span id="elh_proveedor_cuenta_auxiliar" class="proveedor_cuenta_auxiliar"><?= $Page->cuenta_auxiliar->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->cuenta_gasto->Visible) { // cuenta_gasto ?>
-        <th class="<?= $Page->cuenta_gasto->headerCellClass() ?>"><span id="elh_proveedor_cuenta_gasto" class="proveedor_cuenta_gasto"><?= $Page->cuenta_gasto->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <th class="<?= $Page->activo->headerCellClass() ?>"><span id="elh_proveedor_activo" class="proveedor_activo"><?= $Page->activo->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->fabricante->Visible) { // fabricante ?>
-        <th class="<?= $Page->fabricante->headerCellClass() ?>"><span id="elh_proveedor_fabricante" class="proveedor_fabricante"><?= $Page->fabricante->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -116,35 +107,11 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-        <td<?= $Page->cuenta_auxiliar->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->cuenta_auxiliar->viewAttributes() ?>>
-<?= $Page->cuenta_auxiliar->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->cuenta_gasto->Visible) { // cuenta_gasto ?>
-        <td<?= $Page->cuenta_gasto->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->cuenta_gasto->viewAttributes() ?>>
-<?= $Page->cuenta_gasto->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <td<?= $Page->activo->cellAttributes() ?>>
 <span id="">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->fabricante->Visible) { // fabricante ?>
-        <td<?= $Page->fabricante->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->fabricante->viewAttributes() ?>>
-<?= $Page->fabricante->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

@@ -23,7 +23,11 @@ loadjs.ready(["wrapper", "head"], function () {
         // Add fields
         .setFields([
             ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
-            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid]
+            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
+            ["banco", [fields.banco.visible && fields.banco.required ? ew.Validators.required(fields.banco.caption) : null, ew.Validators.integer], fields.banco.isInvalid],
+            ["referencia", [fields.referencia.visible && fields.referencia.required ? ew.Validators.required(fields.referencia.caption) : null], fields.referencia.isInvalid],
+            ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
+            ["comprobante", [fields.comprobante.visible && fields.comprobante.required ? ew.Validators.required(fields.comprobante.caption) : null], fields.comprobante.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -39,6 +43,7 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
+            "comprobante": <?= $Page->comprobante->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -117,6 +122,73 @@ loadjs.ready(["fcont_lotes_pagosadd", "datetimepicker"], function () {
 <textarea data-table="cont_lotes_pagos" data-field="x_nota" name="x_nota" id="x_nota" cols="30" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
 <?= $Page->nota->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nota->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->banco->Visible) { // banco ?>
+    <div id="r_banco"<?= $Page->banco->rowAttributes() ?>>
+        <label id="elh_cont_lotes_pagos_banco" for="x_banco" class="<?= $Page->LeftColumnClass ?>"><?= $Page->banco->caption() ?><?= $Page->banco->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->banco->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_banco">
+<input type="<?= $Page->banco->getInputTextType() ?>" name="x_banco" id="x_banco" data-table="cont_lotes_pagos" data-field="x_banco" value="<?= $Page->banco->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->banco->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->banco->formatPattern()) ?>"<?= $Page->banco->editAttributes() ?> aria-describedby="x_banco_help">
+<?= $Page->banco->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->banco->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->referencia->Visible) { // referencia ?>
+    <div id="r_referencia"<?= $Page->referencia->rowAttributes() ?>>
+        <label id="elh_cont_lotes_pagos_referencia" for="x_referencia" class="<?= $Page->LeftColumnClass ?>"><?= $Page->referencia->caption() ?><?= $Page->referencia->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->referencia->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_referencia">
+<input type="<?= $Page->referencia->getInputTextType() ?>" name="x_referencia" id="x_referencia" data-table="cont_lotes_pagos" data-field="x_referencia" value="<?= $Page->referencia->EditValue ?>" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->referencia->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->referencia->formatPattern()) ?>"<?= $Page->referencia->editAttributes() ?> aria-describedby="x_referencia_help">
+<?= $Page->referencia->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->referencia->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+    <div id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
+        <label id="elh_cont_lotes_pagos_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->moneda->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_moneda">
+<input type="<?= $Page->moneda->getInputTextType() ?>" name="x_moneda" id="x_moneda" data-table="cont_lotes_pagos" data-field="x_moneda" value="<?= $Page->moneda->EditValue ?>" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->moneda->formatPattern()) ?>"<?= $Page->moneda->editAttributes() ?> aria-describedby="x_moneda_help">
+<?= $Page->moneda->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->comprobante->Visible) { // comprobante ?>
+    <div id="r_comprobante"<?= $Page->comprobante->rowAttributes() ?>>
+        <label id="elh_cont_lotes_pagos_comprobante" class="<?= $Page->LeftColumnClass ?>"><?= $Page->comprobante->caption() ?><?= $Page->comprobante->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->comprobante->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_comprobante">
+<template id="tp_x_comprobante">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="cont_lotes_pagos" data-field="x_comprobante" name="x_comprobante" id="x_comprobante"<?= $Page->comprobante->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_comprobante" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_comprobante"
+    name="x_comprobante"
+    value="<?= HtmlEncode($Page->comprobante->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_comprobante"
+    data-target="dsl_x_comprobante"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->comprobante->isInvalidClass() ?>"
+    data-table="cont_lotes_pagos"
+    data-field="x_comprobante"
+    data-value-separator="<?= $Page->comprobante->displayValueSeparatorAttribute() ?>"
+    <?= $Page->comprobante->editAttributes() ?>></selection-list>
+<?= $Page->comprobante->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->comprobante->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

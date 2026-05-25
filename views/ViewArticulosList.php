@@ -450,7 +450,7 @@ loadjs.ready("<?= $Page->FormName ?>", function() {
         <td data-name="principio_activo"<?= $Page->principio_activo->cellAttributes() ?>>
 <?php if ($Page->RowType == RowType::ADD) { // Add record ?>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_articulos_principio_activo" class="el_view_articulos_principio_activo">
-<input type="<?= $Page->principio_activo->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_principio_activo" id="x<?= $Page->RowIndex ?>_principio_activo" data-table="view_articulos" data-field="x_principio_activo" value="<?= $Page->principio_activo->EditValue ?>" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->principio_activo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->principio_activo->formatPattern()) ?>"<?= $Page->principio_activo->editAttributes() ?>>
+<input type="<?= $Page->principio_activo->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_principio_activo" id="x<?= $Page->RowIndex ?>_principio_activo" data-table="view_articulos" data-field="x_principio_activo" value="<?= $Page->principio_activo->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->principio_activo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->principio_activo->formatPattern()) ?>"<?= $Page->principio_activo->editAttributes() ?>>
 <div class="invalid-feedback"><?= $Page->principio_activo->getErrorMessage() ?></div>
 </span>
 <input type="hidden" data-table="view_articulos" data-field="x_principio_activo" data-hidden="1" data-old name="o<?= $Page->RowIndex ?>_principio_activo" id="o<?= $Page->RowIndex ?>_principio_activo" value="<?= HtmlEncode($Page->principio_activo->OldValue) ?>">

@@ -48,6 +48,23 @@ class ContLotesPago extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $usuario;
 
+    #[Column(type: "integer", nullable: true)]
+    private ?int $banco;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $referencia;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $moneda;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $comprobante;
+
+    public function __construct()
+    {
+        $this->comprobante = "N";
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -114,6 +131,53 @@ class ContLotesPago extends AbstractEntity
     public function setUsuario(?string $value): static
     {
         $this->usuario = RemoveXss($value);
+        return $this;
+    }
+
+    public function getBanco(): ?int
+    {
+        return $this->banco;
+    }
+
+    public function setBanco(?int $value): static
+    {
+        $this->banco = $value;
+        return $this;
+    }
+
+    public function getReferencia(): ?string
+    {
+        return HtmlDecode($this->referencia);
+    }
+
+    public function setReferencia(?string $value): static
+    {
+        $this->referencia = RemoveXss($value);
+        return $this;
+    }
+
+    public function getMoneda(): ?string
+    {
+        return HtmlDecode($this->moneda);
+    }
+
+    public function setMoneda(?string $value): static
+    {
+        $this->moneda = RemoveXss($value);
+        return $this;
+    }
+
+    public function getComprobante(): ?string
+    {
+        return $this->comprobante;
+    }
+
+    public function setComprobante(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'comprobante' value");
+        }
+        $this->comprobante = $value;
         return $this;
     }
 }

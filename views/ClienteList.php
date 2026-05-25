@@ -379,6 +379,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->tarifa->Visible) { // tarifa ?>
         <th data-name="tarifa" class="<?= $Page->tarifa->headerCellClass() ?>"><div id="elh_cliente_tarifa" class="cliente_tarifa"><?= $Page->renderFieldHeader($Page->tarifa) ?></div></th>
 <?php } ?>
+<?php if ($Page->codigo->Visible) { // codigo ?>
+        <th data-name="codigo" class="<?= $Page->codigo->headerCellClass() ?>"><div id="elh_cliente_codigo" class="cliente_codigo"><?= $Page->renderFieldHeader($Page->codigo) ?></div></th>
+<?php } ?>
 <?php if ($Page->cuenta->Visible) { // cuenta ?>
         <th data-name="cuenta" class="<?= $Page->cuenta->headerCellClass() ?>"><div id="elh_cliente_cuenta" class="cliente_cuenta"><?= $Page->renderFieldHeader($Page->cuenta) ?></div></th>
 <?php } ?>
@@ -488,6 +491,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cliente_tarifa" class="el_cliente_tarifa">
 <span<?= $Page->tarifa->viewAttributes() ?>>
 <?= $Page->tarifa->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->codigo->Visible) { // codigo ?>
+        <td data-name="codigo"<?= $Page->codigo->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cliente_codigo" class="el_cliente_codigo">
+<span<?= $Page->codigo->viewAttributes() ?>>
+<?= $Page->codigo->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

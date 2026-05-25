@@ -162,6 +162,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->compania->Visible = false;
+        $this->pago_electronico->setVisibility();
     }
 
     // Constructor
@@ -714,6 +715,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->pago_electronico);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1119,6 +1121,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $filterList = Concat($filterList, $this->cuenta->AdvancedSearch->toJson(), ","); // Field cuenta
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
         $filterList = Concat($filterList, $this->compania->AdvancedSearch->toJson(), ","); // Field compania
+        $filterList = Concat($filterList, $this->pago_electronico->AdvancedSearch->toJson(), ","); // Field pago_electronico
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1229,6 +1232,14 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->compania->AdvancedSearch->SearchValue2 = @$filter["y_compania"];
         $this->compania->AdvancedSearch->SearchOperator2 = @$filter["w_compania"];
         $this->compania->AdvancedSearch->save();
+
+        // Field pago_electronico
+        $this->pago_electronico->AdvancedSearch->SearchValue = @$filter["x_pago_electronico"];
+        $this->pago_electronico->AdvancedSearch->SearchOperator = @$filter["z_pago_electronico"];
+        $this->pago_electronico->AdvancedSearch->SearchCondition = @$filter["v_pago_electronico"];
+        $this->pago_electronico->AdvancedSearch->SearchValue2 = @$filter["y_pago_electronico"];
+        $this->pago_electronico->AdvancedSearch->SearchOperator2 = @$filter["w_pago_electronico"];
+        $this->pago_electronico->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1250,6 +1261,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->buildSearchSql($where, $this->cuenta, $default, false); // cuenta
         $this->buildSearchSql($where, $this->activo, $default, false); // activo
         $this->buildSearchSql($where, $this->compania, $default, false); // compania
+        $this->buildSearchSql($where, $this->pago_electronico, $default, false); // pago_electronico
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1265,6 +1277,7 @@ class CompaniaCuentaList extends CompaniaCuenta
             $this->cuenta->AdvancedSearch->save(); // cuenta
             $this->activo->AdvancedSearch->save(); // activo
             $this->compania->AdvancedSearch->save(); // compania
+            $this->pago_electronico->AdvancedSearch->save(); // pago_electronico
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1304,6 +1317,7 @@ class CompaniaCuentaList extends CompaniaCuenta
             $this->cuenta->AdvancedSearch->save(); // cuenta
             $this->activo->AdvancedSearch->save(); // activo
             $this->compania->AdvancedSearch->save(); // compania
+            $this->pago_electronico->AdvancedSearch->save(); // pago_electronico
             $this->setSessionRules($rules);
         }
 
@@ -1422,6 +1436,15 @@ class CompaniaCuentaList extends CompaniaCuenta
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->activo->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field pago_electronico
+        $filter = $this->queryBuilderWhere("pago_electronico");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->pago_electronico, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pago_electronico->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -1507,6 +1530,9 @@ class CompaniaCuentaList extends CompaniaCuenta
         if ($this->compania->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->pago_electronico->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1551,6 +1577,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->cuenta->AdvancedSearch->unsetSession();
         $this->activo->AdvancedSearch->unsetSession();
         $this->compania->AdvancedSearch->unsetSession();
+        $this->pago_electronico->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1571,6 +1598,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->cuenta->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->compania->AdvancedSearch->load();
+        $this->pago_electronico->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1595,6 +1623,7 @@ class CompaniaCuentaList extends CompaniaCuenta
             $this->updateSort($this->mostrar); // mostrar
             $this->updateSort($this->cuenta); // cuenta
             $this->updateSort($this->activo); // activo
+            $this->updateSort($this->pago_electronico); // pago_electronico
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1636,6 +1665,7 @@ class CompaniaCuentaList extends CompaniaCuenta
                 $this->cuenta->setSort("");
                 $this->activo->setSort("");
                 $this->compania->setSort("");
+                $this->pago_electronico->setSort("");
             }
 
             // Reset start position
@@ -1859,6 +1889,7 @@ class CompaniaCuentaList extends CompaniaCuenta
             $this->createColumnOption($option, "mostrar");
             $this->createColumnOption($option, "cuenta");
             $this->createColumnOption($option, "activo");
+            $this->createColumnOption($option, "pago_electronico");
         }
 
         // Set up custom actions
@@ -2283,6 +2314,14 @@ class CompaniaCuentaList extends CompaniaCuenta
                 $this->Command = "search";
             }
         }
+
+        // pago_electronico
+        if ($this->pago_electronico->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->pago_electronico->AdvancedSearch->SearchValue != "" || $this->pago_electronico->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -2388,6 +2427,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->compania->setDbValue($row['compania']);
+        $this->pago_electronico->setDbValue($row['pago_electronico']);
     }
 
     // Return a row with default values
@@ -2403,6 +2443,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['compania'] = $this->compania->DefaultValue;
+        $row['pago_electronico'] = $this->pago_electronico->DefaultValue;
         return $row;
     }
 
@@ -2460,6 +2501,8 @@ class CompaniaCuentaList extends CompaniaCuenta
         // activo
 
         // compania
+
+        // pago_electronico
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2545,6 +2588,13 @@ class CompaniaCuentaList extends CompaniaCuenta
             // compania
             $this->compania->ViewValue = $this->compania->CurrentValue;
 
+            // pago_electronico
+            if (strval($this->pago_electronico->CurrentValue) != "") {
+                $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
+            } else {
+                $this->pago_electronico->ViewValue = null;
+            }
+
             // banco
             $this->banco->HrefValue = "";
             $this->banco->TooltipValue = "";
@@ -2572,6 +2622,10 @@ class CompaniaCuentaList extends CompaniaCuenta
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
+            $this->pago_electronico->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // banco
             $this->banco->setupEditAttributes();
@@ -2615,6 +2669,10 @@ class CompaniaCuentaList extends CompaniaCuenta
             $this->activo->setupEditAttributes();
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
+
+            // pago_electronico
+            $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+            $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2658,6 +2716,7 @@ class CompaniaCuentaList extends CompaniaCuenta
         $this->cuenta->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->compania->AdvancedSearch->load();
+        $this->pago_electronico->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -3015,6 +3074,8 @@ class CompaniaCuentaList extends CompaniaCuenta
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_activo":
+                    break;
+                case "x_pago_electronico":
                     break;
                 default:
                     $lookupFilter = "";

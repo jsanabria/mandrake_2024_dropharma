@@ -109,6 +109,17 @@ $cliente->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($cliente->codigo->Visible) { // codigo ?>
+        <tr id="r_codigo"<?= $cliente->codigo->rowAttributes() ?>>
+            <td class="<?= $cliente->TableLeftColumnClass ?>"><?= $cliente->codigo->caption() ?></td>
+            <td<?= $cliente->codigo->cellAttributes() ?>>
+<span id="el_cliente_codigo">
+<span<?= $cliente->codigo->viewAttributes() ?>>
+<?= $cliente->codigo->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
 <?php if ($cliente->cuenta->Visible) { // cuenta ?>
         <tr id="r_cuenta"<?= $cliente->cuenta->rowAttributes() ?>>
             <td class="<?= $cliente->TableLeftColumnClass ?>"><?= $cliente->cuenta->caption() ?></td>

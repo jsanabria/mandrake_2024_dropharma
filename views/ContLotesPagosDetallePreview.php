@@ -123,6 +123,30 @@ $Page->ListOptions->render("header", "left");
         </th>
     <?php } ?>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+    <?php if (!$Page->fecha->Sortable || !$Page->sortUrl($Page->fecha)) { ?>
+        <th class="<?= $Page->fecha->headerCellClass() ?>"><?= $Page->fecha->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->fecha->headerCellClass() ?>"><div role="button" data-table="cont_lotes_pagos_detalle" data-sort="<?= HtmlEncode($Page->fecha->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->fecha->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->fecha->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->fecha->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
+<?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+    <?php if (!$Page->monto_pagado->Sortable || !$Page->sortUrl($Page->monto_pagado)) { ?>
+        <th class="<?= $Page->monto_pagado->headerCellClass() ?>"><?= $Page->monto_pagado->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->monto_pagado->headerCellClass() ?>"><div role="button" data-table="cont_lotes_pagos_detalle" data-sort="<?= HtmlEncode($Page->monto_pagado->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->monto_pagado->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->monto_pagado->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->monto_pagado->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -210,6 +234,20 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
         <td<?= $Page->comprobante->cellAttributes() ?>>
 <span<?= $Page->comprobante->viewAttributes() ?>>
 <?= $Page->comprobante->getViewValue() ?></span>
+</td>
+<?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <!-- fecha -->
+        <td<?= $Page->fecha->cellAttributes() ?>>
+<span<?= $Page->fecha->viewAttributes() ?>>
+<?= $Page->fecha->getViewValue() ?></span>
+</td>
+<?php } ?>
+<?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+        <!-- monto_pagado -->
+        <td<?= $Page->monto_pagado->cellAttributes() ?>>
+<span<?= $Page->monto_pagado->viewAttributes() ?>>
+<?= $Page->monto_pagado->getViewValue() ?></span>
 </td>
 <?php } ?>
 <?php

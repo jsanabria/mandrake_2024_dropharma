@@ -154,6 +154,8 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         $this->monto_pagdo->setVisibility();
         $this->saldo->setVisibility();
         $this->comprobante->setVisibility();
+        $this->fecha->setVisibility();
+        $this->monto_pagado->setVisibility();
     }
 
     // Constructor
@@ -858,6 +860,7 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         $this->monto_a_pagar->FormValue = ""; // Clear form value
         $this->monto_pagdo->FormValue = ""; // Clear form value
         $this->saldo->FormValue = ""; // Clear form value
+        $this->monto_pagado->FormValue = ""; // Clear form value
         $this->LastAction = $this->CurrentAction; // Save last action
         $this->CurrentAction = ""; // Clear action
         $_SESSION[SESSION_INLINE_MODE] = ""; // Clear inline mode
@@ -1169,6 +1172,22 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
             $CurrentForm->hasValue("o_comprobante") &&
             $this->comprobante->CurrentValue != $this->comprobante->DefaultValue &&
             !($this->comprobante->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->comprobante->CurrentValue == $this->comprobante->getSessionValue())
+        ) {
+            return false;
+        }
+        if (
+            $CurrentForm->hasValue("x_fecha") &&
+            $CurrentForm->hasValue("o_fecha") &&
+            $this->fecha->CurrentValue != $this->fecha->DefaultValue &&
+            !($this->fecha->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->fecha->CurrentValue == $this->fecha->getSessionValue())
+        ) {
+            return false;
+        }
+        if (
+            $CurrentForm->hasValue("x_monto_pagado") &&
+            $CurrentForm->hasValue("o_monto_pagado") &&
+            $this->monto_pagado->CurrentValue != $this->monto_pagado->DefaultValue &&
+            !($this->monto_pagado->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->monto_pagado->CurrentValue == $this->monto_pagado->getSessionValue())
         ) {
             return false;
         }
@@ -1770,6 +1789,33 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
             $this->comprobante->setOldValue($CurrentForm->getValue("o_comprobante"));
         }
 
+        // Check field name 'fecha' first before field var 'x_fecha'
+        $val = $CurrentForm->hasValue("fecha") ? $CurrentForm->getValue("fecha") : $CurrentForm->getValue("x_fecha");
+        if (!$this->fecha->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->fecha->Visible = false; // Disable update for API request
+            } else {
+                $this->fecha->setFormValue($val, true, $validate);
+            }
+            $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
+        }
+        if ($CurrentForm->hasValue("o_fecha")) {
+            $this->fecha->setOldValue($CurrentForm->getValue("o_fecha"));
+        }
+
+        // Check field name 'monto_pagado' first before field var 'x_monto_pagado'
+        $val = $CurrentForm->hasValue("monto_pagado") ? $CurrentForm->getValue("monto_pagado") : $CurrentForm->getValue("x_monto_pagado");
+        if (!$this->monto_pagado->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_pagado->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_pagado->setFormValue($val, true, $validate);
+            }
+        }
+        if ($CurrentForm->hasValue("o_monto_pagado")) {
+            $this->monto_pagado->setOldValue($CurrentForm->getValue("o_monto_pagado"));
+        }
+
         // Check field name 'Id' first before field var 'x_Id'
         $val = $CurrentForm->hasValue("Id") ? $CurrentForm->getValue("Id") : $CurrentForm->getValue("x_Id");
         if (!$this->Id->IsDetailKey && !$this->isGridAdd() && !$this->isAdd()) {
@@ -1791,6 +1837,9 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         $this->monto_pagdo->CurrentValue = $this->monto_pagdo->FormValue;
         $this->saldo->CurrentValue = $this->saldo->FormValue;
         $this->comprobante->CurrentValue = $this->comprobante->FormValue;
+        $this->fecha->CurrentValue = $this->fecha->FormValue;
+        $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
+        $this->monto_pagado->CurrentValue = $this->monto_pagado->FormValue;
     }
 
     /**
@@ -1897,6 +1946,8 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         $this->monto_pagdo->setDbValue($row['monto_pagdo']);
         $this->saldo->setDbValue($row['saldo']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->fecha->setDbValue($row['fecha']);
+        $this->monto_pagado->setDbValue($row['monto_pagado']);
     }
 
     // Return a row with default values
@@ -1914,6 +1965,8 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         $row['monto_pagdo'] = $this->monto_pagdo->DefaultValue;
         $row['saldo'] = $this->saldo->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['fecha'] = $this->fecha->DefaultValue;
+        $row['monto_pagado'] = $this->monto_pagado->DefaultValue;
         return $row;
     }
 
@@ -1973,6 +2026,10 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         // saldo
 
         // comprobante
+
+        // fecha
+
+        // monto_pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2036,6 +2093,14 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
             $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
             $this->comprobante->ViewValue = FormatNumber($this->comprobante->ViewValue, $this->comprobante->formatPattern());
 
+            // fecha
+            $this->fecha->ViewValue = $this->fecha->CurrentValue;
+            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+            // monto_pagado
+            $this->monto_pagado->ViewValue = $this->monto_pagado->CurrentValue;
+            $this->monto_pagado->ViewValue = FormatNumber($this->monto_pagado->ViewValue, $this->monto_pagado->formatPattern());
+
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
@@ -2063,6 +2128,14 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
             // comprobante
             $this->comprobante->HrefValue = "";
             $this->comprobante->TooltipValue = "";
+
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
+            // monto_pagado
+            $this->monto_pagado->HrefValue = "";
+            $this->monto_pagado->TooltipValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // proveedor
             $this->proveedor->setupEditAttributes();
@@ -2138,6 +2211,19 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
                 $this->comprobante->EditValue = FormatNumber($this->comprobante->EditValue, null);
             }
 
+            // fecha
+            $this->fecha->setupEditAttributes();
+            $this->fecha->EditValue = HtmlEncode(FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()));
+            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+
+            // monto_pagado
+            $this->monto_pagado->setupEditAttributes();
+            $this->monto_pagado->EditValue = $this->monto_pagado->CurrentValue;
+            $this->monto_pagado->PlaceHolder = RemoveHtml($this->monto_pagado->caption());
+            if (strval($this->monto_pagado->EditValue) != "" && is_numeric($this->monto_pagado->EditValue)) {
+                $this->monto_pagado->EditValue = FormatNumber($this->monto_pagado->EditValue, null);
+            }
+
             // Add refer script
 
             // proveedor
@@ -2160,6 +2246,12 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
 
             // comprobante
             $this->comprobante->HrefValue = "";
+
+            // fecha
+            $this->fecha->HrefValue = "";
+
+            // monto_pagado
+            $this->monto_pagado->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // proveedor
             $this->proveedor->setupEditAttributes();
@@ -2235,6 +2327,19 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
                 $this->comprobante->EditValue = FormatNumber($this->comprobante->EditValue, null);
             }
 
+            // fecha
+            $this->fecha->setupEditAttributes();
+            $this->fecha->EditValue = HtmlEncode(FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()));
+            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+
+            // monto_pagado
+            $this->monto_pagado->setupEditAttributes();
+            $this->monto_pagado->EditValue = $this->monto_pagado->CurrentValue;
+            $this->monto_pagado->PlaceHolder = RemoveHtml($this->monto_pagado->caption());
+            if (strval($this->monto_pagado->EditValue) != "" && is_numeric($this->monto_pagado->EditValue)) {
+                $this->monto_pagado->EditValue = FormatNumber($this->monto_pagado->EditValue, null);
+            }
+
             // Edit refer script
 
             // proveedor
@@ -2257,6 +2362,12 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
 
             // comprobante
             $this->comprobante->HrefValue = "";
+
+            // fecha
+            $this->fecha->HrefValue = "";
+
+            // monto_pagado
+            $this->monto_pagado->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2327,6 +2438,22 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
             }
             if (!CheckInteger($this->comprobante->FormValue)) {
                 $this->comprobante->addErrorMessage($this->comprobante->getErrorMessage(false));
+            }
+            if ($this->fecha->Visible && $this->fecha->Required) {
+                if (!$this->fecha->IsDetailKey && EmptyValue($this->fecha->FormValue)) {
+                    $this->fecha->addErrorMessage(str_replace("%s", $this->fecha->caption(), $this->fecha->RequiredErrorMessage));
+                }
+            }
+            if (!CheckDate($this->fecha->FormValue, $this->fecha->formatPattern())) {
+                $this->fecha->addErrorMessage($this->fecha->getErrorMessage(false));
+            }
+            if ($this->monto_pagado->Visible && $this->monto_pagado->Required) {
+                if (!$this->monto_pagado->IsDetailKey && EmptyValue($this->monto_pagado->FormValue)) {
+                    $this->monto_pagado->addErrorMessage(str_replace("%s", $this->monto_pagado->caption(), $this->monto_pagado->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_pagado->FormValue)) {
+                $this->monto_pagado->addErrorMessage($this->monto_pagado->getErrorMessage(false));
             }
 
         // Return validate result
@@ -2501,6 +2628,12 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
 
         // comprobante
         $this->comprobante->setDbValueDef($rsnew, $this->comprobante->CurrentValue, $this->comprobante->ReadOnly);
+
+        // fecha
+        $this->fecha->setDbValueDef($rsnew, UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()), $this->fecha->ReadOnly);
+
+        // monto_pagado
+        $this->monto_pagado->setDbValueDef($rsnew, $this->monto_pagado->CurrentValue, $this->monto_pagado->ReadOnly);
         return $rsnew;
     }
 
@@ -2530,6 +2663,12 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         }
         if (isset($row['comprobante'])) { // comprobante
             $this->comprobante->CurrentValue = $row['comprobante'];
+        }
+        if (isset($row['fecha'])) { // fecha
+            $this->fecha->CurrentValue = $row['fecha'];
+        }
+        if (isset($row['monto_pagado'])) { // monto_pagado
+            $this->monto_pagado->CurrentValue = $row['monto_pagado'];
         }
     }
 
@@ -2611,6 +2750,12 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         // comprobante
         $this->comprobante->setDbValueDef($rsnew, $this->comprobante->CurrentValue, false);
 
+        // fecha
+        $this->fecha->setDbValueDef($rsnew, UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()), false);
+
+        // monto_pagado
+        $this->monto_pagado->setDbValueDef($rsnew, $this->monto_pagado->CurrentValue, false);
+
         // cont_lotes_pago
         if ($this->cont_lotes_pago->getSessionValue() != "") {
             $rsnew['cont_lotes_pago'] = $this->cont_lotes_pago->getSessionValue();
@@ -2644,6 +2789,12 @@ class ContLotesPagosDetalleGrid extends ContLotesPagosDetalle
         }
         if (isset($row['comprobante'])) { // comprobante
             $this->comprobante->setFormValue($row['comprobante']);
+        }
+        if (isset($row['fecha'])) { // fecha
+            $this->fecha->setFormValue($row['fecha']);
+        }
+        if (isset($row['monto_pagado'])) { // monto_pagado
+            $this->monto_pagado->setFormValue($row['monto_pagado']);
         }
         if (isset($row['cont_lotes_pago'])) { // cont_lotes_pago
             $this->cont_lotes_pago->setFormValue($row['cont_lotes_pago']);

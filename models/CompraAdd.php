@@ -158,6 +158,7 @@ class CompraAdd extends Compra
         $this->sustraendo->Visible = false;
         $this->tipo_municipal->Visible = false;
         $this->anulado->Visible = false;
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -550,6 +551,7 @@ class CompraAdd extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->pagado);
 
         // Load default values for add
         $this->loadDefaultValues();
@@ -703,6 +705,8 @@ class CompraAdd extends Compra
     {
         $this->anulado->DefaultValue = $this->anulado->getDefault(); // PHP
         $this->anulado->OldValue = $this->anulado->DefaultValue;
+        $this->pagado->DefaultValue = $this->pagado->getDefault(); // PHP
+        $this->pagado->OldValue = $this->pagado->DefaultValue;
     }
 
     // Load form values
@@ -823,6 +827,16 @@ class CompraAdd extends Compra
             }
         }
 
+        // Check field name 'pagado' first before field var 'x_pagado'
+        $val = $CurrentForm->hasValue("pagado") ? $CurrentForm->getValue("pagado") : $CurrentForm->getValue("x_pagado");
+        if (!$this->pagado->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->pagado->Visible = false; // Disable update for API request
+            } else {
+                $this->pagado->setFormValue($val);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
     }
@@ -843,6 +857,7 @@ class CompraAdd extends Compra
         $this->monto_exento->CurrentValue = $this->monto_exento->FormValue;
         $this->monto_gravado->CurrentValue = $this->monto_gravado->FormValue;
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
+        $this->pagado->CurrentValue = $this->pagado->FormValue;
     }
 
     /**
@@ -912,6 +927,7 @@ class CompraAdd extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -947,6 +963,7 @@ class CompraAdd extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -1067,6 +1084,9 @@ class CompraAdd extends Compra
 
         // anulado
         $this->anulado->RowCssClass = "row";
+
+        // pagado
+        $this->pagado->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1246,6 +1266,13 @@ class CompraAdd extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // pagado
+            if (strval($this->pagado->CurrentValue) != "") {
+                $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+            } else {
+                $this->pagado->ViewValue = null;
+            }
+
             // proveedor
             $this->proveedor->HrefValue = "";
 
@@ -1278,6 +1305,9 @@ class CompraAdd extends Compra
 
             // alicuota
             $this->alicuota->HrefValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // proveedor
             $curVal = trim(strval($this->proveedor->CurrentValue));
@@ -1381,6 +1411,10 @@ class CompraAdd extends Compra
                 $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, null);
             }
 
+            // pagado
+            $this->pagado->EditValue = $this->pagado->options(false);
+            $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
+
             // Add refer script
 
             // proveedor
@@ -1415,6 +1449,9 @@ class CompraAdd extends Compra
 
             // alicuota
             $this->alicuota->HrefValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1502,6 +1539,11 @@ class CompraAdd extends Compra
             }
             if (!CheckNumber($this->alicuota->FormValue)) {
                 $this->alicuota->addErrorMessage($this->alicuota->getErrorMessage(false));
+            }
+            if ($this->pagado->Visible && $this->pagado->Required) {
+                if ($this->pagado->FormValue == "") {
+                    $this->pagado->addErrorMessage(str_replace("%s", $this->pagado->caption(), $this->pagado->RequiredErrorMessage));
+                }
             }
 
         // Return validate result
@@ -1606,6 +1648,9 @@ class CompraAdd extends Compra
 
         // alicuota
         $this->alicuota->setDbValueDef($rsnew, $this->alicuota->CurrentValue, false);
+
+        // pagado
+        $this->pagado->setDbValueDef($rsnew, $this->pagado->CurrentValue, strval($this->pagado->CurrentValue) == "");
         return $rsnew;
     }
 
@@ -1648,6 +1693,9 @@ class CompraAdd extends Compra
         if (isset($row['alicuota'])) { // alicuota
             $this->alicuota->setFormValue($row['alicuota']);
         }
+        if (isset($row['pagado'])) { // pagado
+            $this->pagado->setFormValue($row['pagado']);
+        }
     }
 
     // Set up Breadcrumb
@@ -1672,6 +1720,7 @@ class CompraAdd extends Compra
         $pages->add(0);
         $pages->add(1);
         $pages->add(2);
+        $pages->add(3);
         $this->MultiPages = $pages;
     }
 
@@ -1699,6 +1748,8 @@ class CompraAdd extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_pagado":
                     break;
                 default:
                     $lookupFilter = "";

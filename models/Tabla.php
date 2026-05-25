@@ -167,7 +167,7 @@ class Tabla extends DbTable
             '`campo_codigo`', // Expression
             '`campo_codigo`', // Basic search expression
             200, // Type
-            6, // Size
+            50, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`campo_codigo`', // Virtual expression
@@ -190,7 +190,7 @@ class Tabla extends DbTable
             '`campo_descripcion`', // Expression
             '`campo_descripcion`', // Basic search expression
             200, // Type
-            50, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`campo_descripcion`', // Virtual expression

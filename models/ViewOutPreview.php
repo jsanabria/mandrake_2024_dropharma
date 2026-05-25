@@ -150,6 +150,7 @@ class ViewOutPreview extends ViewOut
         $this->cantidad_movimiento_consignacion->Visible = false;
         $this->id_consignacion->Visible = false;
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->precio_unidad_sin_desc->Visible = false;
         $this->check_ne->Visible = false;
         $this->packer_cantidad->Visible = false;
@@ -560,6 +561,7 @@ class ViewOutPreview extends ViewOut
             $this->cantidad_movimiento_consignacion->setSort("");
             $this->id_consignacion->setSort("");
             $this->descuento->setSort("");
+            $this->descuento2->setSort("");
             $this->precio_unidad_sin_desc->setSort("");
             $this->check_ne->setSort("");
             $this->packer_cantidad->setSort("");
@@ -592,6 +594,7 @@ class ViewOutPreview extends ViewOut
             $this->updateSort($this->precio); // precio
             $this->updateSort($this->alicuota); // alicuota
             $this->updateSort($this->descuento); // descuento
+            $this->updateSort($this->descuento2); // descuento2
         }
 
         // Update field sort

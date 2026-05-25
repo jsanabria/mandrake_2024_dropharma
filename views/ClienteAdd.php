@@ -39,6 +39,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["consignacion", [fields.consignacion.visible && fields.consignacion.required ? ew.Validators.required(fields.consignacion.caption) : null], fields.consignacion.isInvalid],
             ["limite_credito", [fields.limite_credito.visible && fields.limite_credito.required ? ew.Validators.required(fields.limite_credito.caption) : null, ew.Validators.float], fields.limite_credito.isInvalid],
             ["condicion", [fields.condicion.visible && fields.condicion.required ? ew.Validators.required(fields.condicion.caption) : null], fields.condicion.isInvalid],
+            ["codigo", [fields.codigo.visible && fields.codigo.required ? ew.Validators.required(fields.codigo.caption) : null], fields.codigo.isInvalid],
             ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
             ["foto1", [fields.foto1.visible && fields.foto1.required ? ew.Validators.fileRequired(fields.foto1.caption) : null], fields.foto1.isInvalid],
             ["foto2", [fields.foto2.visible && fields.foto2.required ? ew.Validators.fileRequired(fields.foto2.caption) : null], fields.foto2.isInvalid],
@@ -445,6 +446,18 @@ loadjs.ready("fclienteadd", function() {
 </div></div>
     </div>
 <?php } ?>
+<?php if ($Page->codigo->Visible) { // codigo ?>
+    <div id="r_codigo"<?= $Page->codigo->rowAttributes() ?>>
+        <label id="elh_cliente_codigo" for="x_codigo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->codigo->caption() ?><?= $Page->codigo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->codigo->cellAttributes() ?>>
+<span id="el_cliente_codigo">
+<input type="<?= $Page->codigo->getInputTextType() ?>" name="x_codigo" id="x_codigo" data-table="cliente" data-field="x_codigo" value="<?= $Page->codigo->EditValue ?>" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->codigo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->codigo->formatPattern()) ?>"<?= $Page->codigo->editAttributes() ?> aria-describedby="x_codigo_help">
+<?= $Page->codigo->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->codigo->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
     <div id="r_activo"<?= $Page->activo->rowAttributes() ?>>
         <label id="elh_cliente_activo" for="x_activo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->activo->caption() ?><?= $Page->activo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -651,13 +664,10 @@ loadjs.ready("head", function() {
 <script>
 loadjs.ready("load", function () {
     // Startup script
-    // Write your table-specific startup script here
-    // document.write("page loaded");
-    // Función para poner el guion tras la primera letra si no lo tiene
+    // Funcionalidad de formateo estandarizado (Ej: V-12345678)
     function formatearRIF(valor) {
-        var limpio = valor.replace(/[.,-]/g, "").trim(); // Quitar todo
+        var limpio = valor.replace(/[.,-\s]/g, "").trim(); // Limpia puntos, comas, guiones y espacios
         if (limpio.length > 1 && limpio.charAt(1) !== '-') {
-            // Retorna la primera letra + guion + el resto
             return limpio.charAt(0).toUpperCase() + "-" + limpio.substring(1);
         }
         return limpio.toUpperCase();
@@ -666,25 +676,42 @@ loadjs.ready("load", function () {
         var $input = $(this);
         var rifOriginal = $input.val();
         if (rifOriginal.trim() == '') return;
+
+        // Detectar automáticamente el entorno mediante la URL para que sirva en ambos formularios
         var tipoEntidad = (window.location.href.toLowerCase().indexOf("proveedor") > -1) ? 'PROVEEDOR' : 'CLIENTE';
-        $.getJSON("RifBuscar", { "ci_rif": rifOriginal, "tipo": tipoEntidad, "accion": 'I' }, function(data) {
-            if (data.existe) {
-                $("#msgRifDuplicado").html("El RIF/CI <b>" + rifOriginal + "</b> ya existe en " + tipoEntidad.toLowerCase() + "s.");
-                var modalRif = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalRifDuplicado'));
-                modalRif.show();
-                $("#btnCancelarRif").off("click").on("click", function() {
-                    $input.val("").focus();
-                    modalRif.hide();
-                });
-                $("#btnContinuarRif").off("click").on("click", function() {
-                    // Si el usuario acepta el duplicado, lo formateamos con guion
-                    $input.val(formatearRIF(rifOriginal));
-                    modalRif.hide();
-                });
+
+        // Realizar la petición esperando el JSON estructurado
+        $.getJSON("RifBuscar", { "ci_rif": rifOriginal, "tipo": tipoEntidad, "accion": 'I' })
+        .done(function(data) {
+            // Validación basada en la respuesta del nuevo backend JSON
+            if (data && data.existe) {
+                $("#msgRifDuplicado").html("El RIF/CI <b>" + rifOriginal + "</b> ya se encuentra registrado en " + tipoEntidad.toLowerCase() + "s.");
+
+                // Instanciar y levantar la modal de Bootstrap
+                var modalElement = document.getElementById('modalRifDuplicado');
+                if (modalElement) {
+                    var modalRif = bootstrap.Modal.getOrCreateInstance(modalElement);
+                    modalRif.show();
+
+                    // Manejo de acciones en los botones
+                    $("#btnCancelarRif").off("click").on("click", function() {
+                        $input.val("").focus();
+                        modalRif.hide();
+                    });
+                    $("#btnContinuarRif").off("click").on("click", function() {
+                        $input.val(formatearRIF(rifOriginal));
+                        modalRif.hide();
+                    });
+                }
             } else {
-                // Si NO existe, igual lo formateamos para que sea bonito (V-12345678)
+                // Si no existe, aplicar formato visual limpio de forma estándar
                 $input.val(formatearRIF(rifOriginal));
             }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("Error en la validación de RIF: ", textStatus, errorThrown);
+            // Resguardo: si falla la red o el script, al menos se le da formato al campo
+            $input.val(formatearRIF(rifOriginal));
         });
     });
 });

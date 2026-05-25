@@ -75,7 +75,7 @@ class ViewInTdcfcc extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $moneda;
 
-    #[Column(type: "string", nullable: true)]
+    #[Column(type: "text", nullable: true)]
     private ?string $nota;
 
     #[Column(type: "integer", nullable: true)]

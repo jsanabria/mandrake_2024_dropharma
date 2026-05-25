@@ -93,6 +93,9 @@ class ViewOut extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $descuento;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento2;
+
     #[Column(name: "precio_unidad_sin_desc", type: "decimal", nullable: true)]
     private ?string $precioUnidadSinDesc;
 
@@ -339,6 +342,17 @@ class ViewOut extends AbstractEntity
     public function setDescuento(?string $value): static
     {
         $this->descuento = $value;
+        return $this;
+    }
+
+    public function getDescuento2(): ?string
+    {
+        return $this->descuento2;
+    }
+
+    public function setDescuento2(?string $value): static
+    {
+        $this->descuento2 = $value;
         return $this;
     }
 

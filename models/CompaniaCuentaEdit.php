@@ -138,6 +138,7 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->compania->Visible = false;
+        $this->pago_electronico->setVisibility();
     }
 
     // Constructor
@@ -531,6 +532,7 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->pago_electronico);
 
         // Check modal
         if ($this->IsModal) {
@@ -848,6 +850,16 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             }
         }
 
+        // Check field name 'pago_electronico' first before field var 'x_pago_electronico'
+        $val = $CurrentForm->hasValue("pago_electronico") ? $CurrentForm->getValue("pago_electronico") : $CurrentForm->getValue("x_pago_electronico");
+        if (!$this->pago_electronico->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->pago_electronico->Visible = false; // Disable update for API request
+            } else {
+                $this->pago_electronico->setFormValue($val);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -867,6 +879,7 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->mostrar->CurrentValue = $this->mostrar->FormValue;
         $this->cuenta->CurrentValue = $this->cuenta->FormValue;
         $this->activo->CurrentValue = $this->activo->FormValue;
+        $this->pago_electronico->CurrentValue = $this->pago_electronico->FormValue;
     }
 
     /**
@@ -971,6 +984,7 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->compania->setDbValue($row['compania']);
+        $this->pago_electronico->setDbValue($row['pago_electronico']);
     }
 
     // Return a row with default values
@@ -986,6 +1000,7 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['compania'] = $this->compania->DefaultValue;
+        $row['pago_electronico'] = $this->pago_electronico->DefaultValue;
         return $row;
     }
 
@@ -1046,6 +1061,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
 
         // compania
         $this->compania->RowCssClass = "row";
+
+        // pago_electronico
+        $this->pago_electronico->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1131,6 +1149,13 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             // compania
             $this->compania->ViewValue = $this->compania->CurrentValue;
 
+            // pago_electronico
+            if (strval($this->pago_electronico->CurrentValue) != "") {
+                $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
+            } else {
+                $this->pago_electronico->ViewValue = null;
+            }
+
             // banco
             $this->banco->HrefValue = "";
 
@@ -1151,6 +1176,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
 
             // activo
             $this->activo->HrefValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // banco
             $this->banco->setupEditAttributes();
@@ -1249,6 +1277,10 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
+            // pago_electronico
+            $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+            $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
+
             // Edit refer script
 
             // banco
@@ -1271,6 +1303,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
 
             // activo
             $this->activo->HrefValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1325,6 +1360,11 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             if ($this->activo->Visible && $this->activo->Required) {
                 if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
                     $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
+                }
+            }
+            if ($this->pago_electronico->Visible && $this->pago_electronico->Required) {
+                if ($this->pago_electronico->FormValue == "") {
+                    $this->pago_electronico->addErrorMessage(str_replace("%s", $this->pago_electronico->caption(), $this->pago_electronico->RequiredErrorMessage));
                 }
             }
 
@@ -1454,6 +1494,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
 
         // activo
         $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, $this->activo->ReadOnly);
+
+        // pago_electronico
+        $this->pago_electronico->setDbValueDef($rsnew, $this->pago_electronico->CurrentValue, $this->pago_electronico->ReadOnly);
         return $rsnew;
     }
 
@@ -1483,6 +1526,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         }
         if (isset($row['activo'])) { // activo
             $this->activo->CurrentValue = $row['activo'];
+        }
+        if (isset($row['pago_electronico'])) { // pago_electronico
+            $this->pago_electronico->CurrentValue = $row['pago_electronico'];
         }
     }
 
@@ -1594,6 +1640,8 @@ class CompaniaCuentaEdit extends CompaniaCuenta
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_activo":
+                    break;
+                case "x_pago_electronico":
                     break;
                 default:
                     $lookupFilter = "";

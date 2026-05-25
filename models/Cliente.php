@@ -73,6 +73,7 @@ class Cliente extends DbTable
     public $consignacion;
     public $limite_credito;
     public $condicion;
+    public $codigo;
     public $cuenta;
     public $activo;
     public $foto1;
@@ -586,6 +587,28 @@ class Cliente extends DbTable
         $this->condicion->OptionCount = 3;
         $this->condicion->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['condicion'] = &$this->condicion;
+
+        // codigo
+        $this->codigo = new DbField(
+            $this, // Table
+            'x_codigo', // Variable name
+            'codigo', // Name
+            '`codigo`', // Expression
+            '`codigo`', // Basic search expression
+            129, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`codigo`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->codigo->InputTextType = "text";
+        $this->codigo->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['codigo'] = &$this->codigo;
 
         // cuenta
         $this->cuenta = new DbField(
@@ -1371,6 +1394,7 @@ class Cliente extends DbTable
         $this->consignacion->DbValue = $row['consignacion'];
         $this->limite_credito->DbValue = $row['limite_credito'];
         $this->condicion->DbValue = $row['condicion'];
+        $this->codigo->DbValue = $row['codigo'];
         $this->cuenta->DbValue = $row['cuenta'];
         $this->activo->DbValue = $row['activo'];
         $this->foto1->Upload->DbValue = $row['foto1'];
@@ -1768,6 +1792,7 @@ class Cliente extends DbTable
         $this->consignacion->setDbValue($row['consignacion']);
         $this->limite_credito->setDbValue($row['limite_credito']);
         $this->condicion->setDbValue($row['condicion']);
+        $this->codigo->setDbValue($row['codigo']);
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->foto1->Upload->DbValue = $row['foto1'];
@@ -1841,6 +1866,8 @@ class Cliente extends DbTable
         // limite_credito
 
         // condicion
+
+        // codigo
 
         // cuenta
 
@@ -1983,6 +2010,9 @@ class Cliente extends DbTable
         } else {
             $this->condicion->ViewValue = null;
         }
+
+        // codigo
+        $this->codigo->ViewValue = $this->codigo->CurrentValue;
 
         // cuenta
         $curVal = strval($this->cuenta->CurrentValue);
@@ -2140,6 +2170,10 @@ class Cliente extends DbTable
         // condicion
         $this->condicion->HrefValue = "";
         $this->condicion->TooltipValue = "";
+
+        // codigo
+        $this->codigo->HrefValue = "";
+        $this->codigo->TooltipValue = "";
 
         // cuenta
         $this->cuenta->HrefValue = "";
@@ -2342,6 +2376,14 @@ class Cliente extends DbTable
         $this->condicion->EditValue = $this->condicion->options(false);
         $this->condicion->PlaceHolder = RemoveHtml($this->condicion->caption());
 
+        // codigo
+        $this->codigo->setupEditAttributes();
+        if (!$this->codigo->Raw) {
+            $this->codigo->CurrentValue = HtmlDecode($this->codigo->CurrentValue);
+        }
+        $this->codigo->EditValue = $this->codigo->CurrentValue;
+        $this->codigo->PlaceHolder = RemoveHtml($this->codigo->caption());
+
         // cuenta
         $this->cuenta->setupEditAttributes();
         $this->cuenta->PlaceHolder = RemoveHtml($this->cuenta->caption());
@@ -2438,6 +2480,7 @@ class Cliente extends DbTable
                     $doc->exportCaption($this->consignacion);
                     $doc->exportCaption($this->limite_credito);
                     $doc->exportCaption($this->condicion);
+                    $doc->exportCaption($this->codigo);
                     $doc->exportCaption($this->cuenta);
                     $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->foto1);
@@ -2464,6 +2507,7 @@ class Cliente extends DbTable
                     $doc->exportCaption($this->consignacion);
                     $doc->exportCaption($this->limite_credito);
                     $doc->exportCaption($this->condicion);
+                    $doc->exportCaption($this->codigo);
                     $doc->exportCaption($this->cuenta);
                     $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->dias_credito);
@@ -2511,6 +2555,7 @@ class Cliente extends DbTable
                         $doc->exportField($this->consignacion);
                         $doc->exportField($this->limite_credito);
                         $doc->exportField($this->condicion);
+                        $doc->exportField($this->codigo);
                         $doc->exportField($this->cuenta);
                         $doc->exportField($this->activo);
                         $doc->exportField($this->foto1);
@@ -2537,6 +2582,7 @@ class Cliente extends DbTable
                         $doc->exportField($this->consignacion);
                         $doc->exportField($this->limite_credito);
                         $doc->exportField($this->condicion);
+                        $doc->exportField($this->codigo);
                         $doc->exportField($this->cuenta);
                         $doc->exportField($this->activo);
                         $doc->exportField($this->dias_credito);
@@ -2921,6 +2967,8 @@ class Cliente extends DbTable
     	$rsnew["ci_rif"] = trim(strtoupper($rsnew["ci_rif"]));
     	$rsnew["email2"] = trim($rsnew["email2"]);
     	$rsnew["web"] = trim(strtoupper($rsnew["web"]));
+
+        /*
     	if(trim($rsnew["ci_rif"]) != "" and $rsold["ci_rif"] <> $rsnew["ci_rif"]) {
     		$sql = "SELECT COUNT(ci_rif) AS cantidad FROM cliente WHERE ci_rif = '" . $rsnew["ci_rif"] . "';";
     		$cantidad = ExecuteScalar($sql);
@@ -2937,6 +2985,7 @@ class Cliente extends DbTable
     			return FALSE;
     		}
     	}
+        */
     	return TRUE;
     }
 

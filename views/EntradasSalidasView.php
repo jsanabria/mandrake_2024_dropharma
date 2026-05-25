@@ -177,6 +177,28 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+    <tr id="r_cantidad_entregada"<?= $Page->cantidad_entregada->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_entradas_salidas_cantidad_entregada"><?= $Page->cantidad_entregada->caption() ?></span></td>
+        <td data-name="cantidad_entregada"<?= $Page->cantidad_entregada->cellAttributes() ?>>
+<span id="el_entradas_salidas_cantidad_entregada">
+<span<?= $Page->cantidad_entregada->viewAttributes() ?>>
+<?= $Page->cantidad_entregada->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+    <tr id="r_cantidad_por_entregar"<?= $Page->cantidad_por_entregar->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_entradas_salidas_cantidad_por_entregar"><?= $Page->cantidad_por_entregar->caption() ?></span></td>
+        <td data-name="cantidad_por_entregar"<?= $Page->cantidad_por_entregar->cellAttributes() ?>>
+<span id="el_entradas_salidas_cantidad_por_entregar">
+<span<?= $Page->cantidad_por_entregar->viewAttributes() ?>>
+<?= $Page->cantidad_por_entregar->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 </form>
 <?php if (!$Page->IsModal) { ?>

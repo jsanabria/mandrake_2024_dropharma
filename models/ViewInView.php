@@ -161,6 +161,7 @@ class ViewInView extends ViewIn
         $this->cantidad_movimiento->setVisibility();
         $this->precio_unidad_sin_desc->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->setVisibility();
@@ -852,6 +853,7 @@ class ViewInView extends ViewIn
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -883,6 +885,7 @@ class ViewInView extends ViewIn
         $row['cantidad_movimiento'] = $this->cantidad_movimiento->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['costo_unidad'] = $this->costo_unidad->DefaultValue;
         $row['costo'] = $this->costo->DefaultValue;
         $row['precio_unidad'] = $this->precio_unidad->DefaultValue;
@@ -942,6 +945,8 @@ class ViewInView extends ViewIn
         // precio_unidad_sin_desc
 
         // descuento
+
+        // descuento2
 
         // costo_unidad
 
@@ -1077,6 +1082,10 @@ class ViewInView extends ViewIn
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // costo_unidad
             $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
             $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -1158,6 +1167,10 @@ class ViewInView extends ViewIn
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";

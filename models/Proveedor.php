@@ -63,15 +63,19 @@ class Proveedor extends DbTable
     public $telefono2;
     public $email1;
     public $email2;
+    public $fabricante;
     public $cuenta_auxiliar;
     public $cuenta_gasto;
     public $tipo_iva;
     public $tipo_islr;
     public $sustraendo;
+    public $tipo_ret_iva;
+    public $tipo_ret_islr_concepto;
+    public $tipo_ret_islr;
+    public $tipo_ret_mun;
     public $tipo_impmun;
     public $cta_bco;
     public $activo;
-    public $fabricante;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -328,6 +332,30 @@ class Proveedor extends DbTable
         $this->email2->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['email2'] = &$this->email2;
 
+        // fabricante
+        $this->fabricante = new DbField(
+            $this, // Table
+            'x_fabricante', // Variable name
+            'fabricante', // Name
+            '`fabricante`', // Expression
+            '`fabricante`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`fabricante`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->fabricante->InputTextType = "text";
+        $this->fabricante->Raw = true;
+        $this->fabricante->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->fabricante->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['fabricante'] = &$this->fabricante;
+
         // cuenta_auxiliar
         $this->cuenta_auxiliar = new DbField(
             $this, // Table
@@ -471,6 +499,96 @@ class Proveedor extends DbTable
         $this->sustraendo->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['sustraendo'] = &$this->sustraendo;
 
+        // tipo_ret_iva
+        $this->tipo_ret_iva = new DbField(
+            $this, // Table
+            'x_tipo_ret_iva', // Variable name
+            'tipo_ret_iva', // Name
+            '`tipo_ret_iva`', // Expression
+            '`tipo_ret_iva`', // Basic search expression
+            129, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo_ret_iva`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tipo_ret_iva->InputTextType = "text";
+        $this->tipo_ret_iva->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tipo_ret_iva'] = &$this->tipo_ret_iva;
+
+        // tipo_ret_islr_concepto
+        $this->tipo_ret_islr_concepto = new DbField(
+            $this, // Table
+            'x_tipo_ret_islr_concepto', // Variable name
+            'tipo_ret_islr_concepto', // Name
+            '`tipo_ret_islr_concepto`', // Expression
+            '`tipo_ret_islr_concepto`', // Basic search expression
+            129, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo_ret_islr_concepto`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tipo_ret_islr_concepto->InputTextType = "text";
+        $this->tipo_ret_islr_concepto->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tipo_ret_islr_concepto'] = &$this->tipo_ret_islr_concepto;
+
+        // tipo_ret_islr
+        $this->tipo_ret_islr = new DbField(
+            $this, // Table
+            'x_tipo_ret_islr', // Variable name
+            'tipo_ret_islr', // Name
+            '`tipo_ret_islr`', // Expression
+            '`tipo_ret_islr`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo_ret_islr`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tipo_ret_islr->InputTextType = "text";
+        $this->tipo_ret_islr->Raw = true;
+        $this->tipo_ret_islr->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->tipo_ret_islr->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tipo_ret_islr'] = &$this->tipo_ret_islr;
+
+        // tipo_ret_mun
+        $this->tipo_ret_mun = new DbField(
+            $this, // Table
+            'x_tipo_ret_mun', // Variable name
+            'tipo_ret_mun', // Name
+            '`tipo_ret_mun`', // Expression
+            '`tipo_ret_mun`', // Basic search expression
+            129, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo_ret_mun`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tipo_ret_mun->InputTextType = "text";
+        $this->tipo_ret_mun->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tipo_ret_mun'] = &$this->tipo_ret_mun;
+
         // tipo_impmun
         $this->tipo_impmun = new DbField(
             $this, // Table
@@ -549,30 +667,6 @@ class Proveedor extends DbTable
         $this->activo->OptionCount = 2;
         $this->activo->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['activo'] = &$this->activo;
-
-        // fabricante
-        $this->fabricante = new DbField(
-            $this, // Table
-            'x_fabricante', // Variable name
-            'fabricante', // Name
-            '`fabricante`', // Expression
-            '`fabricante`', // Basic search expression
-            3, // Type
-            11, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`fabricante`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->fabricante->InputTextType = "text";
-        $this->fabricante->Raw = true;
-        $this->fabricante->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
-        $this->fabricante->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['fabricante'] = &$this->fabricante;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1247,15 +1341,19 @@ class Proveedor extends DbTable
         $this->telefono2->DbValue = $row['telefono2'];
         $this->email1->DbValue = $row['email1'];
         $this->email2->DbValue = $row['email2'];
+        $this->fabricante->DbValue = $row['fabricante'];
         $this->cuenta_auxiliar->DbValue = $row['cuenta_auxiliar'];
         $this->cuenta_gasto->DbValue = $row['cuenta_gasto'];
         $this->tipo_iva->DbValue = $row['tipo_iva'];
         $this->tipo_islr->DbValue = $row['tipo_islr'];
         $this->sustraendo->DbValue = $row['sustraendo'];
+        $this->tipo_ret_iva->DbValue = $row['tipo_ret_iva'];
+        $this->tipo_ret_islr_concepto->DbValue = $row['tipo_ret_islr_concepto'];
+        $this->tipo_ret_islr->DbValue = $row['tipo_ret_islr'];
+        $this->tipo_ret_mun->DbValue = $row['tipo_ret_mun'];
         $this->tipo_impmun->DbValue = $row['tipo_impmun'];
         $this->cta_bco->DbValue = $row['cta_bco'];
         $this->activo->DbValue = $row['activo'];
-        $this->fabricante->DbValue = $row['fabricante'];
     }
 
     // Delete uploaded files
@@ -1625,15 +1723,19 @@ class Proveedor extends DbTable
         $this->telefono2->setDbValue($row['telefono2']);
         $this->email1->setDbValue($row['email1']);
         $this->email2->setDbValue($row['email2']);
+        $this->fabricante->setDbValue($row['fabricante']);
         $this->cuenta_auxiliar->setDbValue($row['cuenta_auxiliar']);
         $this->cuenta_gasto->setDbValue($row['cuenta_gasto']);
         $this->tipo_iva->setDbValue($row['tipo_iva']);
         $this->tipo_islr->setDbValue($row['tipo_islr']);
         $this->sustraendo->setDbValue($row['sustraendo']);
+        $this->tipo_ret_iva->setDbValue($row['tipo_ret_iva']);
+        $this->tipo_ret_islr_concepto->setDbValue($row['tipo_ret_islr_concepto']);
+        $this->tipo_ret_islr->setDbValue($row['tipo_ret_islr']);
+        $this->tipo_ret_mun->setDbValue($row['tipo_ret_mun']);
         $this->tipo_impmun->setDbValue($row['tipo_impmun']);
         $this->cta_bco->setDbValue($row['cta_bco']);
         $this->activo->setDbValue($row['activo']);
-        $this->fabricante->setDbValue($row['fabricante']);
     }
 
     // Render list content
@@ -1682,6 +1784,8 @@ class Proveedor extends DbTable
 
         // email2
 
+        // fabricante
+
         // cuenta_auxiliar
 
         // cuenta_gasto
@@ -1692,13 +1796,19 @@ class Proveedor extends DbTable
 
         // sustraendo
 
+        // tipo_ret_iva
+
+        // tipo_ret_islr_concepto
+
+        // tipo_ret_islr
+
+        // tipo_ret_mun
+
         // tipo_impmun
 
         // cta_bco
 
         // activo
-
-        // fabricante
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1748,6 +1858,10 @@ class Proveedor extends DbTable
 
         // email2
         $this->email2->ViewValue = $this->email2->CurrentValue;
+
+        // fabricante
+        $this->fabricante->ViewValue = $this->fabricante->CurrentValue;
+        $this->fabricante->ViewValue = FormatNumber($this->fabricante->ViewValue, $this->fabricante->formatPattern());
 
         // cuenta_auxiliar
         $curVal = strval($this->cuenta_auxiliar->CurrentValue);
@@ -1869,6 +1983,19 @@ class Proveedor extends DbTable
             $this->sustraendo->ViewValue = null;
         }
 
+        // tipo_ret_iva
+        $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->CurrentValue;
+
+        // tipo_ret_islr_concepto
+        $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->CurrentValue;
+
+        // tipo_ret_islr
+        $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->CurrentValue;
+        $this->tipo_ret_islr->ViewValue = FormatNumber($this->tipo_ret_islr->ViewValue, $this->tipo_ret_islr->formatPattern());
+
+        // tipo_ret_mun
+        $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->CurrentValue;
+
         // tipo_impmun
         $curVal = strval($this->tipo_impmun->CurrentValue);
         if ($curVal != "") {
@@ -1902,10 +2029,6 @@ class Proveedor extends DbTable
         } else {
             $this->activo->ViewValue = null;
         }
-
-        // fabricante
-        $this->fabricante->ViewValue = $this->fabricante->CurrentValue;
-        $this->fabricante->ViewValue = FormatNumber($this->fabricante->ViewValue, $this->fabricante->formatPattern());
 
         // id
         $this->id->HrefValue = "";
@@ -1943,6 +2066,10 @@ class Proveedor extends DbTable
         $this->email2->HrefValue = "";
         $this->email2->TooltipValue = "";
 
+        // fabricante
+        $this->fabricante->HrefValue = "";
+        $this->fabricante->TooltipValue = "";
+
         // cuenta_auxiliar
         $this->cuenta_auxiliar->HrefValue = "";
         $this->cuenta_auxiliar->TooltipValue = "";
@@ -1963,6 +2090,22 @@ class Proveedor extends DbTable
         $this->sustraendo->HrefValue = "";
         $this->sustraendo->TooltipValue = "";
 
+        // tipo_ret_iva
+        $this->tipo_ret_iva->HrefValue = "";
+        $this->tipo_ret_iva->TooltipValue = "";
+
+        // tipo_ret_islr_concepto
+        $this->tipo_ret_islr_concepto->HrefValue = "";
+        $this->tipo_ret_islr_concepto->TooltipValue = "";
+
+        // tipo_ret_islr
+        $this->tipo_ret_islr->HrefValue = "";
+        $this->tipo_ret_islr->TooltipValue = "";
+
+        // tipo_ret_mun
+        $this->tipo_ret_mun->HrefValue = "";
+        $this->tipo_ret_mun->TooltipValue = "";
+
         // tipo_impmun
         $this->tipo_impmun->HrefValue = "";
         $this->tipo_impmun->TooltipValue = "";
@@ -1974,10 +2117,6 @@ class Proveedor extends DbTable
         // activo
         $this->activo->HrefValue = "";
         $this->activo->TooltipValue = "";
-
-        // fabricante
-        $this->fabricante->HrefValue = "";
-        $this->fabricante->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2059,6 +2198,14 @@ class Proveedor extends DbTable
         $this->email2->EditValue = $this->email2->CurrentValue;
         $this->email2->PlaceHolder = RemoveHtml($this->email2->caption());
 
+        // fabricante
+        $this->fabricante->setupEditAttributes();
+        $this->fabricante->EditValue = $this->fabricante->CurrentValue;
+        $this->fabricante->PlaceHolder = RemoveHtml($this->fabricante->caption());
+        if (strval($this->fabricante->EditValue) != "" && is_numeric($this->fabricante->EditValue)) {
+            $this->fabricante->EditValue = FormatNumber($this->fabricante->EditValue, null);
+        }
+
         // cuenta_auxiliar
         $this->cuenta_auxiliar->setupEditAttributes();
         $this->cuenta_auxiliar->PlaceHolder = RemoveHtml($this->cuenta_auxiliar->caption());
@@ -2079,6 +2226,38 @@ class Proveedor extends DbTable
         $this->sustraendo->setupEditAttributes();
         $this->sustraendo->PlaceHolder = RemoveHtml($this->sustraendo->caption());
 
+        // tipo_ret_iva
+        $this->tipo_ret_iva->setupEditAttributes();
+        if (!$this->tipo_ret_iva->Raw) {
+            $this->tipo_ret_iva->CurrentValue = HtmlDecode($this->tipo_ret_iva->CurrentValue);
+        }
+        $this->tipo_ret_iva->EditValue = $this->tipo_ret_iva->CurrentValue;
+        $this->tipo_ret_iva->PlaceHolder = RemoveHtml($this->tipo_ret_iva->caption());
+
+        // tipo_ret_islr_concepto
+        $this->tipo_ret_islr_concepto->setupEditAttributes();
+        if (!$this->tipo_ret_islr_concepto->Raw) {
+            $this->tipo_ret_islr_concepto->CurrentValue = HtmlDecode($this->tipo_ret_islr_concepto->CurrentValue);
+        }
+        $this->tipo_ret_islr_concepto->EditValue = $this->tipo_ret_islr_concepto->CurrentValue;
+        $this->tipo_ret_islr_concepto->PlaceHolder = RemoveHtml($this->tipo_ret_islr_concepto->caption());
+
+        // tipo_ret_islr
+        $this->tipo_ret_islr->setupEditAttributes();
+        $this->tipo_ret_islr->EditValue = $this->tipo_ret_islr->CurrentValue;
+        $this->tipo_ret_islr->PlaceHolder = RemoveHtml($this->tipo_ret_islr->caption());
+        if (strval($this->tipo_ret_islr->EditValue) != "" && is_numeric($this->tipo_ret_islr->EditValue)) {
+            $this->tipo_ret_islr->EditValue = FormatNumber($this->tipo_ret_islr->EditValue, null);
+        }
+
+        // tipo_ret_mun
+        $this->tipo_ret_mun->setupEditAttributes();
+        if (!$this->tipo_ret_mun->Raw) {
+            $this->tipo_ret_mun->CurrentValue = HtmlDecode($this->tipo_ret_mun->CurrentValue);
+        }
+        $this->tipo_ret_mun->EditValue = $this->tipo_ret_mun->CurrentValue;
+        $this->tipo_ret_mun->PlaceHolder = RemoveHtml($this->tipo_ret_mun->caption());
+
         // tipo_impmun
         $this->tipo_impmun->setupEditAttributes();
         $this->tipo_impmun->PlaceHolder = RemoveHtml($this->tipo_impmun->caption());
@@ -2095,14 +2274,6 @@ class Proveedor extends DbTable
         $this->activo->setupEditAttributes();
         $this->activo->EditValue = $this->activo->options(true);
         $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
-
-        // fabricante
-        $this->fabricante->setupEditAttributes();
-        $this->fabricante->EditValue = $this->fabricante->CurrentValue;
-        $this->fabricante->PlaceHolder = RemoveHtml($this->fabricante->caption());
-        if (strval($this->fabricante->EditValue) != "" && is_numeric($this->fabricante->EditValue)) {
-            $this->fabricante->EditValue = FormatNumber($this->fabricante->EditValue, null);
-        }
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2140,15 +2311,8 @@ class Proveedor extends DbTable
                     $doc->exportCaption($this->telefono2);
                     $doc->exportCaption($this->email1);
                     $doc->exportCaption($this->email2);
-                    $doc->exportCaption($this->cuenta_auxiliar);
-                    $doc->exportCaption($this->cuenta_gasto);
-                    $doc->exportCaption($this->tipo_iva);
-                    $doc->exportCaption($this->tipo_islr);
-                    $doc->exportCaption($this->sustraendo);
-                    $doc->exportCaption($this->tipo_impmun);
                     $doc->exportCaption($this->cta_bco);
                     $doc->exportCaption($this->activo);
-                    $doc->exportCaption($this->fabricante);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->ci_rif);
@@ -2159,15 +2323,19 @@ class Proveedor extends DbTable
                     $doc->exportCaption($this->telefono2);
                     $doc->exportCaption($this->email1);
                     $doc->exportCaption($this->email2);
+                    $doc->exportCaption($this->fabricante);
                     $doc->exportCaption($this->cuenta_auxiliar);
                     $doc->exportCaption($this->cuenta_gasto);
                     $doc->exportCaption($this->tipo_iva);
                     $doc->exportCaption($this->tipo_islr);
                     $doc->exportCaption($this->sustraendo);
+                    $doc->exportCaption($this->tipo_ret_iva);
+                    $doc->exportCaption($this->tipo_ret_islr_concepto);
+                    $doc->exportCaption($this->tipo_ret_islr);
+                    $doc->exportCaption($this->tipo_ret_mun);
                     $doc->exportCaption($this->tipo_impmun);
                     $doc->exportCaption($this->cta_bco);
                     $doc->exportCaption($this->activo);
-                    $doc->exportCaption($this->fabricante);
                 }
                 $doc->endExportRow();
             }
@@ -2202,15 +2370,8 @@ class Proveedor extends DbTable
                         $doc->exportField($this->telefono2);
                         $doc->exportField($this->email1);
                         $doc->exportField($this->email2);
-                        $doc->exportField($this->cuenta_auxiliar);
-                        $doc->exportField($this->cuenta_gasto);
-                        $doc->exportField($this->tipo_iva);
-                        $doc->exportField($this->tipo_islr);
-                        $doc->exportField($this->sustraendo);
-                        $doc->exportField($this->tipo_impmun);
                         $doc->exportField($this->cta_bco);
                         $doc->exportField($this->activo);
-                        $doc->exportField($this->fabricante);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->ci_rif);
@@ -2221,15 +2382,19 @@ class Proveedor extends DbTable
                         $doc->exportField($this->telefono2);
                         $doc->exportField($this->email1);
                         $doc->exportField($this->email2);
+                        $doc->exportField($this->fabricante);
                         $doc->exportField($this->cuenta_auxiliar);
                         $doc->exportField($this->cuenta_gasto);
                         $doc->exportField($this->tipo_iva);
                         $doc->exportField($this->tipo_islr);
                         $doc->exportField($this->sustraendo);
+                        $doc->exportField($this->tipo_ret_iva);
+                        $doc->exportField($this->tipo_ret_islr_concepto);
+                        $doc->exportField($this->tipo_ret_islr);
+                        $doc->exportField($this->tipo_ret_mun);
                         $doc->exportField($this->tipo_impmun);
                         $doc->exportField($this->cta_bco);
                         $doc->exportField($this->activo);
-                        $doc->exportField($this->fabricante);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -2442,7 +2607,7 @@ class Proveedor extends DbTable
 
     // Row Inserted event
     public function rowInserted($rsold, $rsnew) {
-    	//echo "Row Inserted"
+        /*
     	$sql = "SELECT valor2 AS cuenta FROM parametro WHERE codigo = '018' AND valor1 = 'Proveedores';";
     	$cuenta = explode("-", ExecuteScalar($sql));
     	if(count($cuenta) > 2) {
@@ -2487,6 +2652,7 @@ class Proveedor extends DbTable
     			Execute($sql);
     		}
     	}
+        */
     }
 
     // Row Updating event
@@ -2520,6 +2686,7 @@ class Proveedor extends DbTable
     public function rowUpdated($rsold, $rsnew)
     {
         //Log("Row Updated");
+        /*
         if($rsold["cuenta_auxiliar"] == "" and $rsnew["cuenta_auxiliar"] == "") {
             $sql = "SELECT valor2 AS cuenta FROM parametro WHERE codigo = '018' AND valor1 = 'Proveedores';";
             $cuenta = explode("-", ExecuteScalar($sql));
@@ -2575,6 +2742,7 @@ class Proveedor extends DbTable
                 Execute($sql);
             }
         }
+        */
     }
 
     // Row Update Conflict event

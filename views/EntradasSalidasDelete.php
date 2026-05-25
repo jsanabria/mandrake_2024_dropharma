@@ -74,6 +74,9 @@ $Page->showMessage();
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th class="<?= $Page->descuento->headerCellClass() ?>"><span id="elh_entradas_salidas_descuento" class="entradas_salidas_descuento"><?= $Page->descuento->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <th class="<?= $Page->descuento2->headerCellClass() ?>"><span id="elh_entradas_salidas_descuento2" class="entradas_salidas_descuento2"><?= $Page->descuento2->caption() ?></span></th>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
         <th class="<?= $Page->costo_unidad->headerCellClass() ?>"><span id="elh_entradas_salidas_costo_unidad" class="entradas_salidas_costo_unidad"><?= $Page->costo_unidad->caption() ?></span></th>
 <?php } ?>
@@ -91,6 +94,12 @@ $Page->showMessage();
 <?php } ?>
 <?php if ($Page->newdata->Visible) { // newdata ?>
         <th class="<?= $Page->newdata->headerCellClass() ?>"><span id="elh_entradas_salidas_newdata" class="entradas_salidas_newdata"><?= $Page->newdata->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+        <th class="<?= $Page->cantidad_entregada->headerCellClass() ?>"><span id="elh_entradas_salidas_cantidad_entregada" class="entradas_salidas_cantidad_entregada"><?= $Page->cantidad_entregada->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+        <th class="<?= $Page->cantidad_por_entregar->headerCellClass() ?>"><span id="elh_entradas_salidas_cantidad_por_entregar" class="entradas_salidas_cantidad_por_entregar"><?= $Page->cantidad_por_entregar->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -177,6 +186,14 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <td<?= $Page->descuento2->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
         <td<?= $Page->costo_unidad->cellAttributes() ?>>
 <span id="">
@@ -222,6 +239,22 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->newdata->viewAttributes() ?>>
 <?= $Page->newdata->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+        <td<?= $Page->cantidad_entregada->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->cantidad_entregada->viewAttributes() ?>>
+<?= $Page->cantidad_entregada->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+        <td<?= $Page->cantidad_por_entregar->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->cantidad_por_entregar->viewAttributes() ?>>
+<?= $Page->cantidad_por_entregar->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

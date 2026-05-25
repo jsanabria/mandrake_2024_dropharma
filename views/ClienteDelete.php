@@ -77,6 +77,9 @@ $Page->showMessage();
 <?php if ($Page->tarifa->Visible) { // tarifa ?>
         <th class="<?= $Page->tarifa->headerCellClass() ?>"><span id="elh_cliente_tarifa" class="cliente_tarifa"><?= $Page->tarifa->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->codigo->Visible) { // codigo ?>
+        <th class="<?= $Page->codigo->headerCellClass() ?>"><span id="elh_cliente_codigo" class="cliente_codigo"><?= $Page->codigo->caption() ?></span></th>
+<?php } ?>
 <?php if ($Page->cuenta->Visible) { // cuenta ?>
         <th class="<?= $Page->cuenta->headerCellClass() ?>"><span id="elh_cliente_cuenta" class="cliente_cuenta"><?= $Page->cuenta->caption() ?></span></th>
 <?php } ?>
@@ -179,6 +182,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->tarifa->viewAttributes() ?>>
 <?= $Page->tarifa->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->codigo->Visible) { // codigo ?>
+        <td<?= $Page->codigo->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->codigo->viewAttributes() ?>>
+<?= $Page->codigo->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

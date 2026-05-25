@@ -138,6 +138,7 @@ class CompaniaCuentaPreview extends CompaniaCuenta
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->compania->Visible = false;
+        $this->pago_electronico->setVisibility();
     }
 
     // Constructor
@@ -444,6 +445,7 @@ class CompaniaCuentaPreview extends CompaniaCuenta
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->pago_electronico);
 
         // Load filter
         $masterKeys = explode("|", Decrypt(Get("f", "")));
@@ -532,6 +534,7 @@ class CompaniaCuentaPreview extends CompaniaCuenta
             $this->cuenta->setSort("");
             $this->activo->setSort("");
             $this->compania->setSort("");
+            $this->pago_electronico->setSort("");
 
             // Save sort to session
             $this->setSessionOrderBy("");
@@ -557,6 +560,7 @@ class CompaniaCuentaPreview extends CompaniaCuenta
             $this->updateSort($this->mostrar); // mostrar
             $this->updateSort($this->cuenta); // cuenta
             $this->updateSort($this->activo); // activo
+            $this->updateSort($this->pago_electronico); // pago_electronico
         }
 
         // Update field sort
@@ -779,6 +783,8 @@ class CompaniaCuentaPreview extends CompaniaCuenta
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_activo":
+                    break;
+                case "x_pago_electronico":
                     break;
                 default:
                     $lookupFilter = "";

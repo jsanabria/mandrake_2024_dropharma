@@ -13,10 +13,10 @@ $GLOBALS["titulo"] = "VENTAS POR ARTICULO UTILIDAD DESDE " . $xFD[2] . "/" . $xF
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	// Cabecera de p?gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
+		// Consulto datos de la compa??a 
 		require("../include/connect.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -96,14 +96,14 @@ class PDF extends FPDF
 
 	}
 	
-	// Pie de página
+	// Pie de p?gina
 	function Footer()
 	{
-		// Posición: a 1,5 cm del final
+		// Posici?n: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Arial','I',8);
-		// Número de página
+		// N?mero de p?gina
 		$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
@@ -127,7 +127,7 @@ class PDF extends FPDF
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaci?n del objeto de la clase heredada
 $pdf = new PDF('P', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();
@@ -144,7 +144,7 @@ $sql = "SELECT
 					ROUND(SUM(b.cantidad_articulo*d.ultimo_costo), 2) AS costo, 
 					ROUND((b.precio_unidad/IFNULL(a.tasa_dia, 1)), 2) AS precio_unidad, 
 					ROUND(SUM(b.precio/IFNULL(a.tasa_dia, 1)), 2) AS precio, 
-					ROUND(((ROUND((b.precio_unidad/IFNULL(a.tasa_dia, 1)), 2) - ROUND(d.ultimo_costo, 2)) / (ROUND((b.precio_unidad/IFNULL(a.tasa_dia, 1)), 2)))*100, 2) AS utilidad 
+					ROUND(((ROUND((MAX(b.precio_unidad)/IFNULL(a.tasa_dia, 1)), 2) - ROUND(d.ultimo_costo, 2)) / (ROUND((MAX(b.precio_unidad)/IFNULL(a.tasa_dia, 1)), 2)))*100, 2) AS utilidad 
 				FROM 
 					salidas AS a 
 					JOIN entradas_salidas AS b ON b.id_documento = a.id 
@@ -156,8 +156,10 @@ $sql = "SELECT
 					AND a.fecha BETWEEN '$fecha_desde 00:00:00' AND '$fecha_hasta 23:59:59'
 				GROUP BY 
 					d.id, 
-					CONCAT(IFNULL(d.nombre_comercial, ' '), ' ', IFNULL(d.principio_activo, ' '), ' ', IFNULL(d.presentacion, ' '), ' ', IFNULL(d.nombre_comercial, ' ')), 
-					ROUND(d.ultimo_costo, 2), ROUND((b.precio_unidad/IFNULL(a.tasa_dia, 1)), 2) 
+					CONCAT(IFNULL(d.nombre_comercial, ' '), ' ', IFNULL(d.principio_activo, ' '), ' ', IFNULL(d.presentacion, ' ')), 
+					ROUND(d.ultimo_costo, 2), 
+					ROUND((b.precio_unidad/IFNULL(a.tasa_dia, 1)), 2),
+					a.tasa_dia
 				ORDER BY 3 ASC;"; 
 
 $rs = mysqli_query($link, $sql) or die(mysqli_error());

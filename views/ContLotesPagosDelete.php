@@ -65,6 +65,18 @@ $Page->showMessage();
 <?php if ($Page->usuario->Visible) { // usuario ?>
         <th class="<?= $Page->usuario->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_usuario" class="cont_lotes_pagos_usuario"><?= $Page->usuario->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->banco->Visible) { // banco ?>
+        <th class="<?= $Page->banco->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_banco" class="cont_lotes_pagos_banco"><?= $Page->banco->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->referencia->Visible) { // referencia ?>
+        <th class="<?= $Page->referencia->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_referencia" class="cont_lotes_pagos_referencia"><?= $Page->referencia->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+        <th class="<?= $Page->moneda->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_moneda" class="cont_lotes_pagos_moneda"><?= $Page->moneda->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->comprobante->Visible) { // comprobante ?>
+        <th class="<?= $Page->comprobante->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_comprobante" class="cont_lotes_pagos_comprobante"><?= $Page->comprobante->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -123,6 +135,38 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->usuario->viewAttributes() ?>>
 <?= $Page->usuario->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->banco->Visible) { // banco ?>
+        <td<?= $Page->banco->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->banco->viewAttributes() ?>>
+<?= $Page->banco->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->referencia->Visible) { // referencia ?>
+        <td<?= $Page->referencia->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->referencia->viewAttributes() ?>>
+<?= $Page->referencia->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+        <td<?= $Page->moneda->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->comprobante->Visible) { // comprobante ?>
+        <td<?= $Page->comprobante->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->comprobante->viewAttributes() ?>>
+<?= $Page->comprobante->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

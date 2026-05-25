@@ -291,6 +291,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->monto->Visible) { // monto ?>
         <th data-name="monto" class="<?= $Page->monto->headerCellClass() ?>"><div id="elh_pagos_proveedor_monto" class="pagos_proveedor_monto"><?= $Page->renderFieldHeader($Page->monto) ?></div></th>
 <?php } ?>
+<?php if ($Page->cont_lotes->Visible) { // cont_lotes ?>
+        <th data-name="cont_lotes" class="<?= $Page->cont_lotes->headerCellClass() ?>"><div id="elh_pagos_proveedor_cont_lotes" class="pagos_proveedor_cont_lotes"><?= $Page->renderFieldHeader($Page->cont_lotes) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -388,6 +391,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_proveedor_monto" class="el_pagos_proveedor_monto">
 <span<?= $Page->monto->viewAttributes() ?>>
 <?= $Page->monto->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->cont_lotes->Visible) { // cont_lotes ?>
+        <td data-name="cont_lotes"<?= $Page->cont_lotes->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_proveedor_cont_lotes" class="el_pagos_proveedor_cont_lotes">
+<span<?= $Page->cont_lotes->viewAttributes() ?>>
+<?= $Page->cont_lotes->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

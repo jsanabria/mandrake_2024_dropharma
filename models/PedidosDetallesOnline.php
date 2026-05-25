@@ -63,6 +63,7 @@ class PedidosDetallesOnline extends DbTable
     public $alicuota;
     public $descuento;
     public $precio_unidad_sin_desc;
+    public $descuento2;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -511,6 +512,30 @@ class PedidosDetallesOnline extends DbTable
         $this->precio_unidad_sin_desc->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
         $this->precio_unidad_sin_desc->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['precio_unidad_sin_desc'] = &$this->precio_unidad_sin_desc;
+
+        // descuento2
+        $this->descuento2 = new DbField(
+            $this, // Table
+            'x_descuento2', // Variable name
+            'descuento2', // Name
+            '`descuento2`', // Expression
+            '`descuento2`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento2->InputTextType = "text";
+        $this->descuento2->Raw = true;
+        $this->descuento2->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento2'] = &$this->descuento2;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1047,6 +1072,7 @@ class PedidosDetallesOnline extends DbTable
         $this->alicuota->DbValue = $row['alicuota'];
         $this->descuento->DbValue = $row['descuento'];
         $this->precio_unidad_sin_desc->DbValue = $row['precio_unidad_sin_desc'];
+        $this->descuento2->DbValue = $row['descuento2'];
     }
 
     // Delete uploaded files
@@ -1416,6 +1442,7 @@ class PedidosDetallesOnline extends DbTable
         $this->alicuota->setDbValue($row['alicuota']);
         $this->descuento->setDbValue($row['descuento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
+        $this->descuento2->setDbValue($row['descuento2']);
     }
 
     // Render list content
@@ -1480,6 +1507,8 @@ class PedidosDetallesOnline extends DbTable
 
         // precio_unidad_sin_desc
 
+        // descuento2
+
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
 
@@ -1542,6 +1571,10 @@ class PedidosDetallesOnline extends DbTable
         // precio_unidad_sin_desc
         $this->precio_unidad_sin_desc->ViewValue = $this->precio_unidad_sin_desc->CurrentValue;
         $this->precio_unidad_sin_desc->ViewValue = FormatNumber($this->precio_unidad_sin_desc->ViewValue, $this->precio_unidad_sin_desc->formatPattern());
+
+        // descuento2
+        $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+        $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
 
         // id
         $this->id->HrefValue = "";
@@ -1610,6 +1643,10 @@ class PedidosDetallesOnline extends DbTable
         // precio_unidad_sin_desc
         $this->precio_unidad_sin_desc->HrefValue = "";
         $this->precio_unidad_sin_desc->TooltipValue = "";
+
+        // descuento2
+        $this->descuento2->HrefValue = "";
+        $this->descuento2->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1755,6 +1792,14 @@ class PedidosDetallesOnline extends DbTable
             $this->precio_unidad_sin_desc->EditValue = FormatNumber($this->precio_unidad_sin_desc->EditValue, null);
         }
 
+        // descuento2
+        $this->descuento2->setupEditAttributes();
+        $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+        $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+        if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+            $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1800,6 +1845,7 @@ class PedidosDetallesOnline extends DbTable
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->precio_unidad_sin_desc);
+                    $doc->exportCaption($this->descuento2);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -1818,6 +1864,7 @@ class PedidosDetallesOnline extends DbTable
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->precio_unidad_sin_desc);
+                    $doc->exportCaption($this->descuento2);
                 }
                 $doc->endExportRow();
             }
@@ -1861,6 +1908,7 @@ class PedidosDetallesOnline extends DbTable
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->precio_unidad_sin_desc);
+                        $doc->exportField($this->descuento2);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -1879,6 +1927,7 @@ class PedidosDetallesOnline extends DbTable
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->precio_unidad_sin_desc);
+                        $doc->exportField($this->descuento2);
                     }
                     $doc->endExportRow($rowCnt);
                 }

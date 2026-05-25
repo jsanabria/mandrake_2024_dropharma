@@ -43,28 +43,6 @@ $proveedor->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($proveedor->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-        <tr id="r_cuenta_auxiliar"<?= $proveedor->cuenta_auxiliar->rowAttributes() ?>>
-            <td class="<?= $proveedor->TableLeftColumnClass ?>"><?= $proveedor->cuenta_auxiliar->caption() ?></td>
-            <td<?= $proveedor->cuenta_auxiliar->cellAttributes() ?>>
-<span id="el_proveedor_cuenta_auxiliar">
-<span<?= $proveedor->cuenta_auxiliar->viewAttributes() ?>>
-<?= $proveedor->cuenta_auxiliar->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($proveedor->cuenta_gasto->Visible) { // cuenta_gasto ?>
-        <tr id="r_cuenta_gasto"<?= $proveedor->cuenta_gasto->rowAttributes() ?>>
-            <td class="<?= $proveedor->TableLeftColumnClass ?>"><?= $proveedor->cuenta_gasto->caption() ?></td>
-            <td<?= $proveedor->cuenta_gasto->cellAttributes() ?>>
-<span id="el_proveedor_cuenta_gasto">
-<span<?= $proveedor->cuenta_gasto->viewAttributes() ?>>
-<?= $proveedor->cuenta_gasto->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
 <?php if ($proveedor->activo->Visible) { // activo ?>
         <tr id="r_activo"<?= $proveedor->activo->rowAttributes() ?>>
             <td class="<?= $proveedor->TableLeftColumnClass ?>"><?= $proveedor->activo->caption() ?></td>
@@ -72,17 +50,6 @@ $proveedor->TableClass = "table table-sm ew-table ew-master-table";
 <span id="el_proveedor_activo">
 <span<?= $proveedor->activo->viewAttributes() ?>>
 <?= $proveedor->activo->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($proveedor->fabricante->Visible) { // fabricante ?>
-        <tr id="r_fabricante"<?= $proveedor->fabricante->rowAttributes() ?>>
-            <td class="<?= $proveedor->TableLeftColumnClass ?>"><?= $proveedor->fabricante->caption() ?></td>
-            <td<?= $proveedor->fabricante->cellAttributes() ?>>
-<span id="el_proveedor_fabricante">
-<span<?= $proveedor->fabricante->viewAttributes() ?>>
-<?= $proveedor->fabricante->getViewValue() ?></span>
 </span>
 </td>
         </tr>

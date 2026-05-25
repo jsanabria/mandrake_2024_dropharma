@@ -788,6 +788,30 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->impreso->Visible) { // impreso ?>
         <th data-name="impreso" class="<?= $Page->impreso->headerCellClass() ?>"><div id="elh_salidas_impreso" class="salidas_impreso"><?= $Page->renderFieldHeader($Page->impreso) ?></div></th>
 <?php } ?>
+<?php if ($Page->nacionalizacion->Visible) { // nacionalizacion ?>
+        <th data-name="nacionalizacion" class="<?= $Page->nacionalizacion->headerCellClass() ?>"><div id="elh_salidas_nacionalizacion" class="salidas_nacionalizacion"><?= $Page->renderFieldHeader($Page->nacionalizacion) ?></div></th>
+<?php } ?>
+<?php if ($Page->arquitecto->Visible) { // arquitecto ?>
+        <th data-name="arquitecto" class="<?= $Page->arquitecto->headerCellClass() ?>"><div id="elh_salidas_arquitecto" class="salidas_arquitecto"><?= $Page->renderFieldHeader($Page->arquitecto) ?></div></th>
+<?php } ?>
+<?php if ($Page->ganancia->Visible) { // ganancia ?>
+        <th data-name="ganancia" class="<?= $Page->ganancia->headerCellClass() ?>"><div id="elh_salidas_ganancia" class="salidas_ganancia"><?= $Page->renderFieldHeader($Page->ganancia) ?></div></th>
+<?php } ?>
+<?php if ($Page->intermediario->Visible) { // intermediario ?>
+        <th data-name="intermediario" class="<?= $Page->intermediario->headerCellClass() ?>"><div id="elh_salidas_intermediario" class="salidas_intermediario"><?= $Page->renderFieldHeader($Page->intermediario) ?></div></th>
+<?php } ?>
+<?php if ($Page->telefeno_intermediario->Visible) { // telefeno_intermediario ?>
+        <th data-name="telefeno_intermediario" class="<?= $Page->telefeno_intermediario->headerCellClass() ?>"><div id="elh_salidas_telefeno_intermediario" class="salidas_telefeno_intermediario"><?= $Page->renderFieldHeader($Page->telefeno_intermediario) ?></div></th>
+<?php } ?>
+<?php if ($Page->email_intermediario->Visible) { // email_intermediario ?>
+        <th data-name="email_intermediario" class="<?= $Page->email_intermediario->headerCellClass() ?>"><div id="elh_salidas_email_intermediario" class="salidas_email_intermediario"><?= $Page->renderFieldHeader($Page->email_intermediario) ?></div></th>
+<?php } ?>
+<?php if ($Page->genera_ne->Visible) { // genera_ne ?>
+        <th data-name="genera_ne" class="<?= $Page->genera_ne->headerCellClass() ?>"><div id="elh_salidas_genera_ne" class="salidas_genera_ne"><?= $Page->renderFieldHeader($Page->genera_ne) ?></div></th>
+<?php } ?>
+<?php if ($Page->visita->Visible) { // visita ?>
+        <th data-name="visita" class="<?= $Page->visita->headerCellClass() ?>"><div id="elh_salidas_visita" class="salidas_visita"><?= $Page->renderFieldHeader($Page->visita) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -1112,6 +1136,70 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_impreso" class="el_salidas_impreso">
 <span<?= $Page->impreso->viewAttributes() ?>>
 <?= $Page->impreso->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->nacionalizacion->Visible) { // nacionalizacion ?>
+        <td data-name="nacionalizacion"<?= $Page->nacionalizacion->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_nacionalizacion" class="el_salidas_nacionalizacion">
+<span<?= $Page->nacionalizacion->viewAttributes() ?>>
+<?= $Page->nacionalizacion->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->arquitecto->Visible) { // arquitecto ?>
+        <td data-name="arquitecto"<?= $Page->arquitecto->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_arquitecto" class="el_salidas_arquitecto">
+<span<?= $Page->arquitecto->viewAttributes() ?>>
+<?= $Page->arquitecto->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->ganancia->Visible) { // ganancia ?>
+        <td data-name="ganancia"<?= $Page->ganancia->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_ganancia" class="el_salidas_ganancia">
+<span<?= $Page->ganancia->viewAttributes() ?>>
+<?= $Page->ganancia->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->intermediario->Visible) { // intermediario ?>
+        <td data-name="intermediario"<?= $Page->intermediario->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_intermediario" class="el_salidas_intermediario">
+<span<?= $Page->intermediario->viewAttributes() ?>>
+<?= $Page->intermediario->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->telefeno_intermediario->Visible) { // telefeno_intermediario ?>
+        <td data-name="telefeno_intermediario"<?= $Page->telefeno_intermediario->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_telefeno_intermediario" class="el_salidas_telefeno_intermediario">
+<span<?= $Page->telefeno_intermediario->viewAttributes() ?>>
+<?= $Page->telefeno_intermediario->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->email_intermediario->Visible) { // email_intermediario ?>
+        <td data-name="email_intermediario"<?= $Page->email_intermediario->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_email_intermediario" class="el_salidas_email_intermediario">
+<span<?= $Page->email_intermediario->viewAttributes() ?>>
+<?= $Page->email_intermediario->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->genera_ne->Visible) { // genera_ne ?>
+        <td data-name="genera_ne"<?= $Page->genera_ne->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_genera_ne" class="el_salidas_genera_ne">
+<span<?= $Page->genera_ne->viewAttributes() ?>>
+<?= $Page->genera_ne->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->visita->Visible) { // visita ?>
+        <td data-name="visita"<?= $Page->visita->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_salidas_visita" class="el_salidas_visita">
+<span<?= $Page->visita->viewAttributes() ?>>
+<?= $Page->visita->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

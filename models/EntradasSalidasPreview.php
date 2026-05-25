@@ -144,6 +144,7 @@ class EntradasSalidasPreview extends EntradasSalidas
         $this->cantidad_movimiento->Visible = false;
         $this->precio_unidad_sin_desc->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->setVisibility();
@@ -154,6 +155,8 @@ class EntradasSalidasPreview extends EntradasSalidas
         $this->check_ne->setVisibility();
         $this->packer_cantidad->Visible = false;
         $this->newdata->setVisibility();
+        $this->cantidad_entregada->setVisibility();
+        $this->cantidad_por_entregar->setVisibility();
     }
 
     // Constructor
@@ -555,6 +558,7 @@ class EntradasSalidasPreview extends EntradasSalidas
             $this->cantidad_movimiento->setSort("");
             $this->precio_unidad_sin_desc->setSort("");
             $this->descuento->setSort("");
+            $this->descuento2->setSort("");
             $this->costo_unidad->setSort("");
             $this->costo->setSort("");
             $this->precio_unidad->setSort("");
@@ -565,6 +569,8 @@ class EntradasSalidasPreview extends EntradasSalidas
             $this->check_ne->setSort("");
             $this->packer_cantidad->setSort("");
             $this->newdata->setSort("");
+            $this->cantidad_entregada->setSort("");
+            $this->cantidad_por_entregar->setSort("");
 
             // Save sort to session
             $this->setSessionOrderBy("");
@@ -591,12 +597,15 @@ class EntradasSalidasPreview extends EntradasSalidas
             $this->updateSort($this->cantidad_articulo); // cantidad_articulo
             $this->updateSort($this->precio_unidad_sin_desc); // precio_unidad_sin_desc
             $this->updateSort($this->descuento); // descuento
+            $this->updateSort($this->descuento2); // descuento2
             $this->updateSort($this->costo_unidad); // costo_unidad
             $this->updateSort($this->costo); // costo
             $this->updateSort($this->precio_unidad); // precio_unidad
             $this->updateSort($this->precio); // precio
             $this->updateSort($this->check_ne); // check_ne
             $this->updateSort($this->newdata); // newdata
+            $this->updateSort($this->cantidad_entregada); // cantidad_entregada
+            $this->updateSort($this->cantidad_por_entregar); // cantidad_por_entregar
         }
 
         // Update field sort

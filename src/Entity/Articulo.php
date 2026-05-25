@@ -63,6 +63,15 @@ class Articulo extends AbstractEntity
     #[Column(name: "lista_pedido", type: "string", nullable: true)]
     private ?string $listaPedido;
 
+    #[Column(name: "categoria_madre", type: "string", nullable: true)]
+    private ?string $categoriaMadre;
+
+    #[Column(name: "sub_categoria", type: "string", nullable: true)]
+    private ?string $subCategoria;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $tipo;
+
     #[Column(name: "unidad_medida_defecto", type: "string", nullable: true)]
     private ?string $unidadMedidaDefecto;
 
@@ -103,6 +112,27 @@ class Articulo extends AbstractEntity
     private ?string $articuloInventario;
 
     #[Column(type: "string", nullable: true)]
+    private ?string $indexado;
+
+    #[Column(name: "pies_cubico", type: "decimal")]
+    private string $piesCubico;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $color;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $cojin;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $brazo;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $respaldo;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $talla;
+
+    #[Column(type: "string", nullable: true)]
     private ?string $activo;
 
     #[Column(type: "string", nullable: true)]
@@ -110,9 +140,6 @@ class Articulo extends AbstractEntity
 
     #[Column(name: "fecha_vencimiento", type: "date", nullable: true)]
     private ?DateTime $fechaVencimiento;
-
-    #[Column(type: "string", nullable: true)]
-    private ?string $indexado;
 
     public function __construct()
     {
@@ -127,6 +154,7 @@ class Articulo extends AbstractEntity
         $this->precio = "0.00";
         $this->alicuota = "0";
         $this->articuloInventario = "S";
+        $this->piesCubico = "0.00";
     }
 
     public function getId(): int
@@ -247,6 +275,39 @@ class Articulo extends AbstractEntity
     public function setListaPedido(?string $value): static
     {
         $this->listaPedido = RemoveXss($value);
+        return $this;
+    }
+
+    public function getCategoriaMadre(): ?string
+    {
+        return HtmlDecode($this->categoriaMadre);
+    }
+
+    public function setCategoriaMadre(?string $value): static
+    {
+        $this->categoriaMadre = RemoveXss($value);
+        return $this;
+    }
+
+    public function getSubCategoria(): ?string
+    {
+        return HtmlDecode($this->subCategoria);
+    }
+
+    public function setSubCategoria(?string $value): static
+    {
+        $this->subCategoria = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTipo(): ?string
+    {
+        return HtmlDecode($this->tipo);
+    }
+
+    public function setTipo(?string $value): static
+    {
+        $this->tipo = RemoveXss($value);
         return $this;
     }
 
@@ -396,6 +457,86 @@ class Articulo extends AbstractEntity
         return $this;
     }
 
+    public function getIndexado(): ?string
+    {
+        return $this->indexado;
+    }
+
+    public function setIndexado(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'indexado' value");
+        }
+        $this->indexado = $value;
+        return $this;
+    }
+
+    public function getPiesCubico(): string
+    {
+        return $this->piesCubico;
+    }
+
+    public function setPiesCubico(string $value): static
+    {
+        $this->piesCubico = $value;
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return HtmlDecode($this->color);
+    }
+
+    public function setColor(?string $value): static
+    {
+        $this->color = RemoveXss($value);
+        return $this;
+    }
+
+    public function getCojin(): ?string
+    {
+        return HtmlDecode($this->cojin);
+    }
+
+    public function setCojin(?string $value): static
+    {
+        $this->cojin = RemoveXss($value);
+        return $this;
+    }
+
+    public function getBrazo(): ?string
+    {
+        return HtmlDecode($this->brazo);
+    }
+
+    public function setBrazo(?string $value): static
+    {
+        $this->brazo = RemoveXss($value);
+        return $this;
+    }
+
+    public function getRespaldo(): ?string
+    {
+        return HtmlDecode($this->respaldo);
+    }
+
+    public function setRespaldo(?string $value): static
+    {
+        $this->respaldo = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTalla(): ?string
+    {
+        return HtmlDecode($this->talla);
+    }
+
+    public function setTalla(?string $value): static
+    {
+        $this->talla = RemoveXss($value);
+        return $this;
+    }
+
     public function getActivo(): ?string
     {
         return $this->activo;
@@ -429,20 +570,6 @@ class Articulo extends AbstractEntity
     public function setFechaVencimiento(?DateTime $value): static
     {
         $this->fechaVencimiento = $value;
-        return $this;
-    }
-
-    public function getIndexado(): ?string
-    {
-        return $this->indexado;
-    }
-
-    public function setIndexado(?string $value): static
-    {
-        if (!in_array($value, ["S", "N"])) {
-            throw new \InvalidArgumentException("Invalid 'indexado' value");
-        }
-        $this->indexado = $value;
         return $this;
     }
 }

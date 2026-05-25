@@ -57,7 +57,7 @@ class ViewEntrada extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $username;
 
-    #[Column(type: "string", nullable: true)]
+    #[Column(type: "text", nullable: true)]
     private ?string $nota;
 
     #[Column(type: "string", nullable: true)]

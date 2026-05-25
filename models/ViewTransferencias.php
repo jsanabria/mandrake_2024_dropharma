@@ -263,8 +263,8 @@ class ViewTransferencias extends DbTable
             'nota', // Name
             '`nota`', // Expression
             '`nota`', // Basic search expression
-            200, // Type
-            255, // Size
+            201, // Type
+            196605, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`nota`', // Virtual expression
@@ -390,7 +390,7 @@ class ViewTransferencias extends DbTable
             '`lote`', // Expression
             '`lote`', // Basic search expression
             200, // Type
-            20, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`lote`', // Virtual expression

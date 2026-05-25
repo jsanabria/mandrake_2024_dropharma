@@ -172,6 +172,7 @@ class ClienteList extends Cliente
         $this->consignacion->Visible = false;
         $this->limite_credito->Visible = false;
         $this->condicion->Visible = false;
+        $this->codigo->setVisibility();
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->foto1->Visible = false;
@@ -1125,6 +1126,7 @@ class ClienteList extends Cliente
         $filterList = Concat($filterList, $this->consignacion->AdvancedSearch->toJson(), ","); // Field consignacion
         $filterList = Concat($filterList, $this->limite_credito->AdvancedSearch->toJson(), ","); // Field limite_credito
         $filterList = Concat($filterList, $this->condicion->AdvancedSearch->toJson(), ","); // Field condicion
+        $filterList = Concat($filterList, $this->codigo->AdvancedSearch->toJson(), ","); // Field codigo
         $filterList = Concat($filterList, $this->cuenta->AdvancedSearch->toJson(), ","); // Field cuenta
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
         $filterList = Concat($filterList, $this->foto1->AdvancedSearch->toJson(), ","); // Field foto1
@@ -1322,6 +1324,14 @@ class ClienteList extends Cliente
         $this->condicion->AdvancedSearch->SearchOperator2 = @$filter["w_condicion"];
         $this->condicion->AdvancedSearch->save();
 
+        // Field codigo
+        $this->codigo->AdvancedSearch->SearchValue = @$filter["x_codigo"];
+        $this->codigo->AdvancedSearch->SearchOperator = @$filter["z_codigo"];
+        $this->codigo->AdvancedSearch->SearchCondition = @$filter["v_codigo"];
+        $this->codigo->AdvancedSearch->SearchValue2 = @$filter["y_codigo"];
+        $this->codigo->AdvancedSearch->SearchOperator2 = @$filter["w_codigo"];
+        $this->codigo->AdvancedSearch->save();
+
         // Field cuenta
         $this->cuenta->AdvancedSearch->SearchValue = @$filter["x_cuenta"];
         $this->cuenta->AdvancedSearch->SearchOperator = @$filter["z_cuenta"];
@@ -1400,6 +1410,7 @@ class ClienteList extends Cliente
         $this->buildSearchSql($where, $this->consignacion, $default, false); // consignacion
         $this->buildSearchSql($where, $this->limite_credito, $default, false); // limite_credito
         $this->buildSearchSql($where, $this->condicion, $default, false); // condicion
+        $this->buildSearchSql($where, $this->codigo, $default, false); // codigo
         $this->buildSearchSql($where, $this->cuenta, $default, false); // cuenta
         $this->buildSearchSql($where, $this->activo, $default, false); // activo
         $this->buildSearchSql($where, $this->foto1, $default, false); // foto1
@@ -1431,6 +1442,7 @@ class ClienteList extends Cliente
             $this->consignacion->AdvancedSearch->save(); // consignacion
             $this->limite_credito->AdvancedSearch->save(); // limite_credito
             $this->condicion->AdvancedSearch->save(); // condicion
+            $this->codigo->AdvancedSearch->save(); // codigo
             $this->cuenta->AdvancedSearch->save(); // cuenta
             $this->activo->AdvancedSearch->save(); // activo
             $this->foto1->AdvancedSearch->save(); // foto1
@@ -1486,6 +1498,7 @@ class ClienteList extends Cliente
             $this->consignacion->AdvancedSearch->save(); // consignacion
             $this->limite_credito->AdvancedSearch->save(); // limite_credito
             $this->condicion->AdvancedSearch->save(); // condicion
+            $this->codigo->AdvancedSearch->save(); // codigo
             $this->cuenta->AdvancedSearch->save(); // cuenta
             $this->activo->AdvancedSearch->save(); // activo
             $this->foto1->AdvancedSearch->save(); // foto1
@@ -1629,6 +1642,15 @@ class ClienteList extends Cliente
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tarifa->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field codigo
+        $filter = $this->queryBuilderWhere("codigo");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->codigo, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->codigo->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field cuenta
         $filter = $this->queryBuilderWhere("cuenta");
         if (!$filter) {
@@ -1704,6 +1726,7 @@ class ClienteList extends Cliente
         $searchFlds[] = &$this->codigo_ims;
         $searchFlds[] = &$this->web;
         $searchFlds[] = &$this->tipo_cliente;
+        $searchFlds[] = &$this->codigo;
         $searchFlds[] = &$this->foto1;
         $searchFlds[] = &$this->foto2;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
@@ -1791,6 +1814,9 @@ class ClienteList extends Cliente
         if ($this->condicion->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->codigo->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->cuenta->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -1863,6 +1889,7 @@ class ClienteList extends Cliente
         $this->consignacion->AdvancedSearch->unsetSession();
         $this->limite_credito->AdvancedSearch->unsetSession();
         $this->condicion->AdvancedSearch->unsetSession();
+        $this->codigo->AdvancedSearch->unsetSession();
         $this->cuenta->AdvancedSearch->unsetSession();
         $this->activo->AdvancedSearch->unsetSession();
         $this->foto1->AdvancedSearch->unsetSession();
@@ -1899,6 +1926,7 @@ class ClienteList extends Cliente
         $this->consignacion->AdvancedSearch->load();
         $this->limite_credito->AdvancedSearch->load();
         $this->condicion->AdvancedSearch->load();
+        $this->codigo->AdvancedSearch->load();
         $this->cuenta->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->foto1->AdvancedSearch->load();
@@ -1931,6 +1959,7 @@ class ClienteList extends Cliente
             $this->updateSort($this->zona); // zona
             $this->updateSort($this->tipo_cliente); // tipo_cliente
             $this->updateSort($this->tarifa); // tarifa
+            $this->updateSort($this->codigo); // codigo
             $this->updateSort($this->cuenta); // cuenta
             $this->updateSort($this->activo); // activo
             $this->updateSort($this->dias_credito); // dias_credito
@@ -1978,6 +2007,7 @@ class ClienteList extends Cliente
                 $this->consignacion->setSort("");
                 $this->limite_credito->setSort("");
                 $this->condicion->setSort("");
+                $this->codigo->setSort("");
                 $this->cuenta->setSort("");
                 $this->activo->setSort("");
                 $this->foto1->setSort("");
@@ -2421,6 +2451,7 @@ class ClienteList extends Cliente
             $this->createColumnOption($option, "zona");
             $this->createColumnOption($option, "tipo_cliente");
             $this->createColumnOption($option, "tarifa");
+            $this->createColumnOption($option, "codigo");
             $this->createColumnOption($option, "cuenta");
             $this->createColumnOption($option, "activo");
             $this->createColumnOption($option, "dias_credito");
@@ -2930,6 +2961,14 @@ class ClienteList extends Cliente
             }
         }
 
+        // codigo
+        if ($this->codigo->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->codigo->AdvancedSearch->SearchValue != "" || $this->codigo->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // cuenta
         if ($this->cuenta->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3092,6 +3131,7 @@ class ClienteList extends Cliente
         $this->consignacion->setDbValue($row['consignacion']);
         $this->limite_credito->setDbValue($row['limite_credito']);
         $this->condicion->setDbValue($row['condicion']);
+        $this->codigo->setDbValue($row['codigo']);
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->foto1->Upload->DbValue = $row['foto1'];
@@ -3125,6 +3165,7 @@ class ClienteList extends Cliente
         $row['consignacion'] = $this->consignacion->DefaultValue;
         $row['limite_credito'] = $this->limite_credito->DefaultValue;
         $row['condicion'] = $this->condicion->DefaultValue;
+        $row['codigo'] = $this->codigo->DefaultValue;
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['foto1'] = $this->foto1->DefaultValue;
@@ -3208,6 +3249,8 @@ class ClienteList extends Cliente
         // limite_credito
 
         // condicion
+
+        // codigo
 
         // cuenta
 
@@ -3353,6 +3396,9 @@ class ClienteList extends Cliente
                 $this->condicion->ViewValue = null;
             }
 
+            // codigo
+            $this->codigo->ViewValue = $this->codigo->CurrentValue;
+
             // cuenta
             $curVal = strval($this->cuenta->CurrentValue);
             if ($curVal != "") {
@@ -3447,6 +3493,10 @@ class ClienteList extends Cliente
             // tarifa
             $this->tarifa->HrefValue = "";
             $this->tarifa->TooltipValue = "";
+
+            // codigo
+            $this->codigo->HrefValue = "";
+            $this->codigo->TooltipValue = "";
 
             // cuenta
             $this->cuenta->HrefValue = "";
@@ -3549,6 +3599,14 @@ class ClienteList extends Cliente
             $this->tarifa->setupEditAttributes();
             $this->tarifa->PlaceHolder = RemoveHtml($this->tarifa->caption());
 
+            // codigo
+            $this->codigo->setupEditAttributes();
+            if (!$this->codigo->Raw) {
+                $this->codigo->AdvancedSearch->SearchValue = HtmlDecode($this->codigo->AdvancedSearch->SearchValue);
+            }
+            $this->codigo->EditValue = HtmlEncode($this->codigo->AdvancedSearch->SearchValue);
+            $this->codigo->PlaceHolder = RemoveHtml($this->codigo->caption());
+
             // cuenta
             $this->cuenta->setupEditAttributes();
             $this->cuenta->PlaceHolder = RemoveHtml($this->cuenta->caption());
@@ -3622,6 +3680,7 @@ class ClienteList extends Cliente
         $this->consignacion->AdvancedSearch->load();
         $this->limite_credito->AdvancedSearch->load();
         $this->condicion->AdvancedSearch->load();
+        $this->codigo->AdvancedSearch->load();
         $this->cuenta->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->foto1->AdvancedSearch->load();
@@ -4067,6 +4126,7 @@ class ClienteList extends Cliente
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event

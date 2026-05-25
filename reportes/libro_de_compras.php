@@ -18,10 +18,10 @@ $GLOBALS["subtitulo"] = "Desde $fecdesde Hasta $fechasta";
 
 class PDF extends FPDF
 {
-	// Cabecera de p�gina
+	// Cabecera de página
 	function Header()
 	{
-		// Consulto datos de la compa��a 
+		// Consulto datos de la compañía 
 		require("../include/connect.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -49,19 +49,21 @@ class PDF extends FPDF
 		}
 		
 		$this->Ln(5);
-		$this->SetFont('Arial','',8);
-		$this->Cell(270, 5, "Fecha: " . date("d/m/Y"),0,0,'R');
+		$this->SetFont('Arial','',6);
+		// Ajustado el ancho de fecha/hora al espacio Legal útil (~330mm)
+		$this->Cell(330, 5, "Fecha: " . date("d/m/Y"),0,0,'R');
 		$this->Ln();
-		$this->Cell(270, 5, "Hora: " . date("H:i:s"),0,0,'R');
+		$this->Cell(330, 5, "Hora: " . date("H:i:s"),0,0,'R');
 
 		$this->Ln(2);
 		
 		$this->SetFont('Arial','B',14);
-		$this->Cell(270, 6, utf8_decode($GLOBALS["titulo"]),0,0,'C');
+		$titulo_convertido = function_exists('iconv') ? iconv('UTF-8', 'ISO-8859-1', $GLOBALS["titulo"]) : $GLOBALS["titulo"];
+		$this->Cell(330, 6, $titulo_convertido, 0, 0, 'C');
 		$this->SetFont('Arial','',12);
 		$this->Ln();
-		$this->Cell(270, 6, $GLOBALS["subtitulo"],0,0,'C');
-		$this->SetFont('Arial','',8);		
+		$this->Cell(330, 6, $GLOBALS["subtitulo"],0,0,'C');
+		$this->SetFont('Arial','',5);		
 
 
 		$this->Ln(8);
@@ -69,86 +71,155 @@ class PDF extends FPDF
 
 		require("../include/desconnect.php");
 
+		// Columnas superiores cabecera (Ancho Total recalculado para Legal)
 		$this->Cell(5, 5);
-		$this->Cell(15, 5, "", "LTR", 0, 'L');
-		$this->Cell(22, 5, "", "LTR", 0, 'C');
-		$this->Cell(20, 5, "NOTA", "LTR", 0, 'C');
-		$this->Cell(20, 5, "NRO", "LTR", 0, 'C');
-		$this->Cell(18, 5, "NRO", "LTR", 0, 'C');
-		$this->Cell(45, 5, "", "LTR", 0, 'L');
-		$this->Cell(18, 5, "", "LTR", 0, 'L');
-		$this->Cell(26, 5, "TOTAL", "LTR", 0, 'R');
-		$this->Cell(26, 5, "TOTAL", "LTR", 0, 'R');
-		$this->Cell(56, 5, "DEBITO FISCAL", 1, 0, 'C');
+		$this->Cell(10, 5, "", "LTR", 0, 'L'); // Fecha
+		$this->Cell(12, 5, "", "LTR", 0, 'C'); // Factura
+		$this->Cell(12, 5, "NOTA", "LTR", 0, 'C'); // Crédito
+		$this->Cell(12, 5, "NOTA", "LTR", 0, 'C'); // Débito (¡Añadida!)
+		$this->Cell(12, 5, "NRO", "LTR", 0, 'C'); // Doc Afectado
+		$this->Cell(15, 5, "NRO", "LTR", 0, 'C'); // Control
+		$this->Cell(45, 5, "", "LTR", 0, 'L'); // Nombre Razón Soc (Ampliado a 45)
+		$this->Cell(15, 5, "", "LTR", 0, 'L'); // RIF (Ampliado a 15)
+		$this->Cell(18, 5, "TOTAL", "LTR", 0, 'R');
+		$this->Cell(18, 5, "TOTAL", "LTR", 0, 'R');
+		$this->Cell(44, 5, "DEBITO FISCAL", 1, 0, 'C');
+		$this->Cell(55, 5, "RETENCION IVA", 1, 0, 'C'); // Ampliado a 55mm totales para dar 30mm a N. COMP.
+		$this->Cell(55, 5, "RETENCION ISLR", 1, 0, 'C'); // Ampliado a 55mm totales para dar 30mm a N. COMP.
 		$this->Ln(5);
 
+		// Columnas inferiores cabecera
 		$this->Cell(5, 5);
-		$this->Cell(15, 5, "FECHA", "LBR", 0, 'L');
-		$this->Cell(22, 5, "FACT", "LBR", 0, 'C');
-		$this->Cell(20, 5, "CREDITO", "LBR", 0, 'C');
-		$this->Cell(20, 5, "DOC. AFEC", "LBR", 0, 'C');
-		$this->Cell(18, 5, "CONTROL", "LBR", 0, 'C');
+		$this->Cell(10, 5, "FECHA", "LBR", 0, 'L');
+		$this->Cell(12, 5, "FACT", "LBR", 0, 'C');
+		$this->Cell(12, 5, "CREDITO", "LBR", 0, 'C');
+		$this->Cell(12, 5, "DEBITO", "LBR", 0, 'C'); // ¡Añadida!
+		$this->Cell(12, 5, "DOC. AFEC", "LBR", 0, 'C');
+		$this->Cell(15, 5, "CONTROL", "LBR", 0, 'C');
 		$this->Cell(45, 5, "NOMBRE O RAZON SOCIAL", "LBR", 0, 'L');
-		$this->Cell(18, 5, "RIF", "LBR", 0, 'L');
-		$this->Cell(26, 5, "VENTAS", "LBR", 0, 'R');
-		$this->Cell(26, 5, "EXENTAS", "LBR", 0, 'R');
-		$this->Cell(26, 5, "BASE", "LBR", 0, 'R');
+		$this->Cell(15, 5, "RIF", "LBR", 0, 'L');
+		$this->Cell(18, 5, "COMPRAS", "LBR", 0, 'R');
+		$this->Cell(18, 5, "EXENTAS", "LBR", 0, 'R');
+		$this->Cell(18, 5, "BASE", "LBR", 0, 'R');
 		$this->Cell(8, 5, "%", "LBR", 0, 'R');
-		$this->Cell(22, 5, "IMPUESTO", "LBR", 0, 'R');
-		//$this->Cell(20, 5, "RET IVA 75%", "LBR", 0, 'R');
+		$this->Cell(18, 5, "IMPUESTO", "LBR", 0, 'R');
+		
+		// RETENCION IVA (Total 55mm)
+		$this->Cell(30, 5, "N. COMP.", "LBR", 0, 'R'); // Ampliado de 18 a 30mm
+		$this->Cell(10, 5, "FECHA", "LBR", 0, 'R');
+		$this->Cell(15, 5, "RETENCION", "LBR", 0, 'R');
+		
+		// RETENCION ISLR (Total 55mm)
+		$this->Cell(30, 5, "N. COMP.", "LBR", 0, 'R'); // Ampliado de 18 a 30mm
+		$this->Cell(10, 5, "FECHA", "LBR", 0, 'R');
+		$this->Cell(15, 5, "RETENCION", "LBR", 0, 'R');
 		$this->Ln(5);
 	}
 	
-	// Pie de p�gina
+	// Pie de página
 	function Footer()
 	{
-		// Posici�n: a 1,5 cm del final
 		$this->SetY(-15);
-		// Arial italic 8
-		$this->SetFont('Arial','I',8);
-		// N�mero de p�gina
+		$this->SetFont('Arial','I',6);
 		$this->Cell(0,5,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
-	function EndReport($items, $_total, $_exenta, $_gravable, $_iva)
+	function EndReport($items, $_total, $_exenta, $_gravable, $_iva, $_retiva, $_retislr)
 	{
-		//$this->AddPage();
-		//require("../include/connect.php");
-		$this->SetFont('Arial','B',8);
+		$this->SetFont('Arial','B',5);
 		$this->Ln();
-		$this->Cell(163, 4, "", 0, 0, 'R');
-		$this->Cell(26, 4, number_format($_total, 2, ",", "."), 0, 0, 'R');
-		$this->Cell(26, 4, number_format($_exenta, 2, ",", "."), 0, 0, 'R');
-		$this->Cell(26, 4, number_format($_gravable, 2, ",", "."), 0, 0, 'R');
+		// Alineación recalculada con la nueva estructura de columnas (136mm de desfase antes de montos numéricos)
+		$this->Cell(136, 4, "", 0, 0, 'R');
+		$this->Cell(18, 4, number_format($_total, 2, ",", "."), 0, 0, 'R');
+		$this->Cell(18, 4, number_format($_exenta, 2, ",", "."), 0, 0, 'R');
+		$this->Cell(18, 4, number_format($_gravable, 2, ",", "."), 0, 0, 'R');
 		$this->Cell(8, 4, "", 0, 0, 'R');
-		$this->Cell(22, 4, number_format($_iva, 2, ",", "."), 0, 0, 'R');
+		$this->Cell(18, 4, number_format($_iva, 2, ",", "."), 0, 0, 'R');
+		
+		// Bloque Retenciones alineados (30mm Comp + 10mm Fecha)
+		$this->Cell(40, 4, "", 0, 0, 'R');
+		$this->Cell(14, 4, number_format($_retiva, 2, ",", "."), 0, 0, 'R');
+		
+		$this->Cell(40, 4, "", 0, 0, 'R');
+		$this->Cell(14, 4, number_format($_retislr, 2, ",", "."), 0, 0, 'R');
 		$this->Ln();
-		$this->Cell(240, 5, "TOTAL FACTURAS: "  . $items, 0, 0, 'R');
+		$this->Cell(230, 5, "TOTAL FACTURAS: "  . $items, 0, 0, 'R');
+
+		$this->Ln(5);
+		if ($this->GetY() > 151) { 
+			$this->AddPage();
+		}
+
+		// Cuadro de Resumen Final con la columna adicional de ISLR RETENIDO
+		$this->SetFont('Arial','',5);
+		$this->Cell(5, 5);
+		$this->Cell(100, 5, "RESUMEN EN CUADRO: COMPRAS", 1, 0, 'C');
+		$this->Cell(20, 5, "BASE", 1, 0, 'C');
+		$this->Cell(20, 5, "CREDITO", 1, 0, 'C');
+		$this->Cell(20, 5, "", 0, 0, 'C');
+		$this->Cell(20, 5, "IVA RETENIDO", 1, 0, 'C');
+		$this->Cell(20, 5, "ISLR RETENIDO", 1, 0, 'C'); // ¡Añadida!
 		$this->Ln();
+		
+		$this->Cell(5, 5);
+		$this->Cell(100, 5, strtoupper("Suma de las: Compras Exentas y/o sin derecho a credito fiscal"), 1, 0, 'L');
+		$this->Cell(20, 5, number_format($_exenta, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, "", 0, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R'); // ¡Añadida!
+		$this->Ln();
+		
+		$this->Cell(5, 5);
+		$this->Cell(100, 5, strtoupper("Suma de las: Compras Alicuota General 16%"), 1, 0, 'L');
+		$this->Cell(20, 5, number_format($_gravable, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format($_iva, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, "", 0, 0, 'R');
+		$this->Cell(20, 5, number_format($_retiva, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format($_retislr, 2, ",", "."), 1, 0, 'R'); // ¡Añadida!
+		$this->Ln();
+		
+		$this->Cell(5, 5);
+		$this->Cell(100, 5, strtoupper("Suma de las: Compras Alicuota Adicional"), 1, 0, 'L');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, "", 0, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R'); // ¡Añadida!
+		$this->Ln();
+		
+		$this->Cell(5, 5);
+		$this->Cell(100, 5, strtoupper("Suma de las: Compras Alicuota Reducida"), 1, 0, 'L');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, "", 0, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R');
+		$this->Cell(20, 5, number_format(0, 2, ",", "."), 1, 0, 'R'); // ¡Añadida!
+		$this->Ln();
+		$this->Ln();
+		
+		$this->Cell(5, 5);
+		$this->Cell(120, 5, function_exists('iconv') ? iconv('UTF-8', 'ISO-8859-1//TRANSLIT', strtoupper("Total Créditos Fiscales del Mes:")) : strtoupper("Total Creditos Fiscales del Mes:"), 1, 0, 'L');
+		$this->Cell(20, 5, number_format($_iva, 2, ",", "."), 1, 0, 'R');
+		$this->Ln();
+
 		require("../include/desconnect.php");
 	}
 }
 
-// Creaci�n del objeto de la clase heredada
-$pdf = new PDF('L', 'mm', 'Letter');
+// CAMBIO CLAVE: Cambiado de 'A4' a 'Legal' (Oficio)
+$pdf = new PDF('L', 'mm', 'Legal');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->SetFont('Arial','',8);
+$pdf->SetFont('Arial','',6);
 
-/*
-			(SELECT SUM(IF(alicuota=0, precio, 0)) 
-			FROM entradas_salidas WHERE id_documento = a.id AND tipo_documento = a.`tipo_documento`) AS exenta, 
-			(SELECT SUM(IF(alicuota>0, precio, 0)) 
-			FROM entradas_salidas WHERE id_documento = a.id AND tipo_documento = a.`tipo_documento`) AS gravable, 
-			(SELECT MAX(alicuota) 
-			FROM entradas_salidas WHERE id_documento = a.id AND tipo_documento = a.`tipo_documento`) AS alicuota_iva, 
-*/
 $sql = "SELECT 
-			a.fecha AS fecfac, 
+			IFNULL(a.fecha_registro_retenciones, a.fecha)  AS fecfac, 
 			date_format(a.fecha, '%d/%m/%Y') AS fecha, 
-			IF(a.documento = 'NC', '', IF(a.documento = 'ND', CONCAT('ND-', a.nro_documento), a.nro_documento)) AS nro_documento, 
+			IF(a.documento = 'NC' OR a.documento = 'ND', '', a.nro_documento) AS nro_documento, 
 			IF(a.documento = 'NC', a.nro_documento, '') AS nota_credito, 
+			IF(a.documento = 'ND', a.nro_documento, '') AS nota_debito, 
 			a.doc_afectado AS doc_afectado, 
 			a.nro_control,  
 			b.nombre AS proveedor, 
@@ -168,7 +239,9 @@ $sql = "SELECT
 				MAX(alicuota) AS alicuota_iva 
 			FROM entradas_salidas 
 			WHERE id_documento = a.id AND tipo_documento = a.tipo_documento) AS alicuota_iva, 
-			a.estatus, ret_islr 
+			a.estatus, ret_islr, 
+			0 AS ret_iva, 0 AS ref_iva, DATE_FORMAT(a.fecha, '%d/%m/%Y') AS fecha_retiva, 
+			0 AS ret_islr, 0 AS ref_islr, DATE_FORMAT(a.fecha, '%d/%m/%Y') AS fecha_retislr 
 		FROM 
 			entradas AS a 
 			LEFT OUTER JOIN proveedor AS b ON b.id = a.proveedor 
@@ -177,10 +250,11 @@ $sql = "SELECT
 			a.fecha_libro_compra BETWEEN '$xfecha 00:00:00' AND '$yfecha 23:59:59' AND a.estatus = 'PROCESADO' 
 		UNION ALL 	
 		SELECT 
-			a.fecha AS fecfac, 
+			IFNULL(a.fecha_registro, a.fecha) AS fecfac, 
 			DATE_FORMAT(a.fecha, '%d/%m/%Y') AS fecha, 
-			IF(a.tipo_documento = 'NC', '', IF(a.tipo_documento = 'ND', CONCAT('ND-', a.documento), a.documento)) AS nro_documento, 
+			IF(a.tipo_documento = 'NC' OR a.tipo_documento = 'ND', '', a.documento) AS nro_documento, 
 			IF(a.tipo_documento = 'NC', a.documento, '')  AS nota_credito, 
+			IF(a.tipo_documento = 'ND', a.documento, '')  AS nota_debito, 
 			a.doc_afectado AS doc_afectado, 
 			a.nro_control,  
 			b.nombre AS proveedor, 
@@ -190,14 +264,16 @@ $sql = "SELECT
 			IF(a.tipo_documento = 'NC', -1, 1) * a.monto_total AS total, 
 			IF(a.tipo_documento = 'NC', -1, 1) * a.monto_exento AS exenta, 
 			IF(a.tipo_documento = 'NC', -1, 1) * a.monto_gravado AS gravable, 
-			a.alicuota AS alicuota_iva, '' AS estatus, ret_islr   
+			a.alicuota AS alicuota_iva, '' AS estatus, ret_islr, 
+			a.ret_iva, a.ref_iva, IF(LTRIM(IFNULL(a.ref_iva, '')) = '', '', DATE_FORMAT(a.fecha_registro, '%d/%m/%Y')) AS fecha_retiva, 
+			a.ret_islr, a.ref_islr, IF(LTRIM(IFNULL(a.ref_islr, '')) = '', '', DATE_FORMAT(a.fecha_registro, '%d/%m/%Y')) AS fecha_retislr    
 		FROM 
 			compra AS a
 			LEFT OUTER JOIN proveedor AS b ON b.id = a.proveedor 
 		WHERE 
 			a.fecha_registro BETWEEN '$xfecha 00:00:00' AND '$yfecha 23:59:59' 
-		ORDER BY fecfac, nro_documento;";  // La fecha de registro la tomo con control de Fecha Libro Compra
-$rs = mysqli_query($link, $sql) or die(mysqli_error());
+		ORDER BY fecfac, ref_iva;";
+$rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 
 $items = 0;
 
@@ -205,25 +281,41 @@ $_total = 0.00;
 $_exenta = 0.00;
 $_gravable = 0.00;
 $_iva = 0.00;
+$_retiva = 0.00;
+$_retislr = 0.00;
 
 while($row = mysqli_fetch_array($rs))
 {
-	$pdf->SetFont('Arial', '', 8);
+	$pdf->SetFont('Arial', '', 5);
 
 	$pdf->Cell(5, 4);
-	$pdf->Cell(15, 4, $row["fecha"], 0, 0, 'L');
-	$pdf->Cell(22, 4, $row["nro_documento"], 0, 0, 'C');
-	$pdf->Cell(20, 4, $row["nota_credito"], 0, 0, 'C');
-	$pdf->Cell(20, 4, $row["doc_afectado"], 0, 0, 'C');
-	$pdf->Cell(18, 4, $row["nro_control"], 0, 0, 'C');
-	$pdf->Cell(45, 4, substr($row["proveedor"], 0, 24), 0, 0, 'L');
-	$pdf->Cell(18, 4, $row["ci_rif"], 0, 0, 'L');
-	$pdf->Cell(26, 4, number_format($row["total"], 2, ",", "."), 0, 0, 'R');
-	$pdf->Cell(26, 4, number_format($row["exenta"], 2, ",", "."), 0, 0, 'R');
-	$pdf->Cell(26, 4, number_format($row["gravable"], 2, ",", "."), 0, 0, 'R');
-	$pdf->Cell(8, 4, number_format($row["alicuota_iva"], 2, ",", "."), 0, 0, 'R');
-	$pdf->Cell(22, 4, number_format($row["iva"], 2, ",", "."), 0, 0, 'R');
-	//$pdf->Cell(20, 4, "", 0, 0, 'R');
+	$pdf->Cell(10, 4, $row["fecha"], 0, 0, 'L');
+	$pdf->Cell(12, 4, $row["nro_documento"], 0, 0, 'C');
+	$pdf->Cell(12, 4, $row["nota_credito"], 0, 0, 'C');
+	$pdf->Cell(12, 4, $row["nota_debito"] ?? '', 0, 0, 'C'); // Celda de Nota de Débito añadida
+	$pdf->Cell(12, 4, $row["doc_afectado"], 0, 0, 'C');
+	$pdf->Cell(15, 4, $row["nro_control"], 0, 0, 'C');
+	
+	// Ampliado el substring a 40 caracteres aprovechando el espacio Legal
+	$pdf->Cell(45, 4, substr($row["proveedor"] ?? '', 0, 40), 0, 0, 'L');
+	$pdf->Cell(15, 4, $row["ci_rif"], 0, 0, 'L');
+	
+	$pdf->Cell(18, 4, number_format($row["total"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	$pdf->Cell(18, 4, number_format($row["exenta"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	$pdf->Cell(18, 4, number_format($row["gravable"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	$pdf->Cell(8, 4, number_format($row["alicuota_iva"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	$pdf->Cell(15, 4, number_format($row["iva"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	
+	/**** RETENCION IVA ***/
+	$pdf->Cell(30, 4, $row["ref_iva"] ?? 0, 0, 0, 'R'); // Ampliado de 18 a 30mm en bucle
+	$pdf->Cell(10, 4, $row["fecha_retiva"] ?? 0, 0, 0, 'R');
+	$pdf->Cell(15, 4, number_format($row["ret_iva"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	
+	/**** RETENCION ISLR ***/
+	$pdf->Cell(30, 4, $row["ref_islr"] ?? 0, 0, 0, 'R'); // Ampliado de 18 a 30mm en bucle
+	$pdf->Cell(10, 4, $row["fecha_retislr"] ?? 0, 0, 0, 'R');
+	$pdf->Cell(15, 4, number_format($row["ret_islr"] ?? 0, 2, ",", "."), 0, 0, 'R');
+	
 	$pdf->Ln();
 	$items++;
 
@@ -231,9 +323,11 @@ while($row = mysqli_fetch_array($rs))
 	$_exenta += floatval($row["exenta"]);
 	$_gravable += floatval($row["gravable"]);
 	$_iva += floatval($row["iva"]);
+	$_retiva += floatval($row["ret_iva"]);
+	$_retislr += floatval($row["ret_islr"]);
 }
 
-$pdf->EndReport($items, $_total, $_exenta, $_gravable, $_iva);
+$pdf->EndReport($items, $_total, $_exenta, $_gravable, $_iva, $_retiva, $_retislr);
 
 	
 require("../include/desconnect.php");

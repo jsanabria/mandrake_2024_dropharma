@@ -135,6 +135,18 @@ $Page->ListOptions->render("header", "left");
         </th>
     <?php } ?>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+    <?php if (!$Page->descuento2->Sortable || !$Page->sortUrl($Page->descuento2)) { ?>
+        <th class="<?= $Page->descuento2->headerCellClass() ?>"><?= $Page->descuento2->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->descuento2->headerCellClass() ?>"><div role="button" data-table="view_in" data-sort="<?= HtmlEncode($Page->descuento2->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->descuento2->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->descuento2->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->descuento2->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
     <?php if (!$Page->costo_unidad->Sortable || !$Page->sortUrl($Page->costo_unidad)) { ?>
         <th class="<?= $Page->costo_unidad->headerCellClass() ?>"><?= $Page->costo_unidad->caption() ?></th>
@@ -277,6 +289,13 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
         <td<?= $Page->descuento->cellAttributes() ?>>
 <span<?= $Page->descuento->viewAttributes() ?>>
 <?= $Page->descuento->getViewValue() ?></span>
+</td>
+<?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <!-- descuento2 -->
+        <td<?= $Page->descuento2->cellAttributes() ?>>
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
 </td>
 <?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>

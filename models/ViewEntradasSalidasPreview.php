@@ -142,6 +142,7 @@ class ViewEntradasSalidasPreview extends ViewEntradasSalidas
         $this->cantidad_movimiento_consignacion->Visible = false;
         $this->id_consignacion->Visible = false;
         $this->descuento->Visible = false;
+        $this->descuento2->Visible = false;
         $this->precio_unidad_sin_desc->Visible = false;
         $this->check_ne->Visible = false;
         $this->packer_cantidad->setVisibility();
@@ -552,6 +553,7 @@ class ViewEntradasSalidasPreview extends ViewEntradasSalidas
             $this->cantidad_movimiento_consignacion->setSort("");
             $this->id_consignacion->setSort("");
             $this->descuento->setSort("");
+            $this->descuento2->setSort("");
             $this->precio_unidad_sin_desc->setSort("");
             $this->check_ne->setSort("");
             $this->packer_cantidad->setSort("");

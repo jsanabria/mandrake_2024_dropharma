@@ -148,6 +148,7 @@ class ClienteAddopt extends Cliente
         $this->consignacion->Visible = false;
         $this->limite_credito->setVisibility();
         $this->condicion->setVisibility();
+        $this->codigo->setVisibility();
         $this->cuenta->Visible = false;
         $this->activo->setVisibility();
         $this->foto1->setVisibility();
@@ -652,6 +653,12 @@ class ClienteAddopt extends Cliente
             $this->condicion->setFormValue($val);
         }
 
+        // Check field name 'codigo' first before field var 'x_codigo'
+        $val = $CurrentForm->hasValue("codigo") ? $CurrentForm->getValue("codigo") : $CurrentForm->getValue("x_codigo");
+        if (!$this->codigo->IsDetailKey) {
+            $this->codigo->setFormValue($val);
+        }
+
         // Check field name 'activo' first before field var 'x_activo'
         $val = $CurrentForm->hasValue("activo") ? $CurrentForm->getValue("activo") : $CurrentForm->getValue("x_activo");
         if (!$this->activo->IsDetailKey) {
@@ -692,6 +699,7 @@ class ClienteAddopt extends Cliente
         $this->tarifa->CurrentValue = ConvertToUtf8($this->tarifa->FormValue);
         $this->limite_credito->CurrentValue = ConvertToUtf8($this->limite_credito->FormValue);
         $this->condicion->CurrentValue = ConvertToUtf8($this->condicion->FormValue);
+        $this->codigo->CurrentValue = ConvertToUtf8($this->codigo->FormValue);
         $this->activo->CurrentValue = ConvertToUtf8($this->activo->FormValue);
         $this->dias_credito->CurrentValue = ConvertToUtf8($this->dias_credito->FormValue);
         $this->descuento->CurrentValue = ConvertToUtf8($this->descuento->FormValue);
@@ -754,6 +762,7 @@ class ClienteAddopt extends Cliente
         $this->consignacion->setDbValue($row['consignacion']);
         $this->limite_credito->setDbValue($row['limite_credito']);
         $this->condicion->setDbValue($row['condicion']);
+        $this->codigo->setDbValue($row['codigo']);
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->foto1->Upload->DbValue = $row['foto1'];
@@ -787,6 +796,7 @@ class ClienteAddopt extends Cliente
         $row['consignacion'] = $this->consignacion->DefaultValue;
         $row['limite_credito'] = $this->limite_credito->DefaultValue;
         $row['condicion'] = $this->condicion->DefaultValue;
+        $row['codigo'] = $this->codigo->DefaultValue;
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['foto1'] = $this->foto1->DefaultValue;
@@ -864,6 +874,9 @@ class ClienteAddopt extends Cliente
 
         // condicion
         $this->condicion->RowCssClass = "row";
+
+        // codigo
+        $this->codigo->RowCssClass = "row";
 
         // cuenta
         $this->cuenta->RowCssClass = "row";
@@ -1015,6 +1028,9 @@ class ClienteAddopt extends Cliente
                 $this->condicion->ViewValue = null;
             }
 
+            // codigo
+            $this->codigo->ViewValue = $this->codigo->CurrentValue;
+
             // cuenta
             $curVal = strval($this->cuenta->CurrentValue);
             if ($curVal != "") {
@@ -1147,6 +1163,10 @@ class ClienteAddopt extends Cliente
             // condicion
             $this->condicion->HrefValue = "";
             $this->condicion->TooltipValue = "";
+
+            // codigo
+            $this->codigo->HrefValue = "";
+            $this->codigo->TooltipValue = "";
 
             // activo
             $this->activo->HrefValue = "";
@@ -1359,6 +1379,14 @@ class ClienteAddopt extends Cliente
             $this->condicion->EditValue = $this->condicion->options(false);
             $this->condicion->PlaceHolder = RemoveHtml($this->condicion->caption());
 
+            // codigo
+            $this->codigo->setupEditAttributes();
+            if (!$this->codigo->Raw) {
+                $this->codigo->CurrentValue = HtmlDecode($this->codigo->CurrentValue);
+            }
+            $this->codigo->EditValue = HtmlEncode($this->codigo->CurrentValue);
+            $this->codigo->PlaceHolder = RemoveHtml($this->codigo->caption());
+
             // activo
             $this->activo->setupEditAttributes();
             $this->activo->EditValue = $this->activo->options(true);
@@ -1483,6 +1511,9 @@ class ClienteAddopt extends Cliente
             // condicion
             $this->condicion->HrefValue = "";
 
+            // codigo
+            $this->codigo->HrefValue = "";
+
             // activo
             $this->activo->HrefValue = "";
 
@@ -1605,6 +1636,11 @@ class ClienteAddopt extends Cliente
             if ($this->condicion->Visible && $this->condicion->Required) {
                 if ($this->condicion->FormValue == "") {
                     $this->condicion->addErrorMessage(str_replace("%s", $this->condicion->caption(), $this->condicion->RequiredErrorMessage));
+                }
+            }
+            if ($this->codigo->Visible && $this->codigo->Required) {
+                if (!$this->codigo->IsDetailKey && EmptyValue($this->codigo->FormValue)) {
+                    $this->codigo->addErrorMessage(str_replace("%s", $this->codigo->caption(), $this->codigo->RequiredErrorMessage));
                 }
             }
             if ($this->activo->Visible && $this->activo->Required) {

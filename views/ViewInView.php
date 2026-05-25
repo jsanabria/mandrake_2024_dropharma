@@ -144,6 +144,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+    <tr id="r_descuento2"<?= $Page->descuento2->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_in_descuento2"><?= $Page->descuento2->caption() ?></span></td>
+        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
+<span id="el_view_in_descuento2">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
     <tr id="r_costo_unidad"<?= $Page->costo_unidad->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_in_costo_unidad"><?= $Page->costo_unidad->caption() ?></span></td>

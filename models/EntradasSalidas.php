@@ -69,6 +69,7 @@ class EntradasSalidas extends DbTable
     public $cantidad_movimiento;
     public $precio_unidad_sin_desc;
     public $descuento;
+    public $descuento2;
     public $costo_unidad;
     public $costo;
     public $precio_unidad;
@@ -79,6 +80,8 @@ class EntradasSalidas extends DbTable
     public $check_ne;
     public $packer_cantidad;
     public $newdata;
+    public $cantidad_entregada;
+    public $cantidad_por_entregar;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -260,7 +263,7 @@ class EntradasSalidas extends DbTable
             '`lote`', // Expression
             '`lote`', // Basic search expression
             200, // Type
-            20, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`lote`', // Virtual expression
@@ -498,6 +501,30 @@ class EntradasSalidas extends DbTable
         $this->descuento->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
         $this->descuento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['descuento'] = &$this->descuento;
+
+        // descuento2
+        $this->descuento2 = new DbField(
+            $this, // Table
+            'x_descuento2', // Variable name
+            'descuento2', // Name
+            '`descuento2`', // Expression
+            '`descuento2`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento2->InputTextType = "text";
+        $this->descuento2->Raw = true;
+        $this->descuento2->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento2'] = &$this->descuento2;
 
         // costo_unidad
         $this->costo_unidad = new DbField(
@@ -742,6 +769,54 @@ class EntradasSalidas extends DbTable
         $this->newdata->OptionCount = 2;
         $this->newdata->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['newdata'] = &$this->newdata;
+
+        // cantidad_entregada
+        $this->cantidad_entregada = new DbField(
+            $this, // Table
+            'x_cantidad_entregada', // Variable name
+            'cantidad_entregada', // Name
+            '`cantidad_entregada`', // Expression
+            '`cantidad_entregada`', // Basic search expression
+            131, // Type
+            12, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cantidad_entregada`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cantidad_entregada->InputTextType = "text";
+        $this->cantidad_entregada->Raw = true;
+        $this->cantidad_entregada->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->cantidad_entregada->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cantidad_entregada'] = &$this->cantidad_entregada;
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar = new DbField(
+            $this, // Table
+            'x_cantidad_por_entregar', // Variable name
+            'cantidad_por_entregar', // Name
+            '`cantidad_por_entregar`', // Expression
+            '`cantidad_por_entregar`', // Basic search expression
+            131, // Type
+            12, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cantidad_por_entregar`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cantidad_por_entregar->InputTextType = "text";
+        $this->cantidad_por_entregar->Raw = true;
+        $this->cantidad_por_entregar->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->cantidad_por_entregar->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cantidad_por_entregar'] = &$this->cantidad_por_entregar;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1442,6 +1517,7 @@ class EntradasSalidas extends DbTable
         $this->cantidad_movimiento->DbValue = $row['cantidad_movimiento'];
         $this->precio_unidad_sin_desc->DbValue = $row['precio_unidad_sin_desc'];
         $this->descuento->DbValue = $row['descuento'];
+        $this->descuento2->DbValue = $row['descuento2'];
         $this->costo_unidad->DbValue = $row['costo_unidad'];
         $this->costo->DbValue = $row['costo'];
         $this->precio_unidad->DbValue = $row['precio_unidad'];
@@ -1452,6 +1528,8 @@ class EntradasSalidas extends DbTable
         $this->check_ne->DbValue = $row['check_ne'];
         $this->packer_cantidad->DbValue = $row['packer_cantidad'];
         $this->newdata->DbValue = $row['newdata'];
+        $this->cantidad_entregada->DbValue = $row['cantidad_entregada'];
+        $this->cantidad_por_entregar->DbValue = $row['cantidad_por_entregar'];
     }
 
     // Delete uploaded files
@@ -1829,6 +1907,7 @@ class EntradasSalidas extends DbTable
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -1839,6 +1918,8 @@ class EntradasSalidas extends DbTable
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
         $this->newdata->setDbValue($row['newdata']);
+        $this->cantidad_entregada->setDbValue($row['cantidad_entregada']);
+        $this->cantidad_por_entregar->setDbValue($row['cantidad_por_entregar']);
     }
 
     // Render list content
@@ -1899,6 +1980,8 @@ class EntradasSalidas extends DbTable
 
         // descuento
 
+        // descuento2
+
         // costo_unidad
 
         // costo
@@ -1918,6 +2001,10 @@ class EntradasSalidas extends DbTable
         // packer_cantidad
 
         // newdata
+
+        // cantidad_entregada
+
+        // cantidad_por_entregar
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2015,6 +2102,10 @@ class EntradasSalidas extends DbTable
         $this->descuento->ViewValue = $this->descuento->CurrentValue;
         $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+        // descuento2
+        $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+        $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
         // costo_unidad
         $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
         $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -2064,6 +2155,14 @@ class EntradasSalidas extends DbTable
         } else {
             $this->newdata->ViewValue = null;
         }
+
+        // cantidad_entregada
+        $this->cantidad_entregada->ViewValue = $this->cantidad_entregada->CurrentValue;
+        $this->cantidad_entregada->ViewValue = FormatNumber($this->cantidad_entregada->ViewValue, $this->cantidad_entregada->formatPattern());
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->ViewValue = $this->cantidad_por_entregar->CurrentValue;
+        $this->cantidad_por_entregar->ViewValue = FormatNumber($this->cantidad_por_entregar->ViewValue, $this->cantidad_por_entregar->formatPattern());
 
         // id
         $this->id->HrefValue = "";
@@ -2125,6 +2224,10 @@ class EntradasSalidas extends DbTable
         $this->descuento->HrefValue = "";
         $this->descuento->TooltipValue = "";
 
+        // descuento2
+        $this->descuento2->HrefValue = "";
+        $this->descuento2->TooltipValue = "";
+
         // costo_unidad
         $this->costo_unidad->HrefValue = "";
         $this->costo_unidad->TooltipValue = "";
@@ -2164,6 +2267,14 @@ class EntradasSalidas extends DbTable
         // newdata
         $this->newdata->HrefValue = "";
         $this->newdata->TooltipValue = "";
+
+        // cantidad_entregada
+        $this->cantidad_entregada->HrefValue = "";
+        $this->cantidad_entregada->TooltipValue = "";
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->HrefValue = "";
+        $this->cantidad_por_entregar->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2290,6 +2401,14 @@ class EntradasSalidas extends DbTable
             $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
         }
 
+        // descuento2
+        $this->descuento2->setupEditAttributes();
+        $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+        $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+        if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+            $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+        }
+
         // costo_unidad
         $this->costo_unidad->setupEditAttributes();
         $this->costo_unidad->EditValue = $this->costo_unidad->CurrentValue;
@@ -2371,6 +2490,22 @@ class EntradasSalidas extends DbTable
         $this->newdata->EditValue = $this->newdata->options(false);
         $this->newdata->PlaceHolder = RemoveHtml($this->newdata->caption());
 
+        // cantidad_entregada
+        $this->cantidad_entregada->setupEditAttributes();
+        $this->cantidad_entregada->EditValue = $this->cantidad_entregada->CurrentValue;
+        $this->cantidad_entregada->PlaceHolder = RemoveHtml($this->cantidad_entregada->caption());
+        if (strval($this->cantidad_entregada->EditValue) != "" && is_numeric($this->cantidad_entregada->EditValue)) {
+            $this->cantidad_entregada->EditValue = FormatNumber($this->cantidad_entregada->EditValue, null);
+        }
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->setupEditAttributes();
+        $this->cantidad_por_entregar->EditValue = $this->cantidad_por_entregar->CurrentValue;
+        $this->cantidad_por_entregar->PlaceHolder = RemoveHtml($this->cantidad_por_entregar->caption());
+        if (strval($this->cantidad_por_entregar->EditValue) != "" && is_numeric($this->cantidad_por_entregar->EditValue)) {
+            $this->cantidad_por_entregar->EditValue = FormatNumber($this->cantidad_por_entregar->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -2410,6 +2545,8 @@ class EntradasSalidas extends DbTable
                     $doc->exportCaption($this->precio);
                     $doc->exportCaption($this->check_ne);
                     $doc->exportCaption($this->newdata);
+                    $doc->exportCaption($this->cantidad_entregada);
+                    $doc->exportCaption($this->cantidad_por_entregar);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -2426,6 +2563,7 @@ class EntradasSalidas extends DbTable
                     $doc->exportCaption($this->cantidad_movimiento);
                     $doc->exportCaption($this->precio_unidad_sin_desc);
                     $doc->exportCaption($this->descuento);
+                    $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->costo_unidad);
                     $doc->exportCaption($this->costo);
                     $doc->exportCaption($this->precio_unidad);
@@ -2436,6 +2574,8 @@ class EntradasSalidas extends DbTable
                     $doc->exportCaption($this->check_ne);
                     $doc->exportCaption($this->packer_cantidad);
                     $doc->exportCaption($this->newdata);
+                    $doc->exportCaption($this->cantidad_entregada);
+                    $doc->exportCaption($this->cantidad_por_entregar);
                 }
                 $doc->endExportRow();
             }
@@ -2473,6 +2613,8 @@ class EntradasSalidas extends DbTable
                         $doc->exportField($this->precio);
                         $doc->exportField($this->check_ne);
                         $doc->exportField($this->newdata);
+                        $doc->exportField($this->cantidad_entregada);
+                        $doc->exportField($this->cantidad_por_entregar);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -2489,6 +2631,7 @@ class EntradasSalidas extends DbTable
                         $doc->exportField($this->cantidad_movimiento);
                         $doc->exportField($this->precio_unidad_sin_desc);
                         $doc->exportField($this->descuento);
+                        $doc->exportField($this->descuento2);
                         $doc->exportField($this->costo_unidad);
                         $doc->exportField($this->costo);
                         $doc->exportField($this->precio_unidad);
@@ -2499,6 +2642,8 @@ class EntradasSalidas extends DbTable
                         $doc->exportField($this->check_ne);
                         $doc->exportField($this->packer_cantidad);
                         $doc->exportField($this->newdata);
+                        $doc->exportField($this->cantidad_entregada);
+                        $doc->exportField($this->cantidad_por_entregar);
                     }
                     $doc->endExportRow($rowCnt);
                 }

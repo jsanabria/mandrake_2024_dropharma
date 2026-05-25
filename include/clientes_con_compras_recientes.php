@@ -1,59 +1,118 @@
 <?php 
-	if($tipo != "") $where = "AND cc.asesor = $tipo";
-	
-	$out .= '<button class="btn btn-primary" onclick="js:window.location.href = \'listado_master_buscar_excel.php?id=' . $id .'&fd=' . $fecha_desde .'&fh=' . $fecha_hasta. '&tipo=' . $tipo . '\'">Exportar a TXT/XLS</button>';
-	$out .= '<table class="table table-hover table-bordered">';
-	  $out .= '<thead>';
-		$out .= '<tr>';
-		  $out .= '<th scope="col">CODIGO</th>';
-		  $out .= '<th scope="col">NOMBRE</th>';
-		  $out .= '<th scope="col">DIRECCION</th>';
-		  $out .= '<th scope="col">CIUDAD</th>';
-		  $out .= '<th scope="col">TELEFONO 1</th>';
-		  $out .= '<th scope="col">TELEFONO 2</th>';
-		  $out .= '<th scope="col">RIF</th>';
-		  $out .= '<th scope="col">ASESOR</th>';
-		$out .= '</tr>';
-	  $out .= '</thead>';
-	  $out .= '<tbody>';
+    // 1. Inicializar y sanitizar parámetros de búsqueda para evitar "Undefined variable"
+    $id          = isset($id) ? trim($id) : '';
+    $tipo        = isset($tipo) ? trim($tipo) : '';
+    $fecha_desde = isset($fecha_desde) ? trim($fecha_desde) : '';
+    $fecha_hasta = isset($fecha_hasta) ? trim($fecha_hasta) : '';
+    
+    $where = "";
+    if ($tipo !== "") {
+        // Sanitizamos para admitir números en caso de filtrar por ID de Asesor
+        $tipo_clean = preg_replace('/[^0-9,]/', '', $tipo);
+        if (!empty($tipo_clean)) {
+            $where = "AND a.cliente = $tipo_clean";
+        }
+    }
 
-	$sql = "SELECT  
-				DISTINCT b.id AS codigo, 
-				b.nombre, b.direccion, 
-				c.campo_descripcion AS ciudad, 
-				b.telefono1, b.telefono2, b.ci_rif,
-				d.nombre AS asesor 
-			FROM 
-				salidas AS a 
-				JOIN cliente AS b ON b.id = a.cliente 
-				LEFT OUTER JOIN tabla AS c ON c.campo_codigo = b.ciudad AND c.tabla = 'CIUDAD'  
-				JOIN asesor_cliente AS cc ON cc.cliente = a.cliente $where 
-				JOIN asesor AS d ON d.id = cc.asesor 
-			WHERE 
-				a.tipo_documento = 'TDCFCV' AND a.estatus = 'PROCESADO'
-				AND a.documento = 'FC' 
-				AND a.fecha BETWEEN '$fecha_desde 00:00:00' AND '$fecha_hasta 23:59:59' 
-			ORDER BY b.nombre;"; 
-	$rs = mysqli_query($link, $sql);
+    $contar = 0;
 
-	$contar = 0;
-	while($row = mysqli_fetch_array($rs)) {
-		$out .= '<tr>';
-		  $out .= '<td>' . $row["codigo"] . '</td>';
-		  $out .= '<td>' . $row["nombre"] . '</td>';
-		  $out .= '<td>' . $row["direccion"] . '</td>';
-		  $out .= '<td>' . $row["ciudad"] . '</td>';
-		  $out .= '<td>' . $row["telefono1"] . '</td>';
-		  $out .= '<td>' . $row["telefono2"] . '</td>';
-		  $out .= '<td>' . $row["ci_rif"] . '</td>';
-		  $out .= '<td>' . $row["asesor"] . '</td>';
-		$out .= '</tr>';
+    // 2. Encabezado de la página, botón de acción y tabla responsiva
+    $out .= <<<HTML
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="text-secondary m-0">Clientes con Compras Recientes</h4>
+    </div>
 
-		$contar++;
-	}
-	$out .= '<tr>
-				<th colspan="8" class="text-right">Clientes: ' . number_format($contar, 0, "", ".") . '</th>
-			</tr>';
-  	  $out .= '</tbody>';
-	$out .= '</table>';
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle" style="font-size: 0.875rem; border: 1px solid #dee2e6;">
+            <thead class="table-light text-uppercase text-nowrap" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                <tr>
+                    <th scope="col" style="width: 8%;">Código</th>
+                    <th scope="col" style="width: 22%;">Nombre</th>
+                    <th scope="col" style="width: 25%;">Dirección</th>
+                    <th scope="col" style="width: 12%;">Ciudad</th>
+                    <th scope="col" style="width: 10%;">Teléfono 1</th>
+                    <th scope="col" style="width: 10%;">Teléfono 2</th>
+                    <th scope="col" style="width: 10%;">RIF</th>
+                    <th scope="col" style="width: 13%;">Asesor</th>
+                </tr>
+            </thead>
+            <tbody>
+HTML;
+
+    // 3. Consulta SQL optimizada
+    $sql = "SELECT  
+                DISTINCT b.id AS codigo, 
+                b.nombre, b.direccion, 
+                c.campo_descripcion AS ciudad, 
+                b.telefono1, b.telefono2, b.ci_rif,
+                d.nombre AS asesor 
+            FROM 
+                salidas AS a 
+                JOIN cliente AS b ON b.id = a.cliente 
+                LEFT OUTER JOIN tabla AS c ON c.campo_codigo = b.ciudad AND c.tabla = 'CIUDAD'  
+                JOIN asesor_cliente AS cc ON cc.cliente = a.cliente $where 
+                JOIN asesor AS d ON d.id = cc.asesor 
+            WHERE 
+                a.tipo_documento = 'TDCFCV' 
+                AND a.estatus = 'PROCESADO'
+                AND a.documento = 'FC' 
+                AND a.fecha BETWEEN '$fecha_desde 00:00:00' AND '$fecha_hasta 23:59:59' 
+            ORDER BY b.nombre;"; 
+
+    $rs = mysqli_query($link, $sql);
+
+    if (!$rs) {
+        var_dump(mysqli_error($link));
+        die();
+    }
+
+    // 4. Renderizado seguro del cuerpo de la tabla
+    while($row = mysqli_fetch_array($rs)) {
+        $contar++;
+
+        // Fusión de nulos para compatibilidad con PHP 8.1+
+        $row_codigo    = $row["codigo"] ?? '';
+        $nombre        = trim($row["nombre"] ?? '');
+        $direccion     = trim($row["direccion"] ?? '');
+        $ciudad        = trim($row["ciudad"] ?? '');
+        $telefono1     = trim($row["telefono1"] ?? '');
+        $telefono2     = trim($row["telefono2"] ?? '');
+        $ci_rif        = trim($row["ci_rif"] ?? '');
+        $asesor        = trim($row["asesor"] ?? '');
+
+        // Fallbacks visuales para textos vacíos
+        $nombre_disp    = !empty($nombre) ? $nombre : '<span class="text-muted">-</span>';
+        $direccion_disp = !empty($direccion) ? $direccion : '<span class="text-muted">-</span>';
+        $ciudad_disp    = !empty($ciudad) ? $ciudad : '<span class="text-muted">-</span>';
+        $telefono1_disp = !empty($telefono1) ? $telefono1 : '<span class="text-muted">-</span>';
+        $telefono2_disp = !empty($telefono2) ? $telefono2 : '<span class="text-muted">-</span>';
+        $ci_rif_disp    = !empty($ci_rif) ? $ci_rif : '<span class="text-muted">-</span>';
+        $asesor_disp    = !empty($asesor) ? $asesor : '<span class="text-muted">-</span>';
+
+        $out .= <<<HTML
+        <tr>
+            <td class="font-monospace fw-bold text-secondary">{$row_codigo}</td>
+            <td class="text-uppercase text-wrap">{$nombre_disp}</td>
+            <td class="text-uppercase text-wrap text-muted" style="font-size: 0.8rem; line-height: 1.3;">{$direccion_disp}</td>
+            <td class="text-uppercase">{$ciudad_disp}</td>
+            <td class="text-nowrap">{$telefono1_disp}</td>
+            <td class="text-nowrap">{$telefono2_disp}</td>
+            <td class="text-nowrap font-monospace text-uppercase">{$ci_rif_disp}</td>
+            <td class="text-uppercase text-nowrap">{$asesor_disp}</td>
+        </tr>
+HTML;
+    }
+
+    // 5. Totales acumulados al pie de la tabla
+    $total_clientes = number_format($contar, 0, "", ".");
+    $out .= <<<HTML
+            <tr>
+                <th colspan="8" class="text-end table-light py-3 pe-4 text-secondary">
+                    Total Clientes: <span class="text-dark">{$total_clientes}</span>
+                </th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+HTML;
 ?>

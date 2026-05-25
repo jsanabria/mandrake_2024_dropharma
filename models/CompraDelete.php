@@ -135,7 +135,7 @@ class CompraDelete extends Compra
         $this->doc_afectado->setVisibility();
         $this->documento->setVisibility();
         $this->nro_control->setVisibility();
-        $this->fecha->Visible = false;
+        $this->fecha->setVisibility();
         $this->descripcion->Visible = false;
         $this->aplica_retencion->Visible = false;
         $this->monto_exento->Visible = false;
@@ -147,7 +147,7 @@ class CompraDelete extends Compra
         $this->ret_iva->Visible = false;
         $this->ref_iva->setVisibility();
         $this->ret_islr->Visible = false;
-        $this->ref_islr->Visible = false;
+        $this->ref_islr->setVisibility();
         $this->ret_municipal->Visible = false;
         $this->ref_municipal->Visible = false;
         $this->fecha_registro->Visible = false;
@@ -158,6 +158,7 @@ class CompraDelete extends Compra
         $this->sustraendo->Visible = false;
         $this->tipo_municipal->Visible = false;
         $this->anulado->setVisibility();
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -441,6 +442,7 @@ class CompraDelete extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->pagado);
 
         // Set up Breadcrumb
         $this->setupBreadcrumb();
@@ -653,6 +655,7 @@ class CompraDelete extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -688,6 +691,7 @@ class CompraDelete extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -760,6 +764,8 @@ class CompraDelete extends Compra
         // tipo_municipal
 
         // anulado
+
+        // pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -939,6 +945,13 @@ class CompraDelete extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // pagado
+            if (strval($this->pagado->CurrentValue) != "") {
+                $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+            } else {
+                $this->pagado->ViewValue = null;
+            }
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -963,6 +976,10 @@ class CompraDelete extends Compra
             $this->nro_control->HrefValue = "";
             $this->nro_control->TooltipValue = "";
 
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
             // monto_total
             $this->monto_total->HrefValue = "";
             $this->monto_total->TooltipValue = "";
@@ -983,9 +1000,25 @@ class CompraDelete extends Compra
             }
             $this->ref_iva->TooltipValue = "";
 
+            // ref_islr
+            if (!EmptyValue($this->id->CurrentValue)) {
+                $this->ref_islr->HrefValue = $this->ref_islr->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_islr->LinkAttrs["target"] = "_blank"; // Add target
+                if ($this->isExport()) {
+                    $this->ref_islr->HrefValue = FullUrl($this->ref_islr->HrefValue, "href");
+                }
+            } else {
+                $this->ref_islr->HrefValue = "";
+            }
+            $this->ref_islr->TooltipValue = "";
+
             // anulado
             $this->anulado->HrefValue = "";
             $this->anulado->TooltipValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
+            $this->pagado->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1137,6 +1170,8 @@ class CompraDelete extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_pagado":
                     break;
                 default:
                     $lookupFilter = "";

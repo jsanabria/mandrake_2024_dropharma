@@ -68,6 +68,7 @@ class ViewIn extends DbTable
     public $cantidad_movimiento;
     public $precio_unidad_sin_desc;
     public $descuento;
+    public $descuento2;
     public $costo_unidad;
     public $costo;
     public $precio_unidad;
@@ -261,7 +262,7 @@ class ViewIn extends DbTable
             '`lote`', // Expression
             '`lote`', // Basic search expression
             200, // Type
-            20, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`lote`', // Virtual expression
@@ -466,6 +467,30 @@ class ViewIn extends DbTable
         $this->descuento->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
         $this->descuento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['descuento'] = &$this->descuento;
+
+        // descuento2
+        $this->descuento2 = new DbField(
+            $this, // Table
+            'x_descuento2', // Variable name
+            'descuento2', // Name
+            '`descuento2`', // Expression
+            '`descuento2`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento2->InputTextType = "text";
+        $this->descuento2->Raw = true;
+        $this->descuento2->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento2'] = &$this->descuento2;
 
         // costo_unidad
         $this->costo_unidad = new DbField(
@@ -1535,6 +1560,7 @@ class ViewIn extends DbTable
         $this->cantidad_movimiento->DbValue = $row['cantidad_movimiento'];
         $this->precio_unidad_sin_desc->DbValue = $row['precio_unidad_sin_desc'];
         $this->descuento->DbValue = $row['descuento'];
+        $this->descuento2->DbValue = $row['descuento2'];
         $this->costo_unidad->DbValue = $row['costo_unidad'];
         $this->costo->DbValue = $row['costo'];
         $this->precio_unidad->DbValue = $row['precio_unidad'];
@@ -1932,6 +1958,7 @@ class ViewIn extends DbTable
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -2000,6 +2027,8 @@ class ViewIn extends DbTable
         // precio_unidad_sin_desc
 
         // descuento
+
+        // descuento2
 
         // costo_unidad
 
@@ -2133,6 +2162,10 @@ class ViewIn extends DbTable
         $this->descuento->ViewValue = $this->descuento->CurrentValue;
         $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+        // descuento2
+        $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+        $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
         // costo_unidad
         $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
         $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -2238,6 +2271,10 @@ class ViewIn extends DbTable
         // descuento
         $this->descuento->HrefValue = "";
         $this->descuento->TooltipValue = "";
+
+        // descuento2
+        $this->descuento2->HrefValue = "";
+        $this->descuento2->TooltipValue = "";
 
         // costo_unidad
         $this->costo_unidad->HrefValue = "";
@@ -2403,6 +2440,14 @@ class ViewIn extends DbTable
             $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
         }
 
+        // descuento2
+        $this->descuento2->setupEditAttributes();
+        $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+        $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+        if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+            $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+        }
+
         // costo_unidad
         $this->costo_unidad->setupEditAttributes();
         $this->costo_unidad->EditValue = $this->costo_unidad->CurrentValue;
@@ -2519,6 +2564,7 @@ class ViewIn extends DbTable
                     $doc->exportCaption($this->cantidad_articulo);
                     $doc->exportCaption($this->precio_unidad_sin_desc);
                     $doc->exportCaption($this->descuento);
+                    $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->costo_unidad);
                     $doc->exportCaption($this->costo);
                     $doc->exportCaption($this->alicuota);
@@ -2537,6 +2583,7 @@ class ViewIn extends DbTable
                     $doc->exportCaption($this->cantidad_movimiento);
                     $doc->exportCaption($this->precio_unidad_sin_desc);
                     $doc->exportCaption($this->descuento);
+                    $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->costo_unidad);
                     $doc->exportCaption($this->costo);
                     $doc->exportCaption($this->precio_unidad);
@@ -2582,6 +2629,7 @@ class ViewIn extends DbTable
                         $doc->exportField($this->cantidad_articulo);
                         $doc->exportField($this->precio_unidad_sin_desc);
                         $doc->exportField($this->descuento);
+                        $doc->exportField($this->descuento2);
                         $doc->exportField($this->costo_unidad);
                         $doc->exportField($this->costo);
                         $doc->exportField($this->alicuota);
@@ -2600,6 +2648,7 @@ class ViewIn extends DbTable
                         $doc->exportField($this->cantidad_movimiento);
                         $doc->exportField($this->precio_unidad_sin_desc);
                         $doc->exportField($this->descuento);
+                        $doc->exportField($this->descuento2);
                         $doc->exportField($this->costo_unidad);
                         $doc->exportField($this->costo);
                         $doc->exportField($this->precio_unidad);

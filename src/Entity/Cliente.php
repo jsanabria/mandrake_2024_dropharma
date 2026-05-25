@@ -87,6 +87,9 @@ class Cliente extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $condicion;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $codigo;
+
     #[Column(type: "integer", nullable: true)]
     private ?int $cuenta;
 
@@ -323,6 +326,17 @@ class Cliente extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'condicion' value");
         }
         $this->condicion = $value;
+        return $this;
+    }
+
+    public function getCodigo(): ?string
+    {
+        return HtmlDecode($this->codigo);
+    }
+
+    public function setCodigo(?string $value): static
+    {
+        $this->codigo = RemoveXss($value);
         return $this;
     }
 

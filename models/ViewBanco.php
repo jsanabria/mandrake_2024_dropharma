@@ -154,7 +154,7 @@ class ViewBanco extends DbTable
             '`banco`', // Expression
             '`banco`', // Basic search expression
             200, // Type
-            50, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`banco`', // Virtual expression

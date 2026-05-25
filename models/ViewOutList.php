@@ -174,6 +174,7 @@ class ViewOutList extends ViewOut
         $this->cantidad_movimiento_consignacion->Visible = false;
         $this->id_consignacion->Visible = false;
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->precio_unidad_sin_desc->Visible = false;
         $this->check_ne->Visible = false;
         $this->packer_cantidad->Visible = false;
@@ -1168,6 +1169,7 @@ class ViewOutList extends ViewOut
         $filterList = Concat($filterList, $this->cantidad_movimiento_consignacion->AdvancedSearch->toJson(), ","); // Field cantidad_movimiento_consignacion
         $filterList = Concat($filterList, $this->id_consignacion->AdvancedSearch->toJson(), ","); // Field id_consignacion
         $filterList = Concat($filterList, $this->descuento->AdvancedSearch->toJson(), ","); // Field descuento
+        $filterList = Concat($filterList, $this->descuento2->AdvancedSearch->toJson(), ","); // Field descuento2
         $filterList = Concat($filterList, $this->precio_unidad_sin_desc->AdvancedSearch->toJson(), ","); // Field precio_unidad_sin_desc
         $filterList = Concat($filterList, $this->check_ne->AdvancedSearch->toJson(), ","); // Field check_ne
         $filterList = Concat($filterList, $this->packer_cantidad->AdvancedSearch->toJson(), ","); // Field packer_cantidad
@@ -1379,6 +1381,14 @@ class ViewOutList extends ViewOut
         $this->descuento->AdvancedSearch->SearchOperator2 = @$filter["w_descuento"];
         $this->descuento->AdvancedSearch->save();
 
+        // Field descuento2
+        $this->descuento2->AdvancedSearch->SearchValue = @$filter["x_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchOperator = @$filter["z_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchCondition = @$filter["v_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchValue2 = @$filter["y_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchOperator2 = @$filter["w_descuento2"];
+        $this->descuento2->AdvancedSearch->save();
+
         // Field precio_unidad_sin_desc
         $this->precio_unidad_sin_desc->AdvancedSearch->SearchValue = @$filter["x_precio_unidad_sin_desc"];
         $this->precio_unidad_sin_desc->AdvancedSearch->SearchOperator = @$filter["z_precio_unidad_sin_desc"];
@@ -1541,6 +1551,7 @@ class ViewOutList extends ViewOut
             $this->updateSort($this->precio); // precio
             $this->updateSort($this->alicuota); // alicuota
             $this->updateSort($this->descuento); // descuento
+            $this->updateSort($this->descuento2); // descuento2
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1601,6 +1612,7 @@ class ViewOutList extends ViewOut
                 $this->cantidad_movimiento_consignacion->setSort("");
                 $this->id_consignacion->setSort("");
                 $this->descuento->setSort("");
+                $this->descuento2->setSort("");
                 $this->precio_unidad_sin_desc->setSort("");
                 $this->check_ne->setSort("");
                 $this->packer_cantidad->setSort("");
@@ -1779,6 +1791,7 @@ class ViewOutList extends ViewOut
             $this->createColumnOption($option, "precio");
             $this->createColumnOption($option, "alicuota");
             $this->createColumnOption($option, "descuento");
+            $this->createColumnOption($option, "descuento2");
         }
 
         // Set up custom actions
@@ -2233,6 +2246,7 @@ class ViewOutList extends ViewOut
         $this->cantidad_movimiento_consignacion->setDbValue($row['cantidad_movimiento_consignacion']);
         $this->id_consignacion->setDbValue($row['id_consignacion']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
@@ -2264,6 +2278,7 @@ class ViewOutList extends ViewOut
         $row['cantidad_movimiento_consignacion'] = $this->cantidad_movimiento_consignacion->DefaultValue;
         $row['id_consignacion'] = $this->id_consignacion->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
@@ -2349,6 +2364,8 @@ class ViewOutList extends ViewOut
         // id_consignacion
 
         // descuento
+
+        // descuento2
 
         // precio_unidad_sin_desc
 
@@ -2498,6 +2515,10 @@ class ViewOutList extends ViewOut
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // precio_unidad_sin_desc
             $this->precio_unidad_sin_desc->ViewValue = $this->precio_unidad_sin_desc->CurrentValue;
             $this->precio_unidad_sin_desc->ViewValue = FormatNumber($this->precio_unidad_sin_desc->ViewValue, $this->precio_unidad_sin_desc->formatPattern());
@@ -2559,6 +2580,10 @@ class ViewOutList extends ViewOut
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
         }
 
         // Call Row Rendered event

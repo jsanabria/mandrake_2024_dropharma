@@ -95,6 +95,9 @@ $Page->showMessage();
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th class="<?= $Page->unidades->headerCellClass() ?>"><span id="elh_entradas_unidades" class="entradas_unidades"><?= $Page->unidades->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->cliente->Visible) { // cliente ?>
+        <th class="<?= $Page->cliente->headerCellClass() ?>"><span id="elh_entradas_cliente" class="entradas_cliente"><?= $Page->cliente->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -244,6 +247,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->unidades->viewAttributes() ?>>
 <?= $Page->unidades->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->cliente->Visible) { // cliente ?>
+        <td<?= $Page->cliente->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->cliente->viewAttributes() ?>>
+<?= $Page->cliente->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

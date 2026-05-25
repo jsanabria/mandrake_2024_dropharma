@@ -203,6 +203,12 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->comprobante->Visible) { // comprobante ?>
         <th data-name="comprobante" class="<?= $Page->comprobante->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_detalle_comprobante" class="cont_lotes_pagos_detalle_comprobante"><?= $Page->renderFieldHeader($Page->comprobante) ?></div></th>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <th data-name="fecha" class="<?= $Page->fecha->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_detalle_fecha" class="cont_lotes_pagos_detalle_fecha"><?= $Page->renderFieldHeader($Page->fecha) ?></div></th>
+<?php } ?>
+<?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+        <th data-name="monto_pagado" class="<?= $Page->monto_pagado->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_detalle_monto_pagado" class="cont_lotes_pagos_detalle_monto_pagado"><?= $Page->renderFieldHeader($Page->monto_pagado) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -284,6 +290,22 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_detalle_comprobante" class="el_cont_lotes_pagos_detalle_comprobante">
 <span<?= $Page->comprobante->viewAttributes() ?>>
 <?= $Page->comprobante->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->fecha->Visible) { // fecha ?>
+        <td data-name="fecha"<?= $Page->fecha->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_detalle_fecha" class="el_cont_lotes_pagos_detalle_fecha">
+<span<?= $Page->fecha->viewAttributes() ?>>
+<?= $Page->fecha->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+        <td data-name="monto_pagado"<?= $Page->monto_pagado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_cont_lotes_pagos_detalle_monto_pagado" class="el_cont_lotes_pagos_detalle_monto_pagado">
+<span<?= $Page->monto_pagado->viewAttributes() ?>>
+<?= $Page->monto_pagado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

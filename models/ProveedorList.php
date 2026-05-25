@@ -162,15 +162,19 @@ class ProveedorList extends Proveedor
         $this->telefono2->Visible = false;
         $this->email1->Visible = false;
         $this->email2->Visible = false;
-        $this->cuenta_auxiliar->setVisibility();
-        $this->cuenta_gasto->setVisibility();
+        $this->fabricante->Visible = false;
+        $this->cuenta_auxiliar->Visible = false;
+        $this->cuenta_gasto->Visible = false;
         $this->tipo_iva->Visible = false;
         $this->tipo_islr->Visible = false;
         $this->sustraendo->Visible = false;
+        $this->tipo_ret_iva->Visible = false;
+        $this->tipo_ret_islr_concepto->Visible = false;
+        $this->tipo_ret_islr->Visible = false;
+        $this->tipo_ret_mun->Visible = false;
         $this->tipo_impmun->Visible = false;
         $this->cta_bco->Visible = false;
         $this->activo->setVisibility();
-        $this->fabricante->setVisibility();
     }
 
     // Constructor
@@ -1108,15 +1112,19 @@ class ProveedorList extends Proveedor
         $filterList = Concat($filterList, $this->telefono2->AdvancedSearch->toJson(), ","); // Field telefono2
         $filterList = Concat($filterList, $this->email1->AdvancedSearch->toJson(), ","); // Field email1
         $filterList = Concat($filterList, $this->email2->AdvancedSearch->toJson(), ","); // Field email2
+        $filterList = Concat($filterList, $this->fabricante->AdvancedSearch->toJson(), ","); // Field fabricante
         $filterList = Concat($filterList, $this->cuenta_auxiliar->AdvancedSearch->toJson(), ","); // Field cuenta_auxiliar
         $filterList = Concat($filterList, $this->cuenta_gasto->AdvancedSearch->toJson(), ","); // Field cuenta_gasto
         $filterList = Concat($filterList, $this->tipo_iva->AdvancedSearch->toJson(), ","); // Field tipo_iva
         $filterList = Concat($filterList, $this->tipo_islr->AdvancedSearch->toJson(), ","); // Field tipo_islr
         $filterList = Concat($filterList, $this->sustraendo->AdvancedSearch->toJson(), ","); // Field sustraendo
+        $filterList = Concat($filterList, $this->tipo_ret_iva->AdvancedSearch->toJson(), ","); // Field tipo_ret_iva
+        $filterList = Concat($filterList, $this->tipo_ret_islr_concepto->AdvancedSearch->toJson(), ","); // Field tipo_ret_islr_concepto
+        $filterList = Concat($filterList, $this->tipo_ret_islr->AdvancedSearch->toJson(), ","); // Field tipo_ret_islr
+        $filterList = Concat($filterList, $this->tipo_ret_mun->AdvancedSearch->toJson(), ","); // Field tipo_ret_mun
         $filterList = Concat($filterList, $this->tipo_impmun->AdvancedSearch->toJson(), ","); // Field tipo_impmun
         $filterList = Concat($filterList, $this->cta_bco->AdvancedSearch->toJson(), ","); // Field cta_bco
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
-        $filterList = Concat($filterList, $this->fabricante->AdvancedSearch->toJson(), ","); // Field fabricante
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1228,6 +1236,14 @@ class ProveedorList extends Proveedor
         $this->email2->AdvancedSearch->SearchOperator2 = @$filter["w_email2"];
         $this->email2->AdvancedSearch->save();
 
+        // Field fabricante
+        $this->fabricante->AdvancedSearch->SearchValue = @$filter["x_fabricante"];
+        $this->fabricante->AdvancedSearch->SearchOperator = @$filter["z_fabricante"];
+        $this->fabricante->AdvancedSearch->SearchCondition = @$filter["v_fabricante"];
+        $this->fabricante->AdvancedSearch->SearchValue2 = @$filter["y_fabricante"];
+        $this->fabricante->AdvancedSearch->SearchOperator2 = @$filter["w_fabricante"];
+        $this->fabricante->AdvancedSearch->save();
+
         // Field cuenta_auxiliar
         $this->cuenta_auxiliar->AdvancedSearch->SearchValue = @$filter["x_cuenta_auxiliar"];
         $this->cuenta_auxiliar->AdvancedSearch->SearchOperator = @$filter["z_cuenta_auxiliar"];
@@ -1268,6 +1284,38 @@ class ProveedorList extends Proveedor
         $this->sustraendo->AdvancedSearch->SearchOperator2 = @$filter["w_sustraendo"];
         $this->sustraendo->AdvancedSearch->save();
 
+        // Field tipo_ret_iva
+        $this->tipo_ret_iva->AdvancedSearch->SearchValue = @$filter["x_tipo_ret_iva"];
+        $this->tipo_ret_iva->AdvancedSearch->SearchOperator = @$filter["z_tipo_ret_iva"];
+        $this->tipo_ret_iva->AdvancedSearch->SearchCondition = @$filter["v_tipo_ret_iva"];
+        $this->tipo_ret_iva->AdvancedSearch->SearchValue2 = @$filter["y_tipo_ret_iva"];
+        $this->tipo_ret_iva->AdvancedSearch->SearchOperator2 = @$filter["w_tipo_ret_iva"];
+        $this->tipo_ret_iva->AdvancedSearch->save();
+
+        // Field tipo_ret_islr_concepto
+        $this->tipo_ret_islr_concepto->AdvancedSearch->SearchValue = @$filter["x_tipo_ret_islr_concepto"];
+        $this->tipo_ret_islr_concepto->AdvancedSearch->SearchOperator = @$filter["z_tipo_ret_islr_concepto"];
+        $this->tipo_ret_islr_concepto->AdvancedSearch->SearchCondition = @$filter["v_tipo_ret_islr_concepto"];
+        $this->tipo_ret_islr_concepto->AdvancedSearch->SearchValue2 = @$filter["y_tipo_ret_islr_concepto"];
+        $this->tipo_ret_islr_concepto->AdvancedSearch->SearchOperator2 = @$filter["w_tipo_ret_islr_concepto"];
+        $this->tipo_ret_islr_concepto->AdvancedSearch->save();
+
+        // Field tipo_ret_islr
+        $this->tipo_ret_islr->AdvancedSearch->SearchValue = @$filter["x_tipo_ret_islr"];
+        $this->tipo_ret_islr->AdvancedSearch->SearchOperator = @$filter["z_tipo_ret_islr"];
+        $this->tipo_ret_islr->AdvancedSearch->SearchCondition = @$filter["v_tipo_ret_islr"];
+        $this->tipo_ret_islr->AdvancedSearch->SearchValue2 = @$filter["y_tipo_ret_islr"];
+        $this->tipo_ret_islr->AdvancedSearch->SearchOperator2 = @$filter["w_tipo_ret_islr"];
+        $this->tipo_ret_islr->AdvancedSearch->save();
+
+        // Field tipo_ret_mun
+        $this->tipo_ret_mun->AdvancedSearch->SearchValue = @$filter["x_tipo_ret_mun"];
+        $this->tipo_ret_mun->AdvancedSearch->SearchOperator = @$filter["z_tipo_ret_mun"];
+        $this->tipo_ret_mun->AdvancedSearch->SearchCondition = @$filter["v_tipo_ret_mun"];
+        $this->tipo_ret_mun->AdvancedSearch->SearchValue2 = @$filter["y_tipo_ret_mun"];
+        $this->tipo_ret_mun->AdvancedSearch->SearchOperator2 = @$filter["w_tipo_ret_mun"];
+        $this->tipo_ret_mun->AdvancedSearch->save();
+
         // Field tipo_impmun
         $this->tipo_impmun->AdvancedSearch->SearchValue = @$filter["x_tipo_impmun"];
         $this->tipo_impmun->AdvancedSearch->SearchOperator = @$filter["z_tipo_impmun"];
@@ -1291,14 +1339,6 @@ class ProveedorList extends Proveedor
         $this->activo->AdvancedSearch->SearchValue2 = @$filter["y_activo"];
         $this->activo->AdvancedSearch->SearchOperator2 = @$filter["w_activo"];
         $this->activo->AdvancedSearch->save();
-
-        // Field fabricante
-        $this->fabricante->AdvancedSearch->SearchValue = @$filter["x_fabricante"];
-        $this->fabricante->AdvancedSearch->SearchOperator = @$filter["z_fabricante"];
-        $this->fabricante->AdvancedSearch->SearchCondition = @$filter["v_fabricante"];
-        $this->fabricante->AdvancedSearch->SearchValue2 = @$filter["y_fabricante"];
-        $this->fabricante->AdvancedSearch->SearchOperator2 = @$filter["w_fabricante"];
-        $this->fabricante->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1320,15 +1360,19 @@ class ProveedorList extends Proveedor
         $this->buildSearchSql($where, $this->telefono2, $default, false); // telefono2
         $this->buildSearchSql($where, $this->email1, $default, false); // email1
         $this->buildSearchSql($where, $this->email2, $default, false); // email2
+        $this->buildSearchSql($where, $this->fabricante, $default, false); // fabricante
         $this->buildSearchSql($where, $this->cuenta_auxiliar, $default, false); // cuenta_auxiliar
         $this->buildSearchSql($where, $this->cuenta_gasto, $default, false); // cuenta_gasto
         $this->buildSearchSql($where, $this->tipo_iva, $default, false); // tipo_iva
         $this->buildSearchSql($where, $this->tipo_islr, $default, false); // tipo_islr
         $this->buildSearchSql($where, $this->sustraendo, $default, false); // sustraendo
+        $this->buildSearchSql($where, $this->tipo_ret_iva, $default, false); // tipo_ret_iva
+        $this->buildSearchSql($where, $this->tipo_ret_islr_concepto, $default, false); // tipo_ret_islr_concepto
+        $this->buildSearchSql($where, $this->tipo_ret_islr, $default, false); // tipo_ret_islr
+        $this->buildSearchSql($where, $this->tipo_ret_mun, $default, false); // tipo_ret_mun
         $this->buildSearchSql($where, $this->tipo_impmun, $default, false); // tipo_impmun
         $this->buildSearchSql($where, $this->cta_bco, $default, false); // cta_bco
         $this->buildSearchSql($where, $this->activo, $default, false); // activo
-        $this->buildSearchSql($where, $this->fabricante, $default, false); // fabricante
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1344,15 +1388,19 @@ class ProveedorList extends Proveedor
             $this->telefono2->AdvancedSearch->save(); // telefono2
             $this->email1->AdvancedSearch->save(); // email1
             $this->email2->AdvancedSearch->save(); // email2
+            $this->fabricante->AdvancedSearch->save(); // fabricante
             $this->cuenta_auxiliar->AdvancedSearch->save(); // cuenta_auxiliar
             $this->cuenta_gasto->AdvancedSearch->save(); // cuenta_gasto
             $this->tipo_iva->AdvancedSearch->save(); // tipo_iva
             $this->tipo_islr->AdvancedSearch->save(); // tipo_islr
             $this->sustraendo->AdvancedSearch->save(); // sustraendo
+            $this->tipo_ret_iva->AdvancedSearch->save(); // tipo_ret_iva
+            $this->tipo_ret_islr_concepto->AdvancedSearch->save(); // tipo_ret_islr_concepto
+            $this->tipo_ret_islr->AdvancedSearch->save(); // tipo_ret_islr
+            $this->tipo_ret_mun->AdvancedSearch->save(); // tipo_ret_mun
             $this->tipo_impmun->AdvancedSearch->save(); // tipo_impmun
             $this->cta_bco->AdvancedSearch->save(); // cta_bco
             $this->activo->AdvancedSearch->save(); // activo
-            $this->fabricante->AdvancedSearch->save(); // fabricante
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1392,15 +1440,19 @@ class ProveedorList extends Proveedor
             $this->telefono2->AdvancedSearch->save(); // telefono2
             $this->email1->AdvancedSearch->save(); // email1
             $this->email2->AdvancedSearch->save(); // email2
+            $this->fabricante->AdvancedSearch->save(); // fabricante
             $this->cuenta_auxiliar->AdvancedSearch->save(); // cuenta_auxiliar
             $this->cuenta_gasto->AdvancedSearch->save(); // cuenta_gasto
             $this->tipo_iva->AdvancedSearch->save(); // tipo_iva
             $this->tipo_islr->AdvancedSearch->save(); // tipo_islr
             $this->sustraendo->AdvancedSearch->save(); // sustraendo
+            $this->tipo_ret_iva->AdvancedSearch->save(); // tipo_ret_iva
+            $this->tipo_ret_islr_concepto->AdvancedSearch->save(); // tipo_ret_islr_concepto
+            $this->tipo_ret_islr->AdvancedSearch->save(); // tipo_ret_islr
+            $this->tipo_ret_mun->AdvancedSearch->save(); // tipo_ret_mun
             $this->tipo_impmun->AdvancedSearch->save(); // tipo_impmun
             $this->cta_bco->AdvancedSearch->save(); // cta_bco
             $this->activo->AdvancedSearch->save(); // activo
-            $this->fabricante->AdvancedSearch->save(); // fabricante
             $this->setSessionRules($rules);
         }
 
@@ -1484,24 +1536,6 @@ class ProveedorList extends Proveedor
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ciudad->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field cuenta_auxiliar
-        $filter = $this->queryBuilderWhere("cuenta_auxiliar");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->cuenta_auxiliar, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->cuenta_auxiliar->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field cuenta_gasto
-        $filter = $this->queryBuilderWhere("cuenta_gasto");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->cuenta_gasto, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->cuenta_gasto->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field activo
         $filter = $this->queryBuilderWhere("activo");
         if (!$filter) {
@@ -1509,15 +1543,6 @@ class ProveedorList extends Proveedor
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->activo->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field fabricante
-        $filter = $this->queryBuilderWhere("fabricante");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->fabricante, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->fabricante->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
@@ -1555,6 +1580,9 @@ class ProveedorList extends Proveedor
         $searchFlds[] = &$this->email2;
         $searchFlds[] = &$this->tipo_iva;
         $searchFlds[] = &$this->tipo_islr;
+        $searchFlds[] = &$this->tipo_ret_iva;
+        $searchFlds[] = &$this->tipo_ret_islr_concepto;
+        $searchFlds[] = &$this->tipo_ret_mun;
         $searchFlds[] = &$this->tipo_impmun;
         $searchFlds[] = &$this->cta_bco;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
@@ -1612,6 +1640,9 @@ class ProveedorList extends Proveedor
         if ($this->email2->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->fabricante->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->cuenta_auxiliar->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -1627,6 +1658,18 @@ class ProveedorList extends Proveedor
         if ($this->sustraendo->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->tipo_ret_iva->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_ret_islr_concepto->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_ret_islr->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_ret_mun->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->tipo_impmun->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -1634,9 +1677,6 @@ class ProveedorList extends Proveedor
             return true;
         }
         if ($this->activo->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->fabricante->AdvancedSearch->issetSession()) {
             return true;
         }
         return false;
@@ -1683,15 +1723,19 @@ class ProveedorList extends Proveedor
         $this->telefono2->AdvancedSearch->unsetSession();
         $this->email1->AdvancedSearch->unsetSession();
         $this->email2->AdvancedSearch->unsetSession();
+        $this->fabricante->AdvancedSearch->unsetSession();
         $this->cuenta_auxiliar->AdvancedSearch->unsetSession();
         $this->cuenta_gasto->AdvancedSearch->unsetSession();
         $this->tipo_iva->AdvancedSearch->unsetSession();
         $this->tipo_islr->AdvancedSearch->unsetSession();
         $this->sustraendo->AdvancedSearch->unsetSession();
+        $this->tipo_ret_iva->AdvancedSearch->unsetSession();
+        $this->tipo_ret_islr_concepto->AdvancedSearch->unsetSession();
+        $this->tipo_ret_islr->AdvancedSearch->unsetSession();
+        $this->tipo_ret_mun->AdvancedSearch->unsetSession();
         $this->tipo_impmun->AdvancedSearch->unsetSession();
         $this->cta_bco->AdvancedSearch->unsetSession();
         $this->activo->AdvancedSearch->unsetSession();
-        $this->fabricante->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1712,15 +1756,19 @@ class ProveedorList extends Proveedor
         $this->telefono2->AdvancedSearch->load();
         $this->email1->AdvancedSearch->load();
         $this->email2->AdvancedSearch->load();
+        $this->fabricante->AdvancedSearch->load();
         $this->cuenta_auxiliar->AdvancedSearch->load();
         $this->cuenta_gasto->AdvancedSearch->load();
         $this->tipo_iva->AdvancedSearch->load();
         $this->tipo_islr->AdvancedSearch->load();
         $this->sustraendo->AdvancedSearch->load();
+        $this->tipo_ret_iva->AdvancedSearch->load();
+        $this->tipo_ret_islr_concepto->AdvancedSearch->load();
+        $this->tipo_ret_islr->AdvancedSearch->load();
+        $this->tipo_ret_mun->AdvancedSearch->load();
         $this->tipo_impmun->AdvancedSearch->load();
         $this->cta_bco->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
-        $this->fabricante->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1741,10 +1789,7 @@ class ProveedorList extends Proveedor
             $this->updateSort($this->ci_rif); // ci_rif
             $this->updateSort($this->nombre); // nombre
             $this->updateSort($this->ciudad); // ciudad
-            $this->updateSort($this->cuenta_auxiliar); // cuenta_auxiliar
-            $this->updateSort($this->cuenta_gasto); // cuenta_gasto
             $this->updateSort($this->activo); // activo
-            $this->updateSort($this->fabricante); // fabricante
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1778,15 +1823,19 @@ class ProveedorList extends Proveedor
                 $this->telefono2->setSort("");
                 $this->email1->setSort("");
                 $this->email2->setSort("");
+                $this->fabricante->setSort("");
                 $this->cuenta_auxiliar->setSort("");
                 $this->cuenta_gasto->setSort("");
                 $this->tipo_iva->setSort("");
                 $this->tipo_islr->setSort("");
                 $this->sustraendo->setSort("");
+                $this->tipo_ret_iva->setSort("");
+                $this->tipo_ret_islr_concepto->setSort("");
+                $this->tipo_ret_islr->setSort("");
+                $this->tipo_ret_mun->setSort("");
                 $this->tipo_impmun->setSort("");
                 $this->cta_bco->setSort("");
                 $this->activo->setSort("");
-                $this->fabricante->setSort("");
             }
 
             // Reset start position
@@ -2318,10 +2367,7 @@ class ProveedorList extends Proveedor
             $this->createColumnOption($option, "ci_rif");
             $this->createColumnOption($option, "nombre");
             $this->createColumnOption($option, "ciudad");
-            $this->createColumnOption($option, "cuenta_auxiliar");
-            $this->createColumnOption($option, "cuenta_gasto");
             $this->createColumnOption($option, "activo");
-            $this->createColumnOption($option, "fabricante");
         }
 
         // Set up custom actions
@@ -2747,6 +2793,14 @@ class ProveedorList extends Proveedor
             }
         }
 
+        // fabricante
+        if ($this->fabricante->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->fabricante->AdvancedSearch->SearchValue != "" || $this->fabricante->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // cuenta_auxiliar
         if ($this->cuenta_auxiliar->AdvancedSearch->get()) {
             $hasValue = true;
@@ -2787,6 +2841,38 @@ class ProveedorList extends Proveedor
             }
         }
 
+        // tipo_ret_iva
+        if ($this->tipo_ret_iva->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_ret_iva->AdvancedSearch->SearchValue != "" || $this->tipo_ret_iva->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_ret_islr_concepto
+        if ($this->tipo_ret_islr_concepto->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_ret_islr_concepto->AdvancedSearch->SearchValue != "" || $this->tipo_ret_islr_concepto->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_ret_islr
+        if ($this->tipo_ret_islr->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_ret_islr->AdvancedSearch->SearchValue != "" || $this->tipo_ret_islr->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_ret_mun
+        if ($this->tipo_ret_mun->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_ret_mun->AdvancedSearch->SearchValue != "" || $this->tipo_ret_mun->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // tipo_impmun
         if ($this->tipo_impmun->AdvancedSearch->get()) {
             $hasValue = true;
@@ -2807,14 +2893,6 @@ class ProveedorList extends Proveedor
         if ($this->activo->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->activo->AdvancedSearch->SearchValue != "" || $this->activo->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // fabricante
-        if ($this->fabricante->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->fabricante->AdvancedSearch->SearchValue != "" || $this->fabricante->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -2923,15 +3001,19 @@ class ProveedorList extends Proveedor
         $this->telefono2->setDbValue($row['telefono2']);
         $this->email1->setDbValue($row['email1']);
         $this->email2->setDbValue($row['email2']);
+        $this->fabricante->setDbValue($row['fabricante']);
         $this->cuenta_auxiliar->setDbValue($row['cuenta_auxiliar']);
         $this->cuenta_gasto->setDbValue($row['cuenta_gasto']);
         $this->tipo_iva->setDbValue($row['tipo_iva']);
         $this->tipo_islr->setDbValue($row['tipo_islr']);
         $this->sustraendo->setDbValue($row['sustraendo']);
+        $this->tipo_ret_iva->setDbValue($row['tipo_ret_iva']);
+        $this->tipo_ret_islr_concepto->setDbValue($row['tipo_ret_islr_concepto']);
+        $this->tipo_ret_islr->setDbValue($row['tipo_ret_islr']);
+        $this->tipo_ret_mun->setDbValue($row['tipo_ret_mun']);
         $this->tipo_impmun->setDbValue($row['tipo_impmun']);
         $this->cta_bco->setDbValue($row['cta_bco']);
         $this->activo->setDbValue($row['activo']);
-        $this->fabricante->setDbValue($row['fabricante']);
     }
 
     // Return a row with default values
@@ -2947,15 +3029,19 @@ class ProveedorList extends Proveedor
         $row['telefono2'] = $this->telefono2->DefaultValue;
         $row['email1'] = $this->email1->DefaultValue;
         $row['email2'] = $this->email2->DefaultValue;
+        $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['cuenta_auxiliar'] = $this->cuenta_auxiliar->DefaultValue;
         $row['cuenta_gasto'] = $this->cuenta_gasto->DefaultValue;
         $row['tipo_iva'] = $this->tipo_iva->DefaultValue;
         $row['tipo_islr'] = $this->tipo_islr->DefaultValue;
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
+        $row['tipo_ret_iva'] = $this->tipo_ret_iva->DefaultValue;
+        $row['tipo_ret_islr_concepto'] = $this->tipo_ret_islr_concepto->DefaultValue;
+        $row['tipo_ret_islr'] = $this->tipo_ret_islr->DefaultValue;
+        $row['tipo_ret_mun'] = $this->tipo_ret_mun->DefaultValue;
         $row['tipo_impmun'] = $this->tipo_impmun->DefaultValue;
         $row['cta_bco'] = $this->cta_bco->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
-        $row['fabricante'] = $this->fabricante->DefaultValue;
         return $row;
     }
 
@@ -3014,6 +3100,8 @@ class ProveedorList extends Proveedor
 
         // email2
 
+        // fabricante
+
         // cuenta_auxiliar
 
         // cuenta_gasto
@@ -3024,13 +3112,19 @@ class ProveedorList extends Proveedor
 
         // sustraendo
 
+        // tipo_ret_iva
+
+        // tipo_ret_islr_concepto
+
+        // tipo_ret_islr
+
+        // tipo_ret_mun
+
         // tipo_impmun
 
         // cta_bco
 
         // activo
-
-        // fabricante
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3082,6 +3176,10 @@ class ProveedorList extends Proveedor
 
             // email2
             $this->email2->ViewValue = $this->email2->CurrentValue;
+
+            // fabricante
+            $this->fabricante->ViewValue = $this->fabricante->CurrentValue;
+            $this->fabricante->ViewValue = FormatNumber($this->fabricante->ViewValue, $this->fabricante->formatPattern());
 
             // cuenta_auxiliar
             $curVal = strval($this->cuenta_auxiliar->CurrentValue);
@@ -3203,6 +3301,19 @@ class ProveedorList extends Proveedor
                 $this->sustraendo->ViewValue = null;
             }
 
+            // tipo_ret_iva
+            $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->CurrentValue;
+
+            // tipo_ret_islr_concepto
+            $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->CurrentValue;
+
+            // tipo_ret_islr
+            $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->CurrentValue;
+            $this->tipo_ret_islr->ViewValue = FormatNumber($this->tipo_ret_islr->ViewValue, $this->tipo_ret_islr->formatPattern());
+
+            // tipo_ret_mun
+            $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->CurrentValue;
+
             // tipo_impmun
             $curVal = strval($this->tipo_impmun->CurrentValue);
             if ($curVal != "") {
@@ -3237,10 +3348,6 @@ class ProveedorList extends Proveedor
                 $this->activo->ViewValue = null;
             }
 
-            // fabricante
-            $this->fabricante->ViewValue = $this->fabricante->CurrentValue;
-            $this->fabricante->ViewValue = FormatNumber($this->fabricante->ViewValue, $this->fabricante->formatPattern());
-
             // ci_rif
             $this->ci_rif->HrefValue = "";
             $this->ci_rif->TooltipValue = "";
@@ -3253,21 +3360,9 @@ class ProveedorList extends Proveedor
             $this->ciudad->HrefValue = "";
             $this->ciudad->TooltipValue = "";
 
-            // cuenta_auxiliar
-            $this->cuenta_auxiliar->HrefValue = "";
-            $this->cuenta_auxiliar->TooltipValue = "";
-
-            // cuenta_gasto
-            $this->cuenta_gasto->HrefValue = "";
-            $this->cuenta_gasto->TooltipValue = "";
-
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
-
-            // fabricante
-            $this->fabricante->HrefValue = "";
-            $this->fabricante->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // ci_rif
             $this->ci_rif->setupEditAttributes();
@@ -3293,23 +3388,10 @@ class ProveedorList extends Proveedor
             $this->ciudad->EditValue = HtmlEncode($this->ciudad->AdvancedSearch->SearchValue);
             $this->ciudad->PlaceHolder = RemoveHtml($this->ciudad->caption());
 
-            // cuenta_auxiliar
-            $this->cuenta_auxiliar->setupEditAttributes();
-            $this->cuenta_auxiliar->PlaceHolder = RemoveHtml($this->cuenta_auxiliar->caption());
-
-            // cuenta_gasto
-            $this->cuenta_gasto->setupEditAttributes();
-            $this->cuenta_gasto->PlaceHolder = RemoveHtml($this->cuenta_gasto->caption());
-
             // activo
             $this->activo->setupEditAttributes();
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
-
-            // fabricante
-            $this->fabricante->setupEditAttributes();
-            $this->fabricante->EditValue = $this->fabricante->AdvancedSearch->SearchValue;
-            $this->fabricante->PlaceHolder = RemoveHtml($this->fabricante->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3353,15 +3435,19 @@ class ProveedorList extends Proveedor
         $this->telefono2->AdvancedSearch->load();
         $this->email1->AdvancedSearch->load();
         $this->email2->AdvancedSearch->load();
+        $this->fabricante->AdvancedSearch->load();
         $this->cuenta_auxiliar->AdvancedSearch->load();
         $this->cuenta_gasto->AdvancedSearch->load();
         $this->tipo_iva->AdvancedSearch->load();
         $this->tipo_islr->AdvancedSearch->load();
         $this->sustraendo->AdvancedSearch->load();
+        $this->tipo_ret_iva->AdvancedSearch->load();
+        $this->tipo_ret_islr_concepto->AdvancedSearch->load();
+        $this->tipo_ret_islr->AdvancedSearch->load();
+        $this->tipo_ret_mun->AdvancedSearch->load();
         $this->tipo_impmun->AdvancedSearch->load();
         $this->cta_bco->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
-        $this->fabricante->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -3803,6 +3889,7 @@ class ProveedorList extends Proveedor
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event

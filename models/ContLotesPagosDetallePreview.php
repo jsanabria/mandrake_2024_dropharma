@@ -140,6 +140,8 @@ class ContLotesPagosDetallePreview extends ContLotesPagosDetalle
         $this->monto_pagdo->setVisibility();
         $this->saldo->setVisibility();
         $this->comprobante->setVisibility();
+        $this->fecha->setVisibility();
+        $this->monto_pagado->setVisibility();
     }
 
     // Constructor
@@ -532,6 +534,8 @@ class ContLotesPagosDetallePreview extends ContLotesPagosDetalle
             $this->monto_pagdo->setSort("");
             $this->saldo->setSort("");
             $this->comprobante->setSort("");
+            $this->fecha->setSort("");
+            $this->monto_pagado->setSort("");
 
             // Save sort to session
             $this->setSessionOrderBy("");
@@ -557,6 +561,8 @@ class ContLotesPagosDetallePreview extends ContLotesPagosDetalle
             $this->updateSort($this->monto_pagdo); // monto_pagdo
             $this->updateSort($this->saldo); // saldo
             $this->updateSort($this->comprobante); // comprobante
+            $this->updateSort($this->fecha); // fecha
+            $this->updateSort($this->monto_pagado); // monto_pagado
         }
 
         // Update field sort

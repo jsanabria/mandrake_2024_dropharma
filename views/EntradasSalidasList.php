@@ -33,19 +33,22 @@ loadjs.ready(["wrapper", "head"], function () {
             ["cantidad_articulo", [fields.cantidad_articulo.visible && fields.cantidad_articulo.required ? ew.Validators.required(fields.cantidad_articulo.caption) : null, ew.Validators.float], fields.cantidad_articulo.isInvalid],
             ["precio_unidad_sin_desc", [fields.precio_unidad_sin_desc.visible && fields.precio_unidad_sin_desc.required ? ew.Validators.required(fields.precio_unidad_sin_desc.caption) : null, ew.Validators.float], fields.precio_unidad_sin_desc.isInvalid],
             ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.float], fields.descuento.isInvalid],
+            ["descuento2", [fields.descuento2.visible && fields.descuento2.required ? ew.Validators.required(fields.descuento2.caption) : null, ew.Validators.float], fields.descuento2.isInvalid],
             ["costo_unidad", [fields.costo_unidad.visible && fields.costo_unidad.required ? ew.Validators.required(fields.costo_unidad.caption) : null, ew.Validators.float], fields.costo_unidad.isInvalid],
             ["costo", [fields.costo.visible && fields.costo.required ? ew.Validators.required(fields.costo.caption) : null, ew.Validators.float], fields.costo.isInvalid],
             ["precio_unidad", [fields.precio_unidad.visible && fields.precio_unidad.required ? ew.Validators.required(fields.precio_unidad.caption) : null, ew.Validators.float], fields.precio_unidad.isInvalid],
             ["precio", [fields.precio.visible && fields.precio.required ? ew.Validators.required(fields.precio.caption) : null, ew.Validators.float], fields.precio.isInvalid],
             ["check_ne", [fields.check_ne.visible && fields.check_ne.required ? ew.Validators.required(fields.check_ne.caption) : null], fields.check_ne.isInvalid],
-            ["newdata", [fields.newdata.visible && fields.newdata.required ? ew.Validators.required(fields.newdata.caption) : null], fields.newdata.isInvalid]
+            ["newdata", [fields.newdata.visible && fields.newdata.required ? ew.Validators.required(fields.newdata.caption) : null], fields.newdata.isInvalid],
+            ["cantidad_entregada", [fields.cantidad_entregada.visible && fields.cantidad_entregada.required ? ew.Validators.required(fields.cantidad_entregada.caption) : null, ew.Validators.float], fields.cantidad_entregada.isInvalid],
+            ["cantidad_por_entregar", [fields.cantidad_por_entregar.visible && fields.cantidad_por_entregar.required ? ew.Validators.required(fields.cantidad_por_entregar.caption) : null, ew.Validators.float], fields.cantidad_por_entregar.isInvalid]
         ])
 
         // Check empty row
         .setEmptyRow(
             function (rowIndex) {
                 let fobj = this.getForm(),
-                    fields = [["articulo",false],["lote",false],["fecha_vencimiento",false],["almacen",false],["id_compra",false],["cantidad_articulo",false],["precio_unidad_sin_desc",false],["descuento",false],["costo_unidad",false],["costo",false],["precio_unidad",false],["precio",false],["check_ne[]",false],["newdata",false]];
+                    fields = [["articulo",false],["lote",false],["fecha_vencimiento",false],["almacen",false],["id_compra",false],["cantidad_articulo",false],["precio_unidad_sin_desc",false],["descuento",false],["descuento2",false],["costo_unidad",false],["costo",false],["precio_unidad",false],["precio",false],["check_ne[]",false],["newdata",false],["cantidad_entregada",false],["cantidad_por_entregar",false]];
                 if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
                     return false;
                 return true;
@@ -266,6 +269,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_entradas_salidas_descuento" class="entradas_salidas_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <th data-name="descuento2" class="<?= $Page->descuento2->headerCellClass() ?>"><div id="elh_entradas_salidas_descuento2" class="entradas_salidas_descuento2"><?= $Page->renderFieldHeader($Page->descuento2) ?></div></th>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
         <th data-name="costo_unidad" class="<?= $Page->costo_unidad->headerCellClass() ?>"><div id="elh_entradas_salidas_costo_unidad" class="entradas_salidas_costo_unidad"><?= $Page->renderFieldHeader($Page->costo_unidad) ?></div></th>
 <?php } ?>
@@ -283,6 +289,12 @@ $Page->ListOptions->render("header", "left");
 <?php } ?>
 <?php if ($Page->newdata->Visible) { // newdata ?>
         <th data-name="newdata" class="<?= $Page->newdata->headerCellClass() ?>"><div id="elh_entradas_salidas_newdata" class="entradas_salidas_newdata"><?= $Page->renderFieldHeader($Page->newdata) ?></div></th>
+<?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+        <th data-name="cantidad_entregada" class="<?= $Page->cantidad_entregada->headerCellClass() ?>"><div id="elh_entradas_salidas_cantidad_entregada" class="entradas_salidas_cantidad_entregada"><?= $Page->renderFieldHeader($Page->cantidad_entregada) ?></div></th>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+        <th data-name="cantidad_por_entregar" class="<?= $Page->cantidad_por_entregar->headerCellClass() ?>"><div id="elh_entradas_salidas_cantidad_por_entregar" class="entradas_salidas_cantidad_por_entregar"><?= $Page->renderFieldHeader($Page->cantidad_por_entregar) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -347,14 +359,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
         <td data-name="lote"<?= $Page->lote->cellAttributes() ?>>
 <?php if ($Page->RowType == RowType::ADD) { // Add record ?>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_lote" class="el_entradas_salidas_lote">
-<input type="<?= $Page->lote->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_lote" id="x<?= $Page->RowIndex ?>_lote" data-table="entradas_salidas" data-field="x_lote" value="<?= $Page->lote->EditValue ?>" size="10" maxlength="20" placeholder="<?= HtmlEncode($Page->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->lote->formatPattern()) ?>"<?= $Page->lote->editAttributes() ?>>
+<input type="<?= $Page->lote->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_lote" id="x<?= $Page->RowIndex ?>_lote" data-table="entradas_salidas" data-field="x_lote" value="<?= $Page->lote->EditValue ?>" size="10" maxlength="150" placeholder="<?= HtmlEncode($Page->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->lote->formatPattern()) ?>"<?= $Page->lote->editAttributes() ?>>
 <div class="invalid-feedback"><?= $Page->lote->getErrorMessage() ?></div>
 </span>
 <input type="hidden" data-table="entradas_salidas" data-field="x_lote" data-hidden="1" data-old name="o<?= $Page->RowIndex ?>_lote" id="o<?= $Page->RowIndex ?>_lote" value="<?= HtmlEncode($Page->lote->OldValue) ?>">
 <?php } ?>
 <?php if ($Page->RowType == RowType::EDIT) { // Edit record ?>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_lote" class="el_entradas_salidas_lote">
-<input type="<?= $Page->lote->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_lote" id="x<?= $Page->RowIndex ?>_lote" data-table="entradas_salidas" data-field="x_lote" value="<?= $Page->lote->EditValue ?>" size="10" maxlength="20" placeholder="<?= HtmlEncode($Page->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->lote->formatPattern()) ?>"<?= $Page->lote->editAttributes() ?>>
+<input type="<?= $Page->lote->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_lote" id="x<?= $Page->RowIndex ?>_lote" data-table="entradas_salidas" data-field="x_lote" value="<?= $Page->lote->EditValue ?>" size="10" maxlength="150" placeholder="<?= HtmlEncode($Page->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->lote->formatPattern()) ?>"<?= $Page->lote->editAttributes() ?>>
 <div class="invalid-feedback"><?= $Page->lote->getErrorMessage() ?></div>
 </span>
 <?php } ?>
@@ -630,6 +642,29 @@ loadjs.ready("<?= $Page->FormName ?>", function() {
 <?php } ?>
 </td>
     <?php } ?>
+    <?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
+<?php if ($Page->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_descuento2" class="el_entradas_salidas_descuento2">
+<input type="<?= $Page->descuento2->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_descuento2" id="x<?= $Page->RowIndex ?>_descuento2" data-table="entradas_salidas" data-field="x_descuento2" value="<?= $Page->descuento2->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->descuento2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento2->formatPattern()) ?>"<?= $Page->descuento2->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->descuento2->getErrorMessage() ?></div>
+</span>
+<input type="hidden" data-table="entradas_salidas" data-field="x_descuento2" data-hidden="1" data-old name="o<?= $Page->RowIndex ?>_descuento2" id="o<?= $Page->RowIndex ?>_descuento2" value="<?= HtmlEncode($Page->descuento2->OldValue) ?>">
+<?php } ?>
+<?php if ($Page->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_descuento2" class="el_entradas_salidas_descuento2">
+<input type="<?= $Page->descuento2->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_descuento2" id="x<?= $Page->RowIndex ?>_descuento2" data-table="entradas_salidas" data-field="x_descuento2" value="<?= $Page->descuento2->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->descuento2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento2->formatPattern()) ?>"<?= $Page->descuento2->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->descuento2->getErrorMessage() ?></div>
+</span>
+<?php } ?>
+<?php if ($Page->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_descuento2" class="el_entradas_salidas_descuento2">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+    <?php } ?>
     <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
         <td data-name="costo_unidad"<?= $Page->costo_unidad->cellAttributes() ?>>
 <?php if ($Page->RowType == RowType::ADD) { // Add record ?>
@@ -822,6 +857,52 @@ loadjs.ready("<?= $Page->FormName ?>", function() {
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_newdata" class="el_entradas_salidas_newdata">
 <span<?= $Page->newdata->viewAttributes() ?>>
 <?= $Page->newdata->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+    <?php } ?>
+    <?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+        <td data-name="cantidad_entregada"<?= $Page->cantidad_entregada->cellAttributes() ?>>
+<?php if ($Page->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_cantidad_entregada" class="el_entradas_salidas_cantidad_entregada">
+<input type="<?= $Page->cantidad_entregada->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_cantidad_entregada" id="x<?= $Page->RowIndex ?>_cantidad_entregada" data-table="entradas_salidas" data-field="x_cantidad_entregada" value="<?= $Page->cantidad_entregada->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_entregada->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_entregada->formatPattern()) ?>"<?= $Page->cantidad_entregada->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_entregada->getErrorMessage() ?></div>
+</span>
+<input type="hidden" data-table="entradas_salidas" data-field="x_cantidad_entregada" data-hidden="1" data-old name="o<?= $Page->RowIndex ?>_cantidad_entregada" id="o<?= $Page->RowIndex ?>_cantidad_entregada" value="<?= HtmlEncode($Page->cantidad_entregada->OldValue) ?>">
+<?php } ?>
+<?php if ($Page->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_cantidad_entregada" class="el_entradas_salidas_cantidad_entregada">
+<input type="<?= $Page->cantidad_entregada->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_cantidad_entregada" id="x<?= $Page->RowIndex ?>_cantidad_entregada" data-table="entradas_salidas" data-field="x_cantidad_entregada" value="<?= $Page->cantidad_entregada->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_entregada->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_entregada->formatPattern()) ?>"<?= $Page->cantidad_entregada->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_entregada->getErrorMessage() ?></div>
+</span>
+<?php } ?>
+<?php if ($Page->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_cantidad_entregada" class="el_entradas_salidas_cantidad_entregada">
+<span<?= $Page->cantidad_entregada->viewAttributes() ?>>
+<?= $Page->cantidad_entregada->getViewValue() ?></span>
+</span>
+<?php } ?>
+</td>
+    <?php } ?>
+    <?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+        <td data-name="cantidad_por_entregar"<?= $Page->cantidad_por_entregar->cellAttributes() ?>>
+<?php if ($Page->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_cantidad_por_entregar" class="el_entradas_salidas_cantidad_por_entregar">
+<input type="<?= $Page->cantidad_por_entregar->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_cantidad_por_entregar" id="x<?= $Page->RowIndex ?>_cantidad_por_entregar" data-table="entradas_salidas" data-field="x_cantidad_por_entregar" value="<?= $Page->cantidad_por_entregar->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_por_entregar->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_por_entregar->formatPattern()) ?>"<?= $Page->cantidad_por_entregar->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_por_entregar->getErrorMessage() ?></div>
+</span>
+<input type="hidden" data-table="entradas_salidas" data-field="x_cantidad_por_entregar" data-hidden="1" data-old name="o<?= $Page->RowIndex ?>_cantidad_por_entregar" id="o<?= $Page->RowIndex ?>_cantidad_por_entregar" value="<?= HtmlEncode($Page->cantidad_por_entregar->OldValue) ?>">
+<?php } ?>
+<?php if ($Page->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_cantidad_por_entregar" class="el_entradas_salidas_cantidad_por_entregar">
+<input type="<?= $Page->cantidad_por_entregar->getInputTextType() ?>" name="x<?= $Page->RowIndex ?>_cantidad_por_entregar" id="x<?= $Page->RowIndex ?>_cantidad_por_entregar" data-table="entradas_salidas" data-field="x_cantidad_por_entregar" value="<?= $Page->cantidad_por_entregar->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_por_entregar->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_por_entregar->formatPattern()) ?>"<?= $Page->cantidad_por_entregar->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_por_entregar->getErrorMessage() ?></div>
+</span>
+<?php } ?>
+<?php if ($Page->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_salidas_cantidad_por_entregar" class="el_entradas_salidas_cantidad_por_entregar">
+<span<?= $Page->cantidad_por_entregar->viewAttributes() ?>>
+<?= $Page->cantidad_por_entregar->getViewValue() ?></span>
 </span>
 <?php } ?>
 </td>

@@ -83,6 +83,7 @@ class Compra extends DbTable
     public $sustraendo;
     public $tipo_municipal;
     public $anulado;
+    public $pagado;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -834,6 +835,32 @@ class Compra extends DbTable
         $this->anulado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['anulado'] = &$this->anulado;
 
+        // pagado
+        $this->pagado = new DbField(
+            $this, // Table
+            'x_pagado', // Variable name
+            'pagado', // Name
+            '`pagado`', // Expression
+            '`pagado`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`pagado`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->pagado->addMethod("getDefault", fn() => "N");
+        $this->pagado->InputTextType = "text";
+        $this->pagado->Raw = true;
+        $this->pagado->Lookup = new Lookup($this->pagado, 'compra', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->pagado->OptionCount = 2;
+        $this->pagado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['pagado'] = &$this->pagado;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1395,6 +1422,7 @@ class Compra extends DbTable
         $this->sustraendo->DbValue = $row['sustraendo'];
         $this->tipo_municipal->DbValue = $row['tipo_municipal'];
         $this->anulado->DbValue = $row['anulado'];
+        $this->pagado->DbValue = $row['pagado'];
     }
 
     // Delete uploaded files
@@ -1776,6 +1804,7 @@ class Compra extends DbTable
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Render list content
@@ -1863,6 +1892,8 @@ class Compra extends DbTable
         // tipo_municipal
 
         // anulado
+
+        // pagado
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2040,6 +2071,13 @@ class Compra extends DbTable
             $this->anulado->ViewValue = null;
         }
 
+        // pagado
+        if (strval($this->pagado->CurrentValue) != "") {
+            $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+        } else {
+            $this->pagado->ViewValue = null;
+        }
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2187,6 +2225,10 @@ class Compra extends DbTable
         // anulado
         $this->anulado->HrefValue = "";
         $this->anulado->TooltipValue = "";
+
+        // pagado
+        $this->pagado->HrefValue = "";
+        $this->pagado->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2403,6 +2445,10 @@ class Compra extends DbTable
         $this->anulado->EditValue = $this->anulado->options(false);
         $this->anulado->PlaceHolder = RemoveHtml($this->anulado->caption());
 
+        // pagado
+        $this->pagado->EditValue = $this->pagado->options(false);
+        $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -2455,7 +2501,12 @@ class Compra extends DbTable
                     $doc->exportCaption($this->fecha_registro);
                     $doc->exportCaption($this->_username);
                     $doc->exportCaption($this->comprobante);
+                    $doc->exportCaption($this->tipo_iva);
+                    $doc->exportCaption($this->tipo_islr);
+                    $doc->exportCaption($this->sustraendo);
+                    $doc->exportCaption($this->tipo_municipal);
                     $doc->exportCaption($this->anulado);
+                    $doc->exportCaption($this->pagado);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->proveedor);
@@ -2486,6 +2537,7 @@ class Compra extends DbTable
                     $doc->exportCaption($this->sustraendo);
                     $doc->exportCaption($this->tipo_municipal);
                     $doc->exportCaption($this->anulado);
+                    $doc->exportCaption($this->pagado);
                 }
                 $doc->endExportRow();
             }
@@ -2536,7 +2588,12 @@ class Compra extends DbTable
                         $doc->exportField($this->fecha_registro);
                         $doc->exportField($this->_username);
                         $doc->exportField($this->comprobante);
+                        $doc->exportField($this->tipo_iva);
+                        $doc->exportField($this->tipo_islr);
+                        $doc->exportField($this->sustraendo);
+                        $doc->exportField($this->tipo_municipal);
                         $doc->exportField($this->anulado);
+                        $doc->exportField($this->pagado);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->proveedor);
@@ -2567,6 +2624,7 @@ class Compra extends DbTable
                         $doc->exportField($this->sustraendo);
                         $doc->exportField($this->tipo_municipal);
                         $doc->exportField($this->anulado);
+                        $doc->exportField($this->pagado);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -2759,11 +2817,32 @@ class Compra extends DbTable
     	// Valido que ya no se haya registrado el número de factura 
     	$proveedor = $rsnew["proveedor"];
     	$rsnew["documento"] = trim($rsnew["documento"]);
+    	$tipo_documento = $rsnew["tipo_documento"];
     	$documento = $rsnew["documento"];
-    	$sql = "SELECT documento FROM compra WHERE proveedor = $proveedor AND documento = '$documento';";
+    	$sql = "SELECT documento FROM compra WHERE proveedor = $proveedor AND tipo_documento='$tipo_documento' AND documento = '$documento';";
     	if($row = ExecuteRow($sql)){
-    		$this->CancelMessage = "El n&uacute;mero de factura ya est&aacute; registrado para el proveedor; verifique.";
+    		$this->CancelMessage = "El n&uacute;mero de documento ya est&aacute; registrado para el proveedor; verifique.";
     		return FALSE;
+    	}
+    	if($rsnew["tipo_documento"] == "FC" or trim($rsnew["tipo_documento"]) == "" or trim($rsnew["tipo_documento"]) == "RC") {
+    		$rsnew["doc_afectado"] == ""; 
+    	} 
+    	else {
+    		if($rsnew["doc_afectado"] == "") {
+    			$this->CancelMessage = "Debe colocar n&uacute;mero de documento afectado.";
+    			return FALSE;
+    		}
+    	}
+    	if($rsnew["tipo_documento"] == "FC") {
+    		if(trim($rsnew["nro_control"]) == "") {
+    			$this->CancelMessage = "Debe colocar n&uacute;mero de control.";
+    			return FALSE;
+    		}
+    	}
+    	if($tipo_documento == "RC") {
+    		$alicuota = 0.00;
+    		$rsnew["alicuota"] = $alicuota;
+    		$rsnew["aplica_retencion"] = "N";
     	}
     	$alicuota = floatval($rsnew["alicuota"]);
     	$monto_exento = floatval($rsnew["monto_exento"]);
@@ -2772,7 +2851,16 @@ class Compra extends DbTable
     	$monto_total = $monto_exento + $monto_gravado + $monto_iva;
     	$monto_pagar = $monto_total;
     	if($rsnew["aplica_retencion"] == "S") {
-    		$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
+    		//$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
+    		$sql = "SELECT 
+    					a.ci_rif AS rif, 
+    					(SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_iva) AS tipo_iva, 
+    					(SELECT tarifa FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS tipo_islr, 
+    					(SELECT sustraendo FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS sustraendo, 
+    					(SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_mun) AS tipo_impmun 
+    				FROM
+    					proveedor AS a
+    				WHERE a.id = " . $rsnew["proveedor"] . ";";
     		$row = ExecuteRow($sql);
     		$retIVA = floatval($row["tipo_iva"]);
     		$retISLR = floatval($row["tipo_islr"]);
@@ -2807,34 +2895,56 @@ class Compra extends DbTable
     	$rsnew["tipo_municipal"] = strval($retMuni);
     	return TRUE;
     }
-
     // Row Inserted event
-    public function rowInserted($rsold, $rsnew)
+    public function rowInserted($rsold, &$rsnew)
     {
         //Log("Row Inserted");
-    	$sql = "SELECT valor1 FROM parametro WHERE codigo = '026';";
-    	$CmpbIVAAuto = ExecuteScalar($sql);
-    	if($CmpbIVAAuto == "S") {
-    		$sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '023';";
-    		$row = ExecuteRow($sql);
-    		$numero = intval($row["valor1"]) + 1;
-    		$prefijo = trim($row["valor2"]);
-    		$prefijo .= substr($rsnew["fecha"], 0, 4) . substr($rsnew["fecha"], 5, 2);
-    		$padeo = intval($row["valor3"]);
-    		$comprobante = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT);
-    		$sql = "UPDATE parametro SET valor1='$numero' 
-    				WHERE codigo = '023';";
-    		Execute($sql);
-    		$sql = "UPDATE compra SET ref_iva = '$comprobante' 
-    				WHERE id = '" . $rsnew["id"] . "';";
-    		Execute($sql);
-    	}
+        if($rsnew["tipo_documento"] == "FC") {
+    		$sql = "SELECT valor1 FROM parametro WHERE codigo = '026';";
+    		$CmpbIVAAuto = ExecuteScalar($sql);
+    		if($CmpbIVAAuto == "S") {
+    			$sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '023';";
+    			$row = ExecuteRow($sql);
+    			$numero = intval($row["valor1"]) + 1;
+    			$prefijo = trim($row["valor2"]);
+    			$prefijo .= substr($rsnew["fecha"], 0, 4) . substr($rsnew["fecha"], 5, 2);
+    			$padeo = intval($row["valor3"]);
+    			$comprobante = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT);
+    			$sql = "UPDATE parametro SET valor1='$numero' 
+    					WHERE codigo = '023';";
+    			Execute($sql);
+    			$sql = "UPDATE compra SET ref_iva = '$comprobante' 
+    					WHERE id = '" . $rsnew["id"] . "';";
+    			Execute($sql);
+    		}
+            $sql = "SELECT valor1 FROM parametro WHERE codigo = '028';";
+            $CmpbMuniAuto = ExecuteScalar($sql);
+    		if($CmpbMuniAuto == "S") {
+    			$sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '025';";
+    			$row = ExecuteRow($sql);
+    			$numero = intval($row["valor1"]) + 1;
+    			$prefijo = trim($row["valor2"]);
+    			$prefijo .= substr($rsold["fecha"], 0, 4) . substr($rsnew["fecha"], 5, 2);
+    			$padeo = intval($row["valor3"]);
+    			$comprobante = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT);
+    			$sql = "UPDATE parametro SET valor1='$numero' 
+    					WHERE codigo = '025';";
+    			Execute($sql);
+    			$sql = "UPDATE compra SET ref_municipal = '$comprobante' 
+    					WHERE id = '" . $rsnew["id"] . "';";
+    			Execute($sql);
+    		}
+        }
     }
-
     // Row Updating event
     public function rowUpdating($rsold, &$rsnew) {
     	// Enter your code here
     	// To cancel, set return value to FALSE
+    	if($rsold["tipo_documento"] != $rsnew["tipo_documento"]) {
+    		$this->CancelMessage = "No se puede cambiar el tipo de documento; verifique.";
+    		return FALSE;
+    	}
+    	$tipo_documento = $rsnew["tipo_documento"];
     	if($rsold["anulado"] == "S" and $rsnew["anulado"] == "N") { 
     		if(!VerificaFuncion('019')) {
     			$this->CancelMessage = "No est&aacute; autorizado para cambiar a estatus activo; verifique.";
@@ -2868,7 +2978,7 @@ class Compra extends DbTable
     		}
     	}
     ///////////////////
-    	if($rsnew["tipo_documento"] == "FC" or trim($rsnew["tipo_documento"]) == "") {
+    	if($rsnew["tipo_documento"] == "FC" or trim($rsnew["tipo_documento"]) == "" or trim($rsnew["tipo_documento"]) == "RC") {
     		$rsnew["doc_afectado"] == ""; 
     	} 
     	else {
@@ -2877,6 +2987,17 @@ class Compra extends DbTable
     			return FALSE;
     		}
     	}
+    	if($rsnew["tipo_documento"] == "FC") {
+    		if(trim($rsnew["nro_control"]) == "") {
+    			$this->CancelMessage = "Debe colocar n&uacute;mero de control.";
+    			return FALSE;
+    		}
+    	}
+    	if($tipo_documento == "RC") {
+    		$alicuota = 0.00;
+    		$rsnew["alicuota"] = $alicuota;
+    		$rsnew["aplica_retencion"] = "N";
+    	}
     	$alicuota = floatval($rsnew["alicuota"]);
     	$monto_exento = floatval($rsnew["monto_exento"]);
     	$monto_gravado = floatval($rsnew["monto_gravado"]);
@@ -2884,7 +3005,16 @@ class Compra extends DbTable
     	$monto_total = $monto_exento + $monto_gravado + $monto_iva;
     	$monto_pagar = $monto_total;
     	if($rsnew["aplica_retencion"] == "S") {
-    		$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
+    		//$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
+    		$sql = "SELECT 
+    					a.ci_rif AS rif, 
+    					(SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_iva) AS tipo_iva, 
+    					(SELECT tarifa FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS tipo_islr, 
+    					(SELECT sustraendo FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS sustraendo, 
+    					(SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_mun) AS tipo_impmun 
+    				FROM
+    					proveedor AS a
+    				WHERE a.id = " . $rsnew["proveedor"] . ";";
     		$row = ExecuteRow($sql);
     		$retIVA = floatval($row["tipo_iva"]);
     		$retISLR = floatval($row["tipo_islr"]);

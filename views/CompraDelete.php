@@ -68,6 +68,9 @@ $Page->showMessage();
 <?php if ($Page->nro_control->Visible) { // nro_control ?>
         <th class="<?= $Page->nro_control->headerCellClass() ?>"><span id="elh_compra_nro_control" class="compra_nro_control"><?= $Page->nro_control->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <th class="<?= $Page->fecha->headerCellClass() ?>"><span id="elh_compra_fecha" class="compra_fecha"><?= $Page->fecha->caption() ?></span></th>
+<?php } ?>
 <?php if ($Page->monto_total->Visible) { // monto_total ?>
         <th class="<?= $Page->monto_total->headerCellClass() ?>"><span id="elh_compra_monto_total" class="compra_monto_total"><?= $Page->monto_total->caption() ?></span></th>
 <?php } ?>
@@ -77,8 +80,14 @@ $Page->showMessage();
 <?php if ($Page->ref_iva->Visible) { // ref_iva ?>
         <th class="<?= $Page->ref_iva->headerCellClass() ?>"><span id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->ref_iva->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <th class="<?= $Page->ref_islr->headerCellClass() ?>"><span id="elh_compra_ref_islr" class="compra_ref_islr"><?= $Page->ref_islr->caption() ?></span></th>
+<?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th class="<?= $Page->anulado->headerCellClass() ?>"><span id="elh_compra_anulado" class="compra_anulado"><?= $Page->anulado->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <th class="<?= $Page->pagado->headerCellClass() ?>"><span id="elh_compra_pagado" class="compra_pagado"><?= $Page->pagado->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -149,6 +158,14 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <td<?= $Page->fecha->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->fecha->viewAttributes() ?>>
+<?= $Page->fecha->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
 <?php if ($Page->monto_total->Visible) { // monto_total ?>
         <td<?= $Page->monto_total->cellAttributes() ?>>
 <span id="">
@@ -178,11 +195,32 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <td<?= $Page->ref_islr->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->ref_islr->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_islr->getViewValue()) && $Page->ref_islr->linkAttributes() != "") { ?>
+<a<?= $Page->ref_islr->linkAttributes() ?>><?= $Page->ref_islr->getViewValue() ?></a>
+<?php } else { ?>
+<?= $Page->ref_islr->getViewValue() ?>
+<?php } ?>
+</span>
+</span>
+</td>
+<?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <td<?= $Page->anulado->cellAttributes() ?>>
 <span id="">
 <span<?= $Page->anulado->viewAttributes() ?>>
 <?= $Page->anulado->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <td<?= $Page->pagado->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

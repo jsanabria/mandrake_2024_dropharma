@@ -117,9 +117,13 @@ class Compra extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $anulado;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $pagado;
+
     public function __construct()
     {
         $this->anulado = "N";
+        $this->pagado = "N";
     }
 
     public function getId(): int
@@ -444,6 +448,20 @@ class Compra extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'anulado' value");
         }
         $this->anulado = $value;
+        return $this;
+    }
+
+    public function getPagado(): ?string
+    {
+        return $this->pagado;
+    }
+
+    public function setPagado(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'pagado' value");
+        }
+        $this->pagado = $value;
         return $this;
     }
 }

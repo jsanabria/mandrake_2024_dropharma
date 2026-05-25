@@ -144,72 +144,6 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-    <tr id="r_cuenta_auxiliar"<?= $Page->cuenta_auxiliar->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_cuenta_auxiliar"><?= $Page->cuenta_auxiliar->caption() ?></span></td>
-        <td data-name="cuenta_auxiliar"<?= $Page->cuenta_auxiliar->cellAttributes() ?>>
-<span id="el_proveedor_cuenta_auxiliar">
-<span<?= $Page->cuenta_auxiliar->viewAttributes() ?>>
-<?= $Page->cuenta_auxiliar->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->cuenta_gasto->Visible) { // cuenta_gasto ?>
-    <tr id="r_cuenta_gasto"<?= $Page->cuenta_gasto->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_cuenta_gasto"><?= $Page->cuenta_gasto->caption() ?></span></td>
-        <td data-name="cuenta_gasto"<?= $Page->cuenta_gasto->cellAttributes() ?>>
-<span id="el_proveedor_cuenta_gasto">
-<span<?= $Page->cuenta_gasto->viewAttributes() ?>>
-<?= $Page->cuenta_gasto->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->tipo_iva->Visible) { // tipo_iva ?>
-    <tr id="r_tipo_iva"<?= $Page->tipo_iva->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_iva"><?= $Page->tipo_iva->caption() ?></span></td>
-        <td data-name="tipo_iva"<?= $Page->tipo_iva->cellAttributes() ?>>
-<span id="el_proveedor_tipo_iva">
-<span<?= $Page->tipo_iva->viewAttributes() ?>>
-<?= $Page->tipo_iva->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->tipo_islr->Visible) { // tipo_islr ?>
-    <tr id="r_tipo_islr"<?= $Page->tipo_islr->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_islr"><?= $Page->tipo_islr->caption() ?></span></td>
-        <td data-name="tipo_islr"<?= $Page->tipo_islr->cellAttributes() ?>>
-<span id="el_proveedor_tipo_islr">
-<span<?= $Page->tipo_islr->viewAttributes() ?>>
-<?= $Page->tipo_islr->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->sustraendo->Visible) { // sustraendo ?>
-    <tr id="r_sustraendo"<?= $Page->sustraendo->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_sustraendo"><?= $Page->sustraendo->caption() ?></span></td>
-        <td data-name="sustraendo"<?= $Page->sustraendo->cellAttributes() ?>>
-<span id="el_proveedor_sustraendo">
-<span<?= $Page->sustraendo->viewAttributes() ?>>
-<?= $Page->sustraendo->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->tipo_impmun->Visible) { // tipo_impmun ?>
-    <tr id="r_tipo_impmun"<?= $Page->tipo_impmun->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_impmun"><?= $Page->tipo_impmun->caption() ?></span></td>
-        <td data-name="tipo_impmun"<?= $Page->tipo_impmun->cellAttributes() ?>>
-<span id="el_proveedor_tipo_impmun">
-<span<?= $Page->tipo_impmun->viewAttributes() ?>>
-<?= $Page->tipo_impmun->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 <?php if ($Page->cta_bco->Visible) { // cta_bco ?>
     <tr id="r_cta_bco"<?= $Page->cta_bco->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_cta_bco"><?= $Page->cta_bco->caption() ?></span></td>
@@ -228,17 +162,6 @@ loadjs.ready("head", function () {
 <span id="el_proveedor_activo">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->fabricante->Visible) { // fabricante ?>
-    <tr id="r_fabricante"<?= $Page->fabricante->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_fabricante"><?= $Page->fabricante->caption() ?></span></td>
-        <td data-name="fabricante"<?= $Page->fabricante->cellAttributes() ?>>
-<span id="el_proveedor_fabricante">
-<span<?= $Page->fabricante->viewAttributes() ?>>
-<?= $Page->fabricante->getViewValue() ?></span>
 </span>
 </td>
     </tr>

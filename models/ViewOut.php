@@ -75,6 +75,7 @@ class ViewOut extends DbTable
     public $cantidad_movimiento_consignacion;
     public $id_consignacion;
     public $descuento;
+    public $descuento2;
     public $precio_unidad_sin_desc;
     public $check_ne;
     public $packer_cantidad;
@@ -261,7 +262,7 @@ class ViewOut extends DbTable
             '`lote`', // Expression
             '`lote`', // Basic search expression
             200, // Type
-            20, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`lote`', // Virtual expression
@@ -634,6 +635,30 @@ class ViewOut extends DbTable
         $this->descuento->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
         $this->descuento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['descuento'] = &$this->descuento;
+
+        // descuento2
+        $this->descuento2 = new DbField(
+            $this, // Table
+            'x_descuento2', // Variable name
+            'descuento2', // Name
+            '`descuento2`', // Expression
+            '`descuento2`', // Basic search expression
+            131, // Type
+            8, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`descuento2`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->descuento2->InputTextType = "text";
+        $this->descuento2->Raw = true;
+        $this->descuento2->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->descuento2->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['descuento2'] = &$this->descuento2;
 
         // precio_unidad_sin_desc
         $this->precio_unidad_sin_desc = new DbField(
@@ -1542,6 +1567,7 @@ class ViewOut extends DbTable
         $this->cantidad_movimiento_consignacion->DbValue = $row['cantidad_movimiento_consignacion'];
         $this->id_consignacion->DbValue = $row['id_consignacion'];
         $this->descuento->DbValue = $row['descuento'];
+        $this->descuento2->DbValue = $row['descuento2'];
         $this->precio_unidad_sin_desc->DbValue = $row['precio_unidad_sin_desc'];
         $this->check_ne->DbValue = $row['check_ne'];
         $this->packer_cantidad->DbValue = $row['packer_cantidad'];
@@ -1939,6 +1965,7 @@ class ViewOut extends DbTable
         $this->cantidad_movimiento_consignacion->setDbValue($row['cantidad_movimiento_consignacion']);
         $this->id_consignacion->setDbValue($row['id_consignacion']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
@@ -2014,6 +2041,8 @@ class ViewOut extends DbTable
         // id_consignacion
 
         // descuento
+
+        // descuento2
 
         // precio_unidad_sin_desc
 
@@ -2161,6 +2190,10 @@ class ViewOut extends DbTable
         $this->descuento->ViewValue = $this->descuento->CurrentValue;
         $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+        // descuento2
+        $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+        $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
         // precio_unidad_sin_desc
         $this->precio_unidad_sin_desc->ViewValue = $this->precio_unidad_sin_desc->CurrentValue;
         $this->precio_unidad_sin_desc->ViewValue = FormatNumber($this->precio_unidad_sin_desc->ViewValue, $this->precio_unidad_sin_desc->formatPattern());
@@ -2266,6 +2299,10 @@ class ViewOut extends DbTable
         // descuento
         $this->descuento->HrefValue = "";
         $this->descuento->TooltipValue = "";
+
+        // descuento2
+        $this->descuento2->HrefValue = "";
+        $this->descuento2->TooltipValue = "";
 
         // precio_unidad_sin_desc
         $this->precio_unidad_sin_desc->HrefValue = "";
@@ -2459,6 +2496,14 @@ class ViewOut extends DbTable
             $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
         }
 
+        // descuento2
+        $this->descuento2->setupEditAttributes();
+        $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+        $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+        if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+            $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+        }
+
         // precio_unidad_sin_desc
         $this->precio_unidad_sin_desc->setupEditAttributes();
         $this->precio_unidad_sin_desc->EditValue = $this->precio_unidad_sin_desc->CurrentValue;
@@ -2542,6 +2587,7 @@ class ViewOut extends DbTable
                     $doc->exportCaption($this->cantidad_movimiento_consignacion);
                     $doc->exportCaption($this->id_consignacion);
                     $doc->exportCaption($this->descuento);
+                    $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->precio_unidad_sin_desc);
                     $doc->exportCaption($this->check_ne);
                     $doc->exportCaption($this->packer_cantidad);
@@ -2603,6 +2649,7 @@ class ViewOut extends DbTable
                         $doc->exportField($this->cantidad_movimiento_consignacion);
                         $doc->exportField($this->id_consignacion);
                         $doc->exportField($this->descuento);
+                        $doc->exportField($this->descuento2);
                         $doc->exportField($this->precio_unidad_sin_desc);
                         $doc->exportField($this->check_ne);
                         $doc->exportField($this->packer_cantidad);

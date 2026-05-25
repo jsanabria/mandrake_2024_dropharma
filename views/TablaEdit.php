@@ -104,7 +104,7 @@ loadjs.ready("head", function () {
         <label id="elh_tabla_campo_descripcion" for="x_campo_descripcion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->campo_descripcion->caption() ?><?= $Page->campo_descripcion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->campo_descripcion->cellAttributes() ?>>
 <span id="el_tabla_campo_descripcion">
-<input type="<?= $Page->campo_descripcion->getInputTextType() ?>" name="x_campo_descripcion" id="x_campo_descripcion" data-table="tabla" data-field="x_campo_descripcion" value="<?= $Page->campo_descripcion->EditValue ?>" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->campo_descripcion->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->campo_descripcion->formatPattern()) ?>"<?= $Page->campo_descripcion->editAttributes() ?> aria-describedby="x_campo_descripcion_help">
+<input type="<?= $Page->campo_descripcion->getInputTextType() ?>" name="x_campo_descripcion" id="x_campo_descripcion" data-table="tabla" data-field="x_campo_descripcion" value="<?= $Page->campo_descripcion->EditValue ?>" size="30" maxlength="150" placeholder="<?= HtmlEncode($Page->campo_descripcion->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->campo_descripcion->formatPattern()) ?>"<?= $Page->campo_descripcion->editAttributes() ?> aria-describedby="x_campo_descripcion_help">
 <?= $Page->campo_descripcion->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->campo_descripcion->getErrorMessage() ?></div>
 </span>

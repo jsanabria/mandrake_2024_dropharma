@@ -99,6 +99,17 @@ $articulo->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($articulo->categoria_madre->Visible) { // categoria_madre ?>
+        <tr id="r_categoria_madre"<?= $articulo->categoria_madre->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->categoria_madre->caption() ?></td>
+            <td<?= $articulo->categoria_madre->cellAttributes() ?>>
+<span id="el_articulo_categoria_madre">
+<span<?= $articulo->categoria_madre->viewAttributes() ?>>
+<?= $articulo->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
 <?php if ($articulo->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <tr id="r_cantidad_en_mano"<?= $articulo->cantidad_en_mano->rowAttributes() ?>>
             <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->cantidad_en_mano->caption() ?></td>
@@ -161,17 +172,6 @@ $articulo->TableClass = "table table-sm ew-table ew-master-table";
 <span id="el_articulo_activo">
 <span<?= $articulo->activo->viewAttributes() ?>>
 <?= $articulo->activo->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($articulo->indexado->Visible) { // indexado ?>
-        <tr id="r_indexado"<?= $articulo->indexado->rowAttributes() ?>>
-            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->indexado->caption() ?></td>
-            <td<?= $articulo->indexado->cellAttributes() ?>>
-<span id="el_articulo_indexado">
-<span<?= $articulo->indexado->viewAttributes() ?>>
-<?= $articulo->indexado->getViewValue() ?></span>
 </span>
 </td>
         </tr>

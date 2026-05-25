@@ -557,6 +557,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
         <th data-name="lista_pedido" class="<?= $Page->lista_pedido->headerCellClass() ?>"><div id="elh_articulo_lista_pedido" class="articulo_lista_pedido"><?= $Page->renderFieldHeader($Page->lista_pedido) ?></div></th>
 <?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <th data-name="categoria_madre" class="<?= $Page->categoria_madre->headerCellClass() ?>"><div id="elh_articulo_categoria_madre" class="articulo_categoria_madre"><?= $Page->renderFieldHeader($Page->categoria_madre) ?></div></th>
+<?php } ?>
 <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <th data-name="cantidad_en_mano" class="<?= $Page->cantidad_en_mano->headerCellClass() ?>"><div id="elh_articulo_cantidad_en_mano" class="articulo_cantidad_en_mano"><?= $Page->renderFieldHeader($Page->cantidad_en_mano) ?></div></th>
 <?php } ?>
@@ -574,9 +577,6 @@ $Page->ListOptions->render("header", "left");
 <?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <th data-name="activo" class="<?= $Page->activo->headerCellClass() ?>"><div id="elh_articulo_activo" class="articulo_activo"><?= $Page->renderFieldHeader($Page->activo) ?></div></th>
-<?php } ?>
-<?php if ($Page->indexado->Visible) { // indexado ?>
-        <th data-name="indexado" class="<?= $Page->indexado->headerCellClass() ?>"><div id="elh_articulo_indexado" class="articulo_indexado"><?= $Page->renderFieldHeader($Page->indexado) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -671,6 +671,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
+    <?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <td data-name="categoria_madre"<?= $Page->categoria_madre->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_categoria_madre" class="el_articulo_categoria_madre">
+<span<?= $Page->categoria_madre->viewAttributes() ?>>
+<?= $Page->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
     <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <td data-name="cantidad_en_mano"<?= $Page->cantidad_en_mano->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_cantidad_en_mano" class="el_articulo_cantidad_en_mano">
@@ -716,14 +724,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_activo" class="el_articulo_activo">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->indexado->Visible) { // indexado ?>
-        <td data-name="indexado"<?= $Page->indexado->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_indexado" class="el_articulo_indexado">
-<span<?= $Page->indexado->viewAttributes() ?>>
-<?= $Page->indexado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

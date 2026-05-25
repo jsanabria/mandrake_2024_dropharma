@@ -189,6 +189,14 @@ class SalidasEdit extends Salidas
         $this->doc_afe->setVisibility();
         $this->descuento3->setVisibility();
         $this->impreso->setVisibility();
+        $this->nacionalizacion->setVisibility();
+        $this->arquitecto->setVisibility();
+        $this->ganancia->setVisibility();
+        $this->intermediario->setVisibility();
+        $this->telefeno_intermediario->setVisibility();
+        $this->email_intermediario->setVisibility();
+        $this->genera_ne->setVisibility();
+        $this->visita->setVisibility();
     }
 
     // Constructor
@@ -604,6 +612,7 @@ class SalidasEdit extends Salidas
         $this->setupLookupOptions($this->id_documento_padre);
         $this->setupLookupOptions($this->igtf);
         $this->setupLookupOptions($this->impreso);
+        $this->setupLookupOptions($this->genera_ne);
 
         // Check modal
         if ($this->IsModal) {
@@ -1133,6 +1142,86 @@ class SalidasEdit extends Salidas
             }
         }
 
+        // Check field name 'nacionalizacion' first before field var 'x_nacionalizacion'
+        $val = $CurrentForm->hasValue("nacionalizacion") ? $CurrentForm->getValue("nacionalizacion") : $CurrentForm->getValue("x_nacionalizacion");
+        if (!$this->nacionalizacion->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->nacionalizacion->Visible = false; // Disable update for API request
+            } else {
+                $this->nacionalizacion->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'arquitecto' first before field var 'x_arquitecto'
+        $val = $CurrentForm->hasValue("arquitecto") ? $CurrentForm->getValue("arquitecto") : $CurrentForm->getValue("x_arquitecto");
+        if (!$this->arquitecto->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->arquitecto->Visible = false; // Disable update for API request
+            } else {
+                $this->arquitecto->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'ganancia' first before field var 'x_ganancia'
+        $val = $CurrentForm->hasValue("ganancia") ? $CurrentForm->getValue("ganancia") : $CurrentForm->getValue("x_ganancia");
+        if (!$this->ganancia->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->ganancia->Visible = false; // Disable update for API request
+            } else {
+                $this->ganancia->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'intermediario' first before field var 'x_intermediario'
+        $val = $CurrentForm->hasValue("intermediario") ? $CurrentForm->getValue("intermediario") : $CurrentForm->getValue("x_intermediario");
+        if (!$this->intermediario->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->intermediario->Visible = false; // Disable update for API request
+            } else {
+                $this->intermediario->setFormValue($val);
+            }
+        }
+
+        // Check field name 'telefeno_intermediario' first before field var 'x_telefeno_intermediario'
+        $val = $CurrentForm->hasValue("telefeno_intermediario") ? $CurrentForm->getValue("telefeno_intermediario") : $CurrentForm->getValue("x_telefeno_intermediario");
+        if (!$this->telefeno_intermediario->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->telefeno_intermediario->Visible = false; // Disable update for API request
+            } else {
+                $this->telefeno_intermediario->setFormValue($val);
+            }
+        }
+
+        // Check field name 'email_intermediario' first before field var 'x_email_intermediario'
+        $val = $CurrentForm->hasValue("email_intermediario") ? $CurrentForm->getValue("email_intermediario") : $CurrentForm->getValue("x_email_intermediario");
+        if (!$this->email_intermediario->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->email_intermediario->Visible = false; // Disable update for API request
+            } else {
+                $this->email_intermediario->setFormValue($val);
+            }
+        }
+
+        // Check field name 'genera_ne' first before field var 'x_genera_ne'
+        $val = $CurrentForm->hasValue("genera_ne") ? $CurrentForm->getValue("genera_ne") : $CurrentForm->getValue("x_genera_ne");
+        if (!$this->genera_ne->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->genera_ne->Visible = false; // Disable update for API request
+            } else {
+                $this->genera_ne->setFormValue($val);
+            }
+        }
+
+        // Check field name 'visita' first before field var 'x_visita'
+        $val = $CurrentForm->hasValue("visita") ? $CurrentForm->getValue("visita") : $CurrentForm->getValue("x_visita");
+        if (!$this->visita->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->visita->Visible = false; // Disable update for API request
+            } else {
+                $this->visita->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -1181,6 +1270,14 @@ class SalidasEdit extends Salidas
         $this->doc_afe->CurrentValue = $this->doc_afe->FormValue;
         $this->descuento3->CurrentValue = $this->descuento3->FormValue;
         $this->impreso->CurrentValue = $this->impreso->FormValue;
+        $this->nacionalizacion->CurrentValue = $this->nacionalizacion->FormValue;
+        $this->arquitecto->CurrentValue = $this->arquitecto->FormValue;
+        $this->ganancia->CurrentValue = $this->ganancia->FormValue;
+        $this->intermediario->CurrentValue = $this->intermediario->FormValue;
+        $this->telefeno_intermediario->CurrentValue = $this->telefeno_intermediario->FormValue;
+        $this->email_intermediario->CurrentValue = $this->email_intermediario->FormValue;
+        $this->genera_ne->CurrentValue = $this->genera_ne->FormValue;
+        $this->visita->CurrentValue = $this->visita->FormValue;
     }
 
     /**
@@ -1283,6 +1380,14 @@ class SalidasEdit extends Salidas
         $this->doc_afe->setDbValue($row['doc_afe']);
         $this->descuento3->setDbValue($row['descuento3']);
         $this->impreso->setDbValue($row['impreso']);
+        $this->nacionalizacion->setDbValue($row['nacionalizacion']);
+        $this->arquitecto->setDbValue($row['arquitecto']);
+        $this->ganancia->setDbValue($row['ganancia']);
+        $this->intermediario->setDbValue($row['intermediario']);
+        $this->telefeno_intermediario->setDbValue($row['telefeno_intermediario']);
+        $this->email_intermediario->setDbValue($row['email_intermediario']);
+        $this->genera_ne->setDbValue($row['genera_ne']);
+        $this->visita->setDbValue($row['visita']);
     }
 
     // Return a row with default values
@@ -1349,6 +1454,14 @@ class SalidasEdit extends Salidas
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
         $row['descuento3'] = $this->descuento3->DefaultValue;
         $row['impreso'] = $this->impreso->DefaultValue;
+        $row['nacionalizacion'] = $this->nacionalizacion->DefaultValue;
+        $row['arquitecto'] = $this->arquitecto->DefaultValue;
+        $row['ganancia'] = $this->ganancia->DefaultValue;
+        $row['intermediario'] = $this->intermediario->DefaultValue;
+        $row['telefeno_intermediario'] = $this->telefeno_intermediario->DefaultValue;
+        $row['email_intermediario'] = $this->email_intermediario->DefaultValue;
+        $row['genera_ne'] = $this->genera_ne->DefaultValue;
+        $row['visita'] = $this->visita->DefaultValue;
         return $row;
     }
 
@@ -1562,6 +1675,30 @@ class SalidasEdit extends Salidas
 
         // impreso
         $this->impreso->RowCssClass = "row";
+
+        // nacionalizacion
+        $this->nacionalizacion->RowCssClass = "row";
+
+        // arquitecto
+        $this->arquitecto->RowCssClass = "row";
+
+        // ganancia
+        $this->ganancia->RowCssClass = "row";
+
+        // intermediario
+        $this->intermediario->RowCssClass = "row";
+
+        // telefeno_intermediario
+        $this->telefeno_intermediario->RowCssClass = "row";
+
+        // email_intermediario
+        $this->email_intermediario->RowCssClass = "row";
+
+        // genera_ne
+        $this->genera_ne->RowCssClass = "row";
+
+        // visita
+        $this->visita->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2072,6 +2209,38 @@ class SalidasEdit extends Salidas
                 $this->impreso->ViewValue = null;
             }
 
+            // nacionalizacion
+            $this->nacionalizacion->ViewValue = $this->nacionalizacion->CurrentValue;
+            $this->nacionalizacion->ViewValue = FormatNumber($this->nacionalizacion->ViewValue, $this->nacionalizacion->formatPattern());
+
+            // arquitecto
+            $this->arquitecto->ViewValue = $this->arquitecto->CurrentValue;
+            $this->arquitecto->ViewValue = FormatNumber($this->arquitecto->ViewValue, $this->arquitecto->formatPattern());
+
+            // ganancia
+            $this->ganancia->ViewValue = $this->ganancia->CurrentValue;
+            $this->ganancia->ViewValue = FormatNumber($this->ganancia->ViewValue, $this->ganancia->formatPattern());
+
+            // intermediario
+            $this->intermediario->ViewValue = $this->intermediario->CurrentValue;
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->ViewValue = $this->telefeno_intermediario->CurrentValue;
+
+            // email_intermediario
+            $this->email_intermediario->ViewValue = $this->email_intermediario->CurrentValue;
+
+            // genera_ne
+            if (strval($this->genera_ne->CurrentValue) != "") {
+                $this->genera_ne->ViewValue = $this->genera_ne->optionCaption($this->genera_ne->CurrentValue);
+            } else {
+                $this->genera_ne->ViewValue = null;
+            }
+
+            // visita
+            $this->visita->ViewValue = $this->visita->CurrentValue;
+            $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
 
@@ -2211,6 +2380,30 @@ class SalidasEdit extends Salidas
 
             // impreso
             $this->impreso->HrefValue = "";
+
+            // nacionalizacion
+            $this->nacionalizacion->HrefValue = "";
+
+            // arquitecto
+            $this->arquitecto->HrefValue = "";
+
+            // ganancia
+            $this->ganancia->HrefValue = "";
+
+            // intermediario
+            $this->intermediario->HrefValue = "";
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->HrefValue = "";
+
+            // email_intermediario
+            $this->email_intermediario->HrefValue = "";
+
+            // genera_ne
+            $this->genera_ne->HrefValue = "";
+
+            // visita
+            $this->visita->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -2575,6 +2768,66 @@ class SalidasEdit extends Salidas
             $this->impreso->EditValue = $this->impreso->options(false);
             $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
 
+            // nacionalizacion
+            $this->nacionalizacion->setupEditAttributes();
+            $this->nacionalizacion->EditValue = $this->nacionalizacion->CurrentValue;
+            $this->nacionalizacion->PlaceHolder = RemoveHtml($this->nacionalizacion->caption());
+            if (strval($this->nacionalizacion->EditValue) != "" && is_numeric($this->nacionalizacion->EditValue)) {
+                $this->nacionalizacion->EditValue = FormatNumber($this->nacionalizacion->EditValue, null);
+            }
+
+            // arquitecto
+            $this->arquitecto->setupEditAttributes();
+            $this->arquitecto->EditValue = $this->arquitecto->CurrentValue;
+            $this->arquitecto->PlaceHolder = RemoveHtml($this->arquitecto->caption());
+            if (strval($this->arquitecto->EditValue) != "" && is_numeric($this->arquitecto->EditValue)) {
+                $this->arquitecto->EditValue = FormatNumber($this->arquitecto->EditValue, null);
+            }
+
+            // ganancia
+            $this->ganancia->setupEditAttributes();
+            $this->ganancia->EditValue = $this->ganancia->CurrentValue;
+            $this->ganancia->PlaceHolder = RemoveHtml($this->ganancia->caption());
+            if (strval($this->ganancia->EditValue) != "" && is_numeric($this->ganancia->EditValue)) {
+                $this->ganancia->EditValue = FormatNumber($this->ganancia->EditValue, null);
+            }
+
+            // intermediario
+            $this->intermediario->setupEditAttributes();
+            if (!$this->intermediario->Raw) {
+                $this->intermediario->CurrentValue = HtmlDecode($this->intermediario->CurrentValue);
+            }
+            $this->intermediario->EditValue = HtmlEncode($this->intermediario->CurrentValue);
+            $this->intermediario->PlaceHolder = RemoveHtml($this->intermediario->caption());
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->setupEditAttributes();
+            if (!$this->telefeno_intermediario->Raw) {
+                $this->telefeno_intermediario->CurrentValue = HtmlDecode($this->telefeno_intermediario->CurrentValue);
+            }
+            $this->telefeno_intermediario->EditValue = HtmlEncode($this->telefeno_intermediario->CurrentValue);
+            $this->telefeno_intermediario->PlaceHolder = RemoveHtml($this->telefeno_intermediario->caption());
+
+            // email_intermediario
+            $this->email_intermediario->setupEditAttributes();
+            if (!$this->email_intermediario->Raw) {
+                $this->email_intermediario->CurrentValue = HtmlDecode($this->email_intermediario->CurrentValue);
+            }
+            $this->email_intermediario->EditValue = HtmlEncode($this->email_intermediario->CurrentValue);
+            $this->email_intermediario->PlaceHolder = RemoveHtml($this->email_intermediario->caption());
+
+            // genera_ne
+            $this->genera_ne->EditValue = $this->genera_ne->options(false);
+            $this->genera_ne->PlaceHolder = RemoveHtml($this->genera_ne->caption());
+
+            // visita
+            $this->visita->setupEditAttributes();
+            $this->visita->EditValue = $this->visita->CurrentValue;
+            $this->visita->PlaceHolder = RemoveHtml($this->visita->caption());
+            if (strval($this->visita->EditValue) != "" && is_numeric($this->visita->EditValue)) {
+                $this->visita->EditValue = FormatNumber($this->visita->EditValue, null);
+            }
+
             // Edit refer script
 
             // tipo_documento
@@ -2716,6 +2969,30 @@ class SalidasEdit extends Salidas
 
             // impreso
             $this->impreso->HrefValue = "";
+
+            // nacionalizacion
+            $this->nacionalizacion->HrefValue = "";
+
+            // arquitecto
+            $this->arquitecto->HrefValue = "";
+
+            // ganancia
+            $this->ganancia->HrefValue = "";
+
+            // intermediario
+            $this->intermediario->HrefValue = "";
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->HrefValue = "";
+
+            // email_intermediario
+            $this->email_intermediario->HrefValue = "";
+
+            // genera_ne
+            $this->genera_ne->HrefValue = "";
+
+            // visita
+            $this->visita->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2935,6 +3212,58 @@ class SalidasEdit extends Salidas
                 if ($this->impreso->FormValue == "") {
                     $this->impreso->addErrorMessage(str_replace("%s", $this->impreso->caption(), $this->impreso->RequiredErrorMessage));
                 }
+            }
+            if ($this->nacionalizacion->Visible && $this->nacionalizacion->Required) {
+                if (!$this->nacionalizacion->IsDetailKey && EmptyValue($this->nacionalizacion->FormValue)) {
+                    $this->nacionalizacion->addErrorMessage(str_replace("%s", $this->nacionalizacion->caption(), $this->nacionalizacion->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->nacionalizacion->FormValue)) {
+                $this->nacionalizacion->addErrorMessage($this->nacionalizacion->getErrorMessage(false));
+            }
+            if ($this->arquitecto->Visible && $this->arquitecto->Required) {
+                if (!$this->arquitecto->IsDetailKey && EmptyValue($this->arquitecto->FormValue)) {
+                    $this->arquitecto->addErrorMessage(str_replace("%s", $this->arquitecto->caption(), $this->arquitecto->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->arquitecto->FormValue)) {
+                $this->arquitecto->addErrorMessage($this->arquitecto->getErrorMessage(false));
+            }
+            if ($this->ganancia->Visible && $this->ganancia->Required) {
+                if (!$this->ganancia->IsDetailKey && EmptyValue($this->ganancia->FormValue)) {
+                    $this->ganancia->addErrorMessage(str_replace("%s", $this->ganancia->caption(), $this->ganancia->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->ganancia->FormValue)) {
+                $this->ganancia->addErrorMessage($this->ganancia->getErrorMessage(false));
+            }
+            if ($this->intermediario->Visible && $this->intermediario->Required) {
+                if (!$this->intermediario->IsDetailKey && EmptyValue($this->intermediario->FormValue)) {
+                    $this->intermediario->addErrorMessage(str_replace("%s", $this->intermediario->caption(), $this->intermediario->RequiredErrorMessage));
+                }
+            }
+            if ($this->telefeno_intermediario->Visible && $this->telefeno_intermediario->Required) {
+                if (!$this->telefeno_intermediario->IsDetailKey && EmptyValue($this->telefeno_intermediario->FormValue)) {
+                    $this->telefeno_intermediario->addErrorMessage(str_replace("%s", $this->telefeno_intermediario->caption(), $this->telefeno_intermediario->RequiredErrorMessage));
+                }
+            }
+            if ($this->email_intermediario->Visible && $this->email_intermediario->Required) {
+                if (!$this->email_intermediario->IsDetailKey && EmptyValue($this->email_intermediario->FormValue)) {
+                    $this->email_intermediario->addErrorMessage(str_replace("%s", $this->email_intermediario->caption(), $this->email_intermediario->RequiredErrorMessage));
+                }
+            }
+            if ($this->genera_ne->Visible && $this->genera_ne->Required) {
+                if ($this->genera_ne->FormValue == "") {
+                    $this->genera_ne->addErrorMessage(str_replace("%s", $this->genera_ne->caption(), $this->genera_ne->RequiredErrorMessage));
+                }
+            }
+            if ($this->visita->Visible && $this->visita->Required) {
+                if (!$this->visita->IsDetailKey && EmptyValue($this->visita->FormValue)) {
+                    $this->visita->addErrorMessage(str_replace("%s", $this->visita->caption(), $this->visita->RequiredErrorMessage));
+                }
+            }
+            if (!CheckInteger($this->visita->FormValue)) {
+                $this->visita->addErrorMessage($this->visita->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -3190,6 +3519,30 @@ class SalidasEdit extends Salidas
 
         // impreso
         $this->impreso->setDbValueDef($rsnew, $this->impreso->CurrentValue, $this->impreso->ReadOnly);
+
+        // nacionalizacion
+        $this->nacionalizacion->setDbValueDef($rsnew, $this->nacionalizacion->CurrentValue, $this->nacionalizacion->ReadOnly);
+
+        // arquitecto
+        $this->arquitecto->setDbValueDef($rsnew, $this->arquitecto->CurrentValue, $this->arquitecto->ReadOnly);
+
+        // ganancia
+        $this->ganancia->setDbValueDef($rsnew, $this->ganancia->CurrentValue, $this->ganancia->ReadOnly);
+
+        // intermediario
+        $this->intermediario->setDbValueDef($rsnew, $this->intermediario->CurrentValue, $this->intermediario->ReadOnly);
+
+        // telefeno_intermediario
+        $this->telefeno_intermediario->setDbValueDef($rsnew, $this->telefeno_intermediario->CurrentValue, $this->telefeno_intermediario->ReadOnly);
+
+        // email_intermediario
+        $this->email_intermediario->setDbValueDef($rsnew, $this->email_intermediario->CurrentValue, $this->email_intermediario->ReadOnly);
+
+        // genera_ne
+        $this->genera_ne->setDbValueDef($rsnew, $this->genera_ne->CurrentValue, $this->genera_ne->ReadOnly);
+
+        // visita
+        $this->visita->setDbValueDef($rsnew, $this->visita->CurrentValue, $this->visita->ReadOnly);
         return $rsnew;
     }
 
@@ -3276,6 +3629,30 @@ class SalidasEdit extends Salidas
         }
         if (isset($row['impreso'])) { // impreso
             $this->impreso->CurrentValue = $row['impreso'];
+        }
+        if (isset($row['nacionalizacion'])) { // nacionalizacion
+            $this->nacionalizacion->CurrentValue = $row['nacionalizacion'];
+        }
+        if (isset($row['arquitecto'])) { // arquitecto
+            $this->arquitecto->CurrentValue = $row['arquitecto'];
+        }
+        if (isset($row['ganancia'])) { // ganancia
+            $this->ganancia->CurrentValue = $row['ganancia'];
+        }
+        if (isset($row['intermediario'])) { // intermediario
+            $this->intermediario->CurrentValue = $row['intermediario'];
+        }
+        if (isset($row['telefeno_intermediario'])) { // telefeno_intermediario
+            $this->telefeno_intermediario->CurrentValue = $row['telefeno_intermediario'];
+        }
+        if (isset($row['email_intermediario'])) { // email_intermediario
+            $this->email_intermediario->CurrentValue = $row['email_intermediario'];
+        }
+        if (isset($row['genera_ne'])) { // genera_ne
+            $this->genera_ne->CurrentValue = $row['genera_ne'];
+        }
+        if (isset($row['visita'])) { // visita
+            $this->visita->CurrentValue = $row['visita'];
         }
     }
 
@@ -3420,6 +3797,8 @@ class SalidasEdit extends Salidas
                 case "x_igtf":
                     break;
                 case "x_impreso":
+                    break;
+                case "x_genera_ne":
                     break;
                 default:
                     $lookupFilter = "";

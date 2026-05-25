@@ -138,15 +138,19 @@ class ProveedorDelete extends Proveedor
         $this->telefono2->Visible = false;
         $this->email1->Visible = false;
         $this->email2->Visible = false;
-        $this->cuenta_auxiliar->setVisibility();
-        $this->cuenta_gasto->setVisibility();
+        $this->fabricante->Visible = false;
+        $this->cuenta_auxiliar->Visible = false;
+        $this->cuenta_gasto->Visible = false;
         $this->tipo_iva->Visible = false;
         $this->tipo_islr->Visible = false;
         $this->sustraendo->Visible = false;
+        $this->tipo_ret_iva->Visible = false;
+        $this->tipo_ret_islr_concepto->Visible = false;
+        $this->tipo_ret_islr->Visible = false;
+        $this->tipo_ret_mun->Visible = false;
         $this->tipo_impmun->Visible = false;
         $this->cta_bco->Visible = false;
         $this->activo->setVisibility();
-        $this->fabricante->setVisibility();
     }
 
     // Constructor
@@ -624,15 +628,19 @@ class ProveedorDelete extends Proveedor
         $this->telefono2->setDbValue($row['telefono2']);
         $this->email1->setDbValue($row['email1']);
         $this->email2->setDbValue($row['email2']);
+        $this->fabricante->setDbValue($row['fabricante']);
         $this->cuenta_auxiliar->setDbValue($row['cuenta_auxiliar']);
         $this->cuenta_gasto->setDbValue($row['cuenta_gasto']);
         $this->tipo_iva->setDbValue($row['tipo_iva']);
         $this->tipo_islr->setDbValue($row['tipo_islr']);
         $this->sustraendo->setDbValue($row['sustraendo']);
+        $this->tipo_ret_iva->setDbValue($row['tipo_ret_iva']);
+        $this->tipo_ret_islr_concepto->setDbValue($row['tipo_ret_islr_concepto']);
+        $this->tipo_ret_islr->setDbValue($row['tipo_ret_islr']);
+        $this->tipo_ret_mun->setDbValue($row['tipo_ret_mun']);
         $this->tipo_impmun->setDbValue($row['tipo_impmun']);
         $this->cta_bco->setDbValue($row['cta_bco']);
         $this->activo->setDbValue($row['activo']);
-        $this->fabricante->setDbValue($row['fabricante']);
     }
 
     // Return a row with default values
@@ -648,15 +656,19 @@ class ProveedorDelete extends Proveedor
         $row['telefono2'] = $this->telefono2->DefaultValue;
         $row['email1'] = $this->email1->DefaultValue;
         $row['email2'] = $this->email2->DefaultValue;
+        $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['cuenta_auxiliar'] = $this->cuenta_auxiliar->DefaultValue;
         $row['cuenta_gasto'] = $this->cuenta_gasto->DefaultValue;
         $row['tipo_iva'] = $this->tipo_iva->DefaultValue;
         $row['tipo_islr'] = $this->tipo_islr->DefaultValue;
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
+        $row['tipo_ret_iva'] = $this->tipo_ret_iva->DefaultValue;
+        $row['tipo_ret_islr_concepto'] = $this->tipo_ret_islr_concepto->DefaultValue;
+        $row['tipo_ret_islr'] = $this->tipo_ret_islr->DefaultValue;
+        $row['tipo_ret_mun'] = $this->tipo_ret_mun->DefaultValue;
         $row['tipo_impmun'] = $this->tipo_impmun->DefaultValue;
         $row['cta_bco'] = $this->cta_bco->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
-        $row['fabricante'] = $this->fabricante->DefaultValue;
         return $row;
     }
 
@@ -690,6 +702,8 @@ class ProveedorDelete extends Proveedor
 
         // email2
 
+        // fabricante
+
         // cuenta_auxiliar
 
         // cuenta_gasto
@@ -700,13 +714,19 @@ class ProveedorDelete extends Proveedor
 
         // sustraendo
 
+        // tipo_ret_iva
+
+        // tipo_ret_islr_concepto
+
+        // tipo_ret_islr
+
+        // tipo_ret_mun
+
         // tipo_impmun
 
         // cta_bco
 
         // activo
-
-        // fabricante
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -758,6 +778,10 @@ class ProveedorDelete extends Proveedor
 
             // email2
             $this->email2->ViewValue = $this->email2->CurrentValue;
+
+            // fabricante
+            $this->fabricante->ViewValue = $this->fabricante->CurrentValue;
+            $this->fabricante->ViewValue = FormatNumber($this->fabricante->ViewValue, $this->fabricante->formatPattern());
 
             // cuenta_auxiliar
             $curVal = strval($this->cuenta_auxiliar->CurrentValue);
@@ -879,6 +903,19 @@ class ProveedorDelete extends Proveedor
                 $this->sustraendo->ViewValue = null;
             }
 
+            // tipo_ret_iva
+            $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->CurrentValue;
+
+            // tipo_ret_islr_concepto
+            $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->CurrentValue;
+
+            // tipo_ret_islr
+            $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->CurrentValue;
+            $this->tipo_ret_islr->ViewValue = FormatNumber($this->tipo_ret_islr->ViewValue, $this->tipo_ret_islr->formatPattern());
+
+            // tipo_ret_mun
+            $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->CurrentValue;
+
             // tipo_impmun
             $curVal = strval($this->tipo_impmun->CurrentValue);
             if ($curVal != "") {
@@ -913,10 +950,6 @@ class ProveedorDelete extends Proveedor
                 $this->activo->ViewValue = null;
             }
 
-            // fabricante
-            $this->fabricante->ViewValue = $this->fabricante->CurrentValue;
-            $this->fabricante->ViewValue = FormatNumber($this->fabricante->ViewValue, $this->fabricante->formatPattern());
-
             // ci_rif
             $this->ci_rif->HrefValue = "";
             $this->ci_rif->TooltipValue = "";
@@ -929,21 +962,9 @@ class ProveedorDelete extends Proveedor
             $this->ciudad->HrefValue = "";
             $this->ciudad->TooltipValue = "";
 
-            // cuenta_auxiliar
-            $this->cuenta_auxiliar->HrefValue = "";
-            $this->cuenta_auxiliar->TooltipValue = "";
-
-            // cuenta_gasto
-            $this->cuenta_gasto->HrefValue = "";
-            $this->cuenta_gasto->TooltipValue = "";
-
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
-
-            // fabricante
-            $this->fabricante->HrefValue = "";
-            $this->fabricante->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1140,6 +1161,7 @@ class ProveedorDelete extends Proveedor
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event

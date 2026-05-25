@@ -144,6 +144,7 @@ class EntradasSalidasDelete extends EntradasSalidas
         $this->cantidad_movimiento->Visible = false;
         $this->precio_unidad_sin_desc->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->setVisibility();
@@ -154,6 +155,8 @@ class EntradasSalidasDelete extends EntradasSalidas
         $this->check_ne->setVisibility();
         $this->packer_cantidad->Visible = false;
         $this->newdata->setVisibility();
+        $this->cantidad_entregada->setVisibility();
+        $this->cantidad_por_entregar->setVisibility();
     }
 
     // Constructor
@@ -638,6 +641,7 @@ class EntradasSalidasDelete extends EntradasSalidas
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -648,6 +652,8 @@ class EntradasSalidasDelete extends EntradasSalidas
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
         $this->newdata->setDbValue($row['newdata']);
+        $this->cantidad_entregada->setDbValue($row['cantidad_entregada']);
+        $this->cantidad_por_entregar->setDbValue($row['cantidad_por_entregar']);
     }
 
     // Return a row with default values
@@ -669,6 +675,7 @@ class EntradasSalidasDelete extends EntradasSalidas
         $row['cantidad_movimiento'] = $this->cantidad_movimiento->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['costo_unidad'] = $this->costo_unidad->DefaultValue;
         $row['costo'] = $this->costo->DefaultValue;
         $row['precio_unidad'] = $this->precio_unidad->DefaultValue;
@@ -679,6 +686,8 @@ class EntradasSalidasDelete extends EntradasSalidas
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
         $row['newdata'] = $this->newdata->DefaultValue;
+        $row['cantidad_entregada'] = $this->cantidad_entregada->DefaultValue;
+        $row['cantidad_por_entregar'] = $this->cantidad_por_entregar->DefaultValue;
         return $row;
     }
 
@@ -724,6 +733,8 @@ class EntradasSalidasDelete extends EntradasSalidas
 
         // descuento
 
+        // descuento2
+
         // costo_unidad
 
         // costo
@@ -743,6 +754,10 @@ class EntradasSalidasDelete extends EntradasSalidas
         // packer_cantidad
 
         // newdata
+
+        // cantidad_entregada
+
+        // cantidad_por_entregar
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -842,6 +857,10 @@ class EntradasSalidasDelete extends EntradasSalidas
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // costo_unidad
             $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
             $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -892,6 +911,14 @@ class EntradasSalidasDelete extends EntradasSalidas
                 $this->newdata->ViewValue = null;
             }
 
+            // cantidad_entregada
+            $this->cantidad_entregada->ViewValue = $this->cantidad_entregada->CurrentValue;
+            $this->cantidad_entregada->ViewValue = FormatNumber($this->cantidad_entregada->ViewValue, $this->cantidad_entregada->formatPattern());
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->ViewValue = $this->cantidad_por_entregar->CurrentValue;
+            $this->cantidad_por_entregar->ViewValue = FormatNumber($this->cantidad_por_entregar->ViewValue, $this->cantidad_por_entregar->formatPattern());
+
             // articulo
             $this->articulo->HrefValue = "";
             $this->articulo->TooltipValue = "";
@@ -924,6 +951,10 @@ class EntradasSalidasDelete extends EntradasSalidas
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
 
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
+
             // costo_unidad
             $this->costo_unidad->HrefValue = "";
             $this->costo_unidad->TooltipValue = "";
@@ -947,6 +978,14 @@ class EntradasSalidasDelete extends EntradasSalidas
             // newdata
             $this->newdata->HrefValue = "";
             $this->newdata->TooltipValue = "";
+
+            // cantidad_entregada
+            $this->cantidad_entregada->HrefValue = "";
+            $this->cantidad_entregada->TooltipValue = "";
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->HrefValue = "";
+            $this->cantidad_por_entregar->TooltipValue = "";
         }
 
         // Call Row Rendered event

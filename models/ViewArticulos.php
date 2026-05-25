@@ -207,7 +207,7 @@ class ViewArticulos extends DbTable
             '`principio_activo`', // Expression
             '`principio_activo`', // Basic search expression
             200, // Type
-            100, // Size
+            255, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`principio_activo`', // Virtual expression

@@ -170,6 +170,7 @@ class EntradasEdit extends Entradas
         $this->descuento->setVisibility();
         $this->archivo_pedido->setVisibility();
         $this->unidades->setVisibility();
+        $this->cliente->setVisibility();
     }
 
     // Constructor
@@ -1033,6 +1034,16 @@ class EntradasEdit extends Entradas
             }
         }
 
+        // Check field name 'cliente' first before field var 'x_cliente'
+        $val = $CurrentForm->hasValue("cliente") ? $CurrentForm->getValue("cliente") : $CurrentForm->getValue("x_cliente");
+        if (!$this->cliente->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->cliente->Visible = false; // Disable update for API request
+            } else {
+                $this->cliente->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -1075,6 +1086,7 @@ class EntradasEdit extends Entradas
         $this->fecha_libro_compra->CurrentValue = UnFormatDateTime($this->fecha_libro_compra->CurrentValue, $this->fecha_libro_compra->formatPattern());
         $this->descuento->CurrentValue = $this->descuento->FormValue;
         $this->unidades->CurrentValue = $this->unidades->FormValue;
+        $this->cliente->CurrentValue = $this->cliente->FormValue;
     }
 
     /**
@@ -1157,6 +1169,7 @@ class EntradasEdit extends Entradas
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
         $this->unidades->setDbValue($row['unidades']);
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Return a row with default values
@@ -1204,6 +1217,7 @@ class EntradasEdit extends Entradas
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
+        $row['cliente'] = $this->cliente->DefaultValue;
         return $row;
     }
 
@@ -1360,6 +1374,9 @@ class EntradasEdit extends Entradas
 
         // unidades
         $this->unidades->RowCssClass = "row";
+
+        // cliente
+        $this->cliente->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1653,6 +1670,10 @@ class EntradasEdit extends Entradas
             $this->unidades->ViewValue = $this->unidades->CurrentValue;
             $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
 
+            // cliente
+            $this->cliente->ViewValue = $this->cliente->CurrentValue;
+            $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1764,6 +1785,9 @@ class EntradasEdit extends Entradas
 
             // unidades
             $this->unidades->HrefValue = "";
+
+            // cliente
+            $this->cliente->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -2000,6 +2024,14 @@ class EntradasEdit extends Entradas
                 $this->unidades->EditValue = FormatNumber($this->unidades->EditValue, null);
             }
 
+            // cliente
+            $this->cliente->setupEditAttributes();
+            $this->cliente->EditValue = $this->cliente->CurrentValue;
+            $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
+            if (strval($this->cliente->EditValue) != "" && is_numeric($this->cliente->EditValue)) {
+                $this->cliente->EditValue = FormatNumber($this->cliente->EditValue, null);
+            }
+
             // Edit refer script
 
             // tipo_documento
@@ -2113,6 +2145,9 @@ class EntradasEdit extends Entradas
 
             // unidades
             $this->unidades->HrefValue = "";
+
+            // cliente
+            $this->cliente->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2289,6 +2324,14 @@ class EntradasEdit extends Entradas
             }
             if (!CheckInteger($this->unidades->FormValue)) {
                 $this->unidades->addErrorMessage($this->unidades->getErrorMessage(false));
+            }
+            if ($this->cliente->Visible && $this->cliente->Required) {
+                if (!$this->cliente->IsDetailKey && EmptyValue($this->cliente->FormValue)) {
+                    $this->cliente->addErrorMessage(str_replace("%s", $this->cliente->caption(), $this->cliente->RequiredErrorMessage));
+                }
+            }
+            if (!CheckInteger($this->cliente->FormValue)) {
+                $this->cliente->addErrorMessage($this->cliente->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -2499,6 +2542,9 @@ class EntradasEdit extends Entradas
 
         // unidades
         $this->unidades->setDbValueDef($rsnew, $this->unidades->CurrentValue, $this->unidades->ReadOnly);
+
+        // cliente
+        $this->cliente->setDbValueDef($rsnew, $this->cliente->CurrentValue, $this->cliente->ReadOnly);
         return $rsnew;
     }
 
@@ -2570,6 +2616,9 @@ class EntradasEdit extends Entradas
         }
         if (isset($row['unidades'])) { // unidades
             $this->unidades->CurrentValue = $row['unidades'];
+        }
+        if (isset($row['cliente'])) { // cliente
+            $this->cliente->CurrentValue = $row['cliente'];
         }
     }
 

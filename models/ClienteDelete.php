@@ -148,6 +148,7 @@ class ClienteDelete extends Cliente
         $this->consignacion->Visible = false;
         $this->limite_credito->Visible = false;
         $this->condicion->Visible = false;
+        $this->codigo->setVisibility();
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->foto1->Visible = false;
@@ -641,6 +642,7 @@ class ClienteDelete extends Cliente
         $this->consignacion->setDbValue($row['consignacion']);
         $this->limite_credito->setDbValue($row['limite_credito']);
         $this->condicion->setDbValue($row['condicion']);
+        $this->codigo->setDbValue($row['codigo']);
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->foto1->Upload->DbValue = $row['foto1'];
@@ -674,6 +676,7 @@ class ClienteDelete extends Cliente
         $row['consignacion'] = $this->consignacion->DefaultValue;
         $row['limite_credito'] = $this->limite_credito->DefaultValue;
         $row['condicion'] = $this->condicion->DefaultValue;
+        $row['codigo'] = $this->codigo->DefaultValue;
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['foto1'] = $this->foto1->DefaultValue;
@@ -732,6 +735,8 @@ class ClienteDelete extends Cliente
         // limite_credito
 
         // condicion
+
+        // codigo
 
         // cuenta
 
@@ -877,6 +882,9 @@ class ClienteDelete extends Cliente
                 $this->condicion->ViewValue = null;
             }
 
+            // codigo
+            $this->codigo->ViewValue = $this->codigo->CurrentValue;
+
             // cuenta
             $curVal = strval($this->cuenta->CurrentValue);
             if ($curVal != "") {
@@ -971,6 +979,10 @@ class ClienteDelete extends Cliente
             // tarifa
             $this->tarifa->HrefValue = "";
             $this->tarifa->TooltipValue = "";
+
+            // codigo
+            $this->codigo->HrefValue = "";
+            $this->codigo->TooltipValue = "";
 
             // cuenta
             $this->cuenta->HrefValue = "";
@@ -1181,6 +1193,7 @@ class ClienteDelete extends Cliente
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event

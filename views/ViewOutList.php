@@ -266,6 +266,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_view_out_descuento" class="view_out_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <th data-name="descuento2" class="<?= $Page->descuento2->headerCellClass() ?>"><div id="elh_view_out_descuento2" class="view_out_descuento2"><?= $Page->renderFieldHeader($Page->descuento2) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -371,6 +374,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_descuento" class="el_view_out_descuento">
 <span<?= $Page->descuento->viewAttributes() ?>>
 <?= $Page->descuento->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_descuento2" class="el_view_out_descuento2">
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

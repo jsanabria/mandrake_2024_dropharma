@@ -140,6 +140,8 @@ class ContLotesPagosDetalleDelete extends ContLotesPagosDetalle
         $this->monto_pagdo->setVisibility();
         $this->saldo->setVisibility();
         $this->comprobante->setVisibility();
+        $this->fecha->setVisibility();
+        $this->monto_pagado->setVisibility();
     }
 
     // Constructor
@@ -615,6 +617,8 @@ class ContLotesPagosDetalleDelete extends ContLotesPagosDetalle
         $this->monto_pagdo->setDbValue($row['monto_pagdo']);
         $this->saldo->setDbValue($row['saldo']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->fecha->setDbValue($row['fecha']);
+        $this->monto_pagado->setDbValue($row['monto_pagado']);
     }
 
     // Return a row with default values
@@ -632,6 +636,8 @@ class ContLotesPagosDetalleDelete extends ContLotesPagosDetalle
         $row['monto_pagdo'] = $this->monto_pagdo->DefaultValue;
         $row['saldo'] = $this->saldo->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['fecha'] = $this->fecha->DefaultValue;
+        $row['monto_pagado'] = $this->monto_pagado->DefaultValue;
         return $row;
     }
 
@@ -668,6 +674,10 @@ class ContLotesPagosDetalleDelete extends ContLotesPagosDetalle
         // saldo
 
         // comprobante
+
+        // fecha
+
+        // monto_pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -731,6 +741,14 @@ class ContLotesPagosDetalleDelete extends ContLotesPagosDetalle
             $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
             $this->comprobante->ViewValue = FormatNumber($this->comprobante->ViewValue, $this->comprobante->formatPattern());
 
+            // fecha
+            $this->fecha->ViewValue = $this->fecha->CurrentValue;
+            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+            // monto_pagado
+            $this->monto_pagado->ViewValue = $this->monto_pagado->CurrentValue;
+            $this->monto_pagado->ViewValue = FormatNumber($this->monto_pagado->ViewValue, $this->monto_pagado->formatPattern());
+
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
@@ -758,6 +776,14 @@ class ContLotesPagosDetalleDelete extends ContLotesPagosDetalle
             // comprobante
             $this->comprobante->HrefValue = "";
             $this->comprobante->TooltipValue = "";
+
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
+            // monto_pagado
+            $this->monto_pagado->HrefValue = "";
+            $this->monto_pagado->TooltipValue = "";
         }
 
         // Call Row Rendered event

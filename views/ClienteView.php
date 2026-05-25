@@ -243,6 +243,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->codigo->Visible) { // codigo ?>
+    <tr id="r_codigo"<?= $Page->codigo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cliente_codigo"><?= $Page->codigo->caption() ?></span></td>
+        <td data-name="codigo"<?= $Page->codigo->cellAttributes() ?>>
+<span id="el_cliente_codigo">
+<span<?= $Page->codigo->viewAttributes() ?>>
+<?= $Page->codigo->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->cuenta->Visible) { // cuenta ?>
     <tr id="r_cuenta"<?= $Page->cuenta->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cliente_cuenta"><?= $Page->cuenta->caption() ?></span></td>

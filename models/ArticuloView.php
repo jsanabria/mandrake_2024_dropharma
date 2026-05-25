@@ -158,6 +158,9 @@ class ArticuloView extends Articulo
         $this->codigo_de_barra->setVisibility();
         $this->categoria->setVisibility();
         $this->lista_pedido->setVisibility();
+        $this->categoria_madre->setVisibility();
+        $this->sub_categoria->setVisibility();
+        $this->tipo->setVisibility();
         $this->unidad_medida_defecto->setVisibility();
         $this->cantidad_por_unidad_medida->setVisibility();
         $this->cantidad_minima->setVisibility();
@@ -171,10 +174,16 @@ class ArticuloView extends Articulo
         $this->precio->setVisibility();
         $this->alicuota->setVisibility();
         $this->articulo_inventario->setVisibility();
+        $this->indexado->setVisibility();
+        $this->pies_cubico->setVisibility();
+        $this->color->setVisibility();
+        $this->cojin->setVisibility();
+        $this->brazo->setVisibility();
+        $this->respaldo->setVisibility();
+        $this->talla->setVisibility();
         $this->activo->setVisibility();
         $this->lote->setVisibility();
         $this->fecha_vencimiento->setVisibility();
-        $this->indexado->setVisibility();
     }
 
     // Constructor
@@ -571,12 +580,13 @@ class ArticuloView extends Articulo
         $this->setupLookupOptions($this->fabricante);
         $this->setupLookupOptions($this->categoria);
         $this->setupLookupOptions($this->lista_pedido);
+        $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->unidad_medida_defecto);
         $this->setupLookupOptions($this->cantidad_por_unidad_medida);
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
-        $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->indexado);
+        $this->setupLookupOptions($this->activo);
 
         // Check modal
         if ($this->IsModal) {
@@ -1007,6 +1017,9 @@ class ArticuloView extends Articulo
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
         $this->categoria->setDbValue($row['categoria']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
+        $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
         $this->cantidad_minima->setDbValue($row['cantidad_minima']);
@@ -1020,10 +1033,16 @@ class ArticuloView extends Articulo
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
+        $this->indexado->setDbValue($row['indexado']);
+        $this->pies_cubico->setDbValue($row['pies_cubico']);
+        $this->color->setDbValue($row['color']);
+        $this->cojin->setDbValue($row['cojin']);
+        $this->brazo->setDbValue($row['brazo']);
+        $this->respaldo->setDbValue($row['respaldo']);
+        $this->talla->setDbValue($row['talla']);
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
-        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Return a row with default values
@@ -1041,6 +1060,9 @@ class ArticuloView extends Articulo
         $row['codigo_de_barra'] = $this->codigo_de_barra->DefaultValue;
         $row['categoria'] = $this->categoria->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
+        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
+        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
+        $row['tipo'] = $this->tipo->DefaultValue;
         $row['unidad_medida_defecto'] = $this->unidad_medida_defecto->DefaultValue;
         $row['cantidad_por_unidad_medida'] = $this->cantidad_por_unidad_medida->DefaultValue;
         $row['cantidad_minima'] = $this->cantidad_minima->DefaultValue;
@@ -1054,10 +1076,16 @@ class ArticuloView extends Articulo
         $row['precio'] = $this->precio->DefaultValue;
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['articulo_inventario'] = $this->articulo_inventario->DefaultValue;
+        $row['indexado'] = $this->indexado->DefaultValue;
+        $row['pies_cubico'] = $this->pies_cubico->DefaultValue;
+        $row['color'] = $this->color->DefaultValue;
+        $row['cojin'] = $this->cojin->DefaultValue;
+        $row['brazo'] = $this->brazo->DefaultValue;
+        $row['respaldo'] = $this->respaldo->DefaultValue;
+        $row['talla'] = $this->talla->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['lote'] = $this->lote->DefaultValue;
         $row['fecha_vencimiento'] = $this->fecha_vencimiento->DefaultValue;
-        $row['indexado'] = $this->indexado->DefaultValue;
         return $row;
     }
 
@@ -1101,6 +1129,12 @@ class ArticuloView extends Articulo
 
         // lista_pedido
 
+        // categoria_madre
+
+        // sub_categoria
+
+        // tipo
+
         // unidad_medida_defecto
 
         // cantidad_por_unidad_medida
@@ -1127,13 +1161,25 @@ class ArticuloView extends Articulo
 
         // articulo_inventario
 
+        // indexado
+
+        // pies_cubico
+
+        // color
+
+        // cojin
+
+        // brazo
+
+        // respaldo
+
+        // talla
+
         // activo
 
         // lote
 
         // fecha_vencimiento
-
-        // indexado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1235,6 +1281,19 @@ class ArticuloView extends Articulo
                 }
             } else {
                 $this->lista_pedido->ViewValue = null;
+            }
+
+            // categoria_madre
+            $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
+
+            // sub_categoria
+            $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
+
+            // tipo
+            if (strval($this->tipo->CurrentValue) != "") {
+                $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
+            } else {
+                $this->tipo->ViewValue = null;
             }
 
             // unidad_medida_defecto
@@ -1351,6 +1410,32 @@ class ArticuloView extends Articulo
                 $this->articulo_inventario->ViewValue = null;
             }
 
+            // indexado
+            if (strval($this->indexado->CurrentValue) != "") {
+                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+            } else {
+                $this->indexado->ViewValue = null;
+            }
+
+            // pies_cubico
+            $this->pies_cubico->ViewValue = $this->pies_cubico->CurrentValue;
+            $this->pies_cubico->ViewValue = FormatNumber($this->pies_cubico->ViewValue, $this->pies_cubico->formatPattern());
+
+            // color
+            $this->color->ViewValue = $this->color->CurrentValue;
+
+            // cojin
+            $this->cojin->ViewValue = $this->cojin->CurrentValue;
+
+            // brazo
+            $this->brazo->ViewValue = $this->brazo->CurrentValue;
+
+            // respaldo
+            $this->respaldo->ViewValue = $this->respaldo->CurrentValue;
+
+            // talla
+            $this->talla->ViewValue = $this->talla->CurrentValue;
+
             // activo
             if (strval($this->activo->CurrentValue) != "") {
                 $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
@@ -1364,13 +1449,6 @@ class ArticuloView extends Articulo
             // fecha_vencimiento
             $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
             $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
-
-            // indexado
-            if (strval($this->indexado->CurrentValue) != "") {
-                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
-            } else {
-                $this->indexado->ViewValue = null;
-            }
 
             // foto
             if (!EmptyValue($this->foto->Upload->DbValue)) {
@@ -1424,6 +1502,18 @@ class ArticuloView extends Articulo
             $this->lista_pedido->HrefValue = "";
             $this->lista_pedido->TooltipValue = "";
 
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+            $this->categoria_madre->TooltipValue = "";
+
+            // sub_categoria
+            $this->sub_categoria->HrefValue = "";
+            $this->sub_categoria->TooltipValue = "";
+
+            // tipo
+            $this->tipo->HrefValue = "";
+            $this->tipo->TooltipValue = "";
+
             // unidad_medida_defecto
             $this->unidad_medida_defecto->HrefValue = "";
             $this->unidad_medida_defecto->TooltipValue = "";
@@ -1476,13 +1566,37 @@ class ArticuloView extends Articulo
             $this->articulo_inventario->HrefValue = "";
             $this->articulo_inventario->TooltipValue = "";
 
-            // activo
-            $this->activo->HrefValue = "";
-            $this->activo->TooltipValue = "";
-
             // indexado
             $this->indexado->HrefValue = "";
             $this->indexado->TooltipValue = "";
+
+            // pies_cubico
+            $this->pies_cubico->HrefValue = "";
+            $this->pies_cubico->TooltipValue = "";
+
+            // color
+            $this->color->HrefValue = "";
+            $this->color->TooltipValue = "";
+
+            // cojin
+            $this->cojin->HrefValue = "";
+            $this->cojin->TooltipValue = "";
+
+            // brazo
+            $this->brazo->HrefValue = "";
+            $this->brazo->TooltipValue = "";
+
+            // respaldo
+            $this->respaldo->HrefValue = "";
+            $this->respaldo->TooltipValue = "";
+
+            // talla
+            $this->talla->HrefValue = "";
+            $this->talla->TooltipValue = "";
+
+            // activo
+            $this->activo->HrefValue = "";
+            $this->activo->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1585,6 +1699,12 @@ class ArticuloView extends Articulo
                 case "x_lista_pedido":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
+                case "x_categoria_madre":
+                    break;
+                case "x_sub_categoria":
+                    break;
+                case "x_tipo":
+                    break;
                 case "x_unidad_medida_defecto":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -1595,9 +1715,9 @@ class ArticuloView extends Articulo
                     break;
                 case "x_articulo_inventario":
                     break;
-                case "x_activo":
-                    break;
                 case "x_indexado":
+                    break;
+                case "x_activo":
                     break;
                 default:
                     $lookupFilter = "";
@@ -1666,6 +1786,7 @@ class ArticuloView extends Articulo
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event

@@ -72,6 +72,9 @@ class ViewIn extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $descuento;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento2;
+
     #[Column(name: "costo_unidad", type: "decimal", nullable: true)]
     private ?string $costoUnidad;
 
@@ -262,6 +265,17 @@ class ViewIn extends AbstractEntity
     public function setDescuento(?string $value): static
     {
         $this->descuento = $value;
+        return $this;
+    }
+
+    public function getDescuento2(): ?string
+    {
+        return $this->descuento2;
+    }
+
+    public function setDescuento2(?string $value): static
+    {
+        $this->descuento2 = $value;
         return $this;
     }
 

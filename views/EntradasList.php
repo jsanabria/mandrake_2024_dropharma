@@ -533,6 +533,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_entradas_unidades" class="entradas_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
 <?php } ?>
+<?php if ($Page->cliente->Visible) { // cliente ?>
+        <th data-name="cliente" class="<?= $Page->cliente->headerCellClass() ?>"><div id="elh_entradas_cliente" class="entradas_cliente"><?= $Page->renderFieldHeader($Page->cliente) ?></div></th>
+<?php } ?>
 <?php
 // Render list options (header, right)
 $Page->ListOptions->render("header", "right");
@@ -689,6 +692,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_unidades" class="el_entradas_unidades">
 <span<?= $Page->unidades->viewAttributes() ?>>
 <?= $Page->unidades->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->cliente->Visible) { // cliente ?>
+        <td data-name="cliente"<?= $Page->cliente->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_entradas_cliente" class="el_entradas_cliente">
+<span<?= $Page->cliente->viewAttributes() ?>>
+<?= $Page->cliente->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

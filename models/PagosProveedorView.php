@@ -161,6 +161,7 @@ class PagosProveedorView extends PagosProveedor
         $this->fecha_registro->setVisibility();
         $this->_username->setVisibility();
         $this->comprobante->setVisibility();
+        $this->cont_lotes->setVisibility();
     }
 
     // Constructor
@@ -949,6 +950,7 @@ class PagosProveedorView extends PagosProveedor
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->cont_lotes->setDbValue($row['cont_lotes']);
     }
 
     // Return a row with default values
@@ -969,6 +971,7 @@ class PagosProveedorView extends PagosProveedor
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['cont_lotes'] = $this->cont_lotes->DefaultValue;
         return $row;
     }
 
@@ -1017,6 +1020,8 @@ class PagosProveedorView extends PagosProveedor
         // username
 
         // comprobante
+
+        // cont_lotes
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1174,6 +1179,10 @@ class PagosProveedorView extends PagosProveedor
                 $this->comprobante->ViewValue = null;
             }
 
+            // cont_lotes
+            $this->cont_lotes->ViewValue = $this->cont_lotes->CurrentValue;
+            $this->cont_lotes->ViewValue = FormatNumber($this->cont_lotes->ViewValue, $this->cont_lotes->formatPattern());
+
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
@@ -1217,6 +1226,10 @@ class PagosProveedorView extends PagosProveedor
             // username
             $this->_username->HrefValue = "";
             $this->_username->TooltipValue = "";
+
+            // cont_lotes
+            $this->cont_lotes->HrefValue = "";
+            $this->cont_lotes->TooltipValue = "";
         }
 
         // Call Row Rendered event

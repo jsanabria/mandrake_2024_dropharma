@@ -72,6 +72,9 @@ class PagosProveedor extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $comprobante;
 
+    #[Column(name: "cont_lotes", type: "integer", nullable: true)]
+    private ?int $contLotes;
+
     public function getId(): int
     {
         return $this->id;
@@ -223,6 +226,17 @@ class PagosProveedor extends AbstractEntity
     public function setComprobante(?string $value): static
     {
         $this->comprobante = RemoveXss($value);
+        return $this;
+    }
+
+    public function getContLotes(): ?int
+    {
+        return $this->contLotes;
+    }
+
+    public function setContLotes(?int $value): static
+    {
+        $this->contLotes = $value;
         return $this;
     }
 }

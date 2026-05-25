@@ -143,6 +143,7 @@ class PagosProveedorDelete extends PagosProveedor
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
+        $this->cont_lotes->setVisibility();
     }
 
     // Constructor
@@ -623,6 +624,7 @@ class PagosProveedorDelete extends PagosProveedor
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->cont_lotes->setDbValue($row['cont_lotes']);
     }
 
     // Return a row with default values
@@ -643,6 +645,7 @@ class PagosProveedorDelete extends PagosProveedor
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['cont_lotes'] = $this->cont_lotes->DefaultValue;
         return $row;
     }
 
@@ -685,6 +688,8 @@ class PagosProveedorDelete extends PagosProveedor
         // username
 
         // comprobante
+
+        // cont_lotes
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -842,6 +847,10 @@ class PagosProveedorDelete extends PagosProveedor
                 $this->comprobante->ViewValue = null;
             }
 
+            // cont_lotes
+            $this->cont_lotes->ViewValue = $this->cont_lotes->CurrentValue;
+            $this->cont_lotes->ViewValue = FormatNumber($this->cont_lotes->ViewValue, $this->cont_lotes->formatPattern());
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -877,6 +886,10 @@ class PagosProveedorDelete extends PagosProveedor
             // monto
             $this->monto->HrefValue = "";
             $this->monto->TooltipValue = "";
+
+            // cont_lotes
+            $this->cont_lotes->HrefValue = "";
+            $this->cont_lotes->TooltipValue = "";
         }
 
         // Call Row Rendered event

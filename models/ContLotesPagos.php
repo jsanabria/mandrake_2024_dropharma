@@ -60,6 +60,10 @@ class ContLotesPagos extends DbTable
     public $nota;
     public $fecha_registro;
     public $usuario;
+    public $banco;
+    public $referencia;
+    public $moneda;
+    public $comprobante;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -256,6 +260,100 @@ class ContLotesPagos extends DbTable
         $this->usuario->Lookup = new Lookup($this->usuario, 'usuario', false, 'username', ["nombre","","",""], '', '', [], [], [], [], [], [], false, '', '', "`nombre`");
         $this->usuario->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['usuario'] = &$this->usuario;
+
+        // banco
+        $this->banco = new DbField(
+            $this, // Table
+            'x_banco', // Variable name
+            'banco', // Name
+            '`banco`', // Expression
+            '`banco`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`banco`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->banco->InputTextType = "text";
+        $this->banco->Raw = true;
+        $this->banco->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->banco->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['banco'] = &$this->banco;
+
+        // referencia
+        $this->referencia = new DbField(
+            $this, // Table
+            'x_referencia', // Variable name
+            'referencia', // Name
+            '`referencia`', // Expression
+            '`referencia`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`referencia`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->referencia->InputTextType = "text";
+        $this->referencia->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['referencia'] = &$this->referencia;
+
+        // moneda
+        $this->moneda = new DbField(
+            $this, // Table
+            'x_moneda', // Variable name
+            'moneda', // Name
+            '`moneda`', // Expression
+            '`moneda`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`moneda`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->moneda->InputTextType = "text";
+        $this->moneda->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['moneda'] = &$this->moneda;
+
+        // comprobante
+        $this->comprobante = new DbField(
+            $this, // Table
+            'x_comprobante', // Variable name
+            'comprobante', // Name
+            '`comprobante`', // Expression
+            '`comprobante`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`comprobante`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->comprobante->addMethod("getDefault", fn() => "N");
+        $this->comprobante->InputTextType = "text";
+        $this->comprobante->Raw = true;
+        $this->comprobante->Lookup = new Lookup($this->comprobante, 'cont_lotes_pagos', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->comprobante->OptionCount = 2;
+        $this->comprobante->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['comprobante'] = &$this->comprobante;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -845,6 +943,10 @@ class ContLotesPagos extends DbTable
         $this->nota->DbValue = $row['nota'];
         $this->fecha_registro->DbValue = $row['fecha_registro'];
         $this->usuario->DbValue = $row['usuario'];
+        $this->banco->DbValue = $row['banco'];
+        $this->referencia->DbValue = $row['referencia'];
+        $this->moneda->DbValue = $row['moneda'];
+        $this->comprobante->DbValue = $row['comprobante'];
     }
 
     // Delete uploaded files
@@ -1211,6 +1313,10 @@ class ContLotesPagos extends DbTable
         $this->nota->setDbValue($row['nota']);
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->usuario->setDbValue($row['usuario']);
+        $this->banco->setDbValue($row['banco']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->comprobante->setDbValue($row['comprobante']);
     }
 
     // Render list content
@@ -1252,6 +1358,14 @@ class ContLotesPagos extends DbTable
         // fecha_registro
 
         // usuario
+
+        // banco
+
+        // referencia
+
+        // moneda
+
+        // comprobante
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1298,6 +1412,23 @@ class ContLotesPagos extends DbTable
             $this->usuario->ViewValue = null;
         }
 
+        // banco
+        $this->banco->ViewValue = $this->banco->CurrentValue;
+        $this->banco->ViewValue = FormatNumber($this->banco->ViewValue, $this->banco->formatPattern());
+
+        // referencia
+        $this->referencia->ViewValue = $this->referencia->CurrentValue;
+
+        // moneda
+        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+        // comprobante
+        if (strval($this->comprobante->CurrentValue) != "") {
+            $this->comprobante->ViewValue = $this->comprobante->optionCaption($this->comprobante->CurrentValue);
+        } else {
+            $this->comprobante->ViewValue = null;
+        }
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -1321,6 +1452,22 @@ class ContLotesPagos extends DbTable
         // usuario
         $this->usuario->HrefValue = "";
         $this->usuario->TooltipValue = "";
+
+        // banco
+        $this->banco->HrefValue = "";
+        $this->banco->TooltipValue = "";
+
+        // referencia
+        $this->referencia->HrefValue = "";
+        $this->referencia->TooltipValue = "";
+
+        // moneda
+        $this->moneda->HrefValue = "";
+        $this->moneda->TooltipValue = "";
+
+        // comprobante
+        $this->comprobante->HrefValue = "";
+        $this->comprobante->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1369,6 +1516,34 @@ class ContLotesPagos extends DbTable
         $this->usuario->EditValue = $this->usuario->CurrentValue;
         $this->usuario->PlaceHolder = RemoveHtml($this->usuario->caption());
 
+        // banco
+        $this->banco->setupEditAttributes();
+        $this->banco->EditValue = $this->banco->CurrentValue;
+        $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
+        if (strval($this->banco->EditValue) != "" && is_numeric($this->banco->EditValue)) {
+            $this->banco->EditValue = FormatNumber($this->banco->EditValue, null);
+        }
+
+        // referencia
+        $this->referencia->setupEditAttributes();
+        if (!$this->referencia->Raw) {
+            $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
+        }
+        $this->referencia->EditValue = $this->referencia->CurrentValue;
+        $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
+
+        // moneda
+        $this->moneda->setupEditAttributes();
+        if (!$this->moneda->Raw) {
+            $this->moneda->CurrentValue = HtmlDecode($this->moneda->CurrentValue);
+        }
+        $this->moneda->EditValue = $this->moneda->CurrentValue;
+        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
+        // comprobante
+        $this->comprobante->EditValue = $this->comprobante->options(false);
+        $this->comprobante->PlaceHolder = RemoveHtml($this->comprobante->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1402,6 +1577,10 @@ class ContLotesPagos extends DbTable
                     $doc->exportCaption($this->procesado);
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->usuario);
+                    $doc->exportCaption($this->banco);
+                    $doc->exportCaption($this->referencia);
+                    $doc->exportCaption($this->moneda);
+                    $doc->exportCaption($this->comprobante);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->fecha);
@@ -1409,6 +1588,10 @@ class ContLotesPagos extends DbTable
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->fecha_registro);
                     $doc->exportCaption($this->usuario);
+                    $doc->exportCaption($this->banco);
+                    $doc->exportCaption($this->referencia);
+                    $doc->exportCaption($this->moneda);
+                    $doc->exportCaption($this->comprobante);
                 }
                 $doc->endExportRow();
             }
@@ -1440,6 +1623,10 @@ class ContLotesPagos extends DbTable
                         $doc->exportField($this->procesado);
                         $doc->exportField($this->nota);
                         $doc->exportField($this->usuario);
+                        $doc->exportField($this->banco);
+                        $doc->exportField($this->referencia);
+                        $doc->exportField($this->moneda);
+                        $doc->exportField($this->comprobante);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->fecha);
@@ -1447,6 +1634,10 @@ class ContLotesPagos extends DbTable
                         $doc->exportField($this->nota);
                         $doc->exportField($this->fecha_registro);
                         $doc->exportField($this->usuario);
+                        $doc->exportField($this->banco);
+                        $doc->exportField($this->referencia);
+                        $doc->exportField($this->moneda);
+                        $doc->exportField($this->comprobante);
                     }
                     $doc->endExportRow($rowCnt);
                 }

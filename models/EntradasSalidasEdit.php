@@ -143,7 +143,8 @@ class EntradasSalidasEdit extends EntradasSalidas
         $this->cantidad_unidad_medida->Visible = false;
         $this->cantidad_movimiento->Visible = false;
         $this->precio_unidad_sin_desc->Visible = false;
-        $this->descuento->setVisibility();
+        $this->descuento->Visible = false;
+        $this->descuento2->Visible = false;
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->setVisibility();
@@ -154,6 +155,8 @@ class EntradasSalidasEdit extends EntradasSalidas
         $this->check_ne->setVisibility();
         $this->packer_cantidad->Visible = false;
         $this->newdata->setVisibility();
+        $this->cantidad_entregada->setVisibility();
+        $this->cantidad_por_entregar->setVisibility();
     }
 
     // Constructor
@@ -836,16 +839,6 @@ class EntradasSalidasEdit extends EntradasSalidas
             }
         }
 
-        // Check field name 'descuento' first before field var 'x_descuento'
-        $val = $CurrentForm->hasValue("descuento") ? $CurrentForm->getValue("descuento") : $CurrentForm->getValue("x_descuento");
-        if (!$this->descuento->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->descuento->Visible = false; // Disable update for API request
-            } else {
-                $this->descuento->setFormValue($val, true, $validate);
-            }
-        }
-
         // Check field name 'costo_unidad' first before field var 'x_costo_unidad'
         $val = $CurrentForm->hasValue("costo_unidad") ? $CurrentForm->getValue("costo_unidad") : $CurrentForm->getValue("x_costo_unidad");
         if (!$this->costo_unidad->IsDetailKey) {
@@ -906,6 +899,26 @@ class EntradasSalidasEdit extends EntradasSalidas
             }
         }
 
+        // Check field name 'cantidad_entregada' first before field var 'x_cantidad_entregada'
+        $val = $CurrentForm->hasValue("cantidad_entregada") ? $CurrentForm->getValue("cantidad_entregada") : $CurrentForm->getValue("x_cantidad_entregada");
+        if (!$this->cantidad_entregada->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->cantidad_entregada->Visible = false; // Disable update for API request
+            } else {
+                $this->cantidad_entregada->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'cantidad_por_entregar' first before field var 'x_cantidad_por_entregar'
+        $val = $CurrentForm->hasValue("cantidad_por_entregar") ? $CurrentForm->getValue("cantidad_por_entregar") : $CurrentForm->getValue("x_cantidad_por_entregar");
+        if (!$this->cantidad_por_entregar->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->cantidad_por_entregar->Visible = false; // Disable update for API request
+            } else {
+                $this->cantidad_por_entregar->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey) {
@@ -923,13 +936,14 @@ class EntradasSalidasEdit extends EntradasSalidas
         $this->fecha_vencimiento->CurrentValue = $this->fecha_vencimiento->FormValue;
         $this->fecha_vencimiento->CurrentValue = UnFormatDateTime($this->fecha_vencimiento->CurrentValue, $this->fecha_vencimiento->formatPattern());
         $this->cantidad_articulo->CurrentValue = $this->cantidad_articulo->FormValue;
-        $this->descuento->CurrentValue = $this->descuento->FormValue;
         $this->costo_unidad->CurrentValue = $this->costo_unidad->FormValue;
         $this->costo->CurrentValue = $this->costo->FormValue;
         $this->precio_unidad->CurrentValue = $this->precio_unidad->FormValue;
         $this->precio->CurrentValue = $this->precio->FormValue;
         $this->check_ne->CurrentValue = $this->check_ne->FormValue;
         $this->newdata->CurrentValue = $this->newdata->FormValue;
+        $this->cantidad_entregada->CurrentValue = $this->cantidad_entregada->FormValue;
+        $this->cantidad_por_entregar->CurrentValue = $this->cantidad_por_entregar->FormValue;
     }
 
     /**
@@ -1040,6 +1054,7 @@ class EntradasSalidasEdit extends EntradasSalidas
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -1050,6 +1065,8 @@ class EntradasSalidasEdit extends EntradasSalidas
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
         $this->newdata->setDbValue($row['newdata']);
+        $this->cantidad_entregada->setDbValue($row['cantidad_entregada']);
+        $this->cantidad_por_entregar->setDbValue($row['cantidad_por_entregar']);
     }
 
     // Return a row with default values
@@ -1071,6 +1088,7 @@ class EntradasSalidasEdit extends EntradasSalidas
         $row['cantidad_movimiento'] = $this->cantidad_movimiento->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['costo_unidad'] = $this->costo_unidad->DefaultValue;
         $row['costo'] = $this->costo->DefaultValue;
         $row['precio_unidad'] = $this->precio_unidad->DefaultValue;
@@ -1081,6 +1099,8 @@ class EntradasSalidasEdit extends EntradasSalidas
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
         $row['newdata'] = $this->newdata->DefaultValue;
+        $row['cantidad_entregada'] = $this->cantidad_entregada->DefaultValue;
+        $row['cantidad_por_entregar'] = $this->cantidad_por_entregar->DefaultValue;
         return $row;
     }
 
@@ -1160,6 +1180,9 @@ class EntradasSalidasEdit extends EntradasSalidas
         // descuento
         $this->descuento->RowCssClass = "row";
 
+        // descuento2
+        $this->descuento2->RowCssClass = "row";
+
         // costo_unidad
         $this->costo_unidad->RowCssClass = "row";
 
@@ -1189,6 +1212,12 @@ class EntradasSalidasEdit extends EntradasSalidas
 
         // newdata
         $this->newdata->RowCssClass = "row";
+
+        // cantidad_entregada
+        $this->cantidad_entregada->RowCssClass = "row";
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1288,6 +1317,10 @@ class EntradasSalidasEdit extends EntradasSalidas
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // costo_unidad
             $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
             $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -1338,6 +1371,14 @@ class EntradasSalidasEdit extends EntradasSalidas
                 $this->newdata->ViewValue = null;
             }
 
+            // cantidad_entregada
+            $this->cantidad_entregada->ViewValue = $this->cantidad_entregada->CurrentValue;
+            $this->cantidad_entregada->ViewValue = FormatNumber($this->cantidad_entregada->ViewValue, $this->cantidad_entregada->formatPattern());
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->ViewValue = $this->cantidad_por_entregar->CurrentValue;
+            $this->cantidad_por_entregar->ViewValue = FormatNumber($this->cantidad_por_entregar->ViewValue, $this->cantidad_por_entregar->formatPattern());
+
             // articulo
             $this->articulo->HrefValue = "";
 
@@ -1349,9 +1390,6 @@ class EntradasSalidasEdit extends EntradasSalidas
 
             // cantidad_articulo
             $this->cantidad_articulo->HrefValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";
@@ -1371,6 +1409,12 @@ class EntradasSalidasEdit extends EntradasSalidas
 
             // newdata
             $this->newdata->HrefValue = "";
+
+            // cantidad_entregada
+            $this->cantidad_entregada->HrefValue = "";
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // articulo
             $this->articulo->setupEditAttributes();
@@ -1399,14 +1443,6 @@ class EntradasSalidasEdit extends EntradasSalidas
             $this->cantidad_articulo->PlaceHolder = RemoveHtml($this->cantidad_articulo->caption());
             if (strval($this->cantidad_articulo->EditValue) != "" && is_numeric($this->cantidad_articulo->EditValue)) {
                 $this->cantidad_articulo->EditValue = FormatNumber($this->cantidad_articulo->EditValue, null);
-            }
-
-            // descuento
-            $this->descuento->setupEditAttributes();
-            $this->descuento->EditValue = $this->descuento->CurrentValue;
-            $this->descuento->PlaceHolder = RemoveHtml($this->descuento->caption());
-            if (strval($this->descuento->EditValue) != "" && is_numeric($this->descuento->EditValue)) {
-                $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
             }
 
             // costo_unidad
@@ -1458,6 +1494,22 @@ class EntradasSalidasEdit extends EntradasSalidas
             $this->newdata->EditValue = $this->newdata->options(false);
             $this->newdata->PlaceHolder = RemoveHtml($this->newdata->caption());
 
+            // cantidad_entregada
+            $this->cantidad_entregada->setupEditAttributes();
+            $this->cantidad_entregada->EditValue = $this->cantidad_entregada->CurrentValue;
+            $this->cantidad_entregada->PlaceHolder = RemoveHtml($this->cantidad_entregada->caption());
+            if (strval($this->cantidad_entregada->EditValue) != "" && is_numeric($this->cantidad_entregada->EditValue)) {
+                $this->cantidad_entregada->EditValue = FormatNumber($this->cantidad_entregada->EditValue, null);
+            }
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->setupEditAttributes();
+            $this->cantidad_por_entregar->EditValue = $this->cantidad_por_entregar->CurrentValue;
+            $this->cantidad_por_entregar->PlaceHolder = RemoveHtml($this->cantidad_por_entregar->caption());
+            if (strval($this->cantidad_por_entregar->EditValue) != "" && is_numeric($this->cantidad_por_entregar->EditValue)) {
+                $this->cantidad_por_entregar->EditValue = FormatNumber($this->cantidad_por_entregar->EditValue, null);
+            }
+
             // Edit refer script
 
             // articulo
@@ -1471,9 +1523,6 @@ class EntradasSalidasEdit extends EntradasSalidas
 
             // cantidad_articulo
             $this->cantidad_articulo->HrefValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";
@@ -1493,6 +1542,12 @@ class EntradasSalidasEdit extends EntradasSalidas
 
             // newdata
             $this->newdata->HrefValue = "";
+
+            // cantidad_entregada
+            $this->cantidad_entregada->HrefValue = "";
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1543,14 +1598,6 @@ class EntradasSalidasEdit extends EntradasSalidas
             if (!CheckNumber($this->cantidad_articulo->FormValue)) {
                 $this->cantidad_articulo->addErrorMessage($this->cantidad_articulo->getErrorMessage(false));
             }
-            if ($this->descuento->Visible && $this->descuento->Required) {
-                if (!$this->descuento->IsDetailKey && EmptyValue($this->descuento->FormValue)) {
-                    $this->descuento->addErrorMessage(str_replace("%s", $this->descuento->caption(), $this->descuento->RequiredErrorMessage));
-                }
-            }
-            if (!CheckNumber($this->descuento->FormValue)) {
-                $this->descuento->addErrorMessage($this->descuento->getErrorMessage(false));
-            }
             if ($this->costo_unidad->Visible && $this->costo_unidad->Required) {
                 if (!$this->costo_unidad->IsDetailKey && EmptyValue($this->costo_unidad->FormValue)) {
                     $this->costo_unidad->addErrorMessage(str_replace("%s", $this->costo_unidad->caption(), $this->costo_unidad->RequiredErrorMessage));
@@ -1592,6 +1639,22 @@ class EntradasSalidasEdit extends EntradasSalidas
                 if ($this->newdata->FormValue == "") {
                     $this->newdata->addErrorMessage(str_replace("%s", $this->newdata->caption(), $this->newdata->RequiredErrorMessage));
                 }
+            }
+            if ($this->cantidad_entregada->Visible && $this->cantidad_entregada->Required) {
+                if (!$this->cantidad_entregada->IsDetailKey && EmptyValue($this->cantidad_entregada->FormValue)) {
+                    $this->cantidad_entregada->addErrorMessage(str_replace("%s", $this->cantidad_entregada->caption(), $this->cantidad_entregada->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->cantidad_entregada->FormValue)) {
+                $this->cantidad_entregada->addErrorMessage($this->cantidad_entregada->getErrorMessage(false));
+            }
+            if ($this->cantidad_por_entregar->Visible && $this->cantidad_por_entregar->Required) {
+                if (!$this->cantidad_por_entregar->IsDetailKey && EmptyValue($this->cantidad_por_entregar->FormValue)) {
+                    $this->cantidad_por_entregar->addErrorMessage(str_replace("%s", $this->cantidad_por_entregar->caption(), $this->cantidad_por_entregar->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->cantidad_por_entregar->FormValue)) {
+                $this->cantidad_por_entregar->addErrorMessage($this->cantidad_por_entregar->getErrorMessage(false));
             }
 
         // Return validate result
@@ -1694,9 +1757,6 @@ class EntradasSalidasEdit extends EntradasSalidas
         // cantidad_articulo
         $this->cantidad_articulo->setDbValueDef($rsnew, $this->cantidad_articulo->CurrentValue, $this->cantidad_articulo->ReadOnly);
 
-        // descuento
-        $this->descuento->setDbValueDef($rsnew, $this->descuento->CurrentValue, $this->descuento->ReadOnly);
-
         // costo_unidad
         $this->costo_unidad->setDbValueDef($rsnew, $this->costo_unidad->CurrentValue, $this->costo_unidad->ReadOnly);
 
@@ -1711,6 +1771,12 @@ class EntradasSalidasEdit extends EntradasSalidas
 
         // newdata
         $this->newdata->setDbValueDef($rsnew, $this->newdata->CurrentValue, $this->newdata->ReadOnly);
+
+        // cantidad_entregada
+        $this->cantidad_entregada->setDbValueDef($rsnew, $this->cantidad_entregada->CurrentValue, $this->cantidad_entregada->ReadOnly);
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->setDbValueDef($rsnew, $this->cantidad_por_entregar->CurrentValue, $this->cantidad_por_entregar->ReadOnly);
         return $rsnew;
     }
 
@@ -1732,9 +1798,6 @@ class EntradasSalidasEdit extends EntradasSalidas
         if (isset($row['cantidad_articulo'])) { // cantidad_articulo
             $this->cantidad_articulo->CurrentValue = $row['cantidad_articulo'];
         }
-        if (isset($row['descuento'])) { // descuento
-            $this->descuento->CurrentValue = $row['descuento'];
-        }
         if (isset($row['costo_unidad'])) { // costo_unidad
             $this->costo_unidad->CurrentValue = $row['costo_unidad'];
         }
@@ -1749,6 +1812,12 @@ class EntradasSalidasEdit extends EntradasSalidas
         }
         if (isset($row['newdata'])) { // newdata
             $this->newdata->CurrentValue = $row['newdata'];
+        }
+        if (isset($row['cantidad_entregada'])) { // cantidad_entregada
+            $this->cantidad_entregada->CurrentValue = $row['cantidad_entregada'];
+        }
+        if (isset($row['cantidad_por_entregar'])) { // cantidad_por_entregar
+            $this->cantidad_por_entregar->CurrentValue = $row['cantidad_por_entregar'];
         }
     }
 

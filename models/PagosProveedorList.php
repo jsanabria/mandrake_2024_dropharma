@@ -167,6 +167,7 @@ class PagosProveedorList extends PagosProveedor
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
+        $this->cont_lotes->setVisibility();
     }
 
     // Constructor
@@ -1107,6 +1108,7 @@ class PagosProveedorList extends PagosProveedor
         $filterList = Concat($filterList, $this->fecha_registro->AdvancedSearch->toJson(), ","); // Field fecha_registro
         $filterList = Concat($filterList, $this->_username->AdvancedSearch->toJson(), ","); // Field username
         $filterList = Concat($filterList, $this->comprobante->AdvancedSearch->toJson(), ","); // Field comprobante
+        $filterList = Concat($filterList, $this->cont_lotes->AdvancedSearch->toJson(), ","); // Field cont_lotes
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1257,6 +1259,14 @@ class PagosProveedorList extends PagosProveedor
         $this->comprobante->AdvancedSearch->SearchValue2 = @$filter["y_comprobante"];
         $this->comprobante->AdvancedSearch->SearchOperator2 = @$filter["w_comprobante"];
         $this->comprobante->AdvancedSearch->save();
+
+        // Field cont_lotes
+        $this->cont_lotes->AdvancedSearch->SearchValue = @$filter["x_cont_lotes"];
+        $this->cont_lotes->AdvancedSearch->SearchOperator = @$filter["z_cont_lotes"];
+        $this->cont_lotes->AdvancedSearch->SearchCondition = @$filter["v_cont_lotes"];
+        $this->cont_lotes->AdvancedSearch->SearchValue2 = @$filter["y_cont_lotes"];
+        $this->cont_lotes->AdvancedSearch->SearchOperator2 = @$filter["w_cont_lotes"];
+        $this->cont_lotes->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1283,6 +1293,7 @@ class PagosProveedorList extends PagosProveedor
         $this->buildSearchSql($where, $this->fecha_registro, $default, false); // fecha_registro
         $this->buildSearchSql($where, $this->_username, $default, false); // username
         $this->buildSearchSql($where, $this->comprobante, $default, false); // comprobante
+        $this->buildSearchSql($where, $this->cont_lotes, $default, false); // cont_lotes
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1303,6 +1314,7 @@ class PagosProveedorList extends PagosProveedor
             $this->fecha_registro->AdvancedSearch->save(); // fecha_registro
             $this->_username->AdvancedSearch->save(); // username
             $this->comprobante->AdvancedSearch->save(); // comprobante
+            $this->cont_lotes->AdvancedSearch->save(); // cont_lotes
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1347,6 +1359,7 @@ class PagosProveedorList extends PagosProveedor
             $this->fecha_registro->AdvancedSearch->save(); // fecha_registro
             $this->_username->AdvancedSearch->save(); // username
             $this->comprobante->AdvancedSearch->save(); // comprobante
+            $this->cont_lotes->AdvancedSearch->save(); // cont_lotes
             $this->setSessionRules($rules);
         }
 
@@ -1483,6 +1496,15 @@ class PagosProveedorList extends PagosProveedor
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field cont_lotes
+        $filter = $this->queryBuilderWhere("cont_lotes");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->cont_lotes, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->cont_lotes->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -1585,6 +1607,9 @@ class PagosProveedorList extends PagosProveedor
         if ($this->comprobante->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->cont_lotes->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1634,6 +1659,7 @@ class PagosProveedorList extends PagosProveedor
         $this->fecha_registro->AdvancedSearch->unsetSession();
         $this->_username->AdvancedSearch->unsetSession();
         $this->comprobante->AdvancedSearch->unsetSession();
+        $this->cont_lotes->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1659,6 +1685,7 @@ class PagosProveedorList extends PagosProveedor
         $this->fecha_registro->AdvancedSearch->load();
         $this->_username->AdvancedSearch->load();
         $this->comprobante->AdvancedSearch->load();
+        $this->cont_lotes->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1685,6 +1712,7 @@ class PagosProveedorList extends PagosProveedor
             $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->monto_dado); // monto_dado
             $this->updateSort($this->monto); // monto
+            $this->updateSort($this->cont_lotes); // cont_lotes
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1723,6 +1751,7 @@ class PagosProveedorList extends PagosProveedor
                 $this->fecha_registro->setSort("");
                 $this->_username->setSort("");
                 $this->comprobante->setSort("");
+                $this->cont_lotes->setSort("");
             }
 
             // Reset start position
@@ -2160,6 +2189,7 @@ class PagosProveedorList extends PagosProveedor
             $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "monto_dado");
             $this->createColumnOption($option, "monto");
+            $this->createColumnOption($option, "cont_lotes");
         }
 
         // Set up custom actions
@@ -2624,6 +2654,14 @@ class PagosProveedorList extends PagosProveedor
                 $this->Command = "search";
             }
         }
+
+        // cont_lotes
+        if ($this->cont_lotes->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cont_lotes->AdvancedSearch->SearchValue != "" || $this->cont_lotes->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -2734,6 +2772,7 @@ class PagosProveedorList extends PagosProveedor
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->_username->setDbValue($row['username']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->cont_lotes->setDbValue($row['cont_lotes']);
     }
 
     // Return a row with default values
@@ -2754,6 +2793,7 @@ class PagosProveedorList extends PagosProveedor
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['username'] = $this->_username->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['cont_lotes'] = $this->cont_lotes->DefaultValue;
         return $row;
     }
 
@@ -2821,6 +2861,8 @@ class PagosProveedorList extends PagosProveedor
         // username
 
         // comprobante
+
+        // cont_lotes
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2978,6 +3020,10 @@ class PagosProveedorList extends PagosProveedor
                 $this->comprobante->ViewValue = null;
             }
 
+            // cont_lotes
+            $this->cont_lotes->ViewValue = $this->cont_lotes->CurrentValue;
+            $this->cont_lotes->ViewValue = FormatNumber($this->cont_lotes->ViewValue, $this->cont_lotes->formatPattern());
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -3013,6 +3059,10 @@ class PagosProveedorList extends PagosProveedor
             // monto
             $this->monto->HrefValue = "";
             $this->monto->TooltipValue = "";
+
+            // cont_lotes
+            $this->cont_lotes->HrefValue = "";
+            $this->cont_lotes->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // id
             $this->id->setupEditAttributes();
@@ -3089,6 +3139,11 @@ class PagosProveedorList extends PagosProveedor
             $this->monto->setupEditAttributes();
             $this->monto->EditValue = $this->monto->AdvancedSearch->SearchValue;
             $this->monto->PlaceHolder = RemoveHtml($this->monto->caption());
+
+            // cont_lotes
+            $this->cont_lotes->setupEditAttributes();
+            $this->cont_lotes->EditValue = $this->cont_lotes->AdvancedSearch->SearchValue;
+            $this->cont_lotes->PlaceHolder = RemoveHtml($this->cont_lotes->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3137,6 +3192,7 @@ class PagosProveedorList extends PagosProveedor
         $this->fecha_registro->AdvancedSearch->load();
         $this->_username->AdvancedSearch->load();
         $this->comprobante->AdvancedSearch->load();
+        $this->cont_lotes->AdvancedSearch->load();
     }
 
     // Get export HTML tag

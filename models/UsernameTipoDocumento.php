@@ -162,7 +162,7 @@ class UsernameTipoDocumento extends DbTable
             '`tipo_documento`', // Expression
             '`tipo_documento`', // Basic search expression
             200, // Type
-            6, // Size
+            60, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`tipo_documento`', // Virtual expression

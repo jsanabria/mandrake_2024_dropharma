@@ -168,6 +168,7 @@ class ViewOutView extends ViewOut
         $this->cantidad_movimiento_consignacion->setVisibility();
         $this->id_consignacion->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->precio_unidad_sin_desc->setVisibility();
         $this->check_ne->setVisibility();
         $this->packer_cantidad->setVisibility();
@@ -859,6 +860,7 @@ class ViewOutView extends ViewOut
         $this->cantidad_movimiento_consignacion->setDbValue($row['cantidad_movimiento_consignacion']);
         $this->id_consignacion->setDbValue($row['id_consignacion']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
@@ -890,6 +892,7 @@ class ViewOutView extends ViewOut
         $row['cantidad_movimiento_consignacion'] = $this->cantidad_movimiento_consignacion->DefaultValue;
         $row['id_consignacion'] = $this->id_consignacion->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
@@ -956,6 +959,8 @@ class ViewOutView extends ViewOut
         // id_consignacion
 
         // descuento
+
+        // descuento2
 
         // precio_unidad_sin_desc
 
@@ -1104,6 +1109,10 @@ class ViewOutView extends ViewOut
             // descuento
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
+
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
 
             // precio_unidad_sin_desc
             $this->precio_unidad_sin_desc->ViewValue = $this->precio_unidad_sin_desc->CurrentValue;

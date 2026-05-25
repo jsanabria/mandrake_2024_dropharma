@@ -186,6 +186,17 @@ $entradas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($entradas->cliente->Visible) { // cliente ?>
+        <tr id="r_cliente"<?= $entradas->cliente->rowAttributes() ?>>
+            <td class="<?= $entradas->TableLeftColumnClass ?>"><?= $entradas->cliente->caption() ?></td>
+            <td<?= $entradas->cliente->cellAttributes() ?>>
+<span id="el_entradas_cliente">
+<span<?= $entradas->cliente->viewAttributes() ?>>
+<?= $entradas->cliente->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

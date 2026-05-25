@@ -72,7 +72,7 @@ class ViewInTdcpdc extends AbstractEntity
     #[Column(name: "tasa_dia", type: "decimal", nullable: true)]
     private ?string $tasaDia;
 
-    #[Column(type: "string", nullable: true)]
+    #[Column(type: "text", nullable: true)]
     private ?string $nota;
 
     #[Column(type: "string", nullable: true)]

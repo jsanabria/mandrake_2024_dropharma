@@ -63,6 +63,12 @@ class ContLotesPagosDetalle extends AbstractEntity
     #[Column(type: "integer", nullable: true)]
     private ?int $comprobante;
 
+    #[Column(type: "date", nullable: true)]
+    private ?DateTime $fecha;
+
+    #[Column(name: "monto_pagado", type: "decimal", nullable: true)]
+    private ?string $montoPagado;
+
     public function getId(): int
     {
         return $this->id;
@@ -181,6 +187,28 @@ class ContLotesPagosDetalle extends AbstractEntity
     public function setComprobante(?int $value): static
     {
         $this->comprobante = $value;
+        return $this;
+    }
+
+    public function getFecha(): ?DateTime
+    {
+        return $this->fecha;
+    }
+
+    public function setFecha(?DateTime $value): static
+    {
+        $this->fecha = $value;
+        return $this;
+    }
+
+    public function getMontoPagado(): ?string
+    {
+        return $this->montoPagado;
+    }
+
+    public function setMontoPagado(?string $value): static
+    {
+        $this->montoPagado = $value;
         return $this;
     }
 }

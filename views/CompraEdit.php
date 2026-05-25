@@ -47,7 +47,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["ref_islr", [fields.ref_islr.visible && fields.ref_islr.required ? ew.Validators.required(fields.ref_islr.caption) : null], fields.ref_islr.isInvalid],
             ["ref_municipal", [fields.ref_municipal.visible && fields.ref_municipal.required ? ew.Validators.required(fields.ref_municipal.caption) : null], fields.ref_municipal.isInvalid],
             ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
-            ["anulado", [fields.anulado.visible && fields.anulado.required ? ew.Validators.required(fields.anulado.caption) : null], fields.anulado.isInvalid]
+            ["anulado", [fields.anulado.visible && fields.anulado.required ? ew.Validators.required(fields.anulado.caption) : null], fields.anulado.isInvalid],
+            ["pagado", [fields.pagado.visible && fields.pagado.required ? ew.Validators.required(fields.pagado.caption) : null], fields.pagado.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -70,6 +71,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "tipo_documento": <?= $Page->tipo_documento->toClientList($Page) ?>,
             "aplica_retencion": <?= $Page->aplica_retencion->toClientList($Page) ?>,
             "anulado": <?= $Page->anulado->toClientList($Page) ?>,
+            "pagado": <?= $Page->pagado->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -98,6 +100,7 @@ loadjs.ready("head", function () {
     <ul class="<?= $Page->MultiPages->navClasses() ?>" role="tablist">
         <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(1) ?>" data-bs-target="#tab_compra1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra1" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(1)) ?>"><?= $Page->pageCaption(1) ?></button></li>
         <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(2) ?>" data-bs-target="#tab_compra2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra2" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(2)) ?>"><?= $Page->pageCaption(2) ?></button></li>
+        <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(3) ?>" data-bs-target="#tab_compra3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra3" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(3)) ?>"><?= $Page->pageCaption(3) ?></button></li>
     </ul>
     <div class="<?= $Page->MultiPages->tabContentClasses() ?>"><!-- multi-page tabs .tab-content -->
         <div class="<?= $Page->MultiPages->tabPaneClasses(1) ?>" id="tab_compra1" role="tabpanel"><!-- multi-page .tab-pane -->
@@ -329,42 +332,42 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
 </div></div>
     </div>
 <?php } ?>
-</div><!-- /page* -->
-        </div><!-- /multi-page .tab-pane -->
-        <div class="<?= $Page->MultiPages->tabPaneClasses(2) ?>" id="tab_compra2" role="tabpanel"><!-- multi-page .tab-pane -->
-<div class="ew-edit-div"><!-- page* -->
-<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
-    <div id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
-        <label id="elh_compra_aplica_retencion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->aplica_retencion->caption() ?><?= $Page->aplica_retencion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->aplica_retencion->cellAttributes() ?>>
-<span id="el_compra_aplica_retencion">
-<template id="tp_x_aplica_retencion">
+<?php if ($Page->pagado->Visible) { // pagado ?>
+    <div id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
+        <label id="elh_compra_pagado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pagado->caption() ?><?= $Page->pagado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pagado->cellAttributes() ?>>
+<span id="el_compra_pagado">
+<template id="tp_x_pagado">
     <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compra" data-field="x_aplica_retencion" name="x_aplica_retencion" id="x_aplica_retencion"<?= $Page->aplica_retencion->editAttributes() ?>>
+        <input type="radio" class="form-check-input" data-table="compra" data-field="x_pagado" name="x_pagado" id="x_pagado"<?= $Page->pagado->editAttributes() ?>>
         <label class="form-check-label"></label>
     </div>
 </template>
-<div id="dsl_x_aplica_retencion" class="ew-item-list"></div>
+<div id="dsl_x_pagado" class="ew-item-list"></div>
 <selection-list hidden
-    id="x_aplica_retencion"
-    name="x_aplica_retencion"
-    value="<?= HtmlEncode($Page->aplica_retencion->CurrentValue) ?>"
+    id="x_pagado"
+    name="x_pagado"
+    value="<?= HtmlEncode($Page->pagado->CurrentValue) ?>"
     data-type="select-one"
-    data-template="tp_x_aplica_retencion"
-    data-target="dsl_x_aplica_retencion"
+    data-template="tp_x_pagado"
+    data-target="dsl_x_pagado"
     data-repeatcolumn="5"
-    class="form-control<?= $Page->aplica_retencion->isInvalidClass() ?>"
+    class="form-control<?= $Page->pagado->isInvalidClass() ?>"
     data-table="compra"
-    data-field="x_aplica_retencion"
-    data-page="2"
-    data-value-separator="<?= $Page->aplica_retencion->displayValueSeparatorAttribute() ?>"
-    <?= $Page->aplica_retencion->editAttributes() ?>></selection-list>
-<?= $Page->aplica_retencion->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->aplica_retencion->getErrorMessage() ?></div>
+    data-field="x_pagado"
+    data-page="1"
+    data-value-separator="<?= $Page->pagado->displayValueSeparatorAttribute() ?>"
+    <?= $Page->pagado->editAttributes() ?>></selection-list>
+<?= $Page->pagado->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->pagado->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
 <?php } ?>
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(2) ?>" id="tab_compra2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
 <?php if ($Page->monto_exento->Visible) { // monto_exento ?>
     <div id="r_monto_exento"<?= $Page->monto_exento->rowAttributes() ?>>
         <label id="elh_compra_monto_exento" for="x_monto_exento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_exento->caption() ?><?= $Page->monto_exento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -401,42 +404,6 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
-    <div id="r_ref_iva"<?= $Page->ref_iva->rowAttributes() ?>>
-        <label id="elh_compra_ref_iva" for="x_ref_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_iva->caption() ?><?= $Page->ref_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_iva->cellAttributes() ?>>
-<span id="el_compra_ref_iva">
-<input type="<?= $Page->ref_iva->getInputTextType() ?>" name="x_ref_iva" id="x_ref_iva" data-table="compra" data-field="x_ref_iva" value="<?= $Page->ref_iva->EditValue ?>" data-page="2" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_iva->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_iva->formatPattern()) ?>"<?= $Page->ref_iva->editAttributes() ?> aria-describedby="x_ref_iva_help">
-<?= $Page->ref_iva->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->ref_iva->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
-    <div id="r_ref_islr"<?= $Page->ref_islr->rowAttributes() ?>>
-        <label id="elh_compra_ref_islr" for="x_ref_islr" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_islr->caption() ?><?= $Page->ref_islr->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_islr->cellAttributes() ?>>
-<span id="el_compra_ref_islr">
-<input type="<?= $Page->ref_islr->getInputTextType() ?>" name="x_ref_islr" id="x_ref_islr" data-table="compra" data-field="x_ref_islr" value="<?= $Page->ref_islr->EditValue ?>" data-page="2" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_islr->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_islr->formatPattern()) ?>"<?= $Page->ref_islr->editAttributes() ?> aria-describedby="x_ref_islr_help">
-<?= $Page->ref_islr->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->ref_islr->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
-    <div id="r_ref_municipal"<?= $Page->ref_municipal->rowAttributes() ?>>
-        <label id="elh_compra_ref_municipal" for="x_ref_municipal" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_municipal->caption() ?><?= $Page->ref_municipal->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_municipal->cellAttributes() ?>>
-<span id="el_compra_ref_municipal">
-<input type="<?= $Page->ref_municipal->getInputTextType() ?>" name="x_ref_municipal" id="x_ref_municipal" data-table="compra" data-field="x_ref_municipal" value="<?= $Page->ref_municipal->EditValue ?>" data-page="2" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_municipal->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_municipal->formatPattern()) ?>"<?= $Page->ref_municipal->editAttributes() ?> aria-describedby="x_ref_municipal_help">
-<?= $Page->ref_municipal->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->ref_municipal->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
     <div id="r_anulado"<?= $Page->anulado->rowAttributes() ?>>
         <label id="elh_compra_anulado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->anulado->caption() ?><?= $Page->anulado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -465,6 +432,78 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
     <?= $Page->anulado->editAttributes() ?>></selection-list>
 <?= $Page->anulado->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->anulado->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(3) ?>" id="tab_compra3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-edit-div"><!-- page* -->
+<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
+    <div id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
+        <label id="elh_compra_aplica_retencion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->aplica_retencion->caption() ?><?= $Page->aplica_retencion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->aplica_retencion->cellAttributes() ?>>
+<span id="el_compra_aplica_retencion">
+<template id="tp_x_aplica_retencion">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="compra" data-field="x_aplica_retencion" name="x_aplica_retencion" id="x_aplica_retencion"<?= $Page->aplica_retencion->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_aplica_retencion" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_aplica_retencion"
+    name="x_aplica_retencion"
+    value="<?= HtmlEncode($Page->aplica_retencion->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_aplica_retencion"
+    data-target="dsl_x_aplica_retencion"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->aplica_retencion->isInvalidClass() ?>"
+    data-table="compra"
+    data-field="x_aplica_retencion"
+    data-page="3"
+    data-value-separator="<?= $Page->aplica_retencion->displayValueSeparatorAttribute() ?>"
+    <?= $Page->aplica_retencion->editAttributes() ?>></selection-list>
+<?= $Page->aplica_retencion->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->aplica_retencion->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
+    <div id="r_ref_iva"<?= $Page->ref_iva->rowAttributes() ?>>
+        <label id="elh_compra_ref_iva" for="x_ref_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_iva->caption() ?><?= $Page->ref_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_iva->cellAttributes() ?>>
+<span id="el_compra_ref_iva">
+<input type="<?= $Page->ref_iva->getInputTextType() ?>" name="x_ref_iva" id="x_ref_iva" data-table="compra" data-field="x_ref_iva" value="<?= $Page->ref_iva->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_iva->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_iva->formatPattern()) ?>"<?= $Page->ref_iva->editAttributes() ?> aria-describedby="x_ref_iva_help">
+<?= $Page->ref_iva->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->ref_iva->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+    <div id="r_ref_islr"<?= $Page->ref_islr->rowAttributes() ?>>
+        <label id="elh_compra_ref_islr" for="x_ref_islr" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_islr->caption() ?><?= $Page->ref_islr->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_islr->cellAttributes() ?>>
+<span id="el_compra_ref_islr">
+<input type="<?= $Page->ref_islr->getInputTextType() ?>" name="x_ref_islr" id="x_ref_islr" data-table="compra" data-field="x_ref_islr" value="<?= $Page->ref_islr->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_islr->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_islr->formatPattern()) ?>"<?= $Page->ref_islr->editAttributes() ?> aria-describedby="x_ref_islr_help">
+<?= $Page->ref_islr->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->ref_islr->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
+    <div id="r_ref_municipal"<?= $Page->ref_municipal->rowAttributes() ?>>
+        <label id="elh_compra_ref_municipal" for="x_ref_municipal" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_municipal->caption() ?><?= $Page->ref_municipal->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_municipal->cellAttributes() ?>>
+<span id="el_compra_ref_municipal">
+<input type="<?= $Page->ref_municipal->getInputTextType() ?>" name="x_ref_municipal" id="x_ref_municipal" data-table="compra" data-field="x_ref_municipal" value="<?= $Page->ref_municipal->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_municipal->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_municipal->formatPattern()) ?>"<?= $Page->ref_municipal->editAttributes() ?> aria-describedby="x_ref_municipal_help">
+<?= $Page->ref_municipal->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->ref_municipal->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

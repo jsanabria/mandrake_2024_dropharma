@@ -417,6 +417,94 @@ $salidas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($salidas->nacionalizacion->Visible) { // nacionalizacion ?>
+        <tr id="r_nacionalizacion"<?= $salidas->nacionalizacion->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->nacionalizacion->caption() ?></td>
+            <td<?= $salidas->nacionalizacion->cellAttributes() ?>>
+<span id="el_salidas_nacionalizacion">
+<span<?= $salidas->nacionalizacion->viewAttributes() ?>>
+<?= $salidas->nacionalizacion->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->arquitecto->Visible) { // arquitecto ?>
+        <tr id="r_arquitecto"<?= $salidas->arquitecto->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->arquitecto->caption() ?></td>
+            <td<?= $salidas->arquitecto->cellAttributes() ?>>
+<span id="el_salidas_arquitecto">
+<span<?= $salidas->arquitecto->viewAttributes() ?>>
+<?= $salidas->arquitecto->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->ganancia->Visible) { // ganancia ?>
+        <tr id="r_ganancia"<?= $salidas->ganancia->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->ganancia->caption() ?></td>
+            <td<?= $salidas->ganancia->cellAttributes() ?>>
+<span id="el_salidas_ganancia">
+<span<?= $salidas->ganancia->viewAttributes() ?>>
+<?= $salidas->ganancia->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->intermediario->Visible) { // intermediario ?>
+        <tr id="r_intermediario"<?= $salidas->intermediario->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->intermediario->caption() ?></td>
+            <td<?= $salidas->intermediario->cellAttributes() ?>>
+<span id="el_salidas_intermediario">
+<span<?= $salidas->intermediario->viewAttributes() ?>>
+<?= $salidas->intermediario->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->telefeno_intermediario->Visible) { // telefeno_intermediario ?>
+        <tr id="r_telefeno_intermediario"<?= $salidas->telefeno_intermediario->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->telefeno_intermediario->caption() ?></td>
+            <td<?= $salidas->telefeno_intermediario->cellAttributes() ?>>
+<span id="el_salidas_telefeno_intermediario">
+<span<?= $salidas->telefeno_intermediario->viewAttributes() ?>>
+<?= $salidas->telefeno_intermediario->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->email_intermediario->Visible) { // email_intermediario ?>
+        <tr id="r_email_intermediario"<?= $salidas->email_intermediario->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->email_intermediario->caption() ?></td>
+            <td<?= $salidas->email_intermediario->cellAttributes() ?>>
+<span id="el_salidas_email_intermediario">
+<span<?= $salidas->email_intermediario->viewAttributes() ?>>
+<?= $salidas->email_intermediario->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->genera_ne->Visible) { // genera_ne ?>
+        <tr id="r_genera_ne"<?= $salidas->genera_ne->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->genera_ne->caption() ?></td>
+            <td<?= $salidas->genera_ne->cellAttributes() ?>>
+<span id="el_salidas_genera_ne">
+<span<?= $salidas->genera_ne->viewAttributes() ?>>
+<?= $salidas->genera_ne->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($salidas->visita->Visible) { // visita ?>
+        <tr id="r_visita"<?= $salidas->visita->rowAttributes() ?>>
+            <td class="<?= $salidas->TableLeftColumnClass ?>"><?= $salidas->visita->caption() ?></td>
+            <td<?= $salidas->visita->cellAttributes() ?>>
+<span id="el_salidas_visita">
+<span<?= $salidas->visita->viewAttributes() ?>>
+<?= $salidas->visita->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

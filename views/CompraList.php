@@ -59,6 +59,9 @@ loadjs.ready("head", function () {
 <?php } ?>
 </div>
 <?php } ?>
+<?php if ($Page->ShowCurrentFilter) { ?>
+<?php $Page->showFilterList() ?>
+<?php } ?>
 <?php if (!$Page->IsModal) { ?>
 <form name="fcomprasrch" id="fcomprasrch" class="ew-form ew-ext-search-form" action="<?= CurrentPageUrl(false) ?>" autocomplete="off">
 <div id="fcomprasrch_search_panel" class="mb-2 mb-sm-0 <?= $Page->SearchPanelClass ?>"><!-- .ew-search-panel -->
@@ -79,8 +82,44 @@ loadjs.ready(["wrapper", "head"], function () {
         .setSubmitWithFetch(true)
 <?php } ?>
 
+        // Add fields
+        .addFields([
+            ["proveedor", [], fields.proveedor.isInvalid]
+        ])
+        // Validate form
+        .setValidate(
+            async function () {
+                if (!this.validateRequired)
+                    return true; // Ignore validation
+                let fobj = this.getForm();
+
+                // Validate fields
+                if (!this.validateFields())
+                    return false;
+
+                // Call Form_CustomValidate event
+                if (!(await this.customValidate?.(fobj) ?? true)) {
+                    this.focus();
+                    return false;
+                }
+                return true;
+            }
+        )
+
+        // Form_CustomValidate
+        .setCustomValidate(
+            function (fobj) { // DO NOT CHANGE THIS LINE! (except for adding "async" keyword)!
+                    // Your custom validation code in JAVASCRIPT here, return false if invalid.
+                    return true;
+                }
+        )
+
+        // Use JavaScript validation or not
+        .setValidateRequired(ew.CLIENT_VALIDATE)
+
         // Dynamic selection lists
         .setLists({
+            "proveedor": <?= $Page->proveedor->toClientList($Page) ?>,
         })
 
         // Filters
@@ -98,6 +137,62 @@ loadjs.ready(["wrapper", "head"], function () {
 <?php if ($Security->canSearch()) { ?>
 <?php if (!$Page->isExport() && !($Page->CurrentAction && $Page->CurrentAction != "search") && $Page->hasSearchFields()) { ?>
 <div class="ew-extended-search container-fluid ps-2">
+<div class="row mb-0<?= ($Page->SearchFieldsPerRow > 0) ? " row-cols-sm-" . $Page->SearchFieldsPerRow : "" ?>">
+<?php
+// Render search row
+$Page->RowType = RowType::SEARCH;
+$Page->resetAttributes();
+$Page->renderRow();
+?>
+<?php if ($Page->proveedor->Visible) { // proveedor ?>
+<?php
+if (!$Page->proveedor->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_proveedor" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->proveedor->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_proveedor" class="ew-search-caption ew-label"><?= $Page->proveedor->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("=") ?>
+<input type="hidden" name="z_proveedor" id="z_proveedor" value="=">
+</div>
+        </div>
+        <div id="el_compra_proveedor" class="ew-search-field">
+    <select
+        id="x_proveedor"
+        name="x_proveedor"
+        class="form-control ew-select<?= $Page->proveedor->isInvalidClass() ?>"
+        data-select2-id="fcomprasrch_x_proveedor"
+        data-table="compra"
+        data-field="x_proveedor"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->proveedor->caption())) ?>"
+        data-modal-lookup="true"
+        data-value-separator="<?= $Page->proveedor->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->proveedor->getPlaceHolder()) ?>"
+        <?= $Page->proveedor->editAttributes() ?>>
+        <?= $Page->proveedor->selectOptionListHtml("x_proveedor") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->proveedor->getErrorMessage(false) ?></div>
+<?= $Page->proveedor->Lookup->getParamTag($Page, "p_x_proveedor") ?>
+<script>
+loadjs.ready("fcomprasrch", function() {
+    var options = { name: "x_proveedor", selectId: "fcomprasrch_x_proveedor" };
+    if (fcomprasrch.lists.proveedor?.lookupOptions.length) {
+        options.data = { id: "x_proveedor", form: "fcomprasrch" };
+    } else {
+        options.ajax = { id: "x_proveedor", form: "fcomprasrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.compra.fields.proveedor.modalLookupOptions);
+    ew.createModalLookup(options);
+});
+</script>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+</div><!-- /.row -->
 <div class="row mb-0">
     <div class="col-sm-auto px-0 pe-sm-2">
         <div class="ew-basic-search input-group">
@@ -187,6 +282,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->nro_control->Visible) { // nro_control ?>
         <th data-name="nro_control" class="<?= $Page->nro_control->headerCellClass() ?>"><div id="elh_compra_nro_control" class="compra_nro_control"><?= $Page->renderFieldHeader($Page->nro_control) ?></div></th>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <th data-name="fecha" class="<?= $Page->fecha->headerCellClass() ?>"><div id="elh_compra_fecha" class="compra_fecha"><?= $Page->renderFieldHeader($Page->fecha) ?></div></th>
+<?php } ?>
 <?php if ($Page->monto_total->Visible) { // monto_total ?>
         <th data-name="monto_total" class="<?= $Page->monto_total->headerCellClass() ?>"><div id="elh_compra_monto_total" class="compra_monto_total"><?= $Page->renderFieldHeader($Page->monto_total) ?></div></th>
 <?php } ?>
@@ -196,8 +294,14 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->ref_iva->Visible) { // ref_iva ?>
         <th data-name="ref_iva" class="<?= $Page->ref_iva->headerCellClass() ?>"><div id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->renderFieldHeader($Page->ref_iva) ?></div></th>
 <?php } ?>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <th data-name="ref_islr" class="<?= $Page->ref_islr->headerCellClass() ?>"><div id="elh_compra_ref_islr" class="compra_ref_islr"><?= $Page->renderFieldHeader($Page->ref_islr) ?></div></th>
+<?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th data-name="anulado" class="<?= $Page->anulado->headerCellClass() ?>"><div id="elh_compra_anulado" class="compra_anulado"><?= $Page->renderFieldHeader($Page->anulado) ?></div></th>
+<?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_compra_pagado" class="compra_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -275,6 +379,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
+    <?php if ($Page->fecha->Visible) { // fecha ?>
+        <td data-name="fecha"<?= $Page->fecha->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_fecha" class="el_compra_fecha">
+<span<?= $Page->fecha->viewAttributes() ?>>
+<?= $Page->fecha->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
     <?php if ($Page->monto_total->Visible) { // monto_total ?>
         <td data-name="monto_total"<?= $Page->monto_total->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_monto_total" class="el_compra_monto_total">
@@ -304,11 +416,32 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
+    <?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <td data-name="ref_islr"<?= $Page->ref_islr->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_ref_islr" class="el_compra_ref_islr">
+<span<?= $Page->ref_islr->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_islr->getViewValue()) && $Page->ref_islr->linkAttributes() != "") { ?>
+<a<?= $Page->ref_islr->linkAttributes() ?>><?= $Page->ref_islr->getViewValue() ?></a>
+<?php } else { ?>
+<?= $Page->ref_islr->getViewValue() ?>
+<?php } ?>
+</span>
+</span>
+</td>
+    <?php } ?>
     <?php if ($Page->anulado->Visible) { // anulado ?>
         <td data-name="anulado"<?= $Page->anulado->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_anulado" class="el_compra_anulado">
 <span<?= $Page->anulado->viewAttributes() ?>>
 <?= $Page->anulado->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->pagado->Visible) { // pagado ?>
+        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_pagado" class="el_compra_pagado">
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

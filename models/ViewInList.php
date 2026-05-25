@@ -167,6 +167,7 @@ class ViewInList extends ViewIn
         $this->cantidad_movimiento->Visible = false;
         $this->precio_unidad_sin_desc->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->Visible = false;
@@ -1161,6 +1162,7 @@ class ViewInList extends ViewIn
         $filterList = Concat($filterList, $this->cantidad_movimiento->AdvancedSearch->toJson(), ","); // Field cantidad_movimiento
         $filterList = Concat($filterList, $this->precio_unidad_sin_desc->AdvancedSearch->toJson(), ","); // Field precio_unidad_sin_desc
         $filterList = Concat($filterList, $this->descuento->AdvancedSearch->toJson(), ","); // Field descuento
+        $filterList = Concat($filterList, $this->descuento2->AdvancedSearch->toJson(), ","); // Field descuento2
         $filterList = Concat($filterList, $this->costo_unidad->AdvancedSearch->toJson(), ","); // Field costo_unidad
         $filterList = Concat($filterList, $this->costo->AdvancedSearch->toJson(), ","); // Field costo
         $filterList = Concat($filterList, $this->precio_unidad->AdvancedSearch->toJson(), ","); // Field precio_unidad
@@ -1322,6 +1324,14 @@ class ViewInList extends ViewIn
         $this->descuento->AdvancedSearch->SearchValue2 = @$filter["y_descuento"];
         $this->descuento->AdvancedSearch->SearchOperator2 = @$filter["w_descuento"];
         $this->descuento->AdvancedSearch->save();
+
+        // Field descuento2
+        $this->descuento2->AdvancedSearch->SearchValue = @$filter["x_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchOperator = @$filter["z_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchCondition = @$filter["v_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchValue2 = @$filter["y_descuento2"];
+        $this->descuento2->AdvancedSearch->SearchOperator2 = @$filter["w_descuento2"];
+        $this->descuento2->AdvancedSearch->save();
 
         // Field costo_unidad
         $this->costo_unidad->AdvancedSearch->SearchValue = @$filter["x_costo_unidad"];
@@ -1539,6 +1549,7 @@ class ViewInList extends ViewIn
             $this->updateSort($this->cantidad_articulo); // cantidad_articulo
             $this->updateSort($this->precio_unidad_sin_desc); // precio_unidad_sin_desc
             $this->updateSort($this->descuento); // descuento
+            $this->updateSort($this->descuento2); // descuento2
             $this->updateSort($this->costo_unidad); // costo_unidad
             $this->updateSort($this->costo); // costo
             $this->updateSort($this->alicuota); // alicuota
@@ -1596,6 +1607,7 @@ class ViewInList extends ViewIn
                 $this->cantidad_movimiento->setSort("");
                 $this->precio_unidad_sin_desc->setSort("");
                 $this->descuento->setSort("");
+                $this->descuento2->setSort("");
                 $this->costo_unidad->setSort("");
                 $this->costo->setSort("");
                 $this->precio_unidad->setSort("");
@@ -1779,6 +1791,7 @@ class ViewInList extends ViewIn
             $this->createColumnOption($option, "cantidad_articulo");
             $this->createColumnOption($option, "precio_unidad_sin_desc");
             $this->createColumnOption($option, "descuento");
+            $this->createColumnOption($option, "descuento2");
             $this->createColumnOption($option, "costo_unidad");
             $this->createColumnOption($option, "costo");
             $this->createColumnOption($option, "alicuota");
@@ -2230,6 +2243,7 @@ class ViewInList extends ViewIn
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -2261,6 +2275,7 @@ class ViewInList extends ViewIn
         $row['cantidad_movimiento'] = $this->cantidad_movimiento->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['costo_unidad'] = $this->costo_unidad->DefaultValue;
         $row['costo'] = $this->costo->DefaultValue;
         $row['precio_unidad'] = $this->precio_unidad->DefaultValue;
@@ -2339,6 +2354,8 @@ class ViewInList extends ViewIn
         // precio_unidad_sin_desc
 
         // descuento
+
+        // descuento2
 
         // costo_unidad
 
@@ -2474,6 +2491,10 @@ class ViewInList extends ViewIn
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // costo_unidad
             $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
             $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -2555,6 +2576,10 @@ class ViewInList extends ViewIn
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";

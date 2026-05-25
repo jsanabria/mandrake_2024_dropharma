@@ -65,6 +65,9 @@ class Articulo extends DbTable
     public $codigo_de_barra;
     public $categoria;
     public $lista_pedido;
+    public $categoria_madre;
+    public $sub_categoria;
+    public $tipo;
     public $unidad_medida_defecto;
     public $cantidad_por_unidad_medida;
     public $cantidad_minima;
@@ -78,10 +81,16 @@ class Articulo extends DbTable
     public $precio;
     public $alicuota;
     public $articulo_inventario;
+    public $indexado;
+    public $pies_cubico;
+    public $color;
+    public $cojin;
+    public $brazo;
+    public $respaldo;
+    public $talla;
     public $activo;
     public $lote;
     public $fecha_vencimiento;
-    public $indexado;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -230,7 +239,7 @@ class Articulo extends DbTable
             '`principio_activo`', // Expression
             '`principio_activo`', // Basic search expression
             200, // Type
-            100, // Size
+            255, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`principio_activo`', // Virtual expression
@@ -396,6 +405,79 @@ class Articulo extends DbTable
         $this->lista_pedido->Lookup = new Lookup($this->lista_pedido, 'tabla', false, 'campo_codigo', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion` ASC', '', "`campo_descripcion`");
         $this->lista_pedido->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['lista_pedido'] = &$this->lista_pedido;
+
+        // categoria_madre
+        $this->categoria_madre = new DbField(
+            $this, // Table
+            'x_categoria_madre', // Variable name
+            'categoria_madre', // Name
+            '`categoria_madre`', // Expression
+            '`categoria_madre`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`categoria_madre`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->categoria_madre->InputTextType = "text";
+        $this->categoria_madre->Lookup = new Lookup($this->categoria_madre, 'articulo', true, 'categoria_madre', ["categoria_madre","","",""], '', '', [], [], [], [], [], [], false, '`categoria_madre` ASC', '', "`categoria_madre`");
+        $this->categoria_madre->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['categoria_madre'] = &$this->categoria_madre;
+
+        // sub_categoria
+        $this->sub_categoria = new DbField(
+            $this, // Table
+            'x_sub_categoria', // Variable name
+            'sub_categoria', // Name
+            '`sub_categoria`', // Expression
+            '`sub_categoria`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`sub_categoria`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->sub_categoria->InputTextType = "text";
+        $this->sub_categoria->Lookup = new Lookup($this->sub_categoria, 'articulo', true, 'sub_categoria', ["sub_categoria","","",""], '', '', [], [], [], [], [], [], false, '`sub_categoria` ASC', '', "`sub_categoria`");
+        $this->sub_categoria->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['sub_categoria'] = &$this->sub_categoria;
+
+        // tipo
+        $this->tipo = new DbField(
+            $this, // Table
+            'x_tipo', // Variable name
+            'tipo', // Name
+            '`tipo`', // Expression
+            '`tipo`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->tipo->InputTextType = "text";
+        $this->tipo->setSelectMultiple(false); // Select one
+        $this->tipo->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->tipo->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->tipo->Lookup = new Lookup($this->tipo, 'articulo', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->tipo->OptionCount = 2;
+        $this->tipo->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tipo'] = &$this->tipo;
 
         // unidad_medida_defecto
         $this->unidad_medida_defecto = new DbField(
@@ -747,6 +829,170 @@ class Articulo extends DbTable
         $this->articulo_inventario->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['articulo_inventario'] = &$this->articulo_inventario;
 
+        // indexado
+        $this->indexado = new DbField(
+            $this, // Table
+            'x_indexado', // Variable name
+            'indexado', // Name
+            '`indexado`', // Expression
+            '`indexado`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`indexado`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->indexado->InputTextType = "text";
+        $this->indexado->Raw = true;
+        $this->indexado->setSelectMultiple(false); // Select one
+        $this->indexado->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->indexado->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->indexado->Lookup = new Lookup($this->indexado, 'articulo', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->indexado->OptionCount = 2;
+        $this->indexado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['indexado'] = &$this->indexado;
+
+        // pies_cubico
+        $this->pies_cubico = new DbField(
+            $this, // Table
+            'x_pies_cubico', // Variable name
+            'pies_cubico', // Name
+            '`pies_cubico`', // Expression
+            '`pies_cubico`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`pies_cubico`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->pies_cubico->addMethod("getDefault", fn() => 0.00);
+        $this->pies_cubico->InputTextType = "text";
+        $this->pies_cubico->Raw = true;
+        $this->pies_cubico->Nullable = false; // NOT NULL field
+        $this->pies_cubico->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->pies_cubico->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
+        $this->Fields['pies_cubico'] = &$this->pies_cubico;
+
+        // color
+        $this->color = new DbField(
+            $this, // Table
+            'x_color', // Variable name
+            'color', // Name
+            '`color`', // Expression
+            '`color`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`color`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->color->InputTextType = "text";
+        $this->color->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['color'] = &$this->color;
+
+        // cojin
+        $this->cojin = new DbField(
+            $this, // Table
+            'x_cojin', // Variable name
+            'cojin', // Name
+            '`cojin`', // Expression
+            '`cojin`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cojin`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cojin->InputTextType = "text";
+        $this->cojin->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cojin'] = &$this->cojin;
+
+        // brazo
+        $this->brazo = new DbField(
+            $this, // Table
+            'x_brazo', // Variable name
+            'brazo', // Name
+            '`brazo`', // Expression
+            '`brazo`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`brazo`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->brazo->InputTextType = "text";
+        $this->brazo->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['brazo'] = &$this->brazo;
+
+        // respaldo
+        $this->respaldo = new DbField(
+            $this, // Table
+            'x_respaldo', // Variable name
+            'respaldo', // Name
+            '`respaldo`', // Expression
+            '`respaldo`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`respaldo`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->respaldo->InputTextType = "text";
+        $this->respaldo->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['respaldo'] = &$this->respaldo;
+
+        // talla
+        $this->talla = new DbField(
+            $this, // Table
+            'x_talla', // Variable name
+            'talla', // Name
+            '`talla`', // Expression
+            '`talla`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`talla`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->talla->InputTextType = "text";
+        $this->talla->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['talla'] = &$this->talla;
+
         // activo
         $this->activo = new DbField(
             $this, // Table
@@ -821,34 +1067,6 @@ class Articulo extends DbTable
         $this->fecha_vencimiento->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->phrase("IncorrectDate"));
         $this->fecha_vencimiento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['fecha_vencimiento'] = &$this->fecha_vencimiento;
-
-        // indexado
-        $this->indexado = new DbField(
-            $this, // Table
-            'x_indexado', // Variable name
-            'indexado', // Name
-            '`indexado`', // Expression
-            '`indexado`', // Basic search expression
-            200, // Type
-            1, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`indexado`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'SELECT' // Edit Tag
-        );
-        $this->indexado->InputTextType = "text";
-        $this->indexado->Raw = true;
-        $this->indexado->setSelectMultiple(false); // Select one
-        $this->indexado->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->indexado->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->indexado->Lookup = new Lookup($this->indexado, 'articulo', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
-        $this->indexado->OptionCount = 2;
-        $this->indexado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
-        $this->Fields['indexado'] = &$this->indexado;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1474,6 +1692,9 @@ class Articulo extends DbTable
         $this->codigo_de_barra->DbValue = $row['codigo_de_barra'];
         $this->categoria->DbValue = $row['categoria'];
         $this->lista_pedido->DbValue = $row['lista_pedido'];
+        $this->categoria_madre->DbValue = $row['categoria_madre'];
+        $this->sub_categoria->DbValue = $row['sub_categoria'];
+        $this->tipo->DbValue = $row['tipo'];
         $this->unidad_medida_defecto->DbValue = $row['unidad_medida_defecto'];
         $this->cantidad_por_unidad_medida->DbValue = $row['cantidad_por_unidad_medida'];
         $this->cantidad_minima->DbValue = $row['cantidad_minima'];
@@ -1487,10 +1708,16 @@ class Articulo extends DbTable
         $this->precio->DbValue = $row['precio'];
         $this->alicuota->DbValue = $row['alicuota'];
         $this->articulo_inventario->DbValue = $row['articulo_inventario'];
+        $this->indexado->DbValue = $row['indexado'];
+        $this->pies_cubico->DbValue = $row['pies_cubico'];
+        $this->color->DbValue = $row['color'];
+        $this->cojin->DbValue = $row['cojin'];
+        $this->brazo->DbValue = $row['brazo'];
+        $this->respaldo->DbValue = $row['respaldo'];
+        $this->talla->DbValue = $row['talla'];
         $this->activo->DbValue = $row['activo'];
         $this->lote->DbValue = $row['lote'];
         $this->fecha_vencimiento->DbValue = $row['fecha_vencimiento'];
-        $this->indexado->DbValue = $row['indexado'];
     }
 
     // Delete uploaded files
@@ -1868,6 +2095,9 @@ class Articulo extends DbTable
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
         $this->categoria->setDbValue($row['categoria']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
+        $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
         $this->cantidad_minima->setDbValue($row['cantidad_minima']);
@@ -1881,10 +2111,16 @@ class Articulo extends DbTable
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
+        $this->indexado->setDbValue($row['indexado']);
+        $this->pies_cubico->setDbValue($row['pies_cubico']);
+        $this->color->setDbValue($row['color']);
+        $this->cojin->setDbValue($row['cojin']);
+        $this->brazo->setDbValue($row['brazo']);
+        $this->respaldo->setDbValue($row['respaldo']);
+        $this->talla->setDbValue($row['talla']);
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
-        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Render list content
@@ -1937,6 +2173,12 @@ class Articulo extends DbTable
 
         // lista_pedido
 
+        // categoria_madre
+
+        // sub_categoria
+
+        // tipo
+
         // unidad_medida_defecto
 
         // cantidad_por_unidad_medida
@@ -1963,13 +2205,25 @@ class Articulo extends DbTable
 
         // articulo_inventario
 
+        // indexado
+
+        // pies_cubico
+
+        // color
+
+        // cojin
+
+        // brazo
+
+        // respaldo
+
+        // talla
+
         // activo
 
         // lote
 
         // fecha_vencimiento
-
-        // indexado
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2073,6 +2327,19 @@ class Articulo extends DbTable
             }
         } else {
             $this->lista_pedido->ViewValue = null;
+        }
+
+        // categoria_madre
+        $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
+
+        // sub_categoria
+        $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
+
+        // tipo
+        if (strval($this->tipo->CurrentValue) != "") {
+            $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
+        } else {
+            $this->tipo->ViewValue = null;
         }
 
         // unidad_medida_defecto
@@ -2189,6 +2456,32 @@ class Articulo extends DbTable
             $this->articulo_inventario->ViewValue = null;
         }
 
+        // indexado
+        if (strval($this->indexado->CurrentValue) != "") {
+            $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+        } else {
+            $this->indexado->ViewValue = null;
+        }
+
+        // pies_cubico
+        $this->pies_cubico->ViewValue = $this->pies_cubico->CurrentValue;
+        $this->pies_cubico->ViewValue = FormatNumber($this->pies_cubico->ViewValue, $this->pies_cubico->formatPattern());
+
+        // color
+        $this->color->ViewValue = $this->color->CurrentValue;
+
+        // cojin
+        $this->cojin->ViewValue = $this->cojin->CurrentValue;
+
+        // brazo
+        $this->brazo->ViewValue = $this->brazo->CurrentValue;
+
+        // respaldo
+        $this->respaldo->ViewValue = $this->respaldo->CurrentValue;
+
+        // talla
+        $this->talla->ViewValue = $this->talla->CurrentValue;
+
         // activo
         if (strval($this->activo->CurrentValue) != "") {
             $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
@@ -2202,13 +2495,6 @@ class Articulo extends DbTable
         // fecha_vencimiento
         $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
         $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
-
-        // indexado
-        if (strval($this->indexado->CurrentValue) != "") {
-            $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
-        } else {
-            $this->indexado->ViewValue = null;
-        }
 
         // id
         $this->id->HrefValue = "";
@@ -2270,6 +2556,18 @@ class Articulo extends DbTable
         $this->lista_pedido->HrefValue = "";
         $this->lista_pedido->TooltipValue = "";
 
+        // categoria_madre
+        $this->categoria_madre->HrefValue = "";
+        $this->categoria_madre->TooltipValue = "";
+
+        // sub_categoria
+        $this->sub_categoria->HrefValue = "";
+        $this->sub_categoria->TooltipValue = "";
+
+        // tipo
+        $this->tipo->HrefValue = "";
+        $this->tipo->TooltipValue = "";
+
         // unidad_medida_defecto
         $this->unidad_medida_defecto->HrefValue = "";
         $this->unidad_medida_defecto->TooltipValue = "";
@@ -2322,6 +2620,34 @@ class Articulo extends DbTable
         $this->articulo_inventario->HrefValue = "";
         $this->articulo_inventario->TooltipValue = "";
 
+        // indexado
+        $this->indexado->HrefValue = "";
+        $this->indexado->TooltipValue = "";
+
+        // pies_cubico
+        $this->pies_cubico->HrefValue = "";
+        $this->pies_cubico->TooltipValue = "";
+
+        // color
+        $this->color->HrefValue = "";
+        $this->color->TooltipValue = "";
+
+        // cojin
+        $this->cojin->HrefValue = "";
+        $this->cojin->TooltipValue = "";
+
+        // brazo
+        $this->brazo->HrefValue = "";
+        $this->brazo->TooltipValue = "";
+
+        // respaldo
+        $this->respaldo->HrefValue = "";
+        $this->respaldo->TooltipValue = "";
+
+        // talla
+        $this->talla->HrefValue = "";
+        $this->talla->TooltipValue = "";
+
         // activo
         $this->activo->HrefValue = "";
         $this->activo->TooltipValue = "";
@@ -2333,10 +2659,6 @@ class Articulo extends DbTable
         // fecha_vencimiento
         $this->fecha_vencimiento->HrefValue = "";
         $this->fecha_vencimiento->TooltipValue = "";
-
-        // indexado
-        $this->indexado->HrefValue = "";
-        $this->indexado->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2432,6 +2754,27 @@ class Articulo extends DbTable
         $this->lista_pedido->setupEditAttributes();
         $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
 
+        // categoria_madre
+        $this->categoria_madre->setupEditAttributes();
+        if (!$this->categoria_madre->Raw) {
+            $this->categoria_madre->CurrentValue = HtmlDecode($this->categoria_madre->CurrentValue);
+        }
+        $this->categoria_madre->EditValue = $this->categoria_madre->CurrentValue;
+        $this->categoria_madre->PlaceHolder = RemoveHtml($this->categoria_madre->caption());
+
+        // sub_categoria
+        $this->sub_categoria->setupEditAttributes();
+        if (!$this->sub_categoria->Raw) {
+            $this->sub_categoria->CurrentValue = HtmlDecode($this->sub_categoria->CurrentValue);
+        }
+        $this->sub_categoria->EditValue = $this->sub_categoria->CurrentValue;
+        $this->sub_categoria->PlaceHolder = RemoveHtml($this->sub_categoria->caption());
+
+        // tipo
+        $this->tipo->setupEditAttributes();
+        $this->tipo->EditValue = $this->tipo->options(true);
+        $this->tipo->PlaceHolder = RemoveHtml($this->tipo->caption());
+
         // unidad_medida_defecto
         $this->unidad_medida_defecto->setupEditAttributes();
         $this->unidad_medida_defecto->PlaceHolder = RemoveHtml($this->unidad_medida_defecto->caption());
@@ -2521,6 +2864,59 @@ class Articulo extends DbTable
         $this->articulo_inventario->EditValue = $this->articulo_inventario->options(true);
         $this->articulo_inventario->PlaceHolder = RemoveHtml($this->articulo_inventario->caption());
 
+        // indexado
+        $this->indexado->setupEditAttributes();
+        $this->indexado->EditValue = $this->indexado->options(true);
+        $this->indexado->PlaceHolder = RemoveHtml($this->indexado->caption());
+
+        // pies_cubico
+        $this->pies_cubico->setupEditAttributes();
+        $this->pies_cubico->EditValue = $this->pies_cubico->CurrentValue;
+        $this->pies_cubico->PlaceHolder = RemoveHtml($this->pies_cubico->caption());
+        if (strval($this->pies_cubico->EditValue) != "" && is_numeric($this->pies_cubico->EditValue)) {
+            $this->pies_cubico->EditValue = FormatNumber($this->pies_cubico->EditValue, null);
+        }
+
+        // color
+        $this->color->setupEditAttributes();
+        if (!$this->color->Raw) {
+            $this->color->CurrentValue = HtmlDecode($this->color->CurrentValue);
+        }
+        $this->color->EditValue = $this->color->CurrentValue;
+        $this->color->PlaceHolder = RemoveHtml($this->color->caption());
+
+        // cojin
+        $this->cojin->setupEditAttributes();
+        if (!$this->cojin->Raw) {
+            $this->cojin->CurrentValue = HtmlDecode($this->cojin->CurrentValue);
+        }
+        $this->cojin->EditValue = $this->cojin->CurrentValue;
+        $this->cojin->PlaceHolder = RemoveHtml($this->cojin->caption());
+
+        // brazo
+        $this->brazo->setupEditAttributes();
+        if (!$this->brazo->Raw) {
+            $this->brazo->CurrentValue = HtmlDecode($this->brazo->CurrentValue);
+        }
+        $this->brazo->EditValue = $this->brazo->CurrentValue;
+        $this->brazo->PlaceHolder = RemoveHtml($this->brazo->caption());
+
+        // respaldo
+        $this->respaldo->setupEditAttributes();
+        if (!$this->respaldo->Raw) {
+            $this->respaldo->CurrentValue = HtmlDecode($this->respaldo->CurrentValue);
+        }
+        $this->respaldo->EditValue = $this->respaldo->CurrentValue;
+        $this->respaldo->PlaceHolder = RemoveHtml($this->respaldo->caption());
+
+        // talla
+        $this->talla->setupEditAttributes();
+        if (!$this->talla->Raw) {
+            $this->talla->CurrentValue = HtmlDecode($this->talla->CurrentValue);
+        }
+        $this->talla->EditValue = $this->talla->CurrentValue;
+        $this->talla->PlaceHolder = RemoveHtml($this->talla->caption());
+
         // activo
         $this->activo->setupEditAttributes();
         $this->activo->EditValue = $this->activo->options(true);
@@ -2538,11 +2934,6 @@ class Articulo extends DbTable
         $this->fecha_vencimiento->setupEditAttributes();
         $this->fecha_vencimiento->EditValue = FormatDateTime($this->fecha_vencimiento->CurrentValue, $this->fecha_vencimiento->formatPattern());
         $this->fecha_vencimiento->PlaceHolder = RemoveHtml($this->fecha_vencimiento->caption());
-
-        // indexado
-        $this->indexado->setupEditAttributes();
-        $this->indexado->EditValue = $this->indexado->options(true);
-        $this->indexado->PlaceHolder = RemoveHtml($this->indexado->caption());
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2581,6 +2972,9 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->codigo_de_barra);
                     $doc->exportCaption($this->categoria);
                     $doc->exportCaption($this->lista_pedido);
+                    $doc->exportCaption($this->categoria_madre);
+                    $doc->exportCaption($this->sub_categoria);
+                    $doc->exportCaption($this->tipo);
                     $doc->exportCaption($this->unidad_medida_defecto);
                     $doc->exportCaption($this->cantidad_por_unidad_medida);
                     $doc->exportCaption($this->cantidad_minima);
@@ -2594,8 +2988,14 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->precio);
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->articulo_inventario);
-                    $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->indexado);
+                    $doc->exportCaption($this->pies_cubico);
+                    $doc->exportCaption($this->color);
+                    $doc->exportCaption($this->cojin);
+                    $doc->exportCaption($this->brazo);
+                    $doc->exportCaption($this->respaldo);
+                    $doc->exportCaption($this->talla);
+                    $doc->exportCaption($this->activo);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->codigo);
@@ -2606,6 +3006,9 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->codigo_de_barra);
                     $doc->exportCaption($this->categoria);
                     $doc->exportCaption($this->lista_pedido);
+                    $doc->exportCaption($this->categoria_madre);
+                    $doc->exportCaption($this->sub_categoria);
+                    $doc->exportCaption($this->tipo);
                     $doc->exportCaption($this->cantidad_en_mano);
                     $doc->exportCaption($this->cantidad_en_almacenes);
                     $doc->exportCaption($this->cantidad_en_pedido);
@@ -2614,10 +3017,16 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->precio);
                     $doc->exportCaption($this->alicuota);
+                    $doc->exportCaption($this->indexado);
+                    $doc->exportCaption($this->pies_cubico);
+                    $doc->exportCaption($this->color);
+                    $doc->exportCaption($this->cojin);
+                    $doc->exportCaption($this->brazo);
+                    $doc->exportCaption($this->respaldo);
+                    $doc->exportCaption($this->talla);
                     $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->lote);
                     $doc->exportCaption($this->fecha_vencimiento);
-                    $doc->exportCaption($this->indexado);
                 }
                 $doc->endExportRow();
             }
@@ -2653,6 +3062,9 @@ class Articulo extends DbTable
                         $doc->exportField($this->codigo_de_barra);
                         $doc->exportField($this->categoria);
                         $doc->exportField($this->lista_pedido);
+                        $doc->exportField($this->categoria_madre);
+                        $doc->exportField($this->sub_categoria);
+                        $doc->exportField($this->tipo);
                         $doc->exportField($this->unidad_medida_defecto);
                         $doc->exportField($this->cantidad_por_unidad_medida);
                         $doc->exportField($this->cantidad_minima);
@@ -2666,8 +3078,14 @@ class Articulo extends DbTable
                         $doc->exportField($this->precio);
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->articulo_inventario);
-                        $doc->exportField($this->activo);
                         $doc->exportField($this->indexado);
+                        $doc->exportField($this->pies_cubico);
+                        $doc->exportField($this->color);
+                        $doc->exportField($this->cojin);
+                        $doc->exportField($this->brazo);
+                        $doc->exportField($this->respaldo);
+                        $doc->exportField($this->talla);
+                        $doc->exportField($this->activo);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->codigo);
@@ -2678,6 +3096,9 @@ class Articulo extends DbTable
                         $doc->exportField($this->codigo_de_barra);
                         $doc->exportField($this->categoria);
                         $doc->exportField($this->lista_pedido);
+                        $doc->exportField($this->categoria_madre);
+                        $doc->exportField($this->sub_categoria);
+                        $doc->exportField($this->tipo);
                         $doc->exportField($this->cantidad_en_mano);
                         $doc->exportField($this->cantidad_en_almacenes);
                         $doc->exportField($this->cantidad_en_pedido);
@@ -2686,10 +3107,16 @@ class Articulo extends DbTable
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->precio);
                         $doc->exportField($this->alicuota);
+                        $doc->exportField($this->indexado);
+                        $doc->exportField($this->pies_cubico);
+                        $doc->exportField($this->color);
+                        $doc->exportField($this->cojin);
+                        $doc->exportField($this->brazo);
+                        $doc->exportField($this->respaldo);
+                        $doc->exportField($this->talla);
                         $doc->exportField($this->activo);
                         $doc->exportField($this->lote);
                         $doc->exportField($this->fecha_vencimiento);
-                        $doc->exportField($this->indexado);
                     }
                     $doc->endExportRow($rowCnt);
                 }

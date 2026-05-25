@@ -48,7 +48,27 @@ loadjs.ready(["wrapper", "head"], function () {
 </script>
 <script>
 loadjs.ready("head", function () {
+    // Client script
     // Write your table-specific client script here, no need to add script tags.
+    window.RevertirPagosCompras = function (id) {
+      if(confirm("Seguro de revertir este pago?")) {
+            var parametros = {
+                    "id" : id
+            };
+            $.ajax({
+                    data:  parametros,
+                    url:   '../include/revertir_compras.php',
+                    type:  'post',
+                    beforeSend: function () {
+                            // alert("Procesando, espere por favor...");
+                    },
+                    success:  function (response) {
+                            alert(response);
+                            location.reload();
+                    }
+            });
+      }
+    }
 });
 </script>
 <?php } ?>
@@ -64,6 +84,7 @@ loadjs.ready("head", function () {
     <ul class="<?= $Page->MultiPages->navClasses() ?>" role="tablist">
         <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(1) ?>" data-bs-target="#tab_compra1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra1" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(1)) ?>"><?= $Page->pageCaption(1) ?></button></li>
         <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(2) ?>" data-bs-target="#tab_compra2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra2" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(2)) ?>"><?= $Page->pageCaption(2) ?></button></li>
+        <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(3) ?>" data-bs-target="#tab_compra3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra3" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(3)) ?>"><?= $Page->pageCaption(3) ?></button></li>
     </ul>
     <div class="<?= $Page->MultiPages->tabContentClasses() ?>">
 <?php } ?>
@@ -197,6 +218,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+    <tr id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_pagado"><?= $Page->pagado->caption() ?></span></td>
+        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
+<span id="el_compra_pagado" data-page="1">
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->
@@ -205,17 +237,6 @@ loadjs.ready("head", function () {
         <div class="<?= $Page->MultiPages->tabPaneClasses(2) ?>" id="tab_compra2" role="tabpanel"><!-- multi-page .tab-pane -->
 <?php } ?>
 <table class="<?= $Page->TableClass ?>">
-<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
-    <tr id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_aplica_retencion"><?= $Page->aplica_retencion->caption() ?></span></td>
-        <td data-name="aplica_retencion"<?= $Page->aplica_retencion->cellAttributes() ?>>
-<span id="el_compra_aplica_retencion" data-page="2">
-<span<?= $Page->aplica_retencion->viewAttributes() ?>>
-<?= $Page->aplica_retencion->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 <?php if ($Page->monto_exento->Visible) { // monto_exento ?>
     <tr id="r_monto_exento"<?= $Page->monto_exento->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_monto_exento"><?= $Page->monto_exento->caption() ?></span></td>
@@ -282,11 +303,41 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->anulado->Visible) { // anulado ?>
+    <tr id="r_anulado"<?= $Page->anulado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_anulado"><?= $Page->anulado->caption() ?></span></td>
+        <td data-name="anulado"<?= $Page->anulado->cellAttributes() ?>>
+<span id="el_compra_anulado" data-page="2">
+<span<?= $Page->anulado->viewAttributes() ?>>
+<?= $Page->anulado->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+</table>
+<?php if (!$Page->isExport()) { ?>
+        </div><!-- /multi-page .tab-pane -->
+<?php } ?>
+<?php if (!$Page->isExport()) { ?>
+        <div class="<?= $Page->MultiPages->tabPaneClasses(3) ?>" id="tab_compra3" role="tabpanel"><!-- multi-page .tab-pane -->
+<?php } ?>
+<table class="<?= $Page->TableClass ?>">
+<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
+    <tr id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_aplica_retencion"><?= $Page->aplica_retencion->caption() ?></span></td>
+        <td data-name="aplica_retencion"<?= $Page->aplica_retencion->cellAttributes() ?>>
+<span id="el_compra_aplica_retencion" data-page="3">
+<span<?= $Page->aplica_retencion->viewAttributes() ?>>
+<?= $Page->aplica_retencion->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->ret_iva->Visible) { // ret_iva ?>
     <tr id="r_ret_iva"<?= $Page->ret_iva->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_ret_iva"><?= $Page->ret_iva->caption() ?></span></td>
         <td data-name="ret_iva"<?= $Page->ret_iva->cellAttributes() ?>>
-<span id="el_compra_ret_iva" data-page="2">
+<span id="el_compra_ret_iva" data-page="3">
 <span<?= $Page->ret_iva->viewAttributes() ?>>
 <?= $Page->ret_iva->getViewValue() ?></span>
 </span>
@@ -297,7 +348,7 @@ loadjs.ready("head", function () {
     <tr id="r_ref_iva"<?= $Page->ref_iva->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_ref_iva"><?= $Page->ref_iva->caption() ?></span></td>
         <td data-name="ref_iva"<?= $Page->ref_iva->cellAttributes() ?>>
-<span id="el_compra_ref_iva" data-page="2">
+<span id="el_compra_ref_iva" data-page="3">
 <span<?= $Page->ref_iva->viewAttributes() ?>>
 <?php if (!EmptyString($Page->ref_iva->getViewValue()) && $Page->ref_iva->linkAttributes() != "") { ?>
 <a<?= $Page->ref_iva->linkAttributes() ?>><?= $Page->ref_iva->getViewValue() ?></a>
@@ -313,7 +364,7 @@ loadjs.ready("head", function () {
     <tr id="r_ret_islr"<?= $Page->ret_islr->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_ret_islr"><?= $Page->ret_islr->caption() ?></span></td>
         <td data-name="ret_islr"<?= $Page->ret_islr->cellAttributes() ?>>
-<span id="el_compra_ret_islr" data-page="2">
+<span id="el_compra_ret_islr" data-page="3">
 <span<?= $Page->ret_islr->viewAttributes() ?>>
 <?= $Page->ret_islr->getViewValue() ?></span>
 </span>
@@ -324,7 +375,7 @@ loadjs.ready("head", function () {
     <tr id="r_ref_islr"<?= $Page->ref_islr->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_ref_islr"><?= $Page->ref_islr->caption() ?></span></td>
         <td data-name="ref_islr"<?= $Page->ref_islr->cellAttributes() ?>>
-<span id="el_compra_ref_islr" data-page="2">
+<span id="el_compra_ref_islr" data-page="3">
 <span<?= $Page->ref_islr->viewAttributes() ?>>
 <?php if (!EmptyString($Page->ref_islr->getViewValue()) && $Page->ref_islr->linkAttributes() != "") { ?>
 <a<?= $Page->ref_islr->linkAttributes() ?>><?= $Page->ref_islr->getViewValue() ?></a>
@@ -340,7 +391,7 @@ loadjs.ready("head", function () {
     <tr id="r_ret_municipal"<?= $Page->ret_municipal->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_ret_municipal"><?= $Page->ret_municipal->caption() ?></span></td>
         <td data-name="ret_municipal"<?= $Page->ret_municipal->cellAttributes() ?>>
-<span id="el_compra_ret_municipal" data-page="2">
+<span id="el_compra_ret_municipal" data-page="3">
 <span<?= $Page->ret_municipal->viewAttributes() ?>>
 <?= $Page->ret_municipal->getViewValue() ?></span>
 </span>
@@ -351,7 +402,7 @@ loadjs.ready("head", function () {
     <tr id="r_ref_municipal"<?= $Page->ref_municipal->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_ref_municipal"><?= $Page->ref_municipal->caption() ?></span></td>
         <td data-name="ref_municipal"<?= $Page->ref_municipal->cellAttributes() ?>>
-<span id="el_compra_ref_municipal" data-page="2">
+<span id="el_compra_ref_municipal" data-page="3">
 <span<?= $Page->ref_municipal->viewAttributes() ?>>
 <?php if (!EmptyString($Page->ref_municipal->getViewValue()) && $Page->ref_municipal->linkAttributes() != "") { ?>
 <a<?= $Page->ref_municipal->linkAttributes() ?>><?= $Page->ref_municipal->getViewValue() ?></a>
@@ -363,13 +414,46 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->anulado->Visible) { // anulado ?>
-    <tr id="r_anulado"<?= $Page->anulado->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_anulado"><?= $Page->anulado->caption() ?></span></td>
-        <td data-name="anulado"<?= $Page->anulado->cellAttributes() ?>>
-<span id="el_compra_anulado" data-page="2">
-<span<?= $Page->anulado->viewAttributes() ?>>
-<?= $Page->anulado->getViewValue() ?></span>
+<?php if ($Page->tipo_iva->Visible) { // tipo_iva ?>
+    <tr id="r_tipo_iva"<?= $Page->tipo_iva->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_tipo_iva"><?= $Page->tipo_iva->caption() ?></span></td>
+        <td data-name="tipo_iva"<?= $Page->tipo_iva->cellAttributes() ?>>
+<span id="el_compra_tipo_iva" data-page="3">
+<span<?= $Page->tipo_iva->viewAttributes() ?>>
+<?= $Page->tipo_iva->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tipo_islr->Visible) { // tipo_islr ?>
+    <tr id="r_tipo_islr"<?= $Page->tipo_islr->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_tipo_islr"><?= $Page->tipo_islr->caption() ?></span></td>
+        <td data-name="tipo_islr"<?= $Page->tipo_islr->cellAttributes() ?>>
+<span id="el_compra_tipo_islr" data-page="3">
+<span<?= $Page->tipo_islr->viewAttributes() ?>>
+<?= $Page->tipo_islr->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->sustraendo->Visible) { // sustraendo ?>
+    <tr id="r_sustraendo"<?= $Page->sustraendo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_sustraendo"><?= $Page->sustraendo->caption() ?></span></td>
+        <td data-name="sustraendo"<?= $Page->sustraendo->cellAttributes() ?>>
+<span id="el_compra_sustraendo" data-page="3">
+<span<?= $Page->sustraendo->viewAttributes() ?>>
+<?= $Page->sustraendo->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tipo_municipal->Visible) { // tipo_municipal ?>
+    <tr id="r_tipo_municipal"<?= $Page->tipo_municipal->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_tipo_municipal"><?= $Page->tipo_municipal->caption() ?></span></td>
+        <td data-name="tipo_municipal"<?= $Page->tipo_municipal->cellAttributes() ?>>
+<span id="el_compra_tipo_municipal" data-page="3">
+<span<?= $Page->tipo_municipal->viewAttributes() ?>>
+<?= $Page->tipo_municipal->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -408,11 +492,14 @@ loadjs.ready("load", function () {
     	// en la carpeta include
     	var tipo_documento = "COMPRA";
     	var username = "<?php echo CurrentUserName(); ?>";
+    	var tipo_doc = $("#x_tipo_documento").val();
+    	var regla = 1;
+    	if(tipo_doc == "RC") regla = 6;
     	if(confirm("Seguro de contabilizar este comprobante?")) {
     		$.ajax({
     		  url : "../include/Generar_Comprobante_Contable.php",
     		  type: "GET",
-    		  data : {id: id, tipo_documento: tipo_documento, regla: 1, username: username},
+    		  data : {id: id, tipo_documento: tipo_documento, regla: regla, username: username},
     		  beforeSend: function(){
     		    $("#result").html("Por Favor Espere. . .");
     		  }

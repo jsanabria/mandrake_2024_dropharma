@@ -77,6 +77,9 @@ $Page->showMessage();
 <?php if ($Page->monto->Visible) { // monto ?>
         <th class="<?= $Page->monto->headerCellClass() ?>"><span id="elh_pagos_proveedor_monto" class="pagos_proveedor_monto"><?= $Page->monto->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->cont_lotes->Visible) { // cont_lotes ?>
+        <th class="<?= $Page->cont_lotes->headerCellClass() ?>"><span id="elh_pagos_proveedor_cont_lotes" class="pagos_proveedor_cont_lotes"><?= $Page->cont_lotes->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -167,6 +170,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->monto->viewAttributes() ?>>
 <?= $Page->monto->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->cont_lotes->Visible) { // cont_lotes ?>
+        <td<?= $Page->cont_lotes->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->cont_lotes->viewAttributes() ?>>
+<?= $Page->cont_lotes->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

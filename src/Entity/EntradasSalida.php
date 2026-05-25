@@ -75,6 +75,9 @@ class EntradasSalida extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $descuento;
 
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $descuento2;
+
     #[Column(name: "costo_unidad", type: "decimal", nullable: true)]
     private ?string $costoUnidad;
 
@@ -104,6 +107,12 @@ class EntradasSalida extends AbstractEntity
 
     #[Column(type: "string", nullable: true)]
     private ?string $newdata;
+
+    #[Column(name: "cantidad_entregada", type: "decimal", nullable: true)]
+    private ?string $cantidadEntregada;
+
+    #[Column(name: "cantidad_por_entregar", type: "decimal", nullable: true)]
+    private ?string $cantidadPorEntregar;
 
     public function __construct()
     {
@@ -276,6 +285,17 @@ class EntradasSalida extends AbstractEntity
         return $this;
     }
 
+    public function getDescuento2(): ?string
+    {
+        return $this->descuento2;
+    }
+
+    public function setDescuento2(?string $value): static
+    {
+        $this->descuento2 = $value;
+        return $this;
+    }
+
     public function getCostoUnidad(): ?string
     {
         return $this->costoUnidad;
@@ -389,6 +409,28 @@ class EntradasSalida extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'newdata' value");
         }
         $this->newdata = $value;
+        return $this;
+    }
+
+    public function getCantidadEntregada(): ?string
+    {
+        return $this->cantidadEntregada;
+    }
+
+    public function setCantidadEntregada(?string $value): static
+    {
+        $this->cantidadEntregada = $value;
+        return $this;
+    }
+
+    public function getCantidadPorEntregar(): ?string
+    {
+        return $this->cantidadPorEntregar;
+    }
+
+    public function setCantidadPorEntregar(?string $value): static
+    {
+        $this->cantidadPorEntregar = $value;
         return $this;
     }
 }

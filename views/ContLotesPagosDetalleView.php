@@ -128,6 +128,28 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+    <tr id="r_fecha"<?= $Page->fecha->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cont_lotes_pagos_detalle_fecha"><?= $Page->fecha->caption() ?></span></td>
+        <td data-name="fecha"<?= $Page->fecha->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_detalle_fecha">
+<span<?= $Page->fecha->viewAttributes() ?>>
+<?= $Page->fecha->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+    <tr id="r_monto_pagado"<?= $Page->monto_pagado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_cont_lotes_pagos_detalle_monto_pagado"><?= $Page->monto_pagado->caption() ?></span></td>
+        <td data-name="monto_pagado"<?= $Page->monto_pagado->cellAttributes() ?>>
+<span id="el_cont_lotes_pagos_detalle_monto_pagado">
+<span<?= $Page->monto_pagado->viewAttributes() ?>>
+<?= $Page->monto_pagado->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 </form>
 </main>

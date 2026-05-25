@@ -69,7 +69,7 @@ class Entrada extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $documento;
 
-    #[Column(type: "string", nullable: true)]
+    #[Column(type: "text", nullable: true)]
     private ?string $nota;
 
     #[Column(type: "string", nullable: true)]
@@ -152,6 +152,9 @@ class Entrada extends AbstractEntity
 
     #[Column(type: "integer", nullable: true)]
     private ?int $unidades;
+
+    #[Column(type: "integer", nullable: true)]
+    private ?int $cliente;
 
     public function __construct()
     {
@@ -619,6 +622,17 @@ class Entrada extends AbstractEntity
     public function setUnidades(?int $value): static
     {
         $this->unidades = $value;
+        return $this;
+    }
+
+    public function getCliente(): ?int
+    {
+        return $this->cliente;
+    }
+
+    public function setCliente(?int $value): static
+    {
+        $this->cliente = $value;
         return $this;
     }
 }

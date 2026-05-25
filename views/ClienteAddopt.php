@@ -35,6 +35,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["tarifa", [fields.tarifa.visible && fields.tarifa.required ? ew.Validators.required(fields.tarifa.caption) : null], fields.tarifa.isInvalid],
             ["limite_credito", [fields.limite_credito.visible && fields.limite_credito.required ? ew.Validators.required(fields.limite_credito.caption) : null, ew.Validators.float], fields.limite_credito.isInvalid],
             ["condicion", [fields.condicion.visible && fields.condicion.required ? ew.Validators.required(fields.condicion.caption) : null], fields.condicion.isInvalid],
+            ["codigo", [fields.codigo.visible && fields.codigo.required ? ew.Validators.required(fields.codigo.caption) : null], fields.codigo.isInvalid],
             ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
             ["foto1", [fields.foto1.visible && fields.foto1.required ? ew.Validators.fileRequired(fields.foto1.caption) : null], fields.foto1.isInvalid],
             ["foto2", [fields.foto2.visible && fields.foto2.required ? ew.Validators.fileRequired(fields.foto2.caption) : null], fields.foto2.isInvalid],
@@ -322,6 +323,16 @@ loadjs.ready("fclienteaddopt", function() {
     <?= $Page->condicion->editAttributes() ?>></selection-list>
 <?= $Page->condicion->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->condicion->getErrorMessage() ?></div>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->codigo->Visible) { // codigo ?>
+    <div id="r_codigo"<?= $Page->codigo->rowAttributes() ?>>
+        <label class="col-sm-2 col-form-label ew-label" for="x_codigo"><?= $Page->codigo->caption() ?><?= $Page->codigo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="col-sm-10"><div<?= $Page->codigo->cellAttributes() ?>>
+<input type="<?= $Page->codigo->getInputTextType() ?>" name="x_codigo" id="x_codigo" data-table="cliente" data-field="x_codigo" value="<?= $Page->codigo->EditValue ?>" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->codigo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->codigo->formatPattern()) ?>"<?= $Page->codigo->editAttributes() ?> aria-describedby="x_codigo_help">
+<?= $Page->codigo->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->codigo->getErrorMessage() ?></div>
 </div></div>
     </div>
 <?php } ?>

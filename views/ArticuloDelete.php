@@ -74,6 +74,9 @@ $Page->showMessage();
 <?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
         <th class="<?= $Page->lista_pedido->headerCellClass() ?>"><span id="elh_articulo_lista_pedido" class="articulo_lista_pedido"><?= $Page->lista_pedido->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <th class="<?= $Page->categoria_madre->headerCellClass() ?>"><span id="elh_articulo_categoria_madre" class="articulo_categoria_madre"><?= $Page->categoria_madre->caption() ?></span></th>
+<?php } ?>
 <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <th class="<?= $Page->cantidad_en_mano->headerCellClass() ?>"><span id="elh_articulo_cantidad_en_mano" class="articulo_cantidad_en_mano"><?= $Page->cantidad_en_mano->caption() ?></span></th>
 <?php } ?>
@@ -91,9 +94,6 @@ $Page->showMessage();
 <?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <th class="<?= $Page->activo->headerCellClass() ?>"><span id="elh_articulo_activo" class="articulo_activo"><?= $Page->activo->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->indexado->Visible) { // indexado ?>
-        <th class="<?= $Page->indexado->headerCellClass() ?>"><span id="elh_articulo_indexado" class="articulo_indexado"><?= $Page->indexado->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -181,6 +181,14 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <td<?= $Page->categoria_madre->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->categoria_madre->viewAttributes() ?>>
+<?= $Page->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
 <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <td<?= $Page->cantidad_en_mano->cellAttributes() ?>>
 <span id="">
@@ -226,14 +234,6 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->indexado->Visible) { // indexado ?>
-        <td<?= $Page->indexado->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->indexado->viewAttributes() ?>>
-<?= $Page->indexado->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

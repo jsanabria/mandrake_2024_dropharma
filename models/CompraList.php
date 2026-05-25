@@ -159,7 +159,7 @@ class CompraList extends Compra
         $this->doc_afectado->setVisibility();
         $this->documento->setVisibility();
         $this->nro_control->setVisibility();
-        $this->fecha->Visible = false;
+        $this->fecha->setVisibility();
         $this->descripcion->Visible = false;
         $this->aplica_retencion->Visible = false;
         $this->monto_exento->Visible = false;
@@ -171,7 +171,7 @@ class CompraList extends Compra
         $this->ret_iva->Visible = false;
         $this->ref_iva->setVisibility();
         $this->ret_islr->Visible = false;
-        $this->ref_islr->Visible = false;
+        $this->ref_islr->setVisibility();
         $this->ret_municipal->Visible = false;
         $this->ref_municipal->Visible = false;
         $this->fecha_registro->Visible = false;
@@ -182,6 +182,7 @@ class CompraList extends Compra
         $this->sustraendo->Visible = false;
         $this->tipo_municipal->Visible = false;
         $this->anulado->setVisibility();
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -732,6 +733,7 @@ class CompraList extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->pagado);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -799,14 +801,23 @@ class CompraList extends Compra
 
         // Get default search criteria
         AddFilter($this->DefaultSearchWhere, $this->basicSearchWhere(true));
+        AddFilter($this->DefaultSearchWhere, $this->advancedSearchWhere(true));
 
         // Get basic search values
         $this->loadBasicSearchValues();
+
+        // Get and validate search values for advanced search
+        if (EmptyValue($this->UserAction)) { // Skip if user action
+            $this->loadSearchValues();
+        }
 
         // Process filter list
         if ($this->processFilterList()) {
             $this->terminate();
             return;
+        }
+        if (!$this->validateSearch()) {
+            // Nothing to do
         }
 
         // Restore search parms from Session if not searching / reset / export
@@ -825,6 +836,14 @@ class CompraList extends Compra
             $srchBasic = $this->basicSearchWhere();
         }
 
+        // Get advanced search criteria
+        if (!$this->hasInvalidFields()) {
+            $srchAdvanced = $this->advancedSearchWhere();
+        }
+
+        // Get query builder criteria
+        $query = $DashboardReport ? "" : $this->queryBuilderWhere();
+
         // Restore display records
         if ($this->Command != "json" && $this->getRecordsPerPage() != "") {
             $this->DisplayRecords = $this->getRecordsPerPage(); // Restore from Session
@@ -840,6 +859,16 @@ class CompraList extends Compra
             if ($this->BasicSearch->Keyword != "") {
                 $srchBasic = $this->basicSearchWhere(); // Save to session
             }
+
+            // Load advanced search from default
+            if ($this->loadAdvancedSearchDefault()) {
+                $srchAdvanced = $this->advancedSearchWhere(); // Save to session
+            }
+        }
+
+        // Restore search settings from Session
+        if (!$this->hasInvalidFields()) {
+            $this->loadAdvancedSearch();
         }
 
         // Build search criteria
@@ -1110,6 +1139,7 @@ class CompraList extends Compra
         $filterList = Concat($filterList, $this->sustraendo->AdvancedSearch->toJson(), ","); // Field sustraendo
         $filterList = Concat($filterList, $this->tipo_municipal->AdvancedSearch->toJson(), ","); // Field tipo_municipal
         $filterList = Concat($filterList, $this->anulado->AdvancedSearch->toJson(), ","); // Field anulado
+        $filterList = Concat($filterList, $this->pagado->AdvancedSearch->toJson(), ","); // Field pagado
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1380,8 +1410,196 @@ class CompraList extends Compra
         $this->anulado->AdvancedSearch->SearchValue2 = @$filter["y_anulado"];
         $this->anulado->AdvancedSearch->SearchOperator2 = @$filter["w_anulado"];
         $this->anulado->AdvancedSearch->save();
+
+        // Field pagado
+        $this->pagado->AdvancedSearch->SearchValue = @$filter["x_pagado"];
+        $this->pagado->AdvancedSearch->SearchOperator = @$filter["z_pagado"];
+        $this->pagado->AdvancedSearch->SearchCondition = @$filter["v_pagado"];
+        $this->pagado->AdvancedSearch->SearchValue2 = @$filter["y_pagado"];
+        $this->pagado->AdvancedSearch->SearchOperator2 = @$filter["w_pagado"];
+        $this->pagado->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
+    }
+
+    // Advanced search WHERE clause based on QueryString
+    public function advancedSearchWhere($default = false)
+    {
+        global $Security;
+        $where = "";
+        if (!$Security->canSearch()) {
+            return "";
+        }
+        $this->buildSearchSql($where, $this->id, $default, false); // id
+        $this->buildSearchSql($where, $this->proveedor, $default, false); // proveedor
+        $this->buildSearchSql($where, $this->tipo_documento, $default, false); // tipo_documento
+        $this->buildSearchSql($where, $this->doc_afectado, $default, false); // doc_afectado
+        $this->buildSearchSql($where, $this->documento, $default, false); // documento
+        $this->buildSearchSql($where, $this->nro_control, $default, false); // nro_control
+        $this->buildSearchSql($where, $this->fecha, $default, false); // fecha
+        $this->buildSearchSql($where, $this->descripcion, $default, false); // descripcion
+        $this->buildSearchSql($where, $this->aplica_retencion, $default, false); // aplica_retencion
+        $this->buildSearchSql($where, $this->monto_exento, $default, false); // monto_exento
+        $this->buildSearchSql($where, $this->monto_gravado, $default, false); // monto_gravado
+        $this->buildSearchSql($where, $this->alicuota, $default, false); // alicuota
+        $this->buildSearchSql($where, $this->monto_iva, $default, false); // monto_iva
+        $this->buildSearchSql($where, $this->monto_total, $default, false); // monto_total
+        $this->buildSearchSql($where, $this->monto_pagar, $default, false); // monto_pagar
+        $this->buildSearchSql($where, $this->ret_iva, $default, false); // ret_iva
+        $this->buildSearchSql($where, $this->ref_iva, $default, false); // ref_iva
+        $this->buildSearchSql($where, $this->ret_islr, $default, false); // ret_islr
+        $this->buildSearchSql($where, $this->ref_islr, $default, false); // ref_islr
+        $this->buildSearchSql($where, $this->ret_municipal, $default, false); // ret_municipal
+        $this->buildSearchSql($where, $this->ref_municipal, $default, false); // ref_municipal
+        $this->buildSearchSql($where, $this->fecha_registro, $default, false); // fecha_registro
+        $this->buildSearchSql($where, $this->_username, $default, false); // username
+        $this->buildSearchSql($where, $this->comprobante, $default, false); // comprobante
+        $this->buildSearchSql($where, $this->tipo_iva, $default, false); // tipo_iva
+        $this->buildSearchSql($where, $this->tipo_islr, $default, false); // tipo_islr
+        $this->buildSearchSql($where, $this->sustraendo, $default, false); // sustraendo
+        $this->buildSearchSql($where, $this->tipo_municipal, $default, false); // tipo_municipal
+        $this->buildSearchSql($where, $this->anulado, $default, false); // anulado
+        $this->buildSearchSql($where, $this->pagado, $default, false); // pagado
+
+        // Set up search command
+        if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
+            $this->Command = "search";
+        }
+        if (!$default && $this->Command == "search") {
+            $this->id->AdvancedSearch->save(); // id
+            $this->proveedor->AdvancedSearch->save(); // proveedor
+            $this->tipo_documento->AdvancedSearch->save(); // tipo_documento
+            $this->doc_afectado->AdvancedSearch->save(); // doc_afectado
+            $this->documento->AdvancedSearch->save(); // documento
+            $this->nro_control->AdvancedSearch->save(); // nro_control
+            $this->fecha->AdvancedSearch->save(); // fecha
+            $this->descripcion->AdvancedSearch->save(); // descripcion
+            $this->aplica_retencion->AdvancedSearch->save(); // aplica_retencion
+            $this->monto_exento->AdvancedSearch->save(); // monto_exento
+            $this->monto_gravado->AdvancedSearch->save(); // monto_gravado
+            $this->alicuota->AdvancedSearch->save(); // alicuota
+            $this->monto_iva->AdvancedSearch->save(); // monto_iva
+            $this->monto_total->AdvancedSearch->save(); // monto_total
+            $this->monto_pagar->AdvancedSearch->save(); // monto_pagar
+            $this->ret_iva->AdvancedSearch->save(); // ret_iva
+            $this->ref_iva->AdvancedSearch->save(); // ref_iva
+            $this->ret_islr->AdvancedSearch->save(); // ret_islr
+            $this->ref_islr->AdvancedSearch->save(); // ref_islr
+            $this->ret_municipal->AdvancedSearch->save(); // ret_municipal
+            $this->ref_municipal->AdvancedSearch->save(); // ref_municipal
+            $this->fecha_registro->AdvancedSearch->save(); // fecha_registro
+            $this->_username->AdvancedSearch->save(); // username
+            $this->comprobante->AdvancedSearch->save(); // comprobante
+            $this->tipo_iva->AdvancedSearch->save(); // tipo_iva
+            $this->tipo_islr->AdvancedSearch->save(); // tipo_islr
+            $this->sustraendo->AdvancedSearch->save(); // sustraendo
+            $this->tipo_municipal->AdvancedSearch->save(); // tipo_municipal
+            $this->anulado->AdvancedSearch->save(); // anulado
+            $this->pagado->AdvancedSearch->save(); // pagado
+
+            // Clear rules for QueryBuilder
+            $this->setSessionRules("");
+        }
+        return $where;
+    }
+
+    // Query builder rules
+    public function queryBuilderRules()
+    {
+        return Post("rules") ?? $this->getSessionRules();
+    }
+
+    // Quey builder WHERE clause
+    public function queryBuilderWhere($fieldName = "")
+    {
+        global $Security;
+        if (!$Security->canSearch()) {
+            return "";
+        }
+
+        // Get rules by query builder
+        $rules = $this->queryBuilderRules();
+
+        // Decode and parse rules
+        $where = $rules ? $this->parseRules(json_decode($rules, true), $fieldName) : "";
+
+        // Clear other search and save rules to session
+        if ($where && $fieldName == "") { // Skip if get query for specific field
+            $this->resetSearchParms();
+            $this->id->AdvancedSearch->save(); // id
+            $this->proveedor->AdvancedSearch->save(); // proveedor
+            $this->tipo_documento->AdvancedSearch->save(); // tipo_documento
+            $this->doc_afectado->AdvancedSearch->save(); // doc_afectado
+            $this->documento->AdvancedSearch->save(); // documento
+            $this->nro_control->AdvancedSearch->save(); // nro_control
+            $this->fecha->AdvancedSearch->save(); // fecha
+            $this->descripcion->AdvancedSearch->save(); // descripcion
+            $this->aplica_retencion->AdvancedSearch->save(); // aplica_retencion
+            $this->monto_exento->AdvancedSearch->save(); // monto_exento
+            $this->monto_gravado->AdvancedSearch->save(); // monto_gravado
+            $this->alicuota->AdvancedSearch->save(); // alicuota
+            $this->monto_iva->AdvancedSearch->save(); // monto_iva
+            $this->monto_total->AdvancedSearch->save(); // monto_total
+            $this->monto_pagar->AdvancedSearch->save(); // monto_pagar
+            $this->ret_iva->AdvancedSearch->save(); // ret_iva
+            $this->ref_iva->AdvancedSearch->save(); // ref_iva
+            $this->ret_islr->AdvancedSearch->save(); // ret_islr
+            $this->ref_islr->AdvancedSearch->save(); // ref_islr
+            $this->ret_municipal->AdvancedSearch->save(); // ret_municipal
+            $this->ref_municipal->AdvancedSearch->save(); // ref_municipal
+            $this->fecha_registro->AdvancedSearch->save(); // fecha_registro
+            $this->_username->AdvancedSearch->save(); // username
+            $this->comprobante->AdvancedSearch->save(); // comprobante
+            $this->tipo_iva->AdvancedSearch->save(); // tipo_iva
+            $this->tipo_islr->AdvancedSearch->save(); // tipo_islr
+            $this->sustraendo->AdvancedSearch->save(); // sustraendo
+            $this->tipo_municipal->AdvancedSearch->save(); // tipo_municipal
+            $this->anulado->AdvancedSearch->save(); // anulado
+            $this->pagado->AdvancedSearch->save(); // pagado
+            $this->setSessionRules($rules);
+        }
+
+        // Return query
+        return $where;
+    }
+
+    // Build search SQL
+    protected function buildSearchSql(&$where, $fld, $default, $multiValue)
+    {
+        $fldParm = $fld->Param;
+        $fldVal = $default ? $fld->AdvancedSearch->SearchValueDefault : $fld->AdvancedSearch->SearchValue;
+        $fldOpr = $default ? $fld->AdvancedSearch->SearchOperatorDefault : $fld->AdvancedSearch->SearchOperator;
+        $fldCond = $default ? $fld->AdvancedSearch->SearchConditionDefault : $fld->AdvancedSearch->SearchCondition;
+        $fldVal2 = $default ? $fld->AdvancedSearch->SearchValue2Default : $fld->AdvancedSearch->SearchValue2;
+        $fldOpr2 = $default ? $fld->AdvancedSearch->SearchOperator2Default : $fld->AdvancedSearch->SearchOperator2;
+        $fldVal = ConvertSearchValue($fldVal, $fldOpr, $fld);
+        $fldVal2 = ConvertSearchValue($fldVal2, $fldOpr2, $fld);
+        $fldOpr = ConvertSearchOperator($fldOpr, $fld, $fldVal);
+        $fldOpr2 = ConvertSearchOperator($fldOpr2, $fld, $fldVal2);
+        $wrk = "";
+        $sep = $fld->UseFilter ? Config("FILTER_OPTION_SEPARATOR") : Config("MULTIPLE_OPTION_SEPARATOR");
+        if (is_array($fldVal)) {
+            $fldVal = implode($sep, $fldVal);
+        }
+        if (is_array($fldVal2)) {
+            $fldVal2 = implode($sep, $fldVal2);
+        }
+        if (Config("SEARCH_MULTI_VALUE_OPTION") == 1 && !$fld->UseFilter || !IsMultiSearchOperator($fldOpr)) {
+            $multiValue = false;
+        }
+        if ($multiValue) {
+            $wrk = $fldVal != "" ? GetMultiSearchSql($fld, $fldOpr, $fldVal, $this->Dbid) : ""; // Field value 1
+            $wrk2 = $fldVal2 != "" ? GetMultiSearchSql($fld, $fldOpr2, $fldVal2, $this->Dbid) : ""; // Field value 2
+            AddFilter($wrk, $wrk2, $fldCond);
+        } else {
+            $wrk = GetSearchSql($fld, $fldVal, $fldOpr, $fldCond, $fldVal2, $fldOpr2, $this->Dbid);
+        }
+        if ($this->SearchOption == "AUTO" && in_array($this->BasicSearch->getType(), ["AND", "OR"])) {
+            $cond = $this->BasicSearch->getType();
+        } else {
+            $cond = SameText($this->SearchOption, "OR") ? "OR" : "AND";
+        }
+        AddFilter($where, $wrk, $cond);
     }
 
     // Show list of filters
@@ -1393,6 +1611,123 @@ class CompraList extends Compra
         $filterList = "";
         $captionClass = $this->isExport("email") ? "ew-filter-caption-email" : "ew-filter-caption";
         $captionSuffix = $this->isExport("email") ? ": " : "";
+
+        // Field id
+        $filter = $this->queryBuilderWhere("id");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->id, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->id->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field proveedor
+        $filter = $this->queryBuilderWhere("proveedor");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->proveedor, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->proveedor->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field tipo_documento
+        $filter = $this->queryBuilderWhere("tipo_documento");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->tipo_documento, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tipo_documento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field doc_afectado
+        $filter = $this->queryBuilderWhere("doc_afectado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->doc_afectado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->doc_afectado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field documento
+        $filter = $this->queryBuilderWhere("documento");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->documento, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->documento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field nro_control
+        $filter = $this->queryBuilderWhere("nro_control");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->nro_control, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->nro_control->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field fecha
+        $filter = $this->queryBuilderWhere("fecha");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->fecha, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->fecha->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field monto_total
+        $filter = $this->queryBuilderWhere("monto_total");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->monto_total, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_total->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field monto_pagar
+        $filter = $this->queryBuilderWhere("monto_pagar");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->monto_pagar, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_pagar->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field ref_iva
+        $filter = $this->queryBuilderWhere("ref_iva");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->ref_iva, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_iva->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field ref_islr
+        $filter = $this->queryBuilderWhere("ref_islr");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->ref_islr, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_islr->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field anulado
+        $filter = $this->queryBuilderWhere("anulado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->anulado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->anulado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field pagado
+        $filter = $this->queryBuilderWhere("pagado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->pagado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pagado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -1457,6 +1792,96 @@ class CompraList extends Compra
         if ($this->BasicSearch->issetSession()) {
             return true;
         }
+        if ($this->id->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->proveedor->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_documento->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->doc_afectado->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->documento->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->nro_control->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->fecha->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->descripcion->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->aplica_retencion->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_exento->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_gravado->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->alicuota->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_iva->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_total->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->monto_pagar->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ret_iva->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ref_iva->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ret_islr->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ref_islr->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ret_municipal->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ref_municipal->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->fecha_registro->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->_username->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->comprobante->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_iva->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_islr->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->sustraendo->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo_municipal->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->anulado->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->pagado->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1469,6 +1894,12 @@ class CompraList extends Compra
 
         // Clear basic search parameters
         $this->resetBasicSearchParms();
+
+        // Clear advanced search parameters
+        $this->resetAdvancedSearchParms();
+
+        // Clear queryBuilder
+        $this->setSessionRules("");
     }
 
     // Load advanced search default values
@@ -1483,6 +1914,41 @@ class CompraList extends Compra
         $this->BasicSearch->unsetSession();
     }
 
+    // Clear all advanced search parameters
+    protected function resetAdvancedSearchParms()
+    {
+        $this->id->AdvancedSearch->unsetSession();
+        $this->proveedor->AdvancedSearch->unsetSession();
+        $this->tipo_documento->AdvancedSearch->unsetSession();
+        $this->doc_afectado->AdvancedSearch->unsetSession();
+        $this->documento->AdvancedSearch->unsetSession();
+        $this->nro_control->AdvancedSearch->unsetSession();
+        $this->fecha->AdvancedSearch->unsetSession();
+        $this->descripcion->AdvancedSearch->unsetSession();
+        $this->aplica_retencion->AdvancedSearch->unsetSession();
+        $this->monto_exento->AdvancedSearch->unsetSession();
+        $this->monto_gravado->AdvancedSearch->unsetSession();
+        $this->alicuota->AdvancedSearch->unsetSession();
+        $this->monto_iva->AdvancedSearch->unsetSession();
+        $this->monto_total->AdvancedSearch->unsetSession();
+        $this->monto_pagar->AdvancedSearch->unsetSession();
+        $this->ret_iva->AdvancedSearch->unsetSession();
+        $this->ref_iva->AdvancedSearch->unsetSession();
+        $this->ret_islr->AdvancedSearch->unsetSession();
+        $this->ref_islr->AdvancedSearch->unsetSession();
+        $this->ret_municipal->AdvancedSearch->unsetSession();
+        $this->ref_municipal->AdvancedSearch->unsetSession();
+        $this->fecha_registro->AdvancedSearch->unsetSession();
+        $this->_username->AdvancedSearch->unsetSession();
+        $this->comprobante->AdvancedSearch->unsetSession();
+        $this->tipo_iva->AdvancedSearch->unsetSession();
+        $this->tipo_islr->AdvancedSearch->unsetSession();
+        $this->sustraendo->AdvancedSearch->unsetSession();
+        $this->tipo_municipal->AdvancedSearch->unsetSession();
+        $this->anulado->AdvancedSearch->unsetSession();
+        $this->pagado->AdvancedSearch->unsetSession();
+    }
+
     // Restore all search parameters
     protected function restoreSearchParms()
     {
@@ -1490,6 +1956,38 @@ class CompraList extends Compra
 
         // Restore basic search values
         $this->BasicSearch->load();
+
+        // Restore advanced search values
+        $this->id->AdvancedSearch->load();
+        $this->proveedor->AdvancedSearch->load();
+        $this->tipo_documento->AdvancedSearch->load();
+        $this->doc_afectado->AdvancedSearch->load();
+        $this->documento->AdvancedSearch->load();
+        $this->nro_control->AdvancedSearch->load();
+        $this->fecha->AdvancedSearch->load();
+        $this->descripcion->AdvancedSearch->load();
+        $this->aplica_retencion->AdvancedSearch->load();
+        $this->monto_exento->AdvancedSearch->load();
+        $this->monto_gravado->AdvancedSearch->load();
+        $this->alicuota->AdvancedSearch->load();
+        $this->monto_iva->AdvancedSearch->load();
+        $this->monto_total->AdvancedSearch->load();
+        $this->monto_pagar->AdvancedSearch->load();
+        $this->ret_iva->AdvancedSearch->load();
+        $this->ref_iva->AdvancedSearch->load();
+        $this->ret_islr->AdvancedSearch->load();
+        $this->ref_islr->AdvancedSearch->load();
+        $this->ret_municipal->AdvancedSearch->load();
+        $this->ref_municipal->AdvancedSearch->load();
+        $this->fecha_registro->AdvancedSearch->load();
+        $this->_username->AdvancedSearch->load();
+        $this->comprobante->AdvancedSearch->load();
+        $this->tipo_iva->AdvancedSearch->load();
+        $this->tipo_islr->AdvancedSearch->load();
+        $this->sustraendo->AdvancedSearch->load();
+        $this->tipo_municipal->AdvancedSearch->load();
+        $this->anulado->AdvancedSearch->load();
+        $this->pagado->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1497,7 +1995,7 @@ class CompraList extends Compra
     {
         // Load default Sorting Order
         if ($this->Command != "json") {
-            $defaultSort = $this->fecha->Expression . " DESC"; // Set up default sort
+            $defaultSort = $this->id->Expression . " DESC"; // Set up default sort
             if ($this->getSessionOrderBy() == "" && $defaultSort != "") {
                 $this->setSessionOrderBy($defaultSort);
             }
@@ -1513,10 +2011,13 @@ class CompraList extends Compra
             $this->updateSort($this->doc_afectado); // doc_afectado
             $this->updateSort($this->documento); // documento
             $this->updateSort($this->nro_control); // nro_control
+            $this->updateSort($this->fecha); // fecha
             $this->updateSort($this->monto_total); // monto_total
             $this->updateSort($this->monto_pagar); // monto_pagar
             $this->updateSort($this->ref_iva); // ref_iva
+            $this->updateSort($this->ref_islr); // ref_islr
             $this->updateSort($this->anulado); // anulado
+            $this->updateSort($this->pagado); // pagado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1570,6 +2071,7 @@ class CompraList extends Compra
                 $this->sustraendo->setSort("");
                 $this->tipo_municipal->setSort("");
                 $this->anulado->setSort("");
+                $this->pagado->setSort("");
             }
 
             // Reset start position
@@ -1792,10 +2294,13 @@ class CompraList extends Compra
             $this->createColumnOption($option, "doc_afectado");
             $this->createColumnOption($option, "documento");
             $this->createColumnOption($option, "nro_control");
+            $this->createColumnOption($option, "fecha");
             $this->createColumnOption($option, "monto_total");
             $this->createColumnOption($option, "monto_pagar");
             $this->createColumnOption($option, "ref_iva");
+            $this->createColumnOption($option, "ref_islr");
             $this->createColumnOption($option, "anulado");
+            $this->createColumnOption($option, "pagado");
         }
 
         // Set up custom actions
@@ -2136,6 +2641,261 @@ class CompraList extends Compra
         $this->BasicSearch->setType(Get(Config("TABLE_BASIC_SEARCH_TYPE"), ""), false);
     }
 
+    // Load search values for validation
+    protected function loadSearchValues()
+    {
+        // Load search values
+        $hasValue = false;
+
+        // Load query builder rules
+        $rules = Post("rules");
+        if ($rules && $this->Command == "") {
+            $this->QueryRules = $rules;
+            $this->Command = "search";
+        }
+
+        // id
+        if ($this->id->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->id->AdvancedSearch->SearchValue != "" || $this->id->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // proveedor
+        if ($this->proveedor->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->proveedor->AdvancedSearch->SearchValue != "" || $this->proveedor->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_documento
+        if ($this->tipo_documento->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_documento->AdvancedSearch->SearchValue != "" || $this->tipo_documento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // doc_afectado
+        if ($this->doc_afectado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->doc_afectado->AdvancedSearch->SearchValue != "" || $this->doc_afectado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // documento
+        if ($this->documento->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->documento->AdvancedSearch->SearchValue != "" || $this->documento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // nro_control
+        if ($this->nro_control->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->nro_control->AdvancedSearch->SearchValue != "" || $this->nro_control->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // fecha
+        if ($this->fecha->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->fecha->AdvancedSearch->SearchValue != "" || $this->fecha->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // descripcion
+        if ($this->descripcion->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->descripcion->AdvancedSearch->SearchValue != "" || $this->descripcion->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // aplica_retencion
+        if ($this->aplica_retencion->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->aplica_retencion->AdvancedSearch->SearchValue != "" || $this->aplica_retencion->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_exento
+        if ($this->monto_exento->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_exento->AdvancedSearch->SearchValue != "" || $this->monto_exento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_gravado
+        if ($this->monto_gravado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_gravado->AdvancedSearch->SearchValue != "" || $this->monto_gravado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // alicuota
+        if ($this->alicuota->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->alicuota->AdvancedSearch->SearchValue != "" || $this->alicuota->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_iva
+        if ($this->monto_iva->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_iva->AdvancedSearch->SearchValue != "" || $this->monto_iva->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_total
+        if ($this->monto_total->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_total->AdvancedSearch->SearchValue != "" || $this->monto_total->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // monto_pagar
+        if ($this->monto_pagar->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->monto_pagar->AdvancedSearch->SearchValue != "" || $this->monto_pagar->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ret_iva
+        if ($this->ret_iva->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ret_iva->AdvancedSearch->SearchValue != "" || $this->ret_iva->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ref_iva
+        if ($this->ref_iva->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ref_iva->AdvancedSearch->SearchValue != "" || $this->ref_iva->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ret_islr
+        if ($this->ret_islr->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ret_islr->AdvancedSearch->SearchValue != "" || $this->ret_islr->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ref_islr
+        if ($this->ref_islr->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ref_islr->AdvancedSearch->SearchValue != "" || $this->ref_islr->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ret_municipal
+        if ($this->ret_municipal->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ret_municipal->AdvancedSearch->SearchValue != "" || $this->ret_municipal->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ref_municipal
+        if ($this->ref_municipal->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ref_municipal->AdvancedSearch->SearchValue != "" || $this->ref_municipal->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // fecha_registro
+        if ($this->fecha_registro->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->fecha_registro->AdvancedSearch->SearchValue != "" || $this->fecha_registro->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // username
+        if ($this->_username->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->_username->AdvancedSearch->SearchValue != "" || $this->_username->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // comprobante
+        if ($this->comprobante->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->comprobante->AdvancedSearch->SearchValue != "" || $this->comprobante->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_iva
+        if ($this->tipo_iva->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_iva->AdvancedSearch->SearchValue != "" || $this->tipo_iva->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_islr
+        if ($this->tipo_islr->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_islr->AdvancedSearch->SearchValue != "" || $this->tipo_islr->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // sustraendo
+        if ($this->sustraendo->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->sustraendo->AdvancedSearch->SearchValue != "" || $this->sustraendo->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo_municipal
+        if ($this->tipo_municipal->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo_municipal->AdvancedSearch->SearchValue != "" || $this->tipo_municipal->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // anulado
+        if ($this->anulado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->anulado->AdvancedSearch->SearchValue != "" || $this->anulado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // pagado
+        if ($this->pagado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->pagado->AdvancedSearch->SearchValue != "" || $this->pagado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+        return $hasValue;
+    }
+
     /**
      * Load result set
      *
@@ -2258,6 +3018,7 @@ class CompraList extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -2293,6 +3054,7 @@ class CompraList extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -2390,6 +3152,8 @@ class CompraList extends Compra
         // tipo_municipal
 
         // anulado
+
+        // pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2569,6 +3333,13 @@ class CompraList extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // pagado
+            if (strval($this->pagado->CurrentValue) != "") {
+                $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+            } else {
+                $this->pagado->ViewValue = null;
+            }
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -2593,6 +3364,10 @@ class CompraList extends Compra
             $this->nro_control->HrefValue = "";
             $this->nro_control->TooltipValue = "";
 
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
             // monto_total
             $this->monto_total->HrefValue = "";
             $this->monto_total->TooltipValue = "";
@@ -2613,15 +3388,197 @@ class CompraList extends Compra
             }
             $this->ref_iva->TooltipValue = "";
 
+            // ref_islr
+            if (!EmptyValue($this->id->CurrentValue)) {
+                $this->ref_islr->HrefValue = $this->ref_islr->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_islr->LinkAttrs["target"] = "_blank"; // Add target
+                if ($this->isExport()) {
+                    $this->ref_islr->HrefValue = FullUrl($this->ref_islr->HrefValue, "href");
+                }
+            } else {
+                $this->ref_islr->HrefValue = "";
+            }
+            $this->ref_islr->TooltipValue = "";
+
             // anulado
             $this->anulado->HrefValue = "";
             $this->anulado->TooltipValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
+            $this->pagado->TooltipValue = "";
+        } elseif ($this->RowType == RowType::SEARCH) {
+            // id
+            $this->id->setupEditAttributes();
+            $this->id->EditValue = $this->id->AdvancedSearch->SearchValue;
+            $this->id->PlaceHolder = RemoveHtml($this->id->caption());
+
+            // proveedor
+            $curVal = trim(strval($this->proveedor->AdvancedSearch->SearchValue));
+            if ($curVal != "") {
+                $this->proveedor->AdvancedSearch->ViewValue = $this->proveedor->lookupCacheOption($curVal);
+            } else {
+                $this->proveedor->AdvancedSearch->ViewValue = $this->proveedor->Lookup !== null && is_array($this->proveedor->lookupOptions()) && count($this->proveedor->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->proveedor->AdvancedSearch->ViewValue !== null) { // Load from cache
+                $this->proveedor->EditValue = array_values($this->proveedor->lookupOptions());
+                if ($this->proveedor->AdvancedSearch->ViewValue == "") {
+                    $this->proveedor->AdvancedSearch->ViewValue = $Language->phrase("PleaseSelect");
+                }
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->proveedor->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $this->proveedor->AdvancedSearch->SearchValue, $this->proveedor->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                }
+                $sqlWrk = $this->proveedor->Lookup->getSql(true, $filterWrk, '', $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->proveedor->Lookup->renderViewRow($rswrk[0]);
+                    $this->proveedor->AdvancedSearch->ViewValue = $this->proveedor->displayValue($arwrk);
+                } else {
+                    $this->proveedor->AdvancedSearch->ViewValue = $Language->phrase("PleaseSelect");
+                }
+                $arwrk = $rswrk;
+                $this->proveedor->EditValue = $arwrk;
+            }
+            $this->proveedor->PlaceHolder = RemoveHtml($this->proveedor->caption());
+
+            // tipo_documento
+            $this->tipo_documento->setupEditAttributes();
+            $this->tipo_documento->EditValue = $this->tipo_documento->options(true);
+            $this->tipo_documento->PlaceHolder = RemoveHtml($this->tipo_documento->caption());
+
+            // doc_afectado
+            $this->doc_afectado->setupEditAttributes();
+            if (!$this->doc_afectado->Raw) {
+                $this->doc_afectado->AdvancedSearch->SearchValue = HtmlDecode($this->doc_afectado->AdvancedSearch->SearchValue);
+            }
+            $this->doc_afectado->EditValue = HtmlEncode($this->doc_afectado->AdvancedSearch->SearchValue);
+            $this->doc_afectado->PlaceHolder = RemoveHtml($this->doc_afectado->caption());
+
+            // documento
+            $this->documento->setupEditAttributes();
+            if (!$this->documento->Raw) {
+                $this->documento->AdvancedSearch->SearchValue = HtmlDecode($this->documento->AdvancedSearch->SearchValue);
+            }
+            $this->documento->EditValue = HtmlEncode($this->documento->AdvancedSearch->SearchValue);
+            $this->documento->PlaceHolder = RemoveHtml($this->documento->caption());
+
+            // nro_control
+            $this->nro_control->setupEditAttributes();
+            if (!$this->nro_control->Raw) {
+                $this->nro_control->AdvancedSearch->SearchValue = HtmlDecode($this->nro_control->AdvancedSearch->SearchValue);
+            }
+            $this->nro_control->EditValue = HtmlEncode($this->nro_control->AdvancedSearch->SearchValue);
+            $this->nro_control->PlaceHolder = RemoveHtml($this->nro_control->caption());
+
+            // fecha
+            $this->fecha->setupEditAttributes();
+            $this->fecha->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha->AdvancedSearch->SearchValue, $this->fecha->formatPattern()), $this->fecha->formatPattern()));
+            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+
+            // monto_total
+            $this->monto_total->setupEditAttributes();
+            $this->monto_total->EditValue = $this->monto_total->AdvancedSearch->SearchValue;
+            $this->monto_total->PlaceHolder = RemoveHtml($this->monto_total->caption());
+
+            // monto_pagar
+            $this->monto_pagar->setupEditAttributes();
+            $this->monto_pagar->EditValue = $this->monto_pagar->AdvancedSearch->SearchValue;
+            $this->monto_pagar->PlaceHolder = RemoveHtml($this->monto_pagar->caption());
+
+            // ref_iva
+            $this->ref_iva->setupEditAttributes();
+            if (!$this->ref_iva->Raw) {
+                $this->ref_iva->AdvancedSearch->SearchValue = HtmlDecode($this->ref_iva->AdvancedSearch->SearchValue);
+            }
+            $this->ref_iva->EditValue = HtmlEncode($this->ref_iva->AdvancedSearch->SearchValue);
+            $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
+
+            // ref_islr
+            $this->ref_islr->setupEditAttributes();
+            if (!$this->ref_islr->Raw) {
+                $this->ref_islr->AdvancedSearch->SearchValue = HtmlDecode($this->ref_islr->AdvancedSearch->SearchValue);
+            }
+            $this->ref_islr->EditValue = HtmlEncode($this->ref_islr->AdvancedSearch->SearchValue);
+            $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
+
+            // anulado
+            $this->anulado->EditValue = $this->anulado->options(false);
+            $this->anulado->PlaceHolder = RemoveHtml($this->anulado->caption());
+
+            // pagado
+            $this->pagado->EditValue = $this->pagado->options(false);
+            $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
+        }
+        if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
+            $this->setupFieldTitles();
         }
 
         // Call Row Rendered event
         if ($this->RowType != RowType::AGGREGATEINIT) {
             $this->rowRendered();
         }
+    }
+
+    // Validate search
+    protected function validateSearch()
+    {
+        // Check if validation required
+        if (!Config("SERVER_VALIDATE")) {
+            return true;
+        }
+
+        // Return validate result
+        $validateSearch = !$this->hasInvalidFields();
+
+        // Call Form_CustomValidate event
+        $formCustomError = "";
+        $validateSearch = $validateSearch && $this->formCustomValidate($formCustomError);
+        if ($formCustomError != "") {
+            $this->setFailureMessage($formCustomError);
+        }
+        return $validateSearch;
+    }
+
+    // Load advanced search
+    public function loadAdvancedSearch()
+    {
+        $this->id->AdvancedSearch->load();
+        $this->proveedor->AdvancedSearch->load();
+        $this->tipo_documento->AdvancedSearch->load();
+        $this->doc_afectado->AdvancedSearch->load();
+        $this->documento->AdvancedSearch->load();
+        $this->nro_control->AdvancedSearch->load();
+        $this->fecha->AdvancedSearch->load();
+        $this->descripcion->AdvancedSearch->load();
+        $this->aplica_retencion->AdvancedSearch->load();
+        $this->monto_exento->AdvancedSearch->load();
+        $this->monto_gravado->AdvancedSearch->load();
+        $this->alicuota->AdvancedSearch->load();
+        $this->monto_iva->AdvancedSearch->load();
+        $this->monto_total->AdvancedSearch->load();
+        $this->monto_pagar->AdvancedSearch->load();
+        $this->ret_iva->AdvancedSearch->load();
+        $this->ref_iva->AdvancedSearch->load();
+        $this->ret_islr->AdvancedSearch->load();
+        $this->ref_islr->AdvancedSearch->load();
+        $this->ret_municipal->AdvancedSearch->load();
+        $this->ref_municipal->AdvancedSearch->load();
+        $this->fecha_registro->AdvancedSearch->load();
+        $this->_username->AdvancedSearch->load();
+        $this->comprobante->AdvancedSearch->load();
+        $this->tipo_iva->AdvancedSearch->load();
+        $this->tipo_islr->AdvancedSearch->load();
+        $this->sustraendo->AdvancedSearch->load();
+        $this->tipo_municipal->AdvancedSearch->load();
+        $this->anulado->AdvancedSearch->load();
+        $this->pagado->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -2878,6 +3835,8 @@ class CompraList extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_pagado":
                     break;
                 default:
                     $lookupFilter = "";

@@ -35,13 +35,14 @@ loadjs.ready(["wrapper", "head"], function () {
             ["lote", [fields.lote.visible && fields.lote.required ? ew.Validators.required(fields.lote.caption) : null], fields.lote.isInvalid],
             ["fecha_vencimiento", [fields.fecha_vencimiento.visible && fields.fecha_vencimiento.required ? ew.Validators.required(fields.fecha_vencimiento.caption) : null, ew.Validators.datetime(fields.fecha_vencimiento.clientFormatPattern)], fields.fecha_vencimiento.isInvalid],
             ["cantidad_articulo", [fields.cantidad_articulo.visible && fields.cantidad_articulo.required ? ew.Validators.required(fields.cantidad_articulo.caption) : null, ew.Validators.float], fields.cantidad_articulo.isInvalid],
-            ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.float], fields.descuento.isInvalid],
             ["costo_unidad", [fields.costo_unidad.visible && fields.costo_unidad.required ? ew.Validators.required(fields.costo_unidad.caption) : null, ew.Validators.float], fields.costo_unidad.isInvalid],
             ["costo", [fields.costo.visible && fields.costo.required ? ew.Validators.required(fields.costo.caption) : null, ew.Validators.float], fields.costo.isInvalid],
             ["precio_unidad", [fields.precio_unidad.visible && fields.precio_unidad.required ? ew.Validators.required(fields.precio_unidad.caption) : null, ew.Validators.float], fields.precio_unidad.isInvalid],
             ["precio", [fields.precio.visible && fields.precio.required ? ew.Validators.required(fields.precio.caption) : null, ew.Validators.float], fields.precio.isInvalid],
             ["check_ne", [fields.check_ne.visible && fields.check_ne.required ? ew.Validators.required(fields.check_ne.caption) : null], fields.check_ne.isInvalid],
-            ["newdata", [fields.newdata.visible && fields.newdata.required ? ew.Validators.required(fields.newdata.caption) : null], fields.newdata.isInvalid]
+            ["newdata", [fields.newdata.visible && fields.newdata.required ? ew.Validators.required(fields.newdata.caption) : null], fields.newdata.isInvalid],
+            ["cantidad_entregada", [fields.cantidad_entregada.visible && fields.cantidad_entregada.required ? ew.Validators.required(fields.cantidad_entregada.caption) : null, ew.Validators.float], fields.cantidad_entregada.isInvalid],
+            ["cantidad_por_entregar", [fields.cantidad_por_entregar.visible && fields.cantidad_por_entregar.required ? ew.Validators.required(fields.cantidad_por_entregar.caption) : null, ew.Validators.float], fields.cantidad_por_entregar.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -109,7 +110,7 @@ loadjs.ready("head", function () {
         <label id="elh_entradas_salidas_lote" for="x_lote" class="<?= $Page->LeftColumnClass ?>"><?= $Page->lote->caption() ?><?= $Page->lote->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->lote->cellAttributes() ?>>
 <span id="el_entradas_salidas_lote">
-<input type="<?= $Page->lote->getInputTextType() ?>" name="x_lote" id="x_lote" data-table="entradas_salidas" data-field="x_lote" value="<?= $Page->lote->EditValue ?>" size="10" maxlength="20" placeholder="<?= HtmlEncode($Page->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->lote->formatPattern()) ?>"<?= $Page->lote->editAttributes() ?> aria-describedby="x_lote_help">
+<input type="<?= $Page->lote->getInputTextType() ?>" name="x_lote" id="x_lote" data-table="entradas_salidas" data-field="x_lote" value="<?= $Page->lote->EditValue ?>" size="10" maxlength="150" placeholder="<?= HtmlEncode($Page->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->lote->formatPattern()) ?>"<?= $Page->lote->editAttributes() ?> aria-describedby="x_lote_help">
 <?= $Page->lote->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->lote->getErrorMessage() ?></div>
 </span>
@@ -165,18 +166,6 @@ loadjs.ready(["fentradas_salidasedit", "datetimepicker"], function () {
 <input type="<?= $Page->cantidad_articulo->getInputTextType() ?>" name="x_cantidad_articulo" id="x_cantidad_articulo" data-table="entradas_salidas" data-field="x_cantidad_articulo" value="<?= $Page->cantidad_articulo->EditValue ?>" size="6" placeholder="<?= HtmlEncode($Page->cantidad_articulo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_articulo->formatPattern()) ?>"<?= $Page->cantidad_articulo->editAttributes() ?> aria-describedby="x_cantidad_articulo_help">
 <?= $Page->cantidad_articulo->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->cantidad_articulo->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->descuento->Visible) { // descuento ?>
-    <div id="r_descuento"<?= $Page->descuento->rowAttributes() ?>>
-        <label id="elh_entradas_salidas_descuento" for="x_descuento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->descuento->caption() ?><?= $Page->descuento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->descuento->cellAttributes() ?>>
-<span id="el_entradas_salidas_descuento">
-<input type="<?= $Page->descuento->getInputTextType() ?>" name="x_descuento" id="x_descuento" data-table="entradas_salidas" data-field="x_descuento" value="<?= $Page->descuento->EditValue ?>" size="6" placeholder="<?= HtmlEncode($Page->descuento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento->formatPattern()) ?>"<?= $Page->descuento->editAttributes() ?> aria-describedby="x_descuento_help">
-<?= $Page->descuento->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->descuento->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -268,6 +257,30 @@ loadjs.ready(["fentradas_salidasedit", "datetimepicker"], function () {
     <?= $Page->newdata->editAttributes() ?>></selection-list>
 <?= $Page->newdata->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->newdata->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+    <div id="r_cantidad_entregada"<?= $Page->cantidad_entregada->rowAttributes() ?>>
+        <label id="elh_entradas_salidas_cantidad_entregada" for="x_cantidad_entregada" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cantidad_entregada->caption() ?><?= $Page->cantidad_entregada->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cantidad_entregada->cellAttributes() ?>>
+<span id="el_entradas_salidas_cantidad_entregada">
+<input type="<?= $Page->cantidad_entregada->getInputTextType() ?>" name="x_cantidad_entregada" id="x_cantidad_entregada" data-table="entradas_salidas" data-field="x_cantidad_entregada" value="<?= $Page->cantidad_entregada->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_entregada->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_entregada->formatPattern()) ?>"<?= $Page->cantidad_entregada->editAttributes() ?> aria-describedby="x_cantidad_entregada_help">
+<?= $Page->cantidad_entregada->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->cantidad_entregada->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+    <div id="r_cantidad_por_entregar"<?= $Page->cantidad_por_entregar->rowAttributes() ?>>
+        <label id="elh_entradas_salidas_cantidad_por_entregar" for="x_cantidad_por_entregar" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cantidad_por_entregar->caption() ?><?= $Page->cantidad_por_entregar->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cantidad_por_entregar->cellAttributes() ?>>
+<span id="el_entradas_salidas_cantidad_por_entregar">
+<input type="<?= $Page->cantidad_por_entregar->getInputTextType() ?>" name="x_cantidad_por_entregar" id="x_cantidad_por_entregar" data-table="entradas_salidas" data-field="x_cantidad_por_entregar" value="<?= $Page->cantidad_por_entregar->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_por_entregar->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_por_entregar->formatPattern()) ?>"<?= $Page->cantidad_por_entregar->editAttributes() ?> aria-describedby="x_cantidad_por_entregar_help">
+<?= $Page->cantidad_por_entregar->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->cantidad_por_entregar->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

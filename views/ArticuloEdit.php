@@ -40,6 +40,9 @@ loadjs.ready(["wrapper", "head"], function () {
             ["codigo_de_barra", [fields.codigo_de_barra.visible && fields.codigo_de_barra.required ? ew.Validators.required(fields.codigo_de_barra.caption) : null], fields.codigo_de_barra.isInvalid],
             ["categoria", [fields.categoria.visible && fields.categoria.required ? ew.Validators.required(fields.categoria.caption) : null], fields.categoria.isInvalid],
             ["lista_pedido", [fields.lista_pedido.visible && fields.lista_pedido.required ? ew.Validators.required(fields.lista_pedido.caption) : null], fields.lista_pedido.isInvalid],
+            ["categoria_madre", [fields.categoria_madre.visible && fields.categoria_madre.required ? ew.Validators.required(fields.categoria_madre.caption) : null], fields.categoria_madre.isInvalid],
+            ["sub_categoria", [fields.sub_categoria.visible && fields.sub_categoria.required ? ew.Validators.required(fields.sub_categoria.caption) : null], fields.sub_categoria.isInvalid],
+            ["tipo", [fields.tipo.visible && fields.tipo.required ? ew.Validators.required(fields.tipo.caption) : null], fields.tipo.isInvalid],
             ["unidad_medida_defecto", [fields.unidad_medida_defecto.visible && fields.unidad_medida_defecto.required ? ew.Validators.required(fields.unidad_medida_defecto.caption) : null], fields.unidad_medida_defecto.isInvalid],
             ["cantidad_por_unidad_medida", [fields.cantidad_por_unidad_medida.visible && fields.cantidad_por_unidad_medida.required ? ew.Validators.required(fields.cantidad_por_unidad_medida.caption) : null], fields.cantidad_por_unidad_medida.isInvalid],
             ["cantidad_minima", [fields.cantidad_minima.visible && fields.cantidad_minima.required ? ew.Validators.required(fields.cantidad_minima.caption) : null, ew.Validators.float], fields.cantidad_minima.isInvalid],
@@ -48,8 +51,14 @@ loadjs.ready(["wrapper", "head"], function () {
             ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.float], fields.descuento.isInvalid],
             ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
             ["articulo_inventario", [fields.articulo_inventario.visible && fields.articulo_inventario.required ? ew.Validators.required(fields.articulo_inventario.caption) : null], fields.articulo_inventario.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
-            ["indexado", [fields.indexado.visible && fields.indexado.required ? ew.Validators.required(fields.indexado.caption) : null], fields.indexado.isInvalid]
+            ["indexado", [fields.indexado.visible && fields.indexado.required ? ew.Validators.required(fields.indexado.caption) : null], fields.indexado.isInvalid],
+            ["pies_cubico", [fields.pies_cubico.visible && fields.pies_cubico.required ? ew.Validators.required(fields.pies_cubico.caption) : null, ew.Validators.float], fields.pies_cubico.isInvalid],
+            ["color", [fields.color.visible && fields.color.required ? ew.Validators.required(fields.color.caption) : null], fields.color.isInvalid],
+            ["cojin", [fields.cojin.visible && fields.cojin.required ? ew.Validators.required(fields.cojin.caption) : null], fields.cojin.isInvalid],
+            ["brazo", [fields.brazo.visible && fields.brazo.required ? ew.Validators.required(fields.brazo.caption) : null], fields.brazo.isInvalid],
+            ["respaldo", [fields.respaldo.visible && fields.respaldo.required ? ew.Validators.required(fields.respaldo.caption) : null], fields.respaldo.isInvalid],
+            ["talla", [fields.talla.visible && fields.talla.required ? ew.Validators.required(fields.talla.caption) : null], fields.talla.isInvalid],
+            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -72,12 +81,15 @@ loadjs.ready(["wrapper", "head"], function () {
             "fabricante": <?= $Page->fabricante->toClientList($Page) ?>,
             "categoria": <?= $Page->categoria->toClientList($Page) ?>,
             "lista_pedido": <?= $Page->lista_pedido->toClientList($Page) ?>,
+            "categoria_madre": <?= $Page->categoria_madre->toClientList($Page) ?>,
+            "sub_categoria": <?= $Page->sub_categoria->toClientList($Page) ?>,
+            "tipo": <?= $Page->tipo->toClientList($Page) ?>,
             "unidad_medida_defecto": <?= $Page->unidad_medida_defecto->toClientList($Page) ?>,
             "cantidad_por_unidad_medida": <?= $Page->cantidad_por_unidad_medida->toClientList($Page) ?>,
             "alicuota": <?= $Page->alicuota->toClientList($Page) ?>,
             "articulo_inventario": <?= $Page->articulo_inventario->toClientList($Page) ?>,
-            "activo": <?= $Page->activo->toClientList($Page) ?>,
             "indexado": <?= $Page->indexado->toClientList($Page) ?>,
+            "activo": <?= $Page->activo->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -140,7 +152,7 @@ loadjs.ready("head", function () {
         <label id="elh_articulo_principio_activo" for="x_principio_activo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->principio_activo->caption() ?><?= $Page->principio_activo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->principio_activo->cellAttributes() ?>>
 <span id="el_articulo_principio_activo">
-<input type="<?= $Page->principio_activo->getInputTextType() ?>" name="x_principio_activo" id="x_principio_activo" data-table="articulo" data-field="x_principio_activo" value="<?= $Page->principio_activo->EditValue ?>" data-page="1" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->principio_activo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->principio_activo->formatPattern()) ?>"<?= $Page->principio_activo->editAttributes() ?> aria-describedby="x_principio_activo_help">
+<input type="<?= $Page->principio_activo->getInputTextType() ?>" name="x_principio_activo" id="x_principio_activo" data-table="articulo" data-field="x_principio_activo" value="<?= $Page->principio_activo->EditValue ?>" data-page="1" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->principio_activo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->principio_activo->formatPattern()) ?>"<?= $Page->principio_activo->editAttributes() ?> aria-describedby="x_principio_activo_help">
 <?= $Page->principio_activo->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->principio_activo->getErrorMessage() ?></div>
 </span>
@@ -308,52 +320,6 @@ loadjs.ready("farticuloedit", function() {
     }
     options.minimumResultsForSearch = Infinity;
     options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.activo.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->indexado->Visible) { // indexado ?>
-    <div id="r_indexado"<?= $Page->indexado->rowAttributes() ?>>
-        <label id="elh_articulo_indexado" for="x_indexado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->indexado->caption() ?><?= $Page->indexado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->indexado->cellAttributes() ?>>
-<span id="el_articulo_indexado">
-    <select
-        id="x_indexado"
-        name="x_indexado"
-        class="form-select ew-select<?= $Page->indexado->isInvalidClass() ?>"
-        <?php if (!$Page->indexado->IsNativeSelect) { ?>
-        data-select2-id="farticuloedit_x_indexado"
-        <?php } ?>
-        data-table="articulo"
-        data-field="x_indexado"
-        data-page="1"
-        data-value-separator="<?= $Page->indexado->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->indexado->getPlaceHolder()) ?>"
-        <?= $Page->indexado->editAttributes() ?>>
-        <?= $Page->indexado->selectOptionListHtml("x_indexado") ?>
-    </select>
-    <?= $Page->indexado->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->indexado->getErrorMessage() ?></div>
-<?php if (!$Page->indexado->IsNativeSelect) { ?>
-<script>
-loadjs.ready("farticuloedit", function() {
-    var options = { name: "x_indexado", selectId: "farticuloedit_x_indexado" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (farticuloedit.lists.indexado?.lookupOptions.length) {
-        options.data = { id: "x_indexado", form: "farticuloedit" };
-    } else {
-        options.ajax = { id: "x_indexado", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.indexado.selectOptions);
     ew.createSelect(options);
 });
 </script>
@@ -595,6 +561,130 @@ loadjs.ready("farticuloedit", function() {
 </div></div>
     </div>
 <?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+    <div id="r_categoria_madre"<?= $Page->categoria_madre->rowAttributes() ?>>
+        <label id="elh_articulo_categoria_madre" class="<?= $Page->LeftColumnClass ?>"><?= $Page->categoria_madre->caption() ?><?= $Page->categoria_madre->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->categoria_madre->cellAttributes() ?>>
+<span id="el_articulo_categoria_madre">
+    <select
+        id="x_categoria_madre"
+        name="x_categoria_madre"
+        class="form-control ew-select<?= $Page->categoria_madre->isInvalidClass() ?>"
+        data-select2-id="farticuloedit_x_categoria_madre"
+        data-table="articulo"
+        data-field="x_categoria_madre"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->categoria_madre->caption())) ?>"
+        data-modal-lookup="true"
+        data-page="3"
+        data-value-separator="<?= $Page->categoria_madre->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->categoria_madre->getPlaceHolder()) ?>"
+        <?= $Page->categoria_madre->editAttributes() ?>>
+        <?= $Page->categoria_madre->selectOptionListHtml("x_categoria_madre") ?>
+    </select>
+    <?= $Page->categoria_madre->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->categoria_madre->getErrorMessage() ?></div>
+<?= $Page->categoria_madre->Lookup->getParamTag($Page, "p_x_categoria_madre") ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_categoria_madre", selectId: "farticuloedit_x_categoria_madre" };
+    if (farticuloedit.lists.categoria_madre?.lookupOptions.length) {
+        options.data = { id: "x_categoria_madre", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_categoria_madre", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.articulo.fields.categoria_madre.modalLookupOptions);
+    ew.createModalLookup(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->sub_categoria->Visible) { // sub_categoria ?>
+    <div id="r_sub_categoria"<?= $Page->sub_categoria->rowAttributes() ?>>
+        <label id="elh_articulo_sub_categoria" class="<?= $Page->LeftColumnClass ?>"><?= $Page->sub_categoria->caption() ?><?= $Page->sub_categoria->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->sub_categoria->cellAttributes() ?>>
+<span id="el_articulo_sub_categoria">
+    <select
+        id="x_sub_categoria"
+        name="x_sub_categoria"
+        class="form-control ew-select<?= $Page->sub_categoria->isInvalidClass() ?>"
+        data-select2-id="farticuloedit_x_sub_categoria"
+        data-table="articulo"
+        data-field="x_sub_categoria"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->sub_categoria->caption())) ?>"
+        data-modal-lookup="true"
+        data-page="3"
+        data-value-separator="<?= $Page->sub_categoria->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->sub_categoria->getPlaceHolder()) ?>"
+        <?= $Page->sub_categoria->editAttributes() ?>>
+        <?= $Page->sub_categoria->selectOptionListHtml("x_sub_categoria") ?>
+    </select>
+    <?= $Page->sub_categoria->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->sub_categoria->getErrorMessage() ?></div>
+<?= $Page->sub_categoria->Lookup->getParamTag($Page, "p_x_sub_categoria") ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_sub_categoria", selectId: "farticuloedit_x_sub_categoria" };
+    if (farticuloedit.lists.sub_categoria?.lookupOptions.length) {
+        options.data = { id: "x_sub_categoria", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_sub_categoria", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.articulo.fields.sub_categoria.modalLookupOptions);
+    ew.createModalLookup(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tipo->Visible) { // tipo ?>
+    <div id="r_tipo"<?= $Page->tipo->rowAttributes() ?>>
+        <label id="elh_articulo_tipo" for="x_tipo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo->caption() ?><?= $Page->tipo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo->cellAttributes() ?>>
+<span id="el_articulo_tipo">
+    <select
+        id="x_tipo"
+        name="x_tipo"
+        class="form-select ew-select<?= $Page->tipo->isInvalidClass() ?>"
+        <?php if (!$Page->tipo->IsNativeSelect) { ?>
+        data-select2-id="farticuloedit_x_tipo"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_tipo"
+        data-page="3"
+        data-value-separator="<?= $Page->tipo->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo->getPlaceHolder()) ?>"
+        <?= $Page->tipo->editAttributes() ?>>
+        <?= $Page->tipo->selectOptionListHtml("x_tipo") ?>
+    </select>
+    <?= $Page->tipo->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo->getErrorMessage() ?></div>
+<?php if (!$Page->tipo->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_tipo", selectId: "farticuloedit_x_tipo" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticuloedit.lists.tipo?.lookupOptions.length) {
+        options.data = { id: "x_tipo", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_tipo", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.tipo.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
 <?php if ($Page->unidad_medida_defecto->Visible) { // unidad_medida_defecto ?>
     <div id="r_unidad_medida_defecto"<?= $Page->unidad_medida_defecto->rowAttributes() ?>>
         <label id="elh_articulo_unidad_medida_defecto" for="x_unidad_medida_defecto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->unidad_medida_defecto->caption() ?><?= $Page->unidad_medida_defecto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -686,6 +776,124 @@ loadjs.ready("farticuloedit", function() {
 });
 </script>
 <?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+    <div id="r_indexado"<?= $Page->indexado->rowAttributes() ?>>
+        <label id="elh_articulo_indexado" for="x_indexado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->indexado->caption() ?><?= $Page->indexado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->indexado->cellAttributes() ?>>
+<span id="el_articulo_indexado">
+    <select
+        id="x_indexado"
+        name="x_indexado"
+        class="form-select ew-select<?= $Page->indexado->isInvalidClass() ?>"
+        <?php if (!$Page->indexado->IsNativeSelect) { ?>
+        data-select2-id="farticuloedit_x_indexado"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_indexado"
+        data-page="3"
+        data-value-separator="<?= $Page->indexado->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->indexado->getPlaceHolder()) ?>"
+        <?= $Page->indexado->editAttributes() ?>>
+        <?= $Page->indexado->selectOptionListHtml("x_indexado") ?>
+    </select>
+    <?= $Page->indexado->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->indexado->getErrorMessage() ?></div>
+<?php if (!$Page->indexado->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_indexado", selectId: "farticuloedit_x_indexado" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticuloedit.lists.indexado?.lookupOptions.length) {
+        options.data = { id: "x_indexado", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_indexado", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.indexado.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->pies_cubico->Visible) { // pies_cubico ?>
+    <div id="r_pies_cubico"<?= $Page->pies_cubico->rowAttributes() ?>>
+        <label id="elh_articulo_pies_cubico" for="x_pies_cubico" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pies_cubico->caption() ?><?= $Page->pies_cubico->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pies_cubico->cellAttributes() ?>>
+<span id="el_articulo_pies_cubico">
+<input type="<?= $Page->pies_cubico->getInputTextType() ?>" name="x_pies_cubico" id="x_pies_cubico" data-table="articulo" data-field="x_pies_cubico" value="<?= $Page->pies_cubico->EditValue ?>" data-page="3" size="30" placeholder="<?= HtmlEncode($Page->pies_cubico->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->pies_cubico->formatPattern()) ?>"<?= $Page->pies_cubico->editAttributes() ?> aria-describedby="x_pies_cubico_help">
+<?= $Page->pies_cubico->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->pies_cubico->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->color->Visible) { // color ?>
+    <div id="r_color"<?= $Page->color->rowAttributes() ?>>
+        <label id="elh_articulo_color" for="x_color" class="<?= $Page->LeftColumnClass ?>"><?= $Page->color->caption() ?><?= $Page->color->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->color->cellAttributes() ?>>
+<span id="el_articulo_color">
+<input type="<?= $Page->color->getInputTextType() ?>" name="x_color" id="x_color" data-table="articulo" data-field="x_color" value="<?= $Page->color->EditValue ?>" data-page="3" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->color->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->color->formatPattern()) ?>"<?= $Page->color->editAttributes() ?> aria-describedby="x_color_help">
+<?= $Page->color->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->color->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->cojin->Visible) { // cojin ?>
+    <div id="r_cojin"<?= $Page->cojin->rowAttributes() ?>>
+        <label id="elh_articulo_cojin" for="x_cojin" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cojin->caption() ?><?= $Page->cojin->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cojin->cellAttributes() ?>>
+<span id="el_articulo_cojin">
+<input type="<?= $Page->cojin->getInputTextType() ?>" name="x_cojin" id="x_cojin" data-table="articulo" data-field="x_cojin" value="<?= $Page->cojin->EditValue ?>" data-page="3" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->cojin->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cojin->formatPattern()) ?>"<?= $Page->cojin->editAttributes() ?> aria-describedby="x_cojin_help">
+<?= $Page->cojin->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->cojin->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->brazo->Visible) { // brazo ?>
+    <div id="r_brazo"<?= $Page->brazo->rowAttributes() ?>>
+        <label id="elh_articulo_brazo" for="x_brazo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->brazo->caption() ?><?= $Page->brazo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->brazo->cellAttributes() ?>>
+<span id="el_articulo_brazo">
+<input type="<?= $Page->brazo->getInputTextType() ?>" name="x_brazo" id="x_brazo" data-table="articulo" data-field="x_brazo" value="<?= $Page->brazo->EditValue ?>" data-page="3" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->brazo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->brazo->formatPattern()) ?>"<?= $Page->brazo->editAttributes() ?> aria-describedby="x_brazo_help">
+<?= $Page->brazo->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->brazo->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->respaldo->Visible) { // respaldo ?>
+    <div id="r_respaldo"<?= $Page->respaldo->rowAttributes() ?>>
+        <label id="elh_articulo_respaldo" for="x_respaldo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->respaldo->caption() ?><?= $Page->respaldo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->respaldo->cellAttributes() ?>>
+<span id="el_articulo_respaldo">
+<input type="<?= $Page->respaldo->getInputTextType() ?>" name="x_respaldo" id="x_respaldo" data-table="articulo" data-field="x_respaldo" value="<?= $Page->respaldo->EditValue ?>" data-page="3" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->respaldo->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->respaldo->formatPattern()) ?>"<?= $Page->respaldo->editAttributes() ?> aria-describedby="x_respaldo_help">
+<?= $Page->respaldo->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->respaldo->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->talla->Visible) { // talla ?>
+    <div id="r_talla"<?= $Page->talla->rowAttributes() ?>>
+        <label id="elh_articulo_talla" for="x_talla" class="<?= $Page->LeftColumnClass ?>"><?= $Page->talla->caption() ?><?= $Page->talla->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->talla->cellAttributes() ?>>
+<span id="el_articulo_talla">
+<input type="<?= $Page->talla->getInputTextType() ?>" name="x_talla" id="x_talla" data-table="articulo" data-field="x_talla" value="<?= $Page->talla->EditValue ?>" data-page="3" size="30" maxlength="50" placeholder="<?= HtmlEncode($Page->talla->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->talla->formatPattern()) ?>"<?= $Page->talla->editAttributes() ?> aria-describedby="x_talla_help">
+<?= $Page->talla->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->talla->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

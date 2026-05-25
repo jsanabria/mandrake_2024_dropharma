@@ -155,6 +155,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
+    <tr id="r_pago_electronico"<?= $Page->pago_electronico->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compania_cuenta_pago_electronico"><?= $Page->pago_electronico->caption() ?></span></td>
+        <td data-name="pago_electronico"<?= $Page->pago_electronico->cellAttributes() ?>>
+<span id="el_compania_cuenta_pago_electronico">
+<span<?= $Page->pago_electronico->viewAttributes() ?>>
+<?= $Page->pago_electronico->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 </form>
 <?php if (!$Page->IsModal) { ?>

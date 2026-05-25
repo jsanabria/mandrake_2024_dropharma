@@ -160,17 +160,6 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->indexado->Visible) { // indexado ?>
-    <tr id="r_indexado"<?= $Page->indexado->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_indexado"><?= $Page->indexado->caption() ?></span></td>
-        <td data-name="indexado"<?= $Page->indexado->cellAttributes() ?>>
-<span id="el_articulo_indexado" data-page="1">
-<span<?= $Page->indexado->viewAttributes() ?>>
-<?= $Page->indexado->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->
@@ -331,6 +320,39 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+    <tr id="r_categoria_madre"<?= $Page->categoria_madre->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_categoria_madre"><?= $Page->categoria_madre->caption() ?></span></td>
+        <td data-name="categoria_madre"<?= $Page->categoria_madre->cellAttributes() ?>>
+<span id="el_articulo_categoria_madre" data-page="3">
+<span<?= $Page->categoria_madre->viewAttributes() ?>>
+<?= $Page->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->sub_categoria->Visible) { // sub_categoria ?>
+    <tr id="r_sub_categoria"<?= $Page->sub_categoria->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_sub_categoria"><?= $Page->sub_categoria->caption() ?></span></td>
+        <td data-name="sub_categoria"<?= $Page->sub_categoria->cellAttributes() ?>>
+<span id="el_articulo_sub_categoria" data-page="3">
+<span<?= $Page->sub_categoria->viewAttributes() ?>>
+<?= $Page->sub_categoria->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tipo->Visible) { // tipo ?>
+    <tr id="r_tipo"<?= $Page->tipo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_tipo"><?= $Page->tipo->caption() ?></span></td>
+        <td data-name="tipo"<?= $Page->tipo->cellAttributes() ?>>
+<span id="el_articulo_tipo" data-page="3">
+<span<?= $Page->tipo->viewAttributes() ?>>
+<?= $Page->tipo->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->unidad_medida_defecto->Visible) { // unidad_medida_defecto ?>
     <tr id="r_unidad_medida_defecto"<?= $Page->unidad_medida_defecto->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_unidad_medida_defecto"><?= $Page->unidad_medida_defecto->caption() ?></span></td>
@@ -349,6 +371,83 @@ loadjs.ready("head", function () {
 <span id="el_articulo_cantidad_por_unidad_medida" data-page="3">
 <span<?= $Page->cantidad_por_unidad_medida->viewAttributes() ?>>
 <?= $Page->cantidad_por_unidad_medida->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->indexado->Visible) { // indexado ?>
+    <tr id="r_indexado"<?= $Page->indexado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_indexado"><?= $Page->indexado->caption() ?></span></td>
+        <td data-name="indexado"<?= $Page->indexado->cellAttributes() ?>>
+<span id="el_articulo_indexado" data-page="3">
+<span<?= $Page->indexado->viewAttributes() ?>>
+<?= $Page->indexado->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->pies_cubico->Visible) { // pies_cubico ?>
+    <tr id="r_pies_cubico"<?= $Page->pies_cubico->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_pies_cubico"><?= $Page->pies_cubico->caption() ?></span></td>
+        <td data-name="pies_cubico"<?= $Page->pies_cubico->cellAttributes() ?>>
+<span id="el_articulo_pies_cubico" data-page="3">
+<span<?= $Page->pies_cubico->viewAttributes() ?>>
+<?= $Page->pies_cubico->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->color->Visible) { // color ?>
+    <tr id="r_color"<?= $Page->color->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_color"><?= $Page->color->caption() ?></span></td>
+        <td data-name="color"<?= $Page->color->cellAttributes() ?>>
+<span id="el_articulo_color" data-page="3">
+<span<?= $Page->color->viewAttributes() ?>>
+<?= $Page->color->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->cojin->Visible) { // cojin ?>
+    <tr id="r_cojin"<?= $Page->cojin->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_cojin"><?= $Page->cojin->caption() ?></span></td>
+        <td data-name="cojin"<?= $Page->cojin->cellAttributes() ?>>
+<span id="el_articulo_cojin" data-page="3">
+<span<?= $Page->cojin->viewAttributes() ?>>
+<?= $Page->cojin->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->brazo->Visible) { // brazo ?>
+    <tr id="r_brazo"<?= $Page->brazo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_brazo"><?= $Page->brazo->caption() ?></span></td>
+        <td data-name="brazo"<?= $Page->brazo->cellAttributes() ?>>
+<span id="el_articulo_brazo" data-page="3">
+<span<?= $Page->brazo->viewAttributes() ?>>
+<?= $Page->brazo->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->respaldo->Visible) { // respaldo ?>
+    <tr id="r_respaldo"<?= $Page->respaldo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_respaldo"><?= $Page->respaldo->caption() ?></span></td>
+        <td data-name="respaldo"<?= $Page->respaldo->cellAttributes() ?>>
+<span id="el_articulo_respaldo" data-page="3">
+<span<?= $Page->respaldo->viewAttributes() ?>>
+<?= $Page->respaldo->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->talla->Visible) { // talla ?>
+    <tr id="r_talla"<?= $Page->talla->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_talla"><?= $Page->talla->caption() ?></span></td>
+        <td data-name="talla"<?= $Page->talla->cellAttributes() ?>>
+<span id="el_articulo_talla" data-page="3">
+<span<?= $Page->talla->viewAttributes() ?>>
+<?= $Page->talla->getViewValue() ?></span>
 </span>
 </td>
     </tr>

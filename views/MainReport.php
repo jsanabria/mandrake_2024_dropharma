@@ -9,46 +9,195 @@ $MainReport = &$Page;
 $Page->showMessage();
 ?>
 <div class="panel panel-default">
-	 <div class="panel-heading">Seleccione un Reporte</div>
-	 <div class="panel-body">
-	 	<form method="get" action="ListadoMaster">
-		 <ul style="list-style-type:none;">
-		 	<li><input type="radio" id="id" name="id" value="CLIENTES IMS" checked="checked">  EXPORTAR CLIENTES IMS</li>
-		 	<li><input type="radio" id="id" name="id" value="ARTICULOS IMS">  EXPORTAR ARTICULOS IMS</li>
-		 	<li><input type="radio" id="id" name="id" value="FACTURAS IMS">  EXPORTAR FACTURAS IMS</li>
-		 	<li><hr><li>
-		 	<li><input type="radio" id="id" name="id" value="LIBRO COMPRA">  LIBRO DE COMPRAS</li>
-		 	<li><input type="radio" id="id" name="id" value="LIBRO VENTA">  LIBRO DE VENTAS</li>
-		 	<li><input type="radio" id="id" name="id" value="FACTURAS COSTO VS PRECIO">  FACTURAS COSTOS VS PRECIO</li>
-		 	<li><input type="radio" id="id" name="id" value="KARDEX DE INVENTARIO">  KARDEX DE INVENTARIO</li>
-		 	<li><hr><li>
-		 	<li><input type="radio" id="id" name="id" value="ENTRADAS GENERALES POR ARTICULO DETALLADO">  ENTRADAS GENERALES POR ARTICULO DETALLADO</li>
-		 	<li><input type="radio" id="id" name="id" value="PEDIDOS DE VENTAS DETALLADO">  PEDIDOS DE VENTAS DETALLADO</li>
-		 	<li><input type="radio" id="id" name="id" value="NOTAS DE ENTREGA DETALLADO">  NOTAS DE ENTREGA DETALLADO</li>
-		 	<li><hr><li>
-		 	<li><input type="radio" id="id" name="id" value="VENTAS POR LABORATORIO">  VENTAS POR LABORATORIO (FACTURAS)</li>
-		 	<li><input type="radio" id="id" name="id" value="VENTAS POR ARTICULO">  VENTAS POR ARTICULO (FACTURAS)</li>
-		 	<li><input type="radio" id="id" name="id" value="VENTAS POR ARTICULO UTILIDAD">  VENTAS POR ARTICULO (FACTURAS UTILIDAD NETA)</li>
-		 	<li><input type="radio" id="id" name="id" value="SALIDAS GENERALES POR LABORATORIO">  SALIDAS GENERALES POR LABORATORIO (FACTURAS + AJUSTE SALIDAS)</li>
-		 	<li><input type="radio" id="id" name="id" value="SALIDAS GENERALES POR ARTICULO">  SALIDAS GENERALES POR ARTICULO (FACTURAS + AJUSTE SALIDAS)</li>
-		 	<li><input type="radio" id="id" name="id" value="VENTAS POR CLIENTE">  VENTAS POR CLIENTE (FACTURAS SIN IVA Y CANTIDAD DE UNIDADES)</li>
-		 	<li><input type="radio" id="id" name="id" value="SALIDAS GENERALES POR ARTICULO DETALLADO">  SALIDAS GENERALES POR ARTICULO DETALLADO</li>
-		 	<li><hr><li>
-		 	<li><input type="radio" id="id" name="id" value="CONSIGNACIONES POR CLIENTE">  CONSIGNACIONES POR CLIENTE</li>
-		 	<li><input type="radio" id="id" name="id" value="FACTURAS POR CONSIGNACION">  FACTURAS POR CONSIGNACION</li>
-		 	<li><hr><li>
-		 	<li><input type="radio" id="id" name="id" value="CLIENTES CON COMPRAS RECIENTES">  CLIENTES CON COMPRAS RECIENTES</li>
-		 	<li><input type="radio" id="id" name="id" value="CLIENTES SIN COMPRAS RECIENTES">  CLIENTES SIN COMPRAS RECIENTES</li>
-		 	<li><hr><li>
-		 	<li><input type="radio" id="id" name="id" value="INVENTARIO ENTRE FECHA">  INVENTARIO ENTRE FECHA</li>
-		 	<li><input type="radio" id="id" name="id" value="DESCARGA ENTRADAS A CONSIGNACION">  DESCARGA ENTRADAS A CONSIGNACION</li>
-		 	<li><hr><li>
-		 </ul>
+    <div class="panel-heading">
+        <h3 class="panel-title"><strong>Seleccione un Reporte</strong></h3>
+    </div>
+    <div class="panel-body">
+        <form method="get" action="ListadoMaster">
+            
+            <!-- Grupo: Exportaciones IMS -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_ims_cli">
+                        <input type="radio" id="rep_ims_cli" name="id" value="ims_clientes" checked="checked">
+                        EXPORTAR CLIENTES IMS
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_ims_art">
+                        <input type="radio" id="rep_ims_art" name="id" value="ims_articulos">
+                        EXPORTAR ARTICULOS IMS
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_ims_fac">
+                        <input type="radio" id="rep_ims_fac" name="id" value="ims_facturas">
+                        EXPORTAR FACTURAS IMS
+                    </label>
+                </div>
+            </div>
+            <hr>
 
-		 <!--<buttom class="btn btn-primary">Generate<buttom>-->
-		 <input type="submit" class="btn btn-primary" value="Generar">
-		</form>
-	 </div>
- </div>
+            <!-- Grupo: Libros y Auditoría -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_tax_com">
+                        <input type="radio" id="rep_tax_com" name="id" value="tax_libro_compra">
+                        LIBRO DE COMPRAS
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_tax_ven">
+                        <input type="radio" id="rep_tax_ven" name="id" value="tax_libro_venta">
+                        LIBRO DE VENTAS
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_aud_cos">
+                        <input type="radio" id="rep_aud_cos" name="id" value="aud_costo_vs_precio">
+                        FACTURAS COSTOS VS PRECIO
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_inv_kar">
+                        <input type="radio" id="rep_inv_kar" name="id" value="inv_kardex">
+                        KARDEX DE INVENTARIO
+                    </label>
+                </div>
+            </div>
+            <hr>
 
+            <!-- Grupo: Detallados -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_det_ent">
+                        <input type="radio" id="rep_det_ent" name="id" value="det_entradas_general">
+                        ENTRADAS GENERALES POR ARTICULO DETALLADO
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_det_ped">
+                        <input type="radio" id="rep_det_ped" name="id" value="det_pedidos_venta">
+                        PEDIDOS DE VENTAS DETALLADO
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_det_not">
+                        <input type="radio" id="rep_det_not" name="id" value="det_notas_entrega">
+                        NOTAS DE ENTREGA DETALLADO
+                    </label>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Grupo: Ventas y Salidas -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_vta_lab">
+                        <input type="radio" id="rep_vta_lab" name="id" value="vta_laboratorio">
+                        VENTAS POR FABRICANTE (FACTURAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_vta_art">
+                        <input type="radio" id="rep_vta_art" name="id" value="vta_articulo">
+                        VENTAS POR ARTICULO (FACTURAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_vta_utl">
+                        <input type="radio" id="rep_vta_utl" name="id" value="vta_articulo_utilidad">
+                        VENTAS POR ARTICULO (FACTURAS UTILIDAD NETA)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_sal_lab">
+                        <input type="radio" id="rep_sal_lab" name="id" value="sal_laboratorio">
+                        SALIDAS GENERALES POR FABRICANTE (FACTURAS + AJUSTE SALIDAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_sal_art">
+                        <input type="radio" id="rep_sal_art" name="id" value="sal_articulo">
+                        SALIDAS GENERALES POR ARTICULO (FACTURAS + AJUSTE SALIDAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_sal_art">
+                        <input type="radio" id="rep_sal_art" name="id" value="sal_articulo_neas">
+                        SALIDAS GENERALES POR ARTICULO (NOTAS DE ENTRAGA + AJUSTE SALIDAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_vta_cli">
+                        <input type="radio" id="rep_vta_cli" name="id" value="vta_cliente">
+                        VENTAS POR CLIENTE (FACTURAS SIN IVA Y CANTIDAD DE UNIDADES)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_sal_det">
+                        <input type="radio" id="rep_sal_det" name="id" value="sal_articulo_detallado">
+                        SALIDAS GENERALES POR ARTICULO DETALLADO
+                    </label>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Grupo: Consignaciones -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_cng_cli">
+                        <input type="radio" id="rep_cng_cli" name="id" value="cng_cliente">
+                        CONSIGNACIONES POR CLIENTE
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_cng_fac">
+                        <input type="radio" id="rep_cng_fac" name="id" value="cng_facturas">
+                        FACTURAS POR CONSIGNACION
+                    </label>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Grupo: Comportamiento de Clientes -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_cli_rec">
+                        <input type="radio" id="rep_cli_rec" name="id" value="cli_compras_recientes">
+                        CLIENTES CON COMPRAS RECIENTES
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_cli_sin">
+                        <input type="radio" id="rep_cli_sin" name="id" value="cli_sin_compras">
+                        CLIENTES SIN COMPRAS RECIENTES
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_cng_des">
+                        <input type="radio" id="rep_cng_des" name="id" value="cng_descarga_entradas">
+                        DESCARGA ENTRADAS A CONSIGNACION
+                    </label>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Grupo: Inventario Avanzado -->
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_inv_fec">
+                        <input type="radio" id="rep_inv_fec" name="id" value="inv_entre_fechas">
+                        INVENTARIO ENTRE FECHA
+                    </label>
+                </div>
+            </div>
+            <br>
+
+            <button type="submit" class="btn btn-primary btn-block-xs">
+                <span class="glyphicon glyphicon-list-alt"></span> Generar Reporte
+            </button>
+        </form>
+    </div>
+</div>
 <?= GetDebugMessage() ?>

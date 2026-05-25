@@ -135,6 +135,10 @@ class ContLotesPagosAdd extends ContLotesPagos
         $this->nota->setVisibility();
         $this->fecha_registro->Visible = false;
         $this->usuario->Visible = false;
+        $this->banco->setVisibility();
+        $this->referencia->setVisibility();
+        $this->moneda->setVisibility();
+        $this->comprobante->setVisibility();
     }
 
     // Constructor
@@ -519,6 +523,7 @@ class ContLotesPagosAdd extends ContLotesPagos
         // Set up lookup cache
         $this->setupLookupOptions($this->procesado);
         $this->setupLookupOptions($this->usuario);
+        $this->setupLookupOptions($this->comprobante);
 
         // Load default values for add
         $this->loadDefaultValues();
@@ -683,6 +688,8 @@ class ContLotesPagosAdd extends ContLotesPagos
     // Load default values
     protected function loadDefaultValues()
     {
+        $this->comprobante->DefaultValue = $this->comprobante->getDefault(); // PHP
+        $this->comprobante->OldValue = $this->comprobante->DefaultValue;
     }
 
     // Load form values
@@ -713,6 +720,46 @@ class ContLotesPagosAdd extends ContLotesPagos
             }
         }
 
+        // Check field name 'banco' first before field var 'x_banco'
+        $val = $CurrentForm->hasValue("banco") ? $CurrentForm->getValue("banco") : $CurrentForm->getValue("x_banco");
+        if (!$this->banco->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->banco->Visible = false; // Disable update for API request
+            } else {
+                $this->banco->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'referencia' first before field var 'x_referencia'
+        $val = $CurrentForm->hasValue("referencia") ? $CurrentForm->getValue("referencia") : $CurrentForm->getValue("x_referencia");
+        if (!$this->referencia->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->referencia->Visible = false; // Disable update for API request
+            } else {
+                $this->referencia->setFormValue($val);
+            }
+        }
+
+        // Check field name 'moneda' first before field var 'x_moneda'
+        $val = $CurrentForm->hasValue("moneda") ? $CurrentForm->getValue("moneda") : $CurrentForm->getValue("x_moneda");
+        if (!$this->moneda->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->moneda->Visible = false; // Disable update for API request
+            } else {
+                $this->moneda->setFormValue($val);
+            }
+        }
+
+        // Check field name 'comprobante' first before field var 'x_comprobante'
+        $val = $CurrentForm->hasValue("comprobante") ? $CurrentForm->getValue("comprobante") : $CurrentForm->getValue("x_comprobante");
+        if (!$this->comprobante->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->comprobante->Visible = false; // Disable update for API request
+            } else {
+                $this->comprobante->setFormValue($val);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
     }
@@ -724,6 +771,10 @@ class ContLotesPagosAdd extends ContLotesPagos
         $this->fecha->CurrentValue = $this->fecha->FormValue;
         $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
         $this->nota->CurrentValue = $this->nota->FormValue;
+        $this->banco->CurrentValue = $this->banco->FormValue;
+        $this->referencia->CurrentValue = $this->referencia->FormValue;
+        $this->moneda->CurrentValue = $this->moneda->FormValue;
+        $this->comprobante->CurrentValue = $this->comprobante->FormValue;
     }
 
     /**
@@ -770,6 +821,10 @@ class ContLotesPagosAdd extends ContLotesPagos
         $this->nota->setDbValue($row['nota']);
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->usuario->setDbValue($row['usuario']);
+        $this->banco->setDbValue($row['banco']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->comprobante->setDbValue($row['comprobante']);
     }
 
     // Return a row with default values
@@ -782,6 +837,10 @@ class ContLotesPagosAdd extends ContLotesPagos
         $row['nota'] = $this->nota->DefaultValue;
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['usuario'] = $this->usuario->DefaultValue;
+        $row['banco'] = $this->banco->DefaultValue;
+        $row['referencia'] = $this->referencia->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['comprobante'] = $this->comprobante->DefaultValue;
         return $row;
     }
 
@@ -834,6 +893,18 @@ class ContLotesPagosAdd extends ContLotesPagos
         // usuario
         $this->usuario->RowCssClass = "row";
 
+        // banco
+        $this->banco->RowCssClass = "row";
+
+        // referencia
+        $this->referencia->RowCssClass = "row";
+
+        // moneda
+        $this->moneda->RowCssClass = "row";
+
+        // comprobante
+        $this->comprobante->RowCssClass = "row";
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -881,11 +952,40 @@ class ContLotesPagosAdd extends ContLotesPagos
                 $this->usuario->ViewValue = null;
             }
 
+            // banco
+            $this->banco->ViewValue = $this->banco->CurrentValue;
+            $this->banco->ViewValue = FormatNumber($this->banco->ViewValue, $this->banco->formatPattern());
+
+            // referencia
+            $this->referencia->ViewValue = $this->referencia->CurrentValue;
+
+            // moneda
+            $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+            // comprobante
+            if (strval($this->comprobante->CurrentValue) != "") {
+                $this->comprobante->ViewValue = $this->comprobante->optionCaption($this->comprobante->CurrentValue);
+            } else {
+                $this->comprobante->ViewValue = null;
+            }
+
             // fecha
             $this->fecha->HrefValue = "";
 
             // nota
             $this->nota->HrefValue = "";
+
+            // banco
+            $this->banco->HrefValue = "";
+
+            // referencia
+            $this->referencia->HrefValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+
+            // comprobante
+            $this->comprobante->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // fecha
             $this->fecha->setupEditAttributes();
@@ -897,6 +997,34 @@ class ContLotesPagosAdd extends ContLotesPagos
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
             $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
 
+            // banco
+            $this->banco->setupEditAttributes();
+            $this->banco->EditValue = $this->banco->CurrentValue;
+            $this->banco->PlaceHolder = RemoveHtml($this->banco->caption());
+            if (strval($this->banco->EditValue) != "" && is_numeric($this->banco->EditValue)) {
+                $this->banco->EditValue = FormatNumber($this->banco->EditValue, null);
+            }
+
+            // referencia
+            $this->referencia->setupEditAttributes();
+            if (!$this->referencia->Raw) {
+                $this->referencia->CurrentValue = HtmlDecode($this->referencia->CurrentValue);
+            }
+            $this->referencia->EditValue = HtmlEncode($this->referencia->CurrentValue);
+            $this->referencia->PlaceHolder = RemoveHtml($this->referencia->caption());
+
+            // moneda
+            $this->moneda->setupEditAttributes();
+            if (!$this->moneda->Raw) {
+                $this->moneda->CurrentValue = HtmlDecode($this->moneda->CurrentValue);
+            }
+            $this->moneda->EditValue = HtmlEncode($this->moneda->CurrentValue);
+            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
+            // comprobante
+            $this->comprobante->EditValue = $this->comprobante->options(false);
+            $this->comprobante->PlaceHolder = RemoveHtml($this->comprobante->caption());
+
             // Add refer script
 
             // fecha
@@ -904,6 +1032,18 @@ class ContLotesPagosAdd extends ContLotesPagos
 
             // nota
             $this->nota->HrefValue = "";
+
+            // banco
+            $this->banco->HrefValue = "";
+
+            // referencia
+            $this->referencia->HrefValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+
+            // comprobante
+            $this->comprobante->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -936,6 +1076,29 @@ class ContLotesPagosAdd extends ContLotesPagos
             if ($this->nota->Visible && $this->nota->Required) {
                 if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
                     $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
+                }
+            }
+            if ($this->banco->Visible && $this->banco->Required) {
+                if (!$this->banco->IsDetailKey && EmptyValue($this->banco->FormValue)) {
+                    $this->banco->addErrorMessage(str_replace("%s", $this->banco->caption(), $this->banco->RequiredErrorMessage));
+                }
+            }
+            if (!CheckInteger($this->banco->FormValue)) {
+                $this->banco->addErrorMessage($this->banco->getErrorMessage(false));
+            }
+            if ($this->referencia->Visible && $this->referencia->Required) {
+                if (!$this->referencia->IsDetailKey && EmptyValue($this->referencia->FormValue)) {
+                    $this->referencia->addErrorMessage(str_replace("%s", $this->referencia->caption(), $this->referencia->RequiredErrorMessage));
+                }
+            }
+            if ($this->moneda->Visible && $this->moneda->Required) {
+                if (!$this->moneda->IsDetailKey && EmptyValue($this->moneda->FormValue)) {
+                    $this->moneda->addErrorMessage(str_replace("%s", $this->moneda->caption(), $this->moneda->RequiredErrorMessage));
+                }
+            }
+            if ($this->comprobante->Visible && $this->comprobante->Required) {
+                if ($this->comprobante->FormValue == "") {
+                    $this->comprobante->addErrorMessage(str_replace("%s", $this->comprobante->caption(), $this->comprobante->RequiredErrorMessage));
                 }
             }
 
@@ -1059,6 +1222,18 @@ class ContLotesPagosAdd extends ContLotesPagos
 
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, false);
+
+        // banco
+        $this->banco->setDbValueDef($rsnew, $this->banco->CurrentValue, false);
+
+        // referencia
+        $this->referencia->setDbValueDef($rsnew, $this->referencia->CurrentValue, false);
+
+        // moneda
+        $this->moneda->setDbValueDef($rsnew, $this->moneda->CurrentValue, false);
+
+        // comprobante
+        $this->comprobante->setDbValueDef($rsnew, $this->comprobante->CurrentValue, strval($this->comprobante->CurrentValue) == "");
         return $rsnew;
     }
 
@@ -1073,6 +1248,18 @@ class ContLotesPagosAdd extends ContLotesPagos
         }
         if (isset($row['nota'])) { // nota
             $this->nota->setFormValue($row['nota']);
+        }
+        if (isset($row['banco'])) { // banco
+            $this->banco->setFormValue($row['banco']);
+        }
+        if (isset($row['referencia'])) { // referencia
+            $this->referencia->setFormValue($row['referencia']);
+        }
+        if (isset($row['moneda'])) { // moneda
+            $this->moneda->setFormValue($row['moneda']);
+        }
+        if (isset($row['comprobante'])) { // comprobante
+            $this->comprobante->setFormValue($row['comprobante']);
         }
     }
 
@@ -1137,6 +1324,8 @@ class ContLotesPagosAdd extends ContLotesPagos
                 case "x_procesado":
                     break;
                 case "x_usuario":
+                    break;
+                case "x_comprobante":
                     break;
                 default:
                     $lookupFilter = "";

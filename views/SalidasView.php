@@ -308,6 +308,94 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->nacionalizacion->Visible) { // nacionalizacion ?>
+    <tr id="r_nacionalizacion"<?= $Page->nacionalizacion->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_nacionalizacion"><?= $Page->nacionalizacion->caption() ?></span></td>
+        <td data-name="nacionalizacion"<?= $Page->nacionalizacion->cellAttributes() ?>>
+<span id="el_salidas_nacionalizacion" data-page="1">
+<span<?= $Page->nacionalizacion->viewAttributes() ?>>
+<?= $Page->nacionalizacion->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->arquitecto->Visible) { // arquitecto ?>
+    <tr id="r_arquitecto"<?= $Page->arquitecto->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_arquitecto"><?= $Page->arquitecto->caption() ?></span></td>
+        <td data-name="arquitecto"<?= $Page->arquitecto->cellAttributes() ?>>
+<span id="el_salidas_arquitecto" data-page="1">
+<span<?= $Page->arquitecto->viewAttributes() ?>>
+<?= $Page->arquitecto->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->ganancia->Visible) { // ganancia ?>
+    <tr id="r_ganancia"<?= $Page->ganancia->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_ganancia"><?= $Page->ganancia->caption() ?></span></td>
+        <td data-name="ganancia"<?= $Page->ganancia->cellAttributes() ?>>
+<span id="el_salidas_ganancia" data-page="1">
+<span<?= $Page->ganancia->viewAttributes() ?>>
+<?= $Page->ganancia->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->intermediario->Visible) { // intermediario ?>
+    <tr id="r_intermediario"<?= $Page->intermediario->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_intermediario"><?= $Page->intermediario->caption() ?></span></td>
+        <td data-name="intermediario"<?= $Page->intermediario->cellAttributes() ?>>
+<span id="el_salidas_intermediario" data-page="1">
+<span<?= $Page->intermediario->viewAttributes() ?>>
+<?= $Page->intermediario->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->telefeno_intermediario->Visible) { // telefeno_intermediario ?>
+    <tr id="r_telefeno_intermediario"<?= $Page->telefeno_intermediario->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_telefeno_intermediario"><?= $Page->telefeno_intermediario->caption() ?></span></td>
+        <td data-name="telefeno_intermediario"<?= $Page->telefeno_intermediario->cellAttributes() ?>>
+<span id="el_salidas_telefeno_intermediario" data-page="1">
+<span<?= $Page->telefeno_intermediario->viewAttributes() ?>>
+<?= $Page->telefeno_intermediario->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->email_intermediario->Visible) { // email_intermediario ?>
+    <tr id="r_email_intermediario"<?= $Page->email_intermediario->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_email_intermediario"><?= $Page->email_intermediario->caption() ?></span></td>
+        <td data-name="email_intermediario"<?= $Page->email_intermediario->cellAttributes() ?>>
+<span id="el_salidas_email_intermediario" data-page="1">
+<span<?= $Page->email_intermediario->viewAttributes() ?>>
+<?= $Page->email_intermediario->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->genera_ne->Visible) { // genera_ne ?>
+    <tr id="r_genera_ne"<?= $Page->genera_ne->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_genera_ne"><?= $Page->genera_ne->caption() ?></span></td>
+        <td data-name="genera_ne"<?= $Page->genera_ne->cellAttributes() ?>>
+<span id="el_salidas_genera_ne" data-page="1">
+<span<?= $Page->genera_ne->viewAttributes() ?>>
+<?= $Page->genera_ne->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->visita->Visible) { // visita ?>
+    <tr id="r_visita"<?= $Page->visita->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_salidas_visita"><?= $Page->visita->caption() ?></span></td>
+        <td data-name="visita"<?= $Page->visita->cellAttributes() ?>>
+<span id="el_salidas_visita" data-page="1">
+<span<?= $Page->visita->viewAttributes() ?>>
+<?= $Page->visita->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

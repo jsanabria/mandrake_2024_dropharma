@@ -29,14 +29,16 @@ loadjs.ready(["wrapper", "head"], function () {
             ["monto_a_pagar", [fields.monto_a_pagar.visible && fields.monto_a_pagar.required ? ew.Validators.required(fields.monto_a_pagar.caption) : null, ew.Validators.float], fields.monto_a_pagar.isInvalid],
             ["monto_pagdo", [fields.monto_pagdo.visible && fields.monto_pagdo.required ? ew.Validators.required(fields.monto_pagdo.caption) : null, ew.Validators.float], fields.monto_pagdo.isInvalid],
             ["saldo", [fields.saldo.visible && fields.saldo.required ? ew.Validators.required(fields.saldo.caption) : null, ew.Validators.float], fields.saldo.isInvalid],
-            ["comprobante", [fields.comprobante.visible && fields.comprobante.required ? ew.Validators.required(fields.comprobante.caption) : null, ew.Validators.integer], fields.comprobante.isInvalid]
+            ["comprobante", [fields.comprobante.visible && fields.comprobante.required ? ew.Validators.required(fields.comprobante.caption) : null, ew.Validators.integer], fields.comprobante.isInvalid],
+            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
+            ["monto_pagado", [fields.monto_pagado.visible && fields.monto_pagado.required ? ew.Validators.required(fields.monto_pagado.caption) : null, ew.Validators.float], fields.monto_pagado.isInvalid]
         ])
 
         // Check empty row
         .setEmptyRow(
             function (rowIndex) {
                 let fobj = this.getForm(),
-                    fields = [["proveedor",false],["tipodoc",false],["nro_documento",false],["monto_a_pagar",false],["monto_pagdo",false],["saldo",false],["comprobante",false]];
+                    fields = [["proveedor",false],["tipodoc",false],["nro_documento",false],["monto_a_pagar",false],["monto_pagdo",false],["saldo",false],["comprobante",false],["fecha",false],["monto_pagado",false]];
                 if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
                     return false;
                 return true;
@@ -111,6 +113,12 @@ $Grid->ListOptions->render("header", "left");
 <?php } ?>
 <?php if ($Grid->comprobante->Visible) { // comprobante ?>
         <th data-name="comprobante" class="<?= $Grid->comprobante->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_detalle_comprobante" class="cont_lotes_pagos_detalle_comprobante"><?= $Grid->renderFieldHeader($Grid->comprobante) ?></div></th>
+<?php } ?>
+<?php if ($Grid->fecha->Visible) { // fecha ?>
+        <th data-name="fecha" class="<?= $Grid->fecha->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_detalle_fecha" class="cont_lotes_pagos_detalle_fecha"><?= $Grid->renderFieldHeader($Grid->fecha) ?></div></th>
+<?php } ?>
+<?php if ($Grid->monto_pagado->Visible) { // monto_pagado ?>
+        <th data-name="monto_pagado" class="<?= $Grid->monto_pagado->headerCellClass() ?>"><div id="elh_cont_lotes_pagos_detalle_monto_pagado" class="cont_lotes_pagos_detalle_monto_pagado"><?= $Grid->renderFieldHeader($Grid->monto_pagado) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -361,6 +369,118 @@ loadjs.ready("fcont_lotes_pagos_detallegrid", function() {
 <?php if ($Grid->isConfirm()) { ?>
 <input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_comprobante" data-hidden="1" name="fcont_lotes_pagos_detallegrid$x<?= $Grid->RowIndex ?>_comprobante" id="fcont_lotes_pagos_detallegrid$x<?= $Grid->RowIndex ?>_comprobante" value="<?= HtmlEncode($Grid->comprobante->FormValue) ?>">
 <input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_comprobante" data-hidden="1" data-old name="fcont_lotes_pagos_detallegrid$o<?= $Grid->RowIndex ?>_comprobante" id="fcont_lotes_pagos_detallegrid$o<?= $Grid->RowIndex ?>_comprobante" value="<?= HtmlEncode($Grid->comprobante->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+    <?php } ?>
+    <?php if ($Grid->fecha->Visible) { // fecha ?>
+        <td data-name="fecha"<?= $Grid->fecha->cellAttributes() ?>>
+<?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_cont_lotes_pagos_detalle_fecha" class="el_cont_lotes_pagos_detalle_fecha">
+<input type="<?= $Grid->fecha->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_fecha" id="x<?= $Grid->RowIndex ?>_fecha" data-table="cont_lotes_pagos_detalle" data-field="x_fecha" value="<?= $Grid->fecha->EditValue ?>" placeholder="<?= HtmlEncode($Grid->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->fecha->formatPattern()) ?>"<?= $Grid->fecha->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Grid->fecha->getErrorMessage() ?></div>
+<?php if (!$Grid->fecha->ReadOnly && !$Grid->fecha->Disabled && !isset($Grid->fecha->EditAttrs["readonly"]) && !isset($Grid->fecha->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fcont_lotes_pagos_detallegrid", "datetimepicker"], function () {
+    let format = "<?= DateFormat(0) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fcont_lotes_pagos_detallegrid", "x<?= $Grid->RowIndex ?>_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
+</span>
+<input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_fecha" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_fecha" id="o<?= $Grid->RowIndex ?>_fecha" value="<?= HtmlEncode($Grid->fecha->OldValue) ?>">
+<?php } ?>
+<?php if ($Grid->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_cont_lotes_pagos_detalle_fecha" class="el_cont_lotes_pagos_detalle_fecha">
+<input type="<?= $Grid->fecha->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_fecha" id="x<?= $Grid->RowIndex ?>_fecha" data-table="cont_lotes_pagos_detalle" data-field="x_fecha" value="<?= $Grid->fecha->EditValue ?>" placeholder="<?= HtmlEncode($Grid->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->fecha->formatPattern()) ?>"<?= $Grid->fecha->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Grid->fecha->getErrorMessage() ?></div>
+<?php if (!$Grid->fecha->ReadOnly && !$Grid->fecha->Disabled && !isset($Grid->fecha->EditAttrs["readonly"]) && !isset($Grid->fecha->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fcont_lotes_pagos_detallegrid", "datetimepicker"], function () {
+    let format = "<?= DateFormat(0) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fcont_lotes_pagos_detallegrid", "x<?= $Grid->RowIndex ?>_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
+</span>
+<?php } ?>
+<?php if ($Grid->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_cont_lotes_pagos_detalle_fecha" class="el_cont_lotes_pagos_detalle_fecha">
+<span<?= $Grid->fecha->viewAttributes() ?>>
+<?= $Grid->fecha->getViewValue() ?></span>
+</span>
+<?php if ($Grid->isConfirm()) { ?>
+<input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_fecha" data-hidden="1" name="fcont_lotes_pagos_detallegrid$x<?= $Grid->RowIndex ?>_fecha" id="fcont_lotes_pagos_detallegrid$x<?= $Grid->RowIndex ?>_fecha" value="<?= HtmlEncode($Grid->fecha->FormValue) ?>">
+<input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_fecha" data-hidden="1" data-old name="fcont_lotes_pagos_detallegrid$o<?= $Grid->RowIndex ?>_fecha" id="fcont_lotes_pagos_detallegrid$o<?= $Grid->RowIndex ?>_fecha" value="<?= HtmlEncode($Grid->fecha->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+    <?php } ?>
+    <?php if ($Grid->monto_pagado->Visible) { // monto_pagado ?>
+        <td data-name="monto_pagado"<?= $Grid->monto_pagado->cellAttributes() ?>>
+<?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_cont_lotes_pagos_detalle_monto_pagado" class="el_cont_lotes_pagos_detalle_monto_pagado">
+<input type="<?= $Grid->monto_pagado->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_monto_pagado" id="x<?= $Grid->RowIndex ?>_monto_pagado" data-table="cont_lotes_pagos_detalle" data-field="x_monto_pagado" value="<?= $Grid->monto_pagado->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Grid->monto_pagado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->monto_pagado->formatPattern()) ?>"<?= $Grid->monto_pagado->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Grid->monto_pagado->getErrorMessage() ?></div>
+</span>
+<input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_monto_pagado" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_monto_pagado" id="o<?= $Grid->RowIndex ?>_monto_pagado" value="<?= HtmlEncode($Grid->monto_pagado->OldValue) ?>">
+<?php } ?>
+<?php if ($Grid->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_cont_lotes_pagos_detalle_monto_pagado" class="el_cont_lotes_pagos_detalle_monto_pagado">
+<input type="<?= $Grid->monto_pagado->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_monto_pagado" id="x<?= $Grid->RowIndex ?>_monto_pagado" data-table="cont_lotes_pagos_detalle" data-field="x_monto_pagado" value="<?= $Grid->monto_pagado->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Grid->monto_pagado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->monto_pagado->formatPattern()) ?>"<?= $Grid->monto_pagado->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Grid->monto_pagado->getErrorMessage() ?></div>
+</span>
+<?php } ?>
+<?php if ($Grid->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_cont_lotes_pagos_detalle_monto_pagado" class="el_cont_lotes_pagos_detalle_monto_pagado">
+<span<?= $Grid->monto_pagado->viewAttributes() ?>>
+<?= $Grid->monto_pagado->getViewValue() ?></span>
+</span>
+<?php if ($Grid->isConfirm()) { ?>
+<input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_monto_pagado" data-hidden="1" name="fcont_lotes_pagos_detallegrid$x<?= $Grid->RowIndex ?>_monto_pagado" id="fcont_lotes_pagos_detallegrid$x<?= $Grid->RowIndex ?>_monto_pagado" value="<?= HtmlEncode($Grid->monto_pagado->FormValue) ?>">
+<input type="hidden" data-table="cont_lotes_pagos_detalle" data-field="x_monto_pagado" data-hidden="1" data-old name="fcont_lotes_pagos_detallegrid$o<?= $Grid->RowIndex ?>_monto_pagado" id="fcont_lotes_pagos_detallegrid$o<?= $Grid->RowIndex ?>_monto_pagado" value="<?= HtmlEncode($Grid->monto_pagado->OldValue) ?>">
 <?php } ?>
 <?php } ?>
 </td>

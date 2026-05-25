@@ -152,6 +152,7 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->compania->Visible = false;
+        $this->pago_electronico->setVisibility();
     }
 
     // Constructor
@@ -626,6 +627,7 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->pago_electronico);
 
         // Load default values for add
         $this->loadDefaultValues();
@@ -1171,6 +1173,14 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         ) {
             return false;
         }
+        if (
+            $CurrentForm->hasValue("x_pago_electronico") &&
+            $CurrentForm->hasValue("o_pago_electronico") &&
+            $this->pago_electronico->CurrentValue != $this->pago_electronico->DefaultValue &&
+            !($this->pago_electronico->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->pago_electronico->CurrentValue == $this->pago_electronico->getSessionValue())
+        ) {
+            return false;
+        }
         return true;
     }
 
@@ -1708,6 +1718,8 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         $this->activo->OldValue = $this->activo->DefaultValue;
         $this->compania->DefaultValue = $this->compania->getDefault(); // PHP
         $this->compania->OldValue = $this->compania->DefaultValue;
+        $this->pago_electronico->DefaultValue = $this->pago_electronico->getDefault(); // PHP
+        $this->pago_electronico->OldValue = $this->pago_electronico->DefaultValue;
     }
 
     // Load form values
@@ -1809,6 +1821,19 @@ class CompaniaCuentaGrid extends CompaniaCuenta
             $this->activo->setOldValue($CurrentForm->getValue("o_activo"));
         }
 
+        // Check field name 'pago_electronico' first before field var 'x_pago_electronico'
+        $val = $CurrentForm->hasValue("pago_electronico") ? $CurrentForm->getValue("pago_electronico") : $CurrentForm->getValue("x_pago_electronico");
+        if (!$this->pago_electronico->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->pago_electronico->Visible = false; // Disable update for API request
+            } else {
+                $this->pago_electronico->setFormValue($val);
+            }
+        }
+        if ($CurrentForm->hasValue("o_pago_electronico")) {
+            $this->pago_electronico->setOldValue($CurrentForm->getValue("o_pago_electronico"));
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
         if (!$this->id->IsDetailKey && !$this->isGridAdd() && !$this->isAdd()) {
@@ -1830,6 +1855,7 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         $this->mostrar->CurrentValue = $this->mostrar->FormValue;
         $this->cuenta->CurrentValue = $this->cuenta->FormValue;
         $this->activo->CurrentValue = $this->activo->FormValue;
+        $this->pago_electronico->CurrentValue = $this->pago_electronico->FormValue;
     }
 
     /**
@@ -1934,6 +1960,7 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->compania->setDbValue($row['compania']);
+        $this->pago_electronico->setDbValue($row['pago_electronico']);
     }
 
     // Return a row with default values
@@ -1949,6 +1976,7 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['compania'] = $this->compania->DefaultValue;
+        $row['pago_electronico'] = $this->pago_electronico->DefaultValue;
         return $row;
     }
 
@@ -2004,6 +2032,8 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         // activo
 
         // compania
+
+        // pago_electronico
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2089,6 +2119,13 @@ class CompaniaCuentaGrid extends CompaniaCuenta
             // compania
             $this->compania->ViewValue = $this->compania->CurrentValue;
 
+            // pago_electronico
+            if (strval($this->pago_electronico->CurrentValue) != "") {
+                $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
+            } else {
+                $this->pago_electronico->ViewValue = null;
+            }
+
             // banco
             $this->banco->HrefValue = "";
             $this->banco->TooltipValue = "";
@@ -2116,6 +2153,10 @@ class CompaniaCuentaGrid extends CompaniaCuenta
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
+            $this->pago_electronico->TooltipValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // banco
             $this->banco->setupEditAttributes();
@@ -2214,6 +2255,10 @@ class CompaniaCuentaGrid extends CompaniaCuenta
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
+            // pago_electronico
+            $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+            $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
+
             // Add refer script
 
             // banco
@@ -2236,6 +2281,9 @@ class CompaniaCuentaGrid extends CompaniaCuenta
 
             // activo
             $this->activo->HrefValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // banco
             $this->banco->setupEditAttributes();
@@ -2334,6 +2382,10 @@ class CompaniaCuentaGrid extends CompaniaCuenta
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
+            // pago_electronico
+            $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+            $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
+
             // Edit refer script
 
             // banco
@@ -2356,6 +2408,9 @@ class CompaniaCuentaGrid extends CompaniaCuenta
 
             // activo
             $this->activo->HrefValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -2410,6 +2465,11 @@ class CompaniaCuentaGrid extends CompaniaCuenta
             if ($this->activo->Visible && $this->activo->Required) {
                 if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
                     $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
+                }
+            }
+            if ($this->pago_electronico->Visible && $this->pago_electronico->Required) {
+                if ($this->pago_electronico->FormValue == "") {
+                    $this->pago_electronico->addErrorMessage(str_replace("%s", $this->pago_electronico->caption(), $this->pago_electronico->RequiredErrorMessage));
                 }
             }
 
@@ -2603,6 +2663,9 @@ class CompaniaCuentaGrid extends CompaniaCuenta
 
         // activo
         $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, $this->activo->ReadOnly);
+
+        // pago_electronico
+        $this->pago_electronico->setDbValueDef($rsnew, $this->pago_electronico->CurrentValue, $this->pago_electronico->ReadOnly);
         return $rsnew;
     }
 
@@ -2632,6 +2695,9 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         }
         if (isset($row['activo'])) { // activo
             $this->activo->CurrentValue = $row['activo'];
+        }
+        if (isset($row['pago_electronico'])) { // pago_electronico
+            $this->pago_electronico->CurrentValue = $row['pago_electronico'];
         }
     }
 
@@ -2731,6 +2797,9 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         // activo
         $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, strval($this->activo->CurrentValue) == "");
 
+        // pago_electronico
+        $this->pago_electronico->setDbValueDef($rsnew, $this->pago_electronico->CurrentValue, strval($this->pago_electronico->CurrentValue) == "");
+
         // compania
         if ($this->compania->getSessionValue() != "") {
             $rsnew['compania'] = $this->compania->getSessionValue();
@@ -2764,6 +2833,9 @@ class CompaniaCuentaGrid extends CompaniaCuenta
         }
         if (isset($row['activo'])) { // activo
             $this->activo->setFormValue($row['activo']);
+        }
+        if (isset($row['pago_electronico'])) { // pago_electronico
+            $this->pago_electronico->setFormValue($row['pago_electronico']);
         }
         if (isset($row['compania'])) { // compania
             $this->compania->setFormValue($row['compania']);
@@ -2810,6 +2882,8 @@ class CompaniaCuentaGrid extends CompaniaCuenta
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_activo":
+                    break;
+                case "x_pago_electronico":
                     break;
                 default:
                     $lookupFilter = "";

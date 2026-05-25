@@ -213,6 +213,14 @@ class SalidasList extends Salidas
         $this->doc_afe->setVisibility();
         $this->descuento3->setVisibility();
         $this->impreso->setVisibility();
+        $this->nacionalizacion->setVisibility();
+        $this->arquitecto->setVisibility();
+        $this->ganancia->setVisibility();
+        $this->intermediario->setVisibility();
+        $this->telefeno_intermediario->setVisibility();
+        $this->email_intermediario->setVisibility();
+        $this->genera_ne->setVisibility();
+        $this->visita->setVisibility();
     }
 
     // Constructor
@@ -779,6 +787,7 @@ class SalidasList extends Salidas
         $this->setupLookupOptions($this->id_documento_padre);
         $this->setupLookupOptions($this->igtf);
         $this->setupLookupOptions($this->impreso);
+        $this->setupLookupOptions($this->genera_ne);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1215,6 +1224,14 @@ class SalidasList extends Salidas
         $filterList = Concat($filterList, $this->doc_afe->AdvancedSearch->toJson(), ","); // Field doc_afe
         $filterList = Concat($filterList, $this->descuento3->AdvancedSearch->toJson(), ","); // Field descuento3
         $filterList = Concat($filterList, $this->impreso->AdvancedSearch->toJson(), ","); // Field impreso
+        $filterList = Concat($filterList, $this->nacionalizacion->AdvancedSearch->toJson(), ","); // Field nacionalizacion
+        $filterList = Concat($filterList, $this->arquitecto->AdvancedSearch->toJson(), ","); // Field arquitecto
+        $filterList = Concat($filterList, $this->ganancia->AdvancedSearch->toJson(), ","); // Field ganancia
+        $filterList = Concat($filterList, $this->intermediario->AdvancedSearch->toJson(), ","); // Field intermediario
+        $filterList = Concat($filterList, $this->telefeno_intermediario->AdvancedSearch->toJson(), ","); // Field telefeno_intermediario
+        $filterList = Concat($filterList, $this->email_intermediario->AdvancedSearch->toJson(), ","); // Field email_intermediario
+        $filterList = Concat($filterList, $this->genera_ne->AdvancedSearch->toJson(), ","); // Field genera_ne
+        $filterList = Concat($filterList, $this->visita->AdvancedSearch->toJson(), ","); // Field visita
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1733,6 +1750,70 @@ class SalidasList extends Salidas
         $this->impreso->AdvancedSearch->SearchValue2 = @$filter["y_impreso"];
         $this->impreso->AdvancedSearch->SearchOperator2 = @$filter["w_impreso"];
         $this->impreso->AdvancedSearch->save();
+
+        // Field nacionalizacion
+        $this->nacionalizacion->AdvancedSearch->SearchValue = @$filter["x_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchOperator = @$filter["z_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchCondition = @$filter["v_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchValue2 = @$filter["y_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchOperator2 = @$filter["w_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->save();
+
+        // Field arquitecto
+        $this->arquitecto->AdvancedSearch->SearchValue = @$filter["x_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchOperator = @$filter["z_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchCondition = @$filter["v_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchValue2 = @$filter["y_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchOperator2 = @$filter["w_arquitecto"];
+        $this->arquitecto->AdvancedSearch->save();
+
+        // Field ganancia
+        $this->ganancia->AdvancedSearch->SearchValue = @$filter["x_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchOperator = @$filter["z_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchCondition = @$filter["v_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchValue2 = @$filter["y_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchOperator2 = @$filter["w_ganancia"];
+        $this->ganancia->AdvancedSearch->save();
+
+        // Field intermediario
+        $this->intermediario->AdvancedSearch->SearchValue = @$filter["x_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchOperator = @$filter["z_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchCondition = @$filter["v_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchValue2 = @$filter["y_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchOperator2 = @$filter["w_intermediario"];
+        $this->intermediario->AdvancedSearch->save();
+
+        // Field telefeno_intermediario
+        $this->telefeno_intermediario->AdvancedSearch->SearchValue = @$filter["x_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchOperator = @$filter["z_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchCondition = @$filter["v_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchValue2 = @$filter["y_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchOperator2 = @$filter["w_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->save();
+
+        // Field email_intermediario
+        $this->email_intermediario->AdvancedSearch->SearchValue = @$filter["x_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchOperator = @$filter["z_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchCondition = @$filter["v_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchValue2 = @$filter["y_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchOperator2 = @$filter["w_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->save();
+
+        // Field genera_ne
+        $this->genera_ne->AdvancedSearch->SearchValue = @$filter["x_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchOperator = @$filter["z_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchCondition = @$filter["v_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchValue2 = @$filter["y_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchOperator2 = @$filter["w_genera_ne"];
+        $this->genera_ne->AdvancedSearch->save();
+
+        // Field visita
+        $this->visita->AdvancedSearch->SearchValue = @$filter["x_visita"];
+        $this->visita->AdvancedSearch->SearchOperator = @$filter["z_visita"];
+        $this->visita->AdvancedSearch->SearchCondition = @$filter["v_visita"];
+        $this->visita->AdvancedSearch->SearchValue2 = @$filter["y_visita"];
+        $this->visita->AdvancedSearch->SearchOperator2 = @$filter["w_visita"];
+        $this->visita->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1805,6 +1886,14 @@ class SalidasList extends Salidas
         $this->buildSearchSql($where, $this->doc_afe, $default, false); // doc_afe
         $this->buildSearchSql($where, $this->descuento3, $default, false); // descuento3
         $this->buildSearchSql($where, $this->impreso, $default, false); // impreso
+        $this->buildSearchSql($where, $this->nacionalizacion, $default, false); // nacionalizacion
+        $this->buildSearchSql($where, $this->arquitecto, $default, false); // arquitecto
+        $this->buildSearchSql($where, $this->ganancia, $default, false); // ganancia
+        $this->buildSearchSql($where, $this->intermediario, $default, false); // intermediario
+        $this->buildSearchSql($where, $this->telefeno_intermediario, $default, false); // telefeno_intermediario
+        $this->buildSearchSql($where, $this->email_intermediario, $default, false); // email_intermediario
+        $this->buildSearchSql($where, $this->genera_ne, $default, false); // genera_ne
+        $this->buildSearchSql($where, $this->visita, $default, false); // visita
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1871,6 +1960,14 @@ class SalidasList extends Salidas
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
             $this->descuento3->AdvancedSearch->save(); // descuento3
             $this->impreso->AdvancedSearch->save(); // impreso
+            $this->nacionalizacion->AdvancedSearch->save(); // nacionalizacion
+            $this->arquitecto->AdvancedSearch->save(); // arquitecto
+            $this->ganancia->AdvancedSearch->save(); // ganancia
+            $this->intermediario->AdvancedSearch->save(); // intermediario
+            $this->telefeno_intermediario->AdvancedSearch->save(); // telefeno_intermediario
+            $this->email_intermediario->AdvancedSearch->save(); // email_intermediario
+            $this->genera_ne->AdvancedSearch->save(); // genera_ne
+            $this->visita->AdvancedSearch->save(); // visita
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1961,6 +2058,14 @@ class SalidasList extends Salidas
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
             $this->descuento3->AdvancedSearch->save(); // descuento3
             $this->impreso->AdvancedSearch->save(); // impreso
+            $this->nacionalizacion->AdvancedSearch->save(); // nacionalizacion
+            $this->arquitecto->AdvancedSearch->save(); // arquitecto
+            $this->ganancia->AdvancedSearch->save(); // ganancia
+            $this->intermediario->AdvancedSearch->save(); // intermediario
+            $this->telefeno_intermediario->AdvancedSearch->save(); // telefeno_intermediario
+            $this->email_intermediario->AdvancedSearch->save(); // email_intermediario
+            $this->genera_ne->AdvancedSearch->save(); // genera_ne
+            $this->visita->AdvancedSearch->save(); // visita
             $this->setSessionRules($rules);
         }
 
@@ -2340,6 +2445,78 @@ class SalidasList extends Salidas
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->impreso->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
+
+        // Field nacionalizacion
+        $filter = $this->queryBuilderWhere("nacionalizacion");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->nacionalizacion, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->nacionalizacion->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field arquitecto
+        $filter = $this->queryBuilderWhere("arquitecto");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->arquitecto, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->arquitecto->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field ganancia
+        $filter = $this->queryBuilderWhere("ganancia");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->ganancia, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ganancia->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field intermediario
+        $filter = $this->queryBuilderWhere("intermediario");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->intermediario, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->intermediario->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field telefeno_intermediario
+        $filter = $this->queryBuilderWhere("telefeno_intermediario");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->telefeno_intermediario, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->telefeno_intermediario->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field email_intermediario
+        $filter = $this->queryBuilderWhere("email_intermediario");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->email_intermediario, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->email_intermediario->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field genera_ne
+        $filter = $this->queryBuilderWhere("genera_ne");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->genera_ne, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->genera_ne->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field visita
+        $filter = $this->queryBuilderWhere("visita");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->visita, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->visita->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -2389,6 +2566,9 @@ class SalidasList extends Salidas
         $searchFlds[] = &$this->checker;
         $searchFlds[] = &$this->packer;
         $searchFlds[] = &$this->fotos;
+        $searchFlds[] = &$this->intermediario;
+        $searchFlds[] = &$this->telefeno_intermediario;
+        $searchFlds[] = &$this->email_intermediario;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -2597,6 +2777,30 @@ class SalidasList extends Salidas
         if ($this->impreso->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->nacionalizacion->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->arquitecto->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ganancia->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->intermediario->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->telefeno_intermediario->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->email_intermediario->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->genera_ne->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->visita->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2692,6 +2896,14 @@ class SalidasList extends Salidas
         $this->doc_afe->AdvancedSearch->unsetSession();
         $this->descuento3->AdvancedSearch->unsetSession();
         $this->impreso->AdvancedSearch->unsetSession();
+        $this->nacionalizacion->AdvancedSearch->unsetSession();
+        $this->arquitecto->AdvancedSearch->unsetSession();
+        $this->ganancia->AdvancedSearch->unsetSession();
+        $this->intermediario->AdvancedSearch->unsetSession();
+        $this->telefeno_intermediario->AdvancedSearch->unsetSession();
+        $this->email_intermediario->AdvancedSearch->unsetSession();
+        $this->genera_ne->AdvancedSearch->unsetSession();
+        $this->visita->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2763,6 +2975,14 @@ class SalidasList extends Salidas
         $this->doc_afe->AdvancedSearch->load();
         $this->descuento3->AdvancedSearch->load();
         $this->impreso->AdvancedSearch->load();
+        $this->nacionalizacion->AdvancedSearch->load();
+        $this->arquitecto->AdvancedSearch->load();
+        $this->ganancia->AdvancedSearch->load();
+        $this->intermediario->AdvancedSearch->load();
+        $this->telefeno_intermediario->AdvancedSearch->load();
+        $this->email_intermediario->AdvancedSearch->load();
+        $this->genera_ne->AdvancedSearch->load();
+        $this->visita->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2816,6 +3036,14 @@ class SalidasList extends Salidas
             $this->updateSort($this->doc_afe); // doc_afe
             $this->updateSort($this->descuento3); // descuento3
             $this->updateSort($this->impreso); // impreso
+            $this->updateSort($this->nacionalizacion); // nacionalizacion
+            $this->updateSort($this->arquitecto); // arquitecto
+            $this->updateSort($this->ganancia); // ganancia
+            $this->updateSort($this->intermediario); // intermediario
+            $this->updateSort($this->telefeno_intermediario); // telefeno_intermediario
+            $this->updateSort($this->email_intermediario); // email_intermediario
+            $this->updateSort($this->genera_ne); // genera_ne
+            $this->updateSort($this->visita); // visita
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2900,6 +3128,14 @@ class SalidasList extends Salidas
                 $this->doc_afe->setSort("");
                 $this->descuento3->setSort("");
                 $this->impreso->setSort("");
+                $this->nacionalizacion->setSort("");
+                $this->arquitecto->setSort("");
+                $this->ganancia->setSort("");
+                $this->intermediario->setSort("");
+                $this->telefeno_intermediario->setSort("");
+                $this->email_intermediario->setSort("");
+                $this->genera_ne->setSort("");
+                $this->visita->setSort("");
             }
 
             // Reset start position
@@ -3466,6 +3702,14 @@ class SalidasList extends Salidas
             $this->createColumnOption($option, "doc_afe");
             $this->createColumnOption($option, "descuento3");
             $this->createColumnOption($option, "impreso");
+            $this->createColumnOption($option, "nacionalizacion");
+            $this->createColumnOption($option, "arquitecto");
+            $this->createColumnOption($option, "ganancia");
+            $this->createColumnOption($option, "intermediario");
+            $this->createColumnOption($option, "telefeno_intermediario");
+            $this->createColumnOption($option, "email_intermediario");
+            $this->createColumnOption($option, "genera_ne");
+            $this->createColumnOption($option, "visita");
         }
 
         // Set up custom actions
@@ -4298,6 +4542,70 @@ class SalidasList extends Salidas
                 $this->Command = "search";
             }
         }
+
+        // nacionalizacion
+        if ($this->nacionalizacion->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->nacionalizacion->AdvancedSearch->SearchValue != "" || $this->nacionalizacion->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // arquitecto
+        if ($this->arquitecto->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->arquitecto->AdvancedSearch->SearchValue != "" || $this->arquitecto->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ganancia
+        if ($this->ganancia->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ganancia->AdvancedSearch->SearchValue != "" || $this->ganancia->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // intermediario
+        if ($this->intermediario->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->intermediario->AdvancedSearch->SearchValue != "" || $this->intermediario->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // telefeno_intermediario
+        if ($this->telefeno_intermediario->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->telefeno_intermediario->AdvancedSearch->SearchValue != "" || $this->telefeno_intermediario->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // email_intermediario
+        if ($this->email_intermediario->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->email_intermediario->AdvancedSearch->SearchValue != "" || $this->email_intermediario->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // genera_ne
+        if ($this->genera_ne->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->genera_ne->AdvancedSearch->SearchValue != "" || $this->genera_ne->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // visita
+        if ($this->visita->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->visita->AdvancedSearch->SearchValue != "" || $this->visita->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -4456,6 +4764,14 @@ class SalidasList extends Salidas
         $this->doc_afe->setDbValue($row['doc_afe']);
         $this->descuento3->setDbValue($row['descuento3']);
         $this->impreso->setDbValue($row['impreso']);
+        $this->nacionalizacion->setDbValue($row['nacionalizacion']);
+        $this->arquitecto->setDbValue($row['arquitecto']);
+        $this->ganancia->setDbValue($row['ganancia']);
+        $this->intermediario->setDbValue($row['intermediario']);
+        $this->telefeno_intermediario->setDbValue($row['telefeno_intermediario']);
+        $this->email_intermediario->setDbValue($row['email_intermediario']);
+        $this->genera_ne->setDbValue($row['genera_ne']);
+        $this->visita->setDbValue($row['visita']);
     }
 
     // Return a row with default values
@@ -4522,6 +4838,14 @@ class SalidasList extends Salidas
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
         $row['descuento3'] = $this->descuento3->DefaultValue;
         $row['impreso'] = $this->impreso->DefaultValue;
+        $row['nacionalizacion'] = $this->nacionalizacion->DefaultValue;
+        $row['arquitecto'] = $this->arquitecto->DefaultValue;
+        $row['ganancia'] = $this->ganancia->DefaultValue;
+        $row['intermediario'] = $this->intermediario->DefaultValue;
+        $row['telefeno_intermediario'] = $this->telefeno_intermediario->DefaultValue;
+        $row['email_intermediario'] = $this->email_intermediario->DefaultValue;
+        $row['genera_ne'] = $this->genera_ne->DefaultValue;
+        $row['visita'] = $this->visita->DefaultValue;
         return $row;
     }
 
@@ -4681,6 +5005,22 @@ class SalidasList extends Salidas
         // descuento3
 
         // impreso
+
+        // nacionalizacion
+
+        // arquitecto
+
+        // ganancia
+
+        // intermediario
+
+        // telefeno_intermediario
+
+        // email_intermediario
+
+        // genera_ne
+
+        // visita
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -5180,6 +5520,38 @@ class SalidasList extends Salidas
                 $this->impreso->ViewValue = null;
             }
 
+            // nacionalizacion
+            $this->nacionalizacion->ViewValue = $this->nacionalizacion->CurrentValue;
+            $this->nacionalizacion->ViewValue = FormatNumber($this->nacionalizacion->ViewValue, $this->nacionalizacion->formatPattern());
+
+            // arquitecto
+            $this->arquitecto->ViewValue = $this->arquitecto->CurrentValue;
+            $this->arquitecto->ViewValue = FormatNumber($this->arquitecto->ViewValue, $this->arquitecto->formatPattern());
+
+            // ganancia
+            $this->ganancia->ViewValue = $this->ganancia->CurrentValue;
+            $this->ganancia->ViewValue = FormatNumber($this->ganancia->ViewValue, $this->ganancia->formatPattern());
+
+            // intermediario
+            $this->intermediario->ViewValue = $this->intermediario->CurrentValue;
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->ViewValue = $this->telefeno_intermediario->CurrentValue;
+
+            // email_intermediario
+            $this->email_intermediario->ViewValue = $this->email_intermediario->CurrentValue;
+
+            // genera_ne
+            if (strval($this->genera_ne->CurrentValue) != "") {
+                $this->genera_ne->ViewValue = $this->genera_ne->optionCaption($this->genera_ne->CurrentValue);
+            } else {
+                $this->genera_ne->ViewValue = null;
+            }
+
+            // visita
+            $this->visita->ViewValue = $this->visita->CurrentValue;
+            $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -5348,6 +5720,38 @@ class SalidasList extends Salidas
             // impreso
             $this->impreso->HrefValue = "";
             $this->impreso->TooltipValue = "";
+
+            // nacionalizacion
+            $this->nacionalizacion->HrefValue = "";
+            $this->nacionalizacion->TooltipValue = "";
+
+            // arquitecto
+            $this->arquitecto->HrefValue = "";
+            $this->arquitecto->TooltipValue = "";
+
+            // ganancia
+            $this->ganancia->HrefValue = "";
+            $this->ganancia->TooltipValue = "";
+
+            // intermediario
+            $this->intermediario->HrefValue = "";
+            $this->intermediario->TooltipValue = "";
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->HrefValue = "";
+            $this->telefeno_intermediario->TooltipValue = "";
+
+            // email_intermediario
+            $this->email_intermediario->HrefValue = "";
+            $this->email_intermediario->TooltipValue = "";
+
+            // genera_ne
+            $this->genera_ne->HrefValue = "";
+            $this->genera_ne->TooltipValue = "";
+
+            // visita
+            $this->visita->HrefValue = "";
+            $this->visita->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // tipo_documento
             $this->tipo_documento->setupEditAttributes();
@@ -5634,6 +6038,54 @@ class SalidasList extends Salidas
             // impreso
             $this->impreso->EditValue = $this->impreso->options(false);
             $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
+
+            // nacionalizacion
+            $this->nacionalizacion->setupEditAttributes();
+            $this->nacionalizacion->EditValue = $this->nacionalizacion->AdvancedSearch->SearchValue;
+            $this->nacionalizacion->PlaceHolder = RemoveHtml($this->nacionalizacion->caption());
+
+            // arquitecto
+            $this->arquitecto->setupEditAttributes();
+            $this->arquitecto->EditValue = $this->arquitecto->AdvancedSearch->SearchValue;
+            $this->arquitecto->PlaceHolder = RemoveHtml($this->arquitecto->caption());
+
+            // ganancia
+            $this->ganancia->setupEditAttributes();
+            $this->ganancia->EditValue = $this->ganancia->AdvancedSearch->SearchValue;
+            $this->ganancia->PlaceHolder = RemoveHtml($this->ganancia->caption());
+
+            // intermediario
+            $this->intermediario->setupEditAttributes();
+            if (!$this->intermediario->Raw) {
+                $this->intermediario->AdvancedSearch->SearchValue = HtmlDecode($this->intermediario->AdvancedSearch->SearchValue);
+            }
+            $this->intermediario->EditValue = HtmlEncode($this->intermediario->AdvancedSearch->SearchValue);
+            $this->intermediario->PlaceHolder = RemoveHtml($this->intermediario->caption());
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->setupEditAttributes();
+            if (!$this->telefeno_intermediario->Raw) {
+                $this->telefeno_intermediario->AdvancedSearch->SearchValue = HtmlDecode($this->telefeno_intermediario->AdvancedSearch->SearchValue);
+            }
+            $this->telefeno_intermediario->EditValue = HtmlEncode($this->telefeno_intermediario->AdvancedSearch->SearchValue);
+            $this->telefeno_intermediario->PlaceHolder = RemoveHtml($this->telefeno_intermediario->caption());
+
+            // email_intermediario
+            $this->email_intermediario->setupEditAttributes();
+            if (!$this->email_intermediario->Raw) {
+                $this->email_intermediario->AdvancedSearch->SearchValue = HtmlDecode($this->email_intermediario->AdvancedSearch->SearchValue);
+            }
+            $this->email_intermediario->EditValue = HtmlEncode($this->email_intermediario->AdvancedSearch->SearchValue);
+            $this->email_intermediario->PlaceHolder = RemoveHtml($this->email_intermediario->caption());
+
+            // genera_ne
+            $this->genera_ne->EditValue = $this->genera_ne->options(false);
+            $this->genera_ne->PlaceHolder = RemoveHtml($this->genera_ne->caption());
+
+            // visita
+            $this->visita->setupEditAttributes();
+            $this->visita->EditValue = $this->visita->AdvancedSearch->SearchValue;
+            $this->visita->PlaceHolder = RemoveHtml($this->visita->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -5734,6 +6186,14 @@ class SalidasList extends Salidas
         $this->doc_afe->AdvancedSearch->load();
         $this->descuento3->AdvancedSearch->load();
         $this->impreso->AdvancedSearch->load();
+        $this->nacionalizacion->AdvancedSearch->load();
+        $this->arquitecto->AdvancedSearch->load();
+        $this->ganancia->AdvancedSearch->load();
+        $this->intermediario->AdvancedSearch->load();
+        $this->telefeno_intermediario->AdvancedSearch->load();
+        $this->email_intermediario->AdvancedSearch->load();
+        $this->genera_ne->AdvancedSearch->load();
+        $this->visita->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -6028,6 +6488,8 @@ class SalidasList extends Salidas
                 case "x_igtf":
                     break;
                 case "x_impreso":
+                    break;
+                case "x_genera_ne":
                     break;
                 default:
                     $lookupFilter = "";

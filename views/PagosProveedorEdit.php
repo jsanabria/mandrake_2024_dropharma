@@ -38,7 +38,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["referencia", [fields.referencia.visible && fields.referencia.required ? ew.Validators.required(fields.referencia.caption) : null], fields.referencia.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["monto_dado", [fields.monto_dado.visible && fields.monto_dado.required ? ew.Validators.required(fields.monto_dado.caption) : null, ew.Validators.float], fields.monto_dado.isInvalid],
-            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid]
+            ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
+            ["cont_lotes", [fields.cont_lotes.visible && fields.cont_lotes.required ? ew.Validators.required(fields.cont_lotes.caption) : null, ew.Validators.integer], fields.cont_lotes.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -304,6 +305,18 @@ loadjs.ready("fpagos_proveedoredit", function() {
 <textarea data-table="pagos_proveedor" data-field="x_nota" name="x_nota" id="x_nota" cols="30" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
 <?= $Page->nota->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nota->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->cont_lotes->Visible) { // cont_lotes ?>
+    <div id="r_cont_lotes"<?= $Page->cont_lotes->rowAttributes() ?>>
+        <label id="elh_pagos_proveedor_cont_lotes" for="x_cont_lotes" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cont_lotes->caption() ?><?= $Page->cont_lotes->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cont_lotes->cellAttributes() ?>>
+<span id="el_pagos_proveedor_cont_lotes">
+<input type="<?= $Page->cont_lotes->getInputTextType() ?>" name="x_cont_lotes" id="x_cont_lotes" data-table="pagos_proveedor" data-field="x_cont_lotes" value="<?= $Page->cont_lotes->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cont_lotes->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cont_lotes->formatPattern()) ?>"<?= $Page->cont_lotes->editAttributes() ?> aria-describedby="x_cont_lotes_help">
+<?= $Page->cont_lotes->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->cont_lotes->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

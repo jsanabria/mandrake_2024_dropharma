@@ -71,6 +71,9 @@ $Page->showMessage();
 <?php if ($Page->activo->Visible) { // activo ?>
         <th class="<?= $Page->activo->headerCellClass() ?>"><span id="elh_compania_cuenta_activo" class="compania_cuenta_activo"><?= $Page->activo->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
+        <th class="<?= $Page->pago_electronico->headerCellClass() ?>"><span id="elh_compania_cuenta_pago_electronico" class="compania_cuenta_pago_electronico"><?= $Page->pago_electronico->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -145,6 +148,14 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
+        <td<?= $Page->pago_electronico->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->pago_electronico->viewAttributes() ?>>
+<?= $Page->pago_electronico->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

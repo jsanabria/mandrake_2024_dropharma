@@ -176,6 +176,7 @@ class CompraView extends Compra
         $this->sustraendo->setVisibility();
         $this->tipo_municipal->setVisibility();
         $this->anulado->setVisibility();
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -575,6 +576,7 @@ class CompraView extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->pagado);
 
         // Check modal
         if ($this->IsModal) {
@@ -902,6 +904,7 @@ class CompraView extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -937,6 +940,7 @@ class CompraView extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -1015,6 +1019,8 @@ class CompraView extends Compra
         // tipo_municipal
 
         // anulado
+
+        // pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1194,6 +1200,13 @@ class CompraView extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // pagado
+            if (strval($this->pagado->CurrentValue) != "") {
+                $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+            } else {
+                $this->pagado->ViewValue = null;
+            }
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -1322,9 +1335,29 @@ class CompraView extends Compra
             }
             $this->comprobante->TooltipValue = "";
 
+            // tipo_iva
+            $this->tipo_iva->HrefValue = "";
+            $this->tipo_iva->TooltipValue = "";
+
+            // tipo_islr
+            $this->tipo_islr->HrefValue = "";
+            $this->tipo_islr->TooltipValue = "";
+
+            // sustraendo
+            $this->sustraendo->HrefValue = "";
+            $this->sustraendo->TooltipValue = "";
+
+            // tipo_municipal
+            $this->tipo_municipal->HrefValue = "";
+            $this->tipo_municipal->TooltipValue = "";
+
             // anulado
             $this->anulado->HrefValue = "";
             $this->anulado->TooltipValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
+            $this->pagado->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1355,6 +1388,7 @@ class CompraView extends Compra
         $pages->add(0);
         $pages->add(1);
         $pages->add(2);
+        $pages->add(3);
         $this->MultiPages = $pages;
     }
 
@@ -1382,6 +1416,8 @@ class CompraView extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_pagado":
                     break;
                 default:
                     $lookupFilter = "";
@@ -1490,18 +1526,33 @@ class CompraView extends Compra
     public function pageDataRendering(&$header) {
     	// Example:
     	//$header = "your header";
-    	if($this->comprobante->CurrentValue == "") {
-    		if(VerificaFuncion('014')) {
-    			$header = '<div id="result" class="container">
-    					<buttom class="btn btn-success" id="cmbContab" name="cmbContab">Generar Comprobante Contable</buttom>
-    					</div>';
-    		}
-    	}
-    	else {
-    		$header = '<div class="alert alert-success" role="alert">
-    						Ya se le Gener&oacute; Comprobante Contable a este Documento
-    					</div>';
-    	}
+        	$header = '<div id="result" class="container">';
+            if($this->comprobante->CurrentValue == "") {
+                if(VerificaFuncion('014')) {
+        			$header .= '<buttom class="btn btn-success" id="cmbContab" name="cmbContab">Generar Comprobante Contable</buttom>&nbsp&nbsp';
+                }
+            }
+            else {
+                $header = '<div class="alert alert-success" role="alert">
+                                Ya se le Gener&oacute; Comprobante Contable a este Documento
+                            </div>';
+            }
+            $sql = "SELECT id FROM pagos_compras WHERE id_documento = " . $this->id->CurrentValue . ";";
+            if($row = ExecuteRow($sql)) {
+                // $url = "../PagosComprasDetalleList?showmaster=pagos_compras&fk_id=" . $row["id"] . "";
+                $url = "../PagosComprasDetalleList?showmaster=pagos_compras&fk_id=" . $row["id"] . "";
+                $header .= '<a class="btn btn-primary" href="' . $url . '">Ver Pago(s)</a>&nbsp&nbsp';
+                if(VerificaFuncion('014')) {
+                    $header .= '<a class="btn btn-danger" onclick="js: RevertirPagosCompras(' . $this->id->CurrentValue . '); ">Revertir Pago(s)</a>&nbsp&nbsp';
+                }
+            }
+            else {
+                if($this->anulado->CurrentValue == "N") {
+                    $url = "../PagosComprasAdd?showdetail=&id_compra=" . $this->id->CurrentValue;
+                    $header .= '<a class="btn btn-primary" href="' . $url . '">Registrar Pago</a>';
+                }
+            } 
+            $header .= '</div>';
     }
 
     // Page Data Rendered event

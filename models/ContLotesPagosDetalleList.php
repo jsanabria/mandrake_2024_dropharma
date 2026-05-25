@@ -164,6 +164,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
         $this->monto_pagdo->setVisibility();
         $this->saldo->setVisibility();
         $this->comprobante->setVisibility();
+        $this->fecha->setVisibility();
+        $this->monto_pagado->setVisibility();
     }
 
     // Constructor
@@ -1092,6 +1094,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
         $filterList = Concat($filterList, $this->monto_pagdo->AdvancedSearch->toJson(), ","); // Field monto_pagdo
         $filterList = Concat($filterList, $this->saldo->AdvancedSearch->toJson(), ","); // Field saldo
         $filterList = Concat($filterList, $this->comprobante->AdvancedSearch->toJson(), ","); // Field comprobante
+        $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
+        $filterList = Concat($filterList, $this->monto_pagado->AdvancedSearch->toJson(), ","); // Field monto_pagado
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1218,6 +1222,22 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
         $this->comprobante->AdvancedSearch->SearchValue2 = @$filter["y_comprobante"];
         $this->comprobante->AdvancedSearch->SearchOperator2 = @$filter["w_comprobante"];
         $this->comprobante->AdvancedSearch->save();
+
+        // Field fecha
+        $this->fecha->AdvancedSearch->SearchValue = @$filter["x_fecha"];
+        $this->fecha->AdvancedSearch->SearchOperator = @$filter["z_fecha"];
+        $this->fecha->AdvancedSearch->SearchCondition = @$filter["v_fecha"];
+        $this->fecha->AdvancedSearch->SearchValue2 = @$filter["y_fecha"];
+        $this->fecha->AdvancedSearch->SearchOperator2 = @$filter["w_fecha"];
+        $this->fecha->AdvancedSearch->save();
+
+        // Field monto_pagado
+        $this->monto_pagado->AdvancedSearch->SearchValue = @$filter["x_monto_pagado"];
+        $this->monto_pagado->AdvancedSearch->SearchOperator = @$filter["z_monto_pagado"];
+        $this->monto_pagado->AdvancedSearch->SearchCondition = @$filter["v_monto_pagado"];
+        $this->monto_pagado->AdvancedSearch->SearchValue2 = @$filter["y_monto_pagado"];
+        $this->monto_pagado->AdvancedSearch->SearchOperator2 = @$filter["w_monto_pagado"];
+        $this->monto_pagado->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1345,6 +1365,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
             $this->updateSort($this->monto_pagdo); // monto_pagdo
             $this->updateSort($this->saldo); // saldo
             $this->updateSort($this->comprobante); // comprobante
+            $this->updateSort($this->fecha); // fecha
+            $this->updateSort($this->monto_pagado); // monto_pagado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1388,6 +1410,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
                 $this->monto_pagdo->setSort("");
                 $this->saldo->setSort("");
                 $this->comprobante->setSort("");
+                $this->fecha->setSort("");
+                $this->monto_pagado->setSort("");
             }
 
             // Reset start position
@@ -1571,6 +1595,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
             $this->createColumnOption($option, "monto_pagdo");
             $this->createColumnOption($option, "saldo");
             $this->createColumnOption($option, "comprobante");
+            $this->createColumnOption($option, "fecha");
+            $this->createColumnOption($option, "monto_pagado");
         }
 
         // Set up custom actions
@@ -2015,6 +2041,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
         $this->monto_pagdo->setDbValue($row['monto_pagdo']);
         $this->saldo->setDbValue($row['saldo']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->fecha->setDbValue($row['fecha']);
+        $this->monto_pagado->setDbValue($row['monto_pagado']);
     }
 
     // Return a row with default values
@@ -2032,6 +2060,8 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
         $row['monto_pagdo'] = $this->monto_pagdo->DefaultValue;
         $row['saldo'] = $this->saldo->DefaultValue;
         $row['comprobante'] = $this->comprobante->DefaultValue;
+        $row['fecha'] = $this->fecha->DefaultValue;
+        $row['monto_pagado'] = $this->monto_pagado->DefaultValue;
         return $row;
     }
 
@@ -2093,6 +2123,10 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
         // saldo
 
         // comprobante
+
+        // fecha
+
+        // monto_pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2156,6 +2190,14 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
             $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
             $this->comprobante->ViewValue = FormatNumber($this->comprobante->ViewValue, $this->comprobante->formatPattern());
 
+            // fecha
+            $this->fecha->ViewValue = $this->fecha->CurrentValue;
+            $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+            // monto_pagado
+            $this->monto_pagado->ViewValue = $this->monto_pagado->CurrentValue;
+            $this->monto_pagado->ViewValue = FormatNumber($this->monto_pagado->ViewValue, $this->monto_pagado->formatPattern());
+
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
@@ -2183,6 +2225,14 @@ class ContLotesPagosDetalleList extends ContLotesPagosDetalle
             // comprobante
             $this->comprobante->HrefValue = "";
             $this->comprobante->TooltipValue = "";
+
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
+            // monto_pagado
+            $this->monto_pagado->HrefValue = "";
+            $this->monto_pagado->TooltipValue = "";
         }
 
         // Call Row Rendered event

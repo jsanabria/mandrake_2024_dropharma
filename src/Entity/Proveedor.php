@@ -57,6 +57,9 @@ class Proveedor extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $email2;
 
+    #[Column(type: "integer", nullable: true)]
+    private ?int $fabricante;
+
     #[Column(name: "cuenta_auxiliar", type: "integer", nullable: true)]
     private ?int $cuentaAuxiliar;
 
@@ -72,6 +75,18 @@ class Proveedor extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $sustraendo;
 
+    #[Column(name: "tipo_ret_iva", type: "string", nullable: true)]
+    private ?string $tipoRetIva;
+
+    #[Column(name: "tipo_ret_islr_concepto", type: "string", nullable: true)]
+    private ?string $tipoRetIslrConcepto;
+
+    #[Column(name: "tipo_ret_islr", type: "integer", nullable: true)]
+    private ?int $tipoRetIslr;
+
+    #[Column(name: "tipo_ret_mun", type: "string", nullable: true)]
+    private ?string $tipoRetMun;
+
     #[Column(name: "tipo_impmun", type: "string", nullable: true)]
     private ?string $tipoImpmun;
 
@@ -80,9 +95,6 @@ class Proveedor extends AbstractEntity
 
     #[Column(type: "string", nullable: true)]
     private ?string $activo;
-
-    #[Column(type: "integer", nullable: true)]
-    private ?int $fabricante;
 
     public function __construct()
     {
@@ -188,6 +200,17 @@ class Proveedor extends AbstractEntity
         return $this;
     }
 
+    public function getFabricante(): ?int
+    {
+        return $this->fabricante;
+    }
+
+    public function setFabricante(?int $value): static
+    {
+        $this->fabricante = $value;
+        return $this;
+    }
+
     public function getCuentaAuxiliar(): ?int
     {
         return $this->cuentaAuxiliar;
@@ -243,6 +266,50 @@ class Proveedor extends AbstractEntity
         return $this;
     }
 
+    public function getTipoRetIva(): ?string
+    {
+        return HtmlDecode($this->tipoRetIva);
+    }
+
+    public function setTipoRetIva(?string $value): static
+    {
+        $this->tipoRetIva = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTipoRetIslrConcepto(): ?string
+    {
+        return HtmlDecode($this->tipoRetIslrConcepto);
+    }
+
+    public function setTipoRetIslrConcepto(?string $value): static
+    {
+        $this->tipoRetIslrConcepto = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTipoRetIslr(): ?int
+    {
+        return $this->tipoRetIslr;
+    }
+
+    public function setTipoRetIslr(?int $value): static
+    {
+        $this->tipoRetIslr = $value;
+        return $this;
+    }
+
+    public function getTipoRetMun(): ?string
+    {
+        return HtmlDecode($this->tipoRetMun);
+    }
+
+    public function setTipoRetMun(?string $value): static
+    {
+        $this->tipoRetMun = RemoveXss($value);
+        return $this;
+    }
+
     public function getTipoImpmun(): ?string
     {
         return HtmlDecode($this->tipoImpmun);
@@ -276,17 +343,6 @@ class Proveedor extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'activo' value");
         }
         $this->activo = $value;
-        return $this;
-    }
-
-    public function getFabricante(): ?int
-    {
-        return $this->fabricante;
-    }
-
-    public function setFabricante(?int $value): static
-    {
-        $this->fabricante = $value;
         return $this;
     }
 }

@@ -158,6 +158,7 @@ class CompraEdit extends Compra
         $this->sustraendo->Visible = false;
         $this->tipo_municipal->Visible = false;
         $this->anulado->setVisibility();
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -556,6 +557,7 @@ class CompraEdit extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->pagado);
 
         // Check modal
         if ($this->IsModal) {
@@ -967,6 +969,16 @@ class CompraEdit extends Compra
                 $this->anulado->setFormValue($val);
             }
         }
+
+        // Check field name 'pagado' first before field var 'x_pagado'
+        $val = $CurrentForm->hasValue("pagado") ? $CurrentForm->getValue("pagado") : $CurrentForm->getValue("x_pagado");
+        if (!$this->pagado->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->pagado->Visible = false; // Disable update for API request
+            } else {
+                $this->pagado->setFormValue($val);
+            }
+        }
     }
 
     // Restore form values
@@ -992,6 +1004,7 @@ class CompraEdit extends Compra
         $this->fecha_registro->CurrentValue = $this->fecha_registro->FormValue;
         $this->fecha_registro->CurrentValue = UnFormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern());
         $this->anulado->CurrentValue = $this->anulado->FormValue;
+        $this->pagado->CurrentValue = $this->pagado->FormValue;
     }
 
     /**
@@ -1116,6 +1129,7 @@ class CompraEdit extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -1151,6 +1165,7 @@ class CompraEdit extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -1271,6 +1286,9 @@ class CompraEdit extends Compra
 
         // anulado
         $this->anulado->RowCssClass = "row";
+
+        // pagado
+        $this->pagado->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1450,6 +1468,13 @@ class CompraEdit extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // pagado
+            if (strval($this->pagado->CurrentValue) != "") {
+                $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+            } else {
+                $this->pagado->ViewValue = null;
+            }
+
             // id
             $this->id->HrefValue = "";
 
@@ -1524,6 +1549,9 @@ class CompraEdit extends Compra
 
             // anulado
             $this->anulado->HrefValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // id
             $this->id->setupEditAttributes();
@@ -1664,6 +1692,10 @@ class CompraEdit extends Compra
             $this->anulado->EditValue = $this->anulado->options(false);
             $this->anulado->PlaceHolder = RemoveHtml($this->anulado->caption());
 
+            // pagado
+            $this->pagado->EditValue = $this->pagado->options(false);
+            $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
+
             // Edit refer script
 
             // id
@@ -1740,6 +1772,9 @@ class CompraEdit extends Compra
 
             // anulado
             $this->anulado->HrefValue = "";
+
+            // pagado
+            $this->pagado->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1859,6 +1894,11 @@ class CompraEdit extends Compra
             if ($this->anulado->Visible && $this->anulado->Required) {
                 if ($this->anulado->FormValue == "") {
                     $this->anulado->addErrorMessage(str_replace("%s", $this->anulado->caption(), $this->anulado->RequiredErrorMessage));
+                }
+            }
+            if ($this->pagado->Visible && $this->pagado->Required) {
+                if ($this->pagado->FormValue == "") {
+                    $this->pagado->addErrorMessage(str_replace("%s", $this->pagado->caption(), $this->pagado->RequiredErrorMessage));
                 }
             }
 
@@ -1997,6 +2037,9 @@ class CompraEdit extends Compra
 
         // anulado
         $this->anulado->setDbValueDef($rsnew, $this->anulado->CurrentValue, $this->anulado->ReadOnly);
+
+        // pagado
+        $this->pagado->setDbValueDef($rsnew, $this->pagado->CurrentValue, $this->pagado->ReadOnly);
         return $rsnew;
     }
 
@@ -2054,6 +2097,9 @@ class CompraEdit extends Compra
         if (isset($row['anulado'])) { // anulado
             $this->anulado->CurrentValue = $row['anulado'];
         }
+        if (isset($row['pagado'])) { // pagado
+            $this->pagado->CurrentValue = $row['pagado'];
+        }
     }
 
     // Set up Breadcrumb
@@ -2078,6 +2124,7 @@ class CompraEdit extends Compra
         $pages->add(0);
         $pages->add(1);
         $pages->add(2);
+        $pages->add(3);
         $this->MultiPages = $pages;
     }
 
@@ -2105,6 +2152,8 @@ class CompraEdit extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_pagado":
                     break;
                 default:
                     $lookupFilter = "";

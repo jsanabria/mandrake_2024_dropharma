@@ -65,6 +65,8 @@ class ContLotesPagosDetalle extends DbTable
     public $monto_pagdo;
     public $saldo;
     public $comprobante;
+    public $fecha;
+    public $monto_pagado;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -357,8 +359,8 @@ class ContLotesPagosDetalle extends DbTable
             'comprobante', // Name
             '`comprobante`', // Expression
             '`comprobante`', // Basic search expression
-            19, // Type
-            10, // Size
+            3, // Type
+            11, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`comprobante`', // Virtual expression
@@ -373,6 +375,54 @@ class ContLotesPagosDetalle extends DbTable
         $this->comprobante->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->comprobante->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['comprobante'] = &$this->comprobante;
+
+        // fecha
+        $this->fecha = new DbField(
+            $this, // Table
+            'x_fecha', // Variable name
+            'fecha', // Name
+            '`fecha`', // Expression
+            CastDateFieldForLike("`fecha`", 0, "DB"), // Basic search expression
+            133, // Type
+            10, // Size
+            0, // Date/Time format
+            false, // Is upload field
+            '`fecha`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->fecha->InputTextType = "text";
+        $this->fecha->Raw = true;
+        $this->fecha->DefaultErrorMessage = str_replace("%s", $GLOBALS["DATE_FORMAT"], $Language->phrase("IncorrectDate"));
+        $this->fecha->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['fecha'] = &$this->fecha;
+
+        // monto_pagado
+        $this->monto_pagado = new DbField(
+            $this, // Table
+            'x_monto_pagado', // Variable name
+            'monto_pagado', // Name
+            '`monto_pagado`', // Expression
+            '`monto_pagado`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`monto_pagado`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->monto_pagado->InputTextType = "text";
+        $this->monto_pagado->Raw = true;
+        $this->monto_pagado->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->monto_pagado->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['monto_pagado'] = &$this->monto_pagado;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -999,6 +1049,8 @@ class ContLotesPagosDetalle extends DbTable
         $this->monto_pagdo->DbValue = $row['monto_pagdo'];
         $this->saldo->DbValue = $row['saldo'];
         $this->comprobante->DbValue = $row['comprobante'];
+        $this->fecha->DbValue = $row['fecha'];
+        $this->monto_pagado->DbValue = $row['monto_pagado'];
     }
 
     // Delete uploaded files
@@ -1366,6 +1418,8 @@ class ContLotesPagosDetalle extends DbTable
         $this->monto_pagdo->setDbValue($row['monto_pagdo']);
         $this->saldo->setDbValue($row['saldo']);
         $this->comprobante->setDbValue($row['comprobante']);
+        $this->fecha->setDbValue($row['fecha']);
+        $this->monto_pagado->setDbValue($row['monto_pagado']);
     }
 
     // Render list content
@@ -1417,6 +1471,10 @@ class ContLotesPagosDetalle extends DbTable
         // saldo
 
         // comprobante
+
+        // fecha
+
+        // monto_pagado
 
         // Id
         $this->Id->ViewValue = $this->Id->CurrentValue;
@@ -1478,6 +1536,14 @@ class ContLotesPagosDetalle extends DbTable
         $this->comprobante->ViewValue = $this->comprobante->CurrentValue;
         $this->comprobante->ViewValue = FormatNumber($this->comprobante->ViewValue, $this->comprobante->formatPattern());
 
+        // fecha
+        $this->fecha->ViewValue = $this->fecha->CurrentValue;
+        $this->fecha->ViewValue = FormatDateTime($this->fecha->ViewValue, $this->fecha->formatPattern());
+
+        // monto_pagado
+        $this->monto_pagado->ViewValue = $this->monto_pagado->CurrentValue;
+        $this->monto_pagado->ViewValue = FormatNumber($this->monto_pagado->ViewValue, $this->monto_pagado->formatPattern());
+
         // Id
         $this->Id->HrefValue = "";
         $this->Id->TooltipValue = "";
@@ -1521,6 +1587,14 @@ class ContLotesPagosDetalle extends DbTable
         // comprobante
         $this->comprobante->HrefValue = "";
         $this->comprobante->TooltipValue = "";
+
+        // fecha
+        $this->fecha->HrefValue = "";
+        $this->fecha->TooltipValue = "";
+
+        // monto_pagado
+        $this->monto_pagado->HrefValue = "";
+        $this->monto_pagado->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1624,6 +1698,19 @@ class ContLotesPagosDetalle extends DbTable
             $this->comprobante->EditValue = FormatNumber($this->comprobante->EditValue, null);
         }
 
+        // fecha
+        $this->fecha->setupEditAttributes();
+        $this->fecha->EditValue = FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
+        $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+
+        // monto_pagado
+        $this->monto_pagado->setupEditAttributes();
+        $this->monto_pagado->EditValue = $this->monto_pagado->CurrentValue;
+        $this->monto_pagado->PlaceHolder = RemoveHtml($this->monto_pagado->caption());
+        if (strval($this->monto_pagado->EditValue) != "" && is_numeric($this->monto_pagado->EditValue)) {
+            $this->monto_pagado->EditValue = FormatNumber($this->monto_pagado->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1659,6 +1746,8 @@ class ContLotesPagosDetalle extends DbTable
                     $doc->exportCaption($this->monto_pagdo);
                     $doc->exportCaption($this->saldo);
                     $doc->exportCaption($this->comprobante);
+                    $doc->exportCaption($this->fecha);
+                    $doc->exportCaption($this->monto_pagado);
                 } else {
                     $doc->exportCaption($this->Id);
                     $doc->exportCaption($this->cont_lotes_pago);
@@ -1671,6 +1760,8 @@ class ContLotesPagosDetalle extends DbTable
                     $doc->exportCaption($this->monto_pagdo);
                     $doc->exportCaption($this->saldo);
                     $doc->exportCaption($this->comprobante);
+                    $doc->exportCaption($this->fecha);
+                    $doc->exportCaption($this->monto_pagado);
                 }
                 $doc->endExportRow();
             }
@@ -1704,6 +1795,8 @@ class ContLotesPagosDetalle extends DbTable
                         $doc->exportField($this->monto_pagdo);
                         $doc->exportField($this->saldo);
                         $doc->exportField($this->comprobante);
+                        $doc->exportField($this->fecha);
+                        $doc->exportField($this->monto_pagado);
                     } else {
                         $doc->exportField($this->Id);
                         $doc->exportField($this->cont_lotes_pago);
@@ -1716,6 +1809,8 @@ class ContLotesPagosDetalle extends DbTable
                         $doc->exportField($this->monto_pagdo);
                         $doc->exportField($this->saldo);
                         $doc->exportField($this->comprobante);
+                        $doc->exportField($this->fecha);
+                        $doc->exportField($this->monto_pagado);
                     }
                     $doc->endExportRow($rowCnt);
                 }

@@ -164,6 +164,9 @@ class ArticuloList extends Articulo
         $this->codigo_de_barra->Visible = false;
         $this->categoria->setVisibility();
         $this->lista_pedido->setVisibility();
+        $this->categoria_madre->setVisibility();
+        $this->sub_categoria->Visible = false;
+        $this->tipo->Visible = false;
         $this->unidad_medida_defecto->Visible = false;
         $this->cantidad_por_unidad_medida->Visible = false;
         $this->cantidad_minima->Visible = false;
@@ -177,10 +180,16 @@ class ArticuloList extends Articulo
         $this->precio->Visible = false;
         $this->alicuota->Visible = false;
         $this->articulo_inventario->Visible = false;
+        $this->indexado->Visible = false;
+        $this->pies_cubico->Visible = false;
+        $this->color->Visible = false;
+        $this->cojin->Visible = false;
+        $this->brazo->Visible = false;
+        $this->respaldo->Visible = false;
+        $this->talla->Visible = false;
         $this->activo->setVisibility();
         $this->lote->Visible = false;
         $this->fecha_vencimiento->Visible = false;
-        $this->indexado->setVisibility();
     }
 
     // Constructor
@@ -728,12 +737,13 @@ class ArticuloList extends Articulo
         $this->setupLookupOptions($this->fabricante);
         $this->setupLookupOptions($this->categoria);
         $this->setupLookupOptions($this->lista_pedido);
+        $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->unidad_medida_defecto);
         $this->setupLookupOptions($this->cantidad_por_unidad_medida);
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
-        $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->indexado);
+        $this->setupLookupOptions($this->activo);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1121,6 +1131,9 @@ class ArticuloList extends Articulo
         $filterList = Concat($filterList, $this->codigo_de_barra->AdvancedSearch->toJson(), ","); // Field codigo_de_barra
         $filterList = Concat($filterList, $this->categoria->AdvancedSearch->toJson(), ","); // Field categoria
         $filterList = Concat($filterList, $this->lista_pedido->AdvancedSearch->toJson(), ","); // Field lista_pedido
+        $filterList = Concat($filterList, $this->categoria_madre->AdvancedSearch->toJson(), ","); // Field categoria_madre
+        $filterList = Concat($filterList, $this->sub_categoria->AdvancedSearch->toJson(), ","); // Field sub_categoria
+        $filterList = Concat($filterList, $this->tipo->AdvancedSearch->toJson(), ","); // Field tipo
         $filterList = Concat($filterList, $this->unidad_medida_defecto->AdvancedSearch->toJson(), ","); // Field unidad_medida_defecto
         $filterList = Concat($filterList, $this->cantidad_por_unidad_medida->AdvancedSearch->toJson(), ","); // Field cantidad_por_unidad_medida
         $filterList = Concat($filterList, $this->cantidad_minima->AdvancedSearch->toJson(), ","); // Field cantidad_minima
@@ -1134,10 +1147,16 @@ class ArticuloList extends Articulo
         $filterList = Concat($filterList, $this->precio->AdvancedSearch->toJson(), ","); // Field precio
         $filterList = Concat($filterList, $this->alicuota->AdvancedSearch->toJson(), ","); // Field alicuota
         $filterList = Concat($filterList, $this->articulo_inventario->AdvancedSearch->toJson(), ","); // Field articulo_inventario
+        $filterList = Concat($filterList, $this->indexado->AdvancedSearch->toJson(), ","); // Field indexado
+        $filterList = Concat($filterList, $this->pies_cubico->AdvancedSearch->toJson(), ","); // Field pies_cubico
+        $filterList = Concat($filterList, $this->color->AdvancedSearch->toJson(), ","); // Field color
+        $filterList = Concat($filterList, $this->cojin->AdvancedSearch->toJson(), ","); // Field cojin
+        $filterList = Concat($filterList, $this->brazo->AdvancedSearch->toJson(), ","); // Field brazo
+        $filterList = Concat($filterList, $this->respaldo->AdvancedSearch->toJson(), ","); // Field respaldo
+        $filterList = Concat($filterList, $this->talla->AdvancedSearch->toJson(), ","); // Field talla
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
         $filterList = Concat($filterList, $this->lote->AdvancedSearch->toJson(), ","); // Field lote
         $filterList = Concat($filterList, $this->fecha_vencimiento->AdvancedSearch->toJson(), ","); // Field fecha_vencimiento
-        $filterList = Concat($filterList, $this->indexado->AdvancedSearch->toJson(), ","); // Field indexado
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1265,6 +1284,30 @@ class ArticuloList extends Articulo
         $this->lista_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_lista_pedido"];
         $this->lista_pedido->AdvancedSearch->save();
 
+        // Field categoria_madre
+        $this->categoria_madre->AdvancedSearch->SearchValue = @$filter["x_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchOperator = @$filter["z_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchCondition = @$filter["v_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchValue2 = @$filter["y_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchOperator2 = @$filter["w_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->save();
+
+        // Field sub_categoria
+        $this->sub_categoria->AdvancedSearch->SearchValue = @$filter["x_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchOperator = @$filter["z_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchCondition = @$filter["v_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchValue2 = @$filter["y_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchOperator2 = @$filter["w_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->save();
+
+        // Field tipo
+        $this->tipo->AdvancedSearch->SearchValue = @$filter["x_tipo"];
+        $this->tipo->AdvancedSearch->SearchOperator = @$filter["z_tipo"];
+        $this->tipo->AdvancedSearch->SearchCondition = @$filter["v_tipo"];
+        $this->tipo->AdvancedSearch->SearchValue2 = @$filter["y_tipo"];
+        $this->tipo->AdvancedSearch->SearchOperator2 = @$filter["w_tipo"];
+        $this->tipo->AdvancedSearch->save();
+
         // Field unidad_medida_defecto
         $this->unidad_medida_defecto->AdvancedSearch->SearchValue = @$filter["x_unidad_medida_defecto"];
         $this->unidad_medida_defecto->AdvancedSearch->SearchOperator = @$filter["z_unidad_medida_defecto"];
@@ -1369,6 +1412,62 @@ class ArticuloList extends Articulo
         $this->articulo_inventario->AdvancedSearch->SearchOperator2 = @$filter["w_articulo_inventario"];
         $this->articulo_inventario->AdvancedSearch->save();
 
+        // Field indexado
+        $this->indexado->AdvancedSearch->SearchValue = @$filter["x_indexado"];
+        $this->indexado->AdvancedSearch->SearchOperator = @$filter["z_indexado"];
+        $this->indexado->AdvancedSearch->SearchCondition = @$filter["v_indexado"];
+        $this->indexado->AdvancedSearch->SearchValue2 = @$filter["y_indexado"];
+        $this->indexado->AdvancedSearch->SearchOperator2 = @$filter["w_indexado"];
+        $this->indexado->AdvancedSearch->save();
+
+        // Field pies_cubico
+        $this->pies_cubico->AdvancedSearch->SearchValue = @$filter["x_pies_cubico"];
+        $this->pies_cubico->AdvancedSearch->SearchOperator = @$filter["z_pies_cubico"];
+        $this->pies_cubico->AdvancedSearch->SearchCondition = @$filter["v_pies_cubico"];
+        $this->pies_cubico->AdvancedSearch->SearchValue2 = @$filter["y_pies_cubico"];
+        $this->pies_cubico->AdvancedSearch->SearchOperator2 = @$filter["w_pies_cubico"];
+        $this->pies_cubico->AdvancedSearch->save();
+
+        // Field color
+        $this->color->AdvancedSearch->SearchValue = @$filter["x_color"];
+        $this->color->AdvancedSearch->SearchOperator = @$filter["z_color"];
+        $this->color->AdvancedSearch->SearchCondition = @$filter["v_color"];
+        $this->color->AdvancedSearch->SearchValue2 = @$filter["y_color"];
+        $this->color->AdvancedSearch->SearchOperator2 = @$filter["w_color"];
+        $this->color->AdvancedSearch->save();
+
+        // Field cojin
+        $this->cojin->AdvancedSearch->SearchValue = @$filter["x_cojin"];
+        $this->cojin->AdvancedSearch->SearchOperator = @$filter["z_cojin"];
+        $this->cojin->AdvancedSearch->SearchCondition = @$filter["v_cojin"];
+        $this->cojin->AdvancedSearch->SearchValue2 = @$filter["y_cojin"];
+        $this->cojin->AdvancedSearch->SearchOperator2 = @$filter["w_cojin"];
+        $this->cojin->AdvancedSearch->save();
+
+        // Field brazo
+        $this->brazo->AdvancedSearch->SearchValue = @$filter["x_brazo"];
+        $this->brazo->AdvancedSearch->SearchOperator = @$filter["z_brazo"];
+        $this->brazo->AdvancedSearch->SearchCondition = @$filter["v_brazo"];
+        $this->brazo->AdvancedSearch->SearchValue2 = @$filter["y_brazo"];
+        $this->brazo->AdvancedSearch->SearchOperator2 = @$filter["w_brazo"];
+        $this->brazo->AdvancedSearch->save();
+
+        // Field respaldo
+        $this->respaldo->AdvancedSearch->SearchValue = @$filter["x_respaldo"];
+        $this->respaldo->AdvancedSearch->SearchOperator = @$filter["z_respaldo"];
+        $this->respaldo->AdvancedSearch->SearchCondition = @$filter["v_respaldo"];
+        $this->respaldo->AdvancedSearch->SearchValue2 = @$filter["y_respaldo"];
+        $this->respaldo->AdvancedSearch->SearchOperator2 = @$filter["w_respaldo"];
+        $this->respaldo->AdvancedSearch->save();
+
+        // Field talla
+        $this->talla->AdvancedSearch->SearchValue = @$filter["x_talla"];
+        $this->talla->AdvancedSearch->SearchOperator = @$filter["z_talla"];
+        $this->talla->AdvancedSearch->SearchCondition = @$filter["v_talla"];
+        $this->talla->AdvancedSearch->SearchValue2 = @$filter["y_talla"];
+        $this->talla->AdvancedSearch->SearchOperator2 = @$filter["w_talla"];
+        $this->talla->AdvancedSearch->save();
+
         // Field activo
         $this->activo->AdvancedSearch->SearchValue = @$filter["x_activo"];
         $this->activo->AdvancedSearch->SearchOperator = @$filter["z_activo"];
@@ -1392,14 +1491,6 @@ class ArticuloList extends Articulo
         $this->fecha_vencimiento->AdvancedSearch->SearchValue2 = @$filter["y_fecha_vencimiento"];
         $this->fecha_vencimiento->AdvancedSearch->SearchOperator2 = @$filter["w_fecha_vencimiento"];
         $this->fecha_vencimiento->AdvancedSearch->save();
-
-        // Field indexado
-        $this->indexado->AdvancedSearch->SearchValue = @$filter["x_indexado"];
-        $this->indexado->AdvancedSearch->SearchOperator = @$filter["z_indexado"];
-        $this->indexado->AdvancedSearch->SearchCondition = @$filter["v_indexado"];
-        $this->indexado->AdvancedSearch->SearchValue2 = @$filter["y_indexado"];
-        $this->indexado->AdvancedSearch->SearchOperator2 = @$filter["w_indexado"];
-        $this->indexado->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1423,6 +1514,9 @@ class ArticuloList extends Articulo
         $this->buildSearchSql($where, $this->codigo_de_barra, $default, false); // codigo_de_barra
         $this->buildSearchSql($where, $this->categoria, $default, false); // categoria
         $this->buildSearchSql($where, $this->lista_pedido, $default, false); // lista_pedido
+        $this->buildSearchSql($where, $this->categoria_madre, $default, false); // categoria_madre
+        $this->buildSearchSql($where, $this->sub_categoria, $default, false); // sub_categoria
+        $this->buildSearchSql($where, $this->tipo, $default, false); // tipo
         $this->buildSearchSql($where, $this->unidad_medida_defecto, $default, false); // unidad_medida_defecto
         $this->buildSearchSql($where, $this->cantidad_por_unidad_medida, $default, false); // cantidad_por_unidad_medida
         $this->buildSearchSql($where, $this->cantidad_minima, $default, false); // cantidad_minima
@@ -1436,10 +1530,16 @@ class ArticuloList extends Articulo
         $this->buildSearchSql($where, $this->precio, $default, false); // precio
         $this->buildSearchSql($where, $this->alicuota, $default, false); // alicuota
         $this->buildSearchSql($where, $this->articulo_inventario, $default, false); // articulo_inventario
+        $this->buildSearchSql($where, $this->indexado, $default, false); // indexado
+        $this->buildSearchSql($where, $this->pies_cubico, $default, false); // pies_cubico
+        $this->buildSearchSql($where, $this->color, $default, false); // color
+        $this->buildSearchSql($where, $this->cojin, $default, false); // cojin
+        $this->buildSearchSql($where, $this->brazo, $default, false); // brazo
+        $this->buildSearchSql($where, $this->respaldo, $default, false); // respaldo
+        $this->buildSearchSql($where, $this->talla, $default, false); // talla
         $this->buildSearchSql($where, $this->activo, $default, false); // activo
         $this->buildSearchSql($where, $this->lote, $default, false); // lote
         $this->buildSearchSql($where, $this->fecha_vencimiento, $default, false); // fecha_vencimiento
-        $this->buildSearchSql($where, $this->indexado, $default, false); // indexado
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1457,6 +1557,9 @@ class ArticuloList extends Articulo
             $this->codigo_de_barra->AdvancedSearch->save(); // codigo_de_barra
             $this->categoria->AdvancedSearch->save(); // categoria
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
+            $this->categoria_madre->AdvancedSearch->save(); // categoria_madre
+            $this->sub_categoria->AdvancedSearch->save(); // sub_categoria
+            $this->tipo->AdvancedSearch->save(); // tipo
             $this->unidad_medida_defecto->AdvancedSearch->save(); // unidad_medida_defecto
             $this->cantidad_por_unidad_medida->AdvancedSearch->save(); // cantidad_por_unidad_medida
             $this->cantidad_minima->AdvancedSearch->save(); // cantidad_minima
@@ -1470,10 +1573,16 @@ class ArticuloList extends Articulo
             $this->precio->AdvancedSearch->save(); // precio
             $this->alicuota->AdvancedSearch->save(); // alicuota
             $this->articulo_inventario->AdvancedSearch->save(); // articulo_inventario
+            $this->indexado->AdvancedSearch->save(); // indexado
+            $this->pies_cubico->AdvancedSearch->save(); // pies_cubico
+            $this->color->AdvancedSearch->save(); // color
+            $this->cojin->AdvancedSearch->save(); // cojin
+            $this->brazo->AdvancedSearch->save(); // brazo
+            $this->respaldo->AdvancedSearch->save(); // respaldo
+            $this->talla->AdvancedSearch->save(); // talla
             $this->activo->AdvancedSearch->save(); // activo
             $this->lote->AdvancedSearch->save(); // lote
             $this->fecha_vencimiento->AdvancedSearch->save(); // fecha_vencimiento
-            $this->indexado->AdvancedSearch->save(); // indexado
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1515,6 +1624,9 @@ class ArticuloList extends Articulo
             $this->codigo_de_barra->AdvancedSearch->save(); // codigo_de_barra
             $this->categoria->AdvancedSearch->save(); // categoria
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
+            $this->categoria_madre->AdvancedSearch->save(); // categoria_madre
+            $this->sub_categoria->AdvancedSearch->save(); // sub_categoria
+            $this->tipo->AdvancedSearch->save(); // tipo
             $this->unidad_medida_defecto->AdvancedSearch->save(); // unidad_medida_defecto
             $this->cantidad_por_unidad_medida->AdvancedSearch->save(); // cantidad_por_unidad_medida
             $this->cantidad_minima->AdvancedSearch->save(); // cantidad_minima
@@ -1528,10 +1640,16 @@ class ArticuloList extends Articulo
             $this->precio->AdvancedSearch->save(); // precio
             $this->alicuota->AdvancedSearch->save(); // alicuota
             $this->articulo_inventario->AdvancedSearch->save(); // articulo_inventario
+            $this->indexado->AdvancedSearch->save(); // indexado
+            $this->pies_cubico->AdvancedSearch->save(); // pies_cubico
+            $this->color->AdvancedSearch->save(); // color
+            $this->cojin->AdvancedSearch->save(); // cojin
+            $this->brazo->AdvancedSearch->save(); // brazo
+            $this->respaldo->AdvancedSearch->save(); // respaldo
+            $this->talla->AdvancedSearch->save(); // talla
             $this->activo->AdvancedSearch->save(); // activo
             $this->lote->AdvancedSearch->save(); // lote
             $this->fecha_vencimiento->AdvancedSearch->save(); // fecha_vencimiento
-            $this->indexado->AdvancedSearch->save(); // indexado
             $this->setSessionRules($rules);
         }
 
@@ -1660,6 +1778,15 @@ class ArticuloList extends Articulo
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->lista_pedido->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field categoria_madre
+        $filter = $this->queryBuilderWhere("categoria_madre");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->categoria_madre, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->categoria_madre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field cantidad_en_mano
         $filter = $this->queryBuilderWhere("cantidad_en_mano");
         if (!$filter) {
@@ -1713,15 +1840,6 @@ class ArticuloList extends Articulo
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->activo->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
-
-        // Field indexado
-        $filter = $this->queryBuilderWhere("indexado");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->indexado, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->indexado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
         }
@@ -1757,8 +1875,16 @@ class ArticuloList extends Articulo
         $searchFlds[] = &$this->codigo_de_barra;
         $searchFlds[] = &$this->categoria;
         $searchFlds[] = &$this->lista_pedido;
+        $searchFlds[] = &$this->categoria_madre;
+        $searchFlds[] = &$this->sub_categoria;
+        $searchFlds[] = &$this->tipo;
         $searchFlds[] = &$this->unidad_medida_defecto;
         $searchFlds[] = &$this->alicuota;
+        $searchFlds[] = &$this->color;
+        $searchFlds[] = &$this->cojin;
+        $searchFlds[] = &$this->brazo;
+        $searchFlds[] = &$this->respaldo;
+        $searchFlds[] = &$this->talla;
         $searchFlds[] = &$this->lote;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
@@ -1821,6 +1947,15 @@ class ArticuloList extends Articulo
         if ($this->lista_pedido->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->categoria_madre->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->sub_categoria->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->tipo->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->unidad_medida_defecto->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -1860,6 +1995,27 @@ class ArticuloList extends Articulo
         if ($this->articulo_inventario->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->indexado->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->pies_cubico->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->color->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->cojin->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->brazo->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->respaldo->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->talla->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->activo->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -1867,9 +2023,6 @@ class ArticuloList extends Articulo
             return true;
         }
         if ($this->fecha_vencimiento->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->indexado->AdvancedSearch->issetSession()) {
             return true;
         }
         return false;
@@ -1918,6 +2071,9 @@ class ArticuloList extends Articulo
         $this->codigo_de_barra->AdvancedSearch->unsetSession();
         $this->categoria->AdvancedSearch->unsetSession();
         $this->lista_pedido->AdvancedSearch->unsetSession();
+        $this->categoria_madre->AdvancedSearch->unsetSession();
+        $this->sub_categoria->AdvancedSearch->unsetSession();
+        $this->tipo->AdvancedSearch->unsetSession();
         $this->unidad_medida_defecto->AdvancedSearch->unsetSession();
         $this->cantidad_por_unidad_medida->AdvancedSearch->unsetSession();
         $this->cantidad_minima->AdvancedSearch->unsetSession();
@@ -1931,10 +2087,16 @@ class ArticuloList extends Articulo
         $this->precio->AdvancedSearch->unsetSession();
         $this->alicuota->AdvancedSearch->unsetSession();
         $this->articulo_inventario->AdvancedSearch->unsetSession();
+        $this->indexado->AdvancedSearch->unsetSession();
+        $this->pies_cubico->AdvancedSearch->unsetSession();
+        $this->color->AdvancedSearch->unsetSession();
+        $this->cojin->AdvancedSearch->unsetSession();
+        $this->brazo->AdvancedSearch->unsetSession();
+        $this->respaldo->AdvancedSearch->unsetSession();
+        $this->talla->AdvancedSearch->unsetSession();
         $this->activo->AdvancedSearch->unsetSession();
         $this->lote->AdvancedSearch->unsetSession();
         $this->fecha_vencimiento->AdvancedSearch->unsetSession();
-        $this->indexado->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1957,6 +2119,9 @@ class ArticuloList extends Articulo
         $this->codigo_de_barra->AdvancedSearch->load();
         $this->categoria->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
+        $this->categoria_madre->AdvancedSearch->load();
+        $this->sub_categoria->AdvancedSearch->load();
+        $this->tipo->AdvancedSearch->load();
         $this->unidad_medida_defecto->AdvancedSearch->load();
         $this->cantidad_por_unidad_medida->AdvancedSearch->load();
         $this->cantidad_minima->AdvancedSearch->load();
@@ -1970,10 +2135,16 @@ class ArticuloList extends Articulo
         $this->precio->AdvancedSearch->load();
         $this->alicuota->AdvancedSearch->load();
         $this->articulo_inventario->AdvancedSearch->load();
+        $this->indexado->AdvancedSearch->load();
+        $this->pies_cubico->AdvancedSearch->load();
+        $this->color->AdvancedSearch->load();
+        $this->cojin->AdvancedSearch->load();
+        $this->brazo->AdvancedSearch->load();
+        $this->respaldo->AdvancedSearch->load();
+        $this->talla->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->lote->AdvancedSearch->load();
         $this->fecha_vencimiento->AdvancedSearch->load();
-        $this->indexado->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1999,13 +2170,13 @@ class ArticuloList extends Articulo
             $this->updateSort($this->fabricante); // fabricante
             $this->updateSort($this->categoria); // categoria
             $this->updateSort($this->lista_pedido); // lista_pedido
+            $this->updateSort($this->categoria_madre); // categoria_madre
             $this->updateSort($this->cantidad_en_mano); // cantidad_en_mano
             $this->updateSort($this->cantidad_en_almacenes); // cantidad_en_almacenes
             $this->updateSort($this->cantidad_en_pedido); // cantidad_en_pedido
             $this->updateSort($this->cantidad_en_transito); // cantidad_en_transito
             $this->updateSort($this->descuento); // descuento
             $this->updateSort($this->activo); // activo
-            $this->updateSort($this->indexado); // indexado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2041,6 +2212,9 @@ class ArticuloList extends Articulo
                 $this->codigo_de_barra->setSort("");
                 $this->categoria->setSort("");
                 $this->lista_pedido->setSort("");
+                $this->categoria_madre->setSort("");
+                $this->sub_categoria->setSort("");
+                $this->tipo->setSort("");
                 $this->unidad_medida_defecto->setSort("");
                 $this->cantidad_por_unidad_medida->setSort("");
                 $this->cantidad_minima->setSort("");
@@ -2054,10 +2228,16 @@ class ArticuloList extends Articulo
                 $this->precio->setSort("");
                 $this->alicuota->setSort("");
                 $this->articulo_inventario->setSort("");
+                $this->indexado->setSort("");
+                $this->pies_cubico->setSort("");
+                $this->color->setSort("");
+                $this->cojin->setSort("");
+                $this->brazo->setSort("");
+                $this->respaldo->setSort("");
+                $this->talla->setSort("");
                 $this->activo->setSort("");
                 $this->lote->setSort("");
                 $this->fecha_vencimiento->setSort("");
-                $this->indexado->setSort("");
             }
 
             // Reset start position
@@ -2594,13 +2774,13 @@ class ArticuloList extends Articulo
             $this->createColumnOption($option, "fabricante");
             $this->createColumnOption($option, "categoria");
             $this->createColumnOption($option, "lista_pedido");
+            $this->createColumnOption($option, "categoria_madre");
             $this->createColumnOption($option, "cantidad_en_mano");
             $this->createColumnOption($option, "cantidad_en_almacenes");
             $this->createColumnOption($option, "cantidad_en_pedido");
             $this->createColumnOption($option, "cantidad_en_transito");
             $this->createColumnOption($option, "descuento");
             $this->createColumnOption($option, "activo");
-            $this->createColumnOption($option, "indexado");
         }
 
         // Set up custom actions
@@ -3042,6 +3222,30 @@ class ArticuloList extends Articulo
             }
         }
 
+        // categoria_madre
+        if ($this->categoria_madre->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->categoria_madre->AdvancedSearch->SearchValue != "" || $this->categoria_madre->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // sub_categoria
+        if ($this->sub_categoria->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->sub_categoria->AdvancedSearch->SearchValue != "" || $this->sub_categoria->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // tipo
+        if ($this->tipo->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->tipo->AdvancedSearch->SearchValue != "" || $this->tipo->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // unidad_medida_defecto
         if ($this->unidad_medida_defecto->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3146,6 +3350,62 @@ class ArticuloList extends Articulo
             }
         }
 
+        // indexado
+        if ($this->indexado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->indexado->AdvancedSearch->SearchValue != "" || $this->indexado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // pies_cubico
+        if ($this->pies_cubico->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->pies_cubico->AdvancedSearch->SearchValue != "" || $this->pies_cubico->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // color
+        if ($this->color->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->color->AdvancedSearch->SearchValue != "" || $this->color->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // cojin
+        if ($this->cojin->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cojin->AdvancedSearch->SearchValue != "" || $this->cojin->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // brazo
+        if ($this->brazo->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->brazo->AdvancedSearch->SearchValue != "" || $this->brazo->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // respaldo
+        if ($this->respaldo->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->respaldo->AdvancedSearch->SearchValue != "" || $this->respaldo->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // talla
+        if ($this->talla->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->talla->AdvancedSearch->SearchValue != "" || $this->talla->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // activo
         if ($this->activo->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3166,14 +3426,6 @@ class ArticuloList extends Articulo
         if ($this->fecha_vencimiento->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->fecha_vencimiento->AdvancedSearch->SearchValue != "" || $this->fecha_vencimiento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // indexado
-        if ($this->indexado->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->indexado->AdvancedSearch->SearchValue != "" || $this->indexado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -3285,6 +3537,9 @@ class ArticuloList extends Articulo
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
         $this->categoria->setDbValue($row['categoria']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
+        $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
         $this->cantidad_minima->setDbValue($row['cantidad_minima']);
@@ -3298,10 +3553,16 @@ class ArticuloList extends Articulo
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
+        $this->indexado->setDbValue($row['indexado']);
+        $this->pies_cubico->setDbValue($row['pies_cubico']);
+        $this->color->setDbValue($row['color']);
+        $this->cojin->setDbValue($row['cojin']);
+        $this->brazo->setDbValue($row['brazo']);
+        $this->respaldo->setDbValue($row['respaldo']);
+        $this->talla->setDbValue($row['talla']);
         $this->activo->setDbValue($row['activo']);
         $this->lote->setDbValue($row['lote']);
         $this->fecha_vencimiento->setDbValue($row['fecha_vencimiento']);
-        $this->indexado->setDbValue($row['indexado']);
     }
 
     // Return a row with default values
@@ -3319,6 +3580,9 @@ class ArticuloList extends Articulo
         $row['codigo_de_barra'] = $this->codigo_de_barra->DefaultValue;
         $row['categoria'] = $this->categoria->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
+        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
+        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
+        $row['tipo'] = $this->tipo->DefaultValue;
         $row['unidad_medida_defecto'] = $this->unidad_medida_defecto->DefaultValue;
         $row['cantidad_por_unidad_medida'] = $this->cantidad_por_unidad_medida->DefaultValue;
         $row['cantidad_minima'] = $this->cantidad_minima->DefaultValue;
@@ -3332,10 +3596,16 @@ class ArticuloList extends Articulo
         $row['precio'] = $this->precio->DefaultValue;
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['articulo_inventario'] = $this->articulo_inventario->DefaultValue;
+        $row['indexado'] = $this->indexado->DefaultValue;
+        $row['pies_cubico'] = $this->pies_cubico->DefaultValue;
+        $row['color'] = $this->color->DefaultValue;
+        $row['cojin'] = $this->cojin->DefaultValue;
+        $row['brazo'] = $this->brazo->DefaultValue;
+        $row['respaldo'] = $this->respaldo->DefaultValue;
+        $row['talla'] = $this->talla->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['lote'] = $this->lote->DefaultValue;
         $row['fecha_vencimiento'] = $this->fecha_vencimiento->DefaultValue;
-        $row['indexado'] = $this->indexado->DefaultValue;
         return $row;
     }
 
@@ -3398,6 +3668,12 @@ class ArticuloList extends Articulo
 
         // lista_pedido
 
+        // categoria_madre
+
+        // sub_categoria
+
+        // tipo
+
         // unidad_medida_defecto
 
         // cantidad_por_unidad_medida
@@ -3424,13 +3700,25 @@ class ArticuloList extends Articulo
 
         // articulo_inventario
 
+        // indexado
+
+        // pies_cubico
+
+        // color
+
+        // cojin
+
+        // brazo
+
+        // respaldo
+
+        // talla
+
         // activo
 
         // lote
 
         // fecha_vencimiento
-
-        // indexado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3534,6 +3822,19 @@ class ArticuloList extends Articulo
                 $this->lista_pedido->ViewValue = null;
             }
 
+            // categoria_madre
+            $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
+
+            // sub_categoria
+            $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
+
+            // tipo
+            if (strval($this->tipo->CurrentValue) != "") {
+                $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
+            } else {
+                $this->tipo->ViewValue = null;
+            }
+
             // cantidad_en_mano
             $this->cantidad_en_mano->ViewValue = $this->cantidad_en_mano->CurrentValue;
             $this->cantidad_en_mano->ViewValue = FormatNumber($this->cantidad_en_mano->ViewValue, $this->cantidad_en_mano->formatPattern());
@@ -3586,6 +3887,32 @@ class ArticuloList extends Articulo
                 $this->alicuota->ViewValue = null;
             }
 
+            // indexado
+            if (strval($this->indexado->CurrentValue) != "") {
+                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
+            } else {
+                $this->indexado->ViewValue = null;
+            }
+
+            // pies_cubico
+            $this->pies_cubico->ViewValue = $this->pies_cubico->CurrentValue;
+            $this->pies_cubico->ViewValue = FormatNumber($this->pies_cubico->ViewValue, $this->pies_cubico->formatPattern());
+
+            // color
+            $this->color->ViewValue = $this->color->CurrentValue;
+
+            // cojin
+            $this->cojin->ViewValue = $this->cojin->CurrentValue;
+
+            // brazo
+            $this->brazo->ViewValue = $this->brazo->CurrentValue;
+
+            // respaldo
+            $this->respaldo->ViewValue = $this->respaldo->CurrentValue;
+
+            // talla
+            $this->talla->ViewValue = $this->talla->CurrentValue;
+
             // activo
             if (strval($this->activo->CurrentValue) != "") {
                 $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
@@ -3599,13 +3926,6 @@ class ArticuloList extends Articulo
             // fecha_vencimiento
             $this->fecha_vencimiento->ViewValue = $this->fecha_vencimiento->CurrentValue;
             $this->fecha_vencimiento->ViewValue = FormatDateTime($this->fecha_vencimiento->ViewValue, $this->fecha_vencimiento->formatPattern());
-
-            // indexado
-            if (strval($this->indexado->CurrentValue) != "") {
-                $this->indexado->ViewValue = $this->indexado->optionCaption($this->indexado->CurrentValue);
-            } else {
-                $this->indexado->ViewValue = null;
-            }
 
             // foto
             if (!EmptyValue($this->foto->Upload->DbValue)) {
@@ -3655,6 +3975,10 @@ class ArticuloList extends Articulo
             $this->lista_pedido->HrefValue = "";
             $this->lista_pedido->TooltipValue = "";
 
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+            $this->categoria_madre->TooltipValue = "";
+
             // cantidad_en_mano
             $this->cantidad_en_mano->HrefValue = "";
             $this->cantidad_en_mano->TooltipValue = "";
@@ -3678,10 +4002,6 @@ class ArticuloList extends Articulo
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
-
-            // indexado
-            $this->indexado->HrefValue = "";
-            $this->indexado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // foto
             $this->foto->setupEditAttributes();
@@ -3814,6 +4134,14 @@ class ArticuloList extends Articulo
             }
             $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
 
+            // categoria_madre
+            $this->categoria_madre->setupEditAttributes();
+            if (!$this->categoria_madre->Raw) {
+                $this->categoria_madre->AdvancedSearch->SearchValue = HtmlDecode($this->categoria_madre->AdvancedSearch->SearchValue);
+            }
+            $this->categoria_madre->EditValue = HtmlEncode($this->categoria_madre->AdvancedSearch->SearchValue);
+            $this->categoria_madre->PlaceHolder = RemoveHtml($this->categoria_madre->caption());
+
             // cantidad_en_mano
             $this->cantidad_en_mano->setupEditAttributes();
             $this->cantidad_en_mano->EditValue = $this->cantidad_en_mano->AdvancedSearch->SearchValue;
@@ -3852,11 +4180,6 @@ class ArticuloList extends Articulo
             $this->activo->setupEditAttributes();
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
-
-            // indexado
-            $this->indexado->setupEditAttributes();
-            $this->indexado->EditValue = $this->indexado->options(true);
-            $this->indexado->PlaceHolder = RemoveHtml($this->indexado->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3920,6 +4243,9 @@ class ArticuloList extends Articulo
         $this->codigo_de_barra->AdvancedSearch->load();
         $this->categoria->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
+        $this->categoria_madre->AdvancedSearch->load();
+        $this->sub_categoria->AdvancedSearch->load();
+        $this->tipo->AdvancedSearch->load();
         $this->unidad_medida_defecto->AdvancedSearch->load();
         $this->cantidad_por_unidad_medida->AdvancedSearch->load();
         $this->cantidad_minima->AdvancedSearch->load();
@@ -3933,10 +4259,16 @@ class ArticuloList extends Articulo
         $this->precio->AdvancedSearch->load();
         $this->alicuota->AdvancedSearch->load();
         $this->articulo_inventario->AdvancedSearch->load();
+        $this->indexado->AdvancedSearch->load();
+        $this->pies_cubico->AdvancedSearch->load();
+        $this->color->AdvancedSearch->load();
+        $this->cojin->AdvancedSearch->load();
+        $this->brazo->AdvancedSearch->load();
+        $this->respaldo->AdvancedSearch->load();
+        $this->talla->AdvancedSearch->load();
         $this->activo->AdvancedSearch->load();
         $this->lote->AdvancedSearch->load();
         $this->fecha_vencimiento->AdvancedSearch->load();
-        $this->indexado->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -4192,6 +4524,12 @@ class ArticuloList extends Articulo
                 case "x_lista_pedido":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
+                case "x_categoria_madre":
+                    break;
+                case "x_sub_categoria":
+                    break;
+                case "x_tipo":
+                    break;
                 case "x_unidad_medida_defecto":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -4202,9 +4540,9 @@ class ArticuloList extends Articulo
                     break;
                 case "x_articulo_inventario":
                     break;
-                case "x_activo":
-                    break;
                 case "x_indexado":
+                    break;
+                case "x_activo":
                     break;
                 default:
                     $lookupFilter = "";
@@ -4379,6 +4717,7 @@ class ArticuloList extends Articulo
     public function pageLoad()
     {
         //Log("Page Load");
+        ew_SetupPage_Visibility($this);
     }
 
     // Page Unload event

@@ -1682,6 +1682,52 @@ function registrarMovimientoRecarga($cliente, $monto_usd, $nota, $cobro_id) {
     Execute("UPDATE recarga SET saldo = $nuevo_saldo_total WHERE id = $id_recarga");
 }
 
+// Función global para ocultar campos dinámicamente según la tabla y el parámetro
+function ew_SetupPage_Visibility($page)
+{
+    // 1. Identificar en qué tabla estamos parados
+    $tableName = $page->TableName;
+    $codigoParametro = '';
+
+    // Asignar el código según la tabla configurada
+    if ($tableName === 'articulo') {
+        $codigoParametro = '100';
+    } elseif ($tableName === 'cliente') {
+        $codigoParametro = '101';
+    } elseif ($tableName === 'proveedor') {
+        $codigoParametro = '102';
+    }
+
+    // Si no es ninguna de nuestras tablas objetivo, salimos de inmediato
+    if (empty($codigoParametro)) {
+        return;
+    }
+
+    // 2. Buscar en la tabla 'parametro' el campo 'valor1' usando el método nativo de PHPMaker
+    // Ajusta los nombres exactos de tus columnas si difieren (ej. codigo, valor1)
+    $camposOcultarRaw = ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '" . AdjustSql($codigoParametro) . "'");
+    if (!empty($camposOcultarRaw)) {
+        // Convertir la cadena separada por pipes '|' en un array de campos
+        // Ejemplo: ['categoria_madre', 'sub_categoria', 'pies_cubico', 'color']
+        $camposOcultar = explode('|', str_replace(' ', '', $camposOcultarRaw));
+
+        // 3. Recorrer la lista de campos devueltos y apagarlos en el servidor
+        foreach ($camposOcultar as $nombreCampo) {
+            if (isset($page->Fields[$nombreCampo])) {
+                $campo = $page->Fields[$nombreCampo];
+
+                // Apagamos por completo su renderizado visual en cualquier tipo de página
+                $campo->Visible = false;
+
+                // IMPORTANTÍSIMO: Desactivar la validación requerida del servidor si el campo está oculto.
+                // Si el campo está oculto y era obligatorio en la base de datos, 
+                // esto evita que el formulario falle al procesar el INSERT o UPDATE.
+                $campo->Required = false;
+            }
+        }
+    }
+}
+
 // Add listeners
 AddListener(DatabaseConnectingEvent::NAME, fn(DatabaseConnectingEvent $event) => Database_Connecting($event));
 AddListener(DatabaseConnectedEvent::NAME, fn(DatabaseConnectedEvent $event) => Database_Connected($event->getConnection()));

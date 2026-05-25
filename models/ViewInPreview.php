@@ -143,6 +143,7 @@ class ViewInPreview extends ViewIn
         $this->cantidad_movimiento->Visible = false;
         $this->precio_unidad_sin_desc->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->Visible = false;
@@ -553,6 +554,7 @@ class ViewInPreview extends ViewIn
             $this->cantidad_movimiento->setSort("");
             $this->precio_unidad_sin_desc->setSort("");
             $this->descuento->setSort("");
+            $this->descuento2->setSort("");
             $this->costo_unidad->setSort("");
             $this->costo->setSort("");
             $this->precio_unidad->setSort("");
@@ -590,6 +592,7 @@ class ViewInPreview extends ViewIn
             $this->updateSort($this->cantidad_articulo); // cantidad_articulo
             $this->updateSort($this->precio_unidad_sin_desc); // precio_unidad_sin_desc
             $this->updateSort($this->descuento); // descuento
+            $this->updateSort($this->descuento2); // descuento2
             $this->updateSort($this->costo_unidad); // costo_unidad
             $this->updateSort($this->costo); // costo
             $this->updateSort($this->alicuota); // alicuota

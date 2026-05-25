@@ -157,6 +157,7 @@ class ViewInGrid extends ViewIn
         $this->cantidad_movimiento->Visible = false;
         $this->precio_unidad_sin_desc->setVisibility();
         $this->descuento->setVisibility();
+        $this->descuento2->setVisibility();
         $this->costo_unidad->setVisibility();
         $this->costo->setVisibility();
         $this->precio_unidad->Visible = false;
@@ -924,6 +925,7 @@ class ViewInGrid extends ViewIn
         $this->cantidad_articulo->FormValue = ""; // Clear form value
         $this->precio_unidad_sin_desc->FormValue = ""; // Clear form value
         $this->descuento->FormValue = ""; // Clear form value
+        $this->descuento2->FormValue = ""; // Clear form value
         $this->costo_unidad->FormValue = ""; // Clear form value
         $this->costo->FormValue = ""; // Clear form value
         $this->alicuota->FormValue = ""; // Clear form value
@@ -1246,6 +1248,14 @@ class ViewInGrid extends ViewIn
             $CurrentForm->hasValue("o_descuento") &&
             $this->descuento->CurrentValue != $this->descuento->DefaultValue &&
             !($this->descuento->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->descuento->CurrentValue == $this->descuento->getSessionValue())
+        ) {
+            return false;
+        }
+        if (
+            $CurrentForm->hasValue("x_descuento2") &&
+            $CurrentForm->hasValue("o_descuento2") &&
+            $this->descuento2->CurrentValue != $this->descuento2->DefaultValue &&
+            !($this->descuento2->IsForeignKey && $this->getCurrentMasterTable() != "" && $this->descuento2->CurrentValue == $this->descuento2->getSessionValue())
         ) {
             return false;
         }
@@ -1882,6 +1892,19 @@ class ViewInGrid extends ViewIn
             $this->descuento->setOldValue($CurrentForm->getValue("o_descuento"));
         }
 
+        // Check field name 'descuento2' first before field var 'x_descuento2'
+        $val = $CurrentForm->hasValue("descuento2") ? $CurrentForm->getValue("descuento2") : $CurrentForm->getValue("x_descuento2");
+        if (!$this->descuento2->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->descuento2->Visible = false; // Disable update for API request
+            } else {
+                $this->descuento2->setFormValue($val, true, $validate);
+            }
+        }
+        if ($CurrentForm->hasValue("o_descuento2")) {
+            $this->descuento2->setOldValue($CurrentForm->getValue("o_descuento2"));
+        }
+
         // Check field name 'costo_unidad' first before field var 'x_costo_unidad'
         $val = $CurrentForm->hasValue("costo_unidad") ? $CurrentForm->getValue("costo_unidad") : $CurrentForm->getValue("x_costo_unidad");
         if (!$this->costo_unidad->IsDetailKey) {
@@ -1957,6 +1980,7 @@ class ViewInGrid extends ViewIn
         $this->cantidad_articulo->CurrentValue = $this->cantidad_articulo->FormValue;
         $this->precio_unidad_sin_desc->CurrentValue = $this->precio_unidad_sin_desc->FormValue;
         $this->descuento->CurrentValue = $this->descuento->FormValue;
+        $this->descuento2->CurrentValue = $this->descuento2->FormValue;
         $this->costo_unidad->CurrentValue = $this->costo_unidad->FormValue;
         $this->costo->CurrentValue = $this->costo->FormValue;
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
@@ -2070,6 +2094,7 @@ class ViewInGrid extends ViewIn
         $this->cantidad_movimiento->setDbValue($row['cantidad_movimiento']);
         $this->precio_unidad_sin_desc->setDbValue($row['precio_unidad_sin_desc']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->descuento2->setDbValue($row['descuento2']);
         $this->costo_unidad->setDbValue($row['costo_unidad']);
         $this->costo->setDbValue($row['costo']);
         $this->precio_unidad->setDbValue($row['precio_unidad']);
@@ -2101,6 +2126,7 @@ class ViewInGrid extends ViewIn
         $row['cantidad_movimiento'] = $this->cantidad_movimiento->DefaultValue;
         $row['precio_unidad_sin_desc'] = $this->precio_unidad_sin_desc->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['descuento2'] = $this->descuento2->DefaultValue;
         $row['costo_unidad'] = $this->costo_unidad->DefaultValue;
         $row['costo'] = $this->costo->DefaultValue;
         $row['precio_unidad'] = $this->precio_unidad->DefaultValue;
@@ -2177,6 +2203,8 @@ class ViewInGrid extends ViewIn
         // precio_unidad_sin_desc
 
         // descuento
+
+        // descuento2
 
         // costo_unidad
 
@@ -2312,6 +2340,10 @@ class ViewInGrid extends ViewIn
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
 
+            // descuento2
+            $this->descuento2->ViewValue = $this->descuento2->CurrentValue;
+            $this->descuento2->ViewValue = FormatNumber($this->descuento2->ViewValue, $this->descuento2->formatPattern());
+
             // costo_unidad
             $this->costo_unidad->ViewValue = $this->costo_unidad->CurrentValue;
             $this->costo_unidad->ViewValue = FormatNumber($this->costo_unidad->ViewValue, $this->costo_unidad->formatPattern());
@@ -2393,6 +2425,10 @@ class ViewInGrid extends ViewIn
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
+            $this->descuento2->TooltipValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";
@@ -2527,6 +2563,14 @@ class ViewInGrid extends ViewIn
                 $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
             }
 
+            // descuento2
+            $this->descuento2->setupEditAttributes();
+            $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+            if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+                $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+            }
+
             // costo_unidad
             $this->costo_unidad->setupEditAttributes();
             $this->costo_unidad->EditValue = $this->costo_unidad->CurrentValue;
@@ -2580,6 +2624,9 @@ class ViewInGrid extends ViewIn
 
             // descuento
             $this->descuento->HrefValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";
@@ -2710,6 +2757,14 @@ class ViewInGrid extends ViewIn
                 $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
             }
 
+            // descuento2
+            $this->descuento2->setupEditAttributes();
+            $this->descuento2->EditValue = $this->descuento2->CurrentValue;
+            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
+            if (strval($this->descuento2->EditValue) != "" && is_numeric($this->descuento2->EditValue)) {
+                $this->descuento2->EditValue = FormatNumber($this->descuento2->EditValue, null);
+            }
+
             // costo_unidad
             $this->costo_unidad->setupEditAttributes();
             $this->costo_unidad->EditValue = $this->costo_unidad->CurrentValue;
@@ -2763,6 +2818,9 @@ class ViewInGrid extends ViewIn
 
             // descuento
             $this->descuento->HrefValue = "";
+
+            // descuento2
+            $this->descuento2->HrefValue = "";
 
             // costo_unidad
             $this->costo_unidad->HrefValue = "";
@@ -2850,6 +2908,14 @@ class ViewInGrid extends ViewIn
             }
             if (!CheckNumber($this->descuento->FormValue)) {
                 $this->descuento->addErrorMessage($this->descuento->getErrorMessage(false));
+            }
+            if ($this->descuento2->Visible && $this->descuento2->Required) {
+                if (!$this->descuento2->IsDetailKey && EmptyValue($this->descuento2->FormValue)) {
+                    $this->descuento2->addErrorMessage(str_replace("%s", $this->descuento2->caption(), $this->descuento2->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->descuento2->FormValue)) {
+                $this->descuento2->addErrorMessage($this->descuento2->getErrorMessage(false));
             }
             if ($this->costo_unidad->Visible && $this->costo_unidad->Required) {
                 if (!$this->costo_unidad->IsDetailKey && EmptyValue($this->costo_unidad->FormValue)) {
@@ -3057,6 +3123,9 @@ class ViewInGrid extends ViewIn
         // descuento
         $this->descuento->setDbValueDef($rsnew, $this->descuento->CurrentValue, $this->descuento->ReadOnly);
 
+        // descuento2
+        $this->descuento2->setDbValueDef($rsnew, $this->descuento2->CurrentValue, $this->descuento2->ReadOnly);
+
         // costo_unidad
         $this->costo_unidad->setDbValueDef($rsnew, $this->costo_unidad->CurrentValue, $this->costo_unidad->ReadOnly);
 
@@ -3100,6 +3169,9 @@ class ViewInGrid extends ViewIn
         }
         if (isset($row['descuento'])) { // descuento
             $this->descuento->CurrentValue = $row['descuento'];
+        }
+        if (isset($row['descuento2'])) { // descuento2
+            $this->descuento2->CurrentValue = $row['descuento2'];
         }
         if (isset($row['costo_unidad'])) { // costo_unidad
             $this->costo_unidad->CurrentValue = $row['costo_unidad'];
@@ -3216,6 +3288,9 @@ class ViewInGrid extends ViewIn
         // descuento
         $this->descuento->setDbValueDef($rsnew, $this->descuento->CurrentValue, false);
 
+        // descuento2
+        $this->descuento2->setDbValueDef($rsnew, $this->descuento2->CurrentValue, false);
+
         // costo_unidad
         $this->costo_unidad->setDbValueDef($rsnew, $this->costo_unidad->CurrentValue, false);
 
@@ -3269,6 +3344,9 @@ class ViewInGrid extends ViewIn
         }
         if (isset($row['descuento'])) { // descuento
             $this->descuento->setFormValue($row['descuento']);
+        }
+        if (isset($row['descuento2'])) { // descuento2
+            $this->descuento2->setFormValue($row['descuento2']);
         }
         if (isset($row['costo_unidad'])) { // costo_unidad
             $this->costo_unidad->setFormValue($row['costo_unidad']);

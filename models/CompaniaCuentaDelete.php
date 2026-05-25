@@ -138,6 +138,7 @@ class CompaniaCuentaDelete extends CompaniaCuenta
         $this->cuenta->setVisibility();
         $this->activo->setVisibility();
         $this->compania->Visible = false;
+        $this->pago_electronico->setVisibility();
     }
 
     // Constructor
@@ -420,6 +421,7 @@ class CompaniaCuentaDelete extends CompaniaCuenta
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->pago_electronico);
 
         // Set up master/detail parameters
         $this->setupMasterParms();
@@ -615,6 +617,7 @@ class CompaniaCuentaDelete extends CompaniaCuenta
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->compania->setDbValue($row['compania']);
+        $this->pago_electronico->setDbValue($row['pago_electronico']);
     }
 
     // Return a row with default values
@@ -630,6 +633,7 @@ class CompaniaCuentaDelete extends CompaniaCuenta
         $row['cuenta'] = $this->cuenta->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
         $row['compania'] = $this->compania->DefaultValue;
+        $row['pago_electronico'] = $this->pago_electronico->DefaultValue;
         return $row;
     }
 
@@ -662,6 +666,8 @@ class CompaniaCuentaDelete extends CompaniaCuenta
         // activo
 
         // compania
+
+        // pago_electronico
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -747,6 +753,13 @@ class CompaniaCuentaDelete extends CompaniaCuenta
             // compania
             $this->compania->ViewValue = $this->compania->CurrentValue;
 
+            // pago_electronico
+            if (strval($this->pago_electronico->CurrentValue) != "") {
+                $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
+            } else {
+                $this->pago_electronico->ViewValue = null;
+            }
+
             // banco
             $this->banco->HrefValue = "";
             $this->banco->TooltipValue = "";
@@ -774,6 +787,10 @@ class CompaniaCuentaDelete extends CompaniaCuenta
             // activo
             $this->activo->HrefValue = "";
             $this->activo->TooltipValue = "";
+
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
+            $this->pago_electronico->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -998,6 +1015,8 @@ class CompaniaCuentaDelete extends CompaniaCuenta
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_activo":
+                    break;
+                case "x_pago_electronico":
                     break;
                 default:
                     $lookupFilter = "";

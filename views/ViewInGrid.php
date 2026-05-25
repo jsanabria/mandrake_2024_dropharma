@@ -31,6 +31,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["cantidad_articulo", [fields.cantidad_articulo.visible && fields.cantidad_articulo.required ? ew.Validators.required(fields.cantidad_articulo.caption) : null, ew.Validators.float], fields.cantidad_articulo.isInvalid],
             ["precio_unidad_sin_desc", [fields.precio_unidad_sin_desc.visible && fields.precio_unidad_sin_desc.required ? ew.Validators.required(fields.precio_unidad_sin_desc.caption) : null, ew.Validators.float], fields.precio_unidad_sin_desc.isInvalid],
             ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.float], fields.descuento.isInvalid],
+            ["descuento2", [fields.descuento2.visible && fields.descuento2.required ? ew.Validators.required(fields.descuento2.caption) : null, ew.Validators.float], fields.descuento2.isInvalid],
             ["costo_unidad", [fields.costo_unidad.visible && fields.costo_unidad.required ? ew.Validators.required(fields.costo_unidad.caption) : null, ew.Validators.float], fields.costo_unidad.isInvalid],
             ["costo", [fields.costo.visible && fields.costo.required ? ew.Validators.required(fields.costo.caption) : null, ew.Validators.float], fields.costo.isInvalid],
             ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
@@ -41,7 +42,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setEmptyRow(
             function (rowIndex) {
                 let fobj = this.getForm(),
-                    fields = [["fabricante",false],["articulo",false],["lote",false],["fecha_vencimiento",false],["almacen",false],["cantidad_articulo",false],["precio_unidad_sin_desc",false],["descuento",false],["costo_unidad",false],["costo",false],["alicuota",false],["check_ne",false]];
+                    fields = [["fabricante",false],["articulo",false],["lote",false],["fecha_vencimiento",false],["almacen",false],["cantidad_articulo",false],["precio_unidad_sin_desc",false],["descuento",false],["descuento2",false],["costo_unidad",false],["costo",false],["alicuota",false],["check_ne",false]];
                 if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
                     return false;
                 return true;
@@ -122,6 +123,9 @@ $Grid->ListOptions->render("header", "left");
 <?php } ?>
 <?php if ($Grid->descuento->Visible) { // descuento ?>
         <th data-name="descuento" class="<?= $Grid->descuento->headerCellClass() ?>"><div id="elh_view_in_descuento" class="view_in_descuento"><?= $Grid->renderFieldHeader($Grid->descuento) ?></div></th>
+<?php } ?>
+<?php if ($Grid->descuento2->Visible) { // descuento2 ?>
+        <th data-name="descuento2" class="<?= $Grid->descuento2->headerCellClass() ?>"><div id="elh_view_in_descuento2" class="view_in_descuento2"><?= $Grid->renderFieldHeader($Grid->descuento2) ?></div></th>
 <?php } ?>
 <?php if ($Grid->costo_unidad->Visible) { // costo_unidad ?>
         <th data-name="costo_unidad" class="<?= $Grid->costo_unidad->headerCellClass() ?>"><div id="elh_view_in_costo_unidad" class="view_in_costo_unidad"><?= $Grid->renderFieldHeader($Grid->costo_unidad) ?></div></th>
@@ -325,14 +329,14 @@ loadjs.ready("fview_ingrid", function() {
         <td data-name="lote"<?= $Grid->lote->cellAttributes() ?>>
 <?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
 <span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_view_in_lote" class="el_view_in_lote">
-<input type="<?= $Grid->lote->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_lote" id="x<?= $Grid->RowIndex ?>_lote" data-table="view_in" data-field="x_lote" value="<?= $Grid->lote->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Grid->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->lote->formatPattern()) ?>"<?= $Grid->lote->editAttributes() ?>>
+<input type="<?= $Grid->lote->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_lote" id="x<?= $Grid->RowIndex ?>_lote" data-table="view_in" data-field="x_lote" value="<?= $Grid->lote->EditValue ?>" size="30" maxlength="150" placeholder="<?= HtmlEncode($Grid->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->lote->formatPattern()) ?>"<?= $Grid->lote->editAttributes() ?>>
 <div class="invalid-feedback"><?= $Grid->lote->getErrorMessage() ?></div>
 </span>
 <input type="hidden" data-table="view_in" data-field="x_lote" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_lote" id="o<?= $Grid->RowIndex ?>_lote" value="<?= HtmlEncode($Grid->lote->OldValue) ?>">
 <?php } ?>
 <?php if ($Grid->RowType == RowType::EDIT) { // Edit record ?>
 <span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_view_in_lote" class="el_view_in_lote">
-<input type="<?= $Grid->lote->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_lote" id="x<?= $Grid->RowIndex ?>_lote" data-table="view_in" data-field="x_lote" value="<?= $Grid->lote->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Grid->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->lote->formatPattern()) ?>"<?= $Grid->lote->editAttributes() ?>>
+<input type="<?= $Grid->lote->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_lote" id="x<?= $Grid->RowIndex ?>_lote" data-table="view_in" data-field="x_lote" value="<?= $Grid->lote->EditValue ?>" size="30" maxlength="150" placeholder="<?= HtmlEncode($Grid->lote->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->lote->formatPattern()) ?>"<?= $Grid->lote->editAttributes() ?>>
 <div class="invalid-feedback"><?= $Grid->lote->getErrorMessage() ?></div>
 </span>
 <?php } ?>
@@ -605,6 +609,33 @@ loadjs.ready("fview_ingrid", function() {
 <?php if ($Grid->isConfirm()) { ?>
 <input type="hidden" data-table="view_in" data-field="x_descuento" data-hidden="1" name="fview_ingrid$x<?= $Grid->RowIndex ?>_descuento" id="fview_ingrid$x<?= $Grid->RowIndex ?>_descuento" value="<?= HtmlEncode($Grid->descuento->FormValue) ?>">
 <input type="hidden" data-table="view_in" data-field="x_descuento" data-hidden="1" data-old name="fview_ingrid$o<?= $Grid->RowIndex ?>_descuento" id="fview_ingrid$o<?= $Grid->RowIndex ?>_descuento" value="<?= HtmlEncode($Grid->descuento->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+    <?php } ?>
+    <?php if ($Grid->descuento2->Visible) { // descuento2 ?>
+        <td data-name="descuento2"<?= $Grid->descuento2->cellAttributes() ?>>
+<?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_view_in_descuento2" class="el_view_in_descuento2">
+<input type="<?= $Grid->descuento2->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_descuento2" id="x<?= $Grid->RowIndex ?>_descuento2" data-table="view_in" data-field="x_descuento2" value="<?= $Grid->descuento2->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Grid->descuento2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->descuento2->formatPattern()) ?>"<?= $Grid->descuento2->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Grid->descuento2->getErrorMessage() ?></div>
+</span>
+<input type="hidden" data-table="view_in" data-field="x_descuento2" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_descuento2" id="o<?= $Grid->RowIndex ?>_descuento2" value="<?= HtmlEncode($Grid->descuento2->OldValue) ?>">
+<?php } ?>
+<?php if ($Grid->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_view_in_descuento2" class="el_view_in_descuento2">
+<input type="<?= $Grid->descuento2->getInputTextType() ?>" name="x<?= $Grid->RowIndex ?>_descuento2" id="x<?= $Grid->RowIndex ?>_descuento2" data-table="view_in" data-field="x_descuento2" value="<?= $Grid->descuento2->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Grid->descuento2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Grid->descuento2->formatPattern()) ?>"<?= $Grid->descuento2->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Grid->descuento2->getErrorMessage() ?></div>
+</span>
+<?php } ?>
+<?php if ($Grid->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_view_in_descuento2" class="el_view_in_descuento2">
+<span<?= $Grid->descuento2->viewAttributes() ?>>
+<?= $Grid->descuento2->getViewValue() ?></span>
+</span>
+<?php if ($Grid->isConfirm()) { ?>
+<input type="hidden" data-table="view_in" data-field="x_descuento2" data-hidden="1" name="fview_ingrid$x<?= $Grid->RowIndex ?>_descuento2" id="fview_ingrid$x<?= $Grid->RowIndex ?>_descuento2" value="<?= HtmlEncode($Grid->descuento2->FormValue) ?>">
+<input type="hidden" data-table="view_in" data-field="x_descuento2" data-hidden="1" data-old name="fview_ingrid$o<?= $Grid->RowIndex ?>_descuento2" id="fview_ingrid$o<?= $Grid->RowIndex ?>_descuento2" value="<?= HtmlEncode($Grid->descuento2->OldValue) ?>">
 <?php } ?>
 <?php } ?>
 </td>

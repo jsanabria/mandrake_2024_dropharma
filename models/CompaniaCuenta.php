@@ -63,6 +63,7 @@ class CompaniaCuenta extends DbTable
     public $cuenta;
     public $activo;
     public $compania;
+    public $pago_electronico;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -353,6 +354,33 @@ OR
         $this->compania->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->compania->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
         $this->Fields['compania'] = &$this->compania;
+
+        // pago_electronico
+        $this->pago_electronico = new DbField(
+            $this, // Table
+            'x_pago_electronico', // Variable name
+            'pago_electronico', // Name
+            '`pago_electronico`', // Expression
+            '`pago_electronico`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`pago_electronico`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->pago_electronico->addMethod("getDefault", fn() => "S");
+        $this->pago_electronico->InputTextType = "text";
+        $this->pago_electronico->Raw = true;
+        $this->pago_electronico->Nullable = false; // NOT NULL field
+        $this->pago_electronico->Lookup = new Lookup($this->pago_electronico, 'compania_cuenta', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->pago_electronico->OptionCount = 2;
+        $this->pago_electronico->SearchOperators = ["=", "<>"];
+        $this->Fields['pago_electronico'] = &$this->pago_electronico;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -977,6 +1005,7 @@ OR
         $this->cuenta->DbValue = $row['cuenta'];
         $this->activo->DbValue = $row['activo'];
         $this->compania->DbValue = $row['compania'];
+        $this->pago_electronico->DbValue = $row['pago_electronico'];
     }
 
     // Delete uploaded files
@@ -1342,6 +1371,7 @@ OR
         $this->cuenta->setDbValue($row['cuenta']);
         $this->activo->setDbValue($row['activo']);
         $this->compania->setDbValue($row['compania']);
+        $this->pago_electronico->setDbValue($row['pago_electronico']);
     }
 
     // Render list content
@@ -1389,6 +1419,8 @@ OR
         // activo
 
         // compania
+
+        // pago_electronico
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1472,6 +1504,13 @@ OR
         // compania
         $this->compania->ViewValue = $this->compania->CurrentValue;
 
+        // pago_electronico
+        if (strval($this->pago_electronico->CurrentValue) != "") {
+            $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
+        } else {
+            $this->pago_electronico->ViewValue = null;
+        }
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -1507,6 +1546,10 @@ OR
         // compania
         $this->compania->HrefValue = "";
         $this->compania->TooltipValue = "";
+
+        // pago_electronico
+        $this->pago_electronico->HrefValue = "";
+        $this->pago_electronico->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1583,6 +1626,10 @@ OR
             }
         }
 
+        // pago_electronico
+        $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+        $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1620,6 +1667,7 @@ OR
                     $doc->exportCaption($this->cuenta);
                     $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->compania);
+                    $doc->exportCaption($this->pago_electronico);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->banco);
@@ -1630,6 +1678,7 @@ OR
                     $doc->exportCaption($this->cuenta);
                     $doc->exportCaption($this->activo);
                     $doc->exportCaption($this->compania);
+                    $doc->exportCaption($this->pago_electronico);
                 }
                 $doc->endExportRow();
             }
@@ -1665,6 +1714,7 @@ OR
                         $doc->exportField($this->cuenta);
                         $doc->exportField($this->activo);
                         $doc->exportField($this->compania);
+                        $doc->exportField($this->pago_electronico);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->banco);
@@ -1675,6 +1725,7 @@ OR
                         $doc->exportField($this->cuenta);
                         $doc->exportField($this->activo);
                         $doc->exportField($this->compania);
+                        $doc->exportField($this->pago_electronico);
                     }
                     $doc->endExportRow($rowCnt);
                 }

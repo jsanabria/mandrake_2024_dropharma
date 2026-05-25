@@ -135,6 +135,10 @@ class ContLotesPagosDelete extends ContLotesPagos
         $this->nota->setVisibility();
         $this->fecha_registro->Visible = false;
         $this->usuario->setVisibility();
+        $this->banco->setVisibility();
+        $this->referencia->setVisibility();
+        $this->moneda->setVisibility();
+        $this->comprobante->setVisibility();
     }
 
     // Constructor
@@ -414,6 +418,7 @@ class ContLotesPagosDelete extends ContLotesPagos
         // Set up lookup cache
         $this->setupLookupOptions($this->procesado);
         $this->setupLookupOptions($this->usuario);
+        $this->setupLookupOptions($this->comprobante);
 
         // Set up Breadcrumb
         $this->setupBreadcrumb();
@@ -603,6 +608,10 @@ class ContLotesPagosDelete extends ContLotesPagos
         $this->nota->setDbValue($row['nota']);
         $this->fecha_registro->setDbValue($row['fecha_registro']);
         $this->usuario->setDbValue($row['usuario']);
+        $this->banco->setDbValue($row['banco']);
+        $this->referencia->setDbValue($row['referencia']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->comprobante->setDbValue($row['comprobante']);
     }
 
     // Return a row with default values
@@ -615,6 +624,10 @@ class ContLotesPagosDelete extends ContLotesPagos
         $row['nota'] = $this->nota->DefaultValue;
         $row['fecha_registro'] = $this->fecha_registro->DefaultValue;
         $row['usuario'] = $this->usuario->DefaultValue;
+        $row['banco'] = $this->banco->DefaultValue;
+        $row['referencia'] = $this->referencia->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['comprobante'] = $this->comprobante->DefaultValue;
         return $row;
     }
 
@@ -641,6 +654,14 @@ class ContLotesPagosDelete extends ContLotesPagos
         // fecha_registro
 
         // usuario
+
+        // banco
+
+        // referencia
+
+        // moneda
+
+        // comprobante
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -689,6 +710,23 @@ class ContLotesPagosDelete extends ContLotesPagos
                 $this->usuario->ViewValue = null;
             }
 
+            // banco
+            $this->banco->ViewValue = $this->banco->CurrentValue;
+            $this->banco->ViewValue = FormatNumber($this->banco->ViewValue, $this->banco->formatPattern());
+
+            // referencia
+            $this->referencia->ViewValue = $this->referencia->CurrentValue;
+
+            // moneda
+            $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+            // comprobante
+            if (strval($this->comprobante->CurrentValue) != "") {
+                $this->comprobante->ViewValue = $this->comprobante->optionCaption($this->comprobante->CurrentValue);
+            } else {
+                $this->comprobante->ViewValue = null;
+            }
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -708,6 +746,22 @@ class ContLotesPagosDelete extends ContLotesPagos
             // usuario
             $this->usuario->HrefValue = "";
             $this->usuario->TooltipValue = "";
+
+            // banco
+            $this->banco->HrefValue = "";
+            $this->banco->TooltipValue = "";
+
+            // referencia
+            $this->referencia->HrefValue = "";
+            $this->referencia->TooltipValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
+
+            // comprobante
+            $this->comprobante->HrefValue = "";
+            $this->comprobante->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -851,6 +905,8 @@ class ContLotesPagosDelete extends ContLotesPagos
                 case "x_procesado":
                     break;
                 case "x_usuario":
+                    break;
+                case "x_comprobante":
                     break;
                 default:
                     $lookupFilter = "";

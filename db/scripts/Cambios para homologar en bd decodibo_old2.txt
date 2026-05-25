@@ -1,0 +1,2020 @@
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+
+USE `decodbnt_windeco`;
+
+/* Create table in target */
+CREATE TABLE `abono`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`cliente` int unsigned NULL  , 
+	`fecha` date NULL  , 
+	`metodo_pago` varchar(10) COLLATE latin1_swedish_ci NULL  , 
+	`nro_recibo` int unsigned NOT NULL  DEFAULT '0' , 
+	`pago` decimal(14,2) NOT NULL  DEFAULT 0.00 , 
+	`nota` varchar(250) COLLATE latin1_swedish_ci NULL  , 
+	`username` varchar(30) COLLATE latin1_swedish_ci NULL  , 
+	`pivote` char(1) COLLATE latin1_swedish_ci NULL  , 
+	`pivote2` char(1) COLLATE latin1_swedish_ci NULL  , 
+	`tasa_usd` decimal(14,2) NULL  , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_cliente`(`cliente`) , 
+	KEY `idx_recibo`(`nro_recibo`) 
+) ENGINE=MyISAM DEFAULT CHARSET='latin1' COLLATE='latin1_swedish_ci';
+
+
+/* Create table in target */
+CREATE TABLE `anticipos_aplicaciones`(
+	`id` int unsigned NOT NULL  auto_increment , 
+	`anticipo_cobro_id` int unsigned NOT NULL  , 
+	`cobro_factura_id` int unsigned NOT NULL  , 
+	`salida_id` int unsigned NOT NULL  , 
+	`fecha` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	`username` varchar(30) COLLATE utf8mb4_general_ci NULL  , 
+	`monto_moneda` decimal(14,2) NOT NULL  , 
+	`moneda` varchar(6) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`tasa_factura` decimal(14,2) NULL  , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_anticipo`(`anticipo_cobro_id`) , 
+	KEY `idx_cobro_factura`(`cobro_factura_id`) , 
+	KEY `idx_salida`(`salida_id`) , 
+	KEY `idx_anticipo_moneda`(`anticipo_cobro_id`,`moneda`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Alter table in target */
+ALTER TABLE `articulo` 
+	ADD COLUMN `indexado` enum('S','N')  COLLATE utf8mb3_general_ci NULL after `talla` ;
+
+/* Create table in target */
+CREATE TABLE `banner`(
+	`id` int NOT NULL  auto_increment , 
+	`tipo` enum('1','2','3') COLLATE latin1_swedish_ci NULL  , 
+	`titulo` varchar(50) COLLATE latin1_swedish_ci NULL  , 
+	`subtitulo` varchar(50) COLLATE latin1_swedish_ci NULL  , 
+	`imagen` varchar(155) COLLATE latin1_swedish_ci NULL  , 
+	`activo` bit(1) NULL  , 
+	PRIMARY KEY (`id`) 
+) ENGINE=MyISAM DEFAULT CHARSET='latin1' COLLATE='latin1_swedish_ci';
+
+
+/* Alter table in target */
+ALTER TABLE `cobros_cliente` 
+	ADD COLUMN `banco` int unsigned   NULL after `tipo_pago` , 
+	ADD COLUMN `banco_origen` varchar(30)  COLLATE latin1_swedish_ci NULL after `banco` , 
+	ADD COLUMN `referencia` varchar(50)  COLLATE latin1_swedish_ci NULL after `pago` , 
+	ADD COLUMN `monto_recibido` decimal(14,2)   NULL after `referencia` , 
+	ADD COLUMN `monto` decimal(14,2)   NULL after `monto_recibido` , 
+	ADD KEY `idx_cliente_doc`(`cliente`,`id_documento`) ;
+
+/* Alter table in target */
+ALTER TABLE `cobros_cliente_detalle` 
+	ADD COLUMN `banco_origen` varchar(6)  COLLATE latin1_swedish_ci NULL after `monto_usd` , 
+	ADD COLUMN `anticipo_id` int unsigned   NULL after `banco` , 
+	ADD KEY `idx_cobro_moneda`(`cobros_cliente`,`moneda`) ;
+
+/* Create table in target */
+CREATE TABLE `cont_asiento_detalle_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`asiento_id` bigint unsigned NOT NULL  , 
+	`cuenta_id` bigint unsigned NOT NULL  , 
+	`centro_costo_id` bigint unsigned NULL  , 
+	`concepto` varchar(255) COLLATE utf8mb4_general_ci NULL  , 
+	`moneda_trx` varchar(6) COLLATE utf8mb4_general_ci NOT NULL  DEFAULT 'Bs' , 
+	`tasa_trx` decimal(20,6) NOT NULL  DEFAULT 1.000000 , 
+	`monto_moneda_trx` decimal(18,2) NOT NULL  DEFAULT 0.00 , 
+	`debe_bs` decimal(18,2) NOT NULL  DEFAULT 0.00 , 
+	`haber_bs` decimal(18,2) NOT NULL  DEFAULT 0.00 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_det_asiento`(`asiento_id`) , 
+	KEY `idx_det_cuenta`(`cuenta_id`) , 
+	KEY `idx_det_cc`(`centro_costo_id`) , 
+	KEY `idx_det_moneda`(`moneda_trx`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Create table in target */
+CREATE TABLE `cont_asiento_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`fecha` date NOT NULL  , 
+	`descripcion` varchar(255) COLLATE utf8mb4_general_ci NULL  , 
+	`referencia` varchar(60) COLLATE utf8mb4_general_ci NULL  , 
+	`modulo_origen` enum('VENTA','COBRO','ANTICIPO_CLI','APL_ANT_CLI','COMPRA_GASTO','COMPRA_INV','PAGO_PROV','ANTICIPO_PROV','APL_ANT_PROV','RETENCION','AJUSTE') COLLATE utf8mb4_general_ci NOT NULL  , 
+	`origen_tabla` varchar(40) COLLATE utf8mb4_general_ci NULL  , 
+	`origen_id` bigint unsigned NULL  , 
+	`tercero_id` bigint unsigned NULL  , 
+	`moneda_trx` varchar(6) COLLATE utf8mb4_general_ci NOT NULL  DEFAULT 'Bs' , 
+	`tasa_trx` decimal(20,6) NOT NULL  DEFAULT 1.000000 , 
+	`total_moneda_trx` decimal(18,2) NOT NULL  DEFAULT 0.00 , 
+	`total_bs` decimal(18,2) NOT NULL  DEFAULT 0.00 , 
+	`centro_costo_id` bigint unsigned NULL  , 
+	`username` varchar(30) COLLATE utf8mb4_general_ci NULL  , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	`anulado` tinyint(1) NOT NULL  DEFAULT 0 , 
+	`anulado_at` datetime NULL  , 
+	`anulado_by` varchar(30) COLLATE utf8mb4_general_ci NULL  , 
+	`anulado_motivo` varchar(255) COLLATE utf8mb4_general_ci NULL  , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_asiento_fecha`(`fecha`) , 
+	KEY `idx_asiento_modulo`(`modulo_origen`) , 
+	KEY `idx_asiento_origen`(`origen_tabla`,`origen_id`) , 
+	KEY `idx_asiento_tercero`(`tercero_id`) , 
+	KEY `idx_asiento_cc`(`centro_costo_id`) , 
+	KEY `idx_asiento_referencia`(`referencia`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Create table in target */
+CREATE TABLE `cont_banco_cuenta_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`banco_id` int NOT NULL  , 
+	`cuenta_id` bigint unsigned NOT NULL  , 
+	`estado` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	UNIQUE KEY `ux_banco`(`banco_id`) , 
+	KEY `idx_cuenta`(`cuenta_id`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Create table in target */
+CREATE TABLE `cont_centro_costo_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`codigo` varchar(20) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`nombre` varchar(120) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`descripcion` varchar(255) COLLATE utf8mb4_general_ci NULL  , 
+	`centro_padre_id` bigint unsigned NULL  , 
+	`nivel` tinyint unsigned NOT NULL  DEFAULT '1' , 
+	`estado` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	UNIQUE KEY `ux_cc_codigo`(`codigo`) , 
+	KEY `idx_cc_padre`(`centro_padre_id`) , 
+	KEY `idx_cc_estado`(`estado`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Create table in target */
+CREATE TABLE `cont_configuracion_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`clave` varchar(60) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`descripcion` varchar(255) COLLATE utf8mb4_general_ci NULL  , 
+	`cuenta_id` bigint unsigned NULL  , 
+	`valor_texto` varchar(255) COLLATE utf8mb4_general_ci NULL  , 
+	`valor_numero` decimal(20,6) NULL  , 
+	`estado` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	UNIQUE KEY `ux_config_clave`(`clave`) , 
+	KEY `idx_config_cuenta`(`cuenta_id`) , 
+	KEY `idx_config_estado`(`estado`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Alter table in target */
+ALTER TABLE `cont_lotes_pagos_detalle` 
+	ADD COLUMN `monto_pagdo` decimal(14,2)   NULL after `comprobante` ;
+
+/* Create table in target */
+CREATE TABLE `cont_metodo_cuenta_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`metodo_pago` varchar(10) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`descripcion` varchar(100) COLLATE utf8mb4_general_ci NULL  , 
+	`tipo_destino` enum('CAJA_BANCO','PASIVO','OTRO') COLLATE utf8mb4_general_ci NOT NULL  DEFAULT 'CAJA_BANCO' , 
+	`cuenta_id` bigint unsigned NULL  , 
+	`forzar_destino` enum('AUTO','CAJA','BANCO') COLLATE utf8mb4_general_ci NOT NULL  DEFAULT 'AUTO' , 
+	`estado` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	UNIQUE KEY `ux_metodo`(`metodo_pago`) , 
+	KEY `idx_cuenta`(`cuenta_id`) , 
+	KEY `idx_estado`(`estado`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Create table in target */
+CREATE TABLE `cont_plan_cuentas_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`codigo` varchar(30) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`nombre` varchar(150) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`tipo` enum('ACTIVO','PASIVO','PATRIMONIO','INGRESO','GASTO') COLLATE utf8mb4_general_ci NOT NULL  , 
+	`naturaleza` enum('DEUDORA','ACREEDORA') COLLATE utf8mb4_general_ci NOT NULL  , 
+	`acepta_movimiento` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`cuenta_padre_id` bigint unsigned NULL  , 
+	`nivel` tinyint unsigned NOT NULL  DEFAULT '1' , 
+	`estado` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	UNIQUE KEY `ux_cuentas_codigo`(`codigo`) , 
+	KEY `idx_cuentas_padre`(`cuenta_padre_id`) , 
+	KEY `idx_cuentas_tipo`(`tipo`) , 
+	KEY `idx_cuentas_estado`(`estado`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Create table in target */
+CREATE TABLE `cont_tercero_mdk`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`tipo` enum('CLIENTE','PROVEEDOR','AMBOS','OTRO') COLLATE utf8mb4_general_ci NOT NULL  , 
+	`origen_tabla` varchar(30) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`origen_id` bigint unsigned NOT NULL  , 
+	`nombre` varchar(150) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`rif` varchar(30) COLLATE utf8mb4_general_ci NULL  , 
+	`estado` tinyint(1) NOT NULL  DEFAULT 1 , 
+	`created_at` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_tercero_tipo`(`tipo`) , 
+	KEY `idx_tercero_origen`(`origen_tabla`,`origen_id`) , 
+	KEY `idx_tercero_estado`(`estado`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Alter table in target */
+ALTER TABLE `fabricante` 
+	ADD COLUMN `moneda` varchar(6)  COLLATE utf8mb3_general_ci NULL after `tipo` , 
+	ADD COLUMN `descuento` decimal(14,2)   NULL after `moneda` , 
+	ADD COLUMN `utilidad` decimal(14,2)   NULL after `descuento` , 
+	CHANGE `activo` `activo` enum('S','N')  COLLATE utf8mb3_general_ci NULL DEFAULT 'S' after `utilidad` ;
+
+/* Create table in target */
+CREATE TABLE `ftp_fact_pedi_procesado`(
+	`id` int NOT NULL  auto_increment , 
+	`factura` varchar(50) COLLATE latin1_general_ci NULL  , 
+	`pedido` varchar(50) COLLATE latin1_general_ci NULL  , 
+	`fecha_hora` datetime NULL  , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_factura`(`factura`) , 
+	KEY `idx_pedido`(`pedido`) 
+) ENGINE=InnoDB DEFAULT CHARSET='latin1' COLLATE='latin1_general_ci';
+
+
+/* Create table in target */
+CREATE TABLE `limite_cliente`(
+	`rif` varchar(50) COLLATE latin1_swedish_ci NOT NULL  , 
+	`limite` float NOT NULL  , 
+	`condicion` varchar(15) COLLATE latin1_swedish_ci NOT NULL  , 
+	KEY `idx_rif`(`rif`) 
+) ENGINE=InnoDB DEFAULT CHARSET='latin1' COLLATE='latin1_swedish_ci';
+
+
+/* Create table in target */
+CREATE TABLE `pago_destino_regla`(
+	`id` int unsigned NOT NULL  auto_increment , 
+	`compania` int unsigned NOT NULL  , 
+	`metodo` char(2) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`moneda` varchar(6) COLLATE utf8mb4_general_ci NULL  , 
+	`cuenta_destino_id` int unsigned NOT NULL  , 
+	`prioridad` tinyint NOT NULL  DEFAULT 0 , 
+	`activo` char(1) COLLATE utf8mb4_general_ci NOT NULL  DEFAULT 'S' , 
+	`nota` varchar(100) COLLATE utf8mb4_general_ci NULL  , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_regla`(`compania`,`metodo`,`moneda`,`activo`,`prioridad`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Alter table in target */
+ALTER TABLE `pagos` 
+	ADD COLUMN `banco` varchar(6)  COLLATE latin1_swedish_ci NULL after `comprobante` , 
+	ADD COLUMN `banco_destino` int   NULL after `banco` , 
+	ADD COLUMN `moneda` varchar(6)  COLLATE latin1_swedish_ci NULL after `banco_destino` , 
+	ADD COLUMN `username` varchar(30)  COLLATE latin1_swedish_ci NULL after `moneda` , 
+	ADD COLUMN `fecha_resgistro` date   NULL after `username` ;
+
+/* Alter table in target */
+ALTER TABLE `pedidos_detalles_online` 
+	ADD COLUMN `descuento2` decimal(6,2)   NULL after `precio_unidad_sin_desc` ;
+
+/* Create table in target */
+CREATE TABLE `pedidos_detalles_online_bitacora`(
+	`id` bigint unsigned NOT NULL  auto_increment , 
+	`id_documento` int unsigned NULL  , 
+	`fabricante` int unsigned NULL  , 
+	`articulo` int unsigned NULL  , 
+	`cantidad_solicitada` decimal(10,2) NULL  , 
+	`cantidadasignada` decimal(10,2) NULL  , 
+	PRIMARY KEY (`id`) , 
+	KEY `idx_documento`(`id_documento`) 
+) ENGINE=MyISAM DEFAULT CHARSET='latin1' COLLATE='latin1_swedish_ci';
+
+
+/* Alter table in target */
+ALTER TABLE `pedidos_online` 
+	ADD COLUMN `descuento2` decimal(6,2)   NULL after `tipo_descuento` ;
+
+/* Alter table in target */
+ALTER TABLE `proveedor` 
+	ADD COLUMN `fabricante` int   NULL after `activo` , 
+	ADD KEY `idx_fabricante`(`fabricante`) ;
+
+/* Alter table in target */
+ALTER TABLE `recarga` 
+	ADD COLUMN `banco` int unsigned   NULL after `nota_recepcion` , 
+	ADD COLUMN `abono` bigint unsigned   NOT NULL DEFAULT '0' after `banco` , 
+	ADD KEY `idx_abono`(`abono`) ;
+
+/* Create table in target */
+CREATE TABLE `reporte_seniat_ne`(
+	`id` int NOT NULL  auto_increment , 
+	`periodo` char(7) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`cantidad` int NOT NULL  DEFAULT 0 , 
+	`monto_total` decimal(18,2) NOT NULL  DEFAULT 0.00 , 
+	`email_destino` varchar(150) COLLATE utf8mb4_general_ci NOT NULL  , 
+	`enviado_en` datetime NOT NULL  , 
+	`usuario` varchar(50) COLLATE utf8mb4_general_ci NULL  , 
+	PRIMARY KEY (`id`) , 
+	UNIQUE KEY `ux_periodo`(`periodo`) 
+) ENGINE=InnoDB DEFAULT CHARSET='utf8mb4' COLLATE=utf8mb4_general_ci;
+
+
+/* Alter table in target */
+ALTER TABLE `salidas` 
+	ADD COLUMN `descuento2` decimal(6,2)   NULL after `descuento` , 
+	ADD COLUMN `descuento3` decimal(6,2)   NULL after `descuento2` , 
+	ADD COLUMN `impreso` enum('S','N')  COLLATE utf8mb3_general_ci NULL DEFAULT 'N' after `visita` , 
+	ADD COLUMN `doc_afe` int   NULL after `impreso` , 
+	ADD KEY `idx_afectado`(`doc_afe`) ;
+
+/* Create table in target */
+CREATE TABLE `tarifa_descuento_utilidad`(
+	`Id` int unsigned NOT NULL  auto_increment , 
+	`tarifa` int unsigned NOT NULL  , 
+	`fabricante` int unsigned NOT NULL  , 
+	`descuento` decimal(14,2) NULL  , 
+	`utilidad` decimal(14,2) NULL  , 
+	PRIMARY KEY (`Id`) , 
+	UNIQUE KEY `idx_tarifa_fabricante`(`tarifa`,`fabricante`) , 
+	KEY `idx_tarifa`(`tarifa`) 
+) ENGINE=MyISAM DEFAULT CHARSET='utf8mb3' COLLATE='utf8mb3_general_ci';
+
+
+/* Alter table in target */
+ALTER TABLE `usuario` 
+	ADD COLUMN `userlevelid2` int   NULL after `userlevelid` , 
+	ADD COLUMN `profile` longtext  COLLATE utf8mb3_general_ci NULL after `userlevelid2` ;
+
+/* Create table in target */
+CREATE TABLE `usuario_master`(
+	`id` int unsigned NOT NULL  auto_increment , 
+	`username` varchar(30) COLLATE latin1_swedish_ci NULL  , 
+	`username2` varchar(30) COLLATE latin1_swedish_ci NULL  , 
+	PRIMARY KEY (`id`) 
+) ENGINE=MyISAM DEFAULT CHARSET='latin1' COLLATE='latin1_swedish_ci';
+
+
+
+
+
+DELIMITER $$
+CREATE PROCEDURE `sp_mdk_asiento_cobro_cliente`(IN p_cobro_id INT UNSIGNED, IN p_centro_costo_id BIGINT)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_cliente INT;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_referencia VARCHAR(60);
+
+  DECLARE v_total_bs DECIMAL(18,2);
+  DECLARE v_moneda VARCHAR(6);
+  DECLARE v_tasa DECIMAL(20,6);
+
+  DECLARE v_es_banco INT DEFAULT 0;
+  DECLARE v_asiento_id BIGINT;
+
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+
+  SET v_cta_caja = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos = fn_cta_id_mdk('CTA_BANCOS');
+  SET v_cta_cxc = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+
+  IF v_cta_caja IS NULL OR v_cta_bancos IS NULL OR v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CAJA/CTA_BANCOS/CTA_CXC/CTA_ANTICIPO_CLIENTE).';
+  END IF;
+
+  SELECT fecha, cliente, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_cliente, v_id_documento, v_username, v_referencia
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicar
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total en Bs desde detalle
+  SELECT IFNULL(ROUND(SUM(IFNULL(monto_bs,0)),2),0),
+         IFNULL(MAX(moneda),'Bs'),
+         IFNULL(MAX(IFNULL(tasa_moneda,1)),1)
+    INTO v_total_bs, v_moneda, v_tasa
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF v_total_bs <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Caja vs banco: si existe algún banco > 0 => banco
+  SELECT COUNT(*) INTO v_es_banco
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id AND IFNULL(banco,0) > 0;
+
+  -- Crear cabecera
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_referencia,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   v_moneda,
+   v_tasa,
+   v_total_bs,  -- simplificado: usamos Bs como trx si tu detalle mezcla monedas; lo refinamos luego
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Debe: Caja o Bancos
+  INSERT INTO cont_asiento_detalle_mdk
+  (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+  VALUES
+  (v_asiento_id,
+   IF(v_es_banco>0, v_cta_bancos, v_cta_caja),
+   p_centro_costo_id,
+   IF(v_es_banco>0,'Ingreso a bancos','Ingreso a caja'),
+   'Bs', 1.000000, v_total_bs,
+   v_total_bs, 0.00);
+
+  -- Haber: CxC o Anticipo cliente
+  INSERT INTO cont_asiento_detalle_mdk
+  (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+  VALUES
+  (v_asiento_id,
+   IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+   p_centro_costo_id,
+   IF(v_id_documento=0,'Anticipo de cliente','Aplicación a CxC'),
+   'Bs', 1.000000, v_total_bs,
+   0.00, v_total_bs);
+
+  -- Validación
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento COBRO/ANTICIPO descuadrado.';
+  END IF;
+
+END$$
+DELIMITER ;
+
+
+/* Create Procedure in target  */
+
+DELIMITER $$
+CREATE PROCEDURE `sp_mdk_asiento_cobro_cliente_detallado`(
+  IN p_cobro_id INT UNSIGNED,
+  IN p_centro_costo_id BIGINT
+)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_ref VARCHAR(60);
+
+  DECLARE v_asiento_id BIGINT;
+
+  DECLARE v_total_bs DECIMAL(18,2);
+
+  -- Cuentas
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+
+  -- Cursor (grupos)
+  DECLARE done INT DEFAULT 0;
+  DECLARE g_banco INT;
+  DECLARE g_metodo VARCHAR(10);
+  DECLARE g_moneda VARCHAR(6);
+  DECLARE g_tasa DECIMAL(20,6);
+  DECLARE g_monto_moneda DECIMAL(18,2);
+  DECLARE g_monto_bs DECIMAL(18,2);
+
+  DECLARE cur CURSOR FOR
+    SELECT
+      IFNULL(banco,0) AS banco,
+      IFNULL(metodo_pago,'') AS metodo_pago,
+      IFNULL(moneda,'Bs') AS moneda,
+      -- tasa: si Bs => 1, si no => tasa_moneda (si viene en NULL, tratamos de derivar de monto_bs / monto_moneda)
+      CASE
+        WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+        ELSE
+          IFNULL(NULLIF(tasa_moneda,0),
+            CASE
+              WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+              ELSE 1.000000
+            END
+          )
+      END AS tasa_calc,
+      -- monto en moneda original (si es Bs y monto_moneda viene NULL, usamos monto_bs como “monto moneda”)
+      ROUND(SUM(COALESCE(monto_moneda, monto_bs, 0)), 2) AS monto_moneda_sum,
+      ROUND(SUM(IFNULL(monto_bs,0)), 2) AS monto_bs_sum
+    FROM cobros_cliente_detalle
+    WHERE cobros_cliente = p_cobro_id
+    GROUP BY IFNULL(banco,0), IFNULL(metodo_pago,''), IFNULL(moneda,'Bs'),
+             CASE
+               WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+               ELSE
+                 IFNULL(NULLIF(tasa_moneda,0),
+                   CASE
+                     WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+                     ELSE 1.000000
+                   END
+                 )
+             END;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  -- Traer cuentas desde config
+  SET v_cta_caja    = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos  = fn_cta_id_mdk('CTA_BANCOS');
+  SET v_cta_cxc     = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+
+  IF v_cta_caja IS NULL OR v_cta_bancos IS NULL OR v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CAJA/CTA_BANCOS/CTA_CXC/CTA_ANTICIPO_CLIENTE).';
+  END IF;
+
+  -- Cabecera de cobro
+  SELECT fecha, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_id_documento, v_username, v_ref
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicados
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total Bs del cobro (base)
+  SELECT ROUND(SUM(IFNULL(monto_bs,0)),2)
+    INTO v_total_bs
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF IFNULL(v_total_bs,0) <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Crear cabecera del asiento (guardamos trx como Bs para cabecera; el detalle tendrá moneda real)
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_ref,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   'Bs', 1.000000,
+   v_total_bs,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Insertar detalle por grupos: DEBE (caja/banco) + HABER (CxC o Anticipo cliente) por cada grupo
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO g_banco, g_metodo, g_moneda, g_tasa, g_monto_moneda, g_monto_bs;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    -- Saltar grupos sin monto
+    IF IFNULL(g_monto_bs,0) <= 0 THEN
+      ITERATE read_loop;
+    END IF;
+
+    -- DEBE: Caja o Bancos (según banco)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      IF(IFNULL(g_banco,0) > 0, v_cta_bancos, v_cta_caja),
+      p_centro_costo_id,
+      CONCAT(IF(IFNULL(g_banco,0) > 0,'Ingreso a bancos','Ingreso a caja'),
+             ' | metodo:', g_metodo,
+             ' | banco:', IFNULL(g_banco,0)),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      g_monto_bs,
+      0.00
+    );
+
+    -- HABER: CxC o Anticipo Cliente (por el mismo grupo)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+      p_centro_costo_id,
+      CONCAT(IF(v_id_documento=0,'Anticipo cliente','Aplicación a CxC'),
+             ' | metodo:', g_metodo,
+             ' | banco:', IFNULL(g_banco,0)),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      0.00,
+      g_monto_bs
+    );
+
+  END LOOP;
+
+  CLOSE cur;
+
+  -- Validación final: Debe = Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento COBRO/ANTICIPO descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+DELIMITER ;
+
+
+/* Create Procedure in target  */
+
+DELIMITER $$
+CREATE PROCEDURE `sp_mdk_asiento_cobro_cliente_detallado_fx`(
+  IN p_cobro_id INT UNSIGNED,
+  IN p_centro_costo_id BIGINT
+)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_ref VARCHAR(60);
+
+  DECLARE v_asiento_id BIGINT;
+  DECLARE v_total_bs DECIMAL(18,2);
+
+  -- Factura asociada (si aplica)
+  DECLARE v_fact_moneda VARCHAR(6);
+  DECLARE v_fact_tasa DECIMAL(20,6);
+
+  -- Cuentas base desde config
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+  DECLARE v_cta_dif_gan BIGINT;
+  DECLARE v_cta_dif_per BIGINT;
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+
+  -- Cursor (grupos)
+  DECLARE done INT DEFAULT 0;
+  DECLARE g_banco INT;
+  DECLARE g_metodo VARCHAR(10);
+  DECLARE g_moneda VARCHAR(6);
+  DECLARE g_tasa DECIMAL(20,6);
+  DECLARE g_monto_moneda DECIMAL(18,2);
+  DECLARE g_monto_bs DECIMAL(18,2);
+
+  -- Mapeo método
+  DECLARE m_tipo_destino VARCHAR(15);
+  DECLARE m_cuenta_id BIGINT;
+  DECLARE m_forzar_destino VARCHAR(10);
+
+  -- Cuenta final DEBE del grupo
+  DECLARE v_cuenta_debe BIGINT;
+
+  -- Para diferencia cambiaria por grupo
+  DECLARE v_aplica_cxc_bs DECIMAL(18,2);
+  DECLARE v_diff_bs DECIMAL(18,2);
+
+  DECLARE cur CURSOR FOR
+    SELECT
+      IFNULL(banco,0) AS banco,
+      IFNULL(metodo_pago,'') AS metodo_pago,
+      IFNULL(moneda,'Bs') AS moneda,
+      CASE
+        WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+        ELSE
+          IFNULL(NULLIF(tasa_moneda,0),
+            CASE
+              WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+              ELSE 1.000000
+            END
+          )
+      END AS tasa_calc,
+      ROUND(SUM(COALESCE(monto_moneda, monto_bs, 0)), 2) AS monto_moneda_sum,
+      ROUND(SUM(IFNULL(monto_bs,0)), 2) AS monto_bs_sum
+    FROM cobros_cliente_detalle
+    WHERE cobros_cliente = p_cobro_id
+    GROUP BY IFNULL(banco,0), IFNULL(metodo_pago,''), IFNULL(moneda,'Bs'),
+             CASE
+               WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+               ELSE
+                 IFNULL(NULLIF(tasa_moneda,0),
+                   CASE
+                     WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+                     ELSE 1.000000
+                   END
+                 )
+             END;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  -- Cuentas
+  SET v_cta_cxc     = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+  SET v_cta_dif_gan = fn_cta_id_mdk('CTA_DIF_CAMBIARIA_GAN');
+  SET v_cta_dif_per = fn_cta_id_mdk('CTA_DIF_CAMBIARIA_PER');
+  SET v_cta_caja    = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos  = fn_cta_id_mdk('CTA_BANCOS');
+
+  IF v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL OR v_cta_dif_gan IS NULL OR v_cta_dif_per IS NULL
+     OR v_cta_caja IS NULL OR v_cta_bancos IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CxC/Anticipo/DifGan/DifPer/Caja/Bancos).';
+  END IF;
+
+  -- Cabecera cobro
+  SELECT fecha, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_id_documento, v_username, v_ref
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicados
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total Bs del cobro
+  SELECT ROUND(SUM(IFNULL(monto_bs,0)),2)
+    INTO v_total_bs
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF IFNULL(v_total_bs,0) <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Datos de la factura (si aplica)
+  SET v_fact_moneda = 'Bs';
+  SET v_fact_tasa = 1.000000;
+
+  IF v_id_documento <> 0 THEN
+    SELECT IFNULL(moneda,'Bs'), IFNULL(NULLIF(tasa_dia,0),1.000000)
+      INTO v_fact_moneda, v_fact_tasa
+    FROM salidas
+    WHERE id = v_id_documento
+    LIMIT 1;
+  END IF;
+
+  -- Crear cabecera del asiento
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_ref,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   'Bs', 1.000000,
+   v_total_bs,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Detalle por grupos
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO g_banco, g_metodo, g_moneda, g_tasa, g_monto_moneda, g_monto_bs;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    IF IFNULL(g_monto_bs,0) <= 0 THEN
+      ITERATE read_loop;
+    END IF;
+
+    -- Mapeo método
+    SET m_tipo_destino = NULL;
+    SET m_cuenta_id = NULL;
+    SET m_forzar_destino = 'AUTO';
+
+    SELECT tipo_destino, cuenta_id, forzar_destino
+      INTO m_tipo_destino, m_cuenta_id, m_forzar_destino
+    FROM cont_metodo_cuenta_mdk
+    WHERE metodo_pago = g_metodo AND estado = 1
+    LIMIT 1;
+
+    IF m_tipo_destino IS NULL THEN
+      SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Método sin mapeo en cont_metodo_cuenta_mdk.';
+    END IF;
+
+    -- Resolver cuenta DEBE
+    SET v_cuenta_debe = NULL;
+
+    IF m_tipo_destino IN ('PASIVO','OTRO') THEN
+      IF m_cuenta_id IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Método PASIVO/OTRO sin cuenta_id en cont_metodo_cuenta_mdk.';
+      END IF;
+      SET v_cuenta_debe = m_cuenta_id;
+    ELSE
+      IF m_forzar_destino = 'CAJA' THEN
+        SET v_cuenta_debe = v_cta_caja;
+      ELSEIF m_forzar_destino = 'BANCO' THEN
+        SET v_cuenta_debe = v_cta_bancos;
+      ELSE
+        SET v_cuenta_debe = IF(IFNULL(g_banco,0) > 0, v_cta_bancos, v_cta_caja);
+      END IF;
+    END IF;
+
+    -- DEBE: entrada según método
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (v_asiento_id, v_cuenta_debe, p_centro_costo_id,
+     CONCAT('Cobro metodo:', g_metodo, ' | banco:', IFNULL(g_banco,0)),
+     g_moneda, g_tasa, g_monto_moneda,
+     g_monto_bs, 0.00);
+
+    -- Calcular cuánto acreditar a CxC (histórico) cuando factura USD y grupo USD
+    SET v_aplica_cxc_bs = g_monto_bs;
+
+    IF v_id_documento <> 0 AND v_fact_moneda = 'USD' AND g_moneda = 'USD' THEN
+      SET v_aplica_cxc_bs = ROUND(IFNULL(g_monto_moneda,0) * v_fact_tasa, 2);
+    END IF;
+
+    -- HABER: CxC o Anticipo (por el monto aplicado)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (v_asiento_id,
+     IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+     p_centro_costo_id,
+     CONCAT(IF(v_id_documento=0,'Anticipo','Cobro'), ' aplicado | metodo:', g_metodo),
+     g_moneda, g_tasa, g_monto_moneda,
+     0.00, v_aplica_cxc_bs);
+
+    -- Diferencia cambiaria (solo si cobro a factura y factura USD y grupo USD)
+    IF v_id_documento <> 0 AND v_fact_moneda = 'USD' AND g_moneda = 'USD' THEN
+      SET v_diff_bs = ROUND(g_monto_bs - v_aplica_cxc_bs, 2);
+
+      IF v_diff_bs > 0 THEN
+        -- Ganancia: crédito
+        INSERT INTO cont_asiento_detalle_mdk
+        (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+        VALUES
+        (v_asiento_id, v_cta_dif_gan, p_centro_costo_id,
+         'Diferencia cambiaria (ganancia)', 'Bs', 1.000000, v_diff_bs, 0.00, v_diff_bs);
+
+      ELSEIF v_diff_bs < 0 THEN
+        -- Pérdida: débito
+        INSERT INTO cont_asiento_detalle_mdk
+        (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+        VALUES
+        (v_asiento_id, v_cta_dif_per, p_centro_costo_id,
+         'Diferencia cambiaria (pérdida)', 'Bs', 1.000000, ABS(v_diff_bs), ABS(v_diff_bs), 0.00);
+      END IF;
+    END IF;
+
+  END LOOP;
+
+  CLOSE cur;
+
+  -- Validación final: Debe = Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+DELIMITER ;
+
+
+/* Create Procedure in target  */
+
+DELIMITER $$
+CREATE PROCEDURE `sp_mdk_asiento_cobro_cliente_detallado_v2`(
+  IN p_cobro_id INT UNSIGNED,
+  IN p_centro_costo_id BIGINT
+)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_id_documento INT;
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_ref VARCHAR(60);
+
+  DECLARE v_asiento_id BIGINT;
+  DECLARE v_total_bs DECIMAL(18,2);
+
+  -- Cuentas base desde config
+  DECLARE v_cta_caja BIGINT;
+  DECLARE v_cta_bancos BIGINT;
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ant_cli BIGINT;
+
+  -- Cursor (grupos)
+  DECLARE done INT DEFAULT 0;
+  DECLARE g_banco INT;
+  DECLARE g_metodo VARCHAR(10);
+  DECLARE g_moneda VARCHAR(6);
+  DECLARE g_tasa DECIMAL(20,6);
+  DECLARE g_monto_moneda DECIMAL(18,2);
+  DECLARE g_monto_bs DECIMAL(18,2);
+
+  -- Mapeo método
+  DECLARE m_tipo_destino VARCHAR(15);
+  DECLARE m_cuenta_id BIGINT;
+  DECLARE m_forzar_destino VARCHAR(10);
+
+  -- Cuenta final DEBE del grupo
+  DECLARE v_cuenta_debe BIGINT;
+
+  DECLARE cur CURSOR FOR
+    SELECT
+      IFNULL(banco,0) AS banco,
+      IFNULL(metodo_pago,'') AS metodo_pago,
+      IFNULL(moneda,'Bs') AS moneda,
+      CASE
+        WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+        ELSE
+          IFNULL(NULLIF(tasa_moneda,0),
+            CASE
+              WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+              ELSE 1.000000
+            END
+          )
+      END AS tasa_calc,
+      ROUND(SUM(COALESCE(monto_moneda, monto_bs, 0)), 2) AS monto_moneda_sum,
+      ROUND(SUM(IFNULL(monto_bs,0)), 2) AS monto_bs_sum
+    FROM cobros_cliente_detalle
+    WHERE cobros_cliente = p_cobro_id
+    GROUP BY IFNULL(banco,0), IFNULL(metodo_pago,''), IFNULL(moneda,'Bs'),
+             CASE
+               WHEN IFNULL(moneda,'Bs') IN ('Bs','VES') THEN 1.000000
+               ELSE
+                 IFNULL(NULLIF(tasa_moneda,0),
+                   CASE
+                     WHEN IFNULL(monto_moneda,0) > 0 THEN ROUND(IFNULL(monto_bs,0) / monto_moneda, 6)
+                     ELSE 1.000000
+                   END
+                 )
+             END;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+  -- Cuentas base
+  SET v_cta_caja    = fn_cta_id_mdk('CTA_CAJA');
+  SET v_cta_bancos  = fn_cta_id_mdk('CTA_BANCOS');
+  SET v_cta_cxc     = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ant_cli = fn_cta_id_mdk('CTA_ANTICIPO_CLIENTE');
+
+  IF v_cta_caja IS NULL OR v_cta_bancos IS NULL OR v_cta_cxc IS NULL OR v_cta_ant_cli IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CAJA/CTA_BANCOS/CTA_CXC/CTA_ANTICIPO_CLIENTE).';
+  END IF;
+
+  -- Cabecera de cobro
+  SELECT fecha, id_documento, username, IFNULL(referencia,'')
+    INTO v_fecha, v_id_documento, v_username, v_ref
+  FROM cobros_cliente
+  WHERE id = p_cobro_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro no encontrado.';
+  END IF;
+
+  -- Evitar duplicados
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE origen_tabla='cobros_cliente' AND origen_id=p_cobro_id AND anulado=0
+      AND modulo_origen IN ('COBRO','ANTICIPO_CLI')
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento para este cobro/anticipo.';
+  END IF;
+
+  -- Total Bs
+  SELECT ROUND(SUM(IFNULL(monto_bs,0)),2)
+    INTO v_total_bs
+  FROM cobros_cliente_detalle
+  WHERE cobros_cliente = p_cobro_id;
+
+  IF IFNULL(v_total_bs,0) <= 0 THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cobro sin detalle o monto_bs=0.';
+  END IF;
+
+  -- Crear cabecera del asiento (cabecera en Bs; detalle guarda moneda real)
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   IF(v_id_documento=0, CONCAT('ANTICIPO CLIENTE #', p_cobro_id), CONCAT('COBRO CLIENTE #', p_cobro_id)),
+   v_ref,
+   IF(v_id_documento=0, 'ANTICIPO_CLI', 'COBRO'),
+   'cobros_cliente',
+   p_cobro_id,
+   NULL,
+   'Bs', 1.000000,
+   v_total_bs,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Detalle por grupos
+  OPEN cur;
+
+  read_loop: LOOP
+    FETCH cur INTO g_banco, g_metodo, g_moneda, g_tasa, g_monto_moneda, g_monto_bs;
+    IF done = 1 THEN
+      LEAVE read_loop;
+    END IF;
+
+    IF IFNULL(g_monto_bs,0) <= 0 THEN
+      ITERATE read_loop;
+    END IF;
+
+    -- Buscar mapeo del método
+    SET m_tipo_destino = NULL;
+    SET m_cuenta_id = NULL;
+    SET m_forzar_destino = 'AUTO';
+
+    SELECT tipo_destino, cuenta_id, forzar_destino
+      INTO m_tipo_destino, m_cuenta_id, m_forzar_destino
+    FROM cont_metodo_cuenta_mdk
+    WHERE metodo_pago = g_metodo AND estado = 1
+    LIMIT 1;
+
+    IF m_tipo_destino IS NULL THEN
+      SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Método de pago sin mapeo en cont_metodo_cuenta_mdk.';
+    END IF;
+
+    -- Resolver cuenta DEBE
+    SET v_cuenta_debe = NULL;
+
+    IF m_tipo_destino IN ('PASIVO','OTRO') THEN
+      -- método especial: debe ir directo a una cuenta fija
+      IF m_cuenta_id IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+          SET MESSAGE_TEXT = 'Método PASIVO/OTRO sin cuenta_id en cont_metodo_cuenta_mdk.';
+      END IF;
+      SET v_cuenta_debe = m_cuenta_id;
+
+    ELSE
+      -- CAJA_BANCO
+      IF m_forzar_destino = 'CAJA' THEN
+        SET v_cuenta_debe = v_cta_caja;
+      ELSEIF m_forzar_destino = 'BANCO' THEN
+        SET v_cuenta_debe = v_cta_bancos;
+      ELSE
+        -- AUTO: decide por banco>0
+        SET v_cuenta_debe = IF(IFNULL(g_banco,0) > 0, v_cta_bancos, v_cta_caja);
+      END IF;
+    END IF;
+
+    -- DEBE (cuenta según método)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      v_cuenta_debe,
+      p_centro_costo_id,
+      CONCAT('Cobro metodo:', g_metodo, ' | banco:', IFNULL(g_banco,0)),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      g_monto_bs,
+      0.00
+    );
+
+    -- HABER (CxC o Anticipo cliente)
+    INSERT INTO cont_asiento_detalle_mdk
+    (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+    VALUES
+    (
+      v_asiento_id,
+      IF(v_id_documento=0, v_cta_ant_cli, v_cta_cxc),
+      p_centro_costo_id,
+      CONCAT(IF(v_id_documento=0,'Anticipo','Cobro'), ' aplicado | metodo:', g_metodo),
+      g_moneda,
+      g_tasa,
+      g_monto_moneda,
+      0.00,
+      g_monto_bs
+    );
+
+  END LOOP;
+
+  CLOSE cur;
+
+  -- Validación Debe/Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento COBRO/ANTICIPO descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+DELIMITER ;
+
+
+/* Create Procedure in target  */
+
+DELIMITER $$
+CREATE PROCEDURE `sp_mdk_asiento_venta_salida`(IN p_salida_id INT UNSIGNED, IN p_centro_costo_id BIGINT)
+BEGIN
+  DECLARE v_fecha DATE;
+  DECLARE v_cliente INT;
+  DECLARE v_nro VARCHAR(60);
+  DECLARE v_moneda VARCHAR(6);
+  DECLARE v_tasa DECIMAL(20,6);
+  DECLARE v_total_bs DECIMAL(18,2);
+  DECLARE v_total_trx DECIMAL(18,2);
+  DECLARE v_username VARCHAR(30);
+  DECLARE v_asiento_id BIGINT;
+
+  DECLARE v_cta_cxc BIGINT;
+  DECLARE v_cta_ventas BIGINT;
+
+  -- Cuentas desde configuración
+  SET v_cta_cxc = fn_cta_id_mdk('CTA_CXC');
+  SET v_cta_ventas = fn_cta_id_mdk('CTA_VENTAS');
+
+  IF v_cta_cxc IS NULL OR v_cta_ventas IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Faltan cuentas en cont_configuracion_mdk (CTA_CXC / CTA_VENTAS).';
+  END IF;
+
+  -- Datos de la salida
+  SELECT DATE(fecha), cliente, nro_documento, moneda,
+         IFNULL(NULLIF(tasa_dia,0),1),
+         IFNULL(total,0),
+         IF(moneda='USD', IFNULL(NULLIF(monto_usd,0), ROUND(IFNULL(total,0)/IFNULL(NULLIF(tasa_dia,0),1),2)), IFNULL(total,0)),
+         username
+    INTO v_fecha, v_cliente, v_nro, v_moneda, v_tasa, v_total_bs, v_total_trx, v_username
+  FROM salidas
+  WHERE id = p_salida_id
+  LIMIT 1;
+
+  IF v_fecha IS NULL THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Salida no encontrada.';
+  END IF;
+
+  -- Evitar duplicar: si ya existe asiento para esa salida y módulo VENTA, no crear otro
+  IF EXISTS (
+    SELECT 1 FROM cont_asiento_mdk
+    WHERE modulo_origen='VENTA' AND origen_tabla='salidas' AND origen_id=p_salida_id AND anulado=0
+    LIMIT 1
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe asiento VENTA para esta salida.';
+  END IF;
+
+  -- Crear cabecera de asiento
+  INSERT INTO cont_asiento_mdk
+  (fecha, descripcion, referencia, modulo_origen, origen_tabla, origen_id, tercero_id,
+   moneda_trx, tasa_trx, total_moneda_trx, total_bs, centro_costo_id, username)
+  VALUES
+  (v_fecha,
+   CONCAT('VENTA SALIDA #', p_salida_id),
+   v_nro,
+   'VENTA',
+   'salidas',
+   p_salida_id,
+   NULL, -- tercero_id lo enlazamos luego cuando tengas cont_tercero_mdk poblado
+   v_moneda,
+   v_tasa,
+   v_total_trx,
+   v_total_bs,
+   p_centro_costo_id,
+   v_username);
+
+  SET v_asiento_id = LAST_INSERT_ID();
+
+  -- Detalle: Debe CxC / Haber Ventas
+  INSERT INTO cont_asiento_detalle_mdk
+  (asiento_id, cuenta_id, centro_costo_id, concepto, moneda_trx, tasa_trx, monto_moneda_trx, debe_bs, haber_bs)
+  VALUES
+  (v_asiento_id, v_cta_cxc, p_centro_costo_id, 'CxC por venta', v_moneda, v_tasa, v_total_trx, v_total_bs, 0.00),
+  (v_asiento_id, v_cta_ventas, p_centro_costo_id, 'Ingresos por venta', v_moneda, v_tasa, v_total_trx, 0.00, v_total_bs);
+
+  -- Validación Debe/Haber
+  IF (
+    (SELECT ROUND(SUM(debe_bs - haber_bs),2)
+     FROM cont_asiento_detalle_mdk
+     WHERE asiento_id = v_asiento_id) <> 0
+  ) THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Asiento VENTA descuadrado (Debe != Haber).';
+  END IF;
+
+END$$
+DELIMITER ;
+
+
+/* Create Procedure in target  */
+
+DELIMITER $$
+CREATE PROCEDURE `sp_onhand_item`(IN articulo_id INT)
+BEGIN
+    /* 1. DECLARACION DE VARIABLES (SIEMPRE PRIMERO) */
+    DECLARE v_onhand INT DEFAULT 0; 
+    DECLARE v_onhandstore INT DEFAULT 0; 
+    DECLARE v_onorder INT DEFAULT 0; 
+    DECLARE v_ontransit INT DEFAULT 0;
+    DECLARE v_lote_rec VARCHAR(20) DEFAULT NULL;
+    DECLARE v_fecha_vencimiento_rec DATE DEFAULT NULL;
+    DECLARE v_final INTEGER DEFAULT 0;
+    DECLARE v_almacen_defecto VARCHAR(50);
+    DECLARE v_tipo_doc_050 VARCHAR(50);
+
+    /* 2. DECLARACION DEL CURSOR (DESPUES DE LAS VARIABLES) */
+    DECLARE cursor1 CURSOR FOR 
+        SELECT x.lote, MIN(x.fecha_vencimiento)  
+        FROM (
+            SELECT 
+                a.lote, 
+                IFNULL(a.fecha_vencimiento, '1990-01-01') AS fecha_vencimiento, 
+                a.cantidad_movimiento
+            FROM entradas_salidas AS a 
+            JOIN entradas AS b ON b.tipo_documento = a.tipo_documento AND b.id = a.id_documento 
+            WHERE ((a.tipo_documento = 'TDCAEN' AND b.estatus <> 'ANULADO') OR 
+                   (a.tipo_documento = 'TDCNRP' AND a.check_ne = 'S' AND b.estatus <> 'ANULADO'))
+              AND a.articulo = articulo_id AND a.newdata = 'S'
+            
+            UNION ALL 
+            
+            SELECT 
+                a.lote, 
+                IFNULL(a.fecha_vencimiento, '1990-01-01') AS fecha_vencimiento, 
+                a.cantidad_movimiento
+            FROM entradas_salidas AS a 
+            JOIN salidas AS b ON b.tipo_documento = a.tipo_documento AND b.id = a.id_documento 
+            WHERE (a.tipo_documento IN ('TDCASA','TDCNET') AND b.estatus <> 'ANULADO') 
+              AND a.articulo = articulo_id AND a.newdata = 'S'
+        ) AS x 
+        WHERE x.fecha_vencimiento > CURDATE() 
+        GROUP BY x.lote 
+        HAVING SUM(x.cantidad_movimiento) > 0 
+        ORDER BY 2 ASC LIMIT 1;
+
+    /* 3. DECLARACION DEL HANDLER (DESPUES DEL CURSOR) */
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_final = 1;
+
+    /* 4. ASIGNACIONES Y LOGICA (DESPUES DE TODAS LAS DECLARACIONES) */
+    SELECT valor1 INTO v_almacen_defecto FROM parametro WHERE codigo = '002' LIMIT 1;
+    SELECT valor1 INTO v_tipo_doc_050 FROM parametro WHERE codigo = '050' LIMIT 1;
+
+    OPEN cursor1;
+    FETCH cursor1 INTO v_lote_rec, v_fecha_vencimiento_rec;
+    CLOSE cursor1;
+
+    -- Cálculo OnHand (Solo almacén por defecto)
+    SELECT SUM(xx.cantidad_movimiento) INTO v_onhand 
+    FROM (
+        SELECT aa.cantidad_movimiento FROM entradas_salidas AS aa 
+        JOIN entradas AS bb ON bb.tipo_documento = aa.tipo_documento AND bb.id = aa.id_documento 
+        WHERE ((aa.tipo_documento = 'TDCAEN' AND bb.estatus <> 'ANULADO') OR 
+               (aa.tipo_documento = 'TDCNRP' AND aa.check_ne = 'S' AND bb.estatus <> 'ANULADO'))
+          AND aa.articulo = articulo_id AND aa.almacen = v_almacen_defecto AND aa.newdata = 'S'
+        UNION ALL 
+        SELECT aa.cantidad_movimiento FROM entradas_salidas AS aa 
+        JOIN salidas AS bb ON bb.tipo_documento = aa.tipo_documento AND bb.id = aa.id_documento 
+        WHERE ((aa.tipo_documento = 'TDCPDV' AND bb.estatus = 'NUEVO') OR 
+               (aa.tipo_documento IN (v_tipo_doc_050, 'TDCASA') AND bb.estatus <> 'ANULADO'))
+          AND aa.articulo = articulo_id AND aa.almacen = v_almacen_defecto AND aa.newdata = 'S'
+    ) AS xx;
+
+    -- Cálculo Tránsito
+    SELECT SUM(a.cantidad_movimiento) INTO v_ontransit 
+    FROM entradas_salidas AS a 
+    JOIN entradas AS b ON b.tipo_documento = a.tipo_documento AND b.id = a.id_documento 
+    WHERE (a.tipo_documento = 'TDCPDC' AND b.estatus = 'NUEVO') 
+      AND a.articulo = articulo_id AND a.newdata = 'S';
+
+    -- Cálculo Pedido (Ventas + Online)
+    SELECT SUM(xx.cantidad_movimiento) INTO v_onorder 
+    FROM (
+        SELECT a.cantidad_movimiento FROM entradas_salidas AS a 
+        JOIN salidas AS b ON b.tipo_documento = a.tipo_documento AND b.id = a.id_documento 
+        WHERE (a.tipo_documento = 'TDCPDV' AND b.estatus = 'NUEVO') 
+          AND a.articulo = articulo_id AND a.newdata = 'S'
+        UNION ALL 
+        SELECT aa.cantidad_movimiento FROM pedidos_detalles_online AS aa 
+        JOIN pedidos_online AS bb ON bb.id = aa.id_documento 
+        WHERE bb.estatus = 'NUEVO' AND aa.articulo = articulo_id 
+    ) AS xx;
+
+    -- Cálculo OnHandStore (Todos los almacenes)
+    SELECT SUM(xx.cantidad_movimiento) INTO v_onhandstore 
+    FROM (
+        SELECT aa.cantidad_movimiento FROM entradas_salidas AS aa 
+        JOIN entradas AS bb ON bb.tipo_documento = aa.tipo_documento AND bb.id = aa.id_documento 
+        WHERE ((aa.tipo_documento = 'TDCAEN' AND bb.estatus <> 'ANULADO') OR 
+               (aa.tipo_documento = 'TDCNRP' AND aa.check_ne = 'S' AND bb.estatus <> 'ANULADO'))
+          AND aa.articulo = articulo_id AND aa.newdata = 'S'
+        UNION ALL 
+        SELECT aa.cantidad_movimiento FROM entradas_salidas AS aa 
+        JOIN salidas AS bb ON bb.tipo_documento = aa.tipo_documento AND bb.id = aa.id_documento 
+        WHERE ((aa.tipo_documento = 'TDCPDV' AND bb.estatus = 'NUEVO') OR 
+               (aa.tipo_documento IN (v_tipo_doc_050, 'TDCASA') AND bb.estatus <> 'ANULADO'))
+          AND aa.articulo = articulo_id AND aa.newdata = 'S'
+    ) AS xx;
+
+    -- Actualización Final
+    UPDATE articulo 
+    SET 
+        cantidad_en_mano = IFNULL(v_onhand, 0), 
+        cantidad_en_almacenes = IFNULL(v_onhandstore, 0), 
+        cantidad_en_pedido = IFNULL(v_onorder, 0),
+        cantidad_en_transito = IFNULL(v_ontransit, 0),
+        lote = v_lote_rec, 
+        fecha_vencimiento = v_fecha_vencimiento_rec 
+    WHERE id = articulo_id;
+
+END$$
+DELIMITER ;
+
+
+/*  Create Function in target  */
+
+DELIMITER $$
+CREATE FUNCTION `fn_cta_id_mdk`(p_clave VARCHAR(60)) RETURNS bigint
+    READS SQL DATA
+    DETERMINISTIC
+BEGIN
+  DECLARE v_id BIGINT;
+  SELECT cuenta_id INTO v_id
+  FROM cont_configuracion_mdk
+  WHERE clave = p_clave AND estado = 1
+  LIMIT 1;
+  RETURN v_id;
+END$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `tg_delete_item` AFTER DELETE ON `entradas_salidas` 
+    FOR EACH ROW BEGIN
+    -- Call the common procedure ran if there is an INSERT or UPDATE on `table`
+    -- NEW.id is an example parameter passed to the procedure but is not required
+    -- if you do not need to pass anything to your procedure.
+    CALL sp_onhand_item(OLD.articulo);
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `tg_delete_item_pd` AFTER DELETE ON `pedidos_detalles_online` 
+    FOR EACH ROW BEGIN
+    -- Call the common procedure ran if there is an INSERT or UPDATE on `table`
+    -- NEW.id is an example parameter passed to the procedure but is not required
+    -- if you do not need to pass anything to your procedure.
+    CALL sp_onhand_item(OLD.articulo);
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `tg_insert_item` AFTER INSERT ON `entradas_salidas` 
+    FOR EACH ROW BEGIN
+    -- Call the common procedure ran if there is an INSERT or UPDATE on `table`
+    -- NEW.id is an example parameter passed to the procedure but is not required
+    -- if you do not need to pass anything to your procedure.
+    CALL sp_onhand_item(NEW.articulo);
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `tg_insert_item_pd` AFTER INSERT ON `pedidos_detalles_online` 
+    FOR EACH ROW BEGIN
+    -- Call the common procedure ran if there is an INSERT or UPDATE on `table`
+    -- NEW.id is an example parameter passed to the procedure but is not required
+    -- if you do not need to pass anything to your procedure.
+    CALL sp_onhand_item(NEW.articulo);
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `tg_update_item` AFTER UPDATE ON `entradas_salidas` 
+    FOR EACH ROW BEGIN
+    -- Call the common procedure ran if there is an INSERT or UPDATE on `table`
+    -- NEW.id is an example parameter passed to the procedure but is not required
+    -- if you do not need to pass anything to your procedure.
+    CALL sp_onhand_item(OLD.articulo);
+    CALL sp_onhand_item(NEW.articulo);
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `tg_update_item_pd` AFTER UPDATE ON `pedidos_detalles_online` 
+    FOR EACH ROW BEGIN
+    -- Call the common procedure ran if there is an INSERT or UPDATE on `table`
+    -- NEW.id is an example parameter passed to the procedure but is not required
+    -- if you do not need to pass anything to your procedure.
+    CALL sp_onhand_item(OLD.articulo);
+    CALL sp_onhand_item(NEW.articulo);
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_entradas_salidas_ad_audit` AFTER DELETE ON `entradas_salidas` 
+    FOR EACH ROW BEGIN
+    IF OLD.tipo_documento = 'TDCFCV' THEN
+        INSERT INTO audittrail
+        (`datetime`, `script`, `user`, `action`, `table`, `field`, `keyvalue`, `oldvalue`, `newvalue`)
+        VALUES
+        (
+            NOW(),
+            'TRIGGER entradas_salidas (view_out) DOC. FISCAL',
+            COALESCE(@app_user, CURRENT_USER()),
+            'DELETE (ELIMINA)',
+            'entradas_salidas',
+            '*',
+            OLD.id,
+            JSON_OBJECT(
+                'id', OLD.id,
+                'tipo_documento', OLD.tipo_documento,
+                'id_documento', OLD.id_documento,
+                'fabricante', OLD.fabricante,
+                'articulo', OLD.articulo,
+                'lote', OLD.lote,
+                'fecha_vencimiento', OLD.fecha_vencimiento,
+                'almacen', OLD.almacen,
+                'cantidad_articulo', OLD.cantidad_articulo,
+                'cantidad_movimiento', OLD.cantidad_movimiento,
+                'costo_unidad', OLD.costo_unidad,
+                'costo', OLD.costo,
+                'precio_unidad', OLD.precio_unidad,
+                'precio', OLD.precio,
+                'alicuota', OLD.alicuota,
+                'descuento', OLD.descuento,
+                'precio_unidad_sin_desc', OLD.precio_unidad_sin_desc,
+                'check_ne', OLD.check_ne,
+                'packer_cantidad', OLD.packer_cantidad,
+                'newdata', OLD.newdata
+            ),
+            NULL
+        );
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_entradas_salidas_ai_audit` AFTER INSERT ON `entradas_salidas` 
+    FOR EACH ROW BEGIN
+    IF NEW.tipo_documento = 'TDCFCV' THEN
+        INSERT INTO audittrail
+        (`datetime`, `script`, `user`, `action`, `table`, `field`, `keyvalue`, `oldvalue`, `newvalue`)
+        VALUES
+        (
+            NOW(),
+            'TRIGGER entradas_salidas (view_out) DOC. FISCAL',
+            COALESCE(@app_user, CURRENT_USER()),
+            'INSERT (AGREGA)',
+            'entradas_salidas',
+            '*',
+            NEW.id,
+            NULL,
+            JSON_OBJECT(
+                'id', NEW.id,
+                'tipo_documento', NEW.tipo_documento,
+                'id_documento', NEW.id_documento,
+                'fabricante', NEW.fabricante,
+                'articulo', NEW.articulo,
+                'lote', NEW.lote,
+                'fecha_vencimiento', NEW.fecha_vencimiento,
+                'almacen', NEW.almacen,
+                'cantidad_articulo', NEW.cantidad_articulo,
+                'cantidad_movimiento', NEW.cantidad_movimiento,
+                'costo_unidad', NEW.costo_unidad,
+                'costo', NEW.costo,
+                'precio_unidad', NEW.precio_unidad,
+                'precio', NEW.precio,
+                'alicuota', NEW.alicuota,
+                'descuento', NEW.descuento,
+                'precio_unidad_sin_desc', NEW.precio_unidad_sin_desc,
+                'check_ne', NEW.check_ne,
+                'packer_cantidad', NEW.packer_cantidad,
+                'newdata', NEW.newdata
+            )
+        );
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_entradas_salidas_au_audit` AFTER UPDATE ON `entradas_salidas` 
+    FOR EACH ROW BEGIN
+    IF OLD.tipo_documento = 'TDCFCV' OR NEW.tipo_documento = 'TDCFCV' THEN
+
+        IF NOT (
+            OLD.tipo_documento <=> NEW.tipo_documento AND
+            OLD.id_documento <=> NEW.id_documento AND
+            OLD.fabricante <=> NEW.fabricante AND
+            OLD.articulo <=> NEW.articulo AND
+            OLD.lote <=> NEW.lote AND
+            OLD.fecha_vencimiento <=> NEW.fecha_vencimiento AND
+            OLD.almacen <=> NEW.almacen AND
+            OLD.cantidad_articulo <=> NEW.cantidad_articulo AND
+            OLD.articulo_unidad_medida <=> NEW.articulo_unidad_medida AND
+            OLD.cantidad_unidad_medida <=> NEW.cantidad_unidad_medida AND
+            OLD.cantidad_movimiento <=> NEW.cantidad_movimiento AND
+            OLD.costo_unidad <=> NEW.costo_unidad AND
+            OLD.costo <=> NEW.costo AND
+            OLD.precio_unidad <=> NEW.precio_unidad AND
+            OLD.precio <=> NEW.precio AND
+            OLD.id_compra <=> NEW.id_compra AND
+            OLD.alicuota <=> NEW.alicuota AND
+            OLD.cantidad_movimiento_consignacion <=> NEW.cantidad_movimiento_consignacion AND
+            OLD.id_consignacion <=> NEW.id_consignacion AND
+            OLD.descuento <=> NEW.descuento AND
+            OLD.precio_unidad_sin_desc <=> NEW.precio_unidad_sin_desc AND
+            OLD.check_ne <=> NEW.check_ne AND
+            OLD.packer_cantidad <=> NEW.packer_cantidad AND
+            OLD.newdata <=> NEW.newdata
+        ) THEN
+
+            INSERT INTO audittrail
+            (`datetime`, `script`, `user`, `action`, `table`, `field`, `keyvalue`, `oldvalue`, `newvalue`)
+            VALUES
+            (
+                NOW(),
+                'TRIGGER entradas_salidas (view_out) DOC. FISCAL',
+                COALESCE(@app_user, CURRENT_USER()),
+                'UPDATE (MODIFICA)',
+                'entradas_salidas',
+                '*',
+                NEW.id,
+
+                CONCAT('{',
+                    CONCAT_WS(',',
+                        IF(NOT OLD.tipo_documento <=> NEW.tipo_documento, CONCAT('"tipo_documento":', JSON_QUOTE(IFNULL(OLD.tipo_documento, 'NULL'))), NULL),
+                        IF(NOT OLD.id_documento <=> NEW.id_documento, CONCAT('"id_documento":', JSON_QUOTE(IFNULL(CAST(OLD.id_documento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.fabricante <=> NEW.fabricante, CONCAT('"fabricante":', JSON_QUOTE(IFNULL(CAST(OLD.fabricante AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.articulo <=> NEW.articulo, CONCAT('"articulo":', JSON_QUOTE(IFNULL(CAST(OLD.articulo AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.lote <=> NEW.lote, CONCAT('"lote":', JSON_QUOTE(IFNULL(OLD.lote, 'NULL'))), NULL),
+                        IF(NOT OLD.fecha_vencimiento <=> NEW.fecha_vencimiento, CONCAT('"fecha_vencimiento":', JSON_QUOTE(IFNULL(CAST(OLD.fecha_vencimiento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.almacen <=> NEW.almacen, CONCAT('"almacen":', JSON_QUOTE(IFNULL(OLD.almacen, 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_articulo <=> NEW.cantidad_articulo, CONCAT('"cantidad_articulo":', JSON_QUOTE(IFNULL(CAST(OLD.cantidad_articulo AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.articulo_unidad_medida <=> NEW.articulo_unidad_medida, CONCAT('"articulo_unidad_medida":', JSON_QUOTE(IFNULL(OLD.articulo_unidad_medida, 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_unidad_medida <=> NEW.cantidad_unidad_medida, CONCAT('"cantidad_unidad_medida":', JSON_QUOTE(IFNULL(CAST(OLD.cantidad_unidad_medida AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_movimiento <=> NEW.cantidad_movimiento, CONCAT('"cantidad_movimiento":', JSON_QUOTE(IFNULL(CAST(OLD.cantidad_movimiento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.costo_unidad <=> NEW.costo_unidad, CONCAT('"costo_unidad":', JSON_QUOTE(IFNULL(CAST(OLD.costo_unidad AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.costo <=> NEW.costo, CONCAT('"costo":', JSON_QUOTE(IFNULL(CAST(OLD.costo AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.precio_unidad <=> NEW.precio_unidad, CONCAT('"precio_unidad":', JSON_QUOTE(IFNULL(CAST(OLD.precio_unidad AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.precio <=> NEW.precio, CONCAT('"precio":', JSON_QUOTE(IFNULL(CAST(OLD.precio AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.id_compra <=> NEW.id_compra, CONCAT('"id_compra":', JSON_QUOTE(IFNULL(CAST(OLD.id_compra AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.alicuota <=> NEW.alicuota, CONCAT('"alicuota":', JSON_QUOTE(IFNULL(CAST(OLD.alicuota AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_movimiento_consignacion <=> NEW.cantidad_movimiento_consignacion, CONCAT('"cantidad_movimiento_consignacion":', JSON_QUOTE(IFNULL(CAST(OLD.cantidad_movimiento_consignacion AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.id_consignacion <=> NEW.id_consignacion, CONCAT('"id_consignacion":', JSON_QUOTE(IFNULL(CAST(OLD.id_consignacion AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.descuento <=> NEW.descuento, CONCAT('"descuento":', JSON_QUOTE(IFNULL(CAST(OLD.descuento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.precio_unidad_sin_desc <=> NEW.precio_unidad_sin_desc, CONCAT('"precio_unidad_sin_desc":', JSON_QUOTE(IFNULL(CAST(OLD.precio_unidad_sin_desc AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.check_ne <=> NEW.check_ne, CONCAT('"check_ne":', JSON_QUOTE(IFNULL(OLD.check_ne, 'NULL'))), NULL),
+                        IF(NOT OLD.packer_cantidad <=> NEW.packer_cantidad, CONCAT('"packer_cantidad":', JSON_QUOTE(IFNULL(CAST(OLD.packer_cantidad AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.newdata <=> NEW.newdata, CONCAT('"newdata":', JSON_QUOTE(IFNULL(OLD.newdata, 'NULL'))), NULL)
+                    ),
+                '}'),
+
+                CONCAT('{',
+                    CONCAT_WS(',',
+                        IF(NOT OLD.tipo_documento <=> NEW.tipo_documento, CONCAT('"tipo_documento":', JSON_QUOTE(IFNULL(NEW.tipo_documento, 'NULL'))), NULL),
+                        IF(NOT OLD.id_documento <=> NEW.id_documento, CONCAT('"id_documento":', JSON_QUOTE(IFNULL(CAST(NEW.id_documento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.fabricante <=> NEW.fabricante, CONCAT('"fabricante":', JSON_QUOTE(IFNULL(CAST(NEW.fabricante AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.articulo <=> NEW.articulo, CONCAT('"articulo":', JSON_QUOTE(IFNULL(CAST(NEW.articulo AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.lote <=> NEW.lote, CONCAT('"lote":', JSON_QUOTE(IFNULL(NEW.lote, 'NULL'))), NULL),
+                        IF(NOT OLD.fecha_vencimiento <=> NEW.fecha_vencimiento, CONCAT('"fecha_vencimiento":', JSON_QUOTE(IFNULL(CAST(NEW.fecha_vencimiento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.almacen <=> NEW.almacen, CONCAT('"almacen":', JSON_QUOTE(IFNULL(NEW.almacen, 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_articulo <=> NEW.cantidad_articulo, CONCAT('"cantidad_articulo":', JSON_QUOTE(IFNULL(CAST(NEW.cantidad_articulo AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.articulo_unidad_medida <=> NEW.articulo_unidad_medida, CONCAT('"articulo_unidad_medida":', JSON_QUOTE(IFNULL(NEW.articulo_unidad_medida, 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_unidad_medida <=> NEW.cantidad_unidad_medida, CONCAT('"cantidad_unidad_medida":', JSON_QUOTE(IFNULL(CAST(NEW.cantidad_unidad_medida AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_movimiento <=> NEW.cantidad_movimiento, CONCAT('"cantidad_movimiento":', JSON_QUOTE(IFNULL(CAST(NEW.cantidad_movimiento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.costo_unidad <=> NEW.costo_unidad, CONCAT('"costo_unidad":', JSON_QUOTE(IFNULL(CAST(NEW.costo_unidad AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.costo <=> NEW.costo, CONCAT('"costo":', JSON_QUOTE(IFNULL(CAST(NEW.costo AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.precio_unidad <=> NEW.precio_unidad, CONCAT('"precio_unidad":', JSON_QUOTE(IFNULL(CAST(NEW.precio_unidad AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.precio <=> NEW.precio, CONCAT('"precio":', JSON_QUOTE(IFNULL(CAST(NEW.precio AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.id_compra <=> NEW.id_compra, CONCAT('"id_compra":', JSON_QUOTE(IFNULL(CAST(NEW.id_compra AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.alicuota <=> NEW.alicuota, CONCAT('"alicuota":', JSON_QUOTE(IFNULL(CAST(NEW.alicuota AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.cantidad_movimiento_consignacion <=> NEW.cantidad_movimiento_consignacion, CONCAT('"cantidad_movimiento_consignacion":', JSON_QUOTE(IFNULL(CAST(NEW.cantidad_movimiento_consignacion AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.id_consignacion <=> NEW.id_consignacion, CONCAT('"id_consignacion":', JSON_QUOTE(IFNULL(CAST(NEW.id_consignacion AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.descuento <=> NEW.descuento, CONCAT('"descuento":', JSON_QUOTE(IFNULL(CAST(NEW.descuento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.precio_unidad_sin_desc <=> NEW.precio_unidad_sin_desc, CONCAT('"precio_unidad_sin_desc":', JSON_QUOTE(IFNULL(CAST(NEW.precio_unidad_sin_desc AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.check_ne <=> NEW.check_ne, CONCAT('"check_ne":', JSON_QUOTE(IFNULL(NEW.check_ne, 'NULL'))), NULL),
+                        IF(NOT OLD.packer_cantidad <=> NEW.packer_cantidad, CONCAT('"packer_cantidad":', JSON_QUOTE(IFNULL(CAST(NEW.packer_cantidad AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.newdata <=> NEW.newdata, CONCAT('"newdata":', JSON_QUOTE(IFNULL(NEW.newdata, 'NULL'))), NULL)
+                    ),
+                '}')
+            );
+        END IF;
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_salidas_ad_audit` AFTER DELETE ON `salidas` 
+    FOR EACH ROW BEGIN
+    IF OLD.tipo_documento = 'TDCFCV' THEN
+        INSERT INTO audittrail
+        (`datetime`, `script`, `user`, `action`, `table`, `field`, `keyvalue`, `oldvalue`, `newvalue`)
+        VALUES
+        (
+            NOW(),
+            'TRIGGER salidas (view_out_tdcfcv) DOC. FISCAL',
+            COALESCE(@app_user, CURRENT_USER()),
+            'DELETE (ELIMINA)',
+            'salidas',
+            '*',
+            OLD.id,
+            JSON_OBJECT(
+                'id', OLD.id,
+                'tipo_documento', OLD.tipo_documento,
+                'username', OLD.username,
+                'fecha', OLD.fecha,
+                'cliente', OLD.cliente,
+                'nro_documento', OLD.nro_documento,
+                'nro_control', OLD.nro_control,
+                'monto_total', OLD.monto_total,
+                'alicuota_iva', OLD.alicuota_iva,
+                'iva', OLD.iva,
+                'total', OLD.total,
+                'estatus', OLD.estatus,
+                'moneda', OLD.moneda,
+                'documento', OLD.documento,
+                'tasa_dia', OLD.tasa_dia,
+                'monto_usd', OLD.monto_usd,
+                'pagado', OLD.pagado,
+                'descuento', OLD.descuento,
+                'descuento2', OLD.descuento2,
+                'factura', OLD.factura,
+                'activo', OLD.activo,
+                'doc_afectado', OLD.doc_afectado,
+                'cerrado', OLD.cerrado,
+                'igtf', OLD.igtf,
+                'monto_base_igtf', OLD.monto_base_igtf,
+                'monto_igtf', OLD.monto_igtf,
+                'impreso', OLD.impreso,
+                'doc_afe', OLD.doc_afe
+            ),
+            NULL
+        );
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_salidas_ai_audit` AFTER INSERT ON `salidas` 
+    FOR EACH ROW BEGIN
+    IF NEW.tipo_documento = 'TDCFCV' THEN
+        INSERT INTO audittrail
+        (`datetime`, `script`, `user`, `action`, `table`, `field`, `keyvalue`, `oldvalue`, `newvalue`)
+        VALUES
+        (
+            NOW(),
+            'TRIGGER salidas (view_out_tdcfcv) DOC. FISCAL',
+            COALESCE(@app_user, CURRENT_USER()),
+            'INSERT (AGREGA)',
+            'salidas',
+            '*',
+            NEW.id,
+            NULL,
+            JSON_OBJECT(
+                'id', NEW.id,
+                'tipo_documento', NEW.tipo_documento,
+                'username', NEW.username,
+                'fecha', NEW.fecha,
+                'cliente', NEW.cliente,
+                'nro_documento', NEW.nro_documento,
+                'nro_control', NEW.nro_control,
+                'monto_total', NEW.monto_total,
+                'alicuota_iva', NEW.alicuota_iva,
+                'iva', NEW.iva,
+                'total', NEW.total,
+                'estatus', NEW.estatus,
+                'moneda', NEW.moneda,
+                'documento', NEW.documento,
+                'tasa_dia', NEW.tasa_dia,
+                'monto_usd', NEW.monto_usd,
+                'pagado', NEW.pagado,
+                'descuento', NEW.descuento,
+                'descuento2', NEW.descuento2,
+                'factura', NEW.factura,
+                'activo', NEW.activo,
+                'doc_afectado', NEW.doc_afectado,
+                'cerrado', NEW.cerrado,
+                'igtf', NEW.igtf,
+                'monto_base_igtf', NEW.monto_base_igtf,
+                'monto_igtf', NEW.monto_igtf,
+                'impreso', NEW.impreso,
+                'doc_afe', NEW.doc_afe
+            )
+        );
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_salidas_au_audit` AFTER UPDATE ON `salidas` 
+    FOR EACH ROW BEGIN
+    IF OLD.tipo_documento = 'TDCFCV' OR NEW.tipo_documento = 'TDCFCV' THEN
+
+        IF NOT (
+            OLD.id <=> NEW.id AND
+            OLD.tipo_documento <=> NEW.tipo_documento AND
+            OLD.username <=> NEW.username AND
+            OLD.fecha <=> NEW.fecha AND
+            OLD.cliente <=> NEW.cliente AND
+            OLD.nro_documento <=> NEW.nro_documento AND
+            OLD.nro_control <=> NEW.nro_control AND
+            OLD.monto_total <=> NEW.monto_total AND
+            OLD.alicuota_iva <=> NEW.alicuota_iva AND
+            OLD.iva <=> NEW.iva AND
+            OLD.total <=> NEW.total AND
+            OLD.estatus <=> NEW.estatus AND
+            OLD.moneda <=> NEW.moneda AND
+            OLD.documento <=> NEW.documento AND
+            OLD.tasa_dia <=> NEW.tasa_dia AND
+            OLD.monto_usd <=> NEW.monto_usd AND
+            OLD.pagado <=> NEW.pagado AND
+            OLD.descuento <=> NEW.descuento AND
+            OLD.descuento2 <=> NEW.descuento2 AND
+            OLD.factura <=> NEW.factura AND
+            OLD.activo <=> NEW.activo AND
+            OLD.doc_afectado <=> NEW.doc_afectado AND
+            OLD.cerrado <=> NEW.cerrado AND
+            OLD.igtf <=> NEW.igtf AND
+            OLD.monto_base_igtf <=> NEW.monto_base_igtf AND
+            OLD.monto_igtf <=> NEW.monto_igtf AND
+            OLD.impreso <=> NEW.impreso AND
+            OLD.doc_afe <=> NEW.doc_afe
+        ) THEN
+
+            INSERT INTO audittrail
+            (`datetime`, `script`, `user`, `action`, `table`, `field`, `keyvalue`, `oldvalue`, `newvalue`)
+            VALUES
+            (
+                NOW(),
+                'TRIGGER salidas (view_out_tdcfcv) DOC. FISCAL',
+                COALESCE(@app_user, CURRENT_USER()),
+                'UPDATE (MODIFICA)',
+                'salidas',
+                '*',
+                NEW.id,
+
+                CONCAT('{',
+                    CONCAT_WS(',',
+                        IF(NOT OLD.id <=> NEW.id, CONCAT('"id":', JSON_QUOTE(IFNULL(CAST(OLD.id AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.tipo_documento <=> NEW.tipo_documento, CONCAT('"tipo_documento":', JSON_QUOTE(IFNULL(OLD.tipo_documento, 'NULL'))), NULL),
+                        IF(NOT OLD.username <=> NEW.username, CONCAT('"username":', JSON_QUOTE(IFNULL(OLD.username, 'NULL'))), NULL),
+                        IF(NOT OLD.fecha <=> NEW.fecha, CONCAT('"fecha":', JSON_QUOTE(IFNULL(CAST(OLD.fecha AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.cliente <=> NEW.cliente, CONCAT('"cliente":', JSON_QUOTE(IFNULL(CAST(OLD.cliente AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.nro_documento <=> NEW.nro_documento, CONCAT('"nro_documento":', JSON_QUOTE(IFNULL(OLD.nro_documento, 'NULL'))), NULL),
+                        IF(NOT OLD.nro_control <=> NEW.nro_control, CONCAT('"nro_control":', JSON_QUOTE(IFNULL(OLD.nro_control, 'NULL'))), NULL),
+                        IF(NOT OLD.monto_total <=> NEW.monto_total, CONCAT('"monto_total":', JSON_QUOTE(IFNULL(CAST(OLD.monto_total AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.alicuota_iva <=> NEW.alicuota_iva, CONCAT('"alicuota_iva":', JSON_QUOTE(IFNULL(CAST(OLD.alicuota_iva AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.iva <=> NEW.iva, CONCAT('"iva":', JSON_QUOTE(IFNULL(CAST(OLD.iva AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.total <=> NEW.total, CONCAT('"total":', JSON_QUOTE(IFNULL(CAST(OLD.total AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.estatus <=> NEW.estatus, CONCAT('"estatus":', JSON_QUOTE(IFNULL(OLD.estatus, 'NULL'))), NULL),
+                        IF(NOT OLD.moneda <=> NEW.moneda, CONCAT('"moneda":', JSON_QUOTE(IFNULL(OLD.moneda, 'NULL'))), NULL),
+                        IF(NOT OLD.documento <=> NEW.documento, CONCAT('"documento":', JSON_QUOTE(IFNULL(OLD.documento, 'NULL'))), NULL),
+                        IF(NOT OLD.tasa_dia <=> NEW.tasa_dia, CONCAT('"tasa_dia":', JSON_QUOTE(IFNULL(CAST(OLD.tasa_dia AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.monto_usd <=> NEW.monto_usd, CONCAT('"monto_usd":', JSON_QUOTE(IFNULL(CAST(OLD.monto_usd AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.pagado <=> NEW.pagado, CONCAT('"pagado":', JSON_QUOTE(IFNULL(OLD.pagado, 'NULL'))), NULL),
+                        IF(NOT OLD.descuento <=> NEW.descuento, CONCAT('"descuento":', JSON_QUOTE(IFNULL(CAST(OLD.descuento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.descuento2 <=> NEW.descuento2, CONCAT('"descuento2":', JSON_QUOTE(IFNULL(CAST(OLD.descuento2 AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.factura <=> NEW.factura, CONCAT('"factura":', JSON_QUOTE(IFNULL(OLD.factura, 'NULL'))), NULL),
+                        IF(NOT OLD.activo <=> NEW.activo, CONCAT('"activo":', JSON_QUOTE(IFNULL(OLD.activo, 'NULL'))), NULL),
+                        IF(NOT OLD.doc_afectado <=> NEW.doc_afectado, CONCAT('"doc_afectado":', JSON_QUOTE(IFNULL(OLD.doc_afectado, 'NULL'))), NULL),
+                        IF(NOT OLD.cerrado <=> NEW.cerrado, CONCAT('"cerrado":', JSON_QUOTE(IFNULL(OLD.cerrado, 'NULL'))), NULL),
+                        IF(NOT OLD.igtf <=> NEW.igtf, CONCAT('"igtf":', JSON_QUOTE(IFNULL(OLD.igtf, 'NULL'))), NULL),
+                        IF(NOT OLD.monto_base_igtf <=> NEW.monto_base_igtf, CONCAT('"monto_base_igtf":', JSON_QUOTE(IFNULL(CAST(OLD.monto_base_igtf AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.monto_igtf <=> NEW.monto_igtf, CONCAT('"monto_igtf":', JSON_QUOTE(IFNULL(CAST(OLD.monto_igtf AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.impreso <=> NEW.impreso, CONCAT('"impreso":', JSON_QUOTE(IFNULL(OLD.impreso, 'NULL'))), NULL),
+                        IF(NOT OLD.doc_afe <=> NEW.doc_afe, CONCAT('"doc_afe":', JSON_QUOTE(IFNULL(CAST(OLD.doc_afe AS CHAR), 'NULL'))), NULL)
+                    ),
+                '}'),
+
+                CONCAT('{',
+                    CONCAT_WS(',',
+                        IF(NOT OLD.id <=> NEW.id, CONCAT('"id":', JSON_QUOTE(IFNULL(CAST(NEW.id AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.tipo_documento <=> NEW.tipo_documento, CONCAT('"tipo_documento":', JSON_QUOTE(IFNULL(NEW.tipo_documento, 'NULL'))), NULL),
+                        IF(NOT OLD.username <=> NEW.username, CONCAT('"username":', JSON_QUOTE(IFNULL(NEW.username, 'NULL'))), NULL),
+                        IF(NOT OLD.fecha <=> NEW.fecha, CONCAT('"fecha":', JSON_QUOTE(IFNULL(CAST(NEW.fecha AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.cliente <=> NEW.cliente, CONCAT('"cliente":', JSON_QUOTE(IFNULL(CAST(NEW.cliente AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.nro_documento <=> NEW.nro_documento, CONCAT('"nro_documento":', JSON_QUOTE(IFNULL(NEW.nro_documento, 'NULL'))), NULL),
+                        IF(NOT OLD.nro_control <=> NEW.nro_control, CONCAT('"nro_control":', JSON_QUOTE(IFNULL(NEW.nro_control, 'NULL'))), NULL),
+                        IF(NOT OLD.monto_total <=> NEW.monto_total, CONCAT('"monto_total":', JSON_QUOTE(IFNULL(CAST(NEW.monto_total AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.alicuota_iva <=> NEW.alicuota_iva, CONCAT('"alicuota_iva":', JSON_QUOTE(IFNULL(CAST(NEW.alicuota_iva AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.iva <=> NEW.iva, CONCAT('"iva":', JSON_QUOTE(IFNULL(CAST(NEW.iva AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.total <=> NEW.total, CONCAT('"total":', JSON_QUOTE(IFNULL(CAST(NEW.total AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.estatus <=> NEW.estatus, CONCAT('"estatus":', JSON_QUOTE(IFNULL(NEW.estatus, 'NULL'))), NULL),
+                        IF(NOT OLD.moneda <=> NEW.moneda, CONCAT('"moneda":', JSON_QUOTE(IFNULL(NEW.moneda, 'NULL'))), NULL),
+                        IF(NOT OLD.documento <=> NEW.documento, CONCAT('"documento":', JSON_QUOTE(IFNULL(NEW.documento, 'NULL'))), NULL),
+                        IF(NOT OLD.tasa_dia <=> NEW.tasa_dia, CONCAT('"tasa_dia":', JSON_QUOTE(IFNULL(CAST(NEW.tasa_dia AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.monto_usd <=> NEW.monto_usd, CONCAT('"monto_usd":', JSON_QUOTE(IFNULL(CAST(NEW.monto_usd AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.pagado <=> NEW.pagado, CONCAT('"pagado":', JSON_QUOTE(IFNULL(NEW.pagado, 'NULL'))), NULL),
+                        IF(NOT OLD.descuento <=> NEW.descuento, CONCAT('"descuento":', JSON_QUOTE(IFNULL(CAST(NEW.descuento AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.descuento2 <=> NEW.descuento2, CONCAT('"descuento2":', JSON_QUOTE(IFNULL(CAST(NEW.descuento2 AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.factura <=> NEW.factura, CONCAT('"factura":', JSON_QUOTE(IFNULL(NEW.factura, 'NULL'))), NULL),
+                        IF(NOT OLD.activo <=> NEW.activo, CONCAT('"activo":', JSON_QUOTE(IFNULL(NEW.activo, 'NULL'))), NULL),
+                        IF(NOT OLD.doc_afectado <=> NEW.doc_afectado, CONCAT('"doc_afectado":', JSON_QUOTE(IFNULL(NEW.doc_afectado, 'NULL'))), NULL),
+                        IF(NOT OLD.cerrado <=> NEW.cerrado, CONCAT('"cerrado":', JSON_QUOTE(IFNULL(NEW.cerrado, 'NULL'))), NULL),
+                        IF(NOT OLD.igtf <=> NEW.igtf, CONCAT('"igtf":', JSON_QUOTE(IFNULL(NEW.igtf, 'NULL'))), NULL),
+                        IF(NOT OLD.monto_base_igtf <=> NEW.monto_base_igtf, CONCAT('"monto_base_igtf":', JSON_QUOTE(IFNULL(CAST(NEW.monto_base_igtf AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.monto_igtf <=> NEW.monto_igtf, CONCAT('"monto_igtf":', JSON_QUOTE(IFNULL(CAST(NEW.monto_igtf AS CHAR), 'NULL'))), NULL),
+                        IF(NOT OLD.impreso <=> NEW.impreso, CONCAT('"impreso":', JSON_QUOTE(IFNULL(NEW.impreso, 'NULL'))), NULL),
+                        IF(NOT OLD.doc_afe <=> NEW.doc_afe, CONCAT('"doc_afe":', JSON_QUOTE(IFNULL(CAST(NEW.doc_afe AS CHAR), 'NULL'))), NULL)
+                    ),
+                '}')
+            );
+        END IF;
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/* Create Trigger in target */
+
+DELIMITER $$
+CREATE
+    TRIGGER `trg_usuario_profile_login_error` AFTER UPDATE ON `usuario` 
+    FOR EACH ROW BEGIN
+    DECLARE v_retry INT DEFAULT 0;
+    DECLARE v_retry_old INT DEFAULT 0;
+    DECLARE v_last_bad_login VARCHAR(30) DEFAULT '';
+
+    IF NEW.profile IS NOT NULL AND JSON_VALID(NEW.profile) THEN
+
+        SET v_retry = CAST(
+            COALESCE(JSON_UNQUOTE(JSON_EXTRACT(NEW.profile, '$.LoginRetryCount')), '0')
+            AS UNSIGNED
+        );
+
+        SET v_last_bad_login = COALESCE(
+            JSON_UNQUOTE(JSON_EXTRACT(NEW.profile, '$.LastBadLoginDateTime')),
+            ''
+        );
+
+    END IF;
+
+    IF OLD.profile IS NOT NULL AND JSON_VALID(OLD.profile) THEN
+
+        SET v_retry_old = CAST(
+            COALESCE(JSON_UNQUOTE(JSON_EXTRACT(OLD.profile, '$.LoginRetryCount')), '0')
+            AS UNSIGNED
+        );
+
+    END IF;
+
+    IF v_retry > 0 AND v_retry > v_retry_old THEN
+
+        INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (
+                NULL,
+                NOW(),
+                CONCAT('Intento fallido de inicio de sesión #', v_retry),
+                NEW.username,
+                'LOGIN_ERROR',
+                'user',
+                'username',
+                NEW.username,
+                OLD.profile,
+                NEW.profile
+            );
+
+    END IF;
+END;
+$$
+DELIMITER ;
+
+
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+
+ALTER TABLE `compra`
+	ADD COLUMN `moneda` VARCHAR(6) NULL DEFAULT NULL AFTER `fecha`,
+	ADD COLUMN `tasa_dia` DECIMAL(14,2) NULL DEFAULT NULL AFTER `moneda`;

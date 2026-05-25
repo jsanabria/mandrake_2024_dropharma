@@ -188,6 +188,7 @@ class EntradasView extends Entradas
         $this->descuento->setVisibility();
         $this->archivo_pedido->setVisibility();
         $this->unidades->setVisibility();
+        $this->cliente->setVisibility();
     }
 
     // Constructor
@@ -1014,6 +1015,7 @@ class EntradasView extends Entradas
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
         $this->unidades->setDbValue($row['unidades']);
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Return a row with default values
@@ -1061,6 +1063,7 @@ class EntradasView extends Entradas
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
+        $row['cliente'] = $this->cliente->DefaultValue;
         return $row;
     }
 
@@ -1163,6 +1166,8 @@ class EntradasView extends Entradas
         // archivo_pedido
 
         // unidades
+
+        // cliente
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1456,6 +1461,10 @@ class EntradasView extends Entradas
             $this->unidades->ViewValue = $this->unidades->CurrentValue;
             $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
 
+            // cliente
+            $this->cliente->ViewValue = $this->cliente->CurrentValue;
+            $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
+
             // tipo_documento
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
@@ -1612,6 +1621,10 @@ class EntradasView extends Entradas
             // unidades
             $this->unidades->HrefValue = "";
             $this->unidades->TooltipValue = "";
+
+            // cliente
+            $this->cliente->HrefValue = "";
+            $this->cliente->TooltipValue = "";
         }
 
         // Call Row Rendered event

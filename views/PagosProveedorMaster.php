@@ -109,6 +109,17 @@ $pagos_proveedor->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($pagos_proveedor->cont_lotes->Visible) { // cont_lotes ?>
+        <tr id="r_cont_lotes"<?= $pagos_proveedor->cont_lotes->rowAttributes() ?>>
+            <td class="<?= $pagos_proveedor->TableLeftColumnClass ?>"><?= $pagos_proveedor->cont_lotes->caption() ?></td>
+            <td<?= $pagos_proveedor->cont_lotes->cellAttributes() ?>>
+<span id="el_pagos_proveedor_cont_lotes">
+<span<?= $pagos_proveedor->cont_lotes->viewAttributes() ?>>
+<?= $pagos_proveedor->cont_lotes->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
     </tbody>
 </table>
 </div>

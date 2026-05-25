@@ -200,6 +200,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->cliente->Visible) { // cliente ?>
+    <tr id="r_cliente"<?= $Page->cliente->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_entradas_cliente"><?= $Page->cliente->caption() ?></span></td>
+        <td data-name="cliente"<?= $Page->cliente->cellAttributes() ?>>
+<span id="el_entradas_cliente" data-page="1">
+<span<?= $Page->cliente->viewAttributes() ?>>
+<?= $Page->cliente->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

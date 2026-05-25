@@ -591,7 +591,7 @@ class PedidosOnline extends DbTable
             '`tipo_descuento`', // Expression
             '`tipo_descuento`', // Basic search expression
             16, // Type
-            1, // Size
+            4, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`tipo_descuento`', // Virtual expression
@@ -603,7 +603,6 @@ class PedidosOnline extends DbTable
         );
         $this->tipo_descuento->InputTextType = "text";
         $this->tipo_descuento->Raw = true;
-        $this->tipo_descuento->setDataType(DataType::BOOLEAN);
         $this->tipo_descuento->Lookup = new Lookup($this->tipo_descuento, 'pedidos_online', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
         $this->tipo_descuento->OptionCount = 2;
         $this->tipo_descuento->DefaultErrorMessage = $Language->phrase("IncorrectField");
@@ -1695,10 +1694,14 @@ class PedidosOnline extends DbTable
         $this->monto_sin_descuento->ViewValue = FormatNumber($this->monto_sin_descuento->ViewValue, $this->monto_sin_descuento->formatPattern());
 
         // tipo_descuento
-        if (ConvertToBool($this->tipo_descuento->CurrentValue)) {
-            $this->tipo_descuento->ViewValue = $this->tipo_descuento->tagCaption(1) != "" ? $this->tipo_descuento->tagCaption(1) : "Yes";
+        if (strval($this->tipo_descuento->CurrentValue) != "") {
+            $this->tipo_descuento->ViewValue = new OptionValues();
+            $arwrk = explode(Config("MULTIPLE_OPTION_SEPARATOR"), strval($this->tipo_descuento->CurrentValue));
+            $cnt = count($arwrk);
+            for ($ari = 0; $ari < $cnt; $ari++)
+                $this->tipo_descuento->ViewValue->add($this->tipo_descuento->optionCaption(trim($arwrk[$ari])));
         } else {
-            $this->tipo_descuento->ViewValue = $this->tipo_descuento->tagCaption(2) != "" ? $this->tipo_descuento->tagCaption(2) : "No";
+            $this->tipo_descuento->ViewValue = null;
         }
 
         // descuento2

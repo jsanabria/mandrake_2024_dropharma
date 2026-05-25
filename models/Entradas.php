@@ -95,6 +95,7 @@ class Entradas extends DbTable
     public $descuento;
     public $archivo_pedido;
     public $unidades;
+    public $cliente;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -479,7 +480,7 @@ class Entradas extends DbTable
             '`nota`', // Expression
             '`nota`', // Basic search expression
             200, // Type
-            255, // Size
+            65535, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`nota`', // Virtual expression
@@ -1156,6 +1157,30 @@ class Entradas extends DbTable
         $this->unidades->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['unidades'] = &$this->unidades;
 
+        // cliente
+        $this->cliente = new DbField(
+            $this, // Table
+            'x_cliente', // Variable name
+            'cliente', // Name
+            '`cliente`', // Expression
+            '`cliente`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cliente`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cliente->InputTextType = "text";
+        $this->cliente->Raw = true;
+        $this->cliente->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->cliente->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cliente'] = &$this->cliente;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1756,6 +1781,7 @@ class Entradas extends DbTable
         $this->descuento->DbValue = $row['descuento'];
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->unidades->DbValue = $row['unidades'];
+        $this->cliente->DbValue = $row['cliente'];
     }
 
     // Delete uploaded files
@@ -2163,6 +2189,7 @@ class Entradas extends DbTable
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->unidades->setDbValue($row['unidades']);
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Render list content
@@ -2274,6 +2301,8 @@ class Entradas extends DbTable
         // archivo_pedido
 
         // unidades
+
+        // cliente
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2565,6 +2594,10 @@ class Entradas extends DbTable
         $this->unidades->ViewValue = $this->unidades->CurrentValue;
         $this->unidades->ViewValue = FormatNumber($this->unidades->ViewValue, $this->unidades->formatPattern());
 
+        // cliente
+        $this->cliente->ViewValue = $this->cliente->CurrentValue;
+        $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2761,6 +2794,10 @@ class Entradas extends DbTable
         // unidades
         $this->unidades->HrefValue = "";
         $this->unidades->TooltipValue = "";
+
+        // cliente
+        $this->cliente->HrefValue = "";
+        $this->cliente->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3081,6 +3118,14 @@ class Entradas extends DbTable
             $this->unidades->EditValue = FormatNumber($this->unidades->EditValue, null);
         }
 
+        // cliente
+        $this->cliente->setupEditAttributes();
+        $this->cliente->EditValue = $this->cliente->CurrentValue;
+        $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
+        if (strval($this->cliente->EditValue) != "" && is_numeric($this->cliente->EditValue)) {
+            $this->cliente->EditValue = FormatNumber($this->cliente->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3140,6 +3185,7 @@ class Entradas extends DbTable
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->archivo_pedido);
                     $doc->exportCaption($this->unidades);
+                    $doc->exportCaption($this->cliente);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->tipo_documento);
@@ -3182,6 +3228,7 @@ class Entradas extends DbTable
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->archivo_pedido);
                     $doc->exportCaption($this->unidades);
+                    $doc->exportCaption($this->cliente);
                 }
                 $doc->endExportRow();
             }
@@ -3239,6 +3286,7 @@ class Entradas extends DbTable
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->archivo_pedido);
                         $doc->exportField($this->unidades);
+                        $doc->exportField($this->cliente);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->tipo_documento);
@@ -3281,6 +3329,7 @@ class Entradas extends DbTable
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->archivo_pedido);
                         $doc->exportField($this->unidades);
+                        $doc->exportField($this->cliente);
                     }
                     $doc->endExportRow($rowCnt);
                 }

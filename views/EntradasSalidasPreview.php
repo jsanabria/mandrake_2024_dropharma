@@ -135,6 +135,18 @@ $Page->ListOptions->render("header", "left");
         </th>
     <?php } ?>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+    <?php if (!$Page->descuento2->Sortable || !$Page->sortUrl($Page->descuento2)) { ?>
+        <th class="<?= $Page->descuento2->headerCellClass() ?>"><?= $Page->descuento2->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->descuento2->headerCellClass() ?>"><div role="button" data-table="entradas_salidas" data-sort="<?= HtmlEncode($Page->descuento2->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->descuento2->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->descuento2->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->descuento2->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
     <?php if (!$Page->costo_unidad->Sortable || !$Page->sortUrl($Page->costo_unidad)) { ?>
         <th class="<?= $Page->costo_unidad->headerCellClass() ?>"><?= $Page->costo_unidad->caption() ?></th>
@@ -203,6 +215,30 @@ $Page->ListOptions->render("header", "left");
             <div class="ew-table-header-btn">
                 <span class="ew-table-header-caption"><?= $Page->newdata->caption() ?></span>
                 <span class="ew-table-header-sort"><?= $Page->newdata->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+    <?php if (!$Page->cantidad_entregada->Sortable || !$Page->sortUrl($Page->cantidad_entregada)) { ?>
+        <th class="<?= $Page->cantidad_entregada->headerCellClass() ?>"><?= $Page->cantidad_entregada->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->cantidad_entregada->headerCellClass() ?>"><div role="button" data-table="entradas_salidas" data-sort="<?= HtmlEncode($Page->cantidad_entregada->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->cantidad_entregada->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->cantidad_entregada->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->cantidad_entregada->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+    <?php if (!$Page->cantidad_por_entregar->Sortable || !$Page->sortUrl($Page->cantidad_por_entregar)) { ?>
+        <th class="<?= $Page->cantidad_por_entregar->headerCellClass() ?>"><?= $Page->cantidad_por_entregar->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->cantidad_por_entregar->headerCellClass() ?>"><div role="button" data-table="entradas_salidas" data-sort="<?= HtmlEncode($Page->cantidad_por_entregar->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->cantidad_por_entregar->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->cantidad_por_entregar->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->cantidad_por_entregar->getSortIcon() ?></span>
             </div>
         </th>
     <?php } ?>
@@ -303,6 +339,13 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <?= $Page->descuento->getViewValue() ?></span>
 </td>
 <?php } ?>
+<?php if ($Page->descuento2->Visible) { // descuento2 ?>
+        <!-- descuento2 -->
+        <td<?= $Page->descuento2->cellAttributes() ?>>
+<span<?= $Page->descuento2->viewAttributes() ?>>
+<?= $Page->descuento2->getViewValue() ?></span>
+</td>
+<?php } ?>
 <?php if ($Page->costo_unidad->Visible) { // costo_unidad ?>
         <!-- costo_unidad -->
         <td<?= $Page->costo_unidad->cellAttributes() ?>>
@@ -343,6 +386,20 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
         <td<?= $Page->newdata->cellAttributes() ?>>
 <span<?= $Page->newdata->viewAttributes() ?>>
 <?= $Page->newdata->getViewValue() ?></span>
+</td>
+<?php } ?>
+<?php if ($Page->cantidad_entregada->Visible) { // cantidad_entregada ?>
+        <!-- cantidad_entregada -->
+        <td<?= $Page->cantidad_entregada->cellAttributes() ?>>
+<span<?= $Page->cantidad_entregada->viewAttributes() ?>>
+<?= $Page->cantidad_entregada->getViewValue() ?></span>
+</td>
+<?php } ?>
+<?php if ($Page->cantidad_por_entregar->Visible) { // cantidad_por_entregar ?>
+        <!-- cantidad_por_entregar -->
+        <td<?= $Page->cantidad_por_entregar->cellAttributes() ?>>
+<span<?= $Page->cantidad_por_entregar->viewAttributes() ?>>
+<?= $Page->cantidad_por_entregar->getViewValue() ?></span>
 </td>
 <?php } ?>
 <?php

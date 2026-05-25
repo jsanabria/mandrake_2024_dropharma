@@ -46,7 +46,7 @@ class ViewTransferencia extends AbstractEntity
     #[Column(name: "nro_documento", type: "string", nullable: true)]
     private ?string $nroDocumento;
 
-    #[Column(type: "string", nullable: true)]
+    #[Column(type: "text", nullable: true)]
     private ?string $nota;
 
     #[Column(type: "string", nullable: true)]

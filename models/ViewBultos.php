@@ -158,7 +158,7 @@ class ViewBultos extends DbTable
             '`ciudad`', // Expression
             '`ciudad`', // Basic search expression
             200, // Type
-            50, // Size
+            150, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`ciudad`', // Virtual expression

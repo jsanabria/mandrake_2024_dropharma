@@ -280,17 +280,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->ciudad->Visible) { // ciudad ?>
         <th data-name="ciudad" class="<?= $Page->ciudad->headerCellClass() ?>"><div id="elh_proveedor_ciudad" class="proveedor_ciudad"><?= $Page->renderFieldHeader($Page->ciudad) ?></div></th>
 <?php } ?>
-<?php if ($Page->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-        <th data-name="cuenta_auxiliar" class="<?= $Page->cuenta_auxiliar->headerCellClass() ?>"><div id="elh_proveedor_cuenta_auxiliar" class="proveedor_cuenta_auxiliar"><?= $Page->renderFieldHeader($Page->cuenta_auxiliar) ?></div></th>
-<?php } ?>
-<?php if ($Page->cuenta_gasto->Visible) { // cuenta_gasto ?>
-        <th data-name="cuenta_gasto" class="<?= $Page->cuenta_gasto->headerCellClass() ?>"><div id="elh_proveedor_cuenta_gasto" class="proveedor_cuenta_gasto"><?= $Page->renderFieldHeader($Page->cuenta_gasto) ?></div></th>
-<?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <th data-name="activo" class="<?= $Page->activo->headerCellClass() ?>"><div id="elh_proveedor_activo" class="proveedor_activo"><?= $Page->renderFieldHeader($Page->activo) ?></div></th>
-<?php } ?>
-<?php if ($Page->fabricante->Visible) { // fabricante ?>
-        <th data-name="fabricante" class="<?= $Page->fabricante->headerCellClass() ?>"><div id="elh_proveedor_fabricante" class="proveedor_fabricante"><?= $Page->renderFieldHeader($Page->fabricante) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -344,35 +335,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->cuenta_auxiliar->Visible) { // cuenta_auxiliar ?>
-        <td data-name="cuenta_auxiliar"<?= $Page->cuenta_auxiliar->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_proveedor_cuenta_auxiliar" class="el_proveedor_cuenta_auxiliar">
-<span<?= $Page->cuenta_auxiliar->viewAttributes() ?>>
-<?= $Page->cuenta_auxiliar->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->cuenta_gasto->Visible) { // cuenta_gasto ?>
-        <td data-name="cuenta_gasto"<?= $Page->cuenta_gasto->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_proveedor_cuenta_gasto" class="el_proveedor_cuenta_gasto">
-<span<?= $Page->cuenta_gasto->viewAttributes() ?>>
-<?= $Page->cuenta_gasto->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->activo->Visible) { // activo ?>
         <td data-name="activo"<?= $Page->activo->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_proveedor_activo" class="el_proveedor_activo">
 <span<?= $Page->activo->viewAttributes() ?>>
 <?= $Page->activo->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->fabricante->Visible) { // fabricante ?>
-        <td data-name="fabricante"<?= $Page->fabricante->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_proveedor_fabricante" class="el_proveedor_fabricante">
-<span<?= $Page->fabricante->viewAttributes() ?>>
-<?= $Page->fabricante->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

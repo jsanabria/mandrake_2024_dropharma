@@ -32,7 +32,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["aplica_retencion", [fields.aplica_retencion.visible && fields.aplica_retencion.required ? ew.Validators.required(fields.aplica_retencion.caption) : null], fields.aplica_retencion.isInvalid],
             ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
             ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
-            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid]
+            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
+            ["pagado", [fields.pagado.visible && fields.pagado.required ? ew.Validators.required(fields.pagado.caption) : null], fields.pagado.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -54,6 +55,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "proveedor": <?= $Page->proveedor->toClientList($Page) ?>,
             "tipo_documento": <?= $Page->tipo_documento->toClientList($Page) ?>,
             "aplica_retencion": <?= $Page->aplica_retencion->toClientList($Page) ?>,
+            "pagado": <?= $Page->pagado->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -87,6 +89,7 @@ $Page->showMessage();
     <ul class="<?= $Page->MultiPages->navClasses() ?>" role="tablist">
         <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(1) ?>" data-bs-target="#tab_compra1" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra1" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(1)) ?>"><?= $Page->pageCaption(1) ?></button></li>
         <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(2) ?>" data-bs-target="#tab_compra2" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra2" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(2)) ?>"><?= $Page->pageCaption(2) ?></button></li>
+        <li class="nav-item"><button class="<?= $Page->MultiPages->navLinkClasses(3) ?>" data-bs-target="#tab_compra3" data-bs-toggle="tab" type="button" role="tab" aria-controls="tab_compra3" aria-selected="<?= JsonEncode($Page->MultiPages->isActive(3)) ?>"><?= $Page->pageCaption(3) ?></button></li>
     </ul>
     <div class="<?= $Page->MultiPages->tabContentClasses() ?>"><!-- multi-page tabs .tab-content -->
         <div class="<?= $Page->MultiPages->tabPaneClasses(1) ?>" id="tab_compra1" role="tabpanel"><!-- multi-page .tab-pane -->
@@ -265,42 +268,42 @@ loadjs.ready(["fcompraadd", "datetimepicker"], function () {
 </div></div>
     </div>
 <?php } ?>
-</div><!-- /page* -->
-        </div><!-- /multi-page .tab-pane -->
-        <div class="<?= $Page->MultiPages->tabPaneClasses(2) ?>" id="tab_compra2" role="tabpanel"><!-- multi-page .tab-pane -->
-<div class="ew-add-div"><!-- page* -->
-<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
-    <div id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
-        <label id="elh_compra_aplica_retencion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->aplica_retencion->caption() ?><?= $Page->aplica_retencion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->aplica_retencion->cellAttributes() ?>>
-<span id="el_compra_aplica_retencion">
-<template id="tp_x_aplica_retencion">
+<?php if ($Page->pagado->Visible) { // pagado ?>
+    <div id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
+        <label id="elh_compra_pagado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pagado->caption() ?><?= $Page->pagado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pagado->cellAttributes() ?>>
+<span id="el_compra_pagado">
+<template id="tp_x_pagado">
     <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compra" data-field="x_aplica_retencion" name="x_aplica_retencion" id="x_aplica_retencion"<?= $Page->aplica_retencion->editAttributes() ?>>
+        <input type="radio" class="form-check-input" data-table="compra" data-field="x_pagado" name="x_pagado" id="x_pagado"<?= $Page->pagado->editAttributes() ?>>
         <label class="form-check-label"></label>
     </div>
 </template>
-<div id="dsl_x_aplica_retencion" class="ew-item-list"></div>
+<div id="dsl_x_pagado" class="ew-item-list"></div>
 <selection-list hidden
-    id="x_aplica_retencion"
-    name="x_aplica_retencion"
-    value="<?= HtmlEncode($Page->aplica_retencion->CurrentValue) ?>"
+    id="x_pagado"
+    name="x_pagado"
+    value="<?= HtmlEncode($Page->pagado->CurrentValue) ?>"
     data-type="select-one"
-    data-template="tp_x_aplica_retencion"
-    data-target="dsl_x_aplica_retencion"
+    data-template="tp_x_pagado"
+    data-target="dsl_x_pagado"
     data-repeatcolumn="5"
-    class="form-control<?= $Page->aplica_retencion->isInvalidClass() ?>"
+    class="form-control<?= $Page->pagado->isInvalidClass() ?>"
     data-table="compra"
-    data-field="x_aplica_retencion"
-    data-page="2"
-    data-value-separator="<?= $Page->aplica_retencion->displayValueSeparatorAttribute() ?>"
-    <?= $Page->aplica_retencion->editAttributes() ?>></selection-list>
-<?= $Page->aplica_retencion->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->aplica_retencion->getErrorMessage() ?></div>
+    data-field="x_pagado"
+    data-page="1"
+    data-value-separator="<?= $Page->pagado->displayValueSeparatorAttribute() ?>"
+    <?= $Page->pagado->editAttributes() ?>></selection-list>
+<?= $Page->pagado->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->pagado->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
 <?php } ?>
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(2) ?>" id="tab_compra2" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
 <?php if ($Page->monto_exento->Visible) { // monto_exento ?>
     <div id="r_monto_exento"<?= $Page->monto_exento->rowAttributes() ?>>
         <label id="elh_compra_monto_exento" for="x_monto_exento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_exento->caption() ?><?= $Page->monto_exento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -333,6 +336,42 @@ loadjs.ready(["fcompraadd", "datetimepicker"], function () {
 <input type="<?= $Page->alicuota->getInputTextType() ?>" name="x_alicuota" id="x_alicuota" data-table="compra" data-field="x_alicuota" value="<?= $Page->alicuota->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->alicuota->formatPattern()) ?>"<?= $Page->alicuota->editAttributes() ?> aria-describedby="x_alicuota_help">
 <?= $Page->alicuota->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+</div><!-- /page* -->
+        </div><!-- /multi-page .tab-pane -->
+        <div class="<?= $Page->MultiPages->tabPaneClasses(3) ?>" id="tab_compra3" role="tabpanel"><!-- multi-page .tab-pane -->
+<div class="ew-add-div"><!-- page* -->
+<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
+    <div id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
+        <label id="elh_compra_aplica_retencion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->aplica_retencion->caption() ?><?= $Page->aplica_retencion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->aplica_retencion->cellAttributes() ?>>
+<span id="el_compra_aplica_retencion">
+<template id="tp_x_aplica_retencion">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="compra" data-field="x_aplica_retencion" name="x_aplica_retencion" id="x_aplica_retencion"<?= $Page->aplica_retencion->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_aplica_retencion" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_aplica_retencion"
+    name="x_aplica_retencion"
+    value="<?= HtmlEncode($Page->aplica_retencion->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_aplica_retencion"
+    data-target="dsl_x_aplica_retencion"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->aplica_retencion->isInvalidClass() ?>"
+    data-table="compra"
+    data-field="x_aplica_retencion"
+    data-page="3"
+    data-value-separator="<?= $Page->aplica_retencion->displayValueSeparatorAttribute() ?>"
+    <?= $Page->aplica_retencion->editAttributes() ?>></selection-list>
+<?= $Page->aplica_retencion->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->aplica_retencion->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -380,11 +419,21 @@ loadjs.ready("load", function () {
         $("#r_doc_afectado").hide();
     });
     $("#x_tipo_documento").change(function() {
+    	var alicuota = 0;
+    	<?php
+    	$sql = "SELECT alicuota FROM alicuota WHERE activo = 'S' AND codigo = 'GEN';";
+    	echo "alicuota = " . floatval(ExecuteScalar($sql)) . ";";
+    	?>
+    	$("#x_alicuota").val(alicuota);
         if($("#x_tipo_documento").val() == "FC") {
         	$("#r_doc_afectado").hide();
         }
         else {
-        	$("#r_doc_afectado").show();
+        	if($("#x_tipo_documento").val() == "RC") {
+        		$("#x_alicuota").val(0);
+        	}
+        	else
+        	   	$("#r_doc_afectado").show();
         }
     });
 });

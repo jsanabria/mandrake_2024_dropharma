@@ -71,6 +71,12 @@ $Page->showMessage();
 <?php if ($Page->comprobante->Visible) { // comprobante ?>
         <th class="<?= $Page->comprobante->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_detalle_comprobante" class="cont_lotes_pagos_detalle_comprobante"><?= $Page->comprobante->caption() ?></span></th>
 <?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <th class="<?= $Page->fecha->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_detalle_fecha" class="cont_lotes_pagos_detalle_fecha"><?= $Page->fecha->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+        <th class="<?= $Page->monto_pagado->headerCellClass() ?>"><span id="elh_cont_lotes_pagos_detalle_monto_pagado" class="cont_lotes_pagos_detalle_monto_pagado"><?= $Page->monto_pagado->caption() ?></span></th>
+<?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -145,6 +151,22 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->comprobante->viewAttributes() ?>>
 <?= $Page->comprobante->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+        <td<?= $Page->fecha->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->fecha->viewAttributes() ?>>
+<?= $Page->fecha->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->monto_pagado->Visible) { // monto_pagado ?>
+        <td<?= $Page->monto_pagado->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->monto_pagado->viewAttributes() ?>>
+<?= $Page->monto_pagado->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
