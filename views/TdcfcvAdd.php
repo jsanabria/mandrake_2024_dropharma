@@ -825,9 +825,49 @@ loadjs.ready(["jquery"], function () {
     };
 
     window.sendProccess = function (i) {
+        if (i <= 0) return false;
+
+        // Mostrar un spinner o deshabilitar temporalmente para evitar doble clic antes de cargar modal
         const PorDesAct = getVal("PorDesAct");
-        window.location.href = "TdcfcvProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
-    };
+
+        $.ajax({
+            url: "include/tdcfcv/get_next_fiscal.php",
+            type: "POST",
+            dataType: "json",
+            data: { pedido: i }
+        }).done(function (response) {
+            response = normalizeJson(response);
+
+            if (response.estatus == 1) {
+                // Inyectar datos calculados en el modal
+                $("#modal_nro_factura").val(response.factura);
+                $("#modal_nro_control").val(response.control);
+                $("#modal_fecha").val(response.fecha);
+
+                // Cambiar dinámicamente el título según el tipo de documento para mayor claridad
+                let tipoDocTxt = "Factura Fiscal";
+                if (response.tipo_doc === "NC") tipoDocTxt = "Nota de Crédito";
+                if (response.tipo_doc === "ND") tipoDocTxt = "Nota de Débito";
+                $("#modalConfirmarFiscalLabel").html('<i class="fa-solid fa-print me-2"></i> Confirmación de Emisión (' + tipoDocTxt + ')');
+
+                // Inicializar y levantar el Modal de Bootstrap 5 de manera nativa
+                const miModal = new bootstrap.Modal(document.getElementById('modalConfirmarFiscal'));
+                miModal.show();
+
+                // Desenlazar eventos anteriores del botón de confirmación para evitar ejecuciones múltiples
+                $("#btnConfirmarProcesar").off("click").on("click", function() {
+                    $(this).prop("disabled", true).html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
+                    window.location.href = "TdcfcvProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
+                });
+
+            } else {
+                alertMsg("Error al recuperar correlativos fiscales: " + (response.mensaje ?? "Intente de nuevo."));
+            }
+        }).fail(function (xhr, status, errorThrown) {
+            console.log(xhr.responseText);
+            alertMsg("Error de red al consultar parámetros fiscales: " + errorThrown);
+        });
+    };    
 
     window.ProgLess = function () {
         const pedido = getVal("pedido");
@@ -1011,5 +1051,54 @@ loadjs.ready(["jquery"], function () {
     getCodigos3(<?= intval($pedido) ?>);
 });
 </script>
+
+<div class="modal fade" id="modalConfirmarFiscal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarFiscalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-primary shadow-lg">
+      <div class="modal-header bg-primary text-white py-2">
+        <h5 class="modal-title" id="modalConfirmarFiscalLabel"><i class="fa-solid fa-print me-2"></i> Confirmación de Emisión Fiscal</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bg-light text-dark">
+        <p class="text-muted small border-bottom pb-2">Por favor, verifique los datos correlativos antes de proceder con el procesamiento definitivo del documento.</p>
+        
+        <div class="row g-3">
+          <div class="col-6">
+            <label class="form-label fw-bold text-secondary mb-1 small">Próximo Nro. Documento</label>
+            <div class="input-group input-group-sm" style="min-width: 0; flex-wrap: nowrap;">
+              <span class="input-group-text bg-white"><i class="fa-solid fa-file-invoice text-primary"></i></span>
+              <input type="text" id="modal_nro_factura" class="form-control bg-white fw-bold text-center" readonly style="min-width: 0; flex-grow: 1; letter-spacing: 0.5px;">
+            </div>
+          </div>
+          <div class="col-6">
+            <label class="form-label fw-bold text-secondary mb-1 small">Próximo Nro. Control</label>
+            <div class="input-group input-group-sm" style="min-width: 0; flex-wrap: nowrap;">
+              <span class="input-group-text bg-white"><i class="fa-solid fa-sliders text-danger"></i></span>
+              <input type="text" id="modal_nro_control" class="form-control bg-white fw-bold text-center" readonly style="min-width: 0; flex-grow: 1; letter-spacing: 0.5px;">
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-bold text-secondary mb-1 small">Fecha de Emisión</label>
+            <div class="input-group input-group-sm" style="min-width: 0; flex-wrap: nowrap;">
+              <span class="input-group-text bg-white"><i class="fa-solid fa-calendar-day text-success"></i></span>
+              <input type="text" id="modal_fecha" class="form-control bg-white text-center" readonly style="min-width: 0; flex-grow: 1;">
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-warning d-flex align-items-center mt-3 mb-0 py-2 small" role="alert">
+          <i class="fa-solid fa-triangle-exclamation flex-shrink-0 me-2 fs-5 text-warning"></i>
+          <div>
+            <strong>¡Atención!</strong> Una vez procesado, no se podrán revertir los números asignados en los parámetros del sistema y mucho menos a la factura emitida.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">
+        <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i> Cancelar</button>
+        <button type="button" id="btnConfirmarProcesar" class="btn btn-sm btn-success px-4 fw-bold"><i class="fa-solid fa-check me-1"></i> Sí, Procesar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <?= GetDebugMessage() ?>

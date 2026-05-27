@@ -26,12 +26,12 @@ case 'TDCPDV':
 case 'TDCNET':
 	//$myform = "TdcnetAdd";
     $myform = "AjusteSalida?id=0&tipo_documento=TDCNET";
-	$linkform = '<a href="ViewSalidasList?crear=TDCNET" class="btn btn-primary">Crear Nota de Entrega desde Pedido de Venta o Factura</a>';
+	$linkform = '<a href="ViewSalidasList?crear=TDCNET" class="btn btn-primary">Crear Orden de Entrega desde Pedido de Venta o Factura</a>';
 	break;
 case 'TDCFCV':
 	$myform = "TdcfcvAdd";
-	$linkform = '<a href="ViewSalidasList?crear=TDCFCV&consig=0" class="btn btn-primary">Crear Factura desde Nota de Entrega</a>&nbsp;&nbsp;';
-	$linkform .= '<a href="ViewSalidasList?crear=TDCFCV&consig=1" class="btn btn-primary">Nota de Entrega a Consignaci&oacute;n</a>&nbsp;&nbsp;';
+	$linkform = '<a href="ViewSalidasList?crear=TDCFCV&consig=0" class="btn btn-primary">Crear Factura desde Orden de Entrega</a>&nbsp;&nbsp;';
+	$linkform .= '<a href="ViewSalidasList?crear=TDCFCV&consig=1" class="btn btn-primary">Orden de Entrega a Consignaci&oacute;n</a>&nbsp;&nbsp;';
 	$linkform .= '<a href="ClienteConsignacionLista" class="btn btn-primary">Clientes a Consignaci&oacute;n</a>';
 	break;
 case 'TDCASA':

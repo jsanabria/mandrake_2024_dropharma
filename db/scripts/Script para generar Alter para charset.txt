@@ -1,0 +1,14 @@
+SELECT 
+    CONCAT('ALTER TABLE `', table_schema, '`.`', table_name, '` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;') AS script_para_ejecutar
+FROM 
+    information_schema.TABLES 
+WHERE 
+    table_schema = 'mandrake' -- <--- Reemplaza aquí por el nombre de tu BD
+    AND table_type = 'BASE TABLE';
+    
+    
+    
+-- ALTER DATABASE `mandrake` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- SHOW CREATE TABLE `articulo`;
+

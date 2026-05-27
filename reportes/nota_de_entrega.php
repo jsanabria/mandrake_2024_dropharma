@@ -70,10 +70,35 @@ else
 
 class PDF extends FPDF
 {
+    function MarcaDeAgua()
+    {
+	    $this->SetFont('Arial','B',32);
+	    $this->SetTextColor(245,245,245);
+
+	    $this->RotatedText(35, 190, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 45);
+
+	    // Restaurar color normal para el resto del PDF
+	    $this->SetTextColor(0, 0, 0);
+    }
+
+    // Función auxiliar para rotar texto
+    function RotatedText($x, $y, $txt, $angle)
+    {
+        // Rotación de texto
+        $this->_out(sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm CP n', cos(deg2rad($angle)), sin(deg2rad($angle)), -sin(deg2rad($angle)), cos(deg2rad($angle)), $x, $y, -$x, -$y));
+        $this->Text($x, $y, $txt);
+        $this->_out('Q');
+    }
+
 	// Cabecera de p?gina
 	function Header()
 	{
 		// Consulto datos de la compa??a 
+		$this->MarcaDeAgua();
+
+		$this->SetTextColor(0, 0, 0);
+    	$this->SetDrawColor(0, 0, 0);
+
 		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -162,6 +187,7 @@ class PDF extends FPDF
 		$this->Ln(10);
 
 		$this->Cell(10, 6);
+
 		$this->SetFont('Arial','B',8);
 		$this->Cell(30, 6,"RAZON SOCIAL: ",'0','0','L');
 		$this->SetFont('Arial','',8);
@@ -213,8 +239,10 @@ class PDF extends FPDF
 		$this->Cell(10, 5, "", 1, 0, 'R');
 		$this->SetFont('Arial','',8);
 		$this->Ln(5);
+		
 	}
 	
+
 	// Pie de p?gina
 	function Footer()
 	{

@@ -1,0 +1,575 @@
+DROP VIEW IF EXISTS view_unidad_medida; 
+CREATE VIEW view_unidad_medida AS 
+SELECT  
+	a.id, a.articulo, a.unidad_medida, b.cantidad AS cantidad_por_unidad_medida, 
+	b.descripcion AS descripcion_unidad_medida 
+FROM 
+	articulo_unidad_medida AS a 
+	JOIN unidad_medida AS b ON b.codigo = a.unidad_medida;
+	
+DROP VIEW IF EXISTS view_entradas; 
+CREATE VIEW view_entradas AS 
+SELECT 
+	 a.id, a.tipo_documento, b.descripcion AS nombre_documento, 
+	 a.proveedor, c.nombre AS nombre_proveedor, a.nro_documento, 
+	 date_format(a.fecha, '%d/%m/%Y') AS fecha,  a.estatus, a.username, 
+	 a.nota, consignacion, consignacion_reportada    
+FROM 
+	entradas AS a 
+	JOIN tipo_documento AS b ON b.codigo = a.tipo_documento 
+	JOIN proveedor AS c ON c.id = a.proveedor 
+WHERE 
+	0 = 0;
+
+DROP VIEW IF EXISTS view_salidas; 
+CREATE VIEW view_salidas AS 
+SELECT 
+	 a.id, a.tipo_documento, b.descripcion AS nombre_documento, 
+	 a.cliente, c.nombre AS nombre_cliente, a.nro_documento, 
+	 -- date_format(a.fecha, '%d/%m/%Y') AS fecha,  
+	 a.fecha AS fecha,  
+	 a.estatus, a.username, 
+	 a.nota, a.consignacion, IFNULL(a.nombre, '') AS cerrado, total, 
+	 a.tasa_dia, a.monto_usd, a.unidades, a.dias_credito, a.asesor_asignado     
+FROM 
+	salidas AS a 
+	JOIN tipo_documento AS b ON b.codigo = a.tipo_documento 
+	JOIN cliente AS c ON c.id = a.cliente 
+WHERE 
+	0 = 0;
+
+DROP VIEW IF EXISTS view_entradas_salidas; 
+CREATE VIEW view_entradas_salidas AS 
+SELECT * FROM entradas_salidas; 
+
+
+DROP VIEW IF EXISTS view_lotes_subquery; 
+CREATE VIEW view_lotes_subquery AS 
+SELECT 
+	a.id_compra AS id, SUM(IFNULL(a.cantidad_movimiento, 0)) AS cantidad_movimiento 
+FROM 
+	entradas_salidas AS a 
+	JOIN salidas AS b ON
+		b.tipo_documento = a.tipo_documento
+		AND b.id = a.id_documento 
+	LEFT OUTER JOIN almacen AS c ON
+		c.codigo = a.almacen AND c.movimiento = 'S'
+WHERE
+	a.tipo_documento IN ('TDCNET','TDCASA') 
+	AND b.estatus IN ('NUEVO', 'PROCESADO') 
+GROUP BY a.id_compra;
+
+DROP VIEW IF EXISTS view_lotes; 
+CREATE VIEW view_lotes AS 
+SELECT
+	a.id, a.articulo, a.lote, date_format(a.fecha_vencimiento, '%d/%m/%Y') AS fecha_vencimiento, 
+	(IFNULL(a.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) AS cantidad, c.descripcion AS almacen  
+FROM 
+	entradas_salidas AS a 
+	JOIN entradas AS b ON
+		b.tipo_documento = a.tipo_documento
+		AND b.id = a.id_documento 
+	JOIN almacen AS c ON
+		c.codigo = a.almacen AND c.movimiento = 'S' 
+	LEFT OUTER JOIN view_lotes_subquery AS d ON d.id = a.id 
+WHERE
+	a.tipo_documento IN ('TDCNRP','TDCAEN') 
+	AND b.estatus = 'PROCESADO' 
+	AND (IFNULL(a.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) > 0 
+ORDER BY a.fecha_vencimiento;
+
+
+DROP VIEW IF EXISTS view_articulos;
+CREATE VIEW view_articulos AS
+SELECT 
+	a.id, a.codigo, a.fabricante, a.nombre_comercial, a.principio_activo, 
+	a.presentacion, a.cantidad_en_mano, a.ultimo_costo 
+FROM 
+	articulo AS a 
+WHERE 0=0;
+
+DROP VIEW IF EXISTS view_facturas_vencidas; 
+CREATE VIEW view_facturas_vencidas AS 
+SELECT 
+	a.id, 
+	a.tipo_documento, 
+	a.cliente AS codcli, 
+	b.nombre AS cliente, 
+	a.fecha, 
+	a.nro_documento, 
+	a.total, 
+	a.fecha_entrega, 
+	a.dias_credito, 
+	(TIMESTAMPDIFF(DAY, a.fecha_entrega, CURDATE()) - IFNULL(a.dias_credito, 0)) AS dias_vencidos 
+FROM 
+	salidas AS a 
+	JOIN cliente AS b ON b.id = a.cliente 
+WHERE 
+	a.tipo_documento = 'TDCFCV' AND 
+	-- a.documento = 'FC' AND 
+	a.estatus <> 'ANULADO' AND 
+	a.pagado = 'N' AND 
+	a.entregado = 'S' AND 
+	IFNULL(a.dias_credito, 0) > 0 AND 
+	TIMESTAMPDIFF(DAY, a.fecha_entrega, CURDATE()) > IFNULL(a.dias_credito, 0);
+	
+DROP VIEW IF EXISTS view_facturas_a_entregar; 
+CREATE VIEW view_facturas_a_entregar AS 
+SELECT 
+	a.id, 
+	a.tipo_documento, 
+	a.cliente AS codcli, 
+	b.nombre AS cliente, 
+	a.fecha, 
+	a.nro_documento, 
+	a.total, 
+	a.entregado, 
+	a.fecha_entrega, 
+	a.dias_credito  
+FROM 
+	salidas AS a 
+	JOIN cliente AS b ON b.id = a.cliente 
+WHERE 
+	a.tipo_documento = 'TDCFCV' AND 
+	-- a.documento = 'FC' AND 
+	a.estatus <> 'ANULADO' AND 
+	a.pagado = 'N';
+	
+DROP VIEW if EXISTS view_bultos; 
+CREATE VIEW view_bultos AS 
+SELECT 
+	a.id, 
+	b.nombre AS cliente, c.campo_descripcion AS ciudad, 
+	b.direccion, a.nro_documento, a.asesor, a.bultos, 
+	a.fecha_despacho, a.user_despacho   
+FROM 
+	salidas AS a 
+	LEFT OUTER JOIN cliente AS b ON b.id = a.cliente 
+	LEFT OUTER JOIN tabla AS c ON c.campo_codigo = b.ciudad AND c.tabla = 'CIUDAD' 
+WHERE a.tipo_documento = 'TDCNET' AND a.bultos > 0;
+
+DROP VIEW IF EXISTS view_temp_tarifa;
+CREATE VIEW view_temp_tarifa AS
+SELECT a.codigo, a.nombre, a.precio 
+FROM 
+	tarifa_temp AS a 
+	LEFT OUTER JOIN articulo AS b ON b.codigo = a.codigo 
+WHERE b.codigo IS NULL;
+
+DROP VIEW IF EXISTS view_plancta; 
+CREATE VIEW view_plancta AS 
+SELECT 
+	id, 
+	CONCAT(LTRIM(RTRIM(IFNULL(clase, ''))), 
+	IF(LTRIM(RTRIM(IFNULL(grupo, ''))) = '', '', CONCAT('-', LTRIM(RTRIM(IFNULL(grupo, ''))))), 
+	IF(LTRIM(RTRIM(IFNULL(cuenta, ''))) = '', '', CONCAT('-', LTRIM(RTRIM(IFNULL(cuenta, ''))))), 
+	IF(LTRIM(RTRIM(IFNULL(subcuenta, ''))) = '', '', CONCAT('-', LTRIM(RTRIM(IFNULL(subcuenta, ''))))) 
+	) AS codigo, 
+	descripcion, activa 
+FROM 
+	cont_plancta; 
+-- WHERE LTRIM(RTRIM(IFNULL(subcuenta, ''))) <> '';
+
+DROP VIEW IF EXISTS view_tarifa_articulos_no_encontrados; 
+CREATE VIEW view_tarifa_articulos_no_encontrados 
+AS 
+SELECT 
+	a.codigo, a.precio 
+FROM 
+	tarifa_temp AS a 
+	LEFT OUTER JOIN articulo AS b ON b.codigo = a.codigo 
+	LEFT OUTER JOIN tarifa_articulo AS c ON c.articulo =b.id 
+WHERE 
+	b.id IS NULL;
+
+DROP VIEW IF EXISTS view_costo_articulos_no_encontrados; 
+CREATE VIEW view_costo_articulos_no_encontrados 
+AS 
+SELECT 
+	a.codigo, a.costo 
+FROM 
+	costo_temp AS a 
+	LEFT OUTER JOIN articulo AS b ON b.codigo = a.codigo 
+WHERE 
+	b.id IS NULL;
+	
+DROP VIEW IF EXISTS view_factura_asesor; 
+CREATE VIEW view_factura_asesor 
+AS 
+SELECT 
+	a.id, a.nro_documento, a.fecha, 
+	b.nombre AS cliente, a.asesor, c.nombre AS asesor_nombre, a.documento, 
+	a.total   
+FROM 	
+	salidas AS a 
+	JOIN cliente AS b ON b.id = a.cliente 
+	LEFT OUTER JOIN usuario AS c ON c.username = a.asesor 
+WHERE 
+	a.tipo_documento = 'TDCFCV';
+
+DROP VIEW IF EXISTS view_banco;
+CREATE VIEW view_banco AS 
+SELECT 
+	a.id,	a.banco AS codigo, b.campo_descripcion AS banco, a.numero, a.cuenta  
+FROM 
+	compania_cuenta AS a 
+	JOIN tabla AS b ON b.campo_codigo = a.banco 
+WHERE a.compania = 1 AND b.tabla = 'BANCO'; 
+
+DROP VIEW IF EXISTS view_x_pagar;
+CREATE VIEW view_x_pagar AS 
+SELECT 
+	 a.id, a.tipo_documento, a.proveedor, a.nro_documento, a.total, a.monto_pagar, 
+	 (SELECT SUM(monto) AS monto 
+	 FROM pagos_proveedor_factura 
+	 WHERE tipo_documento = a.tipo_documento AND id_documento = a.id) AS monto_pagado, 
+	 a.ret_iva, a.ref_iva, a.ret_islr, a.ref_islr, a.comprobante, a.documento AS tipodoc, a.fecha     
+FROM 
+	entradas AS a 
+WHERE 
+	a.tipo_documento = 'TDCFCC' AND a.estatus = 'PROCESADO' 
+UNION ALL SELECT 
+	a.id, 'COMPRA' AS tipo_documento, a.proveedor, a.documento, a.monto_total AS total, a.monto_pagar, 
+	 (SELECT SUM(monto) AS monto 
+	 FROM pagos_proveedor_factura 
+	 WHERE tipo_documento = 'COMPRA' AND id_documento = a.id) AS monto_pagado, 
+	 a.ret_iva, a.ref_iva, a.ret_islr, a.ref_islr, a.comprobante, a.tipo_documento AS tipodoc, a.fecha      
+FROM 
+	compra AS a 
+WHERE 0=0 AND a.anulado = 'N';
+
+
+DROP VIEW IF EXISTS view_x_cobrar;
+CREATE VIEW view_x_cobrar AS 
+SELECT 
+	 a.id, a.tipo_documento, a.cliente, a.nro_documento, a.total AS monto_pagar, 
+	 (SELECT SUM(monto) AS monto 
+	 FROM cobros_cliente_factura 
+	 WHERE tipo_documento = a.tipo_documento AND id_documento = a.id) AS monto_pagado,   
+	 (SELECT SUM(retivamonto) AS retivamonto 
+	 FROM cobros_cliente_factura 
+	 WHERE tipo_documento = a.tipo_documento AND id_documento = a.id) AS retivamonto,   
+	 (SELECT GROUP_CONCAT(retiva, '|') AS retiva 
+	 FROM cobros_cliente_factura 
+	 WHERE tipo_documento = a.tipo_documento AND id_documento = a.id) AS retiva,     
+	 (SELECT SUM(retislrmonto) AS retislrmonto 
+	 FROM cobros_cliente_factura 
+	 WHERE tipo_documento = a.tipo_documento AND id_documento = a.id) AS retislrmonto, 
+	 (SELECT GROUP_CONCAT(retislr, '|') AS retislr 
+	 FROM cobros_cliente_factura 
+	 WHERE tipo_documento = a.tipo_documento AND id_documento = a.id) AS retislr, 
+	 a.comprobante, a.documento AS tipodoc, a.fecha       
+FROM 
+	salidas AS a 
+WHERE 
+	a.tipo_documento = 'TDCFCV' AND a.estatus = 'PROCESADO' 
+	AND IFNULL(a.comprobante, 0) > 0; 
+	
+	
+DROP VIEW if EXISTS view_tarifa;
+CREATE VIEW view_tarifa AS 
+SELECT 
+	a.articulo, a.precio, b.nombre AS tarifa
+FROM 
+	tarifa_articulo AS a JOIN tarifa AS b ON b.id = a.tarifa;
+	
+	
+-- //////////////////  01/09/2022  /////////////////////////////
+DROP VIEW IF EXISTS view_existencia_almacen;
+CREATE VIEW view_existencia_almacen AS 
+	SELECT	
+				a.id AS id_compra, 
+				a.almacen AS codalm, 
+				(SELECT descripcion FROM almacen WHERE codigo = a.almacen) AS nom_almacen, 
+				a.fabricante AS codfab, a.articulo AS codart, 
+				fb.nombre AS fabricante, ar.codigo, ar.codigo_de_barra, 
+				ar.nombre_comercial, ar.principio_activo, ar.presentacion, 
+				ar.principio_activo AS articulo, 
+							a.lote, date_format(a.fecha_vencimiento, '%d/%m/%Y') AS fecha_vencimiento, 
+							(IFNULL(a.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) AS cantidad  
+						FROM 
+							entradas_salidas AS a 
+							JOIN entradas AS b ON
+								b.tipo_documento = a.tipo_documento
+								AND b.id = a.id_documento 
+							JOIN almacen AS c ON
+								c.codigo = a.almacen AND c.movimiento = 'S' 
+							LEFT OUTER JOIN articulo AS ar ON ar.id = a.articulo 
+							LEFT OUTER JOIN fabricante AS fb ON fb.Id = a.fabricante 
+							LEFT OUTER JOIN (
+									SELECT 
+										a.id_compra AS id, SUM(IFNULL(a.cantidad_movimiento, 0)) AS cantidad_movimiento 
+									FROM 
+										entradas_salidas AS a 
+										JOIN salidas AS b ON
+											b.tipo_documento = a.tipo_documento
+											AND b.id = a.id_documento 
+										LEFT OUTER JOIN almacen AS c ON
+											c.codigo = a.almacen AND c.movimiento = 'S'
+									WHERE
+										a.tipo_documento IN ('TDCNET','TDCASA') 
+										AND b.estatus IN ('NUEVO', 'PROCESADO') 
+									GROUP BY a.id_compra
+								) AS d ON d.id = a.id 
+						WHERE
+							((a.tipo_documento IN ('TDCNRP', 'TDCAEN') 
+							AND b.estatus = 'PROCESADO') OR 
+							(a.tipo_documento IN ('TDCNRP', 'TDCAEN') 
+							AND b.estatus <> 'ANULADO' AND b.consignacion = 'S'))
+							AND (IFNULL(a.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) > 0 
+						ORDER BY a.fecha_vencimiento ASC;
+
+/* 
+DROP VIEW IF EXISTS view_existencia_almacen;
+CREATE VIEW view_existencia_almacen AS 
+	SELECT	
+				a.almacen AS codalm, a.fabricante AS codfab, a.articulo AS codart, 
+				fb.nombre AS fabricante, ar.nombre_comercial, ar.principio_activo, ar.presentacion, 
+							a.lote, date_format(a.fecha_vencimiento, '%d/%m/%Y') AS fecha_vencimiento, 
+							(IFNULL(a.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) AS cantidad  
+						FROM 
+							entradas_salidas AS a 
+							JOIN entradas AS b ON
+								b.tipo_documento = a.tipo_documento
+								AND b.id = a.id_documento 
+							JOIN almacen AS c ON
+								c.codigo = a.almacen AND c.movimiento = 'S' 
+							LEFT OUTER JOIN articulo AS ar ON ar.id = a.articulo 
+							LEFT OUTER JOIN fabricante AS fb ON fb.Id = a.fabricante 
+							LEFT OUTER JOIN (
+									SELECT 
+										a.id_compra AS id, SUM(IFNULL(a.cantidad_movimiento, 0)) AS cantidad_movimiento 
+									FROM 
+										entradas_salidas AS a 
+										JOIN salidas AS b ON
+											b.tipo_documento = a.tipo_documento
+											AND b.id = a.id_documento 
+										LEFT OUTER JOIN almacen AS c ON
+											c.codigo = a.almacen AND c.movimiento = 'S'
+									WHERE
+										a.tipo_documento IN ('TDCNET','TDCASA') 
+										AND b.estatus IN ('NUEVO', 'PROCESADO') 
+									GROUP BY a.id_compra
+								) AS d ON d.id = a.id 
+						WHERE
+							((a.tipo_documento IN ('TDCNRP', 'TDCAEN') 
+							AND b.estatus = 'PROCESADO') OR 
+							(a.tipo_documento IN ('TDCNRP', 'TDCAEN') 
+							AND b.estatus <> 'ANULADO' AND b.consignacion = 'S'))
+							AND (IFNULL(a.cantidad_movimiento, 0) + IFNULL(d.cantidad_movimiento, 0)) > 0 
+						ORDER BY a.fecha_vencimiento ASC;
+*/						
+						
+DROP VIEW IF EXISTS view_transferencias;		
+CREATE VIEW view_transferencias AS 		
+SELECT 
+	b.id, a.id AS iddoc, 
+	a.tipo_documento, a.username, a.fecha, a.proveedor, a.nro_documento, a.nota, a.estatus, 
+	b.fabricante, b.articulo, b.lote, b.fecha_vencimiento, b.cantidad_articulo, b.almacen 
+FROM 
+	entradas AS a 
+	JOIN entradas_salidas AS b ON b.id_documento = a.id AND b.tipo_documento = a.tipo_documento  
+WHERE 
+	a.documento = 'TR' 
+UNION ALL SELECT 
+	b.id, a.id AS iddoc, 
+	a.tipo_documento, a.username, a.fecha, a.cliente, a.nro_documento, a.nota, a.estatus, 
+	b.fabricante, b.articulo, b.lote, b.fecha_vencimiento, b.cantidad_articulo, b.almacen 
+FROM 
+	salidas AS a 
+	JOIN entradas_salidas AS b ON b.id_documento = a.id AND b.tipo_documento = a.tipo_documento  
+WHERE 
+	a.documento = 'TR' 
+ORDER BY 1 DESC, 7 DESC;
+
+DROP VIEW IF EXISTS view_facturas_cobranza;
+CREATE VIEW view_facturas_cobranza AS 
+SELECT 
+	a.id, 
+	a.tipo_documento, 
+	a.documento, 
+	a.cliente AS codcli, 
+	a.fecha, 
+	a.nro_documento, 
+	a.moneda, 
+	a.monto_total AS base_imponible, 
+	a.alicuota_iva, 
+	a.iva, 
+	a.total, 
+	a.tasa_dia, 
+	a.monto_usd, 
+	a.pagado, 
+	b.nro_documento AS nro_nota, 
+	b.fecha_despacho AS fecha_despacho, 
+	b.fecha_entrega AS fecha_entrega, 
+	a.dias_credito, 
+	
+	IF((TIMESTAMPDIFF(DAY, (SELECT fecha_entrega FROM salidas WHERE id = a.id_documento_padre), CURDATE())) > a.dias_credito, 
+		a.dias_credito, 
+		(TIMESTAMPDIFF(DAY, b.fecha_entrega, CURDATE()))) AS dias_transcurridos, 
+		
+	IF(TIMESTAMPDIFF(DAY, b.fecha_entrega, CURDATE()) > IFNULL(a.dias_credito, 0), 
+		TIMESTAMPDIFF(DAY, b.fecha_entrega, CURDATE()) - a.dias_credito, 
+		0) AS dias_vencidos, 
+		
+	(SELECT ciudad FROM cliente WHERE id = a.cliente) AS ciudad, 
+	(SELECT bultos FROM salidas WHERE id = a.id_documento_padre) AS bultos, 
+	a.asesor_asignado, 
+	a.id_documento_padre, 
+	
+	/* Subconsultas corregidas agregando el alias p.moneda y p.monto */
+	(SELECT
+			IFNULL(SUM(IF(p.moneda = 'USD', p.monto * a.tasa_dia, p.monto)), 0)
+		FROM pagos AS p
+		WHERE p.id_documento = a.id 
+		  AND p.tipo_documento = a.tipo_documento 
+		  AND p.tipo_pago <> 'IG') AS monto_pagado, 
+		  
+	(a.total - (SELECT
+			IFNULL(SUM(IF(p.moneda = 'USD', p.monto * a.tasa_dia, p.monto)), 0)
+		FROM pagos AS p
+		WHERE p.id_documento = a.id 
+		  AND p.tipo_documento = a.tipo_documento 
+		  AND p.tipo_pago <> 'IG')) AS pendiente, 
+		  
+	(a.total - (SELECT
+			IFNULL(SUM(IF(p.moneda = 'USD', p.monto * a.tasa_dia, p.monto)), 0)
+		FROM pagos AS p
+		WHERE p.id_documento = a.id 
+		  AND p.tipo_documento = a.tipo_documento 
+		  AND p.tipo_pago <> 'IG')) / a.tasa_dia AS pendiente2,  
+		  
+	(a.total - (SELECT
+			IFNULL(SUM(IF(p.moneda = 'USD', p.monto * a.tasa_dia, p.monto)), 0)
+		FROM pagos AS p
+		WHERE p.id_documento = a.id 
+		  AND p.tipo_documento = a.tipo_documento 
+		  AND p.tipo_pago <> 'IG')) * a.tasa_dia AS pendiente3  
+FROM 
+	salidas AS a 
+	LEFT OUTER JOIN salidas AS b ON b.id = a.id_documento_padre  
+WHERE 
+	a.tipo_documento = 'TDCFCV' 
+	AND a.estatus <> 'ANULADO';
+
+
+DROP VIEW IF EXISTS view_pagos;
+CREATE VIEW view_pagos AS 
+SELECT 
+	a.id,  
+	b.cliente, b.documento, b.nro_documento, b.fecha AS fecha_documento, 
+	b.monto_total AS base_imponible, b.total,  
+	a.tipo_pago, a.fecha AS fecha_pago, a.referencia, 
+	a.banco, a.banco_destino, a.moneda, a.monto, 
+	IF(a.moneda = 'USD', a.monto*b.tasa_dia, a.monto) AS monto_bs, 
+	IF(a.moneda = 'USD', a.monto, a.monto/b.tasa_dia) AS monto_usd, 
+	b.asesor_asignado, d.nombre, a.username, a.fecha_resgistro, b.tasa_dia AS tasa_usd  
+FROM 
+	pagos AS a 
+	JOIN salidas AS b ON b.id = a.id_documento AND b.tipo_documento = a.tipo_documento 
+	LEFT OUTER JOIN usuario AS c ON c.username = b.asesor_asignado 
+	LEFT OUTER JOIN asesor AS d ON d.id = c.asesor 
+UNION ALL 
+SELECT 
+	b.id, 
+	a.cliente, 'AB' AS documento, b.referencia AS nro_documento, a.fecha, 
+	0 AS base_imponible, 0 AS total, 
+	b.metodo_pago AS tipo_pago, a.fecha AS fecha_pago, b.referencia, 
+	'' AS banco, b.banco AS banco_destino, b.moneda, b.monto_bs AS monto, 
+	b.monto_bs, 
+	(b.monto_bs/a.tasa_usd) AS monto_usd, 
+	'' AS asesor_asignado, '' AS nombre, a.username, a.fecha AS fecha_resgistro, a.tasa_usd
+FROM 
+	abono	AS a 
+	JOIN recarga AS b ON b.abono = a.id;
+	
+-- ////////////////////////////////////////////////////////
+-- Domingo 24/11/2024
+-- // Entrdas 	
+
+DROP VIEW IF EXISTS view_in_tdcpdc;
+CREATE VIEW view_in_tdcpdc AS 
+SELECT 
+	 *     
+FROM 
+	entradas 
+WHERE 
+	tipo_documento = 'TDCPDC';
+
+DROP VIEW IF EXISTS view_in_tdcnrp;
+CREATE VIEW view_in_tdcnrp AS 
+SELECT 
+	 *     
+FROM 
+	entradas 
+WHERE 
+	tipo_documento = 'TDCNRP';
+
+DROP VIEW IF EXISTS view_in_tdcfcc;
+CREATE VIEW view_in_tdcfcc AS 
+SELECT 
+	 *     
+FROM 
+	entradas 
+WHERE 
+	tipo_documento = 'TDCFCC';
+
+DROP VIEW IF EXISTS view_in_tdcaen;
+CREATE VIEW view_in_tdcaen AS 
+SELECT 
+	 *     
+FROM 
+	entradas 
+WHERE 
+	tipo_documento = 'TDCAEN';
+
+-- // Salidas
+
+DROP VIEW IF EXISTS view_out_tdcpdv;
+CREATE VIEW view_out_tdcpdv AS 
+SELECT 
+	 *     
+FROM 
+	salidas 
+WHERE 
+	tipo_documento = 'TDCPDV';
+
+
+DROP VIEW IF EXISTS view_out_tdcnet;
+CREATE VIEW view_out_tdcnet AS 
+SELECT 
+	 *     
+FROM 
+	salidas 
+WHERE 
+	tipo_documento = 'TDCNET';
+
+DROP VIEW IF EXISTS view_out_tdcfcv;
+CREATE VIEW view_out_tdcfcv AS 
+SELECT 
+	 *     
+FROM 
+	salidas 
+WHERE 
+	tipo_documento = 'TDCFCV';
+
+DROP VIEW IF EXISTS view_out_tdcasa;
+CREATE VIEW view_out_tdcasa AS 
+SELECT 
+	 *     
+FROM 
+	salidas 
+WHERE 
+	tipo_documento = 'TDCASA';
+	
+-- Entradas
+DROP VIEW IF EXISTS view_in; 
+CREATE VIEW view_in AS 
+SELECT * FROM entradas_salidas WHERE tipo_documento IN ('TDCPDC', 'TDCNRP', 'TDCFCC', 'TDCAEN'); 
+
+
+-- Salidas
+DROP VIEW IF EXISTS view_out; 
+CREATE VIEW view_out AS 
+SELECT * FROM entradas_salidas WHERE tipo_documento IN ('TDCPDV', 'TDCNET', 'TDCFCV', 'TDCASA'); 
+

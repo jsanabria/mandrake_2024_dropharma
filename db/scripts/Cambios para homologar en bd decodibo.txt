@@ -1398,6 +1398,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `tg_delete_item`;
 DELIMITER $$
 CREATE
     TRIGGER `tg_delete_item` AFTER DELETE ON `entradas_salidas` 
@@ -1413,6 +1414,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `tg_delete_item_pd`;
 DELIMITER $$
 CREATE
     TRIGGER `tg_delete_item_pd` AFTER DELETE ON `pedidos_detalles_online` 
@@ -1428,6 +1430,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `tg_insert_item`;
 DELIMITER $$
 CREATE
     TRIGGER `tg_insert_item` AFTER INSERT ON `entradas_salidas` 
@@ -1443,6 +1446,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `tg_insert_item_pd`;
 DELIMITER $$
 CREATE
     TRIGGER `tg_insert_item_pd` AFTER INSERT ON `pedidos_detalles_online` 
@@ -1458,6 +1462,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `tg_update_item`;
 DELIMITER $$
 CREATE
     TRIGGER `tg_update_item` AFTER UPDATE ON `entradas_salidas` 
@@ -1474,6 +1479,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `tg_update_item_pd`;
 DELIMITER $$
 CREATE
     TRIGGER `tg_update_item_pd` AFTER UPDATE ON `pedidos_detalles_online` 
@@ -1490,6 +1496,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_entradas_salidas_ad_audit`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_entradas_salidas_ad_audit` AFTER DELETE ON `entradas_salidas` 
@@ -1538,6 +1545,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_entradas_salidas_ai_audit`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_entradas_salidas_ai_audit` AFTER INSERT ON `entradas_salidas` 
@@ -1586,6 +1594,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_entradas_salidas_au_audit`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_entradas_salidas_au_audit` AFTER UPDATE ON `entradas_salidas` 
@@ -1698,6 +1707,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_salidas_ad_audit`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_salidas_ad_audit` AFTER DELETE ON `salidas` 
@@ -1754,6 +1764,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_salidas_ai_audit`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_salidas_ai_audit` AFTER INSERT ON `salidas` 
@@ -1810,6 +1821,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_salidas_au_audit`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_salidas_au_audit` AFTER UPDATE ON `salidas` 
@@ -1934,6 +1946,7 @@ DELIMITER ;
 
 /* Create Trigger in target */
 
+DROP TRIGGER IF EXISTS `trg_usuario_profile_login_error`;
 DELIMITER $$
 CREATE
     TRIGGER `trg_usuario_profile_login_error` AFTER UPDATE ON `usuario` 

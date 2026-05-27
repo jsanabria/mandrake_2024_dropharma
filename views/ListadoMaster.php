@@ -257,7 +257,7 @@ $titulo = isset($titulos_reportes[$id]) ? $titulos_reportes[$id] : $id;
 
                                 foreach ($rows as $row) {
                                     echo '<option value="' . $row["id"] . '">'
-                                        . htmlspecialchars(substr($row["nombre"], 0, 120))
+                                        . htmlspecialchars(substr($row["nombre"], 0, 300))
                                         . '</option>';
                                 }
                                 ?>

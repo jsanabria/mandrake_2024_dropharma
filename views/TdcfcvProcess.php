@@ -78,6 +78,39 @@ if(trim($nro_documento) == "") {
 
     $sql = "UPDATE salidas SET fecha = '" . date("Y-m-d H:i:s") . "', nro_documento = '$factura', nro_control = '$facturaCTRL', estatus = '$estatus', username = '" . CurrentUserName() . "' WHERE id = $pedido;";
     Execute($sql);
+
+    /**********************************************************************************
+     * NUEVO: REGISTRO DE AUDITORÍA DE EMISIÓN DE DOCUMENTO
+     **********************************************************************************/
+    // 1. Identificamos textualmente el tipo de documento para el log
+    $nombreDocumentoTxt = "Documento";
+    switch ($documento) {
+        case "FC":
+            $nombreDocumentoTxt = "Factura";
+            break;
+        case "NC":
+            $nombreDocumentoTxt = "Nota de Crédito";
+            break;
+        case "ND":
+            $nombreDocumentoTxt = "Nota de Débito";
+            break;
+    }
+
+    $usuarioActual = CurrentUserName();
+    $fechaActualTxt = date("d/m/Y H:i:s");
+    
+    // 2. Construimos el texto informativo del log
+    $scriptLog = "Emitió documento {$nombreDocumentoTxt} # {$factura} con # de control {$facturaCTRL} de fecha {$fechaActualTxt}";
+
+    // 3. Insertamos el rastro en audittrail usando Execute() propio de tu entorno PHPMaker
+    $sqlAudit = "INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (NULL, '" . date("Y-m-d H:i:s") . "',
+             '{$scriptLog}',
+             '{$usuarioActual}', 'A', 'view_out_tdcfcv', 'id', '{$pedido}', '', '{$factura}');";
+    Execute($sqlAudit);
+    /**********************************************************************************/
 } 
 else {
     $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";

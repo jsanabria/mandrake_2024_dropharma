@@ -64,7 +64,7 @@ $LineByPage = 100;
 $html = "";
 $sql = "SELECT 
           a.id, 
-          IFNULL(a.foto, '') AS foto, a.nombre_comercial, b.nombre AS fabricante, 
+          IFNULL(a.foto, '') AS foto, a.codigo, a.nombre_comercial, b.nombre AS fabricante, 
           a.principio_activo, a.presentacion, a.ultimo_costo, 
           0 AS cantidad_en_mano, 
           d.descripcion AS unidad_medida, 
@@ -124,6 +124,7 @@ while ($row = mysqli_fetch_array($result)) {
                     '</strong><br><small>' . $row["principio_activo"] . '</small><br>
                     <small><i>' . $row["presentacion"] . '</i></small><br>
                     <strong><small>Fabricante: ' . $row["fabricante"] . '<strong></small><br>
+                    <strong><small>COD: ' . $row["codigo"] . '<strong></small><br>
                     <small> Unidad</small>
                 </td>';
       $html .= '<td class="text-center">'; 
