@@ -358,16 +358,15 @@ foreach ($rows as $row) {
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
-    $valorPrecioFull = ($xPrecioFull == 0 ? "" : number_format($xPrecioFull, 2, ".", ""));
-    $html .= '<input type="text" class="form-control tdcfcv-autorizado" id="x' . $i . '_precioFull" name="x' . $i . '_precioFull" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $valorPrecioFull . '" data-original="' . $valorPrecioFull . '" style="width:100px;"' . $disabled . '>';
+    $html .= '<input type="text" class="form-control" id="x' . $i . '_precioFull" name="x' . $i . '_precioFull" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xPrecioFull == 0 ? "" : number_format($xPrecioFull, 2, ".", "")) . '" style="width:100px;"' . $disabled . '>';
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
-    $html .= '<input type="number" class="form-control tdcfcv-autorizado" id="x' . $i . '_descuento" name="x' . $i . '_descuento" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento . '" data-original="' . $xDescuento . '" style="width:60px;"' . $disabled . '>';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_descuento" name="x' . $i . '_descuento" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento . '" style="width:60px;"' . $disabled . '>';
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
-    $html .= '<input type="number" class="form-control tdcfcv-autorizado" id="x' . $i . '_descuento2" name="x' . $i . '_descuento2" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento2 . '" data-original="' . $xDescuento2 . '" style="width:60px;"' . $disabled . '>';
+    $html .= '<input type="number" class="form-control" id="x' . $i . '_descuento2" name="x' . $i . '_descuento2" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . $xDescuento2 . '" style="width:60px;"' . $disabled . '>';
     $html .= '</td>';
 
     $html .= '<td class="text-center">';

@@ -300,6 +300,8 @@ return [
     "view_unidad_medida" => \DI\create(ViewUnidadMedida::class),
     "visitas" => \DI\create(Visitas::class),
     "ya_fue_procesado" => \DI\create(YaFueProcesado::class),
+    "nota_de_entrega_parcial" => \DI\create(NotaDeEntregaParcial::class),
+    "nota_de_entrega_parcial_procesar" => \DI\create(NotaDeEntregaParcialProcesar::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

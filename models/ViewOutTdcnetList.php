@@ -164,32 +164,32 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->alicuota_iva->Visible = false;
         $this->iva->Visible = false;
         $this->total->setVisibility();
-        $this->lista_pedido->setVisibility();
+        $this->moneda->setVisibility();
+        $this->lista_pedido->Visible = false;
         $this->nota->Visible = false;
         $this->unidades->setVisibility();
         $this->estatus->Visible = false;
         $this->id_documento_padre->setVisibility();
-        $this->moneda->Visible = false;
         $this->asesor->Visible = false;
         $this->documento->Visible = false;
         $this->tasa_dia->Visible = false;
         $this->monto_usd->Visible = false;
-        $this->dias_credito->setVisibility();
-        $this->entregado->Visible = false;
+        $this->dias_credito->Visible = false;
+        $this->entregado->setVisibility();
         $this->fecha_entrega->Visible = false;
         $this->pagado->Visible = false;
-        $this->bultos->setVisibility();
+        $this->bultos->Visible = false;
         $this->fecha_bultos->Visible = false;
         $this->user_bultos->Visible = false;
         $this->fecha_despacho->Visible = false;
         $this->user_despacho->Visible = false;
         $this->consignacion->Visible = false;
-        $this->descuento->setVisibility();
-        $this->descuento2->setVisibility();
+        $this->descuento->Visible = false;
+        $this->descuento2->Visible = false;
         $this->monto_sin_descuento->Visible = false;
-        $this->factura->setVisibility();
-        $this->ci_rif->setVisibility();
-        $this->nombre->setVisibility();
+        $this->factura->Visible = false;
+        $this->ci_rif->Visible = false;
+        $this->nombre->Visible = false;
         $this->direccion->Visible = false;
         $this->telefono->Visible = false;
         $this->_email->Visible = false;
@@ -759,10 +759,10 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         // Set up lookup cache
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->estatus);
         $this->setupLookupOptions($this->id_documento_padre);
-        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->asesor);
         $this->setupLookupOptions($this->documento);
         $this->setupLookupOptions($this->dias_credito);
@@ -1164,12 +1164,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $filterList = Concat($filterList, $this->alicuota_iva->AdvancedSearch->toJson(), ","); // Field alicuota_iva
         $filterList = Concat($filterList, $this->iva->AdvancedSearch->toJson(), ","); // Field iva
         $filterList = Concat($filterList, $this->total->AdvancedSearch->toJson(), ","); // Field total
+        $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
         $filterList = Concat($filterList, $this->lista_pedido->AdvancedSearch->toJson(), ","); // Field lista_pedido
         $filterList = Concat($filterList, $this->nota->AdvancedSearch->toJson(), ","); // Field nota
         $filterList = Concat($filterList, $this->unidades->AdvancedSearch->toJson(), ","); // Field unidades
         $filterList = Concat($filterList, $this->estatus->AdvancedSearch->toJson(), ","); // Field estatus
         $filterList = Concat($filterList, $this->id_documento_padre->AdvancedSearch->toJson(), ","); // Field id_documento_padre
-        $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
         $filterList = Concat($filterList, $this->asesor->AdvancedSearch->toJson(), ","); // Field asesor
         $filterList = Concat($filterList, $this->documento->AdvancedSearch->toJson(), ","); // Field documento
         $filterList = Concat($filterList, $this->tasa_dia->AdvancedSearch->toJson(), ","); // Field tasa_dia
@@ -1340,6 +1340,14 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->total->AdvancedSearch->SearchOperator2 = @$filter["w_total"];
         $this->total->AdvancedSearch->save();
 
+        // Field moneda
+        $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
+        $this->moneda->AdvancedSearch->SearchCondition = @$filter["v_moneda"];
+        $this->moneda->AdvancedSearch->SearchValue2 = @$filter["y_moneda"];
+        $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
+        $this->moneda->AdvancedSearch->save();
+
         // Field lista_pedido
         $this->lista_pedido->AdvancedSearch->SearchValue = @$filter["x_lista_pedido"];
         $this->lista_pedido->AdvancedSearch->SearchOperator = @$filter["z_lista_pedido"];
@@ -1379,14 +1387,6 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->id_documento_padre->AdvancedSearch->SearchValue2 = @$filter["y_id_documento_padre"];
         $this->id_documento_padre->AdvancedSearch->SearchOperator2 = @$filter["w_id_documento_padre"];
         $this->id_documento_padre->AdvancedSearch->save();
-
-        // Field moneda
-        $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
-        $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
-        $this->moneda->AdvancedSearch->SearchCondition = @$filter["v_moneda"];
-        $this->moneda->AdvancedSearch->SearchValue2 = @$filter["y_moneda"];
-        $this->moneda->AdvancedSearch->SearchOperator2 = @$filter["w_moneda"];
-        $this->moneda->AdvancedSearch->save();
 
         // Field asesor
         $this->asesor->AdvancedSearch->SearchValue = @$filter["x_asesor"];
@@ -1754,12 +1754,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->buildSearchSql($where, $this->alicuota_iva, $default, false); // alicuota_iva
         $this->buildSearchSql($where, $this->iva, $default, false); // iva
         $this->buildSearchSql($where, $this->total, $default, false); // total
+        $this->buildSearchSql($where, $this->moneda, $default, false); // moneda
         $this->buildSearchSql($where, $this->lista_pedido, $default, false); // lista_pedido
         $this->buildSearchSql($where, $this->nota, $default, false); // nota
         $this->buildSearchSql($where, $this->unidades, $default, false); // unidades
         $this->buildSearchSql($where, $this->estatus, $default, false); // estatus
         $this->buildSearchSql($where, $this->id_documento_padre, $default, false); // id_documento_padre
-        $this->buildSearchSql($where, $this->moneda, $default, false); // moneda
         $this->buildSearchSql($where, $this->asesor, $default, false); // asesor
         $this->buildSearchSql($where, $this->documento, $default, false); // documento
         $this->buildSearchSql($where, $this->tasa_dia, $default, false); // tasa_dia
@@ -1820,12 +1820,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->alicuota_iva->AdvancedSearch->save(); // alicuota_iva
             $this->iva->AdvancedSearch->save(); // iva
             $this->total->AdvancedSearch->save(); // total
+            $this->moneda->AdvancedSearch->save(); // moneda
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
             $this->nota->AdvancedSearch->save(); // nota
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->estatus->AdvancedSearch->save(); // estatus
             $this->id_documento_padre->AdvancedSearch->save(); // id_documento_padre
-            $this->moneda->AdvancedSearch->save(); // moneda
             $this->asesor->AdvancedSearch->save(); // asesor
             $this->documento->AdvancedSearch->save(); // documento
             $this->tasa_dia->AdvancedSearch->save(); // tasa_dia
@@ -1910,12 +1910,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->alicuota_iva->AdvancedSearch->save(); // alicuota_iva
             $this->iva->AdvancedSearch->save(); // iva
             $this->total->AdvancedSearch->save(); // total
+            $this->moneda->AdvancedSearch->save(); // moneda
             $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
             $this->nota->AdvancedSearch->save(); // nota
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->estatus->AdvancedSearch->save(); // estatus
             $this->id_documento_padre->AdvancedSearch->save(); // id_documento_padre
-            $this->moneda->AdvancedSearch->save(); // moneda
             $this->asesor->AdvancedSearch->save(); // asesor
             $this->documento->AdvancedSearch->save(); // documento
             $this->tasa_dia->AdvancedSearch->save(); // tasa_dia
@@ -2060,13 +2060,13 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->total->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field lista_pedido
-        $filter = $this->queryBuilderWhere("lista_pedido");
+        // Field moneda
+        $filter = $this->queryBuilderWhere("moneda");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->lista_pedido, false, false);
+            $this->buildSearchSql($filter, $this->moneda, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->lista_pedido->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->moneda->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field unidades
@@ -2087,67 +2087,13 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->id_documento_padre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field dias_credito
-        $filter = $this->queryBuilderWhere("dias_credito");
+        // Field entregado
+        $filter = $this->queryBuilderWhere("entregado");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->dias_credito, false, false);
+            $this->buildSearchSql($filter, $this->entregado, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->dias_credito->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field bultos
-        $filter = $this->queryBuilderWhere("bultos");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->bultos, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->bultos->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field descuento
-        $filter = $this->queryBuilderWhere("descuento");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->descuento, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field descuento2
-        $filter = $this->queryBuilderWhere("descuento2");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->descuento2, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento2->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field factura
-        $filter = $this->queryBuilderWhere("factura");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->factura, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->factura->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field ci_rif
-        $filter = $this->queryBuilderWhere("ci_rif");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->ci_rif, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ci_rif->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field nombre
-        $filter = $this->queryBuilderWhere("nombre");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->nombre, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->nombre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->entregado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
@@ -2179,9 +2125,9 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $searchFlds[] = &$this->_username;
         $searchFlds[] = &$this->nro_documento;
         $searchFlds[] = &$this->nro_control;
+        $searchFlds[] = &$this->moneda;
         $searchFlds[] = &$this->nota;
         $searchFlds[] = &$this->estatus;
-        $searchFlds[] = &$this->moneda;
         $searchFlds[] = &$this->asesor;
         $searchFlds[] = &$this->documento;
         $searchFlds[] = &$this->user_bultos;
@@ -2259,6 +2205,9 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         if ($this->total->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->moneda->AdvancedSearch->issetSession()) {
+            return true;
+        }
         if ($this->lista_pedido->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -2272,9 +2221,6 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             return true;
         }
         if ($this->id_documento_padre->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->moneda->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->asesor->AdvancedSearch->issetSession()) {
@@ -2452,12 +2398,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->alicuota_iva->AdvancedSearch->unsetSession();
         $this->iva->AdvancedSearch->unsetSession();
         $this->total->AdvancedSearch->unsetSession();
+        $this->moneda->AdvancedSearch->unsetSession();
         $this->lista_pedido->AdvancedSearch->unsetSession();
         $this->nota->AdvancedSearch->unsetSession();
         $this->unidades->AdvancedSearch->unsetSession();
         $this->estatus->AdvancedSearch->unsetSession();
         $this->id_documento_padre->AdvancedSearch->unsetSession();
-        $this->moneda->AdvancedSearch->unsetSession();
         $this->asesor->AdvancedSearch->unsetSession();
         $this->documento->AdvancedSearch->unsetSession();
         $this->tasa_dia->AdvancedSearch->unsetSession();
@@ -2523,12 +2469,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->alicuota_iva->AdvancedSearch->load();
         $this->iva->AdvancedSearch->load();
         $this->total->AdvancedSearch->load();
+        $this->moneda->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
         $this->nota->AdvancedSearch->load();
         $this->unidades->AdvancedSearch->load();
         $this->estatus->AdvancedSearch->load();
         $this->id_documento_padre->AdvancedSearch->load();
-        $this->moneda->AdvancedSearch->load();
         $this->asesor->AdvancedSearch->load();
         $this->documento->AdvancedSearch->load();
         $this->tasa_dia->AdvancedSearch->load();
@@ -2594,16 +2540,10 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->updateSort($this->cliente); // cliente
             $this->updateSort($this->nro_documento); // nro_documento
             $this->updateSort($this->total); // total
-            $this->updateSort($this->lista_pedido); // lista_pedido
+            $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->unidades); // unidades
             $this->updateSort($this->id_documento_padre); // id_documento_padre
-            $this->updateSort($this->dias_credito); // dias_credito
-            $this->updateSort($this->bultos); // bultos
-            $this->updateSort($this->descuento); // descuento
-            $this->updateSort($this->descuento2); // descuento2
-            $this->updateSort($this->factura); // factura
-            $this->updateSort($this->ci_rif); // ci_rif
-            $this->updateSort($this->nombre); // nombre
+            $this->updateSort($this->entregado); // entregado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2639,12 +2579,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
                 $this->alicuota_iva->setSort("");
                 $this->iva->setSort("");
                 $this->total->setSort("");
+                $this->moneda->setSort("");
                 $this->lista_pedido->setSort("");
                 $this->nota->setSort("");
                 $this->unidades->setSort("");
                 $this->estatus->setSort("");
                 $this->id_documento_padre->setSort("");
-                $this->moneda->setSort("");
                 $this->asesor->setSort("");
                 $this->documento->setSort("");
                 $this->tasa_dia->setSort("");
@@ -3058,16 +2998,10 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->createColumnOption($option, "cliente");
             $this->createColumnOption($option, "nro_documento");
             $this->createColumnOption($option, "total");
-            $this->createColumnOption($option, "lista_pedido");
+            $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "unidades");
             $this->createColumnOption($option, "id_documento_padre");
-            $this->createColumnOption($option, "dias_credito");
-            $this->createColumnOption($option, "bultos");
-            $this->createColumnOption($option, "descuento");
-            $this->createColumnOption($option, "descuento2");
-            $this->createColumnOption($option, "factura");
-            $this->createColumnOption($option, "ci_rif");
-            $this->createColumnOption($option, "nombre");
+            $this->createColumnOption($option, "entregado");
         }
 
         // Set up custom actions
@@ -3509,6 +3443,14 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             }
         }
 
+        // moneda
+        if ($this->moneda->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->moneda->AdvancedSearch->SearchValue != "" || $this->moneda->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
         // lista_pedido
         if ($this->lista_pedido->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3545,14 +3487,6 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         if ($this->id_documento_padre->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->id_documento_padre->AdvancedSearch->SearchValue != "" || $this->id_documento_padre->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // moneda
-        if ($this->moneda->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->moneda->AdvancedSearch->SearchValue != "" || $this->moneda->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -4007,12 +3941,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->id_documento_padre->setDbValue($row['id_documento_padre']);
-        $this->moneda->setDbValue($row['moneda']);
         $this->asesor->setDbValue($row['asesor']);
         $this->documento->setDbValue($row['documento']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
@@ -4075,12 +4009,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['estatus'] = $this->estatus->DefaultValue;
         $row['id_documento_padre'] = $this->id_documento_padre->DefaultValue;
-        $row['moneda'] = $this->moneda->DefaultValue;
         $row['asesor'] = $this->asesor->DefaultValue;
         $row['documento'] = $this->documento->DefaultValue;
         $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
@@ -4186,6 +4120,8 @@ class ViewOutTdcnetList extends ViewOutTdcnet
 
         // total
 
+        // moneda
+
         // lista_pedido
 
         // nota
@@ -4195,8 +4131,6 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         // estatus
 
         // id_documento_padre
-
-        // moneda
 
         // asesor
 
@@ -4364,6 +4298,30 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
+
             // lista_pedido
             $curVal = strval($this->lista_pedido->CurrentValue);
             if ($curVal != "") {
@@ -4423,30 +4381,6 @@ class ViewOutTdcnetList extends ViewOutTdcnet
                 }
             } else {
                 $this->id_documento_padre->ViewValue = null;
-            }
-
-            // moneda
-            $curVal = strval($this->moneda->CurrentValue);
-            if ($curVal != "") {
-                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-                if ($this->moneda->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                    } else {
-                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                    }
-                }
-            } else {
-                $this->moneda->ViewValue = null;
             }
 
             // asesor
@@ -4758,9 +4692,9 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->total->HrefValue = "";
             $this->total->TooltipValue = "";
 
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-            $this->lista_pedido->TooltipValue = "";
+            // moneda
+            $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
 
             // unidades
             $this->unidades->HrefValue = "";
@@ -4770,33 +4704,9 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->id_documento_padre->HrefValue = "";
             $this->id_documento_padre->TooltipValue = "";
 
-            // dias_credito
-            $this->dias_credito->HrefValue = "";
-            $this->dias_credito->TooltipValue = "";
-
-            // bultos
-            $this->bultos->HrefValue = "";
-            $this->bultos->TooltipValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
-            $this->descuento->TooltipValue = "";
-
-            // descuento2
-            $this->descuento2->HrefValue = "";
-            $this->descuento2->TooltipValue = "";
-
-            // factura
-            $this->factura->HrefValue = "";
-            $this->factura->TooltipValue = "";
-
-            // ci_rif
-            $this->ci_rif->HrefValue = "";
-            $this->ci_rif->TooltipValue = "";
-
-            // nombre
-            $this->nombre->HrefValue = "";
-            $this->nombre->TooltipValue = "";
+            // entregado
+            $this->entregado->HrefValue = "";
+            $this->entregado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // username
             $this->_username->setupEditAttributes();
@@ -4858,33 +4768,9 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->total->EditValue = $this->total->AdvancedSearch->SearchValue;
             $this->total->PlaceHolder = RemoveHtml($this->total->caption());
 
-            // lista_pedido
-            $this->lista_pedido->setupEditAttributes();
-            $curVal = trim(strval($this->lista_pedido->AdvancedSearch->SearchValue));
-            if ($curVal != "") {
-                $this->lista_pedido->AdvancedSearch->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
-            } else {
-                $this->lista_pedido->AdvancedSearch->ViewValue = $this->lista_pedido->Lookup !== null && is_array($this->lista_pedido->lookupOptions()) && count($this->lista_pedido->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->lista_pedido->AdvancedSearch->ViewValue !== null) { // Load from cache
-                $this->lista_pedido->EditValue = array_values($this->lista_pedido->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $this->lista_pedido->AdvancedSearch->SearchValue, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
-                $sqlWrk = $this->lista_pedido->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->lista_pedido->EditValue = $arwrk;
-            }
-            $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
+            // moneda
+            $this->moneda->setupEditAttributes();
+            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
             // unidades
             $this->unidades->setupEditAttributes();
@@ -4896,45 +4782,10 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->id_documento_padre->EditValue = $this->id_documento_padre->AdvancedSearch->SearchValue;
             $this->id_documento_padre->PlaceHolder = RemoveHtml($this->id_documento_padre->caption());
 
-            // dias_credito
-            $this->dias_credito->setupEditAttributes();
-            $this->dias_credito->PlaceHolder = RemoveHtml($this->dias_credito->caption());
-
-            // bultos
-            $this->bultos->setupEditAttributes();
-            $this->bultos->EditValue = $this->bultos->AdvancedSearch->SearchValue;
-            $this->bultos->PlaceHolder = RemoveHtml($this->bultos->caption());
-
-            // descuento
-            $this->descuento->setupEditAttributes();
-            $this->descuento->EditValue = $this->descuento->AdvancedSearch->SearchValue;
-            $this->descuento->PlaceHolder = RemoveHtml($this->descuento->caption());
-
-            // descuento2
-            $this->descuento2->setupEditAttributes();
-            $this->descuento2->EditValue = $this->descuento2->AdvancedSearch->SearchValue;
-            $this->descuento2->PlaceHolder = RemoveHtml($this->descuento2->caption());
-
-            // factura
-            $this->factura->setupEditAttributes();
-            $this->factura->EditValue = $this->factura->options(true);
-            $this->factura->PlaceHolder = RemoveHtml($this->factura->caption());
-
-            // ci_rif
-            $this->ci_rif->setupEditAttributes();
-            if (!$this->ci_rif->Raw) {
-                $this->ci_rif->AdvancedSearch->SearchValue = HtmlDecode($this->ci_rif->AdvancedSearch->SearchValue);
-            }
-            $this->ci_rif->EditValue = HtmlEncode($this->ci_rif->AdvancedSearch->SearchValue);
-            $this->ci_rif->PlaceHolder = RemoveHtml($this->ci_rif->caption());
-
-            // nombre
-            $this->nombre->setupEditAttributes();
-            if (!$this->nombre->Raw) {
-                $this->nombre->AdvancedSearch->SearchValue = HtmlDecode($this->nombre->AdvancedSearch->SearchValue);
-            }
-            $this->nombre->EditValue = HtmlEncode($this->nombre->AdvancedSearch->SearchValue);
-            $this->nombre->PlaceHolder = RemoveHtml($this->nombre->caption());
+            // entregado
+            $this->entregado->setupEditAttributes();
+            $this->entregado->EditValue = $this->entregado->options(true);
+            $this->entregado->PlaceHolder = RemoveHtml($this->entregado->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -4986,12 +4837,12 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->alicuota_iva->AdvancedSearch->load();
         $this->iva->AdvancedSearch->load();
         $this->total->AdvancedSearch->load();
+        $this->moneda->AdvancedSearch->load();
         $this->lista_pedido->AdvancedSearch->load();
         $this->nota->AdvancedSearch->load();
         $this->unidades->AdvancedSearch->load();
         $this->estatus->AdvancedSearch->load();
         $this->id_documento_padre->AdvancedSearch->load();
-        $this->moneda->AdvancedSearch->load();
         $this->asesor->AdvancedSearch->load();
         $this->documento->AdvancedSearch->load();
         $this->tasa_dia->AdvancedSearch->load();
@@ -5284,15 +5135,15 @@ class ViewOutTdcnetList extends ViewOutTdcnet
                     break;
                 case "x_cliente":
                     break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
                 case "x_lista_pedido":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_estatus":
                     break;
                 case "x_id_documento_padre":
-                    break;
-                case "x_moneda":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_asesor":
                     break;
@@ -5595,8 +5446,16 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         // Example:
         $sql = "SELECT ABS(SUM(cantidad_movimiento)) AS cantidad FROM entradas_salidas WHERE id_documento = '" . $this->id->CurrentValue . "' AND tipo_documento = '" . $this->tipo_documento->CurrentValue . "';";
         $this->ListOptions["unidades"]->Body = '<a target="_blank" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <b>' . intval(ExecuteScalar($sql)) . ' UNDS</b></a>'; // intval(ExecuteScalar($sql));
+
+        // 1. Consultar el parámetro utilizando el método nativo de PHPMaker 2024
+        $sqlParam = "SELECT IFNULL(valor1, 'N') AS con_precio FROM parametro WHERE codigo = '060';";
+        $conPrecioConfig = ExecuteScalar($sqlParam); // Retorna directamente 'S' o 'N'
+
+        // 2. Construir la URL base (sin el parámetro con_precio aún, este se acoplará en JS)
         $url = "reportes/nota_de_entrega.php?id=" . $this->id->CurrentValue . "&tipo=" . $this->tipo_documento->CurrentValue;
-        $this->ListOptions->Items["print"]->Body ='<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <i class="fa-solid fa-print"></i> </a>';   
+
+        // 3. Renderizar el botón inyectando la configuración en un atributo "data-con-precio" y una clase identificadora "btn-imprimir-nota"
+        $this->ListOptions->Items["print"]->Body = '<a target="_blank" href="' . $url . '" class="btn-imprimir-nota" data-con-precio="' . $conPrecioConfig . '" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <i class="fa-solid fa-print"></i> </a>';
         if($this->estatus->CurrentValue == "PROCESADO" or $this->estatus->CurrentValue == "NUEVO") {
             if(intval($this->bultos->CurrentValue) > 0) {
                 $url = "reportes/bultos_qr.php?id=" . $this->id->CurrentValue;

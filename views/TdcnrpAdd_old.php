@@ -8,6 +8,7 @@ $TdcnrpAdd = &$Page;
 <?php
 $Page->showMessage();
 ?>
+
 <?php
 $codpro = $_REQUEST["codpro"];
 $tipo_documento = $_REQUEST["tipo_documento"];
@@ -1214,4 +1215,5 @@ if (ExecuteScalar($sql) != "") {
     </div>
   </div>
 </div>
+
 <?= GetDebugMessage() ?>

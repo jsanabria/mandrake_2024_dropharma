@@ -144,13 +144,13 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-    <tr id="r_lista_pedido"<?= $Page->lista_pedido->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_lista_pedido"><?= $Page->lista_pedido->caption() ?></span></td>
-        <td data-name="lista_pedido"<?= $Page->lista_pedido->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_lista_pedido">
-<span<?= $Page->lista_pedido->viewAttributes() ?>>
-<?= $Page->lista_pedido->getViewValue() ?></span>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+    <tr id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_moneda"><?= $Page->moneda->caption() ?></span></td>
+        <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
+<span id="el_view_out_tdcnet_moneda">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -173,17 +173,6 @@ loadjs.ready("head", function () {
 <span id="el_view_out_tdcnet_estatus">
 <span<?= $Page->estatus->viewAttributes() ?>>
 <?= $Page->estatus->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->moneda->Visible) { // moneda ?>
-    <tr id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_moneda"><?= $Page->moneda->caption() ?></span></td>
-        <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_moneda">
-<span<?= $Page->moneda->viewAttributes() ?>>
-<?= $Page->moneda->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -221,13 +210,13 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->dias_credito->Visible) { // dias_credito ?>
-    <tr id="r_dias_credito"<?= $Page->dias_credito->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_dias_credito"><?= $Page->dias_credito->caption() ?></span></td>
-        <td data-name="dias_credito"<?= $Page->dias_credito->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_dias_credito">
-<span<?= $Page->dias_credito->viewAttributes() ?>>
-<?= $Page->dias_credito->getViewValue() ?></span>
+<?php if ($Page->entregado->Visible) { // entregado ?>
+    <tr id="r_entregado"<?= $Page->entregado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_entregado"><?= $Page->entregado->caption() ?></span></td>
+        <td data-name="entregado"<?= $Page->entregado->cellAttributes() ?>>
+<span id="el_view_out_tdcnet_entregado">
+<span<?= $Page->entregado->viewAttributes() ?>>
+<?= $Page->entregado->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -239,28 +228,6 @@ loadjs.ready("head", function () {
 <span id="el_view_out_tdcnet_bultos">
 <span<?= $Page->bultos->viewAttributes() ?>>
 <?= $Page->bultos->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->descuento->Visible) { // descuento ?>
-    <tr id="r_descuento"<?= $Page->descuento->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_descuento"><?= $Page->descuento->caption() ?></span></td>
-        <td data-name="descuento"<?= $Page->descuento->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_descuento">
-<span<?= $Page->descuento->viewAttributes() ?>>
-<?= $Page->descuento->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->descuento2->Visible) { // descuento2 ?>
-    <tr id="r_descuento2"<?= $Page->descuento2->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcnet_descuento2"><?= $Page->descuento2->caption() ?></span></td>
-        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_descuento2">
-<span<?= $Page->descuento2->viewAttributes() ?>>
-<?= $Page->descuento2->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -343,7 +310,37 @@ echo GetDebugMessage();
 <?php if (!$Page->isExport()) { ?>
 <script>
 loadjs.ready("load", function () {
+    // Startup script
     // Write your table-specific startup script here, no need to add script tags.
+    // Aseguramos la ejecución limpia en el ecosistema de PHPMaker 2024 para la pantalla View
+    loadjs.ready("makerjs", function() {
+        // Interceptamos el clic en el botón de impresión por su clase
+        jQuery(document).on("click", "a.btn-imprimir-nota", function(e) {
+            e.preventDefault(); // Detenemos la apertura inmediata
+            var $enlace = jQuery(this);
+            var urlOriginal = $enlace.attr("href");
+            var configPrecio = $enlace.data("con-precio"); // Obtiene 'S' o 'N'
+            var conPrecioParam = "S"; // Por defecto asumimos que va Con Precio
+
+            // Evaluamos la configuración global de la empresa
+            if (configPrecio === "S") {
+                if (confirm("¿Emitir Nota de Entrega sin montos?")) {
+                    conPrecioParam = "N"; // Si confirma omitir montos, pasamos 'N'
+                } else {
+                    conPrecioParam = "S"; // Si cancela, mantiene los montos ('S')
+                }
+            } else {
+                // Si el parámetro por defecto es 'N', no pregunta y viaja como 'N'
+                conPrecioParam = "N";
+            }
+
+            // Construimos la URL final acoplando el parámetro validado
+            var urlFinal = urlOriginal + "&con_precio=" + conPrecioParam;
+
+            // Abrimos el reporte de forma segura en una pestaña nueva
+            window.open(urlFinal, '_blank');
+        });
+    });
 });
 </script>
 <?php } ?>

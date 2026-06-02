@@ -713,13 +713,13 @@ $descuento = floatval($row["descuento"]);
         var descuento2 = parseFloat($("#descuento2").val()) || 0;
 
         if (descuento < 0 || descuento >= 100) {
-            ew.alert("Desc 1 debe estar entre 0 y 99.");
+            alert("Desc 1 debe estar entre 0 y 99.");
             $("#descuento").val(0).focus();
             return false;
         }
 
         if (descuento2 < 0 || descuento2 >= 100) {
-            ew.alert("Desc 2 debe estar entre 0 y 99.");
+            alert("Desc 2 debe estar entre 0 y 99.");
             $("#descuento2").val(0).focus();
             return false;
         }
@@ -739,12 +739,12 @@ $descuento = floatval($row["descuento"]);
                     CargarFinanciero();
                     CargarDetalle();
                 } else {
-                    ew.alert(response.error || "No se pudieron actualizar los descuentos.");
+                    alert(response.error || "No se pudieron actualizar los descuentos.");
                 }
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
-                ew.alert("Error actualizando descuentos.");
+                alert("Error actualizando descuentos.");
             }
         });
     }
@@ -807,12 +807,12 @@ $descuento = floatval($row["descuento"]);
         var xpass = $("#auth_pass_descuento").val().trim();
 
         if (xuser === "" || xpass === "") {
-            ew.alert("Debe ingresar usuario y clave.");
+            alert("Debe ingresar usuario y clave.");
             return false;
         }
 
         $.ajax({
-            url: "include/Validar_Usuario_desc_precio.php",
+            url: "include/Validar_Usuario.php",
             type: "GET",
             data: {
                 usernama: xuser,
@@ -834,14 +834,14 @@ $descuento = floatval($row["descuento"]);
                     ActualizarDescuentos();
                 }
             } else {
-                ew.alert("!!! NO AUTORIZADO !!!");
+                alert("!!! NO AUTORIZADO !!!");
                 $("#descuento").val(descuentoPendiente.descuentoOriginal);
                 $("#descuento2").val(descuentoPendiente.descuento2Original);
                 $("#modalAutorizarDescuento").modal("hide");
             }
         })
         .fail(function () {
-            ew.alert("Error de comunicación con el servidor.");
+            alert("Error de comunicación con el servidor.");
         });
     });
 

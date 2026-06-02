@@ -35,10 +35,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["cliente", [fields.cliente.visible && fields.cliente.required ? ew.Validators.required(fields.cliente.caption) : null], fields.cliente.isInvalid],
             ["nro_documento", [fields.nro_documento.visible && fields.nro_documento.required ? ew.Validators.required(fields.nro_documento.caption) : null], fields.nro_documento.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
-            ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["bultos", [fields.bultos.visible && fields.bultos.required ? ew.Validators.required(fields.bultos.caption) : null, ew.Validators.integer], fields.bultos.isInvalid],
-            ["consignacion", [fields.consignacion.visible && fields.consignacion.required ? ew.Validators.required(fields.consignacion.caption) : null], fields.consignacion.isInvalid],
-            ["factura", [fields.factura.visible && fields.factura.required ? ew.Validators.required(fields.factura.caption) : null], fields.factura.isInvalid],
             ["ci_rif", [fields.ci_rif.visible && fields.ci_rif.required ? ew.Validators.required(fields.ci_rif.caption) : null], fields.ci_rif.isInvalid],
             ["nombre", [fields.nombre.visible && fields.nombre.required ? ew.Validators.required(fields.nombre.caption) : null], fields.nombre.isInvalid],
             ["direccion", [fields.direccion.visible && fields.direccion.required ? ew.Validators.required(fields.direccion.caption) : null], fields.direccion.isInvalid],
@@ -58,9 +55,6 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
-            "estatus": <?= $Page->estatus->toClientList($Page) ?>,
-            "consignacion": <?= $Page->consignacion->toClientList($Page) ?>,
-            "factura": <?= $Page->factura->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -133,51 +127,6 @@ loadjs.ready("head", function () {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->estatus->Visible) { // estatus ?>
-    <div id="r_estatus"<?= $Page->estatus->rowAttributes() ?>>
-        <label id="elh_view_out_tdcnet_estatus" for="x_estatus" class="<?= $Page->LeftColumnClass ?>"><?= $Page->estatus->caption() ?><?= $Page->estatus->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->estatus->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_estatus">
-    <select
-        id="x_estatus"
-        name="x_estatus"
-        class="form-select ew-select<?= $Page->estatus->isInvalidClass() ?>"
-        <?php if (!$Page->estatus->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcnetedit_x_estatus"
-        <?php } ?>
-        data-table="view_out_tdcnet"
-        data-field="x_estatus"
-        data-value-separator="<?= $Page->estatus->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->estatus->getPlaceHolder()) ?>"
-        <?= $Page->estatus->editAttributes() ?>>
-        <?= $Page->estatus->selectOptionListHtml("x_estatus") ?>
-    </select>
-    <?= $Page->estatus->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->estatus->getErrorMessage() ?></div>
-<?php if (!$Page->estatus->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fview_out_tdcnetedit", function() {
-    var options = { name: "x_estatus", selectId: "fview_out_tdcnetedit_x_estatus" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcnetedit.lists.estatus?.lookupOptions.length) {
-        options.data = { id: "x_estatus", form: "fview_out_tdcnetedit" };
-    } else {
-        options.ajax = { id: "x_estatus", form: "fview_out_tdcnetedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.estatus.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->bultos->Visible) { // bultos ?>
     <div id="r_bultos"<?= $Page->bultos->rowAttributes() ?>>
         <label id="elh_view_out_tdcnet_bultos" for="x_bultos" class="<?= $Page->LeftColumnClass ?>"><?= $Page->bultos->caption() ?><?= $Page->bultos->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -186,82 +135,6 @@ loadjs.ready("fview_out_tdcnetedit", function() {
 <input type="<?= $Page->bultos->getInputTextType() ?>" name="x_bultos" id="x_bultos" data-table="view_out_tdcnet" data-field="x_bultos" value="<?= $Page->bultos->EditValue ?>" size="6" placeholder="<?= HtmlEncode($Page->bultos->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->bultos->formatPattern()) ?>"<?= $Page->bultos->editAttributes() ?> aria-describedby="x_bultos_help">
 <?= $Page->bultos->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->bultos->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->consignacion->Visible) { // consignacion ?>
-    <div id="r_consignacion"<?= $Page->consignacion->rowAttributes() ?>>
-        <label id="elh_view_out_tdcnet_consignacion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->consignacion->caption() ?><?= $Page->consignacion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->consignacion->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_consignacion">
-<template id="tp_x_consignacion">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="view_out_tdcnet" data-field="x_consignacion" name="x_consignacion" id="x_consignacion"<?= $Page->consignacion->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x_consignacion" class="ew-item-list"></div>
-<selection-list hidden
-    id="x_consignacion"
-    name="x_consignacion"
-    value="<?= HtmlEncode($Page->consignacion->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x_consignacion"
-    data-target="dsl_x_consignacion"
-    data-repeatcolumn="5"
-    class="form-control<?= $Page->consignacion->isInvalidClass() ?>"
-    data-table="view_out_tdcnet"
-    data-field="x_consignacion"
-    data-value-separator="<?= $Page->consignacion->displayValueSeparatorAttribute() ?>"
-    <?= $Page->consignacion->editAttributes() ?>></selection-list>
-<?= $Page->consignacion->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->consignacion->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->factura->Visible) { // factura ?>
-    <div id="r_factura"<?= $Page->factura->rowAttributes() ?>>
-        <label id="elh_view_out_tdcnet_factura" for="x_factura" class="<?= $Page->LeftColumnClass ?>"><?= $Page->factura->caption() ?><?= $Page->factura->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->factura->cellAttributes() ?>>
-<span id="el_view_out_tdcnet_factura">
-    <select
-        id="x_factura"
-        name="x_factura"
-        class="form-select ew-select<?= $Page->factura->isInvalidClass() ?>"
-        <?php if (!$Page->factura->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcnetedit_x_factura"
-        <?php } ?>
-        data-table="view_out_tdcnet"
-        data-field="x_factura"
-        data-value-separator="<?= $Page->factura->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->factura->getPlaceHolder()) ?>"
-        <?= $Page->factura->editAttributes() ?>>
-        <?= $Page->factura->selectOptionListHtml("x_factura") ?>
-    </select>
-    <?= $Page->factura->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->factura->getErrorMessage() ?></div>
-<?php if (!$Page->factura->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fview_out_tdcnetedit", function() {
-    var options = { name: "x_factura", selectId: "fview_out_tdcnetedit_x_factura" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcnetedit.lists.factura?.lookupOptions.length) {
-        options.data = { id: "x_factura", form: "fview_out_tdcnetedit" };
-    } else {
-        options.ajax = { id: "x_factura", form: "fview_out_tdcnetedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.factura.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
 </span>
 </div></div>
     </div>
@@ -295,7 +168,7 @@ loadjs.ready("fview_out_tdcnetedit", function() {
         <label id="elh_view_out_tdcnet_direccion" for="x_direccion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->direccion->caption() ?><?= $Page->direccion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->direccion->cellAttributes() ?>>
 <span id="el_view_out_tdcnet_direccion">
-<input type="<?= $Page->direccion->getInputTextType() ?>" name="x_direccion" id="x_direccion" data-table="view_out_tdcnet" data-field="x_direccion" value="<?= $Page->direccion->EditValue ?>" size="30" maxlength="150" placeholder="<?= HtmlEncode($Page->direccion->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->direccion->formatPattern()) ?>"<?= $Page->direccion->editAttributes() ?> aria-describedby="x_direccion_help">
+<textarea data-table="view_out_tdcnet" data-field="x_direccion" name="x_direccion" id="x_direccion" cols="35" rows="2" placeholder="<?= HtmlEncode($Page->direccion->getPlaceHolder()) ?>"<?= $Page->direccion->editAttributes() ?> aria-describedby="x_direccion_help"><?= $Page->direccion->EditValue ?></textarea>
 <?= $Page->direccion->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->direccion->getErrorMessage() ?></div>
 </span>

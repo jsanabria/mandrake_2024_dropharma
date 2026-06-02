@@ -65,12 +65,12 @@ class ViewOutTdcnet extends DbTable
     public $alicuota_iva;
     public $iva;
     public $total;
+    public $moneda;
     public $lista_pedido;
     public $nota;
     public $unidades;
     public $estatus;
     public $id_documento_padre;
-    public $moneda;
     public $asesor;
     public $documento;
     public $tasa_dia;
@@ -431,6 +431,33 @@ class ViewOutTdcnet extends DbTable
         $this->total->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['total'] = &$this->total;
 
+        // moneda
+        $this->moneda = new DbField(
+            $this, // Table
+            'x_moneda', // Variable name
+            'moneda', // Name
+            '`moneda`', // Expression
+            '`moneda`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`moneda`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->moneda->addMethod("getSelectFilter", fn() => "`codigo` = '006'");
+        $this->moneda->InputTextType = "text";
+        $this->moneda->setSelectMultiple(false); // Select one
+        $this->moneda->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->moneda->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->moneda->Lookup = new Lookup($this->moneda, 'parametro', false, 'valor1', ["valor1","","",""], '', '', [], [], [], [], [], [], false, '`valor1` ASC', '', "`valor1`");
+        $this->moneda->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['moneda'] = &$this->moneda;
+
         // lista_pedido
         $this->lista_pedido = new DbField(
             $this, // Table
@@ -557,33 +584,6 @@ class ViewOutTdcnet extends DbTable
         $this->id_documento_padre->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->id_documento_padre->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['id_documento_padre'] = &$this->id_documento_padre;
-
-        // moneda
-        $this->moneda = new DbField(
-            $this, // Table
-            'x_moneda', // Variable name
-            'moneda', // Name
-            '`moneda`', // Expression
-            '`moneda`', // Basic search expression
-            200, // Type
-            6, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`moneda`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'SELECT' // Edit Tag
-        );
-        $this->moneda->addMethod("getSelectFilter", fn() => "`codigo` = '006'");
-        $this->moneda->InputTextType = "text";
-        $this->moneda->setSelectMultiple(false); // Select one
-        $this->moneda->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->moneda->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->moneda->Lookup = new Lookup($this->moneda, 'parametro', false, 'valor1', ["valor1","","",""], '', '', [], [], [], [], [], [], false, '`valor1` ASC', '', "`valor1`");
-        $this->moneda->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
-        $this->Fields['moneda'] = &$this->moneda;
 
         // asesor
         $this->asesor = new DbField(
@@ -1110,7 +1110,7 @@ class ViewOutTdcnet extends DbTable
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
+            'TEXTAREA' // Edit Tag
         );
         $this->direccion->InputTextType = "text";
         $this->direccion->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
@@ -2211,12 +2211,12 @@ class ViewOutTdcnet extends DbTable
         $this->alicuota_iva->DbValue = $row['alicuota_iva'];
         $this->iva->DbValue = $row['iva'];
         $this->total->DbValue = $row['total'];
+        $this->moneda->DbValue = $row['moneda'];
         $this->lista_pedido->DbValue = $row['lista_pedido'];
         $this->nota->DbValue = $row['nota'];
         $this->unidades->DbValue = $row['unidades'];
         $this->estatus->DbValue = $row['estatus'];
         $this->id_documento_padre->DbValue = $row['id_documento_padre'];
-        $this->moneda->DbValue = $row['moneda'];
         $this->asesor->DbValue = $row['asesor'];
         $this->documento->DbValue = $row['documento'];
         $this->tasa_dia->DbValue = $row['tasa_dia'];
@@ -2643,12 +2643,12 @@ class ViewOutTdcnet extends DbTable
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->id_documento_padre->setDbValue($row['id_documento_padre']);
-        $this->moneda->setDbValue($row['moneda']);
         $this->asesor->setDbValue($row['asesor']);
         $this->documento->setDbValue($row['documento']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
@@ -2744,6 +2744,8 @@ class ViewOutTdcnet extends DbTable
 
         // total
 
+        // moneda
+
         // lista_pedido
 
         // nota
@@ -2753,8 +2755,6 @@ class ViewOutTdcnet extends DbTable
         // estatus
 
         // id_documento_padre
-
-        // moneda
 
         // asesor
 
@@ -2920,6 +2920,30 @@ class ViewOutTdcnet extends DbTable
         $this->total->ViewValue = $this->total->CurrentValue;
         $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+        // moneda
+        $curVal = strval($this->moneda->CurrentValue);
+        if ($curVal != "") {
+            $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+            if ($this->moneda->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                    $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                } else {
+                    $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                }
+            }
+        } else {
+            $this->moneda->ViewValue = null;
+        }
+
         // lista_pedido
         $curVal = strval($this->lista_pedido->CurrentValue);
         if ($curVal != "") {
@@ -2979,30 +3003,6 @@ class ViewOutTdcnet extends DbTable
             }
         } else {
             $this->id_documento_padre->ViewValue = null;
-        }
-
-        // moneda
-        $curVal = strval($this->moneda->CurrentValue);
-        if ($curVal != "") {
-            $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-            if ($this->moneda->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                    $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                } else {
-                    $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                }
-            }
-        } else {
-            $this->moneda->ViewValue = null;
         }
 
         // asesor
@@ -3349,6 +3349,10 @@ class ViewOutTdcnet extends DbTable
         $this->total->HrefValue = "";
         $this->total->TooltipValue = "";
 
+        // moneda
+        $this->moneda->HrefValue = "";
+        $this->moneda->TooltipValue = "";
+
         // lista_pedido
         $this->lista_pedido->HrefValue = "";
         $this->lista_pedido->TooltipValue = "";
@@ -3368,10 +3372,6 @@ class ViewOutTdcnet extends DbTable
         // id_documento_padre
         $this->id_documento_padre->HrefValue = "";
         $this->id_documento_padre->TooltipValue = "";
-
-        // moneda
-        $this->moneda->HrefValue = "";
-        $this->moneda->TooltipValue = "";
 
         // asesor
         $this->asesor->HrefValue = "";
@@ -3670,6 +3670,10 @@ class ViewOutTdcnet extends DbTable
             $this->total->EditValue = FormatNumber($this->total->EditValue, null);
         }
 
+        // moneda
+        $this->moneda->setupEditAttributes();
+        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
         // lista_pedido
         $this->lista_pedido->setupEditAttributes();
         $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
@@ -3696,10 +3700,6 @@ class ViewOutTdcnet extends DbTable
         $this->id_documento_padre->setupEditAttributes();
         $this->id_documento_padre->EditValue = $this->id_documento_padre->CurrentValue;
         $this->id_documento_padre->PlaceHolder = RemoveHtml($this->id_documento_padre->caption());
-
-        // moneda
-        $this->moneda->setupEditAttributes();
-        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
         // asesor
         $this->asesor->setupEditAttributes();
@@ -3833,9 +3833,6 @@ class ViewOutTdcnet extends DbTable
 
         // direccion
         $this->direccion->setupEditAttributes();
-        if (!$this->direccion->Raw) {
-            $this->direccion->CurrentValue = HtmlDecode($this->direccion->CurrentValue);
-        }
         $this->direccion->EditValue = $this->direccion->CurrentValue;
         $this->direccion->PlaceHolder = RemoveHtml($this->direccion->caption());
 
@@ -4027,17 +4024,14 @@ class ViewOutTdcnet extends DbTable
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
                     $doc->exportCaption($this->total);
-                    $doc->exportCaption($this->lista_pedido);
+                    $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->estatus);
-                    $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->asesor);
                     $doc->exportCaption($this->tasa_dia);
                     $doc->exportCaption($this->monto_usd);
-                    $doc->exportCaption($this->dias_credito);
+                    $doc->exportCaption($this->entregado);
                     $doc->exportCaption($this->bultos);
-                    $doc->exportCaption($this->descuento);
-                    $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->factura);
                     $doc->exportCaption($this->ci_rif);
                     $doc->exportCaption($this->nombre);
@@ -4055,12 +4049,12 @@ class ViewOutTdcnet extends DbTable
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
                     $doc->exportCaption($this->total);
+                    $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->lista_pedido);
                     $doc->exportCaption($this->nota);
                     $doc->exportCaption($this->unidades);
                     $doc->exportCaption($this->estatus);
                     $doc->exportCaption($this->id_documento_padre);
-                    $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->asesor);
                     $doc->exportCaption($this->documento);
                     $doc->exportCaption($this->tasa_dia);
@@ -4137,17 +4131,14 @@ class ViewOutTdcnet extends DbTable
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);
                         $doc->exportField($this->total);
-                        $doc->exportField($this->lista_pedido);
+                        $doc->exportField($this->moneda);
                         $doc->exportField($this->nota);
                         $doc->exportField($this->estatus);
-                        $doc->exportField($this->moneda);
                         $doc->exportField($this->asesor);
                         $doc->exportField($this->tasa_dia);
                         $doc->exportField($this->monto_usd);
-                        $doc->exportField($this->dias_credito);
+                        $doc->exportField($this->entregado);
                         $doc->exportField($this->bultos);
-                        $doc->exportField($this->descuento);
-                        $doc->exportField($this->descuento2);
                         $doc->exportField($this->factura);
                         $doc->exportField($this->ci_rif);
                         $doc->exportField($this->nombre);
@@ -4165,12 +4156,12 @@ class ViewOutTdcnet extends DbTable
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);
                         $doc->exportField($this->total);
+                        $doc->exportField($this->moneda);
                         $doc->exportField($this->lista_pedido);
                         $doc->exportField($this->nota);
                         $doc->exportField($this->unidades);
                         $doc->exportField($this->estatus);
                         $doc->exportField($this->id_documento_padre);
-                        $doc->exportField($this->moneda);
                         $doc->exportField($this->asesor);
                         $doc->exportField($this->documento);
                         $doc->exportField($this->tasa_dia);

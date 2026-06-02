@@ -3,15 +3,6 @@ include "../connect.php";
 
 
 $pedido = intval($_REQUEST["pedido"]); 
-$username_permiso_codigo_barra = isset($_REQUEST["username"]) ? trim($_REQUEST["username"]) : "";
-$username_permiso_codigo_barra_sql = mysqli_real_escape_string($link, $username_permiso_codigo_barra);
-$puede_editar_codigo_barra = false;
-$sqlPermisoCodigoBarra = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '045' AND valor1 = '$username_permiso_codigo_barra_sql' LIMIT 1;";
-$rsPermisoCodigoBarra = mysqli_query($link, $sqlPermisoCodigoBarra);
-if ($rsPermisoCodigoBarra && mysqli_fetch_array($rsPermisoCodigoBarra)) {
-  $puede_editar_codigo_barra = true;
-}
-
 
 $tipo_documento = "TDCNRP";
 
@@ -99,7 +90,7 @@ if($row = mysqli_fetch_array($result)) {
 
 $sql = "SELECT 
           a.id, z.id AS id_item, 
-          a.foto, a.codigo, IFNULL(a.codigo_de_barra, '') AS codigo_de_barra, a.nombre_comercial, b.nombre AS fabricante, 
+          a.foto, a.codigo, a.nombre_comercial, b.nombre AS fabricante, 
           a.principio_activo, a.presentacion, z.precio_unidad_sin_desc AS costo_ful, 
           z.cantidad_articulo AS cantidad, 
           z.descuento, z.costo_unidad AS costo, z.costo as total, z.lote, z.fecha_vencimiento, z.check_ne  
@@ -157,21 +148,11 @@ while ($row = mysqli_fetch_array($result)) {
                 </div>';
       
       $html .= '</td>';
-      $codigoBarraTexto = trim($row["codigo_de_barra"] ?? "");
-      $codigoBarraMostrar = ($codigoBarraTexto != "" ? htmlspecialchars($codigoBarraTexto, ENT_QUOTES, "UTF-8") : "Sin código de barra");
-
-      if ($puede_editar_codigo_barra) {
-        $codigoBarraHtml = '<a href="javascript:void(0);" onclick="abrirModalCodigoBarra(' . intval($row["id"]) . ');" class="text-primary text-decoration-underline">' . $codigoBarraMostrar . '</a>';
-      } else {
-        $codigoBarraHtml = $codigoBarraMostrar;
-      }
-
-      $html .= '<td><strong>' . htmlspecialchars($row["nombre_comercial"] ?? "", ENT_QUOTES, "UTF-8") . 
-                    '</strong><br><small>' . htmlspecialchars($row["principio_activo"] ?? "", ENT_QUOTES, "UTF-8") . '</small><br>
-                    <small><i>' . htmlspecialchars($row["presentacion"] ?? "", ENT_QUOTES, "UTF-8") . '</i></small><br>
-                    <strong><small>Fabricante: ' . htmlspecialchars($row["fabricante"] ?? "", ENT_QUOTES, "UTF-8") . '</small></strong><br>
-                    <strong><small>COD: ' . htmlspecialchars($row["codigo"] ?? "", ENT_QUOTES, "UTF-8") . '</small></strong><br>
-                    <strong><small>Barra: ' . $codigoBarraHtml . '</small></strong><br>
+      $html .= '<td><strong>' . $row["nombre_comercial"] . 
+                    '</strong><br><small>' . $row["principio_activo"] . '</small><br>
+                    <small><i>' . $row["presentacion"] . '</i></small><br>
+                    <strong><small>Fabricante: ' . $row["fabricante"] . '<strong></small><br>
+                    <strong><small>COD: ' . $row["codigo"] . '<strong></small><br>
                     <small> Unidad</small>
                 </td>';
       $html .= '<td class="text-center">'; 
@@ -225,8 +206,4 @@ while ($row = mysqli_fetch_array($result)) {
       $html .= '<tr><td colspan="10"> <center><b>Registros ' . $i-1 . ' de ' . $cantidad . '</b></center> </td></tr>';
 
 echo json_encode($html, JSON_UNESCAPED_UNICODE);
-
-function h($value) {
-    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-}
 ?>

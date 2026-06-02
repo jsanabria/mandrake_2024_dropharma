@@ -61,27 +61,32 @@ $cliente = $row["nombre"];
 $PorDesMin = 0;
 $PorDesMax = 100;
 $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0));
+
+$puedeModificarPrecioDescuento = false;
+if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
+    $puedeModificarPrecioDescuento = VerificaFuncion("040");
+}
 ?>
 
 
 <div class="container border border-primary border-top rounded p-3">
   <div class="row">
     <div class="col-sm-8">
-		  <h5>Cliente: <?= $cliente ?></h5>
+      <h5>Cliente: <?= $cliente ?></h5>
       <div id="nroPedido">
           <button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Documento Id.: <?= $pedido ?> </button> 
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:vaciar(' . $pedido . ')"' : ''); ?> class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar la Cesta <i class="fa-solid fa-exclamation"></i></button> 
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:getCodigos3(' . $pedido . ')"' : ''); ?> class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace('ViewOutTdcfcvList');"><i class="fa-solid fa-list"></i> Facturas </button>
       </div>
-	    <input name="pedido" id="pedido" type="hidden" value="<?= $pedido ?>" />
-	    <input name="tipo_documento" id="tipo_documento" type="hidden" value="<?= $tipo_documento ?>" />
-	    <input name="codcli" id="codcli" type="hidden" value="<?= $codcli ?>" />
+      <input name="pedido" id="pedido" type="hidden" value="<?= $pedido ?>" />
+      <input name="tipo_documento" id="tipo_documento" type="hidden" value="<?= $tipo_documento ?>" />
+      <input name="codcli" id="codcli" type="hidden" value="<?= $codcli ?>" />
         <input name="nro_documento" id="nro_documento" type="hidden" value="<?= $nro_documento ?>" />
       <!--<input name="tasa_usd" id="tasa_usd" type="hidden" value="<?= $tasa ?>" />-->
       <input name="username" id="username" type="hidden" class="form-control form-control-sm" value="<?= CurrentUserName() ?>" />
     </div>
     <div class="col-sm-4">
-		<h2 class="text-end"><i class="fa-solid fa-comments-dollar"></i> <span class="badge text-bg-secondary"><?= number_format($tasa, 2, ".", ",") ?> Bs.</span></h2>
+    <h2 class="text-end"><i class="fa-solid fa-comments-dollar"></i> <span class="badge text-bg-secondary"><?= number_format($tasa, 2, ".", ",") ?> Bs.</span></h2>
     </div>
   </div>
 
@@ -112,7 +117,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
     <?php if(trim($doc_afectado) != "") echo "Doc Afect.:" . $doc_afectado; ?>
     <?php
-    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();">
+    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" data-original="' . $descTransferencista . '" class="form-control form-control-sm tdcfcv-autorizado-transferencista" size="4">
     <small>% Transferencista</small>';
     ?>   
   </div>
@@ -231,8 +236,8 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     </div>
     <div class="col-sm-3">
       Fabricante:
-		<input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-		<input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+    <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
+    <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
       <ul id="lista" class="list-group"></ul>
     </div>
     <div class="col-sm-3">
@@ -293,7 +298,7 @@ loadjs.ready(["jquery"], function () {
         if (typeof ew !== "undefined" && ew.alert) {
             ew.alert(msg);
         } else {
-            alert(msg);
+            ew.alert(msg);
         }
     }
 
@@ -311,6 +316,223 @@ loadjs.ready(["jquery"], function () {
     function getVal(id) {
         return $("#" + id).val() ?? "";
     }
+
+    const puedeModificarPrecioDescuento = <?= ($puedeModificarPrecioDescuento ? "true" : "false") ?>;
+
+    let revirtiendoAutorizacionTdcfcv = false;
+
+    let cambioAutorizacionTdcfcv = {
+        tipo: "",
+        inputId: "",
+        valorOriginal: "",
+        valorNuevo: "",
+        fila: 0
+    };
+
+    function limpiarCambioAutorizacionTdcfcv() {
+        cambioAutorizacionTdcfcv = {
+            tipo: "",
+            inputId: "",
+            valorOriginal: "",
+            valorNuevo: "",
+            fila: 0
+        };
+    }
+
+    function obtenerFilaDesdeInputId(inputId) {
+        const match = String(inputId || "").match(/^x(\d+)_/);
+        return match ? parseInt(match[1], 10) : 0;
+    }
+
+    function showModalAutorizarTdcfcv() {
+        const modalEl = document.getElementById("modalAutorizarTdcfcv");
+        if (!modalEl) return;
+
+        if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(modalEl).show();
+        } else if (typeof jQuery !== "undefined" && jQuery.fn.modal) {
+            jQuery(modalEl).modal("show");
+        }
+    }
+
+    function hideModalAutorizarTdcfcv() {
+        const modalEl = document.getElementById("modalAutorizarTdcfcv");
+        if (!modalEl) return;
+
+        if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+        } else if (typeof jQuery !== "undefined" && jQuery.fn.modal) {
+            jQuery(modalEl).modal("hide");
+        }
+    }
+
+    function restaurarCambioAutorizacionTdcfcv() {
+        if (cambioAutorizacionTdcfcv.inputId !== "") {
+            revirtiendoAutorizacionTdcfcv = true;
+            const $input = $("#" + cambioAutorizacionTdcfcv.inputId);
+            $input.val(cambioAutorizacionTdcfcv.valorOriginal);
+            $input.attr("data-original", cambioAutorizacionTdcfcv.valorOriginal);
+
+            if (cambioAutorizacionTdcfcv.tipo === "item" && cambioAutorizacionTdcfcv.fila > 0) {
+                myCalc(cambioAutorizacionTdcfcv.fila);
+            }
+
+            setTimeout(function () {
+                revirtiendoAutorizacionTdcfcv = false;
+            }, 250);
+        }
+
+        limpiarCambioAutorizacionTdcfcv();
+    }
+
+    function validarCambioAutorizacionTdcfcv($input) {
+        const id = $input.attr("id") || "";
+        const valor = parseFloat($input.val() || 0);
+
+        if (id === "descTransferencista" && (valor < 0 || valor >= 100)) {
+            alertMsg("El descuento de transferencista debe estar entre 0 y 99.");
+            return false;
+        }
+
+        if (id.indexOf("_precioFull") >= 0 && valor < 0) {
+            alertMsg("El precio full no puede ser menor a 0.");
+            return false;
+        }
+
+        if ((id.indexOf("_descuento") >= 0 || id.indexOf("_descuento2") >= 0) && (valor < 0 || valor >= 100)) {
+            alertMsg("El descuento debe estar entre 0 y 99.");
+            return false;
+        }
+
+        return true;
+    }
+
+    function aplicarCambioAutorizadoTdcfcv() {
+        if (cambioAutorizacionTdcfcv.inputId === "") return;
+
+        const $input = $("#" + cambioAutorizacionTdcfcv.inputId);
+        $input.attr("data-original", cambioAutorizacionTdcfcv.valorNuevo);
+
+        if (cambioAutorizacionTdcfcv.tipo === "transferencista") {
+            DiasCred();
+        } else if (cambioAutorizacionTdcfcv.tipo === "item" && cambioAutorizacionTdcfcv.fila > 0) {
+            myCalc(cambioAutorizacionTdcfcv.fila);
+        }
+
+        limpiarCambioAutorizacionTdcfcv();
+    }
+
+    function prepararAutorizacionTdcfcv($input, tipo) {
+        const inputId = $input.attr("id");
+        const valorOriginal = $input.attr("data-original") ?? "";
+        const valorNuevo = $input.val() ?? "";
+        const fila = obtenerFilaDesdeInputId(inputId);
+
+        if (String(valorOriginal) === String(valorNuevo)) return false;
+
+        cambioAutorizacionTdcfcv.tipo = tipo;
+        cambioAutorizacionTdcfcv.inputId = inputId;
+        cambioAutorizacionTdcfcv.valorOriginal = valorOriginal;
+        cambioAutorizacionTdcfcv.valorNuevo = valorNuevo;
+        cambioAutorizacionTdcfcv.fila = fila;
+
+        if (!validarCambioAutorizacionTdcfcv($input)) {
+            restaurarCambioAutorizacionTdcfcv();
+            return false;
+        }
+
+        if (puedeModificarPrecioDescuento) {
+            aplicarCambioAutorizadoTdcfcv();
+            return false;
+        }
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+        showModalAutorizarTdcfcv();
+        return true;
+    }
+
+    $(document).on("focus", ".tdcfcv-autorizado, #descTransferencista", function () {
+        $(this).attr("data-original", $(this).val());
+    });
+
+    $(document).on("change", ".tdcfcv-autorizado", function () {
+        if (revirtiendoAutorizacionTdcfcv) return;
+        prepararAutorizacionTdcfcv($(this), "item");
+    });
+
+    $(document).on("change", "#descTransferencista", function () {
+        if (revirtiendoAutorizacionTdcfcv) return;
+        prepararAutorizacionTdcfcv($(this), "transferencista");
+    });
+
+    $(document).on("click", "#btnCancelarAutorizarTdcfcv", function () {
+        if (descuentoGlobalPendiente.pedido !== "") {
+            PintarProgressBar(descuentoGlobalPendiente.original);
+
+            descuentoGlobalPendiente = {
+                pedido: "",
+                original: "",
+                nuevo: ""
+            };
+
+            hideModalAutorizarTdcfcv();
+            return;
+        }
+
+        restaurarCambioAutorizacionTdcfcv();
+        hideModalAutorizarTdcfcv();
+    });
+
+    $(document).on("click", "#btnAceptarAutorizarTdcfcv", function () {
+        const xuser = $("#auth_user_tdcfcv").val().trim();
+        const xpass = $("#auth_pass_tdcfcv").val().trim();
+
+        if (xuser === "" || xpass === "") {
+            alertMsg("Debe indicar usuario autorizador y clave.");
+            return false;
+        }
+
+        $("#btnAceptarAutorizarTdcfcv")
+            .prop("disabled", true)
+            .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Validando...');
+
+        $.ajax({
+            url: "include/Validar_Usuario_desc_precio.php",
+            type: "GET",
+            data: {
+                usernama: xuser,
+                password: xpass,
+                contexto: "TDCFCV_PRECIO_DESCUENTO"
+            }
+        })
+        .done(function (result) {
+            if (String(result).trim() === "S") {
+                if (descuentoGlobalPendiente.pedido !== "") {
+                    AplicarDescuentoGlobalPendiente();
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
+                aplicarCambioAutorizadoTdcfcv();
+                hideModalAutorizarTdcfcv();
+            } else {
+                alertMsg("!!! NO AUTORIZADO !!!");
+                restaurarCambioAutorizacionTdcfcv();
+                hideModalAutorizarTdcfcv();
+            }
+        })
+        .fail(function () {
+            alertMsg("Error de comunicación con el servidor.");
+            restaurarCambioAutorizacionTdcfcv();
+        })
+        .always(function () {
+            $("#btnAceptarAutorizarTdcfcv")
+                .prop("disabled", false)
+                .html('<i class="fa-solid fa-check me-1"></i> Autorizar');
+        });
+    });
 
     function setPedidoButtons(json) {
         $("#nroPedido").html(
@@ -869,19 +1091,69 @@ loadjs.ready(["jquery"], function () {
         });
     };    
 
+    var descuentoGlobalPendiente = {
+        pedido: "",
+        original: "",
+        nuevo: ""
+    };
+
+    window.PintarProgressBar = function (valor) {
+        const PorDesMin = parseInt(getVal("PorDesMin"), 10);
+        const PorDesMax = parseInt(getVal("PorDesMax"), 10);
+
+        $("#PorDesAct").val(valor);
+
+        $("#xProgress").html(
+            '<div class="progress">' +
+                '<div class="progress-bar" role="progressbar" style="width: ' + valor + '%" aria-valuenow="' + valor + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' +
+                    valor + '%' +
+                '</div>' +
+            '</div>'
+        );
+    }
+
+    window.AplicarDescuentoGlobalPendiente = function () {
+        if (descuentoGlobalPendiente.pedido === "") return;
+
+        PintarProgressBar(descuentoGlobalPendiente.nuevo);
+
+        RefreshDescuento(
+            descuentoGlobalPendiente.pedido,
+            descuentoGlobalPendiente.nuevo
+        );
+
+        descuentoGlobalPendiente = {
+            pedido: "",
+            original: "",
+            nuevo: ""
+        };
+    }
+
     window.ProgLess = function () {
         const pedido = getVal("pedido");
         const PorDesMin = parseInt(getVal("PorDesMin"), 10);
         const PorDesMax = parseInt(getVal("PorDesMax"), 10);
-        let PorDesAct = parseInt(getVal("PorDesAct"), 10);
+        const PorDesActOriginal = parseInt(getVal("PorDesAct"), 10);
 
         if (pedido == 0) return false;
 
-        if (PorDesAct > PorDesMin && PorDesAct <= PorDesMax) {
-            PorDesAct -= 1;
-            $("#PorDesAct").val(PorDesAct);
-            $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-            RefreshDescuento(pedido, PorDesAct);
+        if (PorDesActOriginal > PorDesMin && PorDesActOriginal <= PorDesMax) {
+            const PorDesActNuevo = PorDesActOriginal - 1;
+
+            descuentoGlobalPendiente = {
+                pedido: pedido,
+                original: PorDesActOriginal,
+                nuevo: PorDesActNuevo
+            };
+
+            if (puedeModificarPrecioDescuento) {
+                AplicarDescuentoGlobalPendiente();
+                return;
+            }
+
+            $("#auth_user_tdcfcv").val("");
+            $("#auth_pass_tdcfcv").val("");
+            showModalAutorizarTdcfcv();
         }
     };
 
@@ -889,15 +1161,28 @@ loadjs.ready(["jquery"], function () {
         const pedido = getVal("pedido");
         const PorDesMin = parseInt(getVal("PorDesMin"), 10);
         const PorDesMax = parseInt(getVal("PorDesMax"), 10);
-        let PorDesAct = parseInt(getVal("PorDesAct"), 10);
+        const PorDesActOriginal = parseInt(getVal("PorDesAct"), 10);
 
         if (pedido == 0) return false;
 
-        if (PorDesAct >= PorDesMin && PorDesAct < PorDesMax) {
-            PorDesAct += 1;
-            $("#PorDesAct").val(PorDesAct);
-            $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-            RefreshDescuento(pedido, PorDesAct);
+        if (PorDesActOriginal >= PorDesMin && PorDesActOriginal < PorDesMax) {
+
+            const PorDesActNuevo = PorDesActOriginal + 1;
+
+            descuentoGlobalPendiente = {
+                pedido: pedido,
+                original: PorDesActOriginal,
+                nuevo: PorDesActNuevo
+            };
+
+            if (puedeModificarPrecioDescuento) {
+                AplicarDescuentoGlobalPendiente();
+                return;
+            }
+
+            $("#auth_user_tdcfcv").val("");
+            $("#auth_pass_tdcfcv").val("");
+            showModalAutorizarTdcfcv();
         }
     };
 
@@ -1052,6 +1337,38 @@ loadjs.ready(["jquery"], function () {
 });
 </script>
 
+
+<div class="modal fade" id="modalAutorizarTdcfcv" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAutorizarTdcfcvLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-warning shadow-lg">
+      <div class="modal-header bg-dark text-white py-2">
+        <h5 class="modal-title" id="modalAutorizarTdcfcvLabel">
+          <i class="fa-solid fa-key me-2"></i> Autorización Requerida
+        </h5>
+      </div>
+      <div class="modal-body bg-light text-dark">
+        <p class="text-muted small border-bottom pb-2">
+          Para modificar precios o descuentos debe ingresar un usuario autorizador.
+        </p>
+        <div class="mb-3">
+          <input type="text" class="form-control form-control-sm" id="auth_user_tdcfcv" autocomplete="off" placeholder="Usuario Autorizador">
+        </div>
+        <div class="mb-0">
+          <input type="password" class="form-control form-control-sm" id="auth_pass_tdcfcv" placeholder="Password">
+        </div>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">
+        <button type="button" class="btn btn-sm btn-secondary" id="btnCancelarAutorizarTdcfcv">
+          <i class="fa-solid fa-xmark me-1"></i> Cancelar
+        </button>
+        <button type="button" class="btn btn-sm btn-success" id="btnAceptarAutorizarTdcfcv">
+          <i class="fa-solid fa-check me-1"></i> Autorizar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="modalConfirmarFiscal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarFiscalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-primary shadow-lg">
@@ -1100,5 +1417,4 @@ loadjs.ready(["jquery"], function () {
     </div>
   </div>
 </div>
-
 <?= GetDebugMessage() ?>

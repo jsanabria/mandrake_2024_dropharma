@@ -32,7 +32,6 @@ try {
     $fecha_vencimiento = trim($_POST["fecha"] ?? "");
     $almacen = trim($_POST["almacen"] ?? "");
     $cnt = floatval($_POST["cantidad"] ?? 0);
-    $precio_request = isset($_POST["precio"]) ? floatval($_POST["precio"]) : null;
     $un = trim($_POST["unidad"] ?? "");
 
     if ($id <= 0 || $articulo <= 0 || $cnt <= 0) {
@@ -108,18 +107,14 @@ try {
     $rowPre = $stmt->get_result()->fetch_assoc();
     $stmt->close();
 
-    if ($precio_request !== null && $precio_request >= 0) {
-        $precio_unidad = $precio_request;
-        $precio = $asignado * $precio_unidad;
-        $precio_ful = $precio_request;
-    } elseif ($mostrar_precio === "S" && $rowPre) {
+    if ($mostrar_precio === "S" && $rowPre) {
         $precio_unidad = floatval($rowPre["precio"]);
         $precio = $asignado * $precio_unidad;
-        $precio_ful = floatval($rowPre["precio_ful"]);
+        $precio_ful = floatval($rowPre["precio_ful"]);	
     } else {
         $precio_unidad = 0;
         $precio = 0;
-        $precio_ful = 0;
+        $precio_ful = 0;	
     }
 
     // Re-verificación estricta de stock disponible en lote

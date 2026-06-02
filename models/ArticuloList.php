@@ -4822,9 +4822,11 @@ class ArticuloList extends Articulo
                     <div class="col-sm-2">
                         <a href="include/DescargarArticulosCostos.php" class="btn btn-primary w-100">Art&iacute;culos Costos</a>
                     </div>
+                    <!--
                     <div class="col-sm-2">
                         <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#modalInventario">Inventario a A2</button>
                     </div>
+                    -->
                     <div class="col-sm-2">
                         <div style="color:#222; background-color:#8ad3d3; padding: 7px;" class="alert text-center" role="alert">Sin Existencia</div>
                     </div>

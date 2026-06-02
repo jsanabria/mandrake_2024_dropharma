@@ -493,7 +493,11 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}visitas","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}visitas","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}ya_fue_procesado.php","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}ya_fue_procesado.php","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}ya_fue_procesado.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial_procesar.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial_procesar.php","0","0"]];
 
 /**
  * Tables
@@ -741,4 +745,6 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["view_x_cobrar","view_x_cobrar","view x cobrar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}",""],
     ["view_x_pagar","view_x_pagar","view x pagar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}",""],
     ["visitas","visitas","visitas",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","VisitasList"],
-    ["ya_fue_procesado.php","ya_fue_procesado","Nota de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","YaFueProcesado"]];
+    ["ya_fue_procesado.php","ya_fue_procesado","Nota de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","YaFueProcesado"],
+    ["nota_de_entrega_parcial.php","nota_de_entrega_parcial","Nota de Entrega Parcial",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","NotaDeEntregaParcial"],
+    ["nota_de_entrega_parcial_procesar.php","nota_de_entrega_parcial_procesar","Nota de Entrega Parcial",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","NotaDeEntregaParcialProcesar"]];

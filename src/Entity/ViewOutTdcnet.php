@@ -63,6 +63,9 @@ class ViewOutTdcnet extends AbstractEntity
     #[Column(type: "decimal", nullable: true)]
     private ?string $total;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $moneda;
+
     #[Column(name: "lista_pedido", type: "string", nullable: true)]
     private ?string $listaPedido;
 
@@ -77,9 +80,6 @@ class ViewOutTdcnet extends AbstractEntity
 
     #[Column(name: "id_documento_padre", type: "integer", nullable: true)]
     private ?int $idDocumentoPadre;
-
-    #[Column(type: "string", nullable: true)]
-    private ?string $moneda;
 
     #[Column(type: "string", nullable: true)]
     private ?string $asesor;
@@ -343,6 +343,17 @@ class ViewOutTdcnet extends AbstractEntity
         return $this;
     }
 
+    public function getMoneda(): ?string
+    {
+        return HtmlDecode($this->moneda);
+    }
+
+    public function setMoneda(?string $value): static
+    {
+        $this->moneda = RemoveXss($value);
+        return $this;
+    }
+
     public function getListaPedido(): ?string
     {
         return HtmlDecode($this->listaPedido);
@@ -395,17 +406,6 @@ class ViewOutTdcnet extends AbstractEntity
     public function setIdDocumentoPadre(?int $value): static
     {
         $this->idDocumentoPadre = $value;
-        return $this;
-    }
-
-    public function getMoneda(): ?string
-    {
-        return HtmlDecode($this->moneda);
-    }
-
-    public function setMoneda(?string $value): static
-    {
-        $this->moneda = RemoveXss($value);
         return $this;
     }
 

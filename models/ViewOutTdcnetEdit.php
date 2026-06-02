@@ -140,12 +140,12 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->alicuota_iva->Visible = false;
         $this->iva->Visible = false;
         $this->total->Visible = false;
+        $this->moneda->Visible = false;
         $this->lista_pedido->Visible = false;
         $this->nota->setVisibility();
         $this->unidades->Visible = false;
-        $this->estatus->setVisibility();
+        $this->estatus->Visible = false;
         $this->id_documento_padre->Visible = false;
-        $this->moneda->Visible = false;
         $this->asesor->Visible = false;
         $this->documento->Visible = false;
         $this->tasa_dia->Visible = false;
@@ -159,11 +159,11 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->user_bultos->Visible = false;
         $this->fecha_despacho->Visible = false;
         $this->user_despacho->Visible = false;
-        $this->consignacion->setVisibility();
+        $this->consignacion->Visible = false;
         $this->descuento->Visible = false;
         $this->descuento2->Visible = false;
         $this->monto_sin_descuento->Visible = false;
-        $this->factura->setVisibility();
+        $this->factura->Visible = false;
         $this->ci_rif->setVisibility();
         $this->nombre->setVisibility();
         $this->direccion->setVisibility();
@@ -581,10 +581,10 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         // Set up lookup cache
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->estatus);
         $this->setupLookupOptions($this->id_documento_padre);
-        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->asesor);
         $this->setupLookupOptions($this->documento);
         $this->setupLookupOptions($this->dias_credito);
@@ -893,16 +893,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             }
         }
 
-        // Check field name 'estatus' first before field var 'x_estatus'
-        $val = $CurrentForm->hasValue("estatus") ? $CurrentForm->getValue("estatus") : $CurrentForm->getValue("x_estatus");
-        if (!$this->estatus->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->estatus->Visible = false; // Disable update for API request
-            } else {
-                $this->estatus->setFormValue($val);
-            }
-        }
-
         // Check field name 'bultos' first before field var 'x_bultos'
         $val = $CurrentForm->hasValue("bultos") ? $CurrentForm->getValue("bultos") : $CurrentForm->getValue("x_bultos");
         if (!$this->bultos->IsDetailKey) {
@@ -910,26 +900,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
                 $this->bultos->Visible = false; // Disable update for API request
             } else {
                 $this->bultos->setFormValue($val, true, $validate);
-            }
-        }
-
-        // Check field name 'consignacion' first before field var 'x_consignacion'
-        $val = $CurrentForm->hasValue("consignacion") ? $CurrentForm->getValue("consignacion") : $CurrentForm->getValue("x_consignacion");
-        if (!$this->consignacion->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->consignacion->Visible = false; // Disable update for API request
-            } else {
-                $this->consignacion->setFormValue($val);
-            }
-        }
-
-        // Check field name 'factura' first before field var 'x_factura'
-        $val = $CurrentForm->hasValue("factura") ? $CurrentForm->getValue("factura") : $CurrentForm->getValue("x_factura");
-        if (!$this->factura->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->factura->Visible = false; // Disable update for API request
-            } else {
-                $this->factura->setFormValue($val);
             }
         }
 
@@ -990,10 +960,7 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->cliente->CurrentValue = $this->cliente->FormValue;
         $this->nro_documento->CurrentValue = $this->nro_documento->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
-        $this->estatus->CurrentValue = $this->estatus->FormValue;
         $this->bultos->CurrentValue = $this->bultos->FormValue;
-        $this->consignacion->CurrentValue = $this->consignacion->FormValue;
-        $this->factura->CurrentValue = $this->factura->FormValue;
         $this->ci_rif->CurrentValue = $this->ci_rif->FormValue;
         $this->nombre->CurrentValue = $this->nombre->FormValue;
         $this->direccion->CurrentValue = $this->direccion->FormValue;
@@ -1104,12 +1071,12 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->id_documento_padre->setDbValue($row['id_documento_padre']);
-        $this->moneda->setDbValue($row['moneda']);
         $this->asesor->setDbValue($row['asesor']);
         $this->documento->setDbValue($row['documento']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
@@ -1172,12 +1139,12 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['estatus'] = $this->estatus->DefaultValue;
         $row['id_documento_padre'] = $this->id_documento_padre->DefaultValue;
-        $row['moneda'] = $this->moneda->DefaultValue;
         $row['asesor'] = $this->asesor->DefaultValue;
         $row['documento'] = $this->documento->DefaultValue;
         $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
@@ -1288,6 +1255,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         // total
         $this->total->RowCssClass = "row";
 
+        // moneda
+        $this->moneda->RowCssClass = "row";
+
         // lista_pedido
         $this->lista_pedido->RowCssClass = "row";
 
@@ -1302,9 +1272,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
 
         // id_documento_padre
         $this->id_documento_padre->RowCssClass = "row";
-
-        // moneda
-        $this->moneda->RowCssClass = "row";
 
         // asesor
         $this->asesor->RowCssClass = "row";
@@ -1515,6 +1482,30 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
+
             // lista_pedido
             $curVal = strval($this->lista_pedido->CurrentValue);
             if ($curVal != "") {
@@ -1574,30 +1565,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
                 }
             } else {
                 $this->id_documento_padre->ViewValue = null;
-            }
-
-            // moneda
-            $curVal = strval($this->moneda->CurrentValue);
-            if ($curVal != "") {
-                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-                if ($this->moneda->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                    } else {
-                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                    }
-                }
-            } else {
-                $this->moneda->ViewValue = null;
             }
 
             // asesor
@@ -1904,17 +1871,8 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             // nota
             $this->nota->HrefValue = "";
 
-            // estatus
-            $this->estatus->HrefValue = "";
-
             // bultos
             $this->bultos->HrefValue = "";
-
-            // consignacion
-            $this->consignacion->HrefValue = "";
-
-            // factura
-            $this->factura->HrefValue = "";
 
             // ci_rif
             $this->ci_rif->HrefValue = "";
@@ -1966,11 +1924,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
             $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
 
-            // estatus
-            $this->estatus->setupEditAttributes();
-            $this->estatus->EditValue = $this->estatus->options(true);
-            $this->estatus->PlaceHolder = RemoveHtml($this->estatus->caption());
-
             // bultos
             $this->bultos->setupEditAttributes();
             $this->bultos->EditValue = $this->bultos->CurrentValue;
@@ -1978,15 +1931,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             if (strval($this->bultos->EditValue) != "" && is_numeric($this->bultos->EditValue)) {
                 $this->bultos->EditValue = $this->bultos->EditValue;
             }
-
-            // consignacion
-            $this->consignacion->EditValue = $this->consignacion->options(false);
-            $this->consignacion->PlaceHolder = RemoveHtml($this->consignacion->caption());
-
-            // factura
-            $this->factura->setupEditAttributes();
-            $this->factura->EditValue = $this->factura->options(true);
-            $this->factura->PlaceHolder = RemoveHtml($this->factura->caption());
 
             // ci_rif
             $this->ci_rif->setupEditAttributes();
@@ -2006,9 +1950,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
 
             // direccion
             $this->direccion->setupEditAttributes();
-            if (!$this->direccion->Raw) {
-                $this->direccion->CurrentValue = HtmlDecode($this->direccion->CurrentValue);
-            }
             $this->direccion->EditValue = HtmlEncode($this->direccion->CurrentValue);
             $this->direccion->PlaceHolder = RemoveHtml($this->direccion->caption());
 
@@ -2037,17 +1978,8 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             // nota
             $this->nota->HrefValue = "";
 
-            // estatus
-            $this->estatus->HrefValue = "";
-
             // bultos
             $this->bultos->HrefValue = "";
-
-            // consignacion
-            $this->consignacion->HrefValue = "";
-
-            // factura
-            $this->factura->HrefValue = "";
 
             // ci_rif
             $this->ci_rif->HrefValue = "";
@@ -2101,11 +2033,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
                     $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
                 }
             }
-            if ($this->estatus->Visible && $this->estatus->Required) {
-                if (!$this->estatus->IsDetailKey && EmptyValue($this->estatus->FormValue)) {
-                    $this->estatus->addErrorMessage(str_replace("%s", $this->estatus->caption(), $this->estatus->RequiredErrorMessage));
-                }
-            }
             if ($this->bultos->Visible && $this->bultos->Required) {
                 if (!$this->bultos->IsDetailKey && EmptyValue($this->bultos->FormValue)) {
                     $this->bultos->addErrorMessage(str_replace("%s", $this->bultos->caption(), $this->bultos->RequiredErrorMessage));
@@ -2113,16 +2040,6 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             }
             if (!CheckInteger($this->bultos->FormValue)) {
                 $this->bultos->addErrorMessage($this->bultos->getErrorMessage(false));
-            }
-            if ($this->consignacion->Visible && $this->consignacion->Required) {
-                if ($this->consignacion->FormValue == "") {
-                    $this->consignacion->addErrorMessage(str_replace("%s", $this->consignacion->caption(), $this->consignacion->RequiredErrorMessage));
-                }
-            }
-            if ($this->factura->Visible && $this->factura->Required) {
-                if (!$this->factura->IsDetailKey && EmptyValue($this->factura->FormValue)) {
-                    $this->factura->addErrorMessage(str_replace("%s", $this->factura->caption(), $this->factura->RequiredErrorMessage));
-                }
             }
             if ($this->ci_rif->Visible && $this->ci_rif->Required) {
                 if (!$this->ci_rif->IsDetailKey && EmptyValue($this->ci_rif->FormValue)) {
@@ -2275,17 +2192,8 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
-        // estatus
-        $this->estatus->setDbValueDef($rsnew, $this->estatus->CurrentValue, $this->estatus->ReadOnly);
-
         // bultos
         $this->bultos->setDbValueDef($rsnew, $this->bultos->CurrentValue, $this->bultos->ReadOnly);
-
-        // consignacion
-        $this->consignacion->setDbValueDef($rsnew, $this->consignacion->CurrentValue, $this->consignacion->ReadOnly);
-
-        // factura
-        $this->factura->setDbValueDef($rsnew, $this->factura->CurrentValue, $this->factura->ReadOnly);
 
         // ci_rif
         $this->ci_rif->setDbValueDef($rsnew, $this->ci_rif->CurrentValue, $this->ci_rif->ReadOnly);
@@ -2310,17 +2218,8 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];
         }
-        if (isset($row['estatus'])) { // estatus
-            $this->estatus->CurrentValue = $row['estatus'];
-        }
         if (isset($row['bultos'])) { // bultos
             $this->bultos->CurrentValue = $row['bultos'];
-        }
-        if (isset($row['consignacion'])) { // consignacion
-            $this->consignacion->CurrentValue = $row['consignacion'];
-        }
-        if (isset($row['factura'])) { // factura
-            $this->factura->CurrentValue = $row['factura'];
         }
         if (isset($row['ci_rif'])) { // ci_rif
             $this->ci_rif->CurrentValue = $row['ci_rif'];
@@ -2397,15 +2296,15 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
                     break;
                 case "x_cliente":
                     break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
                 case "x_lista_pedido":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_estatus":
                     break;
                 case "x_id_documento_padre":
-                    break;
-                case "x_moneda":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_asesor":
                     break;

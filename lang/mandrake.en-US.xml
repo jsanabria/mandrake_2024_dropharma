@@ -1,7 +1,13 @@
-<ew-language date="2026/5/19" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/6/1" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1461">
+      <phrase id="menutext" value="Nota de Entrega Parcial" />
+    </menu>
+    <menu id="1462">
+      <phrase id="menutext" value="Nota de Entrega Parcial" />
+    </menu>
     <menu id="1443">
       <phrase id="menutext" value="reporte seniat ne" />
     </menu>
@@ -1770,16 +1776,16 @@
         <phrase id="fldcaption" value="Comprobante" />
       </field>
       <field id="tipo_iva">
-        <phrase id="fldcaption" value="tipo iva" />
+        <phrase id="fldcaption" value="Tipo IVA" />
       </field>
       <field id="tipo_islr">
-        <phrase id="fldcaption" value="tipo islr" />
+        <phrase id="fldcaption" value="Tipo ISLR" />
       </field>
       <field id="sustraendo">
-        <phrase id="fldcaption" value="sustraendo" />
+        <phrase id="fldcaption" value="Sustraendo" />
       </field>
       <field id="tipo_municipal">
-        <phrase id="fldcaption" value="tipo municipal" />
+        <phrase id="fldcaption" value="Tipo Municipal" />
       </field>
       <field id="anulado">
         <phrase id="fldcaption" value="Anulado" />
@@ -1794,6 +1800,12 @@
         <phrase id="fldtagcaption1" value="SI" />
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="NO" />
+      </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="moneda" />
+      </field>
+      <field id="tasa_dia">
+        <phrase id="fldcaption" value="tasa dia" />
       </field>
     </table>
     <table id="conceptos_bancarios">
@@ -6862,6 +6874,9 @@
       <field id="total">
         <phrase id="fldcaption" value="Total" />
       </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
       <field id="lista_pedido">
         <phrase id="fldcaption" value="Lista Pedido" />
       </field>
@@ -6882,9 +6897,6 @@
       </field>
       <field id="id_documento_padre">
         <phrase id="fldcaption" value="Doc. Origen" />
-      </field>
-      <field id="moneda">
-        <phrase id="fldcaption" value="Moneda" />
       </field>
       <field id="asesor">
         <phrase id="fldcaption" value="Asesor/Cliente" />
@@ -6966,10 +6978,10 @@
         <phrase id="fldcaption" value="CI/RIF" />
       </field>
       <field id="nombre">
-        <phrase id="fldcaption" value="Cliente Compra" />
+        <phrase id="fldcaption" value="Quien Recibe" />
       </field>
       <field id="direccion">
-        <phrase id="fldcaption" value="Dirección" />
+        <phrase id="fldcaption" value="Dirección Envío" />
       </field>
       <field id="telefono">
         <phrase id="fldcaption" value="Teléfono" />
@@ -7662,6 +7674,12 @@
     </table>
     <table id="ya_fue_procesado">
       <phrase id="tblcaption" value="Nota de Entrega" />
+    </table>
+    <table id="nota_de_entrega_parcial">
+      <phrase id="tblcaption" value="Nota de Entrega Parcial" />
+    </table>
+    <table id="nota_de_entrega_parcial_procesar">
+      <phrase id="tblcaption" value="Nota de Entrega Parcial" />
     </table>
   </project>
 </ew-language>

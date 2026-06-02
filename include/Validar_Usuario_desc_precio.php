@@ -11,7 +11,7 @@ $usercaja = $_REQUEST["usercaja"] ?? $usernama;
 $sql = "SELECT id FROM usuario WHERE username = '$usernama' AND password = '$password';"; 
 $rs = mysqli_query($link, $sql);
 if($row = mysqli_fetch_array($rs)) {
-	$sql = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '045' AND RTRIM(valor1) = '$usernama';";
+	$sql = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '070' AND RTRIM(valor1) = '$usernama';";
 	$rs = mysqli_query($link, $sql);
 	if($row = mysqli_fetch_array($rs)) $resp = "S";
 	else $resp = "N";
@@ -23,7 +23,7 @@ else {
 
 $sql = "INSERT INTO audittrail
 	(id, datetime, script, user, `action`, `table`, `field`)
-	VALUES (NULL, NOW(), 'SOLICITAR AUTORIZACION PROCESAR CONTEO FISICO', '$usernama', 'PURGA NRO.: $idPurga', 'USUARIO EN CONTEO: $usercaja | AUTORIZADO: $resp', '')"; 
+	VALUES (NULL, NOW(), 'SOLICITAR AUTORIZACION CAMBIO DESCUENTO PRECIO', '$usernama', 'FACT NRO.: $idPurga', 'USUARIO EN CAJA: $usercaja | AUTORIZADO: $resp', '')"; 
 mysqli_query($link, $sql);	
 
 echo $resp;

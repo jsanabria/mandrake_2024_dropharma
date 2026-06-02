@@ -88,8 +88,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["y_fecha", [ew.Validators.between], false],
             ["cliente", [], fields.cliente.isInvalid],
             ["nro_documento", [], fields.nro_documento.isInvalid],
-            ["lista_pedido", [], fields.lista_pedido.isInvalid],
-            ["factura", [], fields.factura.isInvalid]
+            ["entregado", [], fields.entregado.isInvalid]
         ])
         // Validate form
         .setValidate(
@@ -125,8 +124,7 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
-            "lista_pedido": <?= $Page->lista_pedido->toClientList($Page) ?>,
-            "factura": <?= $Page->factura->toClientList($Page) ?>,
+            "entregado": <?= $Page->entregado->toClientList($Page) ?>,
         })
 
         // Filters
@@ -306,108 +304,52 @@ if (!$Page->nro_documento->UseFilter) {
         </div><!-- /.ew-search-field -->
     </div><!-- /.col-sm-auto -->
 <?php } ?>
-<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
+<?php if ($Page->entregado->Visible) { // entregado ?>
 <?php
-if (!$Page->lista_pedido->UseFilter) {
+if (!$Page->entregado->UseFilter) {
     $Page->SearchColumnCount++;
 }
 ?>
-    <div id="xs_lista_pedido" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->lista_pedido->UseFilter ? " ew-filter-field" : "" ?>">
+    <div id="xs_entregado" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->entregado->UseFilter ? " ew-filter-field" : "" ?>">
         <div class="d-flex my-1 my-sm-0">
-            <label for="x_lista_pedido" class="ew-search-caption ew-label"><?= $Page->lista_pedido->caption() ?></label>
+            <label for="x_entregado" class="ew-search-caption ew-label"><?= $Page->entregado->caption() ?></label>
             <div class="ew-search-operator">
 <?= $Language->phrase("=") ?>
-<input type="hidden" name="z_lista_pedido" id="z_lista_pedido" value="=">
+<input type="hidden" name="z_entregado" id="z_entregado" value="=">
 </div>
         </div>
-        <div id="el_view_out_tdcnet_lista_pedido" class="ew-search-field">
+        <div id="el_view_out_tdcnet_entregado" class="ew-search-field">
     <select
-        id="x_lista_pedido"
-        name="x_lista_pedido"
-        class="form-select ew-select<?= $Page->lista_pedido->isInvalidClass() ?>"
-        <?php if (!$Page->lista_pedido->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcnetsrch_x_lista_pedido"
+        id="x_entregado"
+        name="x_entregado"
+        class="form-select ew-select<?= $Page->entregado->isInvalidClass() ?>"
+        <?php if (!$Page->entregado->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcnetsrch_x_entregado"
         <?php } ?>
         data-table="view_out_tdcnet"
-        data-field="x_lista_pedido"
-        data-value-separator="<?= $Page->lista_pedido->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->lista_pedido->getPlaceHolder()) ?>"
-        <?= $Page->lista_pedido->editAttributes() ?>>
-        <?= $Page->lista_pedido->selectOptionListHtml("x_lista_pedido") ?>
+        data-field="x_entregado"
+        data-value-separator="<?= $Page->entregado->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->entregado->getPlaceHolder()) ?>"
+        <?= $Page->entregado->editAttributes() ?>>
+        <?= $Page->entregado->selectOptionListHtml("x_entregado") ?>
     </select>
-    <div class="invalid-feedback"><?= $Page->lista_pedido->getErrorMessage(false) ?></div>
-<?= $Page->lista_pedido->Lookup->getParamTag($Page, "p_x_lista_pedido") ?>
-<?php if (!$Page->lista_pedido->IsNativeSelect) { ?>
+    <div class="invalid-feedback"><?= $Page->entregado->getErrorMessage(false) ?></div>
+<?php if (!$Page->entregado->IsNativeSelect) { ?>
 <script>
 loadjs.ready("fview_out_tdcnetsrch", function() {
-    var options = { name: "x_lista_pedido", selectId: "fview_out_tdcnetsrch_x_lista_pedido" },
+    var options = { name: "x_entregado", selectId: "fview_out_tdcnetsrch_x_entregado" },
         el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
     if (!el)
         return;
     options.closeOnSelect = !options.multiple;
     options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcnetsrch.lists.lista_pedido?.lookupOptions.length) {
-        options.data = { id: "x_lista_pedido", form: "fview_out_tdcnetsrch" };
+    if (fview_out_tdcnetsrch.lists.entregado?.lookupOptions.length) {
+        options.data = { id: "x_entregado", form: "fview_out_tdcnetsrch" };
     } else {
-        options.ajax = { id: "x_lista_pedido", form: "fview_out_tdcnetsrch", limit: ew.LOOKUP_PAGE_SIZE };
+        options.ajax = { id: "x_entregado", form: "fview_out_tdcnetsrch", limit: ew.LOOKUP_PAGE_SIZE };
     }
     options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.lista_pedido.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</div>
-        <div class="d-flex my-1 my-sm-0">
-        </div><!-- /.ew-search-field -->
-    </div><!-- /.col-sm-auto -->
-<?php } ?>
-<?php if ($Page->factura->Visible) { // factura ?>
-<?php
-if (!$Page->factura->UseFilter) {
-    $Page->SearchColumnCount++;
-}
-?>
-    <div id="xs_factura" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->factura->UseFilter ? " ew-filter-field" : "" ?>">
-        <div class="d-flex my-1 my-sm-0">
-            <label for="x_factura" class="ew-search-caption ew-label"><?= $Page->factura->caption() ?></label>
-            <div class="ew-search-operator">
-<?= $Language->phrase("=") ?>
-<input type="hidden" name="z_factura" id="z_factura" value="=">
-</div>
-        </div>
-        <div id="el_view_out_tdcnet_factura" class="ew-search-field">
-    <select
-        id="x_factura"
-        name="x_factura"
-        class="form-select ew-select<?= $Page->factura->isInvalidClass() ?>"
-        <?php if (!$Page->factura->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcnetsrch_x_factura"
-        <?php } ?>
-        data-table="view_out_tdcnet"
-        data-field="x_factura"
-        data-value-separator="<?= $Page->factura->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->factura->getPlaceHolder()) ?>"
-        <?= $Page->factura->editAttributes() ?>>
-        <?= $Page->factura->selectOptionListHtml("x_factura") ?>
-    </select>
-    <div class="invalid-feedback"><?= $Page->factura->getErrorMessage(false) ?></div>
-<?php if (!$Page->factura->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fview_out_tdcnetsrch", function() {
-    var options = { name: "x_factura", selectId: "fview_out_tdcnetsrch_x_factura" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcnetsrch.lists.factura?.lookupOptions.length) {
-        options.data = { id: "x_factura", form: "fview_out_tdcnetsrch" };
-    } else {
-        options.ajax = { id: "x_factura", form: "fview_out_tdcnetsrch", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.factura.selectOptions);
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.entregado.selectOptions);
     ew.createSelect(options);
 });
 </script>
@@ -504,8 +446,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->total->Visible) { // total ?>
         <th data-name="total" class="<?= $Page->total->headerCellClass() ?>"><div id="elh_view_out_tdcnet_total" class="view_out_tdcnet_total"><?= $Page->renderFieldHeader($Page->total) ?></div></th>
 <?php } ?>
-<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-        <th data-name="lista_pedido" class="<?= $Page->lista_pedido->headerCellClass() ?>"><div id="elh_view_out_tdcnet_lista_pedido" class="view_out_tdcnet_lista_pedido"><?= $Page->renderFieldHeader($Page->lista_pedido) ?></div></th>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+        <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_view_out_tdcnet_moneda" class="view_out_tdcnet_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
 <?php } ?>
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_view_out_tdcnet_unidades" class="view_out_tdcnet_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
@@ -513,26 +455,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->id_documento_padre->Visible) { // id_documento_padre ?>
         <th data-name="id_documento_padre" class="<?= $Page->id_documento_padre->headerCellClass() ?>"><div id="elh_view_out_tdcnet_id_documento_padre" class="view_out_tdcnet_id_documento_padre"><?= $Page->renderFieldHeader($Page->id_documento_padre) ?></div></th>
 <?php } ?>
-<?php if ($Page->dias_credito->Visible) { // dias_credito ?>
-        <th data-name="dias_credito" class="<?= $Page->dias_credito->headerCellClass() ?>"><div id="elh_view_out_tdcnet_dias_credito" class="view_out_tdcnet_dias_credito"><?= $Page->renderFieldHeader($Page->dias_credito) ?></div></th>
-<?php } ?>
-<?php if ($Page->bultos->Visible) { // bultos ?>
-        <th data-name="bultos" class="<?= $Page->bultos->headerCellClass() ?>"><div id="elh_view_out_tdcnet_bultos" class="view_out_tdcnet_bultos"><?= $Page->renderFieldHeader($Page->bultos) ?></div></th>
-<?php } ?>
-<?php if ($Page->descuento->Visible) { // descuento ?>
-        <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_view_out_tdcnet_descuento" class="view_out_tdcnet_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
-<?php } ?>
-<?php if ($Page->descuento2->Visible) { // descuento2 ?>
-        <th data-name="descuento2" class="<?= $Page->descuento2->headerCellClass() ?>"><div id="elh_view_out_tdcnet_descuento2" class="view_out_tdcnet_descuento2"><?= $Page->renderFieldHeader($Page->descuento2) ?></div></th>
-<?php } ?>
-<?php if ($Page->factura->Visible) { // factura ?>
-        <th data-name="factura" class="<?= $Page->factura->headerCellClass() ?>"><div id="elh_view_out_tdcnet_factura" class="view_out_tdcnet_factura"><?= $Page->renderFieldHeader($Page->factura) ?></div></th>
-<?php } ?>
-<?php if ($Page->ci_rif->Visible) { // ci_rif ?>
-        <th data-name="ci_rif" class="<?= $Page->ci_rif->headerCellClass() ?>"><div id="elh_view_out_tdcnet_ci_rif" class="view_out_tdcnet_ci_rif"><?= $Page->renderFieldHeader($Page->ci_rif) ?></div></th>
-<?php } ?>
-<?php if ($Page->nombre->Visible) { // nombre ?>
-        <th data-name="nombre" class="<?= $Page->nombre->headerCellClass() ?>"><div id="elh_view_out_tdcnet_nombre" class="view_out_tdcnet_nombre"><?= $Page->renderFieldHeader($Page->nombre) ?></div></th>
+<?php if ($Page->entregado->Visible) { // entregado ?>
+        <th data-name="entregado" class="<?= $Page->entregado->headerCellClass() ?>"><div id="elh_view_out_tdcnet_entregado" class="view_out_tdcnet_entregado"><?= $Page->renderFieldHeader($Page->entregado) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -602,11 +526,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-        <td data-name="lista_pedido"<?= $Page->lista_pedido->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_lista_pedido" class="el_view_out_tdcnet_lista_pedido">
-<span<?= $Page->lista_pedido->viewAttributes() ?>>
-<?= $Page->lista_pedido->getViewValue() ?></span>
+    <?php if ($Page->moneda->Visible) { // moneda ?>
+        <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_moneda" class="el_view_out_tdcnet_moneda">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -626,59 +550,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->dias_credito->Visible) { // dias_credito ?>
-        <td data-name="dias_credito"<?= $Page->dias_credito->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_dias_credito" class="el_view_out_tdcnet_dias_credito">
-<span<?= $Page->dias_credito->viewAttributes() ?>>
-<?= $Page->dias_credito->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->bultos->Visible) { // bultos ?>
-        <td data-name="bultos"<?= $Page->bultos->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_bultos" class="el_view_out_tdcnet_bultos">
-<span<?= $Page->bultos->viewAttributes() ?>>
-<?= $Page->bultos->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->descuento->Visible) { // descuento ?>
-        <td data-name="descuento"<?= $Page->descuento->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_descuento" class="el_view_out_tdcnet_descuento">
-<span<?= $Page->descuento->viewAttributes() ?>>
-<?= $Page->descuento->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->descuento2->Visible) { // descuento2 ?>
-        <td data-name="descuento2"<?= $Page->descuento2->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_descuento2" class="el_view_out_tdcnet_descuento2">
-<span<?= $Page->descuento2->viewAttributes() ?>>
-<?= $Page->descuento2->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->factura->Visible) { // factura ?>
-        <td data-name="factura"<?= $Page->factura->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_factura" class="el_view_out_tdcnet_factura">
-<span<?= $Page->factura->viewAttributes() ?>>
-<?= $Page->factura->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->ci_rif->Visible) { // ci_rif ?>
-        <td data-name="ci_rif"<?= $Page->ci_rif->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_ci_rif" class="el_view_out_tdcnet_ci_rif">
-<span<?= $Page->ci_rif->viewAttributes() ?>>
-<?= $Page->ci_rif->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->nombre->Visible) { // nombre ?>
-        <td data-name="nombre"<?= $Page->nombre->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_nombre" class="el_view_out_tdcnet_nombre">
-<span<?= $Page->nombre->viewAttributes() ?>>
-<?= $Page->nombre->getViewValue() ?></span>
+    <?php if ($Page->entregado->Visible) { // entregado ?>
+        <td data-name="entregado"<?= $Page->entregado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_entregado" class="el_view_out_tdcnet_entregado">
+<span<?= $Page->entregado->viewAttributes() ?>>
+<?= $Page->entregado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -746,7 +622,38 @@ loadjs.ready("head", function() {
 </script>
 <script>
 loadjs.ready("load", function () {
+    // Startup script
     // Write your table-specific startup script here, no need to add script tags.
+
+    // Aseguramos la ejecución limpia en el ecosistema de PHPMaker 2024
+    loadjs.ready("makerjs", function() {
+        // Interceptamos el clic en el botón de impresión usando delegación de eventos de jQuery
+        jQuery(document).on("click", "a.btn-imprimir-nota", function(e) {
+            e.preventDefault(); // Detenemos la apertura automática inmediata de la pestaña
+            var $enlace = jQuery(this);
+            var urlOriginal = $enlace.attr("href");
+            var configPrecio = $enlace.data("con-precio"); // Obtiene 'S' o 'N'
+            var conPrecioParam = "S"; // Por defecto asumimos que va Con Precio ('S')
+
+            // Si el parámetro de la tabla es 'S', disparamos la interactividad de confirmación
+            if (configPrecio === "S") {
+                if (confirm("¿Emitir Nota de Entrega sin montos?")) {
+                    conPrecioParam = "N"; // Si dice que SÍ quiere omitir montos, pasamos 'N'
+                } else {
+                    conPrecioParam = "S"; // Si dice que NO, quiere mantener los montos visibles
+                }
+            } else {
+                // Si el parámetro por defecto es 'N', no pregunta y viaja directo como 'N' (según tu regla)
+                conPrecioParam = "N";
+            }
+
+            // Reconstruimos la URL final inyectándole el parámetro dinámico obtenido
+            var urlFinal = urlOriginal + "&con_precio=" + conPrecioParam;
+
+            // Abrimos el reporte de forma segura en una pestaña nueva respetando el comportamiento original
+            window.open(urlFinal, '_blank');
+        });
+    });
 });
 </script>
 <?php } ?>

@@ -468,6 +468,19 @@ loadjs.ready(["jquery"], function () {
     });
 
     $(document).on("click", "#btnCancelarAutorizarTdcfcv", function () {
+        if (descuentoGlobalPendiente.pedido !== "") {
+            PintarProgressBar(descuentoGlobalPendiente.original);
+
+            descuentoGlobalPendiente = {
+                pedido: "",
+                original: "",
+                nuevo: ""
+            };
+
+            hideModalAutorizarTdcfcv();
+            return;
+        }
+
         restaurarCambioAutorizacionTdcfcv();
         hideModalAutorizarTdcfcv();
     });
@@ -496,6 +509,12 @@ loadjs.ready(["jquery"], function () {
         })
         .done(function (result) {
             if (String(result).trim() === "S") {
+                if (descuentoGlobalPendiente.pedido !== "") {
+                    AplicarDescuentoGlobalPendiente();
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 aplicarCambioAutorizadoTdcfcv();
                 hideModalAutorizarTdcfcv();
             } else {
@@ -1072,19 +1091,69 @@ loadjs.ready(["jquery"], function () {
         });
     };    
 
+    var descuentoGlobalPendiente = {
+        pedido: "",
+        original: "",
+        nuevo: ""
+    };
+
+    window.PintarProgressBar = function (valor) {
+        const PorDesMin = parseInt(getVal("PorDesMin"), 10);
+        const PorDesMax = parseInt(getVal("PorDesMax"), 10);
+
+        $("#PorDesAct").val(valor);
+
+        $("#xProgress").html(
+            '<div class="progress">' +
+                '<div class="progress-bar" role="progressbar" style="width: ' + valor + '%" aria-valuenow="' + valor + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' +
+                    valor + '%' +
+                '</div>' +
+            '</div>'
+        );
+    }
+
+    window.AplicarDescuentoGlobalPendiente = function () {
+        if (descuentoGlobalPendiente.pedido === "") return;
+
+        PintarProgressBar(descuentoGlobalPendiente.nuevo);
+
+        RefreshDescuento(
+            descuentoGlobalPendiente.pedido,
+            descuentoGlobalPendiente.nuevo
+        );
+
+        descuentoGlobalPendiente = {
+            pedido: "",
+            original: "",
+            nuevo: ""
+        };
+    }
+
     window.ProgLess = function () {
         const pedido = getVal("pedido");
         const PorDesMin = parseInt(getVal("PorDesMin"), 10);
         const PorDesMax = parseInt(getVal("PorDesMax"), 10);
-        let PorDesAct = parseInt(getVal("PorDesAct"), 10);
+        const PorDesActOriginal = parseInt(getVal("PorDesAct"), 10);
 
         if (pedido == 0) return false;
 
-        if (PorDesAct > PorDesMin && PorDesAct <= PorDesMax) {
-            PorDesAct -= 1;
-            $("#PorDesAct").val(PorDesAct);
-            $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-            RefreshDescuento(pedido, PorDesAct);
+        if (PorDesActOriginal > PorDesMin && PorDesActOriginal <= PorDesMax) {
+            const PorDesActNuevo = PorDesActOriginal - 1;
+
+            descuentoGlobalPendiente = {
+                pedido: pedido,
+                original: PorDesActOriginal,
+                nuevo: PorDesActNuevo
+            };
+
+            if (puedeModificarPrecioDescuento) {
+                AplicarDescuentoGlobalPendiente();
+                return;
+            }
+
+            $("#auth_user_tdcfcv").val("");
+            $("#auth_pass_tdcfcv").val("");
+            showModalAutorizarTdcfcv();
         }
     };
 
@@ -1092,15 +1161,28 @@ loadjs.ready(["jquery"], function () {
         const pedido = getVal("pedido");
         const PorDesMin = parseInt(getVal("PorDesMin"), 10);
         const PorDesMax = parseInt(getVal("PorDesMax"), 10);
-        let PorDesAct = parseInt(getVal("PorDesAct"), 10);
+        const PorDesActOriginal = parseInt(getVal("PorDesAct"), 10);
 
         if (pedido == 0) return false;
 
-        if (PorDesAct >= PorDesMin && PorDesAct < PorDesMax) {
-            PorDesAct += 1;
-            $("#PorDesAct").val(PorDesAct);
-            $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-            RefreshDescuento(pedido, PorDesAct);
+        if (PorDesActOriginal >= PorDesMin && PorDesActOriginal < PorDesMax) {
+
+            const PorDesActNuevo = PorDesActOriginal + 1;
+
+            descuentoGlobalPendiente = {
+                pedido: pedido,
+                original: PorDesActOriginal,
+                nuevo: PorDesActNuevo
+            };
+
+            if (puedeModificarPrecioDescuento) {
+                AplicarDescuentoGlobalPendiente();
+                return;
+            }
+
+            $("#auth_user_tdcfcv").val("");
+            $("#auth_pass_tdcfcv").val("");
+            showModalAutorizarTdcfcv();
         }
     };
 
@@ -1272,7 +1354,7 @@ loadjs.ready(["jquery"], function () {
           <input type="text" class="form-control form-control-sm" id="auth_user_tdcfcv" autocomplete="off" placeholder="Usuario Autorizador">
         </div>
         <div class="mb-0">
-          <input type="password" class="form-control form-control-sm" id="auth_pass_tdcfcv" autocomplete="off" placeholder="Password">
+          <input type="password" class="form-control form-control-sm" id="auth_pass_tdcfcv" placeholder="Password">
         </div>
       </div>
       <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">

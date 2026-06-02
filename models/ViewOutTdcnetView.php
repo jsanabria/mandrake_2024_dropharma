@@ -158,12 +158,12 @@ class ViewOutTdcnetView extends ViewOutTdcnet
         $this->alicuota_iva->setVisibility();
         $this->iva->setVisibility();
         $this->total->setVisibility();
+        $this->moneda->setVisibility();
         $this->lista_pedido->setVisibility();
         $this->nota->setVisibility();
         $this->unidades->setVisibility();
         $this->estatus->setVisibility();
         $this->id_documento_padre->setVisibility();
-        $this->moneda->setVisibility();
         $this->asesor->setVisibility();
         $this->documento->setVisibility();
         $this->tasa_dia->setVisibility();
@@ -598,10 +598,10 @@ class ViewOutTdcnetView extends ViewOutTdcnet
         // Set up lookup cache
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->cliente);
+        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->estatus);
         $this->setupLookupOptions($this->id_documento_padre);
-        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->asesor);
         $this->setupLookupOptions($this->documento);
         $this->setupLookupOptions($this->dias_credito);
@@ -987,12 +987,12 @@ class ViewOutTdcnetView extends ViewOutTdcnet
         $this->alicuota_iva->setDbValue($row['alicuota_iva']);
         $this->iva->setDbValue($row['iva']);
         $this->total->setDbValue($row['total']);
+        $this->moneda->setDbValue($row['moneda']);
         $this->lista_pedido->setDbValue($row['lista_pedido']);
         $this->nota->setDbValue($row['nota']);
         $this->unidades->setDbValue($row['unidades']);
         $this->estatus->setDbValue($row['estatus']);
         $this->id_documento_padre->setDbValue($row['id_documento_padre']);
-        $this->moneda->setDbValue($row['moneda']);
         $this->asesor->setDbValue($row['asesor']);
         $this->documento->setDbValue($row['documento']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
@@ -1055,12 +1055,12 @@ class ViewOutTdcnetView extends ViewOutTdcnet
         $row['alicuota_iva'] = $this->alicuota_iva->DefaultValue;
         $row['iva'] = $this->iva->DefaultValue;
         $row['total'] = $this->total->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
         $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
         $row['nota'] = $this->nota->DefaultValue;
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['estatus'] = $this->estatus->DefaultValue;
         $row['id_documento_padre'] = $this->id_documento_padre->DefaultValue;
-        $row['moneda'] = $this->moneda->DefaultValue;
         $row['asesor'] = $this->asesor->DefaultValue;
         $row['documento'] = $this->documento->DefaultValue;
         $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
@@ -1147,6 +1147,8 @@ class ViewOutTdcnetView extends ViewOutTdcnet
 
         // total
 
+        // moneda
+
         // lista_pedido
 
         // nota
@@ -1156,8 +1158,6 @@ class ViewOutTdcnetView extends ViewOutTdcnet
         // estatus
 
         // id_documento_padre
-
-        // moneda
 
         // asesor
 
@@ -1325,6 +1325,30 @@ class ViewOutTdcnetView extends ViewOutTdcnet
             $this->total->ViewValue = $this->total->CurrentValue;
             $this->total->ViewValue = FormatNumber($this->total->ViewValue, $this->total->formatPattern());
 
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
+
             // lista_pedido
             $curVal = strval($this->lista_pedido->CurrentValue);
             if ($curVal != "") {
@@ -1384,30 +1408,6 @@ class ViewOutTdcnetView extends ViewOutTdcnet
                 }
             } else {
                 $this->id_documento_padre->ViewValue = null;
-            }
-
-            // moneda
-            $curVal = strval($this->moneda->CurrentValue);
-            if ($curVal != "") {
-                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
-                if ($this->moneda->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
-                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
-                    } else {
-                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
-                    }
-                }
-            } else {
-                $this->moneda->ViewValue = null;
             }
 
             // asesor
@@ -1731,9 +1731,9 @@ class ViewOutTdcnetView extends ViewOutTdcnet
             $this->total->HrefValue = "";
             $this->total->TooltipValue = "";
 
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-            $this->lista_pedido->TooltipValue = "";
+            // moneda
+            $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
 
             // nota
             $this->nota->HrefValue = "";
@@ -1742,10 +1742,6 @@ class ViewOutTdcnetView extends ViewOutTdcnet
             // estatus
             $this->estatus->HrefValue = "";
             $this->estatus->TooltipValue = "";
-
-            // moneda
-            $this->moneda->HrefValue = "";
-            $this->moneda->TooltipValue = "";
 
             // asesor
             $this->asesor->HrefValue = "";
@@ -1759,21 +1755,13 @@ class ViewOutTdcnetView extends ViewOutTdcnet
             $this->monto_usd->HrefValue = "";
             $this->monto_usd->TooltipValue = "";
 
-            // dias_credito
-            $this->dias_credito->HrefValue = "";
-            $this->dias_credito->TooltipValue = "";
+            // entregado
+            $this->entregado->HrefValue = "";
+            $this->entregado->TooltipValue = "";
 
             // bultos
             $this->bultos->HrefValue = "";
             $this->bultos->TooltipValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
-            $this->descuento->TooltipValue = "";
-
-            // descuento2
-            $this->descuento2->HrefValue = "";
-            $this->descuento2->TooltipValue = "";
 
             // factura
             $this->factura->HrefValue = "";
@@ -1862,15 +1850,15 @@ class ViewOutTdcnetView extends ViewOutTdcnet
                     break;
                 case "x_cliente":
                     break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
                 case "x_lista_pedido":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_estatus":
                     break;
                 case "x_id_documento_padre":
-                    break;
-                case "x_moneda":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_asesor":
                     break;
@@ -2017,18 +2005,30 @@ class ViewOutTdcnetView extends ViewOutTdcnet
             $header .= '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $url . '"><span class="fa fa-download"></span> Descargar Documento</a>';
             $header .= ' ';
         }
+        // 1. Consultamos la configuración del parámetro '060' de la base de datos
+        $sqlParam = "SELECT IFNULL(valor1, 'N') AS con_precio FROM parametro WHERE codigo = '060';";
+        $conPrecioConfig = ExecuteScalar($sqlParam); // Retorna 'S' o 'N'
+
+        // 2. Definimos la URL base para el reporte desde la pantalla View
         $url = "../reportes/nota_de_entrega.php?id=" . $this->id->CurrentValue . "&tipo=TDCNET";
-        $header .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $url . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
+
+        // 3. Añadimos el botón al $header usando la misma clase "btn-imprimir-nota" y el atributo "data-con-precio"
+        $header .= '<a class="btn btn-outline-primary btn-imprimir-nota" id="btnImprimir" href="' . $url . '" target="_blank" data-con-precio="' . $conPrecioConfig . '"><span class="fas fa-print"></span> Imprimir Documento</a>';
         if($this->factura->CurrentValue == "S") {
             $header .= ' ';
-            $url = "../reportes/factura_ajuste_de_salida.php?id=" . $this->id->CurrentValue . "&tipo=TDCNET";
-            $header .= '<a class="btn btn-outline-primary" target="_blank" href="' . $url . '"><span class="fas fa-print"></span> Imprimir Factura</a>';
+            $url = "../reportes/nota_de_entrega.php?id=" . $this->id->CurrentValue . "&tipo=TDCNET&con_precio=S";
+            $header .= '<a class="btn btn-outline-primary" target="_blank" href="' . $url . '"><span class="fas fa-print"></span> Imprimir Orden de Entrega</a>';
         }
         if(intval($this->bultos->CurrentValue) > 0) {
             $header .= ' ';
             $url = "../reportes/bultos_qr.php?id=" . $this->id->CurrentValue;
             $header .= '<a class="btn btn-outline-primary" target="_blank" href="' . $url . '"><span class="fa-solid fa-qrcode"></span> Imprimir QR </a>';
         } 
+        if ($this->entregado->CurrentValue != "S") {
+            $header .= ' ';
+            $url_parcial = "../NotaDeEntregaParcial?id=" . $this->id->CurrentValue;
+            $header .= '<a class="btn btn-outline-primary" target="_blank" href="' . $url_parcial . '"><span class="fa-solid fa-boxes-stacked"></span> Generar Entrega Total / Parcial </a>';
+        }
         $header .= '<br><br>';
     }
 

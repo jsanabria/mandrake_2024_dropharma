@@ -17,7 +17,6 @@ $response = [
 
 try {
     $codart = (int)($_REQUEST["id"] ?? 0);
-    $id_documento = (int)($_REQUEST["id_documento"] ?? 0);
 
     if ($codart <= 0) {
         throw new Exception("Identificador de artículo no válido.");
@@ -104,77 +103,6 @@ try {
     $stmtLotes->execute();
     $resLotes = $stmtLotes->get_result();
 
-    ////////
-    $precio_unidad = 0;
-    $precio_ful = 0;
-    $descuento = 0;
-    $descuento2 = 0;
-    $tarifa = 0;
-    $mostrar_precio = "S";
-
-    if ($id_documento > 0) {
-
-        $stmt = $link->prepare("
-            SELECT a.tipo_documento, b.tarifa
-            FROM salidas AS a
-            JOIN cliente AS b ON b.id = a.cliente
-            WHERE a.id = ?
-        ");
-        $stmt->bind_param("i", $id_documento);
-        $stmt->execute();
-        $rowDoc = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        if ($rowDoc) {
-            $tipo_documento = $rowDoc["tipo_documento"];
-            $tarifa = intval($rowDoc["tarifa"]);
-
-            $codParamPrecio = ($tipo_documento === "TDCNET") ? "051" : "052";
-            $resPrecio = $link->query("SELECT valor1 AS mostrar_precio FROM parametro WHERE codigo = '$codParamPrecio';");
-            if ($resPrecio && $rowPr = $resPrecio->fetch_assoc()) {
-                $mostrar_precio = $rowPr["mostrar_precio"];
-            }
-
-            $stmt = $link->prepare("
-                SELECT a.descuento, IFNULL(b.descuento, 0) AS descuento2
-                FROM articulo AS a
-                LEFT JOIN fabricante AS b ON b.Id = a.fabricante
-                WHERE a.id = ?
-            ");
-            $stmt->bind_param("i", $codart);
-            $stmt->execute();
-            $rowArtPrecio = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-
-            $descuento = floatval($rowArtPrecio["descuento"] ?? 0);
-            $descuento2 = floatval($rowArtPrecio["descuento2"] ?? 0);
-
-            $stmt = $link->prepare("
-                SELECT 
-                    a.precio AS precio_ful,
-                    ROUND(
-                        (
-                            (a.precio - (a.precio * (? / 100))) -
-                            ((a.precio - (a.precio * (? / 100))) * (? / 100))
-                        ), 2
-                    ) AS precio
-                FROM tarifa_articulo AS a
-                WHERE a.tarifa = ?
-                  AND a.articulo = ?
-            ");
-            $stmt->bind_param("ddiii", $descuento, $descuento, $descuento2, $tarifa, $codart);
-            $stmt->execute();
-            $rowPrecio = $stmt->get_result()->fetch_assoc();
-            $stmt->close();
-
-            if ($mostrar_precio === "S" && $rowPrecio) {
-                $precio_unidad = floatval($rowPrecio["precio"]);
-                $precio_ful = floatval($rowPrecio["precio_ful"]);
-            }
-        }
-    }
-    ////////
-
     while ($rowLote = $resLotes->fetch_assoc()) {
         $cantidad = (int)$rowLote["cantidad"];
         if ($cantidad > 0) {
@@ -185,10 +113,6 @@ try {
                 "cantidad" => $cantidad,
                 "codigo_almacen" => $rowLote["codalm"],
                 "almacen" => $rowLote["almacen"],
-                "precio_unidad" => $precio_unidad,
-                "precio_ful" => $precio_ful,
-                "descuento" => $descuento,
-                "descuento2" => $descuento2,
                 // Mantenemos este string compuesto en el JSON por si tu JS actual parsea el value con split('|')
                 "value_string" => $rowLote["lote"] . "|" . $rowLote["fecha_vencimiento"] . "|" . $cantidad . "|" . $rowLote["codalm"]
             ];
