@@ -67,7 +67,7 @@ try {
 
     $response["success"] = true;
     $response["message"] = "Documento eliminado permanentemente.";
-    $response["redirect_to"] = ($tipo_documento === "TDCNET") ? "../ViewOutTdcnetList" : "../ViewOutTdcasaList";
+    $response["redirect_to"] = ($tipo_documento === "TDCNET") ? "ViewOutTdcnetList" : "ViewOutTdcasaList";
 
 } catch (Exception $e) {
     $link->rollback();

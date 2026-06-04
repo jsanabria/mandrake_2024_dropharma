@@ -136,7 +136,7 @@ $descuento = floatval($row["descuento"]);
                     <div class="row g-2 mt-1">
                         <div class="col-md-12">
                             <label class="form-label small fw-bold mb-1">Cliente</label>
-                            <textarea class="form-control form-control-sm bg-light fw-bold text-primary" rows="1" readonly="yes"><?= htmlspecialchars($cliente) ?>></textarea>
+                            <textarea class="form-control form-control-sm bg-light fw-bold text-primary" rows="1" readonly="yes"><?= htmlspecialchars($cliente) ?></textarea>
                         </div>
                     </div>
 
@@ -241,7 +241,6 @@ $descuento = floatval($row["descuento"]);
     </div>
 </div>
 
-<script type="text/javascript" src="jquery/jquery-3.6.0.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
@@ -646,10 +645,34 @@ $descuento = floatval($row["descuento"]);
     }
 
     function VaciarCesta() {
-        if(confirm("¿Seguro de vaciar por completo la cesta de este documento?")) { 
-            window.location.href = "include/findme_eliminar_all.php?id=" + $("#id").val() + "&username=" + $("#username").val().trim();
-            return true;
-        } 
+        if (!confirm("¿Seguro de vaciar por completo la cesta de este documento?"))
+            return false;
+
+        $.ajax({
+            url: "include/findme_eliminar_all.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                id: $("#id").val(),
+                username: $("#username").val().trim()
+            }
+        })
+        .done(function(resp) {
+            if (resp.success) {
+
+                ew.alert(resp.message);
+
+                window.location.href = resp.redirect_to;
+
+            } else {
+                ew.alert(resp.error || "No fue posible eliminar el documento.");
+            }
+        })
+        .fail(function(xhr) {
+            console.log(xhr.responseText);
+            ew.alert("Error de comunicación con el servidor.");
+        });
+
         return false;
     }
 
@@ -806,6 +829,11 @@ $descuento = floatval($row["descuento"]);
         var xuser = $("#auth_user_descuento").val().trim();
         var xpass = $("#auth_pass_descuento").val().trim();
 
+        var tipo_documento = "<?= $tipo_documento ?>";
+        var nro_documento  = "<?= $nro_documento ?>";
+        var usercaja = "<?= CurrentUserName() ?>";
+        var pedido = $("#id").val();
+
         if (xuser === "" || xpass === "") {
             ew.alert("Debe ingresar usuario y clave.");
             return false;
@@ -817,7 +845,11 @@ $descuento = floatval($row["descuento"]);
             data: {
                 usernama: xuser,
                 password: xpass,
-                contexto: "DESCUENTO_SALIDA"
+                contexto: "DESCUENTO_SALIDA",
+                tipo_documento: tipo_documento,
+                nro_documento: nro_documento,
+                usercaja: usercaja,
+                idPurga: pedido
             }
         })
         .done(function (MyResult) {
@@ -834,11 +866,21 @@ $descuento = floatval($row["descuento"]);
                     ActualizarDescuentos();
                 }
             } else {
-                ew.alert("!!! NO AUTORIZADO !!!");
+                RestaurarPrecioPendiente();
+
+                revertiendoDescuento = true;
+
                 $("#descuento").val(descuentoPendiente.descuentoOriginal);
                 $("#descuento2").val(descuentoPendiente.descuento2Original);
+
+                setTimeout(function () {
+                    revertiendoDescuento = false;
+                }, 300);
+
                 $("#modalAutorizarDescuento").modal("hide");
-            }
+
+                ew.alert("!!! NO AUTORIZADO !!!");
+            }            
         })
         .fail(function () {
             ew.alert("Error de comunicación con el servidor.");
@@ -852,8 +894,23 @@ $descuento = floatval($row["descuento"]);
     };
 
     $(document).on("focus", ".precio-autorizado", function () {
-        $(this).attr("data-original", $(this).val());
+        if ($(this).attr("data-original") === undefined || $(this).attr("data-original") === "") {
+            $(this).attr("data-original", $(this).val());
+        }
     });
+
+    function RestaurarPrecioPendiente() {
+        if (precioPendiente.inputId !== "") {
+            var $input = $("#" + precioPendiente.inputId);
+
+            $input.val(precioPendiente.precioOriginal);
+            $input.attr("data-original", precioPendiente.precioOriginal);
+
+            precioPendiente.inputId = "";
+            precioPendiente.precioOriginal = "";
+            precioPendiente.precioNuevo = "";
+        }
+    }
 
     $(document).on("change", ".precio-autorizado", function () {
         var $input = $(this);

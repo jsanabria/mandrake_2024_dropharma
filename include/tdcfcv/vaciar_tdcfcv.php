@@ -85,14 +85,6 @@ try {
             }
         }
 
-        if ($id_documento_padre > 0) {
-            ExecuteStatement("
-                UPDATE salidas
-                SET estatus = 'NUEVO'
-                WHERE id = {$id_documento_padre}
-            ");
-        }
-
         if ($direccion !== "") {
             ExecuteStatement("
                 UPDATE salidas
@@ -100,6 +92,14 @@ try {
                 WHERE id IN ({$direccion})
             ");
         }
+    }
+
+    if ($id_documento_padre > 0) {
+        ExecuteStatement("
+            UPDATE salidas
+            SET estatus = 'NUEVO'
+            WHERE id = {$id_documento_padre}
+        ");
     }
 
     /**

@@ -88,6 +88,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["y_fecha", [ew.Validators.between], false],
             ["cliente", [], fields.cliente.isInvalid],
             ["nro_documento", [], fields.nro_documento.isInvalid],
+            ["estatus", [], fields.estatus.isInvalid],
             ["entregado", [], fields.entregado.isInvalid]
         ])
         // Validate form
@@ -124,6 +125,7 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
+            "estatus": <?= $Page->estatus->toClientList($Page) ?>,
             "entregado": <?= $Page->entregado->toClientList($Page) ?>,
         })
 
@@ -304,6 +306,61 @@ if (!$Page->nro_documento->UseFilter) {
         </div><!-- /.ew-search-field -->
     </div><!-- /.col-sm-auto -->
 <?php } ?>
+<?php if ($Page->estatus->Visible) { // estatus ?>
+<?php
+if (!$Page->estatus->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_estatus" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->estatus->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_estatus" class="ew-search-caption ew-label"><?= $Page->estatus->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("LIKE") ?>
+<input type="hidden" name="z_estatus" id="z_estatus" value="LIKE">
+</div>
+        </div>
+        <div id="el_view_out_tdcnet_estatus" class="ew-search-field">
+    <select
+        id="x_estatus"
+        name="x_estatus"
+        class="form-select ew-select<?= $Page->estatus->isInvalidClass() ?>"
+        <?php if (!$Page->estatus->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcnetsrch_x_estatus"
+        <?php } ?>
+        data-table="view_out_tdcnet"
+        data-field="x_estatus"
+        data-value-separator="<?= $Page->estatus->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->estatus->getPlaceHolder()) ?>"
+        <?= $Page->estatus->editAttributes() ?>>
+        <?= $Page->estatus->selectOptionListHtml("x_estatus") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->estatus->getErrorMessage(false) ?></div>
+<?php if (!$Page->estatus->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcnetsrch", function() {
+    var options = { name: "x_estatus", selectId: "fview_out_tdcnetsrch_x_estatus" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcnetsrch.lists.estatus?.lookupOptions.length) {
+        options.data = { id: "x_estatus", form: "fview_out_tdcnetsrch" };
+    } else {
+        options.ajax = { id: "x_estatus", form: "fview_out_tdcnetsrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.estatus.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
 <?php if ($Page->entregado->Visible) { // entregado ?>
 <?php
 if (!$Page->entregado->UseFilter) {
@@ -452,6 +509,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_view_out_tdcnet_unidades" class="view_out_tdcnet_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
 <?php } ?>
+<?php if ($Page->estatus->Visible) { // estatus ?>
+        <th data-name="estatus" class="<?= $Page->estatus->headerCellClass() ?>"><div id="elh_view_out_tdcnet_estatus" class="view_out_tdcnet_estatus"><?= $Page->renderFieldHeader($Page->estatus) ?></div></th>
+<?php } ?>
 <?php if ($Page->id_documento_padre->Visible) { // id_documento_padre ?>
         <th data-name="id_documento_padre" class="<?= $Page->id_documento_padre->headerCellClass() ?>"><div id="elh_view_out_tdcnet_id_documento_padre" class="view_out_tdcnet_id_documento_padre"><?= $Page->renderFieldHeader($Page->id_documento_padre) ?></div></th>
 <?php } ?>
@@ -539,6 +599,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_unidades" class="el_view_out_tdcnet_unidades">
 <span<?= $Page->unidades->viewAttributes() ?>>
 <?= $Page->unidades->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->estatus->Visible) { // estatus ?>
+        <td data-name="estatus"<?= $Page->estatus->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcnet_estatus" class="el_view_out_tdcnet_estatus">
+<span<?= $Page->estatus->viewAttributes() ?>>
+<?= $Page->estatus->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

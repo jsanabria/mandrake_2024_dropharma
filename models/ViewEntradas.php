@@ -255,7 +255,7 @@ class ViewEntradas extends DbTable
             '`fecha`', // Basic search expression
             200, // Type
             10, // Size
-            -1, // Date/Time format
+            7, // Date/Time format
             false, // Is upload field
             '`fecha`', // Virtual expression
             false, // Is virtual
@@ -319,8 +319,8 @@ class ViewEntradas extends DbTable
             'nota', // Name
             '`nota`', // Expression
             '`nota`', // Basic search expression
-            200, // Type
-            65535, // Size
+            201, // Type
+            16777215, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`nota`', // Virtual expression
@@ -1755,23 +1755,37 @@ class ViewEntradas extends DbTable
         // Enter your code here
     }
 
-    // Recordset Selecting event
-    public function recordsetSelecting(&$filter) {
-    	// Enter your code here
-    	$tipo = $_REQUEST["crear"];
-    	switch($tipo) {
-    	case "TDCNRP":
-    		AddFilter($filter, "tipo_documento IN ('TDCPDC', 'TDCFCC')");
-    		AddFilter($filter, "estatus = 'NUEVO'");
-    		break;
-    	case "TDCFCC":
-    		//AddFilter($filter, "tipo_documento IN ('TDCNRP')");
-    		AddFilter($filter, "((tipo_documento IN ('TDCNRP') AND estatus = 'NUEVO') OR (tipo_documento IN ('TDCNRP') AND consignacion = 'S' AND consignacion_reportada = 'N'))");
-    		break;
-    	default:
-    		AddFilter($filter, "tipo_documento IN ('N/A')");
-    		AddFilter($filter, "estatus = 'NUEVO'");
-    	}
+    public function recordsetSelecting(&$filter)
+    {
+        $tipo = $_REQUEST["crear"] ?? ($_SESSION["ViewEntradasList_crear"] ?? "");
+        if ($tipo != "") {
+            $_SESSION["ViewEntradasList_crear"] = $tipo;
+        }
+        switch ($tipo) {
+            case "TDCNRP":
+                AddFilter($filter, "tipo_documento IN ('TDCPDC', 'TDCFCC')");
+                AddFilter($filter, "estatus = 'NUEVO'");
+                break;
+            case "TDCFCC":
+                AddFilter($filter, "
+                    (
+                        (
+                            tipo_documento = 'TDCNRP'
+                            AND estatus = 'NUEVO'
+                        )
+                        OR
+                        (
+                            tipo_documento = 'TDCNRP'
+                            AND consignacion = 'S'
+                            AND consignacion_reportada = 'N'
+                        )
+                    )
+                ");
+                break;
+            default:
+                AddFilter($filter, "tipo_documento IN ('N/A')");
+                AddFilter($filter, "estatus = 'NUEVO'");
+        }
     }
 
     // Recordset Selected event

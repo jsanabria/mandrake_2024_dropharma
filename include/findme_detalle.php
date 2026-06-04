@@ -53,7 +53,7 @@ $id = $id_documento;
                             <?php 
                             $sql = "SELECT 
                                         a.id, b.nombre AS fabricante, 
-                                        CONCAT(IFNULL(c.principio_activo, ''), ', ', IFNULL(c.presentacion, ''), ', ', IFNULL(c.nombre_comercial, '')) AS articulo, 
+                                        CONCAT(IFNULL(c.principio_activo, ''), ', ', IFNULL(c.presentacion, ''), ', ', IFNULL(c.nombre_comercial, ''), ' COD:', IFNULL(c.codigo, '')) AS articulo, 
                                         a.cantidad_articulo, d.descripcion AS unidad_medida, 
                                         a.articulo AS codart, a.articulo_unidad_medida,  
                                         a.lote, a.fecha_vencimiento, a.precio_unidad, a.precio 

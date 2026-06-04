@@ -84,6 +84,12 @@ class ViewSalida extends AbstractEntity
     #[Column(name: "asesor_asignado", type: "string", nullable: true)]
     private ?string $asesorAsignado;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $documento;
+
+    #[Column(name: "id_documento_padre", type: "integer", nullable: true)]
+    private ?int $idDocumentoPadre;
+
     public function __construct()
     {
         $this->consignacion = "N";
@@ -287,6 +293,28 @@ class ViewSalida extends AbstractEntity
     public function setAsesorAsignado(?string $value): static
     {
         $this->asesorAsignado = RemoveXss($value);
+        return $this;
+    }
+
+    public function getDocumento(): ?string
+    {
+        return HtmlDecode($this->documento);
+    }
+
+    public function setDocumento(?string $value): static
+    {
+        $this->documento = RemoveXss($value);
+        return $this;
+    }
+
+    public function getIdDocumentoPadre(): ?int
+    {
+        return $this->idDocumentoPadre;
+    }
+
+    public function setIdDocumentoPadre(?int $value): static
+    {
+        $this->idDocumentoPadre = $value;
         return $this;
     }
 }

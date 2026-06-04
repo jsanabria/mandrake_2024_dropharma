@@ -76,17 +76,6 @@ $view_salidas->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($view_salidas->tasa_dia->Visible) { // tasa_dia ?>
-        <tr id="r_tasa_dia"<?= $view_salidas->tasa_dia->rowAttributes() ?>>
-            <td class="<?= $view_salidas->TableLeftColumnClass ?>"><?= $view_salidas->tasa_dia->caption() ?></td>
-            <td<?= $view_salidas->tasa_dia->cellAttributes() ?>>
-<span id="el_view_salidas_tasa_dia">
-<span<?= $view_salidas->tasa_dia->viewAttributes() ?>>
-<?= $view_salidas->tasa_dia->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
 <?php if ($view_salidas->unidades->Visible) { // unidades ?>
         <tr id="r_unidades"<?= $view_salidas->unidades->rowAttributes() ?>>
             <td class="<?= $view_salidas->TableLeftColumnClass ?>"><?= $view_salidas->unidades->caption() ?></td>
@@ -94,17 +83,6 @@ $view_salidas->TableClass = "table table-sm ew-table ew-master-table";
 <span id="el_view_salidas_unidades">
 <span<?= $view_salidas->unidades->viewAttributes() ?>>
 <?= $view_salidas->unidades->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($view_salidas->asesor_asignado->Visible) { // asesor_asignado ?>
-        <tr id="r_asesor_asignado"<?= $view_salidas->asesor_asignado->rowAttributes() ?>>
-            <td class="<?= $view_salidas->TableLeftColumnClass ?>"><?= $view_salidas->asesor_asignado->caption() ?></td>
-            <td<?= $view_salidas->asesor_asignado->cellAttributes() ?>>
-<span id="el_view_salidas_asesor_asignado">
-<span<?= $view_salidas->asesor_asignado->viewAttributes() ?>>
-<?= $view_salidas->asesor_asignado->getViewValue() ?></span>
 </span>
 </td>
         </tr>

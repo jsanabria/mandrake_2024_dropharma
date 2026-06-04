@@ -551,12 +551,12 @@ class ViewEntradasList extends ViewEntradas
     public $ListActions; // List actions
     public $SelectedCount = 0;
     public $SelectedIndex = 0;
-    public $DisplayRecords = 500;
+    public $DisplayRecords = 50;
     public $StartRecord;
     public $StopRecord;
     public $TotalRecords = 0;
     public $RecordRange = 10;
-    public $PageSizes = "10,20,50,500,-1"; // Page sizes (comma separated)
+    public $PageSizes = "10,20,50,-1"; // Page sizes (comma separated)
     public $DefaultSearchWhere = ""; // Default search WHERE clause
     public $SearchWhere = ""; // Search WHERE clause
     public $SearchPanelClass = "ew-search-panel collapse"; // Search Panel class
@@ -818,7 +818,7 @@ class ViewEntradasList extends ViewEntradas
         if ($this->Command != "json" && $this->getRecordsPerPage() != "") {
             $this->DisplayRecords = $this->getRecordsPerPage(); // Restore from Session
         } else {
-            $this->DisplayRecords = 500; // Load default
+            $this->DisplayRecords = 50; // Load default
             $this->setRecordsPerPage($this->DisplayRecords); // Save default to Session
         }
 
@@ -1021,7 +1021,7 @@ class ViewEntradasList extends ViewEntradas
                 if (SameText($wrk, "all")) { // Display all records
                     $this->DisplayRecords = -1;
                 } else {
-                    $this->DisplayRecords = 500; // Non-numeric, load default
+                    $this->DisplayRecords = 50; // Non-numeric, load default
                 }
             }
             $this->setRecordsPerPage($this->DisplayRecords); // Save to Session
@@ -2713,6 +2713,12 @@ class ViewEntradasList extends ViewEntradas
             }
             $this->fecha->EditValue = HtmlEncode($this->fecha->AdvancedSearch->SearchValue);
             $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+            $this->fecha->setupEditAttributes();
+            if (!$this->fecha->Raw) {
+                $this->fecha->AdvancedSearch->SearchValue2 = HtmlDecode($this->fecha->AdvancedSearch->SearchValue2);
+            }
+            $this->fecha->EditValue2 = HtmlEncode($this->fecha->AdvancedSearch->SearchValue2);
+            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
 
             // nota
             $this->nota->setupEditAttributes();
@@ -3190,10 +3196,14 @@ class ViewEntradasList extends ViewEntradas
         return $where;
     }
 
-    // Page Load event
     public function pageLoad()
     {
-        //Log("Page Load");
+        if (isset($_GET["crear"]) && trim($_GET["crear"]) != "") {
+            $_SESSION["ViewEntradasList_crear"] = trim($_GET["crear"]);
+        }
+        if (isset($_GET["limpiar_crear"])) {
+            unset($_SESSION["ViewEntradasList_crear"]);
+        }
     }
 
     // Page Unload event
@@ -3224,10 +3234,24 @@ class ViewEntradasList extends ViewEntradas
         }
     }
 
-    // Page Render event
     public function pageRender()
     {
-        //Log("Page Render");
+        $crear = $_SESSION["ViewEntradasList_crear"] ?? "";
+        if ($crear != "") {
+            $crear = HtmlEncode($crear);
+            echo <<<HTML
+    <script>
+    loadjs.ready(["jquery"], function () {
+        const crear = "{$crear}";
+        $("form").each(function () {
+            if ($(this).find("input[name='crear']").length === 0) {
+                $(this).append('<input type="hidden" name="crear" value="' + crear + '">');
+            }
+        });
+    });
+    </script>
+    HTML;
+        }
     }
 
     // Page Data Rendering event
@@ -3259,13 +3283,12 @@ class ViewEntradasList extends ViewEntradas
         return true;
     }
 
-    // ListOptions Load event
-    public function listOptionsLoad() {
-    	// Example:
-    	$opt = &$this->ListOptions->Add("new");
-    	$opt->Header = "";
-    	$opt->OnLeft = TRUE; // Link on left
-    	$opt->MoveTo(2); // Move to first column
+    public function listOptionsLoad()
+    {
+        $opt = &$this->ListOptions->Add("new");
+        $opt->Header = "";
+        $opt->OnLeft = true;
+        $opt->MoveTo(2);
     }
 
     // ListOptions Rendering event
@@ -3276,25 +3299,29 @@ class ViewEntradasList extends ViewEntradas
         //Container("DetailTableGrid")->DetailView = (...condition...); // Set to true or false conditionally
     }
 
-    // ListOptions Rendered event
-    public function listOptionsRendered() {
-    	// Example:
-    	$crear = $_REQUEST["crear"];
-    	$id = $this->id->CurrentValue;
-    	$tipo = $this->tipo_documento->CurrentValue;
-    	switch($crear) {
-    	case "TDCNRP":
-    		$url = 'ConfirmPage?page=TDCNRP&id=' . $id;
-    		break;
-    	case "TDCFCC":
-    		$url = 'ConfirmPage?page=TDCFCC&id=' . $id;
-    		break;
-    	}
-    	$sql = "SELECT COUNT(*) AS cantidad FROM entradas_salidas WHERE tipo_documento = '$tipo' AND id_documento = '$id' AND IFNULL(cantidad_articulo, 0) > 0;";
-    	if(ExecuteScalar($sql) > 0) {
-    		// $this->ListOptions->Items["new"]->Body ='<a class="ewRowLink ewProcess" title="" data-caption="Process" onclick="js:if(!confirm(\'Seguro que desea procesar este documento?\')) return false;" href="' . $url . '" data-original-title="Process"><span data-phrase="ProcessLink" class="glyphicon glyphicon-cog ewIcon" data-caption="Process"></span></a>';
-    		$this->ListOptions->Items["new"]->Body = '<a class="fas fa-cog" href="' . $url . '" data-toggle="tooltip" title="Procesar este Documento." data-placement="bottom"></a>';
-    	}
+    public function listOptionsRendered()
+    {
+        $crear = $_REQUEST["crear"] ?? ($_SESSION["ViewEntradasList_crear"] ?? "");
+        $id = $this->id->CurrentValue;
+        $tipo = $this->tipo_documento->CurrentValue;
+        $url = "";
+        switch ($crear) {
+            case "TDCNRP":
+                $url = 'ConfirmPage?page=TDCNRP&id=' . $id;
+                break;
+            case "TDCFCC":
+                $url = 'ConfirmPage?page=TDCFCC&id=' . $id;
+                break;
+        }
+        $sql = "SELECT COUNT(*) AS cantidad
+                FROM entradas_salidas
+                WHERE tipo_documento = '$tipo'
+                  AND id_documento = '$id'
+                  AND IFNULL(cantidad_articulo, 0) > 0;";
+        if ($url != "" && ExecuteScalar($sql) > 0) {
+            $this->ListOptions->Items["new"]->Body =
+                '<a class="fas fa-cog" href="' . $url . '" data-toggle="tooltip" title="Procesar este Documento." data-placement="bottom"></a>';
+        }
     }
 
     // Row Custom Action event

@@ -158,11 +158,13 @@ class ViewSalidasList extends ViewSalidas
         $this->consignacion->setVisibility();
         $this->cerrado->Visible = false;
         $this->total->Visible = false;
-        $this->tasa_dia->setVisibility();
+        $this->tasa_dia->Visible = false;
         $this->monto_usd->Visible = false;
         $this->unidades->setVisibility();
         $this->dias_credito->Visible = false;
-        $this->asesor_asignado->setVisibility();
+        $this->asesor_asignado->Visible = false;
+        $this->documento->Visible = false;
+        $this->id_documento_padre->Visible = false;
     }
 
     // Constructor
@@ -557,12 +559,12 @@ class ViewSalidasList extends ViewSalidas
     public $ListActions; // List actions
     public $SelectedCount = 0;
     public $SelectedIndex = 0;
-    public $DisplayRecords = 500;
+    public $DisplayRecords = 50;
     public $StartRecord;
     public $StopRecord;
     public $TotalRecords = 0;
     public $RecordRange = 10;
-    public $PageSizes = "10,20,50,500,-1"; // Page sizes (comma separated)
+    public $PageSizes = "10,20,50,-1"; // Page sizes (comma separated)
     public $DefaultSearchWhere = ""; // Default search WHERE clause
     public $SearchWhere = ""; // Search WHERE clause
     public $SearchPanelClass = "ew-search-panel collapse"; // Search Panel class
@@ -823,7 +825,7 @@ class ViewSalidasList extends ViewSalidas
         if ($this->Command != "json" && $this->getRecordsPerPage() != "") {
             $this->DisplayRecords = $this->getRecordsPerPage(); // Restore from Session
         } else {
-            $this->DisplayRecords = 500; // Load default
+            $this->DisplayRecords = 50; // Load default
             $this->setRecordsPerPage($this->DisplayRecords); // Save default to Session
         }
 
@@ -1026,7 +1028,7 @@ class ViewSalidasList extends ViewSalidas
                 if (SameText($wrk, "all")) { // Display all records
                     $this->DisplayRecords = -1;
                 } else {
-                    $this->DisplayRecords = 500; // Non-numeric, load default
+                    $this->DisplayRecords = 50; // Non-numeric, load default
                 }
             }
             $this->setRecordsPerPage($this->DisplayRecords); // Save to Session
@@ -1096,6 +1098,8 @@ class ViewSalidasList extends ViewSalidas
         $filterList = Concat($filterList, $this->unidades->AdvancedSearch->toJson(), ","); // Field unidades
         $filterList = Concat($filterList, $this->dias_credito->AdvancedSearch->toJson(), ","); // Field dias_credito
         $filterList = Concat($filterList, $this->asesor_asignado->AdvancedSearch->toJson(), ","); // Field asesor_asignado
+        $filterList = Concat($filterList, $this->documento->AdvancedSearch->toJson(), ","); // Field documento
+        $filterList = Concat($filterList, $this->id_documento_padre->AdvancedSearch->toJson(), ","); // Field id_documento_padre
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1278,6 +1282,22 @@ class ViewSalidasList extends ViewSalidas
         $this->asesor_asignado->AdvancedSearch->SearchValue2 = @$filter["y_asesor_asignado"];
         $this->asesor_asignado->AdvancedSearch->SearchOperator2 = @$filter["w_asesor_asignado"];
         $this->asesor_asignado->AdvancedSearch->save();
+
+        // Field documento
+        $this->documento->AdvancedSearch->SearchValue = @$filter["x_documento"];
+        $this->documento->AdvancedSearch->SearchOperator = @$filter["z_documento"];
+        $this->documento->AdvancedSearch->SearchCondition = @$filter["v_documento"];
+        $this->documento->AdvancedSearch->SearchValue2 = @$filter["y_documento"];
+        $this->documento->AdvancedSearch->SearchOperator2 = @$filter["w_documento"];
+        $this->documento->AdvancedSearch->save();
+
+        // Field id_documento_padre
+        $this->id_documento_padre->AdvancedSearch->SearchValue = @$filter["x_id_documento_padre"];
+        $this->id_documento_padre->AdvancedSearch->SearchOperator = @$filter["z_id_documento_padre"];
+        $this->id_documento_padre->AdvancedSearch->SearchCondition = @$filter["v_id_documento_padre"];
+        $this->id_documento_padre->AdvancedSearch->SearchValue2 = @$filter["y_id_documento_padre"];
+        $this->id_documento_padre->AdvancedSearch->SearchOperator2 = @$filter["w_id_documento_padre"];
+        $this->id_documento_padre->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1308,6 +1328,8 @@ class ViewSalidasList extends ViewSalidas
         $this->buildSearchSql($where, $this->unidades, $default, false); // unidades
         $this->buildSearchSql($where, $this->dias_credito, $default, false); // dias_credito
         $this->buildSearchSql($where, $this->asesor_asignado, $default, false); // asesor_asignado
+        $this->buildSearchSql($where, $this->documento, $default, false); // documento
+        $this->buildSearchSql($where, $this->id_documento_padre, $default, false); // id_documento_padre
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1332,6 +1354,8 @@ class ViewSalidasList extends ViewSalidas
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->dias_credito->AdvancedSearch->save(); // dias_credito
             $this->asesor_asignado->AdvancedSearch->save(); // asesor_asignado
+            $this->documento->AdvancedSearch->save(); // documento
+            $this->id_documento_padre->AdvancedSearch->save(); // id_documento_padre
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1380,6 +1404,8 @@ class ViewSalidasList extends ViewSalidas
             $this->unidades->AdvancedSearch->save(); // unidades
             $this->dias_credito->AdvancedSearch->save(); // dias_credito
             $this->asesor_asignado->AdvancedSearch->save(); // asesor_asignado
+            $this->documento->AdvancedSearch->save(); // documento
+            $this->id_documento_padre->AdvancedSearch->save(); // id_documento_padre
             $this->setSessionRules($rules);
         }
 
@@ -1490,15 +1516,6 @@ class ViewSalidasList extends ViewSalidas
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->consignacion->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field tasa_dia
-        $filter = $this->queryBuilderWhere("tasa_dia");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->tasa_dia, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tasa_dia->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field unidades
         $filter = $this->queryBuilderWhere("unidades");
         if (!$filter) {
@@ -1506,15 +1523,6 @@ class ViewSalidasList extends ViewSalidas
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->unidades->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field asesor_asignado
-        $filter = $this->queryBuilderWhere("asesor_asignado");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->asesor_asignado, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->asesor_asignado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
@@ -1552,6 +1560,7 @@ class ViewSalidasList extends ViewSalidas
         $searchFlds[] = &$this->nota;
         $searchFlds[] = &$this->cerrado;
         $searchFlds[] = &$this->asesor_asignado;
+        $searchFlds[] = &$this->documento;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1634,6 +1643,12 @@ class ViewSalidasList extends ViewSalidas
         if ($this->asesor_asignado->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->documento->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->id_documento_padre->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -1687,6 +1702,8 @@ class ViewSalidasList extends ViewSalidas
         $this->unidades->AdvancedSearch->unsetSession();
         $this->dias_credito->AdvancedSearch->unsetSession();
         $this->asesor_asignado->AdvancedSearch->unsetSession();
+        $this->documento->AdvancedSearch->unsetSession();
+        $this->id_documento_padre->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -1716,6 +1733,8 @@ class ViewSalidasList extends ViewSalidas
         $this->unidades->AdvancedSearch->load();
         $this->dias_credito->AdvancedSearch->load();
         $this->asesor_asignado->AdvancedSearch->load();
+        $this->documento->AdvancedSearch->load();
+        $this->id_documento_padre->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -1739,9 +1758,7 @@ class ViewSalidasList extends ViewSalidas
             $this->updateSort($this->fecha); // fecha
             $this->updateSort($this->nota); // nota
             $this->updateSort($this->consignacion); // consignacion
-            $this->updateSort($this->tasa_dia); // tasa_dia
             $this->updateSort($this->unidades); // unidades
-            $this->updateSort($this->asesor_asignado); // asesor_asignado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1784,6 +1801,8 @@ class ViewSalidasList extends ViewSalidas
                 $this->unidades->setSort("");
                 $this->dias_credito->setSort("");
                 $this->asesor_asignado->setSort("");
+                $this->documento->setSort("");
+                $this->id_documento_padre->setSort("");
             }
 
             // Reset start position
@@ -2095,9 +2114,7 @@ class ViewSalidasList extends ViewSalidas
             $this->createColumnOption($option, "fecha");
             $this->createColumnOption($option, "nota");
             $this->createColumnOption($option, "consignacion");
-            $this->createColumnOption($option, "tasa_dia");
             $this->createColumnOption($option, "unidades");
-            $this->createColumnOption($option, "asesor_asignado");
         }
 
         // Set up custom actions
@@ -2594,6 +2611,22 @@ class ViewSalidasList extends ViewSalidas
                 $this->Command = "search";
             }
         }
+
+        // documento
+        if ($this->documento->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->documento->AdvancedSearch->SearchValue != "" || $this->documento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // id_documento_padre
+        if ($this->id_documento_padre->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->id_documento_padre->AdvancedSearch->SearchValue != "" || $this->id_documento_padre->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -2708,6 +2741,8 @@ class ViewSalidasList extends ViewSalidas
         $this->unidades->setDbValue($row['unidades']);
         $this->dias_credito->setDbValue($row['dias_credito']);
         $this->asesor_asignado->setDbValue($row['asesor_asignado']);
+        $this->documento->setDbValue($row['documento']);
+        $this->id_documento_padre->setDbValue($row['id_documento_padre']);
     }
 
     // Return a row with default values
@@ -2732,6 +2767,8 @@ class ViewSalidasList extends ViewSalidas
         $row['unidades'] = $this->unidades->DefaultValue;
         $row['dias_credito'] = $this->dias_credito->DefaultValue;
         $row['asesor_asignado'] = $this->asesor_asignado->DefaultValue;
+        $row['documento'] = $this->documento->DefaultValue;
+        $row['id_documento_padre'] = $this->id_documento_padre->DefaultValue;
         return $row;
     }
 
@@ -2808,6 +2845,10 @@ class ViewSalidasList extends ViewSalidas
 
         // asesor_asignado
 
+        // documento
+
+        // id_documento_padre
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -2820,7 +2861,6 @@ class ViewSalidasList extends ViewSalidas
             $this->nombre_documento->ViewValue = $this->nombre_documento->CurrentValue;
 
             // cliente
-            $this->cliente->ViewValue = $this->cliente->CurrentValue;
             $curVal = strval($this->cliente->CurrentValue);
             if ($curVal != "") {
                 $this->cliente->ViewValue = $this->cliente->lookupCacheOption($curVal);
@@ -2895,6 +2935,13 @@ class ViewSalidasList extends ViewSalidas
             // asesor_asignado
             $this->asesor_asignado->ViewValue = $this->asesor_asignado->CurrentValue;
 
+            // documento
+            $this->documento->ViewValue = $this->documento->CurrentValue;
+
+            // id_documento_padre
+            $this->id_documento_padre->ViewValue = $this->id_documento_padre->CurrentValue;
+            $this->id_documento_padre->ViewValue = FormatNumber($this->id_documento_padre->ViewValue, $this->id_documento_padre->formatPattern());
+
             // nombre_documento
             $this->nombre_documento->HrefValue = "";
             $this->nombre_documento->TooltipValue = "";
@@ -2919,17 +2966,9 @@ class ViewSalidasList extends ViewSalidas
             $this->consignacion->HrefValue = "";
             $this->consignacion->TooltipValue = "";
 
-            // tasa_dia
-            $this->tasa_dia->HrefValue = "";
-            $this->tasa_dia->TooltipValue = "";
-
             // unidades
             $this->unidades->HrefValue = "";
             $this->unidades->TooltipValue = "";
-
-            // asesor_asignado
-            $this->asesor_asignado->HrefValue = "";
-            $this->asesor_asignado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // nombre_documento
             $this->nombre_documento->setupEditAttributes();
@@ -2940,28 +2979,37 @@ class ViewSalidasList extends ViewSalidas
             $this->nombre_documento->PlaceHolder = RemoveHtml($this->nombre_documento->caption());
 
             // cliente
-            $this->cliente->setupEditAttributes();
-            $this->cliente->EditValue = $this->cliente->AdvancedSearch->SearchValue;
-            $curVal = strval($this->cliente->AdvancedSearch->SearchValue);
+            $curVal = trim(strval($this->cliente->AdvancedSearch->SearchValue));
             if ($curVal != "") {
-                $this->cliente->EditValue = $this->cliente->lookupCacheOption($curVal);
-                if ($this->cliente->EditValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->cliente->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->cliente->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                    $sqlWrk = $this->cliente->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->cliente->Lookup->renderViewRow($rswrk[0]);
-                        $this->cliente->EditValue = $this->cliente->displayValue($arwrk);
-                    } else {
-                        $this->cliente->EditValue = HtmlEncode($this->cliente->AdvancedSearch->SearchValue);
-                    }
-                }
+                $this->cliente->AdvancedSearch->ViewValue = $this->cliente->lookupCacheOption($curVal);
             } else {
-                $this->cliente->EditValue = null;
+                $this->cliente->AdvancedSearch->ViewValue = $this->cliente->Lookup !== null && is_array($this->cliente->lookupOptions()) && count($this->cliente->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->cliente->AdvancedSearch->ViewValue !== null) { // Load from cache
+                $this->cliente->EditValue = array_values($this->cliente->lookupOptions());
+                if ($this->cliente->AdvancedSearch->ViewValue == "") {
+                    $this->cliente->AdvancedSearch->ViewValue = $Language->phrase("PleaseSelect");
+                }
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->cliente->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $this->cliente->AdvancedSearch->SearchValue, $this->cliente->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                }
+                $sqlWrk = $this->cliente->Lookup->getSql(true, $filterWrk, '', $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->cliente->Lookup->renderViewRow($rswrk[0]);
+                    $this->cliente->AdvancedSearch->ViewValue = $this->cliente->displayValue($arwrk);
+                } else {
+                    $this->cliente->AdvancedSearch->ViewValue = $Language->phrase("PleaseSelect");
+                }
+                $arwrk = $rswrk;
+                $this->cliente->EditValue = $arwrk;
             }
             $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
 
@@ -2977,6 +3025,9 @@ class ViewSalidasList extends ViewSalidas
             $this->fecha->setupEditAttributes();
             $this->fecha->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha->AdvancedSearch->SearchValue, $this->fecha->formatPattern()), $this->fecha->formatPattern()));
             $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+            $this->fecha->setupEditAttributes();
+            $this->fecha->EditValue2 = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha->AdvancedSearch->SearchValue2, $this->fecha->formatPattern()), $this->fecha->formatPattern()));
+            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
 
             // nota
             $this->nota->setupEditAttributes();
@@ -2990,23 +3041,10 @@ class ViewSalidasList extends ViewSalidas
             $this->consignacion->EditValue = $this->consignacion->options(false);
             $this->consignacion->PlaceHolder = RemoveHtml($this->consignacion->caption());
 
-            // tasa_dia
-            $this->tasa_dia->setupEditAttributes();
-            $this->tasa_dia->EditValue = $this->tasa_dia->AdvancedSearch->SearchValue;
-            $this->tasa_dia->PlaceHolder = RemoveHtml($this->tasa_dia->caption());
-
             // unidades
             $this->unidades->setupEditAttributes();
             $this->unidades->EditValue = $this->unidades->AdvancedSearch->SearchValue;
             $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
-
-            // asesor_asignado
-            $this->asesor_asignado->setupEditAttributes();
-            if (!$this->asesor_asignado->Raw) {
-                $this->asesor_asignado->AdvancedSearch->SearchValue = HtmlDecode($this->asesor_asignado->AdvancedSearch->SearchValue);
-            }
-            $this->asesor_asignado->EditValue = HtmlEncode($this->asesor_asignado->AdvancedSearch->SearchValue);
-            $this->asesor_asignado->PlaceHolder = RemoveHtml($this->asesor_asignado->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3024,9 +3062,6 @@ class ViewSalidasList extends ViewSalidas
         // Check if validation required
         if (!Config("SERVER_VALIDATE")) {
             return true;
-        }
-        if (!CheckInteger($this->cliente->AdvancedSearch->SearchValue)) {
-            $this->cliente->addErrorMessage($this->cliente->getErrorMessage(false));
         }
 
         // Return validate result
@@ -3062,6 +3097,8 @@ class ViewSalidasList extends ViewSalidas
         $this->unidades->AdvancedSearch->load();
         $this->dias_credito->AdvancedSearch->load();
         $this->asesor_asignado->AdvancedSearch->load();
+        $this->documento->AdvancedSearch->load();
+        $this->id_documento_padre->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -3480,10 +3517,14 @@ class ViewSalidasList extends ViewSalidas
         return $where;
     }
 
-    // Page Load event
     public function pageLoad()
     {
-        //Log("Page Load");
+        if (isset($_GET["crear"]) && trim($_GET["crear"]) != "") {
+            $_SESSION["ViewSalidasList_crear"] = trim($_GET["crear"]);
+        }
+        if (isset($_GET["limpiar_crear"])) {
+            unset($_SESSION["ViewSalidasList_crear"]);
+        }
     }
 
     // Page Unload event
@@ -3517,7 +3558,22 @@ class ViewSalidasList extends ViewSalidas
     // Page Render event
     public function pageRender()
     {
-        //Log("Page Render");
+        $crear = $_SESSION["ViewSalidasList_crear"] ?? "";
+        if ($crear != "") {
+            $crear = HtmlEncode($crear);
+            echo <<<HTML
+    <script>
+    loadjs.ready(["jquery"], function () {
+        const crear = "{$crear}";
+        $("form").each(function () {
+            if ($(this).find("input[name='crear']").length === 0) {
+                $(this).append('<input type="hidden" name="crear" value="' + crear + '">');
+            }
+        });
+    });
+    </script>
+    HTML;
+        }
     }
 
     // Page Data Rendering event
@@ -3551,26 +3607,25 @@ class ViewSalidasList extends ViewSalidas
 
     // ListOptions Load event
     public function listOptionsLoad() {
-    	// Example:
-    	$opt = &$this->ListOptions->Add("new");
-    	$opt->Header = "";
-    	$opt->OnLeft = TRUE; // Link on left
-    	$opt->MoveTo(2); // Move to first column
-    	$opt = &$this->ListOptions->Add("new2");
-    	$opt->Header = "Asesor";
-    	$opt->OnLeft = TRUE; // Link on left
-    	$opt->MoveTo(10); // Move to first column
-    	$crear = $_REQUEST["crear"];
-    	if($crear == "TDCFCV") {
-    		$opt = &$this->ListOptions->Add("checker");
-    		$opt->Header = "Cheker";
-    		$opt->OnLeft = FALSE; // Link on left
-    		$opt->MoveTo(0); // Move to first column
-    		$opt = &$this->ListOptions->Add("packer");
-    		$opt->Header = "Packer";
-    		$opt->OnLeft = FALSE; // Link on left
-    		$opt->MoveTo(0); // Move to first column
-    	}
+        $opt = &$this->ListOptions->Add("new");
+        $opt->Header = "";
+        $opt->OnLeft = true;
+        $opt->MoveTo(2);
+        $opt = &$this->ListOptions->Add("new2");
+        $opt->Header = "Asesor";
+        $opt->OnLeft = true;
+        $opt->MoveTo(10);
+        $crear = $_REQUEST["crear"] ?? ($_SESSION["ViewSalidasList_crear"] ?? "");
+        if ($crear == "TDCFCV") {
+            $opt = &$this->ListOptions->Add("checker");
+            $opt->Header = "Cheker";
+            $opt->OnLeft = false;
+            $opt->MoveTo(0);
+            $opt = &$this->ListOptions->Add("packer");
+            $opt->Header = "Packer";
+            $opt->OnLeft = false;
+            $opt->MoveTo(0);
+        }
     }
 
     // ListOptions Rendering event
@@ -3583,38 +3638,41 @@ class ViewSalidasList extends ViewSalidas
 
     // ListOptions Rendered event
     public function listOptionsRendered() {
-    	// Example: 
-    	$crear = $_REQUEST["crear"];
-    	$id = $this->id->CurrentValue;
-    	$tipo = $this->tipo_documento->CurrentValue;
-    	switch($crear) {
-    	case "TDCNET":
-    		$url = 'ConfirmPage?page=TDCNET&id=' . $id;
-    		break;
-    	case "TDCFCV":
-    		$url = 'ConfirmPage?page=TDCFCV&id=' . $id;
-    		break;
-    	}
-    	$sql = "SELECT COUNT(*) AS cantidad FROM entradas_salidas WHERE tipo_documento = '$tipo' AND id_documento = '$id' AND IFNULL(cantidad_articulo, 0) > 0;";
-    	if(ExecuteScalar($sql) > 0) {
-    		$this->ListOptions->Items["new"]->Body = '<a class="fas fa-cog" href="' . $url . '" data-toggle="tooltip" title="Procesar este Documento." data-placement="bottom"></a>';
-    	}
-    	$sql = "SELECT 
-    				c.nombre AS asesor 
-    			FROM 
-    				salidas AS a 
-    				LEFT OUTER JOIN usuario AS b ON b.username = a.asesor 
-    				LEFT OUTER JOIN asesor AS c ON c.id = b.asesor 
-    			WHERE a.id = '$id';";
-    	$asesor = ExecuteScalar($sql);
-    	$this->ListOptions->Items["new2"]->Body =$asesor;
-    	if($crear == "TDCFCV") {
-    		$sql = "SELECT checker, packer FROM salidas WHERE id = '$id';";
-    		if($row = ExecuteRow($sql)) {
-    			$this->ListOptions->Items["checker"]->Body = $row["checker"];
-    			$this->ListOptions->Items["packer"]->Body = $row["packer"];
-    		}
-    	}
+        $crear = $_REQUEST["crear"] ?? ($_SESSION["ViewSalidasList_crear"] ?? "");
+        $id = $this->id->CurrentValue;
+        $tipo = $this->tipo_documento->CurrentValue;
+        $url = "";
+        switch ($crear) {
+            case "TDCNET":
+                $url = 'ConfirmPage?page=TDCNET&id=' . $id;
+                break;
+            case "TDCFCV":
+                $url = 'ConfirmPage?page=TDCFCV&id=' . $id;
+                break;
+        }
+        $sql = "SELECT COUNT(*) AS cantidad
+                FROM entradas_salidas
+                WHERE tipo_documento = '$tipo'
+                  AND id_documento = '$id'
+                  AND IFNULL(cantidad_articulo, 0) > 0;";
+        if ($url != "" && ExecuteScalar($sql) > 0) {
+            $this->ListOptions->Items["new"]->Body =
+                '<a class="fas fa-cog" href="' . $url . '" data-toggle="tooltip" title="Procesar este Documento." data-placement="bottom"></a>';
+        }
+        $sql = "SELECT c.nombre AS asesor
+                FROM salidas AS a
+                LEFT OUTER JOIN usuario AS b ON b.username = a.asesor
+                LEFT OUTER JOIN asesor AS c ON c.id = b.asesor
+                WHERE a.id = '$id';";
+        $asesor = ExecuteScalar($sql);
+        $this->ListOptions->Items["new2"]->Body = $asesor;
+        if ($crear == "TDCFCV") {
+            $sql = "SELECT checker, packer FROM salidas WHERE id = '$id';";
+            if ($row = ExecuteRow($sql)) {
+                $this->ListOptions->Items["checker"]->Body = $row["checker"];
+                $this->ListOptions->Items["packer"]->Body = $row["packer"];
+            }
+        }
     }
 
     // Row Custom Action event

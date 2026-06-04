@@ -187,6 +187,14 @@ try {
     "));
 
     if ($renglonesRestantes <= 0) {
+        if ($id_documento_padre > 0) {
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'NUEVO'
+                WHERE id = {$id_documento_padre}
+            ");
+        }
+
         ExecuteStatement("
             DELETE FROM salidas
             WHERE id = {$pedido}

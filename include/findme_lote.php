@@ -35,7 +35,7 @@ try {
                     b.nombre AS fabricante, 
                     CONCAT(IFNULL(a.principio_activo, ''), ', ', 
                            IFNULL(a.presentacion, ''), ', ', 
-                           IFNULL(a.nombre_comercial, '')) AS articulo 
+                           IFNULL(a.nombre_comercial, ''), ' COD:', IFNULL(a.codigo, '')) AS articulo  
                 FROM 
                     articulo AS a 
                     LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante 

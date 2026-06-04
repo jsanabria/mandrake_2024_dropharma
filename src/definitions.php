@@ -302,6 +302,10 @@ return [
     "ya_fue_procesado" => \DI\create(YaFueProcesado::class),
     "nota_de_entrega_parcial" => \DI\create(NotaDeEntregaParcial::class),
     "nota_de_entrega_parcial_procesar" => \DI\create(NotaDeEntregaParcialProcesar::class),
+    "devoluciones" => \DI\create(Devoluciones::class),
+    "devoluciones_buscar" => \DI\create(DevolucionesBuscar::class),
+    "devoluciones_guardar" => \DI\create(DevolucionesGuardar::class),
+    "devoluciones_ver" => \DI\create(DevolucionesVer::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

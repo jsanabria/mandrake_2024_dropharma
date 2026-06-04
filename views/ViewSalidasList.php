@@ -84,7 +84,8 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Add fields
         .addFields([
-            ["cliente", [ew.Validators.integer], fields.cliente.isInvalid],
+            ["cliente", [], fields.cliente.isInvalid],
+            ["nro_documento", [], fields.nro_documento.isInvalid],
             ["consignacion", [], fields.consignacion.isInvalid]
         ])
         // Validate form
@@ -154,29 +155,63 @@ if (!$Page->cliente->UseFilter) {
 ?>
     <div id="xs_cliente" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cliente->UseFilter ? " ew-filter-field" : "" ?>">
         <div class="d-flex my-1 my-sm-0">
-            <label class="ew-search-caption ew-label"><?= $Page->cliente->caption() ?></label>
+            <label for="x_cliente" class="ew-search-caption ew-label"><?= $Page->cliente->caption() ?></label>
             <div class="ew-search-operator">
 <?= $Language->phrase("=") ?>
 <input type="hidden" name="z_cliente" id="z_cliente" value="=">
 </div>
         </div>
         <div id="el_view_salidas_cliente" class="ew-search-field">
-<?php
-if (IsRTL()) {
-    $Page->cliente->EditAttrs["dir"] = "rtl";
-}
-?>
-<span id="as_x_cliente" class="ew-auto-suggest">
-    <input type="<?= $Page->cliente->getInputTextType() ?>" class="form-control" name="sv_x_cliente" id="sv_x_cliente" value="<?= RemoveHtml($Page->cliente->EditValue) ?>" autocomplete="off" size="30" placeholder="<?= HtmlEncode($Page->cliente->getPlaceHolder()) ?>" data-placeholder="<?= HtmlEncode($Page->cliente->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cliente->formatPattern()) ?>"<?= $Page->cliente->editAttributes() ?>>
-</span>
-<selection-list hidden class="form-control" data-table="view_salidas" data-field="x_cliente" data-input="sv_x_cliente" data-value-separator="<?= $Page->cliente->displayValueSeparatorAttribute() ?>" name="x_cliente" id="x_cliente" value="<?= HtmlEncode($Page->cliente->AdvancedSearch->SearchValue) ?>"></selection-list>
-<div class="invalid-feedback"><?= $Page->cliente->getErrorMessage(false) ?></div>
+    <select
+        id="x_cliente"
+        name="x_cliente"
+        class="form-control ew-select<?= $Page->cliente->isInvalidClass() ?>"
+        data-select2-id="fview_salidassrch_x_cliente"
+        data-table="view_salidas"
+        data-field="x_cliente"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->cliente->caption())) ?>"
+        data-modal-lookup="true"
+        data-value-separator="<?= $Page->cliente->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->cliente->getPlaceHolder()) ?>"
+        <?= $Page->cliente->editAttributes() ?>>
+        <?= $Page->cliente->selectOptionListHtml("x_cliente") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->cliente->getErrorMessage(false) ?></div>
+<?= $Page->cliente->Lookup->getParamTag($Page, "p_x_cliente") ?>
 <script>
 loadjs.ready("fview_salidassrch", function() {
-    fview_salidassrch.createAutoSuggest(Object.assign({"id":"x_cliente","forceSelect":false}, { lookupAllDisplayFields: <?= $Page->cliente->Lookup->LookupAllDisplayFields ? "true" : "false" ?> }, ew.vars.tables.view_salidas.fields.cliente.autoSuggestOptions));
+    var options = { name: "x_cliente", selectId: "fview_salidassrch_x_cliente" };
+    if (fview_salidassrch.lists.cliente?.lookupOptions.length) {
+        options.data = { id: "x_cliente", form: "fview_salidassrch" };
+    } else {
+        options.ajax = { id: "x_cliente", form: "fview_salidassrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.view_salidas.fields.cliente.modalLookupOptions);
+    ew.createModalLookup(options);
 });
 </script>
-<?= $Page->cliente->Lookup->getParamTag($Page, "p_x_cliente") ?>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+<?php if ($Page->nro_documento->Visible) { // nro_documento ?>
+<?php
+if (!$Page->nro_documento->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_nro_documento" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->nro_documento->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_nro_documento" class="ew-search-caption ew-label"><?= $Page->nro_documento->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("LIKE") ?>
+<input type="hidden" name="z_nro_documento" id="z_nro_documento" value="LIKE">
+</div>
+        </div>
+        <div id="el_view_salidas_nro_documento" class="ew-search-field">
+<input type="<?= $Page->nro_documento->getInputTextType() ?>" name="x_nro_documento" id="x_nro_documento" data-table="view_salidas" data-field="x_nro_documento" value="<?= $Page->nro_documento->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_documento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_documento->formatPattern()) ?>"<?= $Page->nro_documento->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->nro_documento->getErrorMessage(false) ?></div>
 </div>
         <div class="d-flex my-1 my-sm-0">
         </div><!-- /.ew-search-field -->
@@ -313,14 +348,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->consignacion->Visible) { // consignacion ?>
         <th data-name="consignacion" class="<?= $Page->consignacion->headerCellClass() ?>"><div id="elh_view_salidas_consignacion" class="view_salidas_consignacion"><?= $Page->renderFieldHeader($Page->consignacion) ?></div></th>
 <?php } ?>
-<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
-        <th data-name="tasa_dia" class="<?= $Page->tasa_dia->headerCellClass() ?>"><div id="elh_view_salidas_tasa_dia" class="view_salidas_tasa_dia"><?= $Page->renderFieldHeader($Page->tasa_dia) ?></div></th>
-<?php } ?>
 <?php if ($Page->unidades->Visible) { // unidades ?>
         <th data-name="unidades" class="<?= $Page->unidades->headerCellClass() ?>"><div id="elh_view_salidas_unidades" class="view_salidas_unidades"><?= $Page->renderFieldHeader($Page->unidades) ?></div></th>
-<?php } ?>
-<?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
-        <th data-name="asesor_asignado" class="<?= $Page->asesor_asignado->headerCellClass() ?>"><div id="elh_view_salidas_asesor_asignado" class="view_salidas_asesor_asignado"><?= $Page->renderFieldHeader($Page->asesor_asignado) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -398,27 +427,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
-        <td data-name="tasa_dia"<?= $Page->tasa_dia->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_salidas_tasa_dia" class="el_view_salidas_tasa_dia">
-<span<?= $Page->tasa_dia->viewAttributes() ?>>
-<?= $Page->tasa_dia->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->unidades->Visible) { // unidades ?>
         <td data-name="unidades"<?= $Page->unidades->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_salidas_unidades" class="el_view_salidas_unidades">
 <span<?= $Page->unidades->viewAttributes() ?>>
 <?= $Page->unidades->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
-        <td data-name="asesor_asignado"<?= $Page->asesor_asignado->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_salidas_asesor_asignado" class="el_view_salidas_asesor_asignado">
-<span<?= $Page->asesor_asignado->viewAttributes() ?>>
-<?= $Page->asesor_asignado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

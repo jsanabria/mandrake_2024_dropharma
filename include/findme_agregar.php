@@ -128,13 +128,13 @@ try {
                     JOIN entradas AS b ON b.tipo_documento = a.tipo_documento AND b.id = a.id_documento 
                     JOIN almacen AS c ON c.codigo = a.almacen AND c.movimiento = 'S'
                     WHERE ((a.tipo_documento = 'TDCAEN' AND b.estatus <> 'ANULADO') OR (a.tipo_documento = 'TDCNRP' AND a.check_ne = 'S' AND b.estatus <> 'ANULADO'))
-                      AND a.articulo = ? AND a.newdata = 'S' AND a.lote = ? AND IFNULL(a.fecha_vencimiento, '1990-01-01') = ? AND a.almacen = ?
+                      AND a.articulo = ? AND a.newdata = 'S' AND IFNULL(a.lote, '') = ? AND IFNULL(a.fecha_vencimiento, '1990-01-01') = ? AND a.almacen = ?
                     UNION ALL 
                     SELECT a.cantidad_movimiento FROM entradas_salidas AS a 
                     JOIN salidas AS b ON b.tipo_documento = a.tipo_documento AND b.id = a.id_documento 
                     JOIN almacen AS c ON c.codigo = a.almacen AND c.movimiento = 'S'
                     WHERE ((a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR (a.tipo_documento IN (?, 'TDCASA') AND b.estatus <> 'ANULADO'))
-                      AND a.articulo = ? AND a.newdata = 'S' AND a.lote = ? AND IFNULL(a.fecha_vencimiento, '1990-01-01') = ? AND a.almacen = ?
+                      AND a.articulo = ? AND a.newdata = 'S' AND IFNULL(a.lote, '') = ? AND IFNULL(a.fecha_vencimiento, '1990-01-01') = ? AND a.almacen = ?
                  ) AS x;";
     
     $stmtCheck = $link->prepare($sqlCheck);

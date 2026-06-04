@@ -72,7 +72,8 @@ if ($es_entrega_total_global) {
     }
     
     // Cambiamos el estatus de la Madre a PROCESADO y cerramos su ciclo
-    $sqlCabecera = "UPDATE salidas SET entregado = 'S', estatus = 'PROCESADO' WHERE id = $id;";
+    // $sqlCabecera = "UPDATE salidas SET entregado = 'S', estatus = 'PROCESADO' WHERE id = $id;";
+    $sqlCabecera = "UPDATE salidas SET entregado = 'S' WHERE id = $id;";
     Execute($sqlCabecera);
 
 } 

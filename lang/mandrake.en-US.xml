@@ -1,67 +1,7 @@
-<ew-language date="2026/6/1" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/6/4" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
-    <menu id="1461">
-      <phrase id="menutext" value="Nota de Entrega Parcial" />
-    </menu>
-    <menu id="1462">
-      <phrase id="menutext" value="Nota de Entrega Parcial" />
-    </menu>
-    <menu id="1443">
-      <phrase id="menutext" value="reporte seniat ne" />
-    </menu>
-    <menu id="1444">
-      <phrase id="menutext" value="adjunto salida" />
-    </menu>
-    <menu id="1445">
-      <phrase id="menutext" value="banco tipo pago" />
-    </menu>
-    <menu id="1446">
-      <phrase id="menutext" value="cierre de caja" />
-    </menu>
-    <menu id="1447">
-      <phrase id="menutext" value="conceptos bancarios" />
-    </menu>
-    <menu id="1448">
-      <phrase id="menutext" value="conteo detalle" />
-    </menu>
-    <menu id="1449">
-      <phrase id="menutext" value="conteo encabezado" />
-    </menu>
-    <menu id="1450">
-      <phrase id="menutext" value="items deco" />
-    </menu>
-    <menu id="1451">
-      <phrase id="menutext" value="movimiento bancario" />
-    </menu>
-    <menu id="1452">
-      <phrase id="menutext" value="nombre comercial" />
-    </menu>
-    <menu id="1453">
-      <phrase id="menutext" value="nota salida" />
-    </menu>
-    <menu id="1454">
-      <phrase id="menutext" value="Pagos Compras" />
-    </menu>
-    <menu id="1455">
-      <phrase id="menutext" value="Pagos Compras Detalle" />
-    </menu>
-    <menu id="1456">
-      <phrase id="menutext" value="presupuesto" />
-    </menu>
-    <menu id="1457">
-      <phrase id="menutext" value="presupusto detalle" />
-    </menu>
-    <menu id="1458">
-      <phrase id="menutext" value="tabla retenciones" />
-    </menu>
-    <menu id="1459">
-      <phrase id="menutext" value="transferencia banco" />
-    </menu>
-    <menu id="1460">
-      <phrase id="menutext" value="visitas" />
-    </menu>
     <menu id="19">
       <phrase id="menutext" value="Maestros" />
     </menu>
@@ -158,11 +98,11 @@
     <menu id="863">
       <phrase id="menutext" value="Cobros Clientes" />
     </menu>
-    <menu id="64">
-      <phrase id="menutext" value="Entradas" />
-    </menu>
     <menu id="864">
       <phrase id="menutext" value="Pagos Proveedores" />
+    </menu>
+    <menu id="64">
+      <phrase id="menutext" value="Entradas" />
     </menu>
     <menu id="918">
       <phrase id="menutext" value="Lotes de Pagos Generar" />
@@ -260,6 +200,18 @@
     <menu id="929">
       <phrase id="menutext" value="Transferencias" />
     </menu>
+    <menu id="1463">
+      <phrase id="menutext" value="Devoluciones" />
+    </menu>
+    <menu id="1464">
+      <phrase id="menutext" value="Devoluciones Notas de Entrega" />
+    </menu>
+    <menu id="1465">
+      <phrase id="menutext" value="Devoluciones Guardar" />
+    </menu>
+    <menu id="1461">
+      <phrase id="menutext" value="Nota de Entrega Parcial" />
+    </menu>
     <menu id="1154">
       <phrase id="menutext" value="Cobranza" />
     </menu>
@@ -271,6 +223,9 @@
     </menu>
     <menu id="1155">
       <phrase id="menutext" value="Abonos" />
+    </menu>
+    <menu id="1462">
+      <phrase id="menutext" value="Nota de Entrega Parcial" />
     </menu>
     <menu id="1441">
       <phrase id="menutext" value="Contabilidad MDK" />
@@ -301,6 +256,9 @@
     </menu>
     <menu id="1442">
       <phrase id="menutext" value="view cont asiento resumen mdk" />
+    </menu>
+    <menu id="1443">
+      <phrase id="menutext" value="reporte seniat ne" />
     </menu>
     <menu id="587">
       <phrase id="menutext" value="Contabilidad" />
@@ -344,6 +302,12 @@
     <menu id="720">
       <phrase id="menutext" value="Estado de Resultados" />
     </menu>
+    <menu id="1466">
+      <phrase id="menutext" value="Devoluciones Ver Nota de Entrega" />
+    </menu>
+    <menu id="1444">
+      <phrase id="menutext" value="adjunto salida" />
+    </menu>
     <menu id="304">
       <phrase id="menutext" value="Reportes" />
     </menu>
@@ -361,6 +325,9 @@
     </menu>
     <menu id="724">
       <phrase id="menutext" value="Facturas Asesor" />
+    </menu>
+    <menu id="1445">
+      <phrase id="menutext" value="banco tipo pago" />
     </menu>
     <menu id="17">
       <phrase id="menutext" value="Sistema" />
@@ -410,8 +377,8 @@
     <menu id="1212">
       <phrase id="menutext" value="Pago Destino Regla" />
     </menu>
-    <menu id="1210">
-      <phrase id="menutext" value="Registrar Pagos de Clientes" />
+    <menu id="1446">
+      <phrase id="menutext" value="cierre de caja" />
     </menu>
     <menu id="18">
       <phrase id="menutext" value="Seguridad" />
@@ -430,6 +397,51 @@
     </menu>
     <menu id="126">
       <phrase id="menutext" value="Funciones" />
+    </menu>
+    <menu id="1447">
+      <phrase id="menutext" value="conceptos bancarios" />
+    </menu>
+    <menu id="1448">
+      <phrase id="menutext" value="conteo detalle" />
+    </menu>
+    <menu id="1449">
+      <phrase id="menutext" value="conteo encabezado" />
+    </menu>
+    <menu id="1450">
+      <phrase id="menutext" value="items deco" />
+    </menu>
+    <menu id="1451">
+      <phrase id="menutext" value="movimiento bancario" />
+    </menu>
+    <menu id="1452">
+      <phrase id="menutext" value="nombre comercial" />
+    </menu>
+    <menu id="1453">
+      <phrase id="menutext" value="nota salida" />
+    </menu>
+    <menu id="1454">
+      <phrase id="menutext" value="Pagos Compras" />
+    </menu>
+    <menu id="1455">
+      <phrase id="menutext" value="Pagos Compras Detalle" />
+    </menu>
+    <menu id="1456">
+      <phrase id="menutext" value="presupuesto" />
+    </menu>
+    <menu id="1457">
+      <phrase id="menutext" value="presupusto detalle" />
+    </menu>
+    <menu id="1458">
+      <phrase id="menutext" value="tabla retenciones" />
+    </menu>
+    <menu id="1459">
+      <phrase id="menutext" value="transferencia banco" />
+    </menu>
+    <menu id="1460">
+      <phrase id="menutext" value="visitas" />
+    </menu>
+    <menu id="1210">
+      <phrase id="menutext" value="Registrar Pagos de Clientes" />
     </menu>
     <menu id="1209">
       <phrase id="menutext" value="Cobros Detalle" />
@@ -7446,6 +7458,12 @@
       <field id="asesor_asignado">
         <phrase id="fldcaption" value="asesor asignado" />
       </field>
+      <field id="documento">
+        <phrase id="fldcaption" value="documento" />
+      </field>
+      <field id="id_documento_padre">
+        <phrase id="fldcaption" value="id documento padre" />
+      </field>
     </table>
     <table id="view_tarifa">
       <phrase id="tblcaption" value="view tarifa" />
@@ -7680,6 +7698,18 @@
     </table>
     <table id="nota_de_entrega_parcial_procesar">
       <phrase id="tblcaption" value="Nota de Entrega Parcial" />
+    </table>
+    <table id="devoluciones">
+      <phrase id="tblcaption" value="Devoluciones" />
+    </table>
+    <table id="devoluciones_buscar">
+      <phrase id="tblcaption" value="Devoluciones Notas de Entrega" />
+    </table>
+    <table id="devoluciones_guardar">
+      <phrase id="tblcaption" value="Devoluciones Guardar" />
+    </table>
+    <table id="devoluciones_ver">
+      <phrase id="tblcaption" value="Devoluciones Ver Nota de Entrega" />
     </table>
   </project>
 </ew-language>

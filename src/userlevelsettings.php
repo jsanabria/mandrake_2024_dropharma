@@ -497,7 +497,15 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial.php","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial.php","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial_procesar.php","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial_procesar.php","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}nota_de_entrega_parcial_procesar.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_buscar.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_buscar.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_guardar.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_guardar.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_ver.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_ver.php","0","0"]];
 
 /**
  * Tables
@@ -747,4 +755,8 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["visitas","visitas","visitas",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","VisitasList"],
     ["ya_fue_procesado.php","ya_fue_procesado","Nota de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","YaFueProcesado"],
     ["nota_de_entrega_parcial.php","nota_de_entrega_parcial","Nota de Entrega Parcial",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","NotaDeEntregaParcial"],
-    ["nota_de_entrega_parcial_procesar.php","nota_de_entrega_parcial_procesar","Nota de Entrega Parcial",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","NotaDeEntregaParcialProcesar"]];
+    ["nota_de_entrega_parcial_procesar.php","nota_de_entrega_parcial_procesar","Nota de Entrega Parcial",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","NotaDeEntregaParcialProcesar"],
+    ["devoluciones.php","devoluciones","Devoluciones",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","Devoluciones"],
+    ["devoluciones_buscar.php","devoluciones_buscar","Devoluciones Notas de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesBuscar"],
+    ["devoluciones_guardar.php","devoluciones_guardar","Devoluciones Guardar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesGuardar"],
+    ["devoluciones_ver.php","devoluciones_ver","Devoluciones Ver Nota de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesVer"]];

@@ -64,6 +64,8 @@ class ViewSalidas extends DbTable
     public $unidades;
     public $dias_credito;
     public $asesor_asignado;
+    public $documento;
+    public $id_documento_padre;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -199,13 +201,16 @@ class ViewSalidas extends DbTable
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
+            'SELECT' // Edit Tag
         );
         $this->cliente->InputTextType = "text";
         $this->cliente->Raw = true;
-        $this->cliente->Lookup = new Lookup($this->cliente, 'cliente', false, 'id', ["nombre","","",""], '', '', [], [], [], [], [], [], false, '', '', "`nombre`");
+        $this->cliente->setSelectMultiple(false); // Select one
+        $this->cliente->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->cliente->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->cliente->Lookup = new Lookup($this->cliente, 'cliente', false, 'id', ["nombre","","",""], '', '', [], [], [], [], [], [], false, '`nombre`', '', "`nombre`");
         $this->cliente->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
-        $this->cliente->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->cliente->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['cliente'] = &$this->cliente;
 
         // nombre_cliente
@@ -532,6 +537,52 @@ class ViewSalidas extends DbTable
         $this->asesor_asignado->InputTextType = "text";
         $this->asesor_asignado->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['asesor_asignado'] = &$this->asesor_asignado;
+
+        // documento
+        $this->documento = new DbField(
+            $this, // Table
+            'x_documento', // Variable name
+            'documento', // Name
+            '`documento`', // Expression
+            '`documento`', // Basic search expression
+            129, // Type
+            2, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`documento`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->documento->InputTextType = "text";
+        $this->documento->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['documento'] = &$this->documento;
+
+        // id_documento_padre
+        $this->id_documento_padre = new DbField(
+            $this, // Table
+            'x_id_documento_padre', // Variable name
+            'id_documento_padre', // Name
+            '`id_documento_padre`', // Expression
+            '`id_documento_padre`', // Basic search expression
+            19, // Type
+            10, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`id_documento_padre`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->id_documento_padre->InputTextType = "text";
+        $this->id_documento_padre->Raw = true;
+        $this->id_documento_padre->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->id_documento_padre->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['id_documento_padre'] = &$this->id_documento_padre;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1151,6 +1202,8 @@ class ViewSalidas extends DbTable
         $this->unidades->DbValue = $row['unidades'];
         $this->dias_credito->DbValue = $row['dias_credito'];
         $this->asesor_asignado->DbValue = $row['asesor_asignado'];
+        $this->documento->DbValue = $row['documento'];
+        $this->id_documento_padre->DbValue = $row['id_documento_padre'];
     }
 
     // Delete uploaded files
@@ -1529,6 +1582,8 @@ class ViewSalidas extends DbTable
         $this->unidades->setDbValue($row['unidades']);
         $this->dias_credito->setDbValue($row['dias_credito']);
         $this->asesor_asignado->setDbValue($row['asesor_asignado']);
+        $this->documento->setDbValue($row['documento']);
+        $this->id_documento_padre->setDbValue($row['id_documento_padre']);
     }
 
     // Render list content
@@ -1595,6 +1650,10 @@ class ViewSalidas extends DbTable
 
         // asesor_asignado
 
+        // documento
+
+        // id_documento_padre
+
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
 
@@ -1605,7 +1664,6 @@ class ViewSalidas extends DbTable
         $this->nombre_documento->ViewValue = $this->nombre_documento->CurrentValue;
 
         // cliente
-        $this->cliente->ViewValue = $this->cliente->CurrentValue;
         $curVal = strval($this->cliente->CurrentValue);
         if ($curVal != "") {
             $this->cliente->ViewValue = $this->cliente->lookupCacheOption($curVal);
@@ -1680,6 +1738,13 @@ class ViewSalidas extends DbTable
         // asesor_asignado
         $this->asesor_asignado->ViewValue = $this->asesor_asignado->CurrentValue;
 
+        // documento
+        $this->documento->ViewValue = $this->documento->CurrentValue;
+
+        // id_documento_padre
+        $this->id_documento_padre->ViewValue = $this->id_documento_padre->CurrentValue;
+        $this->id_documento_padre->ViewValue = FormatNumber($this->id_documento_padre->ViewValue, $this->id_documento_padre->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -1752,6 +1817,14 @@ class ViewSalidas extends DbTable
         $this->asesor_asignado->HrefValue = "";
         $this->asesor_asignado->TooltipValue = "";
 
+        // documento
+        $this->documento->HrefValue = "";
+        $this->documento->TooltipValue = "";
+
+        // id_documento_padre
+        $this->id_documento_padre->HrefValue = "";
+        $this->id_documento_padre->TooltipValue = "";
+
         // Call Row Rendered event
         $this->rowRendered();
 
@@ -1789,7 +1862,6 @@ class ViewSalidas extends DbTable
 
         // cliente
         $this->cliente->setupEditAttributes();
-        $this->cliente->EditValue = $this->cliente->CurrentValue;
         $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
 
         // nombre_cliente
@@ -1897,6 +1969,22 @@ class ViewSalidas extends DbTable
         $this->asesor_asignado->EditValue = $this->asesor_asignado->CurrentValue;
         $this->asesor_asignado->PlaceHolder = RemoveHtml($this->asesor_asignado->caption());
 
+        // documento
+        $this->documento->setupEditAttributes();
+        if (!$this->documento->Raw) {
+            $this->documento->CurrentValue = HtmlDecode($this->documento->CurrentValue);
+        }
+        $this->documento->EditValue = $this->documento->CurrentValue;
+        $this->documento->PlaceHolder = RemoveHtml($this->documento->caption());
+
+        // id_documento_padre
+        $this->id_documento_padre->setupEditAttributes();
+        $this->id_documento_padre->EditValue = $this->id_documento_padre->CurrentValue;
+        $this->id_documento_padre->PlaceHolder = RemoveHtml($this->id_documento_padre->caption());
+        if (strval($this->id_documento_padre->EditValue) != "" && is_numeric($this->id_documento_padre->EditValue)) {
+            $this->id_documento_padre->EditValue = FormatNumber($this->id_documento_padre->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1956,6 +2044,8 @@ class ViewSalidas extends DbTable
                     $doc->exportCaption($this->unidades);
                     $doc->exportCaption($this->dias_credito);
                     $doc->exportCaption($this->asesor_asignado);
+                    $doc->exportCaption($this->documento);
+                    $doc->exportCaption($this->id_documento_padre);
                 }
                 $doc->endExportRow();
             }
@@ -2013,6 +2103,8 @@ class ViewSalidas extends DbTable
                         $doc->exportField($this->unidades);
                         $doc->exportField($this->dias_credito);
                         $doc->exportField($this->asesor_asignado);
+                        $doc->exportField($this->documento);
+                        $doc->exportField($this->id_documento_padre);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -2045,33 +2137,41 @@ class ViewSalidas extends DbTable
         // Enter your code here
     }
 
-    // Recordset Selecting event
-    public function recordsetSelecting(&$filter) {
-    	// Enter your code here	
-    	// Enter your code here
-    	if(isset($_REQUEST["consig"])) {
-    		$consig = intval($_REQUEST["consig"]);
-    	}
-    	$tipo = $_REQUEST["crear"];
-    	switch($tipo) {
-    	case "TDCNET":
-    		AddFilter($filter, "tipo_documento IN ('TDCPDV', 'TDCFCV')");
-    		AddFilter($filter, "IF(tipo_documento = 'TDCPDV', cerrado <> '', 1)");
-    		break;
-    	case "TDCFCV":
-    		AddFilter($filter, "tipo_documento IN ('TDCNET')");
-    		// Lo agrego para no facturar directamente las consignaciones si no por la nueva interfaz nueva 2//12/2020 Junior Sanabria
-    		if($consig == 1) {
-    			AddFilter($filter, "consignacion = 'S'"); 
-    		}
-    		else {
-    			AddFilter($filter, "consignacion = 'N'"); 
-    		}
-    		break;
-    	default:
-    		AddFilter($filter, "tipo_documento IN ('N/A')");
-    	}
-    	AddFilter($filter, "estatus = 'NUEVO'");
+    public function recordsetSelecting(&$filter)
+    {
+        $consig = intval($_REQUEST["consig"] ?? 0);
+        $tipo = $_REQUEST["crear"] ?? ($_SESSION["ViewSalidasList_crear"] ?? "");
+        switch ($tipo) {
+            case "TDCNET":
+                AddFilter($filter, "
+                (
+                    (
+                        tipo_documento = 'TDCPDV'
+                        AND estatus = 'NUEVO'
+                    )
+                    OR
+                    (
+                        tipo_documento = 'TDCFCV'
+                        AND IFNULL(TRIM(nro_documento), '') <> ''
+                        AND IFNULL(id_documento_padre, 0) = 0
+                        AND estatus = 'PROCESADO' AND documento = 'FC'
+                    )
+                )
+                ");
+                AddFilter($filter, "(tipo_documento <> 'TDCPDV' OR IFNULL(TRIM(cerrado), '') <> '')");
+                break;
+            case "TDCFCV":
+                AddFilter($filter, "tipo_documento IN ('TDCNET')");
+                if ($consig == 1) {
+                    AddFilter($filter, "consignacion = 'S'");
+                } else {
+                    AddFilter($filter, "consignacion = 'N'");
+                }
+                AddFilter($filter, "estatus = 'NUEVO'");
+                break;
+            default:
+                AddFilter($filter, "tipo_documento IN ('N/A')");
+        }
     }
 
     // Recordset Selected event

@@ -2,7 +2,7 @@
 session_start();
 
 require('rcs/fpdf.php');
-require("../include/connect.php");
+require("../include/connect2.php");
 
 $id = isset($_REQUEST["id"])?$_REQUEST["id"]:"0";
 
@@ -29,7 +29,7 @@ class PDF extends FPDF
 	function Header()
 	{
 		// Consulto datos de la compa??a 
-		require("../include/connect.php");
+		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
 		$row = mysqli_fetch_array($rs);
@@ -95,18 +95,18 @@ class PDF extends FPDF
 		$this->Ln(15);
 		
 		$this->SetFont('Arial','',12);
-		$this->Cell(200, 6, $row["descripcion"],0,0,'C');
+		$this->Cell(260, 6, $row["descripcion"],0,0,'C');
 		
 
 
 		$this->Ln(8);
 		
 		$this->SetFont('Arial','',8);
-		$this->Cell(200, 6, "ESTATUS: " . $GLOBALS["estatus"] . " / " . "No. Doc.: " . $GLOBALS["nro_documento"],0,0,'R');
+		$this->Cell(260, 6, "ESTATUS: " . $GLOBALS["estatus"] . " / " . "No. Doc.: " . $GLOBALS["nro_documento"],0,0,'R');
 
 		$this->Ln();
 		$this->Cell(10, 5);
-		$this->Cell(120, 5);
+		$this->Cell(180, 5);
 		$this->Cell(35, 5, "CIUDAD: $ciudad,");
 		$this->Cell(10, 5, substr(($GLOBALS["fecha"]),0,2),0,0,'L');
 		$this->Cell(10, 5, substr(($GLOBALS["fecha"]),3,2),0,0,'C');
@@ -133,12 +133,10 @@ class PDF extends FPDF
 
 		$this->Cell(10, 6);
 		$this->Cell(20, 6, "CODIGO", 1, 0, 'L');
-		$this->Cell(20, 6, "FABRICANTE", 1, 0, 'L');
-		$this->Cell(70, 6, "ARTICULO", 1, 0, 'L');
-		/*
+		$this->Cell(30, 6, "LAB", 1, 0, 'L');
+		$this->Cell(90, 6, "ARTICULO", 1, 0, 'L');
 		$this->Cell(20, 6, "LOTE", 1, 0, 'L');
 		$this->Cell(15, 6, "VENCE", 1, 0, 'L');
-		*/
 		$this->Cell(20, 6, "ALMACEN", 1, 0, 'C');
 		$this->Cell(20, 6, "PRECIO", 1, 0, 'R');
 		$this->Cell(25, 6, "TOTAL", 1, 0, 'R');
@@ -162,14 +160,14 @@ class PDF extends FPDF
 		//$this->AddPage();
 		//require("../connect.php");
 		$this->Ln();
-		$this->Cell(155, 6, "TOTAL UNIDADES: $unidades EN $items ITEMS", 0, 0, 'R');
+		$this->Cell(205, 6, "TOTAL UNIDADES: $unidades EN $items ITEMS", 0, 0, 'R');
 		$this->Cell(45, 6, number_format($tot, 2, ".", ","), 0, 0, 'R');
 		//require("../desconnect.php");
 	}
 }
 
 // Creaci?n del objeto de la clase heredada
-$pdf = new PDF('P', 'mm', 'Letter');
+$pdf = new PDF('L', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();
 $pdf->AddPage();
@@ -229,19 +227,17 @@ while($row = mysqli_fetch_array($rs))
     $pdf->SetXY($x_actual + 20, $y_actual);
     
     // Continuamos con el Laboratorio
-    $pdf->Cell(20, 4, substr($row["lab"], 0, 10), 0, 0, 'L');
+    $pdf->Cell(30, 4, substr($row["lab"], 0, 15), 0, 0, 'L');
     
     // Continuamos con el Artículo (tu lógica actual)
-    if(strlen($row["articulo"]) < 40) 
-        $pdf->Cell(70, 4, trim($row["articulo"]), 0, 0, 'L');
+    if(strlen($row["articulo"]) < 50) 
+        $pdf->Cell(90, 4, trim($row["articulo"]), 0, 0, 'L');
     else 
-        $pdf->Cell(70, 4, trim(substr($row["articulo"], 0, 40)), 0, 0, 'L');
+        $pdf->Cell(90, 4, trim(substr($row["articulo"], 0, 50)), 0, 0, 'L');
         
     // ... AQUÍ SE MANTIENE EXACTAMENTE IGUAL EL RESTO DE TUS CELLS (Lote, Vence, Almacén, Precio, Total, Cant) ...
-    /*
     $pdf->Cell(20, 4, $row["lote"], 0, 0, 'C');
     $pdf->Cell(15, 4, $row["fecha_vencimiento"], 0, 0, 'C');
-    */
     
     $abrev = explode(" ", $row["almacen"]);
     $almacen = "";
@@ -259,10 +255,10 @@ while($row = mysqli_fetch_array($rs))
 
     // 5. Ajuste del salto de línea final de la fila
     // Evaluamos qué fue más largo: si la descripción larga o el código largo
-    if(strlen($row["articulo"]) >= 40) {
+    if(strlen($row["articulo"]) >= 50) {
         $pdf->Ln();
-        $pdf->Cell(30, 4);
-        $pdf->MultiCell(70, 4, trim(substr($row["articulo"], 40, strlen($row["articulo"]))), 0, 'L');
+        $pdf->Cell(60, 4);
+        $pdf->MultiCell(90, 4, trim(substr($row["articulo"], 50, strlen($row["articulo"]))), 0, 'L');
     } else {
         // Si la descripción fue corta, verificamos si el código usó dos líneas
         if ($y_despues_codigo > $y_actual + 4) {

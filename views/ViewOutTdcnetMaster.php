@@ -87,6 +87,17 @@ $view_out_tdcnet->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
+<?php if ($view_out_tdcnet->estatus->Visible) { // estatus ?>
+        <tr id="r_estatus"<?= $view_out_tdcnet->estatus->rowAttributes() ?>>
+            <td class="<?= $view_out_tdcnet->TableLeftColumnClass ?>"><?= $view_out_tdcnet->estatus->caption() ?></td>
+            <td<?= $view_out_tdcnet->estatus->cellAttributes() ?>>
+<span id="el_view_out_tdcnet_estatus">
+<span<?= $view_out_tdcnet->estatus->viewAttributes() ?>>
+<?= $view_out_tdcnet->estatus->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
 <?php if ($view_out_tdcnet->id_documento_padre->Visible) { // id_documento_padre ?>
         <tr id="r_id_documento_padre"<?= $view_out_tdcnet->id_documento_padre->rowAttributes() ?>>
             <td class="<?= $view_out_tdcnet->TableLeftColumnClass ?>"><?= $view_out_tdcnet->id_documento_padre->caption() ?></td>

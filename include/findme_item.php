@@ -31,7 +31,7 @@ try {
                     IFNULL(a.nombre_comercial, ''), ' ', 
                     IFNULL(a.principio_activo, ''), ' ', 
                     IFNULL(a.presentacion, ''), ' (', 
-                    IFNULL(b.nombre, ''), ')'
+                    IFNULL(b.nombre, ''), ')', ' COD:', IFNULL(a.codigo, '')
                 ) AS articulo 
             FROM 
                 articulo AS a 

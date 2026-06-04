@@ -28,9 +28,11 @@ $tipo = $row["tipo_documento"];
 $cliente = $row["cliente"];
 $estatus = $row["estatus"];
 
-if($estatus == "PROCESADO") {
-	header("Location: YaFueProcesado");
-	die();
+if($tipo != "TDCFCV") {
+    if($estatus == "PROCESADO") {
+        header("Location: YaFueProcesado");
+        die();
+    }
 }
 
 /**** Consulto si el cliente compra a consignación y si se aplica al documento, esto puede cambiarse luego al editar la nota de entrega ****/
@@ -201,12 +203,14 @@ else {
 
 $monto_usd = $total/(substr(strtoupper($moneda), 0, 2) == "BS" ? 1 : $tasa);
 $sql = "UPDATE salidas 
-		SET
-			monto_total = $precio,
-			alicuota_iva = $alicuota,
-			iva = $iva,
-			total = $total, monto_usd = $monto_usd 
-		WHERE id = '$new_id'"; 
+        SET
+            monto_total = $precio,
+            alicuota_iva = $alicuota,
+            iva = $iva,
+            total = $total,
+            monto_usd = $monto_usd,
+            estatus = '" . ($tipo == "TDCFCV" ? "PROCESADO" : "NUEVO") . "'
+        WHERE id = '$new_id'"; 
 Execute($sql);
 
 /* Se actualizan las cantidades de unidades en el encabezado de la salida */
@@ -225,7 +229,11 @@ $sql = "UPDATE
 Execute($sql);
 /**************/
 
-$sql = "UPDATE salidas SET estatus = 'PROCESADO' WHERE id = '$id'";
+if($tipo == "TDCFCV") 
+    $sql = "UPDATE salidas SET id_documento_padre = $new_id WHERE id = '$id'";
+else 
+    $sql = "UPDATE salidas SET estatus = 'PROCESADO' WHERE id = '$id'";
+
 ExecuteRow($sql);
 
 $sql = "SELECT articulo FROM entradas_salidas WHERE id_documento = $id AND tipo_documento = 'TDCPDV';";

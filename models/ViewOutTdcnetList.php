@@ -168,7 +168,7 @@ class ViewOutTdcnetList extends ViewOutTdcnet
         $this->lista_pedido->Visible = false;
         $this->nota->Visible = false;
         $this->unidades->setVisibility();
-        $this->estatus->Visible = false;
+        $this->estatus->setVisibility();
         $this->id_documento_padre->setVisibility();
         $this->asesor->Visible = false;
         $this->documento->Visible = false;
@@ -2078,6 +2078,15 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->unidades->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field estatus
+        $filter = $this->queryBuilderWhere("estatus");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->estatus, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->estatus->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field id_documento_padre
         $filter = $this->queryBuilderWhere("id_documento_padre");
         if (!$filter) {
@@ -2542,6 +2551,7 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->updateSort($this->total); // total
             $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->unidades); // unidades
+            $this->updateSort($this->estatus); // estatus
             $this->updateSort($this->id_documento_padre); // id_documento_padre
             $this->updateSort($this->entregado); // entregado
             $this->setStartRecordNumber(1); // Reset start position
@@ -3000,6 +3010,7 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->createColumnOption($option, "total");
             $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "unidades");
+            $this->createColumnOption($option, "estatus");
             $this->createColumnOption($option, "id_documento_padre");
             $this->createColumnOption($option, "entregado");
         }
@@ -4700,6 +4711,10 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->unidades->HrefValue = "";
             $this->unidades->TooltipValue = "";
 
+            // estatus
+            $this->estatus->HrefValue = "";
+            $this->estatus->TooltipValue = "";
+
             // id_documento_padre
             $this->id_documento_padre->HrefValue = "";
             $this->id_documento_padre->TooltipValue = "";
@@ -4776,6 +4791,11 @@ class ViewOutTdcnetList extends ViewOutTdcnet
             $this->unidades->setupEditAttributes();
             $this->unidades->EditValue = $this->unidades->AdvancedSearch->SearchValue;
             $this->unidades->PlaceHolder = RemoveHtml($this->unidades->caption());
+
+            // estatus
+            $this->estatus->setupEditAttributes();
+            $this->estatus->EditValue = $this->estatus->options(true);
+            $this->estatus->PlaceHolder = RemoveHtml($this->estatus->caption());
 
             // id_documento_padre
             $this->id_documento_padre->setupEditAttributes();

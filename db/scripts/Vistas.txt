@@ -30,7 +30,7 @@ SELECT
 	 a.fecha AS fecha,  
 	 a.estatus, a.username, 
 	 a.nota, a.consignacion, IFNULL(a.nombre, '') AS cerrado, total, 
-	 a.tasa_dia, a.monto_usd, a.unidades, a.dias_credito, a.asesor_asignado     
+	 a.tasa_dia, a.monto_usd, a.unidades, a.dias_credito, a.asesor_asignado, a.documento, a.id_documento_padre       
 FROM 
 	salidas AS a 
 	JOIN tipo_documento AS b ON b.codigo = a.tipo_documento 

@@ -96,42 +96,58 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
   <input type="hidden" id="PorDesMax" name="PorDesMax" value="<?= $PorDesMax ?>">
   <input type="hidden" id="PorDesAct" name="PorDesAct" value="<?= $PorDesAct ?>">
 
-<div class="row">
-  <div class="col-sm-2" style="text-align: right">
-    <strong>Descuento cliente</strong>
-  </div>  
-  <div class="col-sm-1" style="text-align: right; vertical-align: middle;">
-    <span><a onclick="js:ProgLess();"><i class="fa-solid fa-minus"></i></a></span>
-  </div>
-  <div class="col-sm-2" id="xProgress">
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" style="width: <?= $PorDesAct ?>%" aria-valuenow="<?= $PorDesAct ?>" aria-valuemin="<?= $PorDesMin ?>" aria-valuemax="<?= $PorDesMax ?>"><?= intval($PorDesAct) ?>%</div>
+<div class="row g-3 align-items-end">
+
+    <div class="col-12 col-md-4">
+        <div class="border rounded p-2 bg-light h-100">
+            <label for="rangoDescuentoCliente" class="form-label small fw-bold mb-1">
+                Descuento cliente:
+                <span id="lblDescuentoCliente" class="text-primary"><?= intval($PorDesAct) ?>%</span>
+            </label>
+
+            <input type="range"
+                   class="form-range"
+                   min="<?= $PorDesMin ?>"
+                   max="99"
+                   step="1"
+                   id="rangoDescuentoCliente"
+                   value="<?= intval($PorDesAct) ?>">
+        </div>
     </div>
-  </div>
-  <div class="col-sm-1" style="text-align: left; vertical-align: middle;">
-    <span><a onclick="js:ProgPlus();"><i class="fa-solid fa-plus"></i></a></span>
-  </div>
 
-  <!-- Transferencista (igual que lo tienes) -->
-  <div class="col-sm-2">
-    <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
-    <?php if(trim($doc_afectado) != "") echo "Doc Afect.:" . $doc_afectado; ?>
-    <?php
-    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" data-original="' . $descTransferencista . '" class="form-control form-control-sm tdcfcv-autorizado-transferencista" size="4">
-    <small>% Transferencista</small>';
-    ?>   
-  </div>
+    <div class="col-12 col-md-4">
+        <div class="border rounded p-2 bg-light h-100">
+            <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
 
-  <!-- Fabricante (ajustado como Transferencista) -->
-  <div class="col-sm-2" style="display:none;>
-    <?php
-    echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();" readonly="yes">
-    <small>% Fabricante</small>';
-    ?>   
-  </div>
+            <?php if (trim($doc_afectado) != "") { ?>
+                <small class="d-block text-muted mb-1">
+                    Doc Afect.: <?= $doc_afectado ?>
+                </small>
+            <?php } ?>
 
-  <!-- Moneda -->
-    <div class="col-sm-1">
+            <label for="rangoTransferencista" class="form-label small fw-bold mb-1">
+                % Transferencista:
+                <span id="lblTransferencista" class="text-primary"><?= intval($descTransferencista) ?>%</span>
+            </label>
+
+            <input type="hidden"
+                   id="descTransferencista"
+                   name="descTransferencista"
+                   value="<?= $descTransferencista ?>">
+
+            <input type="range"
+                   class="form-range"
+                   min="0"
+                   max="99"
+                   step="1"
+                   id="rangoTransferencista"
+                   value="<?= intval($descTransferencista) ?>">
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <label class="form-label small fw-bold mb-1">Moneda</label>
+
         <select id="moneda" name="moneda" class="form-select form-select-sm"
             <?php if (intval($pedido) == 0) { ?>
                 onchange="js:RefreshMonedaTasa()"
@@ -140,23 +156,38 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
                 onchange="this.selectedIndex=this.defaultIndex;"
             <?php } ?>
         >
-        <?php
-        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-        $rows = ExecuteRows($sql);
-        foreach ($rows as $value) {
-            echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"] == $moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-        }
-        ?>
+            <?php
+            $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
+            $rows = ExecuteRows($sql);
+
+            foreach ($rows as $value) {
+                echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"] == $moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
+            }
+            ?>
         </select>
     </div>
 
-  <!-- Tasa (ahora con label abajo) -->
-  <div class="col-sm-1">
-    <?php
-    echo '<input name="tasa_usd" id="tasa_usd" type="number" class="form-control form-control-sm" value="' . $tasa . '" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()" readonly="yes">
-    <small>Tasa B.C.V.</small>';
-    ?>
-  </div>
+    <div class="col-6 col-md-2">
+        <label class="form-label small fw-bold mb-1">Tasa B.C.V.</label>
+
+        <input name="tasa_usd"
+               id="tasa_usd"
+               type="number"
+               class="form-control form-control-sm bg-light text-end"
+               value="<?= $tasa ?>"
+               onkeyup="js:RefreshMonedaTasa()"
+               readonly>
+    </div>
+
+    <div style="display:none;">
+        <input type="text"
+               id="descFabricante"
+               name="descFabricante"
+               value="<?= ($descFabricante ?? '') ?>"
+               class="form-control form-control-sm"
+               readonly>
+    </div>
+
 </div>
 
 <hr class="border border-primary" />
@@ -287,6 +318,87 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
 <script type="text/javascript">
 loadjs.ready(["jquery"], function () {
     const $ = jQuery;
+
+    let descuentoRangeOriginal = parseInt($("#PorDesAct").val() || 0, 10);
+
+    $(document).on("mousedown touchstart focus", "#rangoDescuentoCliente", function () {
+        descuentoRangeOriginal = parseInt($("#PorDesAct").val() || 0, 10);
+    });
+
+    $(document).on("input", "#rangoDescuentoCliente", function () {
+        $("#lblDescuentoCliente").text($(this).val() + "%");
+    });
+
+    $(document).on("input", "#rangoTransferencista", function () {
+        $("#lblTransferencista").text($(this).val() + "%");
+    });
+
+    $(document).on("change", "#rangoDescuentoCliente", function () {
+        const pedido = getVal("pedido");
+        const nuevo = parseInt($(this).val(), 10);
+
+        if (pedido == 0) {
+            $(this).val(descuentoRangeOriginal);
+            $("#lblDescuentoCliente").text(descuentoRangeOriginal + "%");
+            return false;
+        }
+
+        descuentoGlobalPendiente = {
+            pedido: pedido,
+            original: descuentoRangeOriginal,
+            nuevo: nuevo
+        };
+
+        if (puedeModificarPrecioDescuento) {
+            AplicarDescuentoGlobalPendiente();
+            return;
+        }
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+        showModalAutorizarTdcfcv();
+    });
+
+    let transferenciaOriginal = parseInt(
+        $("#descTransferencista").val() || 0,
+        10
+    );
+
+    $(document).on(
+        "mousedown touchstart focus",
+        "#rangoTransferencista",
+        function () {
+
+            transferenciaOriginal = parseInt(
+                $("#descTransferencista").val() || 0,
+                10
+            );
+        }
+    ); 
+
+    $(document).on("change", "#rangoTransferencista", function () {
+
+        const nuevo = parseInt($(this).val(), 10);
+
+        transferenciaPendiente = {
+            original: transferenciaOriginal,
+            nuevo: nuevo
+        };
+
+        if (puedeModificarPrecioDescuento) {
+
+            $("#descTransferencista").val(nuevo);
+
+            DiasCred();
+
+            return;
+        }
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+
+        showModalAutorizarTdcfcv();
+    });
 
     const formatter = new Intl.NumberFormat("es-PE", {
         style: "decimal",
@@ -468,6 +580,28 @@ loadjs.ready(["jquery"], function () {
     });
 
     $(document).on("click", "#btnCancelarAutorizarTdcfcv", function () {
+        if (transferenciaPendiente.original !== "") {
+            $("#descTransferencista").val(
+                transferenciaPendiente.original
+            );
+
+            $("#rangoTransferencista").val(
+                transferenciaPendiente.original
+            );
+
+            $("#lblTransferencista").text(
+                transferenciaPendiente.original + "%"
+            );
+
+            transferenciaPendiente = {
+                original: "",
+                nuevo: ""
+            };
+
+            hideModalAutorizarTdcfcv();
+            return;
+        }
+
         if (descuentoGlobalPendiente.pedido !== "") {
             PintarProgressBar(descuentoGlobalPendiente.original);
 
@@ -489,6 +623,11 @@ loadjs.ready(["jquery"], function () {
         const xuser = $("#auth_user_tdcfcv").val().trim();
         const xpass = $("#auth_pass_tdcfcv").val().trim();
 
+        const tipo_documento = $("#tipo_documento").val();
+        const nro_documento  = $("#nro_documento").val();
+        const usercaja       = $("#username").val();
+        const pedido         = $("#pedido").val();
+
         if (xuser === "" || xpass === "") {
             alertMsg("Debe indicar usuario autorizador y clave.");
             return false;
@@ -504,7 +643,11 @@ loadjs.ready(["jquery"], function () {
             data: {
                 usernama: xuser,
                 password: xpass,
-                contexto: "TDCFCV_PRECIO_DESCUENTO"
+                contexto: "TDCFCV_PRECIO_DESCUENTO",
+                tipo_documento: tipo_documento,
+                nro_documento: nro_documento,
+                usercaja: usercaja,
+                idPurga: pedido
             }
         })
         .done(function (result) {
@@ -515,17 +658,99 @@ loadjs.ready(["jquery"], function () {
                     return;
                 }
 
+                if (transferenciaPendiente.original !== "") {
+                    $("#descTransferencista").val(
+                        transferenciaPendiente.nuevo
+                    );
+
+                    $("#rangoTransferencista").val(
+                        transferenciaPendiente.nuevo
+                    );
+
+                    $("#lblTransferencista").text(
+                        transferenciaPendiente.nuevo + "%"
+                    );
+
+                    DiasCred();
+
+                    transferenciaPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
+
                 aplicarCambioAutorizadoTdcfcv();
                 hideModalAutorizarTdcfcv();
             } else {
                 alertMsg("!!! NO AUTORIZADO !!!");
+
+                if (transferenciaPendiente.original !== "") {
+                    $("#descTransferencista").val(transferenciaPendiente.original);
+                    $("#rangoTransferencista").val(transferenciaPendiente.original);
+                    $("#lblTransferencista").text(transferenciaPendiente.original + "%");
+
+                    transferenciaPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
+                if (descuentoGlobalPendiente.pedido !== "") {
+                    PintarProgressBar(descuentoGlobalPendiente.original);
+
+                    descuentoGlobalPendiente = {
+                        pedido: "",
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 restaurarCambioAutorizacionTdcfcv();
                 hideModalAutorizarTdcfcv();
             }
         })
         .fail(function () {
             alertMsg("Error de comunicación con el servidor.");
+            
+            if (transferenciaPendiente.original !== "") {
+                $("#descTransferencista").val(transferenciaPendiente.original);
+                $("#rangoTransferencista").val(transferenciaPendiente.original);
+                $("#lblTransferencista").text(transferenciaPendiente.original + "%");
+
+                transferenciaPendiente = {
+                    original: "",
+                    nuevo: ""
+                };
+
+                hideModalAutorizarTdcfcv();
+                return;
+            }
+
+            if (descuentoGlobalPendiente.pedido !== "") {
+                PintarProgressBar(descuentoGlobalPendiente.original);
+
+                descuentoGlobalPendiente = {
+                    pedido: "",
+                    original: "",
+                    nuevo: ""
+                };
+
+                hideModalAutorizarTdcfcv();
+                return;
+            }
+
             restaurarCambioAutorizacionTdcfcv();
+            hideModalAutorizarTdcfcv();
         })
         .always(function () {
             $("#btnAceptarAutorizarTdcfcv")
@@ -805,10 +1030,7 @@ loadjs.ready(["jquery"], function () {
                 updateTotals(json);
 
                 const PorDesAct = json.descuento ?? 0;
-                $("#PorDesAct").val(PorDesAct);
-                $("#xProgress").html(
-                    '<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>'
-                );
+                PintarProgressBar(PorDesAct);
 
                 $("#descTransferencista").val(json.descTransferencista ?? 0);
                 $("#descFabricante").val(json.descFabricante ?? 0);
@@ -1097,19 +1319,15 @@ loadjs.ready(["jquery"], function () {
         nuevo: ""
     };
 
+    var transferenciaPendiente = {
+        original: "",
+        nuevo: ""
+    };
+
     window.PintarProgressBar = function (valor) {
-        const PorDesMin = parseInt(getVal("PorDesMin"), 10);
-        const PorDesMax = parseInt(getVal("PorDesMax"), 10);
-
         $("#PorDesAct").val(valor);
-
-        $("#xProgress").html(
-            '<div class="progress">' +
-                '<div class="progress-bar" role="progressbar" style="width: ' + valor + '%" aria-valuenow="' + valor + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' +
-                    valor + '%' +
-                '</div>' +
-            '</div>'
-        );
+        $("#rangoDescuentoCliente").val(valor);
+        $("#lblDescuentoCliente").text(valor + "%");
     }
 
     window.AplicarDescuentoGlobalPendiente = function () {

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="reportcontroller=0,custom=0,custom|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=1,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
+<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="reportcontroller=0,custom=0,custom|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=0,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
   <Database DBID="DB" DBName="mandrake" DBType="MySQL" DBConnectionMethod="DIRECT" DBHost="localhost" DBPort="3306" DBUID="root" DBQuoteS="`" DBQuoteE="`" DBDBMSName="MySQL" DBDBMSVer="80030" MaxUploadSize="1000000" SecUserLevelFld="userlevelid" SecDefault="0,&quot;Default&quot;,0" SecUserProfileFld="profile" UseDynamicUserLevel="1" UserLevelTbl="userlevels" UserLevelIdFld="userlevelid" UserLevelNameFld="userlevelname" UserLevelPrivTbl="userlevelpermissions" UserLevelPrivTblNameFld="tablename" UserLevelPrivUserLevelFld="userlevelid" UserLevelPrivPrivFld="permission">
     <Table TblName="abono" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblIsMaster="1" TblCaption="Abonos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="nro_recibo" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Nro." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -70,7 +70,7 @@
       <Field FldName="tasa_factura" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="tasa factura" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="anular_venta.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption=" Anular Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="articulo" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblDelete="1" TblCaption="Art&amp;iacute;culos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblDetailEditPaging="1" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblUseButtonsForLinks="1" TblPageCaptions="Descripción|Stock|Imagen">
+    <Table TblName="articulo" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblDelete="1" TblCaption="Art&amp;iacute;culos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblDetailEditPaging="1" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblUseButtonsForLinks="1" TblPageCaptions="Descripción|Stock|Imagen">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="foto" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="250" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Foto" FldViewTag="IMAGE" FldHtmlTag="FILE" FldTagSize="30" FldTagMaxLength="250" FldSelectType="Values" FldTagImgWidth="120" FldTagImgHeight="120" FldTagATarget="_blank" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FileNameFld="foto" FldHrefFld="foto" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="codigo" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Código" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1227,11 +1227,11 @@
     <Table TblName="tdcasa_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcnrp_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcnrp_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnrp_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Pedido de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Pedido de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -1868,7 +1868,7 @@
       <Field FldName="descuento3" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="descuento 3" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="doc_afe" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="doc afe" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_out_tdcnet" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,master=1,list=1,list|class=1,view=1,view|class=1,edit=1,edit|class=1" TblList="1" TblView="1" TblEdit="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblCaption="Orden de Entrega" TblUpdatable="1" TblSQL="select `salidas`.`id` AS `id`,`salidas`.`tipo_documento` AS `tipo_documento`,`salidas`.`username` AS `username`,`salidas`.`fecha` AS `fecha`,`salidas`.`cliente` AS `cliente`,`salidas`.`nro_documento` AS `nro_documento`,`salidas`.`nro_control` AS `nro_control`,`salidas`.`monto_total` AS `monto_total`,`salidas`.`alicuota_iva` AS `alicuota_iva`,`salidas`.`iva` AS `iva`,`salidas`.`total` AS `total`,`salidas`.`lista_pedido` AS `lista_pedido`,`salidas`.`nota` AS `nota`,`salidas`.`estatus` AS `estatus`,`salidas`.`id_documento_padre` AS `id_documento_padre`,`salidas`.`moneda` AS `moneda`,`salidas`.`asesor` AS `asesor`,`salidas`.`documento` AS `documento`,`salidas`.`tasa_dia` AS `tasa_dia`,`salidas`.`monto_usd` AS `monto_usd`,`salidas`.`dias_credito` AS `dias_credito`,`salidas`.`entregado` AS `entregado`,`salidas`.`fecha_entrega` AS `fecha_entrega`,`salidas`.`pagado` AS `pagado`,`salidas`.`bultos` AS `bultos`,`salidas`.`fecha_bultos` AS `fecha_bultos`,`salidas`.`user_bultos` AS `user_bultos`,`salidas`.`fecha_despacho` AS `fecha_despacho`,`salidas`.`user_despacho` AS `user_despacho`,`salidas`.`consignacion` AS `consignacion`,`salidas`.`unidades` AS `unidades`,`salidas`.`descuento` AS `descuento`,`salidas`.`descuento2` AS `descuento2`,`salidas`.`descuento3` AS `descuento3`,`salidas`.`monto_sin_descuento` AS `monto_sin_descuento`,`salidas`.`factura` AS `factura`,`salidas`.`ci_rif` AS `ci_rif`,`salidas`.`nombre` AS `nombre`,`salidas`.`direccion` AS `direccion`,`salidas`.`telefono` AS `telefono`,`salidas`.`email` AS `email`,`salidas`.`activo` AS `activo`,`salidas`.`comprobante` AS `comprobante`,`salidas`.`doc_afectado` AS `doc_afectado`,`salidas`.`nro_despacho` AS `nro_despacho`,`salidas`.`cerrado` AS `cerrado`,`salidas`.`asesor_asignado` AS `asesor_asignado`,`salidas`.`tasa_indexada` AS `tasa_indexada`,`salidas`.`id_documento_padre_nd` AS `id_documento_padre_nd`,`salidas`.`archivo_pedido` AS `archivo_pedido`,`salidas`.`checker` AS `checker`,`salidas`.`checker_date` AS `checker_date`,`salidas`.`packer` AS `packer`,`salidas`.`packer_date` AS `packer_date`,`salidas`.`fotos` AS `fotos`,`salidas`.`igtf` AS `igtf`,`salidas`.`monto_base_igtf` AS `monto_base_igtf`,`salidas`.`monto_igtf` AS `monto_igtf`,`salidas`.`impreso` AS `impreso`,`salidas`.`doc_afe` AS `doc_afe` from `salidas` where (`salidas`.`tipo_documento` = 'TDCNET')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblEditReturnPage="_VIEW" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_out_tdcnet" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,view=0,view|class=0,edit=0,edit|class=0" TblList="1" TblView="1" TblEdit="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblCaption="Orden de Entrega" TblUpdatable="1" TblSQL="select `salidas`.`id` AS `id`,`salidas`.`tipo_documento` AS `tipo_documento`,`salidas`.`username` AS `username`,`salidas`.`fecha` AS `fecha`,`salidas`.`cliente` AS `cliente`,`salidas`.`nro_documento` AS `nro_documento`,`salidas`.`nro_control` AS `nro_control`,`salidas`.`monto_total` AS `monto_total`,`salidas`.`alicuota_iva` AS `alicuota_iva`,`salidas`.`iva` AS `iva`,`salidas`.`total` AS `total`,`salidas`.`lista_pedido` AS `lista_pedido`,`salidas`.`nota` AS `nota`,`salidas`.`estatus` AS `estatus`,`salidas`.`id_documento_padre` AS `id_documento_padre`,`salidas`.`moneda` AS `moneda`,`salidas`.`asesor` AS `asesor`,`salidas`.`documento` AS `documento`,`salidas`.`tasa_dia` AS `tasa_dia`,`salidas`.`monto_usd` AS `monto_usd`,`salidas`.`dias_credito` AS `dias_credito`,`salidas`.`entregado` AS `entregado`,`salidas`.`fecha_entrega` AS `fecha_entrega`,`salidas`.`pagado` AS `pagado`,`salidas`.`bultos` AS `bultos`,`salidas`.`fecha_bultos` AS `fecha_bultos`,`salidas`.`user_bultos` AS `user_bultos`,`salidas`.`fecha_despacho` AS `fecha_despacho`,`salidas`.`user_despacho` AS `user_despacho`,`salidas`.`consignacion` AS `consignacion`,`salidas`.`unidades` AS `unidades`,`salidas`.`descuento` AS `descuento`,`salidas`.`descuento2` AS `descuento2`,`salidas`.`descuento3` AS `descuento3`,`salidas`.`monto_sin_descuento` AS `monto_sin_descuento`,`salidas`.`factura` AS `factura`,`salidas`.`ci_rif` AS `ci_rif`,`salidas`.`nombre` AS `nombre`,`salidas`.`direccion` AS `direccion`,`salidas`.`telefono` AS `telefono`,`salidas`.`email` AS `email`,`salidas`.`activo` AS `activo`,`salidas`.`comprobante` AS `comprobante`,`salidas`.`doc_afectado` AS `doc_afectado`,`salidas`.`nro_despacho` AS `nro_despacho`,`salidas`.`cerrado` AS `cerrado`,`salidas`.`asesor_asignado` AS `asesor_asignado`,`salidas`.`tasa_indexada` AS `tasa_indexada`,`salidas`.`id_documento_padre_nd` AS `id_documento_padre_nd`,`salidas`.`archivo_pedido` AS `archivo_pedido`,`salidas`.`checker` AS `checker`,`salidas`.`checker_date` AS `checker_date`,`salidas`.`packer` AS `packer`,`salidas`.`packer_date` AS `packer_date`,`salidas`.`fotos` AS `fotos`,`salidas`.`igtf` AS `igtf`,`salidas`.`monto_base_igtf` AS `monto_base_igtf`,`salidas`.`monto_igtf` AS `monto_igtf`,`salidas`.`impreso` AS `impreso`,`salidas`.`doc_afe` AS `doc_afe` from `salidas` where (`salidas`.`tipo_documento` = 'TDCNET')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblEditReturnPage="_VIEW" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="Id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="username" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Usuario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -20873,10 +20873,34 @@ $descuento = floatval($row["descuento"]);
     }
 
     function VaciarCesta() {
-        if(confirm("¿Seguro de vaciar por completo la cesta de este documento?")) { 
-            window.location.href = "include/findme_eliminar_all.php?id=" + $("#id").val() + "&username=" + $("#username").val().trim();
-            return true;
-        } 
+        if (!confirm("¿Seguro de vaciar por completo la cesta de este documento?"))
+            return false;
+
+        $.ajax({
+            url: "include/findme_eliminar_all.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                id: $("#id").val(),
+                username: $("#username").val().trim()
+            }
+        })
+        .done(function(resp) {
+            if (resp.success) {
+
+                ew.alert(resp.message);
+
+                window.location.href = resp.redirect_to;
+
+            } else {
+                ew.alert(resp.error || "No fue posible eliminar el documento.");
+            }
+        })
+        .fail(function(xhr) {
+            console.log(xhr.responseText);
+            ew.alert("Error de comunicación con el servidor.");
+        });
+
         return false;
     }
 
@@ -30875,8 +30899,7 @@ Execute($sql);
 header("Location: ViewInList?showmaster=view_in_tdcpdc&fk_id=" . $pedido . "&fk_tipo_documento=TDCPDC");
 die();
 ?>]]></CustomScript>
-  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcnrp_add.php"><![CDATA[
-<?php
+  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcnrp_add.php"><![CDATA[<?php
 $codpro = $_REQUEST["codpro"];
 $tipo_documento = $_REQUEST["tipo_documento"];
 
@@ -30915,6 +30938,13 @@ $proveedor = $row["nombre"];
 $PorDesMin = 0;
 $PorDesMax = 100;
 $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0));
+
+$usuarioCodigoBarra = CurrentUserName();
+$puedeEditarCodigoBarra = false;
+$sql = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '045' AND valor1 = '" . AdjustSql($usuarioCodigoBarra) . "' LIMIT 1;";
+if (ExecuteScalar($sql) != "") {
+    $puedeEditarCodigoBarra = true;
+}
 ?>
 
 <script type="text/javascript">
@@ -31432,20 +31462,20 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 <div class="container border border-primary border-top rounded p-3">
   <div class="row">
     <div class="col-sm-8">
-		  <h5>Proveedor: <?= $proveedor ?></h5>
+      <h5>Proveedor: <?= $proveedor ?></h5>
       <div id="nroPedido">
           <button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: <?= $pedido ?> </button> 
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:vaciar(' . $pedido . ')"' : ''); ?> class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button>  <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace('ViewInTdcnrpList');"><i class="fa-solid fa-list"></i> Notas </button>
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:getCodigos3(' . $pedido . ')"' : ''); ?> class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button>
       </div>
-	    <input name="pedido" id="pedido" type="hidden" value="<?= $pedido ?>" />
-	    <input name="tipo_documento" id="tipo_documento" type="hidden" value="<?= $tipo_documento ?>" />
-	    <input name="codpro" id="codpro" type="hidden" value="<?= $codpro ?>" />
+      <input name="pedido" id="pedido" type="hidden" value="<?= $pedido ?>" />
+      <input name="tipo_documento" id="tipo_documento" type="hidden" value="<?= $tipo_documento ?>" />
+      <input name="codpro" id="codpro" type="hidden" value="<?= $codpro ?>" />
       <!--<input name="tasa_usd" id="tasa_usd" type="hidden" value="<?= $tasa ?>" />-->
       <input name="username" id="username" type="hidden" class="form-control form-control-sm" value="<?= CurrentUserName() ?>" />
     </div>
     <div class="col-sm-4">
-		<h2 class="text-end"><i class="fa-solid fa-comments-dollar"></i> <span class="badge text-bg-secondary"><?= number_format($tasa, 2, ".", ",") ?> Bs.</span></h2>
+    <h2 class="text-end"><i class="fa-solid fa-comments-dollar"></i> <span class="badge text-bg-secondary"><?= number_format($tasa, 2, ".", ",") ?> Bs.</span></h2>
     </div>
   </div>
 
@@ -31564,8 +31594,8 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     </div>
     <div class="col-sm-3">
       Fabricante:
-		<input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-		<input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+    <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
+    <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
       <ul id="lista" class="list-group"></ul>
     </div>
     <div class="col-sm-3">
@@ -31613,8 +31643,8 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 </div>
 
 <script type="text/javascript">
-  $("#laboratorio").prop("disabled", true);
-  $("#articulo").prop("disabled", true);
+  document.getElementById("laboratorio").disabled = true;
+  document.getElementById("articulo").disabled = true;
 
   document.getElementById("laboratorio").addEventListener("keyup", getCodigos)
   document.getElementById("laboratorio").addEventListener("click", getCodigos)
@@ -31743,6 +31773,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
           let url = "include/tdcnrp/listar_tdcnrp.php"
           let formData = new FormData()
           formData.append("pedido", inputCP)
+          formData.append("username", document.getElementById("username").value)
 
           fetch(url, {
               method: "POST",
@@ -31856,7 +31887,7 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
                 // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
             });  
         }   
-        else  $("#recepAll").prop('checked', false);
+        else document.getElementById("recepAll").checked = false;
     } 
     else {
         if(confirm("Seguro de Desrecepcionar Todos los Items?")) {
@@ -31888,13 +31919,192 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
                 // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
             });   
         }   
-        else  $("#recepAll").prop('checked', true);
+        else document.getElementById("recepAll").checked = true;
     }
   }
 
+
+  const puedeEditarCodigoBarra = <?= ($puedeEditarCodigoBarra ? "true" : "false") ?>;
+
+  function abrirModalCodigoBarra(articulo) {
+      var username = "<?= CurrentUserName() ?>";
+      $.ajax({
+          url: "include/tdcnrp/actualizar_codigo_barra_articulo.php",
+          type: "POST",
+          dataType: "json",
+          data: {
+              accion: "get",
+              username: username,
+              articulo: articulo
+          },
+          success: function (response) {
+              if (!response || response.success !== true) {
+                  alert(response.error || "No se pudo consultar el artículo.");
+                  return;
+              }
+
+              $("#modal_codigo_articulo_id").val(articulo);
+              $("#modal_codigo").val(response.data.codigo || "");
+              $("#modal_fabricante").val(response.data.fabricante || "");
+              $("#modal_nombre_comercial").val(response.data.nombre_comercial || "");
+              $("#modal_nombre_articulo").val(response.data.nombre_articulo || "");
+              $("#modal_presentacion").val(response.data.presentacion || "");
+              $("#modal_codigo_de_barra").val(response.data.codigo_de_barra || "");
+
+              const modalEl = document.getElementById("modalCodigoBarraArticulo");
+
+              if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+                  bootstrap.Modal.getOrCreateInstance(modalEl).show();
+              } else if (typeof jQuery !== "undefined" && jQuery.fn.modal) {
+                  $("#modalCodigoBarraArticulo").modal("show");
+              } else {
+                  alert("No se pudo abrir el modal: Bootstrap no está disponible.");
+              }
+          },
+          error: function (xhr) {
+              console.log(xhr.responseText);
+              alert("Error consultando código de barra.");
+          }
+      });
+  }
+
+  function guardarCodigoBarraArticulo() {
+      const articulo = $("#modal_codigo_articulo_id").val();
+      const codigoBarra = $("#modal_codigo_de_barra").val();
+
+      $.ajax({
+          url: "include/tdcnrp/actualizar_codigo_barra_articulo.php",
+          type: "POST",
+          dataType: "json",
+          data: {
+              accion: "update",
+              articulo: articulo,
+              codigo_de_barra: codigoBarra,
+              username: $("#username").val()
+          }
+      }).done(function(resp) {
+          if (resp && resp.success) {
+              bootstrap.Modal.getOrCreateInstance(
+                  document.getElementById("modalCodigoBarraArticulo")
+              ).hide();
+
+              getCodigos3($("#pedido").val());
+          } else {
+              alert(resp.error || "No se pudo actualizar el código de barra.");
+          }
+      }).fail(function(xhr) {
+          console.log(xhr.responseText);
+          alert("Error actualizando código de barra.");
+      });
+  }
+
+
   getCodigos3( <?= $pedido ?> )
 </script>
-]]></CustomScript>
+
+<style>
+#modalCodigoBarraArticulo input[readonly]{
+    background-color:#f8f9fa !important;
+    color:#6c757d !important;
+    opacity:0.85;
+    cursor:not-allowed;
+}
+
+#modalCodigoBarraArticulo label{
+    margin-top:6px;
+}
+</style>
+
+<div class="modal fade" id="modalCodigoBarraArticulo" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white py-2">
+        <h5 class="modal-title">Código de Barra del Artículo</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+          <input type="hidden" id="modal_codigo_articulo_id">
+
+          <div class="row mb-2">
+              <div class="col-md-4">
+                  <label class="form-label fw-bold">Código</label>
+              </div>
+              <div class="col-md-8">
+                  <input type="text" id="modal_codigo"
+                         class="form-control form-control-sm bg-light text-muted"
+                         readonly>
+              </div>
+          </div>
+
+          <div class="row mb-2">
+              <div class="col-md-4">
+                  <label class="form-label fw-bold">Fabricante</label>
+              </div>
+              <div class="col-md-8">
+                  <input type="text" id="modal_fabricante"
+                         class="form-control form-control-sm bg-light text-muted"
+                         readonly>
+              </div>
+          </div>
+
+          <div class="row mb-2">
+              <div class="col-md-4">
+                  <label class="form-label fw-bold">Nombre Comercial</label>
+              </div>
+              <div class="col-md-8">
+                  <input type="text" id="modal_nombre_comercial"
+                         class="form-control form-control-sm bg-light text-muted"
+                         readonly>
+              </div>
+          </div>
+
+          <div class="row mb-2">
+              <div class="col-md-4">
+                  <label class="form-label fw-bold">Artículo</label>
+              </div>
+              <div class="col-md-8">
+                  <input type="text" id="modal_nombre_articulo"
+                         class="form-control form-control-sm bg-light text-muted"
+                         readonly>
+              </div>
+          </div>
+
+          <div class="row mb-3">
+              <div class="col-md-4">
+                  <label class="form-label fw-bold">Presentación</label>
+              </div>
+              <div class="col-md-8">
+                  <input type="text" id="modal_presentacion"
+                         class="form-control form-control-sm bg-light text-muted"
+                         readonly>
+              </div>
+          </div>
+
+          <hr>
+
+          <div class="row">
+              <div class="col-md-4">
+                  <label class="form-label fw-bold text-primary">
+                      Código de Barra
+                  </label>
+              </div>
+              <div class="col-md-8">
+                  <input type="text"
+                         id="modal_codigo_de_barra"
+                         class="form-control form-control-sm">
+              </div>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-sm btn-success" onclick="guardarCodigoBarraArticulo();">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcnrp_process.php"><![CDATA[<?php
 $pedido = $_REQUEST["pedido"];
 
@@ -33532,42 +33742,58 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
   <input type="hidden" id="PorDesMax" name="PorDesMax" value="<?= $PorDesMax ?>">
   <input type="hidden" id="PorDesAct" name="PorDesAct" value="<?= $PorDesAct ?>">
 
-<div class="row">
-  <div class="col-sm-2" style="text-align: right">
-    <strong>Descuento cliente</strong>
-  </div>  
-  <div class="col-sm-1" style="text-align: right; vertical-align: middle;">
-    <span><a onclick="js:ProgLess();"><i class="fa-solid fa-minus"></i></a></span>
-  </div>
-  <div class="col-sm-2" id="xProgress">
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" style="width: <?= $PorDesAct ?>%" aria-valuenow="<?= $PorDesAct ?>" aria-valuemin="<?= $PorDesMin ?>" aria-valuemax="<?= $PorDesMax ?>"><?= intval($PorDesAct) ?>%</div>
+<div class="row g-3 align-items-end">
+
+    <div class="col-12 col-md-4">
+        <div class="border rounded p-2 bg-light h-100">
+            <label for="rangoDescuentoCliente" class="form-label small fw-bold mb-1">
+                Descuento cliente:
+                <span id="lblDescuentoCliente" class="text-primary"><?= intval($PorDesAct) ?>%</span>
+            </label>
+
+            <input type="range"
+                   class="form-range"
+                   min="<?= $PorDesMin ?>"
+                   max="99"
+                   step="1"
+                   id="rangoDescuentoCliente"
+                   value="<?= intval($PorDesAct) ?>">
+        </div>
     </div>
-  </div>
-  <div class="col-sm-1" style="text-align: left; vertical-align: middle;">
-    <span><a onclick="js:ProgPlus();"><i class="fa-solid fa-plus"></i></a></span>
-  </div>
 
-  <!-- Transferencista (igual que lo tienes) -->
-  <div class="col-sm-2">
-    <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
-    <?php if(trim($doc_afectado) != "") echo "Doc Afect.:" . $doc_afectado; ?>
-    <?php
-    echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" data-original="' . $descTransferencista . '" class="form-control form-control-sm tdcfcv-autorizado-transferencista" size="4">
-    <small>% Transferencista</small>';
-    ?>   
-  </div>
+    <div class="col-12 col-md-4">
+        <div class="border rounded p-2 bg-light h-100">
+            <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
 
-  <!-- Fabricante (ajustado como Transferencista) -->
-  <div class="col-sm-2" style="display:none;>
-    <?php
-    echo '<input type="text" id="descFabricante" name="descFabricante" value="' . ($descFabricante ?? '') . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();" readonly="yes">
-    <small>% Fabricante</small>';
-    ?>   
-  </div>
+            <?php if (trim($doc_afectado) != "") { ?>
+                <small class="d-block text-muted mb-1">
+                    Doc Afect.: <?= $doc_afectado ?>
+                </small>
+            <?php } ?>
 
-  <!-- Moneda -->
-    <div class="col-sm-1">
+            <label for="rangoTransferencista" class="form-label small fw-bold mb-1">
+                % Transferencista:
+                <span id="lblTransferencista" class="text-primary"><?= intval($descTransferencista) ?>%</span>
+            </label>
+
+            <input type="hidden"
+                   id="descTransferencista"
+                   name="descTransferencista"
+                   value="<?= $descTransferencista ?>">
+
+            <input type="range"
+                   class="form-range"
+                   min="0"
+                   max="99"
+                   step="1"
+                   id="rangoTransferencista"
+                   value="<?= intval($descTransferencista) ?>">
+        </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <label class="form-label small fw-bold mb-1">Moneda</label>
+
         <select id="moneda" name="moneda" class="form-select form-select-sm"
             <?php if (intval($pedido) == 0) { ?>
                 onchange="js:RefreshMonedaTasa()"
@@ -33576,23 +33802,38 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
                 onchange="this.selectedIndex=this.defaultIndex;"
             <?php } ?>
         >
-        <?php
-        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-        $rows = ExecuteRows($sql);
-        foreach ($rows as $value) {
-            echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"] == $moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-        }
-        ?>
+            <?php
+            $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
+            $rows = ExecuteRows($sql);
+
+            foreach ($rows as $value) {
+                echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"] == $moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
+            }
+            ?>
         </select>
     </div>
 
-  <!-- Tasa (ahora con label abajo) -->
-  <div class="col-sm-1">
-    <?php
-    echo '<input name="tasa_usd" id="tasa_usd" type="number" class="form-control form-control-sm" value="' . $tasa . '" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()" readonly="yes">
-    <small>Tasa B.C.V.</small>';
-    ?>
-  </div>
+    <div class="col-6 col-md-2">
+        <label class="form-label small fw-bold mb-1">Tasa B.C.V.</label>
+
+        <input name="tasa_usd"
+               id="tasa_usd"
+               type="number"
+               class="form-control form-control-sm bg-light text-end"
+               value="<?= $tasa ?>"
+               onkeyup="js:RefreshMonedaTasa()"
+               readonly>
+    </div>
+
+    <div style="display:none;">
+        <input type="text"
+               id="descFabricante"
+               name="descFabricante"
+               value="<?= ($descFabricante ?? '') ?>"
+               class="form-control form-control-sm"
+               readonly>
+    </div>
+
 </div>
 
 <hr class="border border-primary" />
@@ -33723,6 +33964,87 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
 <script type="text/javascript">
 loadjs.ready(["jquery"], function () {
     const $ = jQuery;
+
+    let descuentoRangeOriginal = parseInt($("#PorDesAct").val() || 0, 10);
+
+    $(document).on("mousedown touchstart focus", "#rangoDescuentoCliente", function () {
+        descuentoRangeOriginal = parseInt($("#PorDesAct").val() || 0, 10);
+    });
+
+    $(document).on("input", "#rangoDescuentoCliente", function () {
+        $("#lblDescuentoCliente").text($(this).val() + "%");
+    });
+
+    $(document).on("input", "#rangoTransferencista", function () {
+        $("#lblTransferencista").text($(this).val() + "%");
+    });
+
+    $(document).on("change", "#rangoDescuentoCliente", function () {
+        const pedido = getVal("pedido");
+        const nuevo = parseInt($(this).val(), 10);
+
+        if (pedido == 0) {
+            $(this).val(descuentoRangeOriginal);
+            $("#lblDescuentoCliente").text(descuentoRangeOriginal + "%");
+            return false;
+        }
+
+        descuentoGlobalPendiente = {
+            pedido: pedido,
+            original: descuentoRangeOriginal,
+            nuevo: nuevo
+        };
+
+        if (puedeModificarPrecioDescuento) {
+            AplicarDescuentoGlobalPendiente();
+            return;
+        }
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+        showModalAutorizarTdcfcv();
+    });
+
+    let transferenciaOriginal = parseInt(
+        $("#descTransferencista").val() || 0,
+        10
+    );
+
+    $(document).on(
+        "mousedown touchstart focus",
+        "#rangoTransferencista",
+        function () {
+
+            transferenciaOriginal = parseInt(
+                $("#descTransferencista").val() || 0,
+                10
+            );
+        }
+    ); 
+
+    $(document).on("change", "#rangoTransferencista", function () {
+
+        const nuevo = parseInt($(this).val(), 10);
+
+        transferenciaPendiente = {
+            original: transferenciaOriginal,
+            nuevo: nuevo
+        };
+
+        if (puedeModificarPrecioDescuento) {
+
+            $("#descTransferencista").val(nuevo);
+
+            DiasCred();
+
+            return;
+        }
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+
+        showModalAutorizarTdcfcv();
+    });
 
     const formatter = new Intl.NumberFormat("es-PE", {
         style: "decimal",
@@ -33904,6 +34226,28 @@ loadjs.ready(["jquery"], function () {
     });
 
     $(document).on("click", "#btnCancelarAutorizarTdcfcv", function () {
+        if (transferenciaPendiente.original !== "") {
+            $("#descTransferencista").val(
+                transferenciaPendiente.original
+            );
+
+            $("#rangoTransferencista").val(
+                transferenciaPendiente.original
+            );
+
+            $("#lblTransferencista").text(
+                transferenciaPendiente.original + "%"
+            );
+
+            transferenciaPendiente = {
+                original: "",
+                nuevo: ""
+            };
+
+            hideModalAutorizarTdcfcv();
+            return;
+        }
+
         if (descuentoGlobalPendiente.pedido !== "") {
             PintarProgressBar(descuentoGlobalPendiente.original);
 
@@ -33951,17 +34295,99 @@ loadjs.ready(["jquery"], function () {
                     return;
                 }
 
+                if (transferenciaPendiente.original !== "") {
+                    $("#descTransferencista").val(
+                        transferenciaPendiente.nuevo
+                    );
+
+                    $("#rangoTransferencista").val(
+                        transferenciaPendiente.nuevo
+                    );
+
+                    $("#lblTransferencista").text(
+                        transferenciaPendiente.nuevo + "%"
+                    );
+
+                    DiasCred();
+
+                    transferenciaPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
+
                 aplicarCambioAutorizadoTdcfcv();
                 hideModalAutorizarTdcfcv();
             } else {
                 alertMsg("!!! NO AUTORIZADO !!!");
+
+                if (transferenciaPendiente.original !== "") {
+                    $("#descTransferencista").val(transferenciaPendiente.original);
+                    $("#rangoTransferencista").val(transferenciaPendiente.original);
+                    $("#lblTransferencista").text(transferenciaPendiente.original + "%");
+
+                    transferenciaPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
+                if (descuentoGlobalPendiente.pedido !== "") {
+                    PintarProgressBar(descuentoGlobalPendiente.original);
+
+                    descuentoGlobalPendiente = {
+                        pedido: "",
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 restaurarCambioAutorizacionTdcfcv();
                 hideModalAutorizarTdcfcv();
             }
         })
         .fail(function () {
             alertMsg("Error de comunicación con el servidor.");
+            
+            if (transferenciaPendiente.original !== "") {
+                $("#descTransferencista").val(transferenciaPendiente.original);
+                $("#rangoTransferencista").val(transferenciaPendiente.original);
+                $("#lblTransferencista").text(transferenciaPendiente.original + "%");
+
+                transferenciaPendiente = {
+                    original: "",
+                    nuevo: ""
+                };
+
+                hideModalAutorizarTdcfcv();
+                return;
+            }
+
+            if (descuentoGlobalPendiente.pedido !== "") {
+                PintarProgressBar(descuentoGlobalPendiente.original);
+
+                descuentoGlobalPendiente = {
+                    pedido: "",
+                    original: "",
+                    nuevo: ""
+                };
+
+                hideModalAutorizarTdcfcv();
+                return;
+            }
+
             restaurarCambioAutorizacionTdcfcv();
+            hideModalAutorizarTdcfcv();
         })
         .always(function () {
             $("#btnAceptarAutorizarTdcfcv")
@@ -34241,10 +34667,7 @@ loadjs.ready(["jquery"], function () {
                 updateTotals(json);
 
                 const PorDesAct = json.descuento ?? 0;
-                $("#PorDesAct").val(PorDesAct);
-                $("#xProgress").html(
-                    '<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>'
-                );
+                PintarProgressBar(PorDesAct);
 
                 $("#descTransferencista").val(json.descTransferencista ?? 0);
                 $("#descFabricante").val(json.descFabricante ?? 0);
@@ -34533,19 +34956,15 @@ loadjs.ready(["jquery"], function () {
         nuevo: ""
     };
 
+    var transferenciaPendiente = {
+        original: "",
+        nuevo: ""
+    };
+
     window.PintarProgressBar = function (valor) {
-        const PorDesMin = parseInt(getVal("PorDesMin"), 10);
-        const PorDesMax = parseInt(getVal("PorDesMax"), 10);
-
         $("#PorDesAct").val(valor);
-
-        $("#xProgress").html(
-            '<div class="progress">' +
-                '<div class="progress-bar" role="progressbar" style="width: ' + valor + '%" aria-valuenow="' + valor + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' +
-                    valor + '%' +
-                '</div>' +
-            '</div>'
-        );
+        $("#rangoDescuentoCliente").val(valor);
+        $("#lblDescuentoCliente").text(valor + "%");
     }
 
     window.AplicarDescuentoGlobalPendiente = function () {

@@ -84,7 +84,8 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Add fields
         .addFields([
-            ["proveedor", [ew.Validators.integer], fields.proveedor.isInvalid]
+            ["proveedor", [ew.Validators.integer], fields.proveedor.isInvalid],
+            ["nro_documento", [], fields.nro_documento.isInvalid]
         ])
         // Validate form
         .setValidate(
@@ -187,6 +188,28 @@ loadjs.ready("fview_entradassrch", function() {
     ew.createModalLookup(options);
 });
 </script>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+<?php if ($Page->nro_documento->Visible) { // nro_documento ?>
+<?php
+if (!$Page->nro_documento->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_nro_documento" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->nro_documento->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_nro_documento" class="ew-search-caption ew-label"><?= $Page->nro_documento->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("LIKE") ?>
+<input type="hidden" name="z_nro_documento" id="z_nro_documento" value="LIKE">
+</div>
+        </div>
+        <div id="el_view_entradas_nro_documento" class="ew-search-field">
+<input type="<?= $Page->nro_documento->getInputTextType() ?>" name="x_nro_documento" id="x_nro_documento" data-table="view_entradas" data-field="x_nro_documento" value="<?= $Page->nro_documento->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_documento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_documento->formatPattern()) ?>"<?= $Page->nro_documento->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->nro_documento->getErrorMessage(false) ?></div>
 </div>
         <div class="d-flex my-1 my-sm-0">
         </div><!-- /.ew-search-field -->
