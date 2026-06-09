@@ -12,12 +12,11 @@ $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $GLOBALS["moneda_default"] = $row["moneda"];
 
-/*
+
 $sql = "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S';";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $GLOBALS["alicuota_dinamica"] = $row["alicuota"];
-*/
 
 /////////////////////////////
 $sql = "SELECT 
@@ -45,18 +44,16 @@ $sql = "SELECT
 			date_format(fecha, '%Y/%m/%d') AS fech, cliente, nro_documento, nro_control, tipo_documento, estatus, 
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito, 
 			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado, 
-			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota 
+			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe   
 		FROM salidas where id = '$id_invoice';"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 $GLOBALS["invoice"] = $row["nro_documento"];
-$GLOBALS["invoice_id"] = $row["id"];
 $GLOBALS["cliente"] = $row["cliente"];
 $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["control"] = $row["nro_control"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
-$GLOBALS["estatus_doc"] = $row["estatus"];
 $GLOBALS["estatus"] = $row["estatus"]=="ANULADO" ? $row["estatus"] .  " - " : "";
 $GLOBALS["documento"] = $row["documento"];
 $GLOBALS["dias_credito"] = $row["dias_credito"];
@@ -65,7 +62,6 @@ $GLOBALS["doc_afectado"] = $row["doc_afectado"];
 $GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["moneda"] = $row["moneda"];
 $GLOBALS["impreso"] = $row["impreso"];
-$GLOBALS["alicuota_dinamica"] = $row["igtf_alicuota"];
 
 if(trim($GLOBALS["nro_documento"] ?? "") != "") {
 	if ($row["impreso"] != "S") {
@@ -198,36 +194,20 @@ class PDF extends FPDF
 
 		
 		
-		if ($GLOBALS["estatus_doc"] == "PROCESADO") {
-			// Documento fiscal procesado: imprimir datos congelados en salidas
-			$sql = "SELECT
-					cliente AS id,
-					cliente_ci_rif AS ci_rif,
-					cliente_nombre AS nombre,
-					cliente_direccion AS direccion,
-					cliente_telefono AS telf,
-					'' AS ciudad,
-					'' AS web,
-					'' AS SICM
-				FROM salidas
-				WHERE id = '" . $GLOBALS["invoice_id"] . "';";
-		} else {
-			// Documento no procesado: imprimir datos vivos del maestro cliente
-			$sql = "SELECT 
+		$sql = "SELECT 
 					a.id, a.ci_rif, a.nombre, a.contacto, 
 					a.email1, a.direccion, b.campo_descripcion AS ciudad, 
 					CONCAT(REPLACE(ifnull(a.telefono1,''), ' ', ''), ' ', REPLACE(ifnull(a.telefono2,''), ' ', '')) as telf, a.web, 
 					a.email2 AS SICM 
 				FROM cliente AS a 
 					LEFT OUTER JOIN tabla AS b ON b.campo_codigo = a.ciudad AND b.tabla = 'CIUDAD' 
-				WHERE a.id = '" . $GLOBALS["cliente"] . "';";
-		}
-
+				WHERE a.id = '" . $GLOBALS["cliente"] . "';"; 
 		$rs = mysqli_query($link, $sql);
 		$row = mysqli_fetch_array($rs);
 		
 		$rif = $row["ci_rif"];
-		$razon_social = html_entity_decode($row["nombre"] ?? "");
+		$razon_social = html_entity_decode($row["nombre"]);
+		$rif = $row["ci_rif"];
 		$direccion_cliente = $row["direccion"]; 
 		$ciudad_cliente = $row["ciudad"]; 
 		$telf = $row["telf"]; 
@@ -284,11 +264,11 @@ class PDF extends FPDF
 		$this->SetFont('Courier','B',8);
 		$this->Cell(12,4,'R.I.F.: ','0',0,'L');
 		$this->SetFont('Courier','',8);
-		$this->Cell(20,4,str_replace("-", "", $rif ?? ""),'0',0,'L');
+		$this->Cell(20,4,str_replace("-", "", $rif),'0',0,'L');
 		$this->SetFont('Courier','B',8);
 		$this->Cell(8,4,'Telf:','0','0','L');
 		$this->SetFont('Courier','',8);
-		$this->Cell(50,4,str_replace("-", "", $telf ?? ""),'0','0','L');
+		$this->Cell(50,4,str_replace("-", "", $telf),'0','0','L');
 
 		$this->SetFont('Courier','B',8);
 		$this->Cell(10,4,'SICM:','0','0','L');
@@ -601,18 +581,9 @@ $pdf->AddPage();
 $pdf->SetFont('Courier','',8);
 
 
-if ($GLOBALS["estatus_doc"] == "PROCESADO") {
-	// Documento fiscal procesado: imprimir exclusivamente la foto congelada del detalle
-	$select_codigo_articulo = "IFNULL(a.articulo_codigo, '') AS codigo";
-	$select_descripcion_articulo = "IFNULL(a.articulo_descripcion, '') AS articulo";
-} else {
-	$select_codigo_articulo = "IFNULL(b.codigo, '') AS codigo";
-	$select_descripcion_articulo = "LTRIM(RTRIM(CONCAT(IFNULL(b.nombre_comercial, ''), ' ', IFNULL(b.principio_activo, ''), ' ', IFNULL(b.presentacion, '')))) AS articulo";
-}
-
 $sql = "SELECT 
-			$select_codigo_articulo, 
-			$select_descripcion_articulo, 
+			IFNULL(b.codigo, '') AS codigo, 
+			LTRIM(RTRIM(CONCAT(IFNULL(b.nombre_comercial, ''), ' ', IFNULL(b.principio_activo, ''), ' ', IFNULL(b.presentacion, '')))) AS articulo, 
 			a.lote, date_format(a.fecha_vencimiento, '%m/%y') as vencimiento, 
 			a.cantidad_articulo AS cantidad, 
 			(SELECT SUBSTRING(descripcion,1,3) FROM unidad_medida WHERE codigo = a.articulo_unidad_medida) AS unidad_medida, 

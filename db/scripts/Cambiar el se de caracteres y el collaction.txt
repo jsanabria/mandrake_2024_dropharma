@@ -1,12 +1,7 @@
-ALTER TABLE `salidas`
-	ADD COLUMN `facturas_asociadas` VARCHAR(50) NULL DEFAULT NULL AFTER `doc_afe`;
-	
-ALTER TABLE `salidas`
-	CHANGE COLUMN `facturas_asociadas` `facturas_ne_asociadas` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb3_general_ci' AFTER `doc_afe`;
 
 -- 1. Eliminamos el índice compuesto conflictivo
 ALTER TABLE `decodbnt_windeco`.`articulo` DROP INDEX `idx_descripcion`;
-
+	
 -- 2. Ahora la conversión a utf8mb4 pasará de forma instantánea y limpia
 ALTER TABLE `decodbnt_windeco`.`articulo` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 

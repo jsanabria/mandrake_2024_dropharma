@@ -169,6 +169,10 @@ class ViewOutGrid extends ViewOut
         $this->check_ne->Visible = false;
         $this->packer_cantidad->Visible = false;
         $this->newdata->Visible = false;
+        $this->articulo_codigo->Visible = false;
+        $this->articulo_descripcion->Visible = false;
+        $this->cantidad_entregada->Visible = false;
+        $this->cantidad_por_entregar->Visible = false;
     }
 
     // Constructor
@@ -2061,6 +2065,10 @@ class ViewOutGrid extends ViewOut
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
         $this->newdata->setDbValue($row['newdata']);
+        $this->articulo_codigo->setDbValue($row['articulo_codigo']);
+        $this->articulo_descripcion->setDbValue($row['articulo_descripcion']);
+        $this->cantidad_entregada->setDbValue($row['cantidad_entregada']);
+        $this->cantidad_por_entregar->setDbValue($row['cantidad_por_entregar']);
     }
 
     // Return a row with default values
@@ -2093,6 +2101,10 @@ class ViewOutGrid extends ViewOut
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
         $row['newdata'] = $this->newdata->DefaultValue;
+        $row['articulo_codigo'] = $this->articulo_codigo->DefaultValue;
+        $row['articulo_descripcion'] = $this->articulo_descripcion->DefaultValue;
+        $row['cantidad_entregada'] = $this->cantidad_entregada->DefaultValue;
+        $row['cantidad_por_entregar'] = $this->cantidad_por_entregar->DefaultValue;
         return $row;
     }
 
@@ -2182,6 +2194,14 @@ class ViewOutGrid extends ViewOut
         // packer_cantidad
 
         // newdata
+
+        // articulo_codigo
+
+        // articulo_descripcion
+
+        // cantidad_entregada
+
+        // cantidad_por_entregar
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2348,6 +2368,20 @@ class ViewOutGrid extends ViewOut
             } else {
                 $this->newdata->ViewValue = null;
             }
+
+            // articulo_codigo
+            $this->articulo_codigo->ViewValue = $this->articulo_codigo->CurrentValue;
+
+            // articulo_descripcion
+            $this->articulo_descripcion->ViewValue = $this->articulo_descripcion->CurrentValue;
+
+            // cantidad_entregada
+            $this->cantidad_entregada->ViewValue = $this->cantidad_entregada->CurrentValue;
+            $this->cantidad_entregada->ViewValue = FormatNumber($this->cantidad_entregada->ViewValue, $this->cantidad_entregada->formatPattern());
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->ViewValue = $this->cantidad_por_entregar->CurrentValue;
+            $this->cantidad_por_entregar->ViewValue = FormatNumber($this->cantidad_por_entregar->ViewValue, $this->cantidad_por_entregar->formatPattern());
 
             // fabricante
             $this->fabricante->HrefValue = "";

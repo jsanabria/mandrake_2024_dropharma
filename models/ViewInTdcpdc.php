@@ -95,6 +95,7 @@ class ViewInTdcpdc extends DbTable
     public $cerrado;
     public $descuento;
     public $archivo_pedido;
+    public $cliente;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -490,8 +491,8 @@ class ViewInTdcpdc extends DbTable
             'nota', // Name
             '`nota`', // Expression
             '`nota`', // Basic search expression
-            200, // Type
-            65535, // Size
+            201, // Type
+            16777215, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`nota`', // Virtual expression
@@ -1125,6 +1126,30 @@ class ViewInTdcpdc extends DbTable
         $this->archivo_pedido->SearchOperators = ["=", "<>", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['archivo_pedido'] = &$this->archivo_pedido;
 
+        // cliente
+        $this->cliente = new DbField(
+            $this, // Table
+            'x_cliente', // Variable name
+            'cliente', // Name
+            '`cliente`', // Expression
+            '`cliente`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cliente`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cliente->InputTextType = "text";
+        $this->cliente->Raw = true;
+        $this->cliente->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->cliente->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cliente'] = &$this->cliente;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1725,6 +1750,7 @@ class ViewInTdcpdc extends DbTable
         $this->cerrado->DbValue = $row['cerrado'];
         $this->descuento->DbValue = $row['descuento'];
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
+        $this->cliente->DbValue = $row['cliente'];
     }
 
     // Delete uploaded files
@@ -2132,6 +2158,7 @@ class ViewInTdcpdc extends DbTable
         $this->cerrado->setDbValue($row['cerrado']);
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Render list content
@@ -2243,6 +2270,8 @@ class ViewInTdcpdc extends DbTable
         // descuento
 
         // archivo_pedido
+
+        // cliente
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2492,6 +2521,10 @@ class ViewInTdcpdc extends DbTable
             $this->archivo_pedido->ViewValue = "";
         }
 
+        // cliente
+        $this->cliente->ViewValue = $this->cliente->CurrentValue;
+        $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2664,6 +2697,10 @@ class ViewInTdcpdc extends DbTable
         }
         $this->archivo_pedido->ExportHrefValue = $this->archivo_pedido->UploadPath . $this->archivo_pedido->Upload->DbValue;
         $this->archivo_pedido->TooltipValue = "";
+
+        // cliente
+        $this->cliente->HrefValue = "";
+        $this->cliente->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2980,6 +3017,14 @@ class ViewInTdcpdc extends DbTable
             $this->archivo_pedido->Upload->FileName = $this->archivo_pedido->CurrentValue;
         }
 
+        // cliente
+        $this->cliente->setupEditAttributes();
+        $this->cliente->EditValue = $this->cliente->CurrentValue;
+        $this->cliente->PlaceHolder = RemoveHtml($this->cliente->caption());
+        if (strval($this->cliente->EditValue) != "" && is_numeric($this->cliente->EditValue)) {
+            $this->cliente->EditValue = FormatNumber($this->cliente->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -3064,6 +3109,7 @@ class ViewInTdcpdc extends DbTable
                     $doc->exportCaption($this->cerrado);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->archivo_pedido);
+                    $doc->exportCaption($this->cliente);
                 }
                 $doc->endExportRow();
             }
@@ -3146,6 +3192,7 @@ class ViewInTdcpdc extends DbTable
                         $doc->exportField($this->cerrado);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->archivo_pedido);
+                        $doc->exportField($this->cliente);
                     }
                     $doc->endExportRow($rowCnt);
                 }

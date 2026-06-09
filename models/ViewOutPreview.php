@@ -155,6 +155,10 @@ class ViewOutPreview extends ViewOut
         $this->check_ne->Visible = false;
         $this->packer_cantidad->Visible = false;
         $this->newdata->Visible = false;
+        $this->articulo_codigo->Visible = false;
+        $this->articulo_descripcion->Visible = false;
+        $this->cantidad_entregada->Visible = false;
+        $this->cantidad_por_entregar->Visible = false;
     }
 
     // Constructor
@@ -566,6 +570,10 @@ class ViewOutPreview extends ViewOut
             $this->check_ne->setSort("");
             $this->packer_cantidad->setSort("");
             $this->newdata->setSort("");
+            $this->articulo_codigo->setSort("");
+            $this->articulo_descripcion->setSort("");
+            $this->cantidad_entregada->setSort("");
+            $this->cantidad_por_entregar->setSort("");
 
             // Save sort to session
             $this->setSessionOrderBy("");

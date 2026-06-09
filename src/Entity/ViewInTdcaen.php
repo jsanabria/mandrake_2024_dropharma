@@ -153,6 +153,9 @@ class ViewInTdcaen extends AbstractEntity
     #[Column(name: "archivo_pedido", type: "string", nullable: true)]
     private ?string $archivoPedido;
 
+    #[Column(type: "integer", nullable: true)]
+    private ?int $cliente;
+
     public function __construct()
     {
         $this->consignacion = "N";
@@ -620,6 +623,17 @@ class ViewInTdcaen extends AbstractEntity
     public function setArchivoPedido(?string $value): static
     {
         $this->archivoPedido = RemoveXss($value);
+        return $this;
+    }
+
+    public function getCliente(): ?int
+    {
+        return $this->cliente;
+    }
+
+    public function setCliente(?int $value): static
+    {
+        $this->cliente = $value;
         return $this;
     }
 }

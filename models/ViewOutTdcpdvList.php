@@ -213,6 +213,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->descuento3->Visible = false;
         $this->impreso->Visible = false;
         $this->doc_afe->Visible = false;
+        $this->cliente_ci_rif->Visible = false;
+        $this->cliente_nombre->Visible = false;
+        $this->cliente_direccion->Visible = false;
+        $this->cliente_telefono->Visible = false;
+        $this->igtf_alicuota->Visible = false;
+        $this->nacionalizacion->Visible = false;
+        $this->arquitecto->Visible = false;
+        $this->ganancia->Visible = false;
+        $this->intermediario->Visible = false;
+        $this->telefeno_intermediario->Visible = false;
+        $this->email_intermediario->Visible = false;
+        $this->genera_ne->Visible = false;
+        $this->visita->Visible = false;
     }
 
     // Constructor
@@ -776,6 +789,7 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->setupLookupOptions($this->asesor_asignado);
         $this->setupLookupOptions($this->igtf);
         $this->setupLookupOptions($this->impreso);
+        $this->setupLookupOptions($this->genera_ne);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1212,6 +1226,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $filterList = Concat($filterList, $this->descuento3->AdvancedSearch->toJson(), ","); // Field descuento3
         $filterList = Concat($filterList, $this->impreso->AdvancedSearch->toJson(), ","); // Field impreso
         $filterList = Concat($filterList, $this->doc_afe->AdvancedSearch->toJson(), ","); // Field doc_afe
+        $filterList = Concat($filterList, $this->cliente_ci_rif->AdvancedSearch->toJson(), ","); // Field cliente_ci_rif
+        $filterList = Concat($filterList, $this->cliente_nombre->AdvancedSearch->toJson(), ","); // Field cliente_nombre
+        $filterList = Concat($filterList, $this->cliente_direccion->AdvancedSearch->toJson(), ","); // Field cliente_direccion
+        $filterList = Concat($filterList, $this->cliente_telefono->AdvancedSearch->toJson(), ","); // Field cliente_telefono
+        $filterList = Concat($filterList, $this->igtf_alicuota->AdvancedSearch->toJson(), ","); // Field igtf_alicuota
+        $filterList = Concat($filterList, $this->nacionalizacion->AdvancedSearch->toJson(), ","); // Field nacionalizacion
+        $filterList = Concat($filterList, $this->arquitecto->AdvancedSearch->toJson(), ","); // Field arquitecto
+        $filterList = Concat($filterList, $this->ganancia->AdvancedSearch->toJson(), ","); // Field ganancia
+        $filterList = Concat($filterList, $this->intermediario->AdvancedSearch->toJson(), ","); // Field intermediario
+        $filterList = Concat($filterList, $this->telefeno_intermediario->AdvancedSearch->toJson(), ","); // Field telefeno_intermediario
+        $filterList = Concat($filterList, $this->email_intermediario->AdvancedSearch->toJson(), ","); // Field email_intermediario
+        $filterList = Concat($filterList, $this->genera_ne->AdvancedSearch->toJson(), ","); // Field genera_ne
+        $filterList = Concat($filterList, $this->visita->AdvancedSearch->toJson(), ","); // Field visita
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1730,6 +1757,110 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->doc_afe->AdvancedSearch->SearchValue2 = @$filter["y_doc_afe"];
         $this->doc_afe->AdvancedSearch->SearchOperator2 = @$filter["w_doc_afe"];
         $this->doc_afe->AdvancedSearch->save();
+
+        // Field cliente_ci_rif
+        $this->cliente_ci_rif->AdvancedSearch->SearchValue = @$filter["x_cliente_ci_rif"];
+        $this->cliente_ci_rif->AdvancedSearch->SearchOperator = @$filter["z_cliente_ci_rif"];
+        $this->cliente_ci_rif->AdvancedSearch->SearchCondition = @$filter["v_cliente_ci_rif"];
+        $this->cliente_ci_rif->AdvancedSearch->SearchValue2 = @$filter["y_cliente_ci_rif"];
+        $this->cliente_ci_rif->AdvancedSearch->SearchOperator2 = @$filter["w_cliente_ci_rif"];
+        $this->cliente_ci_rif->AdvancedSearch->save();
+
+        // Field cliente_nombre
+        $this->cliente_nombre->AdvancedSearch->SearchValue = @$filter["x_cliente_nombre"];
+        $this->cliente_nombre->AdvancedSearch->SearchOperator = @$filter["z_cliente_nombre"];
+        $this->cliente_nombre->AdvancedSearch->SearchCondition = @$filter["v_cliente_nombre"];
+        $this->cliente_nombre->AdvancedSearch->SearchValue2 = @$filter["y_cliente_nombre"];
+        $this->cliente_nombre->AdvancedSearch->SearchOperator2 = @$filter["w_cliente_nombre"];
+        $this->cliente_nombre->AdvancedSearch->save();
+
+        // Field cliente_direccion
+        $this->cliente_direccion->AdvancedSearch->SearchValue = @$filter["x_cliente_direccion"];
+        $this->cliente_direccion->AdvancedSearch->SearchOperator = @$filter["z_cliente_direccion"];
+        $this->cliente_direccion->AdvancedSearch->SearchCondition = @$filter["v_cliente_direccion"];
+        $this->cliente_direccion->AdvancedSearch->SearchValue2 = @$filter["y_cliente_direccion"];
+        $this->cliente_direccion->AdvancedSearch->SearchOperator2 = @$filter["w_cliente_direccion"];
+        $this->cliente_direccion->AdvancedSearch->save();
+
+        // Field cliente_telefono
+        $this->cliente_telefono->AdvancedSearch->SearchValue = @$filter["x_cliente_telefono"];
+        $this->cliente_telefono->AdvancedSearch->SearchOperator = @$filter["z_cliente_telefono"];
+        $this->cliente_telefono->AdvancedSearch->SearchCondition = @$filter["v_cliente_telefono"];
+        $this->cliente_telefono->AdvancedSearch->SearchValue2 = @$filter["y_cliente_telefono"];
+        $this->cliente_telefono->AdvancedSearch->SearchOperator2 = @$filter["w_cliente_telefono"];
+        $this->cliente_telefono->AdvancedSearch->save();
+
+        // Field igtf_alicuota
+        $this->igtf_alicuota->AdvancedSearch->SearchValue = @$filter["x_igtf_alicuota"];
+        $this->igtf_alicuota->AdvancedSearch->SearchOperator = @$filter["z_igtf_alicuota"];
+        $this->igtf_alicuota->AdvancedSearch->SearchCondition = @$filter["v_igtf_alicuota"];
+        $this->igtf_alicuota->AdvancedSearch->SearchValue2 = @$filter["y_igtf_alicuota"];
+        $this->igtf_alicuota->AdvancedSearch->SearchOperator2 = @$filter["w_igtf_alicuota"];
+        $this->igtf_alicuota->AdvancedSearch->save();
+
+        // Field nacionalizacion
+        $this->nacionalizacion->AdvancedSearch->SearchValue = @$filter["x_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchOperator = @$filter["z_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchCondition = @$filter["v_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchValue2 = @$filter["y_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->SearchOperator2 = @$filter["w_nacionalizacion"];
+        $this->nacionalizacion->AdvancedSearch->save();
+
+        // Field arquitecto
+        $this->arquitecto->AdvancedSearch->SearchValue = @$filter["x_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchOperator = @$filter["z_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchCondition = @$filter["v_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchValue2 = @$filter["y_arquitecto"];
+        $this->arquitecto->AdvancedSearch->SearchOperator2 = @$filter["w_arquitecto"];
+        $this->arquitecto->AdvancedSearch->save();
+
+        // Field ganancia
+        $this->ganancia->AdvancedSearch->SearchValue = @$filter["x_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchOperator = @$filter["z_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchCondition = @$filter["v_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchValue2 = @$filter["y_ganancia"];
+        $this->ganancia->AdvancedSearch->SearchOperator2 = @$filter["w_ganancia"];
+        $this->ganancia->AdvancedSearch->save();
+
+        // Field intermediario
+        $this->intermediario->AdvancedSearch->SearchValue = @$filter["x_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchOperator = @$filter["z_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchCondition = @$filter["v_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchValue2 = @$filter["y_intermediario"];
+        $this->intermediario->AdvancedSearch->SearchOperator2 = @$filter["w_intermediario"];
+        $this->intermediario->AdvancedSearch->save();
+
+        // Field telefeno_intermediario
+        $this->telefeno_intermediario->AdvancedSearch->SearchValue = @$filter["x_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchOperator = @$filter["z_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchCondition = @$filter["v_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchValue2 = @$filter["y_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->SearchOperator2 = @$filter["w_telefeno_intermediario"];
+        $this->telefeno_intermediario->AdvancedSearch->save();
+
+        // Field email_intermediario
+        $this->email_intermediario->AdvancedSearch->SearchValue = @$filter["x_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchOperator = @$filter["z_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchCondition = @$filter["v_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchValue2 = @$filter["y_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->SearchOperator2 = @$filter["w_email_intermediario"];
+        $this->email_intermediario->AdvancedSearch->save();
+
+        // Field genera_ne
+        $this->genera_ne->AdvancedSearch->SearchValue = @$filter["x_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchOperator = @$filter["z_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchCondition = @$filter["v_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchValue2 = @$filter["y_genera_ne"];
+        $this->genera_ne->AdvancedSearch->SearchOperator2 = @$filter["w_genera_ne"];
+        $this->genera_ne->AdvancedSearch->save();
+
+        // Field visita
+        $this->visita->AdvancedSearch->SearchValue = @$filter["x_visita"];
+        $this->visita->AdvancedSearch->SearchOperator = @$filter["z_visita"];
+        $this->visita->AdvancedSearch->SearchCondition = @$filter["v_visita"];
+        $this->visita->AdvancedSearch->SearchValue2 = @$filter["y_visita"];
+        $this->visita->AdvancedSearch->SearchOperator2 = @$filter["w_visita"];
+        $this->visita->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1802,6 +1933,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->buildSearchSql($where, $this->descuento3, $default, false); // descuento3
         $this->buildSearchSql($where, $this->impreso, $default, false); // impreso
         $this->buildSearchSql($where, $this->doc_afe, $default, false); // doc_afe
+        $this->buildSearchSql($where, $this->cliente_ci_rif, $default, false); // cliente_ci_rif
+        $this->buildSearchSql($where, $this->cliente_nombre, $default, false); // cliente_nombre
+        $this->buildSearchSql($where, $this->cliente_direccion, $default, false); // cliente_direccion
+        $this->buildSearchSql($where, $this->cliente_telefono, $default, false); // cliente_telefono
+        $this->buildSearchSql($where, $this->igtf_alicuota, $default, false); // igtf_alicuota
+        $this->buildSearchSql($where, $this->nacionalizacion, $default, false); // nacionalizacion
+        $this->buildSearchSql($where, $this->arquitecto, $default, false); // arquitecto
+        $this->buildSearchSql($where, $this->ganancia, $default, false); // ganancia
+        $this->buildSearchSql($where, $this->intermediario, $default, false); // intermediario
+        $this->buildSearchSql($where, $this->telefeno_intermediario, $default, false); // telefeno_intermediario
+        $this->buildSearchSql($where, $this->email_intermediario, $default, false); // email_intermediario
+        $this->buildSearchSql($where, $this->genera_ne, $default, false); // genera_ne
+        $this->buildSearchSql($where, $this->visita, $default, false); // visita
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1868,6 +2012,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->descuento3->AdvancedSearch->save(); // descuento3
             $this->impreso->AdvancedSearch->save(); // impreso
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
+            $this->cliente_ci_rif->AdvancedSearch->save(); // cliente_ci_rif
+            $this->cliente_nombre->AdvancedSearch->save(); // cliente_nombre
+            $this->cliente_direccion->AdvancedSearch->save(); // cliente_direccion
+            $this->cliente_telefono->AdvancedSearch->save(); // cliente_telefono
+            $this->igtf_alicuota->AdvancedSearch->save(); // igtf_alicuota
+            $this->nacionalizacion->AdvancedSearch->save(); // nacionalizacion
+            $this->arquitecto->AdvancedSearch->save(); // arquitecto
+            $this->ganancia->AdvancedSearch->save(); // ganancia
+            $this->intermediario->AdvancedSearch->save(); // intermediario
+            $this->telefeno_intermediario->AdvancedSearch->save(); // telefeno_intermediario
+            $this->email_intermediario->AdvancedSearch->save(); // email_intermediario
+            $this->genera_ne->AdvancedSearch->save(); // genera_ne
+            $this->visita->AdvancedSearch->save(); // visita
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1958,6 +2115,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->descuento3->AdvancedSearch->save(); // descuento3
             $this->impreso->AdvancedSearch->save(); // impreso
             $this->doc_afe->AdvancedSearch->save(); // doc_afe
+            $this->cliente_ci_rif->AdvancedSearch->save(); // cliente_ci_rif
+            $this->cliente_nombre->AdvancedSearch->save(); // cliente_nombre
+            $this->cliente_direccion->AdvancedSearch->save(); // cliente_direccion
+            $this->cliente_telefono->AdvancedSearch->save(); // cliente_telefono
+            $this->igtf_alicuota->AdvancedSearch->save(); // igtf_alicuota
+            $this->nacionalizacion->AdvancedSearch->save(); // nacionalizacion
+            $this->arquitecto->AdvancedSearch->save(); // arquitecto
+            $this->ganancia->AdvancedSearch->save(); // ganancia
+            $this->intermediario->AdvancedSearch->save(); // intermediario
+            $this->telefeno_intermediario->AdvancedSearch->save(); // telefeno_intermediario
+            $this->email_intermediario->AdvancedSearch->save(); // email_intermediario
+            $this->genera_ne->AdvancedSearch->save(); // genera_ne
+            $this->visita->AdvancedSearch->save(); // visita
             $this->setSessionRules($rules);
         }
 
@@ -2161,6 +2331,13 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $searchFlds[] = &$this->checker;
         $searchFlds[] = &$this->packer;
         $searchFlds[] = &$this->fotos;
+        $searchFlds[] = &$this->cliente_ci_rif;
+        $searchFlds[] = &$this->cliente_nombre;
+        $searchFlds[] = &$this->cliente_direccion;
+        $searchFlds[] = &$this->cliente_telefono;
+        $searchFlds[] = &$this->intermediario;
+        $searchFlds[] = &$this->telefeno_intermediario;
+        $searchFlds[] = &$this->email_intermediario;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -2369,6 +2546,45 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         if ($this->doc_afe->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->cliente_ci_rif->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->cliente_nombre->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->cliente_direccion->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->cliente_telefono->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->igtf_alicuota->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->nacionalizacion->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->arquitecto->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->ganancia->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->intermediario->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->telefeno_intermediario->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->email_intermediario->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->genera_ne->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->visita->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2464,6 +2680,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->descuento3->AdvancedSearch->unsetSession();
         $this->impreso->AdvancedSearch->unsetSession();
         $this->doc_afe->AdvancedSearch->unsetSession();
+        $this->cliente_ci_rif->AdvancedSearch->unsetSession();
+        $this->cliente_nombre->AdvancedSearch->unsetSession();
+        $this->cliente_direccion->AdvancedSearch->unsetSession();
+        $this->cliente_telefono->AdvancedSearch->unsetSession();
+        $this->igtf_alicuota->AdvancedSearch->unsetSession();
+        $this->nacionalizacion->AdvancedSearch->unsetSession();
+        $this->arquitecto->AdvancedSearch->unsetSession();
+        $this->ganancia->AdvancedSearch->unsetSession();
+        $this->intermediario->AdvancedSearch->unsetSession();
+        $this->telefeno_intermediario->AdvancedSearch->unsetSession();
+        $this->email_intermediario->AdvancedSearch->unsetSession();
+        $this->genera_ne->AdvancedSearch->unsetSession();
+        $this->visita->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2535,6 +2764,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->descuento3->AdvancedSearch->load();
         $this->impreso->AdvancedSearch->load();
         $this->doc_afe->AdvancedSearch->load();
+        $this->cliente_ci_rif->AdvancedSearch->load();
+        $this->cliente_nombre->AdvancedSearch->load();
+        $this->cliente_direccion->AdvancedSearch->load();
+        $this->cliente_telefono->AdvancedSearch->load();
+        $this->igtf_alicuota->AdvancedSearch->load();
+        $this->nacionalizacion->AdvancedSearch->load();
+        $this->arquitecto->AdvancedSearch->load();
+        $this->ganancia->AdvancedSearch->load();
+        $this->intermediario->AdvancedSearch->load();
+        $this->telefeno_intermediario->AdvancedSearch->load();
+        $this->email_intermediario->AdvancedSearch->load();
+        $this->genera_ne->AdvancedSearch->load();
+        $this->visita->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2647,6 +2889,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 $this->descuento3->setSort("");
                 $this->impreso->setSort("");
                 $this->doc_afe->setSort("");
+                $this->cliente_ci_rif->setSort("");
+                $this->cliente_nombre->setSort("");
+                $this->cliente_direccion->setSort("");
+                $this->cliente_telefono->setSort("");
+                $this->igtf_alicuota->setSort("");
+                $this->nacionalizacion->setSort("");
+                $this->arquitecto->setSort("");
+                $this->ganancia->setSort("");
+                $this->intermediario->setSort("");
+                $this->telefeno_intermediario->setSort("");
+                $this->email_intermediario->setSort("");
+                $this->genera_ne->setSort("");
+                $this->visita->setSort("");
             }
 
             // Reset start position
@@ -3855,6 +4110,110 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 $this->Command = "search";
             }
         }
+
+        // cliente_ci_rif
+        if ($this->cliente_ci_rif->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cliente_ci_rif->AdvancedSearch->SearchValue != "" || $this->cliente_ci_rif->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // cliente_nombre
+        if ($this->cliente_nombre->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cliente_nombre->AdvancedSearch->SearchValue != "" || $this->cliente_nombre->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // cliente_direccion
+        if ($this->cliente_direccion->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cliente_direccion->AdvancedSearch->SearchValue != "" || $this->cliente_direccion->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // cliente_telefono
+        if ($this->cliente_telefono->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cliente_telefono->AdvancedSearch->SearchValue != "" || $this->cliente_telefono->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // igtf_alicuota
+        if ($this->igtf_alicuota->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->igtf_alicuota->AdvancedSearch->SearchValue != "" || $this->igtf_alicuota->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // nacionalizacion
+        if ($this->nacionalizacion->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->nacionalizacion->AdvancedSearch->SearchValue != "" || $this->nacionalizacion->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // arquitecto
+        if ($this->arquitecto->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->arquitecto->AdvancedSearch->SearchValue != "" || $this->arquitecto->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // ganancia
+        if ($this->ganancia->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->ganancia->AdvancedSearch->SearchValue != "" || $this->ganancia->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // intermediario
+        if ($this->intermediario->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->intermediario->AdvancedSearch->SearchValue != "" || $this->intermediario->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // telefeno_intermediario
+        if ($this->telefeno_intermediario->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->telefeno_intermediario->AdvancedSearch->SearchValue != "" || $this->telefeno_intermediario->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // email_intermediario
+        if ($this->email_intermediario->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->email_intermediario->AdvancedSearch->SearchValue != "" || $this->email_intermediario->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // genera_ne
+        if ($this->genera_ne->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->genera_ne->AdvancedSearch->SearchValue != "" || $this->genera_ne->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // visita
+        if ($this->visita->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->visita->AdvancedSearch->SearchValue != "" || $this->visita->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -4013,6 +4372,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->descuento3->setDbValue($row['descuento3']);
         $this->impreso->setDbValue($row['impreso']);
         $this->doc_afe->setDbValue($row['doc_afe']);
+        $this->cliente_ci_rif->setDbValue($row['cliente_ci_rif']);
+        $this->cliente_nombre->setDbValue($row['cliente_nombre']);
+        $this->cliente_direccion->setDbValue($row['cliente_direccion']);
+        $this->cliente_telefono->setDbValue($row['cliente_telefono']);
+        $this->igtf_alicuota->setDbValue($row['igtf_alicuota']);
+        $this->nacionalizacion->setDbValue($row['nacionalizacion']);
+        $this->arquitecto->setDbValue($row['arquitecto']);
+        $this->ganancia->setDbValue($row['ganancia']);
+        $this->intermediario->setDbValue($row['intermediario']);
+        $this->telefeno_intermediario->setDbValue($row['telefeno_intermediario']);
+        $this->email_intermediario->setDbValue($row['email_intermediario']);
+        $this->genera_ne->setDbValue($row['genera_ne']);
+        $this->visita->setDbValue($row['visita']);
     }
 
     // Return a row with default values
@@ -4079,6 +4451,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $row['descuento3'] = $this->descuento3->DefaultValue;
         $row['impreso'] = $this->impreso->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
+        $row['cliente_ci_rif'] = $this->cliente_ci_rif->DefaultValue;
+        $row['cliente_nombre'] = $this->cliente_nombre->DefaultValue;
+        $row['cliente_direccion'] = $this->cliente_direccion->DefaultValue;
+        $row['cliente_telefono'] = $this->cliente_telefono->DefaultValue;
+        $row['igtf_alicuota'] = $this->igtf_alicuota->DefaultValue;
+        $row['nacionalizacion'] = $this->nacionalizacion->DefaultValue;
+        $row['arquitecto'] = $this->arquitecto->DefaultValue;
+        $row['ganancia'] = $this->ganancia->DefaultValue;
+        $row['intermediario'] = $this->intermediario->DefaultValue;
+        $row['telefeno_intermediario'] = $this->telefeno_intermediario->DefaultValue;
+        $row['email_intermediario'] = $this->email_intermediario->DefaultValue;
+        $row['genera_ne'] = $this->genera_ne->DefaultValue;
+        $row['visita'] = $this->visita->DefaultValue;
         return $row;
     }
 
@@ -4238,6 +4623,32 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         // impreso
 
         // doc_afe
+
+        // cliente_ci_rif
+
+        // cliente_nombre
+
+        // cliente_direccion
+
+        // cliente_telefono
+
+        // igtf_alicuota
+
+        // nacionalizacion
+
+        // arquitecto
+
+        // ganancia
+
+        // intermediario
+
+        // telefeno_intermediario
+
+        // email_intermediario
+
+        // genera_ne
+
+        // visita
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -4673,6 +5084,54 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
             $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
             $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
+            // cliente_ci_rif
+            $this->cliente_ci_rif->ViewValue = $this->cliente_ci_rif->CurrentValue;
+
+            // cliente_nombre
+            $this->cliente_nombre->ViewValue = $this->cliente_nombre->CurrentValue;
+
+            // cliente_direccion
+            $this->cliente_direccion->ViewValue = $this->cliente_direccion->CurrentValue;
+
+            // cliente_telefono
+            $this->cliente_telefono->ViewValue = $this->cliente_telefono->CurrentValue;
+
+            // igtf_alicuota
+            $this->igtf_alicuota->ViewValue = $this->igtf_alicuota->CurrentValue;
+            $this->igtf_alicuota->ViewValue = FormatNumber($this->igtf_alicuota->ViewValue, $this->igtf_alicuota->formatPattern());
+
+            // nacionalizacion
+            $this->nacionalizacion->ViewValue = $this->nacionalizacion->CurrentValue;
+            $this->nacionalizacion->ViewValue = FormatNumber($this->nacionalizacion->ViewValue, $this->nacionalizacion->formatPattern());
+
+            // arquitecto
+            $this->arquitecto->ViewValue = $this->arquitecto->CurrentValue;
+            $this->arquitecto->ViewValue = FormatNumber($this->arquitecto->ViewValue, $this->arquitecto->formatPattern());
+
+            // ganancia
+            $this->ganancia->ViewValue = $this->ganancia->CurrentValue;
+            $this->ganancia->ViewValue = FormatNumber($this->ganancia->ViewValue, $this->ganancia->formatPattern());
+
+            // intermediario
+            $this->intermediario->ViewValue = $this->intermediario->CurrentValue;
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->ViewValue = $this->telefeno_intermediario->CurrentValue;
+
+            // email_intermediario
+            $this->email_intermediario->ViewValue = $this->email_intermediario->CurrentValue;
+
+            // genera_ne
+            if (strval($this->genera_ne->CurrentValue) != "") {
+                $this->genera_ne->ViewValue = $this->genera_ne->optionCaption($this->genera_ne->CurrentValue);
+            } else {
+                $this->genera_ne->ViewValue = null;
+            }
+
+            // visita
+            $this->visita->ViewValue = $this->visita->CurrentValue;
+            $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -4927,6 +5386,19 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
         $this->descuento3->AdvancedSearch->load();
         $this->impreso->AdvancedSearch->load();
         $this->doc_afe->AdvancedSearch->load();
+        $this->cliente_ci_rif->AdvancedSearch->load();
+        $this->cliente_nombre->AdvancedSearch->load();
+        $this->cliente_direccion->AdvancedSearch->load();
+        $this->cliente_telefono->AdvancedSearch->load();
+        $this->igtf_alicuota->AdvancedSearch->load();
+        $this->nacionalizacion->AdvancedSearch->load();
+        $this->arquitecto->AdvancedSearch->load();
+        $this->ganancia->AdvancedSearch->load();
+        $this->intermediario->AdvancedSearch->load();
+        $this->telefeno_intermediario->AdvancedSearch->load();
+        $this->email_intermediario->AdvancedSearch->load();
+        $this->genera_ne->AdvancedSearch->load();
+        $this->visita->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -5213,6 +5685,8 @@ class ViewOutTdcpdvList extends ViewOutTdcpdv
                 case "x_igtf":
                     break;
                 case "x_impreso":
+                    break;
+                case "x_genera_ne":
                     break;
                 default:
                     $lookupFilter = "";

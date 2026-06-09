@@ -5,6 +5,7 @@ require('rcs/fpdf.php');
 require("../include/connect2.php");
 
 $id_invoice = isset($_REQUEST["id"]) ? intval($_REQUEST["id"]) : 0;
+$GLOBALS["id_invoice"] = $id_invoice;
 
 function enc_pdf($txt) {
     $texto = html_entity_decode((string)$txt, ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -74,6 +75,7 @@ $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["control"] = $row["nro_control"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
+$GLOBALS["estatus_doc"] = $row["estatus"];
 $GLOBALS["estatus"] = $row["estatus"] == "ANULADO" ? $row["estatus"] . " - " : "";
 $GLOBALS["documento"] = $row["documento"];
 $GLOBALS["dias_credito"] = $row["dias_credito"];
@@ -171,19 +173,20 @@ class PDF extends FPDF
         $ciudad = $rowCia["ciudad"] ?? "";
 
         $sql = "SELECT
-                    LPAD(a.id, 8, '0') AS id,
-                    a.ci_rif,
-                    a.nombre,
+                    LPAD(s.cliente, 8, '0') AS id,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_ci_rif, '') ELSE IFNULL(a.ci_rif, '') END AS ci_rif,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_nombre, '') ELSE IFNULL(a.nombre, '') END AS nombre,
                     a.contacto,
                     a.email1,
-                    a.direccion,
-                    b.campo_descripcion AS ciudad,
-                    CONCAT(IFNULL(a.telefono1,''), ' ', IFNULL(a.telefono2,'')) AS telf,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_direccion, '') ELSE TRIM(CONCAT(IFNULL(a.direccion, ''), '. ', IFNULL(b.campo_descripcion, ''))) END AS direccion,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_telefono, '') ELSE CONCAT(IFNULL(a.telefono1,''), ' ', IFNULL(a.telefono2,'')) END AS telf,
                     a.web,
                     a.email2 AS SICM
-                FROM cliente AS a
+                FROM salidas AS s
+                LEFT JOIN cliente AS a ON a.id = s.cliente
                 LEFT JOIN tabla AS b ON b.campo_codigo = a.ciudad AND b.tabla = 'CIUDAD'
-                WHERE a.id = '" . $GLOBALS["cliente"] . "'";
+                WHERE s.id = '" . $GLOBALS["id_invoice"] . "'
+                LIMIT 1";
         $rs = mysqli_query($link, $sql);
         $row = mysqli_fetch_array($rs);
 
@@ -191,7 +194,7 @@ class PDF extends FPDF
         $rif = $row["ci_rif"] ?? "";
         $razon_social = html_entity_decode($row["nombre"] ?? "", ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $razon_social = str_ireplace(['&AMP;', '&amp;'], '&', $razon_social);
-        $direccion_cliente = trim(($row["direccion"] ?? "") . ". " . ($row["ciudad"] ?? ""));
+        $direccion_cliente = trim($row["direccion"] ?? "");
         $telf = $row["telf"] ?? "";
 
         $this->Ln(25);
@@ -532,8 +535,11 @@ $pdf->AddPage();
 $pdf->SetFont('Arial', '', 7);
 
 $sql = "SELECT
-            IFNULL(b.codigo, '') AS codigo,
-            LTRIM(RTRIM(CONCAT(IFNULL(b.codigo, ''), ' ', SUBSTRING(IFNULL(b.principio_activo, ''), 1, 65), ' ', IFNULL(a.lote, '')))) AS articulo,
+            CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(a.articulo_codigo, '') ELSE IFNULL(b.codigo, '') END AS codigo,
+            CASE
+                WHEN s.estatus = 'PROCESADO' THEN LTRIM(RTRIM(CONCAT(IFNULL(a.articulo_codigo, ''), ' ', IFNULL(a.articulo_descripcion, ''), ' ', IFNULL(a.lote, ''))))
+                ELSE LTRIM(RTRIM(CONCAT(IFNULL(b.codigo, ''), ' ', SUBSTRING(IFNULL(b.principio_activo, ''), 1, 65), ' ', IFNULL(a.lote, ''))))
+            END AS articulo,
             a.lote,
             DATE_FORMAT(a.fecha_vencimiento, '%d/%m/%Y') AS vencimiento,
             a.cantidad_articulo AS cantidad,
@@ -545,11 +551,12 @@ $sql = "SELECT
             a.descuento,
             a.precio_unidad_sin_desc AS precio_ful
         FROM entradas_salidas AS a
+        JOIN salidas AS s ON s.id = a.id_documento AND s.tipo_documento = a.tipo_documento
         LEFT JOIN articulo AS b ON b.id = a.articulo
         LEFT JOIN fabricante AS c ON c.id = a.fabricante
         WHERE a.id_documento = '{$id_invoice}'
           AND a.tipo_documento = '" . $GLOBALS["tipo_documento"] . "'
-        ORDER BY b.principio_activo, b.presentacion";
+        ORDER BY articulo";
 
 $rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 while ($row = mysqli_fetch_array($rs)) {

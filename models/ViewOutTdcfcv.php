@@ -114,6 +114,19 @@ class ViewOutTdcfcv extends DbTable
     public $fotos;
     public $descuento3;
     public $doc_afe;
+    public $cliente_ci_rif;
+    public $cliente_nombre;
+    public $cliente_direccion;
+    public $cliente_telefono;
+    public $igtf_alicuota;
+    public $nacionalizacion;
+    public $arquitecto;
+    public $ganancia;
+    public $intermediario;
+    public $telefeno_intermediario;
+    public $email_intermediario;
+    public $genera_ne;
+    public $visita;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -1642,6 +1655,305 @@ class ViewOutTdcfcv extends DbTable
         $this->doc_afe->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['doc_afe'] = &$this->doc_afe;
 
+        // cliente_ci_rif
+        $this->cliente_ci_rif = new DbField(
+            $this, // Table
+            'x_cliente_ci_rif', // Variable name
+            'cliente_ci_rif', // Name
+            '`cliente_ci_rif`', // Expression
+            '`cliente_ci_rif`', // Basic search expression
+            200, // Type
+            30, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cliente_ci_rif`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cliente_ci_rif->InputTextType = "text";
+        $this->cliente_ci_rif->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cliente_ci_rif'] = &$this->cliente_ci_rif;
+
+        // cliente_nombre
+        $this->cliente_nombre = new DbField(
+            $this, // Table
+            'x_cliente_nombre', // Variable name
+            'cliente_nombre', // Name
+            '`cliente_nombre`', // Expression
+            '`cliente_nombre`', // Basic search expression
+            200, // Type
+            80, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cliente_nombre`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cliente_nombre->InputTextType = "text";
+        $this->cliente_nombre->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cliente_nombre'] = &$this->cliente_nombre;
+
+        // cliente_direccion
+        $this->cliente_direccion = new DbField(
+            $this, // Table
+            'x_cliente_direccion', // Variable name
+            'cliente_direccion', // Name
+            '`cliente_direccion`', // Expression
+            '`cliente_direccion`', // Basic search expression
+            200, // Type
+            150, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cliente_direccion`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cliente_direccion->InputTextType = "text";
+        $this->cliente_direccion->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cliente_direccion'] = &$this->cliente_direccion;
+
+        // cliente_telefono
+        $this->cliente_telefono = new DbField(
+            $this, // Table
+            'x_cliente_telefono', // Variable name
+            'cliente_telefono', // Name
+            '`cliente_telefono`', // Expression
+            '`cliente_telefono`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cliente_telefono`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cliente_telefono->InputTextType = "text";
+        $this->cliente_telefono->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cliente_telefono'] = &$this->cliente_telefono;
+
+        // igtf_alicuota
+        $this->igtf_alicuota = new DbField(
+            $this, // Table
+            'x_igtf_alicuota', // Variable name
+            'igtf_alicuota', // Name
+            '`igtf_alicuota`', // Expression
+            '`igtf_alicuota`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`igtf_alicuota`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->igtf_alicuota->InputTextType = "text";
+        $this->igtf_alicuota->Raw = true;
+        $this->igtf_alicuota->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->igtf_alicuota->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['igtf_alicuota'] = &$this->igtf_alicuota;
+
+        // nacionalizacion
+        $this->nacionalizacion = new DbField(
+            $this, // Table
+            'x_nacionalizacion', // Variable name
+            'nacionalizacion', // Name
+            '`nacionalizacion`', // Expression
+            '`nacionalizacion`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`nacionalizacion`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->nacionalizacion->InputTextType = "text";
+        $this->nacionalizacion->Raw = true;
+        $this->nacionalizacion->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->nacionalizacion->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['nacionalizacion'] = &$this->nacionalizacion;
+
+        // arquitecto
+        $this->arquitecto = new DbField(
+            $this, // Table
+            'x_arquitecto', // Variable name
+            'arquitecto', // Name
+            '`arquitecto`', // Expression
+            '`arquitecto`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`arquitecto`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->arquitecto->InputTextType = "text";
+        $this->arquitecto->Raw = true;
+        $this->arquitecto->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->arquitecto->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['arquitecto'] = &$this->arquitecto;
+
+        // ganancia
+        $this->ganancia = new DbField(
+            $this, // Table
+            'x_ganancia', // Variable name
+            'ganancia', // Name
+            '`ganancia`', // Expression
+            '`ganancia`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`ganancia`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->ganancia->InputTextType = "text";
+        $this->ganancia->Raw = true;
+        $this->ganancia->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->ganancia->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['ganancia'] = &$this->ganancia;
+
+        // intermediario
+        $this->intermediario = new DbField(
+            $this, // Table
+            'x_intermediario', // Variable name
+            'intermediario', // Name
+            '`intermediario`', // Expression
+            '`intermediario`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`intermediario`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->intermediario->InputTextType = "text";
+        $this->intermediario->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['intermediario'] = &$this->intermediario;
+
+        // telefeno_intermediario
+        $this->telefeno_intermediario = new DbField(
+            $this, // Table
+            'x_telefeno_intermediario', // Variable name
+            'telefeno_intermediario', // Name
+            '`telefeno_intermediario`', // Expression
+            '`telefeno_intermediario`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`telefeno_intermediario`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->telefeno_intermediario->InputTextType = "text";
+        $this->telefeno_intermediario->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['telefeno_intermediario'] = &$this->telefeno_intermediario;
+
+        // email_intermediario
+        $this->email_intermediario = new DbField(
+            $this, // Table
+            'x_email_intermediario', // Variable name
+            'email_intermediario', // Name
+            '`email_intermediario`', // Expression
+            '`email_intermediario`', // Basic search expression
+            200, // Type
+            100, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`email_intermediario`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->email_intermediario->InputTextType = "text";
+        $this->email_intermediario->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['email_intermediario'] = &$this->email_intermediario;
+
+        // genera_ne
+        $this->genera_ne = new DbField(
+            $this, // Table
+            'x_genera_ne', // Variable name
+            'genera_ne', // Name
+            '`genera_ne`', // Expression
+            '`genera_ne`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`genera_ne`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->genera_ne->InputTextType = "text";
+        $this->genera_ne->Raw = true;
+        $this->genera_ne->Lookup = new Lookup($this->genera_ne, 'view_out_tdcfcv', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->genera_ne->OptionCount = 2;
+        $this->genera_ne->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['genera_ne'] = &$this->genera_ne;
+
+        // visita
+        $this->visita = new DbField(
+            $this, // Table
+            'x_visita', // Variable name
+            'visita', // Name
+            '`visita`', // Expression
+            '`visita`', // Basic search expression
+            3, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`visita`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->visita->InputTextType = "text";
+        $this->visita->Raw = true;
+        $this->visita->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->visita->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['visita'] = &$this->visita;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -2261,6 +2573,19 @@ class ViewOutTdcfcv extends DbTable
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->descuento3->DbValue = $row['descuento3'];
         $this->doc_afe->DbValue = $row['doc_afe'];
+        $this->cliente_ci_rif->DbValue = $row['cliente_ci_rif'];
+        $this->cliente_nombre->DbValue = $row['cliente_nombre'];
+        $this->cliente_direccion->DbValue = $row['cliente_direccion'];
+        $this->cliente_telefono->DbValue = $row['cliente_telefono'];
+        $this->igtf_alicuota->DbValue = $row['igtf_alicuota'];
+        $this->nacionalizacion->DbValue = $row['nacionalizacion'];
+        $this->arquitecto->DbValue = $row['arquitecto'];
+        $this->ganancia->DbValue = $row['ganancia'];
+        $this->intermediario->DbValue = $row['intermediario'];
+        $this->telefeno_intermediario->DbValue = $row['telefeno_intermediario'];
+        $this->email_intermediario->DbValue = $row['email_intermediario'];
+        $this->genera_ne->DbValue = $row['genera_ne'];
+        $this->visita->DbValue = $row['visita'];
     }
 
     // Delete uploaded files
@@ -2693,6 +3018,19 @@ class ViewOutTdcfcv extends DbTable
         $this->fotos->Upload->DbValue = $row['fotos'];
         $this->descuento3->setDbValue($row['descuento3']);
         $this->doc_afe->setDbValue($row['doc_afe']);
+        $this->cliente_ci_rif->setDbValue($row['cliente_ci_rif']);
+        $this->cliente_nombre->setDbValue($row['cliente_nombre']);
+        $this->cliente_direccion->setDbValue($row['cliente_direccion']);
+        $this->cliente_telefono->setDbValue($row['cliente_telefono']);
+        $this->igtf_alicuota->setDbValue($row['igtf_alicuota']);
+        $this->nacionalizacion->setDbValue($row['nacionalizacion']);
+        $this->arquitecto->setDbValue($row['arquitecto']);
+        $this->ganancia->setDbValue($row['ganancia']);
+        $this->intermediario->setDbValue($row['intermediario']);
+        $this->telefeno_intermediario->setDbValue($row['telefeno_intermediario']);
+        $this->email_intermediario->setDbValue($row['email_intermediario']);
+        $this->genera_ne->setDbValue($row['genera_ne']);
+        $this->visita->setDbValue($row['visita']);
     }
 
     // Render list content
@@ -2842,6 +3180,32 @@ class ViewOutTdcfcv extends DbTable
         // descuento3
 
         // doc_afe
+
+        // cliente_ci_rif
+
+        // cliente_nombre
+
+        // cliente_direccion
+
+        // cliente_telefono
+
+        // igtf_alicuota
+
+        // nacionalizacion
+
+        // arquitecto
+
+        // ganancia
+
+        // intermediario
+
+        // telefeno_intermediario
+
+        // email_intermediario
+
+        // genera_ne
+
+        // visita
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -3307,6 +3671,54 @@ class ViewOutTdcfcv extends DbTable
         $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
         $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
+        // cliente_ci_rif
+        $this->cliente_ci_rif->ViewValue = $this->cliente_ci_rif->CurrentValue;
+
+        // cliente_nombre
+        $this->cliente_nombre->ViewValue = $this->cliente_nombre->CurrentValue;
+
+        // cliente_direccion
+        $this->cliente_direccion->ViewValue = $this->cliente_direccion->CurrentValue;
+
+        // cliente_telefono
+        $this->cliente_telefono->ViewValue = $this->cliente_telefono->CurrentValue;
+
+        // igtf_alicuota
+        $this->igtf_alicuota->ViewValue = $this->igtf_alicuota->CurrentValue;
+        $this->igtf_alicuota->ViewValue = FormatNumber($this->igtf_alicuota->ViewValue, $this->igtf_alicuota->formatPattern());
+
+        // nacionalizacion
+        $this->nacionalizacion->ViewValue = $this->nacionalizacion->CurrentValue;
+        $this->nacionalizacion->ViewValue = FormatNumber($this->nacionalizacion->ViewValue, $this->nacionalizacion->formatPattern());
+
+        // arquitecto
+        $this->arquitecto->ViewValue = $this->arquitecto->CurrentValue;
+        $this->arquitecto->ViewValue = FormatNumber($this->arquitecto->ViewValue, $this->arquitecto->formatPattern());
+
+        // ganancia
+        $this->ganancia->ViewValue = $this->ganancia->CurrentValue;
+        $this->ganancia->ViewValue = FormatNumber($this->ganancia->ViewValue, $this->ganancia->formatPattern());
+
+        // intermediario
+        $this->intermediario->ViewValue = $this->intermediario->CurrentValue;
+
+        // telefeno_intermediario
+        $this->telefeno_intermediario->ViewValue = $this->telefeno_intermediario->CurrentValue;
+
+        // email_intermediario
+        $this->email_intermediario->ViewValue = $this->email_intermediario->CurrentValue;
+
+        // genera_ne
+        if (strval($this->genera_ne->CurrentValue) != "") {
+            $this->genera_ne->ViewValue = $this->genera_ne->optionCaption($this->genera_ne->CurrentValue);
+        } else {
+            $this->genera_ne->ViewValue = null;
+        }
+
+        // visita
+        $this->visita->ViewValue = $this->visita->CurrentValue;
+        $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -3571,6 +3983,58 @@ class ViewOutTdcfcv extends DbTable
         // doc_afe
         $this->doc_afe->HrefValue = "";
         $this->doc_afe->TooltipValue = "";
+
+        // cliente_ci_rif
+        $this->cliente_ci_rif->HrefValue = "";
+        $this->cliente_ci_rif->TooltipValue = "";
+
+        // cliente_nombre
+        $this->cliente_nombre->HrefValue = "";
+        $this->cliente_nombre->TooltipValue = "";
+
+        // cliente_direccion
+        $this->cliente_direccion->HrefValue = "";
+        $this->cliente_direccion->TooltipValue = "";
+
+        // cliente_telefono
+        $this->cliente_telefono->HrefValue = "";
+        $this->cliente_telefono->TooltipValue = "";
+
+        // igtf_alicuota
+        $this->igtf_alicuota->HrefValue = "";
+        $this->igtf_alicuota->TooltipValue = "";
+
+        // nacionalizacion
+        $this->nacionalizacion->HrefValue = "";
+        $this->nacionalizacion->TooltipValue = "";
+
+        // arquitecto
+        $this->arquitecto->HrefValue = "";
+        $this->arquitecto->TooltipValue = "";
+
+        // ganancia
+        $this->ganancia->HrefValue = "";
+        $this->ganancia->TooltipValue = "";
+
+        // intermediario
+        $this->intermediario->HrefValue = "";
+        $this->intermediario->TooltipValue = "";
+
+        // telefeno_intermediario
+        $this->telefeno_intermediario->HrefValue = "";
+        $this->telefeno_intermediario->TooltipValue = "";
+
+        // email_intermediario
+        $this->email_intermediario->HrefValue = "";
+        $this->email_intermediario->TooltipValue = "";
+
+        // genera_ne
+        $this->genera_ne->HrefValue = "";
+        $this->genera_ne->TooltipValue = "";
+
+        // visita
+        $this->visita->HrefValue = "";
+        $this->visita->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -3998,6 +4462,106 @@ class ViewOutTdcfcv extends DbTable
             $this->doc_afe->EditValue = FormatNumber($this->doc_afe->EditValue, null);
         }
 
+        // cliente_ci_rif
+        $this->cliente_ci_rif->setupEditAttributes();
+        if (!$this->cliente_ci_rif->Raw) {
+            $this->cliente_ci_rif->CurrentValue = HtmlDecode($this->cliente_ci_rif->CurrentValue);
+        }
+        $this->cliente_ci_rif->EditValue = $this->cliente_ci_rif->CurrentValue;
+        $this->cliente_ci_rif->PlaceHolder = RemoveHtml($this->cliente_ci_rif->caption());
+
+        // cliente_nombre
+        $this->cliente_nombre->setupEditAttributes();
+        if (!$this->cliente_nombre->Raw) {
+            $this->cliente_nombre->CurrentValue = HtmlDecode($this->cliente_nombre->CurrentValue);
+        }
+        $this->cliente_nombre->EditValue = $this->cliente_nombre->CurrentValue;
+        $this->cliente_nombre->PlaceHolder = RemoveHtml($this->cliente_nombre->caption());
+
+        // cliente_direccion
+        $this->cliente_direccion->setupEditAttributes();
+        if (!$this->cliente_direccion->Raw) {
+            $this->cliente_direccion->CurrentValue = HtmlDecode($this->cliente_direccion->CurrentValue);
+        }
+        $this->cliente_direccion->EditValue = $this->cliente_direccion->CurrentValue;
+        $this->cliente_direccion->PlaceHolder = RemoveHtml($this->cliente_direccion->caption());
+
+        // cliente_telefono
+        $this->cliente_telefono->setupEditAttributes();
+        if (!$this->cliente_telefono->Raw) {
+            $this->cliente_telefono->CurrentValue = HtmlDecode($this->cliente_telefono->CurrentValue);
+        }
+        $this->cliente_telefono->EditValue = $this->cliente_telefono->CurrentValue;
+        $this->cliente_telefono->PlaceHolder = RemoveHtml($this->cliente_telefono->caption());
+
+        // igtf_alicuota
+        $this->igtf_alicuota->setupEditAttributes();
+        $this->igtf_alicuota->EditValue = $this->igtf_alicuota->CurrentValue;
+        $this->igtf_alicuota->PlaceHolder = RemoveHtml($this->igtf_alicuota->caption());
+        if (strval($this->igtf_alicuota->EditValue) != "" && is_numeric($this->igtf_alicuota->EditValue)) {
+            $this->igtf_alicuota->EditValue = FormatNumber($this->igtf_alicuota->EditValue, null);
+        }
+
+        // nacionalizacion
+        $this->nacionalizacion->setupEditAttributes();
+        $this->nacionalizacion->EditValue = $this->nacionalizacion->CurrentValue;
+        $this->nacionalizacion->PlaceHolder = RemoveHtml($this->nacionalizacion->caption());
+        if (strval($this->nacionalizacion->EditValue) != "" && is_numeric($this->nacionalizacion->EditValue)) {
+            $this->nacionalizacion->EditValue = FormatNumber($this->nacionalizacion->EditValue, null);
+        }
+
+        // arquitecto
+        $this->arquitecto->setupEditAttributes();
+        $this->arquitecto->EditValue = $this->arquitecto->CurrentValue;
+        $this->arquitecto->PlaceHolder = RemoveHtml($this->arquitecto->caption());
+        if (strval($this->arquitecto->EditValue) != "" && is_numeric($this->arquitecto->EditValue)) {
+            $this->arquitecto->EditValue = FormatNumber($this->arquitecto->EditValue, null);
+        }
+
+        // ganancia
+        $this->ganancia->setupEditAttributes();
+        $this->ganancia->EditValue = $this->ganancia->CurrentValue;
+        $this->ganancia->PlaceHolder = RemoveHtml($this->ganancia->caption());
+        if (strval($this->ganancia->EditValue) != "" && is_numeric($this->ganancia->EditValue)) {
+            $this->ganancia->EditValue = FormatNumber($this->ganancia->EditValue, null);
+        }
+
+        // intermediario
+        $this->intermediario->setupEditAttributes();
+        if (!$this->intermediario->Raw) {
+            $this->intermediario->CurrentValue = HtmlDecode($this->intermediario->CurrentValue);
+        }
+        $this->intermediario->EditValue = $this->intermediario->CurrentValue;
+        $this->intermediario->PlaceHolder = RemoveHtml($this->intermediario->caption());
+
+        // telefeno_intermediario
+        $this->telefeno_intermediario->setupEditAttributes();
+        if (!$this->telefeno_intermediario->Raw) {
+            $this->telefeno_intermediario->CurrentValue = HtmlDecode($this->telefeno_intermediario->CurrentValue);
+        }
+        $this->telefeno_intermediario->EditValue = $this->telefeno_intermediario->CurrentValue;
+        $this->telefeno_intermediario->PlaceHolder = RemoveHtml($this->telefeno_intermediario->caption());
+
+        // email_intermediario
+        $this->email_intermediario->setupEditAttributes();
+        if (!$this->email_intermediario->Raw) {
+            $this->email_intermediario->CurrentValue = HtmlDecode($this->email_intermediario->CurrentValue);
+        }
+        $this->email_intermediario->EditValue = $this->email_intermediario->CurrentValue;
+        $this->email_intermediario->PlaceHolder = RemoveHtml($this->email_intermediario->caption());
+
+        // genera_ne
+        $this->genera_ne->EditValue = $this->genera_ne->options(false);
+        $this->genera_ne->PlaceHolder = RemoveHtml($this->genera_ne->caption());
+
+        // visita
+        $this->visita->setupEditAttributes();
+        $this->visita->EditValue = $this->visita->CurrentValue;
+        $this->visita->PlaceHolder = RemoveHtml($this->visita->caption());
+        if (strval($this->visita->EditValue) != "" && is_numeric($this->visita->EditValue)) {
+            $this->visita->EditValue = FormatNumber($this->visita->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -4114,6 +4678,19 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->packer_date);
                     $doc->exportCaption($this->descuento3);
                     $doc->exportCaption($this->doc_afe);
+                    $doc->exportCaption($this->cliente_ci_rif);
+                    $doc->exportCaption($this->cliente_nombre);
+                    $doc->exportCaption($this->cliente_direccion);
+                    $doc->exportCaption($this->cliente_telefono);
+                    $doc->exportCaption($this->igtf_alicuota);
+                    $doc->exportCaption($this->nacionalizacion);
+                    $doc->exportCaption($this->arquitecto);
+                    $doc->exportCaption($this->ganancia);
+                    $doc->exportCaption($this->intermediario);
+                    $doc->exportCaption($this->telefeno_intermediario);
+                    $doc->exportCaption($this->email_intermediario);
+                    $doc->exportCaption($this->genera_ne);
+                    $doc->exportCaption($this->visita);
                 }
                 $doc->endExportRow();
             }
@@ -4228,6 +4805,19 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->packer_date);
                         $doc->exportField($this->descuento3);
                         $doc->exportField($this->doc_afe);
+                        $doc->exportField($this->cliente_ci_rif);
+                        $doc->exportField($this->cliente_nombre);
+                        $doc->exportField($this->cliente_direccion);
+                        $doc->exportField($this->cliente_telefono);
+                        $doc->exportField($this->igtf_alicuota);
+                        $doc->exportField($this->nacionalizacion);
+                        $doc->exportField($this->arquitecto);
+                        $doc->exportField($this->ganancia);
+                        $doc->exportField($this->intermediario);
+                        $doc->exportField($this->telefeno_intermediario);
+                        $doc->exportField($this->email_intermediario);
+                        $doc->exportField($this->genera_ne);
+                        $doc->exportField($this->visita);
                     }
                     $doc->endExportRow($rowCnt);
                 }

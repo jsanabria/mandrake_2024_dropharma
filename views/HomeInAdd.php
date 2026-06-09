@@ -50,7 +50,7 @@ case 'TDCAEN':
         <input name="codpro" id="codpro" type="hidden" class="form-control form-control-sm" value="<?= $proveedor ?>" />
         <input name="username" id="username" type="hidden" class="form-control form-control-sm" value="<?= CurrentUserName() ?>" />
         <input name="tipo_documento" id="tipo_documento" type="hidden" class="form-control form-control-sm" value="<?= $tipo_documento ?>" />
-        <button id="btnCrear" class="btn btn-sm btn-primary form-control" type="submit" disabled>Crear Documento</button>
+        <button id="btnCrear" class="btn btn-sm btn-primary form-control" type="submit" disabled>Crear <?= $tipo_documento_nombre ?></button>
       </form>
 
       <ul id="lista" class="list-group"></ul>

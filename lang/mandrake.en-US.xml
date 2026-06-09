@@ -1,4 +1,4 @@
-<ew-language date="2026/6/4" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/6/9" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -2906,6 +2906,12 @@
       <field id="cantidad_por_entregar">
         <phrase id="fldcaption" value="cantidad por entregar" />
       </field>
+      <field id="articulo_codigo">
+        <phrase id="fldcaption" value="articulo codigo" />
+      </field>
+      <field id="articulo_descripcion">
+        <phrase id="fldcaption" value="artilo descripcion" />
+      </field>
     </table>
     <table id="error_page">
       <phrase id="tblcaption" value="Errores Sistema" />
@@ -4433,6 +4439,21 @@
       <field id="visita">
         <phrase id="fldcaption" value="visita" />
       </field>
+      <field id="cliente_ci_rif">
+        <phrase id="fldcaption" value="cliente ci rif" />
+      </field>
+      <field id="cliente_nombre">
+        <phrase id="fldcaption" value="cliente nombre" />
+      </field>
+      <field id="cliente_direccion">
+        <phrase id="fldcaption" value="cliente direccion" />
+      </field>
+      <field id="cliente_telefono">
+        <phrase id="fldcaption" value="cliente telefono" />
+      </field>
+      <field id="igtf_alicuota">
+        <phrase id="fldcaption" value="igtf alicuota" />
+      </field>
     </table>
     <table id="sesiones">
       <phrase id="tblcaption" value="Inicios de Sesion" />
@@ -5662,6 +5683,18 @@
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="N" />
       </field>
+      <field id="articulo_codigo">
+        <phrase id="fldcaption" value="articulo codigo" />
+      </field>
+      <field id="articulo_descripcion">
+        <phrase id="fldcaption" value="artilo descripcion" />
+      </field>
+      <field id="cantidad_entregada">
+        <phrase id="fldcaption" value="cantidad entregada" />
+      </field>
+      <field id="cantidad_por_entregar">
+        <phrase id="fldcaption" value="cantidad por entregar" />
+      </field>
     </table>
     <table id="view_in_tdcaen">
       <phrase id="tblcaption" value="Ajuste de Entrada" />
@@ -5815,6 +5848,9 @@
       </field>
       <field id="archivo_pedido">
         <phrase id="fldcaption" value="Carga Masiva" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
       </field>
     </table>
     <table id="view_in_tdcfcc">
@@ -5970,6 +6006,9 @@
       <field id="archivo_pedido">
         <phrase id="fldcaption" value="Carga Masiva" />
       </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
     </table>
     <table id="view_in_tdcnrp">
       <phrase id="tblcaption" value="Nota de Recepción" />
@@ -6124,6 +6163,9 @@
       <field id="archivo_pedido">
         <phrase id="fldcaption" value="Carga Masiva" />
       </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
     </table>
     <table id="view_in_tdcpdc">
       <phrase id="tblcaption" value="Pedidos de Compra" />
@@ -6272,6 +6314,9 @@
       <field id="archivo_pedido">
         <phrase id="fldcaption" value="Carga Masiva" />
       </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
     </table>
     <table id="view_lotes">
       <phrase id="tblcaption" value="view lotes" />
@@ -6390,6 +6435,18 @@
         <phrase id="fldtagcaption1" value="S" />
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="articulo_codigo">
+        <phrase id="fldcaption" value="articulo codigo" />
+      </field>
+      <field id="articulo_descripcion">
+        <phrase id="fldcaption" value="artilo descripcion" />
+      </field>
+      <field id="cantidad_entregada">
+        <phrase id="fldcaption" value="cantidad entregada" />
+      </field>
+      <field id="cantidad_por_entregar">
+        <phrase id="fldcaption" value="cantidad por entregar" />
       </field>
     </table>
     <table id="view_out_tdcasa">
@@ -6617,6 +6674,49 @@
       </field>
       <field id="doc_afe">
         <phrase id="fldcaption" value="doc afe" />
+      </field>
+      <field id="cliente_ci_rif">
+        <phrase id="fldcaption" value="cliente ci rif" />
+      </field>
+      <field id="cliente_nombre">
+        <phrase id="fldcaption" value="cliente nombre" />
+      </field>
+      <field id="cliente_direccion">
+        <phrase id="fldcaption" value="cliente direccion" />
+      </field>
+      <field id="cliente_telefono">
+        <phrase id="fldcaption" value="cliente telefono" />
+      </field>
+      <field id="igtf_alicuota">
+        <phrase id="fldcaption" value="igtf alicuota" />
+      </field>
+      <field id="nacionalizacion">
+        <phrase id="fldcaption" value="nacionalizacion" />
+      </field>
+      <field id="arquitecto">
+        <phrase id="fldcaption" value="arquitecto" />
+      </field>
+      <field id="ganancia">
+        <phrase id="fldcaption" value="ganancia" />
+      </field>
+      <field id="intermediario">
+        <phrase id="fldcaption" value="intermediario" />
+      </field>
+      <field id="telefeno_intermediario">
+        <phrase id="fldcaption" value="telefeno intermediario" />
+      </field>
+      <field id="email_intermediario">
+        <phrase id="fldcaption" value="email intermediario" />
+      </field>
+      <field id="genera_ne">
+        <phrase id="fldcaption" value="genera ne" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="visita">
+        <phrase id="fldcaption" value="visita" />
       </field>
     </table>
     <table id="view_out_tdcfcv">
@@ -6850,6 +6950,49 @@
       <field id="doc_afe">
         <phrase id="fldcaption" value="doc afe" />
       </field>
+      <field id="cliente_ci_rif">
+        <phrase id="fldcaption" value="cliente ci rif" />
+      </field>
+      <field id="cliente_nombre">
+        <phrase id="fldcaption" value="cliente nombre" />
+      </field>
+      <field id="cliente_direccion">
+        <phrase id="fldcaption" value="cliente direccion" />
+      </field>
+      <field id="cliente_telefono">
+        <phrase id="fldcaption" value="cliente telefono" />
+      </field>
+      <field id="igtf_alicuota">
+        <phrase id="fldcaption" value="igtf alicuota" />
+      </field>
+      <field id="nacionalizacion">
+        <phrase id="fldcaption" value="nacionalizacion" />
+      </field>
+      <field id="arquitecto">
+        <phrase id="fldcaption" value="arquitecto" />
+      </field>
+      <field id="ganancia">
+        <phrase id="fldcaption" value="ganancia" />
+      </field>
+      <field id="intermediario">
+        <phrase id="fldcaption" value="intermediario" />
+      </field>
+      <field id="telefeno_intermediario">
+        <phrase id="fldcaption" value="telefeno intermediario" />
+      </field>
+      <field id="email_intermediario">
+        <phrase id="fldcaption" value="email intermediario" />
+      </field>
+      <field id="genera_ne">
+        <phrase id="fldcaption" value="genera ne" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="visita">
+        <phrase id="fldcaption" value="visita" />
+      </field>
     </table>
     <table id="view_out_tdcnet">
       <phrase id="tblcaption" value="Orden de Entrega" />
@@ -7077,6 +7220,49 @@
       <field id="doc_afe">
         <phrase id="fldcaption" value="doc afe" />
       </field>
+      <field id="cliente_ci_rif">
+        <phrase id="fldcaption" value="cliente ci rif" />
+      </field>
+      <field id="cliente_nombre">
+        <phrase id="fldcaption" value="cliente nombre" />
+      </field>
+      <field id="cliente_direccion">
+        <phrase id="fldcaption" value="cliente direccion" />
+      </field>
+      <field id="cliente_telefono">
+        <phrase id="fldcaption" value="cliente telefono" />
+      </field>
+      <field id="igtf_alicuota">
+        <phrase id="fldcaption" value="igtf alicuota" />
+      </field>
+      <field id="nacionalizacion">
+        <phrase id="fldcaption" value="nacionalizacion" />
+      </field>
+      <field id="arquitecto">
+        <phrase id="fldcaption" value="arquitecto" />
+      </field>
+      <field id="ganancia">
+        <phrase id="fldcaption" value="ganancia" />
+      </field>
+      <field id="intermediario">
+        <phrase id="fldcaption" value="intermediario" />
+      </field>
+      <field id="telefeno_intermediario">
+        <phrase id="fldcaption" value="telefeno intermediario" />
+      </field>
+      <field id="email_intermediario">
+        <phrase id="fldcaption" value="email intermediario" />
+      </field>
+      <field id="genera_ne">
+        <phrase id="fldcaption" value="genera ne" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="visita">
+        <phrase id="fldcaption" value="visita" />
+      </field>
     </table>
     <table id="view_out_tdcpdv">
       <phrase id="tblcaption" value="Pedido de Venta" />
@@ -7303,6 +7489,49 @@
       </field>
       <field id="doc_afe">
         <phrase id="fldcaption" value="doc afe" />
+      </field>
+      <field id="cliente_ci_rif">
+        <phrase id="fldcaption" value="cliente ci rif" />
+      </field>
+      <field id="cliente_nombre">
+        <phrase id="fldcaption" value="cliente nombre" />
+      </field>
+      <field id="cliente_direccion">
+        <phrase id="fldcaption" value="cliente direccion" />
+      </field>
+      <field id="cliente_telefono">
+        <phrase id="fldcaption" value="cliente telefono" />
+      </field>
+      <field id="igtf_alicuota">
+        <phrase id="fldcaption" value="igtf alicuota" />
+      </field>
+      <field id="nacionalizacion">
+        <phrase id="fldcaption" value="nacionalizacion" />
+      </field>
+      <field id="arquitecto">
+        <phrase id="fldcaption" value="arquitecto" />
+      </field>
+      <field id="ganancia">
+        <phrase id="fldcaption" value="ganancia" />
+      </field>
+      <field id="intermediario">
+        <phrase id="fldcaption" value="intermediario" />
+      </field>
+      <field id="telefeno_intermediario">
+        <phrase id="fldcaption" value="telefeno intermediario" />
+      </field>
+      <field id="email_intermediario">
+        <phrase id="fldcaption" value="email intermediario" />
+      </field>
+      <field id="genera_ne">
+        <phrase id="fldcaption" value="genera ne" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="visita">
+        <phrase id="fldcaption" value="visita" />
       </field>
     </table>
     <table id="view_pagos">

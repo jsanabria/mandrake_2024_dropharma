@@ -108,6 +108,18 @@ class ViewOut extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $newdata;
 
+    #[Column(name: "articulo_codigo", type: "string", nullable: true)]
+    private ?string $articuloCodigo;
+
+    #[Column(name: "articulo_descripcion", type: "text", nullable: true)]
+    private ?string $articuloDescripcion;
+
+    #[Column(name: "cantidad_entregada", type: "decimal", nullable: true)]
+    private ?string $cantidadEntregada;
+
+    #[Column(name: "cantidad_por_entregar", type: "decimal", nullable: true)]
+    private ?string $cantidadPorEntregar;
+
     public function __construct()
     {
         $this->checkNe = "N";
@@ -403,6 +415,50 @@ class ViewOut extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'newdata' value");
         }
         $this->newdata = $value;
+        return $this;
+    }
+
+    public function getArticuloCodigo(): ?string
+    {
+        return HtmlDecode($this->articuloCodigo);
+    }
+
+    public function setArticuloCodigo(?string $value): static
+    {
+        $this->articuloCodigo = RemoveXss($value);
+        return $this;
+    }
+
+    public function getArticuloDescripcion(): ?string
+    {
+        return HtmlDecode($this->articuloDescripcion);
+    }
+
+    public function setArticuloDescripcion(?string $value): static
+    {
+        $this->articuloDescripcion = RemoveXss($value);
+        return $this;
+    }
+
+    public function getCantidadEntregada(): ?string
+    {
+        return $this->cantidadEntregada;
+    }
+
+    public function setCantidadEntregada(?string $value): static
+    {
+        $this->cantidadEntregada = $value;
+        return $this;
+    }
+
+    public function getCantidadPorEntregar(): ?string
+    {
+        return $this->cantidadPorEntregar;
+    }
+
+    public function setCantidadPorEntregar(?string $value): static
+    {
+        $this->cantidadPorEntregar = $value;
         return $this;
     }
 }

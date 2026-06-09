@@ -66,6 +66,11 @@ $puedeModificarPrecioDescuento = false;
 if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
     $puedeModificarPrecioDescuento = VerificaFuncion("040");
 }
+
+if(isset($_REQUEST["pedido"])) {
+    $pedido = $_REQUEST["pedido"];
+    $urlImprimir = "reportes/factura_de_venta.php?id=" . $pedido . "&tipo=TDCFCV";
+}
 ?>
 
 
@@ -1628,10 +1633,29 @@ loadjs.ready(["jquery"], function () {
           </div>
         </div>
       </div>
-      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">
-        <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i> Cancelar</button>
-        <button type="button" id="btnConfirmarProcesar" class="btn btn-sm btn-success px-4 fw-bold"><i class="fa-solid fa-check me-1"></i> Sí, Procesar</button>
-      </div>
+        <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary px-3"
+                    data-bs-dismiss="modal">
+                <i class="fa-solid fa-xmark me-1"></i>
+                Cancelar
+            </button>
+
+            <a id="btnVistaPrevia"
+                href="<?= $urlImprimir ?>"
+                target="_blank"
+                class="btn btn-sm btn-outline-primary px-3">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i>
+                    Vista Previa
+            </a>
+
+            <button type="button"
+                    id="btnConfirmarProcesar"
+                    class="btn btn-sm btn-success px-4 fw-bold">
+                <i class="fa-solid fa-check me-1"></i>
+                Sí, Procesar
+            </button>
+        </div>
     </div>
   </div>
 </div>

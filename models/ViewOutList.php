@@ -179,6 +179,10 @@ class ViewOutList extends ViewOut
         $this->check_ne->Visible = false;
         $this->packer_cantidad->Visible = false;
         $this->newdata->Visible = false;
+        $this->articulo_codigo->Visible = false;
+        $this->articulo_descripcion->Visible = false;
+        $this->cantidad_entregada->Visible = false;
+        $this->cantidad_por_entregar->Visible = false;
     }
 
     // Constructor
@@ -1174,6 +1178,10 @@ class ViewOutList extends ViewOut
         $filterList = Concat($filterList, $this->check_ne->AdvancedSearch->toJson(), ","); // Field check_ne
         $filterList = Concat($filterList, $this->packer_cantidad->AdvancedSearch->toJson(), ","); // Field packer_cantidad
         $filterList = Concat($filterList, $this->newdata->AdvancedSearch->toJson(), ","); // Field newdata
+        $filterList = Concat($filterList, $this->articulo_codigo->AdvancedSearch->toJson(), ","); // Field articulo_codigo
+        $filterList = Concat($filterList, $this->articulo_descripcion->AdvancedSearch->toJson(), ","); // Field articulo_descripcion
+        $filterList = Concat($filterList, $this->cantidad_entregada->AdvancedSearch->toJson(), ","); // Field cantidad_entregada
+        $filterList = Concat($filterList, $this->cantidad_por_entregar->AdvancedSearch->toJson(), ","); // Field cantidad_por_entregar
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1420,6 +1428,38 @@ class ViewOutList extends ViewOut
         $this->newdata->AdvancedSearch->SearchValue2 = @$filter["y_newdata"];
         $this->newdata->AdvancedSearch->SearchOperator2 = @$filter["w_newdata"];
         $this->newdata->AdvancedSearch->save();
+
+        // Field articulo_codigo
+        $this->articulo_codigo->AdvancedSearch->SearchValue = @$filter["x_articulo_codigo"];
+        $this->articulo_codigo->AdvancedSearch->SearchOperator = @$filter["z_articulo_codigo"];
+        $this->articulo_codigo->AdvancedSearch->SearchCondition = @$filter["v_articulo_codigo"];
+        $this->articulo_codigo->AdvancedSearch->SearchValue2 = @$filter["y_articulo_codigo"];
+        $this->articulo_codigo->AdvancedSearch->SearchOperator2 = @$filter["w_articulo_codigo"];
+        $this->articulo_codigo->AdvancedSearch->save();
+
+        // Field articulo_descripcion
+        $this->articulo_descripcion->AdvancedSearch->SearchValue = @$filter["x_articulo_descripcion"];
+        $this->articulo_descripcion->AdvancedSearch->SearchOperator = @$filter["z_articulo_descripcion"];
+        $this->articulo_descripcion->AdvancedSearch->SearchCondition = @$filter["v_articulo_descripcion"];
+        $this->articulo_descripcion->AdvancedSearch->SearchValue2 = @$filter["y_articulo_descripcion"];
+        $this->articulo_descripcion->AdvancedSearch->SearchOperator2 = @$filter["w_articulo_descripcion"];
+        $this->articulo_descripcion->AdvancedSearch->save();
+
+        // Field cantidad_entregada
+        $this->cantidad_entregada->AdvancedSearch->SearchValue = @$filter["x_cantidad_entregada"];
+        $this->cantidad_entregada->AdvancedSearch->SearchOperator = @$filter["z_cantidad_entregada"];
+        $this->cantidad_entregada->AdvancedSearch->SearchCondition = @$filter["v_cantidad_entregada"];
+        $this->cantidad_entregada->AdvancedSearch->SearchValue2 = @$filter["y_cantidad_entregada"];
+        $this->cantidad_entregada->AdvancedSearch->SearchOperator2 = @$filter["w_cantidad_entregada"];
+        $this->cantidad_entregada->AdvancedSearch->save();
+
+        // Field cantidad_por_entregar
+        $this->cantidad_por_entregar->AdvancedSearch->SearchValue = @$filter["x_cantidad_por_entregar"];
+        $this->cantidad_por_entregar->AdvancedSearch->SearchOperator = @$filter["z_cantidad_por_entregar"];
+        $this->cantidad_por_entregar->AdvancedSearch->SearchCondition = @$filter["v_cantidad_por_entregar"];
+        $this->cantidad_por_entregar->AdvancedSearch->SearchValue2 = @$filter["y_cantidad_por_entregar"];
+        $this->cantidad_por_entregar->AdvancedSearch->SearchOperator2 = @$filter["w_cantidad_por_entregar"];
+        $this->cantidad_por_entregar->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1463,6 +1503,8 @@ class ViewOutList extends ViewOut
         $searchFlds[] = &$this->lote;
         $searchFlds[] = &$this->almacen;
         $searchFlds[] = &$this->articulo_unidad_medida;
+        $searchFlds[] = &$this->articulo_codigo;
+        $searchFlds[] = &$this->articulo_descripcion;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1617,6 +1659,10 @@ class ViewOutList extends ViewOut
                 $this->check_ne->setSort("");
                 $this->packer_cantidad->setSort("");
                 $this->newdata->setSort("");
+                $this->articulo_codigo->setSort("");
+                $this->articulo_descripcion->setSort("");
+                $this->cantidad_entregada->setSort("");
+                $this->cantidad_por_entregar->setSort("");
             }
 
             // Reset start position
@@ -2251,6 +2297,10 @@ class ViewOutList extends ViewOut
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
         $this->newdata->setDbValue($row['newdata']);
+        $this->articulo_codigo->setDbValue($row['articulo_codigo']);
+        $this->articulo_descripcion->setDbValue($row['articulo_descripcion']);
+        $this->cantidad_entregada->setDbValue($row['cantidad_entregada']);
+        $this->cantidad_por_entregar->setDbValue($row['cantidad_por_entregar']);
     }
 
     // Return a row with default values
@@ -2283,6 +2333,10 @@ class ViewOutList extends ViewOut
         $row['check_ne'] = $this->check_ne->DefaultValue;
         $row['packer_cantidad'] = $this->packer_cantidad->DefaultValue;
         $row['newdata'] = $this->newdata->DefaultValue;
+        $row['articulo_codigo'] = $this->articulo_codigo->DefaultValue;
+        $row['articulo_descripcion'] = $this->articulo_descripcion->DefaultValue;
+        $row['cantidad_entregada'] = $this->cantidad_entregada->DefaultValue;
+        $row['cantidad_por_entregar'] = $this->cantidad_por_entregar->DefaultValue;
         return $row;
     }
 
@@ -2374,6 +2428,14 @@ class ViewOutList extends ViewOut
         // packer_cantidad
 
         // newdata
+
+        // articulo_codigo
+
+        // articulo_descripcion
+
+        // cantidad_entregada
+
+        // cantidad_por_entregar
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -2540,6 +2602,20 @@ class ViewOutList extends ViewOut
             } else {
                 $this->newdata->ViewValue = null;
             }
+
+            // articulo_codigo
+            $this->articulo_codigo->ViewValue = $this->articulo_codigo->CurrentValue;
+
+            // articulo_descripcion
+            $this->articulo_descripcion->ViewValue = $this->articulo_descripcion->CurrentValue;
+
+            // cantidad_entregada
+            $this->cantidad_entregada->ViewValue = $this->cantidad_entregada->CurrentValue;
+            $this->cantidad_entregada->ViewValue = FormatNumber($this->cantidad_entregada->ViewValue, $this->cantidad_entregada->formatPattern());
+
+            // cantidad_por_entregar
+            $this->cantidad_por_entregar->ViewValue = $this->cantidad_por_entregar->CurrentValue;
+            $this->cantidad_por_entregar->ViewValue = FormatNumber($this->cantidad_por_entregar->ViewValue, $this->cantidad_por_entregar->formatPattern());
 
             // fabricante
             $this->fabricante->HrefValue = "";

@@ -207,6 +207,19 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->fotos->setVisibility();
         $this->descuento3->setVisibility();
         $this->doc_afe->setVisibility();
+        $this->cliente_ci_rif->setVisibility();
+        $this->cliente_nombre->setVisibility();
+        $this->cliente_direccion->setVisibility();
+        $this->cliente_telefono->setVisibility();
+        $this->igtf_alicuota->setVisibility();
+        $this->nacionalizacion->setVisibility();
+        $this->arquitecto->setVisibility();
+        $this->ganancia->setVisibility();
+        $this->intermediario->setVisibility();
+        $this->telefeno_intermediario->setVisibility();
+        $this->email_intermediario->setVisibility();
+        $this->genera_ne->setVisibility();
+        $this->visita->setVisibility();
     }
 
     // Constructor
@@ -620,6 +633,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->cerrado);
         $this->setupLookupOptions($this->asesor_asignado);
+        $this->setupLookupOptions($this->genera_ne);
 
         // Check modal
         if ($this->IsModal) {
@@ -1042,6 +1056,19 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $this->fotos->setDbValue($this->fotos->Upload->DbValue);
         $this->descuento3->setDbValue($row['descuento3']);
         $this->doc_afe->setDbValue($row['doc_afe']);
+        $this->cliente_ci_rif->setDbValue($row['cliente_ci_rif']);
+        $this->cliente_nombre->setDbValue($row['cliente_nombre']);
+        $this->cliente_direccion->setDbValue($row['cliente_direccion']);
+        $this->cliente_telefono->setDbValue($row['cliente_telefono']);
+        $this->igtf_alicuota->setDbValue($row['igtf_alicuota']);
+        $this->nacionalizacion->setDbValue($row['nacionalizacion']);
+        $this->arquitecto->setDbValue($row['arquitecto']);
+        $this->ganancia->setDbValue($row['ganancia']);
+        $this->intermediario->setDbValue($row['intermediario']);
+        $this->telefeno_intermediario->setDbValue($row['telefeno_intermediario']);
+        $this->email_intermediario->setDbValue($row['email_intermediario']);
+        $this->genera_ne->setDbValue($row['genera_ne']);
+        $this->visita->setDbValue($row['visita']);
     }
 
     // Return a row with default values
@@ -1108,6 +1135,19 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         $row['fotos'] = $this->fotos->DefaultValue;
         $row['descuento3'] = $this->descuento3->DefaultValue;
         $row['doc_afe'] = $this->doc_afe->DefaultValue;
+        $row['cliente_ci_rif'] = $this->cliente_ci_rif->DefaultValue;
+        $row['cliente_nombre'] = $this->cliente_nombre->DefaultValue;
+        $row['cliente_direccion'] = $this->cliente_direccion->DefaultValue;
+        $row['cliente_telefono'] = $this->cliente_telefono->DefaultValue;
+        $row['igtf_alicuota'] = $this->igtf_alicuota->DefaultValue;
+        $row['nacionalizacion'] = $this->nacionalizacion->DefaultValue;
+        $row['arquitecto'] = $this->arquitecto->DefaultValue;
+        $row['ganancia'] = $this->ganancia->DefaultValue;
+        $row['intermediario'] = $this->intermediario->DefaultValue;
+        $row['telefeno_intermediario'] = $this->telefeno_intermediario->DefaultValue;
+        $row['email_intermediario'] = $this->email_intermediario->DefaultValue;
+        $row['genera_ne'] = $this->genera_ne->DefaultValue;
+        $row['visita'] = $this->visita->DefaultValue;
         return $row;
     }
 
@@ -1248,6 +1288,32 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
         // descuento3
 
         // doc_afe
+
+        // cliente_ci_rif
+
+        // cliente_nombre
+
+        // cliente_direccion
+
+        // cliente_telefono
+
+        // igtf_alicuota
+
+        // nacionalizacion
+
+        // arquitecto
+
+        // ganancia
+
+        // intermediario
+
+        // telefeno_intermediario
+
+        // email_intermediario
+
+        // genera_ne
+
+        // visita
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1704,6 +1770,54 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->doc_afe->ViewValue = $this->doc_afe->CurrentValue;
             $this->doc_afe->ViewValue = FormatNumber($this->doc_afe->ViewValue, $this->doc_afe->formatPattern());
 
+            // cliente_ci_rif
+            $this->cliente_ci_rif->ViewValue = $this->cliente_ci_rif->CurrentValue;
+
+            // cliente_nombre
+            $this->cliente_nombre->ViewValue = $this->cliente_nombre->CurrentValue;
+
+            // cliente_direccion
+            $this->cliente_direccion->ViewValue = $this->cliente_direccion->CurrentValue;
+
+            // cliente_telefono
+            $this->cliente_telefono->ViewValue = $this->cliente_telefono->CurrentValue;
+
+            // igtf_alicuota
+            $this->igtf_alicuota->ViewValue = $this->igtf_alicuota->CurrentValue;
+            $this->igtf_alicuota->ViewValue = FormatNumber($this->igtf_alicuota->ViewValue, $this->igtf_alicuota->formatPattern());
+
+            // nacionalizacion
+            $this->nacionalizacion->ViewValue = $this->nacionalizacion->CurrentValue;
+            $this->nacionalizacion->ViewValue = FormatNumber($this->nacionalizacion->ViewValue, $this->nacionalizacion->formatPattern());
+
+            // arquitecto
+            $this->arquitecto->ViewValue = $this->arquitecto->CurrentValue;
+            $this->arquitecto->ViewValue = FormatNumber($this->arquitecto->ViewValue, $this->arquitecto->formatPattern());
+
+            // ganancia
+            $this->ganancia->ViewValue = $this->ganancia->CurrentValue;
+            $this->ganancia->ViewValue = FormatNumber($this->ganancia->ViewValue, $this->ganancia->formatPattern());
+
+            // intermediario
+            $this->intermediario->ViewValue = $this->intermediario->CurrentValue;
+
+            // telefeno_intermediario
+            $this->telefeno_intermediario->ViewValue = $this->telefeno_intermediario->CurrentValue;
+
+            // email_intermediario
+            $this->email_intermediario->ViewValue = $this->email_intermediario->CurrentValue;
+
+            // genera_ne
+            if (strval($this->genera_ne->CurrentValue) != "") {
+                $this->genera_ne->ViewValue = $this->genera_ne->optionCaption($this->genera_ne->CurrentValue);
+            } else {
+                $this->genera_ne->ViewValue = null;
+            }
+
+            // visita
+            $this->visita->ViewValue = $this->visita->CurrentValue;
+            $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
+
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -1938,6 +2052,8 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
                     break;
                 case "x_asesor_asignado":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_genera_ne":
                     break;
                 default:
                     $lookupFilter = "";

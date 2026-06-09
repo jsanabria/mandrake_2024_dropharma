@@ -9,6 +9,108 @@ $TdcfcvProcess = &$Page;
 $Page->showMessage();
 ?>
 <?php
+
+function TdcfcvSqlValue($value)
+{
+    return str_replace("'", "''", (string)$value);
+}
+
+function CongelarSnapshotFiscalTdcfcv($pedido)
+{
+    $pedido = intval($pedido);
+
+    if ($pedido <= 0) {
+        return;
+    }
+
+    /*****************************************************************************
+     * 1) Congelar datos fiscales del cliente en salidas
+     *
+     * IMPORTANTE:
+     * - El SELECT puede consultar cliente/tabla.
+     * - El UPDATE debe ser simple sobre salidas por id, sin JOIN.
+     * - Solo rellena campos vacios; nunca pisa datos ya congelados.
+     *****************************************************************************/
+    $sql = "SELECT
+                s.id,
+                IFNULL(c.ci_rif, '') AS cliente_ci_rif,
+                IFNULL(c.nombre, '') AS cliente_nombre,
+                TRIM(CONCAT(IFNULL(c.direccion, ''), IF(IFNULL(t.campo_descripcion, '') <> '', CONCAT('. ', t.campo_descripcion), ''))) AS cliente_direccion,
+                TRIM(CONCAT(REPLACE(IFNULL(c.telefono1, ''), ' ', ''), ' ', REPLACE(IFNULL(c.telefono2, ''), ' ', ''))) AS cliente_telefono
+            FROM salidas AS s
+            LEFT JOIN cliente AS c ON c.id = s.cliente
+            LEFT JOIN tabla AS t ON t.campo_codigo = c.ciudad AND t.tabla = 'CIUDAD'
+            WHERE s.id = {$pedido}
+            LIMIT 1";
+    $row = ExecuteRow($sql);
+
+    if ($row) {
+        $cliente_ci_rif = TdcfcvSqlValue($row["cliente_ci_rif"] ?? "");
+        $cliente_nombre = TdcfcvSqlValue($row["cliente_nombre"] ?? "");
+        $cliente_direccion = TdcfcvSqlValue($row["cliente_direccion"] ?? "");
+        $cliente_telefono = TdcfcvSqlValue($row["cliente_telefono"] ?? "");
+
+        $sql = "UPDATE salidas
+                SET
+                    cliente_ci_rif = IF(cliente_ci_rif IS NULL OR cliente_ci_rif = '', '{$cliente_ci_rif}', cliente_ci_rif),
+                    cliente_nombre = IF(cliente_nombre IS NULL OR cliente_nombre = '', '{$cliente_nombre}', cliente_nombre),
+                    cliente_direccion = IF(cliente_direccion IS NULL OR cliente_direccion = '', '{$cliente_direccion}', cliente_direccion),
+                    cliente_telefono = IF(cliente_telefono IS NULL OR cliente_telefono = '', '{$cliente_telefono}', cliente_telefono)
+                WHERE id = {$pedido}
+                LIMIT 1";
+        Execute($sql);
+    }
+
+    /*****************************************************************************
+     * 2) Congelar datos del articulo en entradas_salidas
+     *
+     * IMPORTANTE:
+     * - El SELECT puede consultar articulo.
+     * - Cada UPDATE es simple sobre entradas_salidas por id, sin JOIN.
+     * - Solo rellena campos vacios; nunca pisa datos ya congelados.
+     *****************************************************************************/
+    $sql = "SELECT
+                e.id,
+                IFNULL(a.codigo, '') AS articulo_codigo,
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, ''),
+                    ' ',
+                    IFNULL(a.principio_activo, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                ))) AS articulo_descripcion
+            FROM entradas_salidas AS e
+            LEFT JOIN articulo AS a ON a.id = e.articulo
+            WHERE e.id_documento = {$pedido}
+              AND e.tipo_documento = 'TDCFCV'
+              AND (
+                    e.articulo_codigo IS NULL OR e.articulo_codigo = ''
+                 OR e.articulo_descripcion IS NULL OR e.articulo_descripcion = ''
+              )";
+    $rows = ExecuteRows($sql);
+
+    if ($rows) {
+        foreach ($rows as $row) {
+            $id_detalle = intval($row["id"] ?? 0);
+
+            if ($id_detalle <= 0) {
+                continue;
+            }
+
+            $articulo_codigo = TdcfcvSqlValue($row["articulo_codigo"] ?? "");
+            $articulo_descripcion = TdcfcvSqlValue($row["articulo_descripcion"] ?? "");
+
+            $sql = "UPDATE entradas_salidas
+                    SET
+                        articulo_codigo = IF(articulo_codigo IS NULL OR articulo_codigo = '', '{$articulo_codigo}', articulo_codigo),
+                        articulo_descripcion = IF(articulo_descripcion IS NULL OR articulo_descripcion = '', '{$articulo_descripcion}', articulo_descripcion)
+                    WHERE id = {$id_detalle}
+                    LIMIT 1";
+            Execute($sql);
+        }
+    }
+}
+
 $pedido = $_REQUEST["pedido"];
 
 $sql = "SELECT documento, nro_documento, estatus FROM salidas WHERE id = $pedido;";
@@ -78,6 +180,9 @@ if(trim($nro_documento) == "") {
 
     $sql = "UPDATE salidas SET fecha = '" . date("Y-m-d H:i:s") . "', nro_documento = '$factura', nro_control = '$facturaCTRL', estatus = '$estatus', username = '" . CurrentUserName() . "' WHERE id = $pedido;";
     Execute($sql);
+
+    // Congela la foto fiscal del cliente y de los articulos al momento de emitir.
+    CongelarSnapshotFiscalTdcfcv($pedido);
 
     /**********************************************************************************
      * NUEVO: REGISTRO DE AUDITORÍA DE EMISIÓN DE DOCUMENTO

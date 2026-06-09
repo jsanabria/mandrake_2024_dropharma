@@ -112,7 +112,7 @@ if(intval($cliente) > 0) {
                 <input name="cliente" id="cliente" type="text" class="form-control form-control-sm" placeholder="Buscar Cliente" size="50" value="<?= $clienteNombre ?>" />
                 <input name="codcli" id="codcli" type="hidden" class="form-control form-control-sm" value="<?= $cliente ?>" />
                 <input name="username" id="username" type="hidden" class="form-control form-control-sm" value="<?= CurrentUserName() ?>" />
-                <button id="btnCrear" class="btn btn-sm btn-primary form-control" type="submit" disabled>Crear Pedido</button>
+                <button id="btnCrear" class="btn btn-sm btn-primary form-control" type="submit" disabled>Crear <?= $tipo_documento_nombre ?></button>
             </form>
 
             <ul id="lista" class="list-group"></ul>

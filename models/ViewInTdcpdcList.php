@@ -194,6 +194,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->cerrado->Visible = false;
         $this->descuento->setVisibility();
         $this->archivo_pedido->Visible = false;
+        $this->cliente->Visible = false;
     }
 
     // Constructor
@@ -1164,6 +1165,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $filterList = Concat($filterList, $this->cerrado->AdvancedSearch->toJson(), ","); // Field cerrado
         $filterList = Concat($filterList, $this->descuento->AdvancedSearch->toJson(), ","); // Field descuento
         $filterList = Concat($filterList, $this->archivo_pedido->AdvancedSearch->toJson(), ","); // Field archivo_pedido
+        $filterList = Concat($filterList, $this->cliente->AdvancedSearch->toJson(), ","); // Field cliente
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1530,6 +1532,14 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->archivo_pedido->AdvancedSearch->SearchValue2 = @$filter["y_archivo_pedido"];
         $this->archivo_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_archivo_pedido"];
         $this->archivo_pedido->AdvancedSearch->save();
+
+        // Field cliente
+        $this->cliente->AdvancedSearch->SearchValue = @$filter["x_cliente"];
+        $this->cliente->AdvancedSearch->SearchOperator = @$filter["z_cliente"];
+        $this->cliente->AdvancedSearch->SearchCondition = @$filter["v_cliente"];
+        $this->cliente->AdvancedSearch->SearchValue2 = @$filter["y_cliente"];
+        $this->cliente->AdvancedSearch->SearchOperator2 = @$filter["w_cliente"];
+        $this->cliente->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1583,6 +1593,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->buildSearchSql($where, $this->cerrado, $default, false); // cerrado
         $this->buildSearchSql($where, $this->descuento, $default, false); // descuento
         $this->buildSearchSql($where, $this->archivo_pedido, $default, false); // archivo_pedido
+        $this->buildSearchSql($where, $this->cliente, $default, false); // cliente
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1630,6 +1641,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
             $this->cerrado->AdvancedSearch->save(); // cerrado
             $this->descuento->AdvancedSearch->save(); // descuento
             $this->archivo_pedido->AdvancedSearch->save(); // archivo_pedido
+            $this->cliente->AdvancedSearch->save(); // cliente
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1701,6 +1713,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
             $this->cerrado->AdvancedSearch->save(); // cerrado
             $this->descuento->AdvancedSearch->save(); // descuento
             $this->archivo_pedido->AdvancedSearch->save(); // archivo_pedido
+            $this->cliente->AdvancedSearch->save(); // cliente
             $this->setSessionRules($rules);
         }
 
@@ -2040,6 +2053,9 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         if ($this->archivo_pedido->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->cliente->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2116,6 +2132,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->cerrado->AdvancedSearch->unsetSession();
         $this->descuento->AdvancedSearch->unsetSession();
         $this->archivo_pedido->AdvancedSearch->unsetSession();
+        $this->cliente->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2168,6 +2185,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->cerrado->AdvancedSearch->load();
         $this->descuento->AdvancedSearch->load();
         $this->archivo_pedido->AdvancedSearch->load();
+        $this->cliente->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2260,6 +2278,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
                 $this->cerrado->setSort("");
                 $this->descuento->setSort("");
                 $this->archivo_pedido->setSort("");
+                $this->cliente->setSort("");
             }
 
             // Reset start position
@@ -3315,6 +3334,14 @@ class ViewInTdcpdcList extends ViewInTdcpdc
                 $this->Command = "search";
             }
         }
+
+        // cliente
+        if ($this->cliente->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cliente->AdvancedSearch->SearchValue != "" || $this->cliente->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3453,6 +3480,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Return a row with default values
@@ -3500,6 +3528,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $row['cerrado'] = $this->cerrado->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
+        $row['cliente'] = $this->cliente->DefaultValue;
         return $row;
     }
 
@@ -3621,6 +3650,8 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         // descuento
 
         // archivo_pedido
+
+        // cliente
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3872,6 +3903,10 @@ class ViewInTdcpdcList extends ViewInTdcpdc
                 $this->archivo_pedido->ViewValue = "";
             }
 
+            // cliente
+            $this->cliente->ViewValue = $this->cliente->CurrentValue;
+            $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
+
             // nro_documento
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
@@ -4071,6 +4106,7 @@ class ViewInTdcpdcList extends ViewInTdcpdc
         $this->cerrado->AdvancedSearch->load();
         $this->descuento->AdvancedSearch->load();
         $this->archivo_pedido->AdvancedSearch->load();
+        $this->cliente->AdvancedSearch->load();
     }
 
     // Get export HTML tag

@@ -194,6 +194,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->monto_usd->Visible = false;
         $this->cerrado->Visible = false;
         $this->archivo_pedido->Visible = false;
+        $this->cliente->Visible = false;
     }
 
     // Constructor
@@ -1165,6 +1166,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $filterList = Concat($filterList, $this->monto_usd->AdvancedSearch->toJson(), ","); // Field monto_usd
         $filterList = Concat($filterList, $this->cerrado->AdvancedSearch->toJson(), ","); // Field cerrado
         $filterList = Concat($filterList, $this->archivo_pedido->AdvancedSearch->toJson(), ","); // Field archivo_pedido
+        $filterList = Concat($filterList, $this->cliente->AdvancedSearch->toJson(), ","); // Field cliente
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1531,6 +1533,14 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->archivo_pedido->AdvancedSearch->SearchValue2 = @$filter["y_archivo_pedido"];
         $this->archivo_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_archivo_pedido"];
         $this->archivo_pedido->AdvancedSearch->save();
+
+        // Field cliente
+        $this->cliente->AdvancedSearch->SearchValue = @$filter["x_cliente"];
+        $this->cliente->AdvancedSearch->SearchOperator = @$filter["z_cliente"];
+        $this->cliente->AdvancedSearch->SearchCondition = @$filter["v_cliente"];
+        $this->cliente->AdvancedSearch->SearchValue2 = @$filter["y_cliente"];
+        $this->cliente->AdvancedSearch->SearchOperator2 = @$filter["w_cliente"];
+        $this->cliente->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1584,6 +1594,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->buildSearchSql($where, $this->monto_usd, $default, false); // monto_usd
         $this->buildSearchSql($where, $this->cerrado, $default, false); // cerrado
         $this->buildSearchSql($where, $this->archivo_pedido, $default, false); // archivo_pedido
+        $this->buildSearchSql($where, $this->cliente, $default, false); // cliente
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1631,6 +1642,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
             $this->monto_usd->AdvancedSearch->save(); // monto_usd
             $this->cerrado->AdvancedSearch->save(); // cerrado
             $this->archivo_pedido->AdvancedSearch->save(); // archivo_pedido
+            $this->cliente->AdvancedSearch->save(); // cliente
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1702,6 +1714,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
             $this->monto_usd->AdvancedSearch->save(); // monto_usd
             $this->cerrado->AdvancedSearch->save(); // cerrado
             $this->archivo_pedido->AdvancedSearch->save(); // archivo_pedido
+            $this->cliente->AdvancedSearch->save(); // cliente
             $this->setSessionRules($rules);
         }
 
@@ -2059,6 +2072,9 @@ class ViewInTdcfccList extends ViewInTdcfcc
         if ($this->archivo_pedido->AdvancedSearch->issetSession()) {
             return true;
         }
+        if ($this->cliente->AdvancedSearch->issetSession()) {
+            return true;
+        }
         return false;
     }
 
@@ -2135,6 +2151,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->monto_usd->AdvancedSearch->unsetSession();
         $this->cerrado->AdvancedSearch->unsetSession();
         $this->archivo_pedido->AdvancedSearch->unsetSession();
+        $this->cliente->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2187,6 +2204,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->monto_usd->AdvancedSearch->load();
         $this->cerrado->AdvancedSearch->load();
         $this->archivo_pedido->AdvancedSearch->load();
+        $this->cliente->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2281,6 +2299,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
                 $this->monto_usd->setSort("");
                 $this->cerrado->setSort("");
                 $this->archivo_pedido->setSort("");
+                $this->cliente->setSort("");
             }
 
             // Reset start position
@@ -3338,6 +3357,14 @@ class ViewInTdcfccList extends ViewInTdcfcc
                 $this->Command = "search";
             }
         }
+
+        // cliente
+        if ($this->cliente->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->cliente->AdvancedSearch->SearchValue != "" || $this->cliente->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
         return $hasValue;
     }
 
@@ -3476,6 +3503,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->cerrado->setDbValue($row['cerrado']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Return a row with default values
@@ -3523,6 +3551,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $row['monto_usd'] = $this->monto_usd->DefaultValue;
         $row['cerrado'] = $this->cerrado->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
+        $row['cliente'] = $this->cliente->DefaultValue;
         return $row;
     }
 
@@ -3644,6 +3673,8 @@ class ViewInTdcfccList extends ViewInTdcfcc
         // cerrado
 
         // archivo_pedido
+
+        // cliente
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3899,6 +3930,10 @@ class ViewInTdcfccList extends ViewInTdcfcc
                 $this->archivo_pedido->ViewValue = "";
             }
 
+            // cliente
+            $this->cliente->ViewValue = $this->cliente->CurrentValue;
+            $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
+
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -4119,6 +4154,7 @@ class ViewInTdcfccList extends ViewInTdcfcc
         $this->monto_usd->AdvancedSearch->load();
         $this->cerrado->AdvancedSearch->load();
         $this->archivo_pedido->AdvancedSearch->load();
+        $this->cliente->AdvancedSearch->load();
     }
 
     // Get export HTML tag

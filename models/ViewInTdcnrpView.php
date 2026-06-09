@@ -188,6 +188,7 @@ class ViewInTdcnrpView extends ViewInTdcnrp
         $this->cerrado->setVisibility();
         $this->descuento->setVisibility();
         $this->archivo_pedido->setVisibility();
+        $this->cliente->setVisibility();
     }
 
     // Constructor
@@ -989,6 +990,7 @@ class ViewInTdcnrpView extends ViewInTdcnrp
         $this->descuento->setDbValue($row['descuento']);
         $this->archivo_pedido->Upload->DbValue = $row['archivo_pedido'];
         $this->archivo_pedido->setDbValue($this->archivo_pedido->Upload->DbValue);
+        $this->cliente->setDbValue($row['cliente']);
     }
 
     // Return a row with default values
@@ -1036,6 +1038,7 @@ class ViewInTdcnrpView extends ViewInTdcnrp
         $row['cerrado'] = $this->cerrado->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
         $row['archivo_pedido'] = $this->archivo_pedido->DefaultValue;
+        $row['cliente'] = $this->cliente->DefaultValue;
         return $row;
     }
 
@@ -1138,6 +1141,8 @@ class ViewInTdcnrpView extends ViewInTdcnrp
         // descuento
 
         // archivo_pedido
+
+        // cliente
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1392,6 +1397,10 @@ class ViewInTdcnrpView extends ViewInTdcnrp
             } else {
                 $this->archivo_pedido->ViewValue = "";
             }
+
+            // cliente
+            $this->cliente->ViewValue = $this->cliente->CurrentValue;
+            $this->cliente->ViewValue = FormatNumber($this->cliente->ViewValue, $this->cliente->formatPattern());
 
             // nro_documento
             $this->nro_documento->HrefValue = "";

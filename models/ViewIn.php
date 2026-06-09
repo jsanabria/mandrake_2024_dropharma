@@ -80,6 +80,10 @@ class ViewIn extends DbTable
     public $check_ne;
     public $packer_cantidad;
     public $newdata;
+    public $articulo_codigo;
+    public $articulo_descripcion;
+    public $cantidad_entregada;
+    public $cantidad_por_entregar;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -759,6 +763,98 @@ class ViewIn extends DbTable
         $this->newdata->OptionCount = 2;
         $this->newdata->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['newdata'] = &$this->newdata;
+
+        // articulo_codigo
+        $this->articulo_codigo = new DbField(
+            $this, // Table
+            'x_articulo_codigo', // Variable name
+            'articulo_codigo', // Name
+            '`articulo_codigo`', // Expression
+            '`articulo_codigo`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`articulo_codigo`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->articulo_codigo->InputTextType = "text";
+        $this->articulo_codigo->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['articulo_codigo'] = &$this->articulo_codigo;
+
+        // articulo_descripcion
+        $this->articulo_descripcion = new DbField(
+            $this, // Table
+            'x_articulo_descripcion', // Variable name
+            'articulo_descripcion', // Name
+            '`articulo_descripcion`', // Expression
+            '`articulo_descripcion`', // Basic search expression
+            200, // Type
+            65535, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`articulo_descripcion`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->articulo_descripcion->InputTextType = "text";
+        $this->articulo_descripcion->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['articulo_descripcion'] = &$this->articulo_descripcion;
+
+        // cantidad_entregada
+        $this->cantidad_entregada = new DbField(
+            $this, // Table
+            'x_cantidad_entregada', // Variable name
+            'cantidad_entregada', // Name
+            '`cantidad_entregada`', // Expression
+            '`cantidad_entregada`', // Basic search expression
+            131, // Type
+            12, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cantidad_entregada`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cantidad_entregada->InputTextType = "text";
+        $this->cantidad_entregada->Raw = true;
+        $this->cantidad_entregada->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->cantidad_entregada->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cantidad_entregada'] = &$this->cantidad_entregada;
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar = new DbField(
+            $this, // Table
+            'x_cantidad_por_entregar', // Variable name
+            'cantidad_por_entregar', // Name
+            '`cantidad_por_entregar`', // Expression
+            '`cantidad_por_entregar`', // Basic search expression
+            131, // Type
+            12, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`cantidad_por_entregar`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->cantidad_por_entregar->InputTextType = "text";
+        $this->cantidad_por_entregar->Raw = true;
+        $this->cantidad_por_entregar->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->cantidad_por_entregar->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['cantidad_por_entregar'] = &$this->cantidad_por_entregar;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1572,6 +1668,10 @@ class ViewIn extends DbTable
         $this->check_ne->DbValue = $row['check_ne'];
         $this->packer_cantidad->DbValue = $row['packer_cantidad'];
         $this->newdata->DbValue = $row['newdata'];
+        $this->articulo_codigo->DbValue = $row['articulo_codigo'];
+        $this->articulo_descripcion->DbValue = $row['articulo_descripcion'];
+        $this->cantidad_entregada->DbValue = $row['cantidad_entregada'];
+        $this->cantidad_por_entregar->DbValue = $row['cantidad_por_entregar'];
     }
 
     // Delete uploaded files
@@ -1970,6 +2070,10 @@ class ViewIn extends DbTable
         $this->check_ne->setDbValue($row['check_ne']);
         $this->packer_cantidad->setDbValue($row['packer_cantidad']);
         $this->newdata->setDbValue($row['newdata']);
+        $this->articulo_codigo->setDbValue($row['articulo_codigo']);
+        $this->articulo_descripcion->setDbValue($row['articulo_descripcion']);
+        $this->cantidad_entregada->setDbValue($row['cantidad_entregada']);
+        $this->cantidad_por_entregar->setDbValue($row['cantidad_por_entregar']);
     }
 
     // Render list content
@@ -2051,6 +2155,14 @@ class ViewIn extends DbTable
         // packer_cantidad
 
         // newdata
+
+        // articulo_codigo
+
+        // articulo_descripcion
+
+        // cantidad_entregada
+
+        // cantidad_por_entregar
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2216,6 +2328,20 @@ class ViewIn extends DbTable
             $this->newdata->ViewValue = null;
         }
 
+        // articulo_codigo
+        $this->articulo_codigo->ViewValue = $this->articulo_codigo->CurrentValue;
+
+        // articulo_descripcion
+        $this->articulo_descripcion->ViewValue = $this->articulo_descripcion->CurrentValue;
+
+        // cantidad_entregada
+        $this->cantidad_entregada->ViewValue = $this->cantidad_entregada->CurrentValue;
+        $this->cantidad_entregada->ViewValue = FormatNumber($this->cantidad_entregada->ViewValue, $this->cantidad_entregada->formatPattern());
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->ViewValue = $this->cantidad_por_entregar->CurrentValue;
+        $this->cantidad_por_entregar->ViewValue = FormatNumber($this->cantidad_por_entregar->ViewValue, $this->cantidad_por_entregar->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2319,6 +2445,22 @@ class ViewIn extends DbTable
         // newdata
         $this->newdata->HrefValue = "";
         $this->newdata->TooltipValue = "";
+
+        // articulo_codigo
+        $this->articulo_codigo->HrefValue = "";
+        $this->articulo_codigo->TooltipValue = "";
+
+        // articulo_descripcion
+        $this->articulo_descripcion->HrefValue = "";
+        $this->articulo_descripcion->TooltipValue = "";
+
+        // cantidad_entregada
+        $this->cantidad_entregada->HrefValue = "";
+        $this->cantidad_entregada->TooltipValue = "";
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->HrefValue = "";
+        $this->cantidad_por_entregar->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2528,6 +2670,38 @@ class ViewIn extends DbTable
         $this->newdata->EditValue = $this->newdata->options(false);
         $this->newdata->PlaceHolder = RemoveHtml($this->newdata->caption());
 
+        // articulo_codigo
+        $this->articulo_codigo->setupEditAttributes();
+        if (!$this->articulo_codigo->Raw) {
+            $this->articulo_codigo->CurrentValue = HtmlDecode($this->articulo_codigo->CurrentValue);
+        }
+        $this->articulo_codigo->EditValue = $this->articulo_codigo->CurrentValue;
+        $this->articulo_codigo->PlaceHolder = RemoveHtml($this->articulo_codigo->caption());
+
+        // articulo_descripcion
+        $this->articulo_descripcion->setupEditAttributes();
+        if (!$this->articulo_descripcion->Raw) {
+            $this->articulo_descripcion->CurrentValue = HtmlDecode($this->articulo_descripcion->CurrentValue);
+        }
+        $this->articulo_descripcion->EditValue = $this->articulo_descripcion->CurrentValue;
+        $this->articulo_descripcion->PlaceHolder = RemoveHtml($this->articulo_descripcion->caption());
+
+        // cantidad_entregada
+        $this->cantidad_entregada->setupEditAttributes();
+        $this->cantidad_entregada->EditValue = $this->cantidad_entregada->CurrentValue;
+        $this->cantidad_entregada->PlaceHolder = RemoveHtml($this->cantidad_entregada->caption());
+        if (strval($this->cantidad_entregada->EditValue) != "" && is_numeric($this->cantidad_entregada->EditValue)) {
+            $this->cantidad_entregada->EditValue = FormatNumber($this->cantidad_entregada->EditValue, null);
+        }
+
+        // cantidad_por_entregar
+        $this->cantidad_por_entregar->setupEditAttributes();
+        $this->cantidad_por_entregar->EditValue = $this->cantidad_por_entregar->CurrentValue;
+        $this->cantidad_por_entregar->PlaceHolder = RemoveHtml($this->cantidad_por_entregar->caption());
+        if (strval($this->cantidad_por_entregar->EditValue) != "" && is_numeric($this->cantidad_por_entregar->EditValue)) {
+            $this->cantidad_por_entregar->EditValue = FormatNumber($this->cantidad_por_entregar->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -2595,6 +2769,10 @@ class ViewIn extends DbTable
                     $doc->exportCaption($this->check_ne);
                     $doc->exportCaption($this->packer_cantidad);
                     $doc->exportCaption($this->newdata);
+                    $doc->exportCaption($this->articulo_codigo);
+                    $doc->exportCaption($this->articulo_descripcion);
+                    $doc->exportCaption($this->cantidad_entregada);
+                    $doc->exportCaption($this->cantidad_por_entregar);
                 }
                 $doc->endExportRow();
             }
@@ -2660,6 +2838,10 @@ class ViewIn extends DbTable
                         $doc->exportField($this->check_ne);
                         $doc->exportField($this->packer_cantidad);
                         $doc->exportField($this->newdata);
+                        $doc->exportField($this->articulo_codigo);
+                        $doc->exportField($this->articulo_descripcion);
+                        $doc->exportField($this->cantidad_entregada);
+                        $doc->exportField($this->cantidad_por_entregar);
                     }
                     $doc->endExportRow($rowCnt);
                 }

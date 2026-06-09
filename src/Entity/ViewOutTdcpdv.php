@@ -210,6 +210,45 @@ class ViewOutTdcpdv extends AbstractEntity
     #[Column(name: "doc_afe", type: "integer", nullable: true)]
     private ?int $docAfe;
 
+    #[Column(name: "cliente_ci_rif", type: "string", nullable: true)]
+    private ?string $clienteCiRif;
+
+    #[Column(name: "cliente_nombre", type: "string", nullable: true)]
+    private ?string $clienteNombre;
+
+    #[Column(name: "cliente_direccion", type: "string", nullable: true)]
+    private ?string $clienteDireccion;
+
+    #[Column(name: "cliente_telefono", type: "string", nullable: true)]
+    private ?string $clienteTelefono;
+
+    #[Column(name: "igtf_alicuota", type: "decimal", nullable: true)]
+    private ?string $igtfAlicuota;
+
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $nacionalizacion;
+
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $arquitecto;
+
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $ganancia;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $intermediario;
+
+    #[Column(name: "telefeno_intermediario", type: "string", nullable: true)]
+    private ?string $telefenoIntermediario;
+
+    #[Column(name: "email_intermediario", type: "string", nullable: true)]
+    private ?string $emailIntermediario;
+
+    #[Column(name: "genera_ne", type: "string", nullable: true)]
+    private ?string $generaNe;
+
+    #[Column(type: "integer", nullable: true)]
+    private ?int $visita;
+
     public function __construct()
     {
         $this->entregado = "N";
@@ -903,6 +942,152 @@ class ViewOutTdcpdv extends AbstractEntity
     public function setDocAfe(?int $value): static
     {
         $this->docAfe = $value;
+        return $this;
+    }
+
+    public function getClienteCiRif(): ?string
+    {
+        return HtmlDecode($this->clienteCiRif);
+    }
+
+    public function setClienteCiRif(?string $value): static
+    {
+        $this->clienteCiRif = RemoveXss($value);
+        return $this;
+    }
+
+    public function getClienteNombre(): ?string
+    {
+        return HtmlDecode($this->clienteNombre);
+    }
+
+    public function setClienteNombre(?string $value): static
+    {
+        $this->clienteNombre = RemoveXss($value);
+        return $this;
+    }
+
+    public function getClienteDireccion(): ?string
+    {
+        return HtmlDecode($this->clienteDireccion);
+    }
+
+    public function setClienteDireccion(?string $value): static
+    {
+        $this->clienteDireccion = RemoveXss($value);
+        return $this;
+    }
+
+    public function getClienteTelefono(): ?string
+    {
+        return HtmlDecode($this->clienteTelefono);
+    }
+
+    public function setClienteTelefono(?string $value): static
+    {
+        $this->clienteTelefono = RemoveXss($value);
+        return $this;
+    }
+
+    public function getIgtfAlicuota(): ?string
+    {
+        return $this->igtfAlicuota;
+    }
+
+    public function setIgtfAlicuota(?string $value): static
+    {
+        $this->igtfAlicuota = $value;
+        return $this;
+    }
+
+    public function getNacionalizacion(): ?string
+    {
+        return $this->nacionalizacion;
+    }
+
+    public function setNacionalizacion(?string $value): static
+    {
+        $this->nacionalizacion = $value;
+        return $this;
+    }
+
+    public function getArquitecto(): ?string
+    {
+        return $this->arquitecto;
+    }
+
+    public function setArquitecto(?string $value): static
+    {
+        $this->arquitecto = $value;
+        return $this;
+    }
+
+    public function getGanancia(): ?string
+    {
+        return $this->ganancia;
+    }
+
+    public function setGanancia(?string $value): static
+    {
+        $this->ganancia = $value;
+        return $this;
+    }
+
+    public function getIntermediario(): ?string
+    {
+        return HtmlDecode($this->intermediario);
+    }
+
+    public function setIntermediario(?string $value): static
+    {
+        $this->intermediario = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTelefenoIntermediario(): ?string
+    {
+        return HtmlDecode($this->telefenoIntermediario);
+    }
+
+    public function setTelefenoIntermediario(?string $value): static
+    {
+        $this->telefenoIntermediario = RemoveXss($value);
+        return $this;
+    }
+
+    public function getEmailIntermediario(): ?string
+    {
+        return HtmlDecode($this->emailIntermediario);
+    }
+
+    public function setEmailIntermediario(?string $value): static
+    {
+        $this->emailIntermediario = RemoveXss($value);
+        return $this;
+    }
+
+    public function getGeneraNe(): ?string
+    {
+        return $this->generaNe;
+    }
+
+    public function setGeneraNe(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'genera_ne' value");
+        }
+        $this->generaNe = $value;
+        return $this;
+    }
+
+    public function getVisita(): ?int
+    {
+        return $this->visita;
+    }
+
+    public function setVisita(?int $value): static
+    {
+        $this->visita = $value;
         return $this;
     }
 }
