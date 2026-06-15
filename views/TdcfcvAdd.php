@@ -67,9 +67,9 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
     $puedeModificarPrecioDescuento = VerificaFuncion("040");
 }
 
-if(isset($_REQUEST["pedido"])) {
-    $pedido = $_REQUEST["pedido"];
-    $urlImprimir = "reportes/factura_de_venta.php?id=" . $pedido . "&tipo=TDCFCV";
+$urlImprimir = "#";
+if (intval($pedido) > 0) {
+    $urlImprimir = "reportes/factura_de_venta.php?id=" . intval($pedido) . "&tipo=TDCFCV";
 }
 ?>
 
@@ -846,6 +846,7 @@ loadjs.ready(["jquery"], function () {
                 setPedidoButtons(json);
                 $("#pedido").val(json.pedido);
                 updateTotals(json);
+                ActualizarVistaPrevia(json.pedido);
 
                 $("#x" + i + "_cantidad, #x" + i + "_precioFull, #x" + i + "_descuento, #x" + i + "_lote, #x" + i + "_vence")
                     .prop("disabled", true);
@@ -1033,6 +1034,7 @@ loadjs.ready(["jquery"], function () {
                 setPedidoButtons(json);
                 $("#pedido").val(json.pedido);
                 updateTotals(json);
+                ActualizarVistaPrevia(json.pedido);
 
                 const PorDesAct = json.descuento ?? 0;
                 PintarProgressBar(PorDesAct);
@@ -1545,6 +1547,27 @@ loadjs.ready(["jquery"], function () {
         }
     };   
 
+    function ActualizarVistaPrevia(pedido) {
+
+        if (parseInt(pedido) > 0) {
+
+            $("#btnVistaPrevia")
+                .attr(
+                    "href",
+                    "reportes/factura_de_venta.php?id=" +
+                    pedido +
+                    "&tipo=TDCFCV"
+                )
+                .removeClass("disabled");
+
+        } else {
+
+            $("#btnVistaPrevia")
+                .attr("href", "#")
+                .addClass("disabled");
+        }
+    }
+
     $(document).on("keyup change", "#articulo", function () {
         console.log("Buscando artículo:", $(this).val());
         getCodigos2();
@@ -1644,7 +1667,7 @@ loadjs.ready(["jquery"], function () {
             <a id="btnVistaPrevia"
                 href="<?= $urlImprimir ?>"
                 target="_blank"
-                class="btn btn-sm btn-outline-primary px-3">
+                class="btn btn-sm btn-outline-primary px-3 <?= ($urlImprimir == '#' ? 'disabled' : '') ?>">
                     <i class="fa-solid fa-magnifying-glass me-1"></i>
                     Vista Previa
             </a>

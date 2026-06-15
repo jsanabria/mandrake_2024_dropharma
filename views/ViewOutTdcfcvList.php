@@ -84,12 +84,15 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Add fields
         .addFields([
+            ["id", [ew.Validators.integer], fields.id.isInvalid],
             ["documento", [], fields.documento.isInvalid],
             ["nro_documento", [], fields.nro_documento.isInvalid],
             ["fecha", [ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["y_fecha", [ew.Validators.between], false],
             ["cliente", [], fields.cliente.isInvalid],
-            ["pagado", [], fields.pagado.isInvalid]
+            ["pagado", [], fields.pagado.isInvalid],
+            ["fecha_despacho", [ew.Validators.datetime(fields.fecha_despacho.clientFormatPattern)], fields.fecha_despacho.isInvalid],
+            ["y_fecha_despacho", [ew.Validators.between], false]
         ])
         // Validate form
         .setValidate(
@@ -151,6 +154,28 @@ $Page->RowType = RowType::SEARCH;
 $Page->resetAttributes();
 $Page->renderRow();
 ?>
+<?php if ($Page->id->Visible) { // id ?>
+<?php
+if (!$Page->id->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_id" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->id->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_id" class="ew-search-caption ew-label"><?= $Page->id->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("=") ?>
+<input type="hidden" name="z_id" id="z_id" value="=">
+</div>
+        </div>
+        <div id="el_view_out_tdcfcv_id" class="ew-search-field">
+<input type="<?= $Page->id->getInputTextType() ?>" name="x_id" id="x_id" data-table="view_out_tdcfcv" data-field="x_id" value="<?= $Page->id->EditValue ?>" placeholder="<?= HtmlEncode($Page->id->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->id->formatPattern()) ?>"<?= $Page->id->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->id->getErrorMessage(false) ?></div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
 <?php
 if (!$Page->documento->UseFilter) {
@@ -416,6 +441,91 @@ loadjs.ready("fview_out_tdcfcvsrch", function() {
         </div><!-- /.ew-search-field -->
     </div><!-- /.col-sm-auto -->
 <?php } ?>
+<?php if ($Page->fecha_despacho->Visible) { // fecha_despacho ?>
+<?php
+if (!$Page->fecha_despacho->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_fecha_despacho" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->fecha_despacho->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_fecha_despacho" class="ew-search-caption ew-label"><?= $Page->fecha_despacho->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("BETWEEN") ?>
+<input type="hidden" name="z_fecha_despacho" id="z_fecha_despacho" value="BETWEEN">
+</div>
+        </div>
+        <div id="el_view_out_tdcfcv_fecha_despacho" class="ew-search-field">
+<input type="<?= $Page->fecha_despacho->getInputTextType() ?>" name="x_fecha_despacho" id="x_fecha_despacho" data-table="view_out_tdcfcv" data-field="x_fecha_despacho" value="<?= $Page->fecha_despacho->EditValue ?>" placeholder="<?= HtmlEncode($Page->fecha_despacho->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_despacho->formatPattern()) ?>"<?= $Page->fecha_despacho->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->fecha_despacho->getErrorMessage(false) ?></div>
+<?php if (!$Page->fecha_despacho->ReadOnly && !$Page->fecha_despacho->Disabled && !isset($Page->fecha_despacho->EditAttrs["readonly"]) && !isset($Page->fecha_despacho->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fview_out_tdcfcvsrch", "datetimepicker"], function () {
+    let format = "<?= DateFormat(7) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fview_out_tdcfcvsrch", "x_fecha_despacho", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+            <div class="ew-search-and"><label><?= $Language->phrase("AND") ?></label></div>
+        </div><!-- /.ew-search-field -->
+        <div id="el2_view_out_tdcfcv_fecha_despacho" class="ew-search-field2">
+<input type="<?= $Page->fecha_despacho->getInputTextType() ?>" name="y_fecha_despacho" id="y_fecha_despacho" data-table="view_out_tdcfcv" data-field="x_fecha_despacho" value="<?= $Page->fecha_despacho->EditValue2 ?>" placeholder="<?= HtmlEncode($Page->fecha_despacho->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_despacho->formatPattern()) ?>"<?= $Page->fecha_despacho->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->fecha_despacho->getErrorMessage(false) ?></div>
+<?php if (!$Page->fecha_despacho->ReadOnly && !$Page->fecha_despacho->Disabled && !isset($Page->fecha_despacho->EditAttrs["readonly"]) && !isset($Page->fecha_despacho->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fview_out_tdcfcvsrch", "datetimepicker"], function () {
+    let format = "<?= DateFormat(7) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fview_out_tdcfcvsrch", "y_fecha_despacho", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
+</div>
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
 </div><!-- /.row -->
 <div class="row mb-0">
     <div class="col-sm-auto px-0 pe-sm-2">
@@ -488,6 +598,9 @@ $Page->renderListOptions();
 // Render list options (header, left)
 $Page->ListOptions->render("header", "left");
 ?>
+<?php if ($Page->id->Visible) { // id ?>
+        <th data-name="id" class="<?= $Page->id->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_id" class="view_out_tdcfcv_id"><?= $Page->renderFieldHeader($Page->id) ?></div></th>
+<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
         <th data-name="documento" class="<?= $Page->documento->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_documento" class="view_out_tdcfcv_documento"><?= $Page->renderFieldHeader($Page->documento) ?></div></th>
 <?php } ?>
@@ -527,6 +640,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->impreso->Visible) { // impreso ?>
         <th data-name="impreso" class="<?= $Page->impreso->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_impreso" class="view_out_tdcfcv_impreso"><?= $Page->renderFieldHeader($Page->impreso) ?></div></th>
 <?php } ?>
+<?php if ($Page->fecha_despacho->Visible) { // fecha_despacho ?>
+        <th data-name="fecha_despacho" class="<?= $Page->fecha_despacho->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_fecha_despacho" class="view_out_tdcfcv_fecha_despacho"><?= $Page->renderFieldHeader($Page->fecha_despacho) ?></div></th>
+<?php } ?>
 <?php if ($Page->asesor_asignado->Visible) { // asesor_asignado ?>
         <th data-name="asesor_asignado" class="<?= $Page->asesor_asignado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_asesor_asignado" class="view_out_tdcfcv_asesor_asignado"><?= $Page->renderFieldHeader($Page->asesor_asignado) ?></div></th>
 <?php } ?>
@@ -558,6 +674,14 @@ while ($Page->RecordCount < $Page->StopRecord || $Page->RowIndex === '$rowindex$
 // Render list options (body, left)
 $Page->ListOptions->render("body", "left", $Page->RowCount);
 ?>
+    <?php if ($Page->id->Visible) { // id ?>
+        <td data-name="id"<?= $Page->id->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_id" class="el_view_out_tdcfcv_id">
+<span<?= $Page->id->viewAttributes() ?>>
+<?= $Page->id->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
     <?php if ($Page->documento->Visible) { // documento ?>
         <td data-name="documento"<?= $Page->documento->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_documento" class="el_view_out_tdcfcv_documento">
@@ -659,6 +783,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_impreso" class="el_view_out_tdcfcv_impreso">
 <span<?= $Page->impreso->viewAttributes() ?>>
 <?= $Page->impreso->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->fecha_despacho->Visible) { // fecha_despacho ?>
+        <td data-name="fecha_despacho"<?= $Page->fecha_despacho->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_fecha_despacho" class="el_view_out_tdcfcv_fecha_despacho">
+<span<?= $Page->fecha_despacho->viewAttributes() ?>>
+<?= $Page->fecha_despacho->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

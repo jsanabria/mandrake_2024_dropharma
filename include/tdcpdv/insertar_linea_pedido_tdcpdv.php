@@ -1,5 +1,7 @@
 <?php
 include "../connect.php";
+include "../rutinas.php";
+
 // die(json_encode("Hello World", JSON_UNESCAPED_UNICODE));
 $pedido = intval($_REQUEST["pedido"]); 
 $cliente = $_REQUEST["cliente"]; 
@@ -94,11 +96,7 @@ $unidad_medida_nombre = $row["um"];
 
 if($pedido == 0) {
 	/* Obetengo el consecutivo del nro de documento */
-	$sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipo_documento';";
-	$rs = mysqli_query($link, $sql);
-	$row = mysqli_fetch_array($rs);
-	$consecutivo = intval($row["consecutivo"]) + 1;
-	$nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
+	$nro_documento = ReservarConsecutivoDocumentoMySQLi($link, $tipo_documento, "DOC");
 
 	$sql = "INSERT INTO salidas 
 				(id, tipo_documento, nro_documento, username, fecha, cliente, 

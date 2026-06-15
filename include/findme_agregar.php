@@ -16,10 +16,19 @@ $response = [
     "error" => ""
 ];
 
+
+$documento_creado_en_este_request = false;
+$id_documento_creado = 0;
+$nro_documento_creado = "";
+
 try {
     $link->begin_transaction();
 
     $id = (int)($_POST["id"] ?? 0);
+    $codcli = (int)($_POST["codcli"] ?? 0);
+    $tipo_documento_request = trim($_POST["tipo_documento"] ?? "TDCASA");
+    $moneda_request = trim($_POST["moneda"] ?? "");
+    $tasa_dia_request = floatval($_POST["tasa_dia"] ?? 0);
     $nota = trim($_POST["nota"] ?? "");
     $username = trim($_POST["username"] ?? "");
     $factura = trim($_POST["factura"] ?? "");
@@ -35,12 +44,69 @@ try {
     $precio_request = isset($_POST["precio"]) ? floatval($_POST["precio"]) : null;
     $un = trim($_POST["unidad"] ?? "");
 
-    if ($id <= 0 || $articulo <= 0 || $cnt <= 0) {
+    if ($articulo <= 0 || $cnt <= 0) {
         throw new Exception("Parámetros obligatorios incompletos o erróneos.");
     }
 
+    if ($id <= 0) {
+        if ($codcli <= 0) {
+            throw new Exception("No se recibió cliente para crear el documento.");
+        }
+
+        if ($tipo_documento_request == "") {
+            $tipo_documento_request = "TDCASA";
+        }
+
+        if ($moneda_request == "") {
+            $resMon = $link->query("SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default' LIMIT 1");
+            if ($resMon && $rowMon = $resMon->fetch_assoc()) {
+                $moneda_request = $rowMon["moneda"];
+            }
+            if ($moneda_request == "") $moneda_request = "Bs.";
+        }
+
+        if ($tasa_dia_request <= 0) {
+            $resTasa = $link->query("SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 1");
+            if ($resTasa && $rowTasa = $resTasa->fetch_assoc()) {
+                $tasa_dia_request = floatval($rowTasa["tasa"]);
+            }
+        }
+
+        $nro_documento_creado = ReservarConsecutivoDocumentoMySQLi($link, $tipo_documento_request, "DOC");
+
+        $stmtCab = $link->prepare("INSERT INTO salidas
+            (id, tipo_documento, username, fecha, cliente, nro_documento, nota, estatus, moneda, factura, tasa_dia, ci_rif, nombre, direccion, telefono)
+            VALUES
+            (NULL, ?, ?, NOW(), ?, ?, ?, 'NUEVO', ?, ?, ?, ?, ?, ?, ?);");
+        $stmtCab->bind_param(
+            "ssissssdssss",
+            $tipo_documento_request,
+            $username,
+            $codcli,
+            $nro_documento_creado,
+            $nota,
+            $moneda_request,
+            $factura,
+            $tasa_dia_request,
+            $ci_rif,
+            $nombre,
+            $direccion,
+            $telefono
+        );
+        $stmtCab->execute();
+        $stmtCab->close();
+
+        $id = intval($link->insert_id);
+        if ($id <= 0) {
+            throw new Exception("No se pudo crear la cabecera del documento.");
+        }
+
+        $documento_creado_en_este_request = true;
+        $id_documento_creado = $id;
+    }
+
     // Identificar tipo de documento madre
-    $stmt = $link->prepare("SELECT tipo_documento FROM salidas WHERE id = ?;");
+    $stmt = $link->prepare("SELECT tipo_documento, nro_documento FROM salidas WHERE id = ?;");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resSalida = $stmt->get_result()->fetch_assoc();
@@ -48,6 +114,7 @@ try {
 
     if (!$resSalida) throw new Exception("El documento base no existe.");
     $tipo_documento = $resSalida["tipo_documento"];
+    $nro_documento = $resSalida["nro_documento"] ?? $nro_documento_creado;
 
     // Buscar parámetro de inventario
     $tipo_documento_inventario = 'TDCNET';
@@ -139,7 +206,7 @@ try {
     
     $stmtCheck = $link->prepare($sqlCheck);
     $vencParam = ($fecha_vencimiento === "") ? '1990-01-01' : $fecha_vencimiento;
-	$stmtCheck->bind_param("issssisss", $articulo, $lote, $vencParam, $almacen, $tipo_documento_inventario, $articulo, $lote, $vencParam, $almacen);
+    $stmtCheck->bind_param("issssisss", $articulo, $lote, $vencParam, $almacen, $tipo_documento_inventario, $articulo, $lote, $vencParam, $almacen);
     $stmtCheck->execute();
     $xReal = floatval($stmtCheck->get_result()->fetch_assoc()["cantidad"] ?? 0);
     $stmtCheck->close();
@@ -177,10 +244,21 @@ try {
 
     $response["success"] = true;
     $response["message"] = "Artículo añadido exitosamente.";
+    $response["id_documento"] = $id;
+    $response["nro_documento"] = $nro_documento;
     $response["data"] = $dataActualizada;
 
 } catch (Exception $e) {
     $link->rollback();
+
+    // Rollback manual básico para MyISAM si la cabecera fue creada en este request
+    // y luego ocurrió un error antes de completar el alta del renglón.
+    if (!empty($documento_creado_en_este_request) && !empty($id_documento_creado)) {
+        $idTmp = intval($id_documento_creado);
+        mysqli_query($link, "DELETE FROM entradas_salidas WHERE id_documento = $idTmp AND tipo_documento = '" . mysqli_real_escape_string($link, $tipo_documento_request) . "'");
+        mysqli_query($link, "DELETE FROM salidas WHERE id = $idTmp");
+    }
+
     $response["success"] = false;
     $response["error"] = $e->getMessage();
 }

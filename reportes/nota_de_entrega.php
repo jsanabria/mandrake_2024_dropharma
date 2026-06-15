@@ -13,6 +13,8 @@ require("../include/connect.php");
 $id = isset($_REQUEST["id"])?$_REQUEST["id"]:"0";
 $GLOBALS["id"] = $id;
 
+$GLOBALS["ocultar_precios"] = false;
+
 $con_precio = isset($_REQUEST["con_precio"])?$_REQUEST["con_precio"]:"0";
 $GLOBALS["con_precio"] = $con_precio;
 
@@ -39,6 +41,7 @@ $GLOBALS["invoice"] = $row["nro_documento"];
 $GLOBALS["cliente"] = $row["cliente"];
 $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
+$GLOBALS["ocultar_precios"] = ($row["tipo_documento"] == "TDCASA");
 $GLOBALS["nro_documento"] = $row["nro_documento"];
 $GLOBALS["estatus"] = $row["estatus"];
 $GLOBALS["direccion_cia"] = "";
@@ -49,6 +52,10 @@ $GLOBALS["direccion_envio"] = $row["direccion_envio"];
 $GLOBALS["telefono_envio"] = $row["telefono_envio"];
 
 $cliente = $row["cliente"];
+
+if (in_array($row["tipo_documento"], ["TDCASA"])) {
+    $GLOBALS["ocultar_precios"] = true;
+}
 
 class PDF extends FPDF
 {
@@ -252,7 +259,7 @@ class PDF extends FPDF
 		$this->Ln(6);
 
 		$this->Cell(10, 5);
-		if($GLOBALS["con_precio"] == "S") {
+		if($GLOBALS["con_precio"] == "S" && !$GLOBALS["ocultar_precios"]) {
 			$this->Cell(20, 5, "CODIGO", 1, 0, 'L');
 			$this->Cell(105, 5, "ARTICULO", 1, 0, 'L');
 			$this->Cell(15, 5, "CANT", 1, 0, 'C');
@@ -326,7 +333,7 @@ class PDF extends FPDF
 		$this->SetFont('Arial','',8);
 
 		if(floatval($row["iva"]) > 0.00) {
-				if($GLOBALS["con_precio"] == "S") {
+				if($GLOBALS["con_precio"] == "S" && !$GLOBALS["ocultar_precios"]) {
 					$this->SetFont('Arial','',8);
 					$this->Cell(175,3, "TOTAL:", 0, 0, 'R');
 					$this->SetFont('Arial','',8);
@@ -368,7 +375,7 @@ class PDF extends FPDF
 				$this->SetFont('Arial','',8);
 				$this->Cell(50, 4, "RECIBE CONFORME", "T", 0, 'C');
 				$this->SetFont('Arial','',8);
-				if($GLOBALS["con_precio"] == "S") {
+				if($GLOBALS["con_precio"] == "S" && !$GLOBALS["ocultar_precios"]) {
 					$this->Cell(35, 4, "TOTAL $moneda:", 0, 0, 'R');
 					$this->SetFont('Arial','',8);
 					$this->Cell(25, 4, number_format($row["total"], 2, ",", "."), 0, 0, 'R');
@@ -430,7 +437,7 @@ while($row = mysqli_fetch_array($rs))
 	$pdf->SetFont('Arial', '', 8);
 	$desart = mb_convert_encoding(trim($row["articulo"]) . ". " . $row["codigo"], "ISO-8859-1", "UTF-8");
 	
-	if($GLOBALS["con_precio"] == "S") {
+	if($GLOBALS["con_precio"] == "S" && !$GLOBALS["ocultar_precios"]) {
 		$pdf->Cell(10, 4);
 		$pdf->Cell(20, 4, substr($row["codigo"], 0, 10), 0, 0, 'L');
 		$pdf->Cell(105, 4, substr($desart, 0, 60), 0, 0, 'L');

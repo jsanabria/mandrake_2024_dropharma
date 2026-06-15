@@ -851,7 +851,6 @@ class TasaUsdAdd extends TasaUsd
 
             // hora
             $this->hora->ViewValue = $this->hora->CurrentValue;
-            $this->hora->ViewValue = FormatDateTime($this->hora->ViewValue, $this->hora->formatPattern());
 
             // moneda
             $this->moneda->HrefValue = "";

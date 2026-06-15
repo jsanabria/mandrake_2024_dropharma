@@ -35,7 +35,7 @@ ew.PREVIEW_NAV_STYLE ??= "tabs"; // tabs/pills/underline
 ew.PREVIEW_MODAL_CLASS ??= "modal modal-fullscreen-sm-down";
 ew.PREVIEW_ROW ??= true;
 ew.PREVIEW_SINGLE_ROW ??= false;
-ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.js?v=24.16.0", "preview");
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=24.16.0", "preview");
 </script>
 <script>
 loadjs.ready("head", function () {
@@ -88,7 +88,6 @@ loadjs.ready(["wrapper", "head"], function () {
             ["categoria", [], fields.categoria.isInvalid],
             ["lista_pedido", [], fields.lista_pedido.isInvalid],
             ["cantidad_en_mano", [ew.Validators.float], fields.cantidad_en_mano.isInvalid],
-            ["y_cantidad_en_mano", [ew.Validators.between], false],
             ["cantidad_en_pedido", [ew.Validators.float], fields.cantidad_en_pedido.isInvalid],
             ["y_cantidad_en_pedido", [ew.Validators.between], false],
             ["cantidad_en_transito", [ew.Validators.float], fields.cantidad_en_transito.isInvalid],
@@ -326,11 +325,8 @@ if (!$Page->cantidad_en_mano->UseFilter) {
         <div class="d-flex my-1 my-sm-0">
             <label for="x_cantidad_en_mano" class="ew-search-caption ew-label"><?= $Page->cantidad_en_mano->caption() ?></label>
             <div class="ew-search-operator">
-<select name="z_cantidad_en_mano" id="z_cantidad_en_mano" class="form-select ew-operator-select" data-ew-action="search-operator">
-<?php foreach ($Page->cantidad_en_mano->SearchOperators as $opr) { ?>
-<option value="<?= HtmlEncode($opr) ?>"<?= $Page->cantidad_en_mano->AdvancedSearch->SearchOperator == $opr ? " selected" : "" ?>><?= $Language->phrase($opr == "=" ? "EQUAL" : $opr) ?></option>
-<?php } ?>
-</select>
+<?= $Language->phrase(">=") ?>
+<input type="hidden" name="z_cantidad_en_mano" id="z_cantidad_en_mano" value="&gt;=">
 </div>
         </div>
         <div id="el_articulo_cantidad_en_mano" class="ew-search-field">
@@ -338,12 +334,7 @@ if (!$Page->cantidad_en_mano->UseFilter) {
 <div class="invalid-feedback"><?= $Page->cantidad_en_mano->getErrorMessage(false) ?></div>
 </div>
         <div class="d-flex my-1 my-sm-0">
-            <div class="ew-search-and d-none"><label><?= $Language->phrase("AND") ?></label></div>
         </div><!-- /.ew-search-field -->
-        <div id="el2_articulo_cantidad_en_mano" class="ew-search-field2 d-none">
-<input type="<?= $Page->cantidad_en_mano->getInputTextType() ?>" name="y_cantidad_en_mano" id="y_cantidad_en_mano" data-table="articulo" data-field="x_cantidad_en_mano" value="<?= $Page->cantidad_en_mano->EditValue2 ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_mano->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_mano->formatPattern()) ?>"<?= $Page->cantidad_en_mano->editAttributes() ?>>
-<div class="invalid-feedback"><?= $Page->cantidad_en_mano->getErrorMessage(false) ?></div>
-</div>
     </div><!-- /.col-sm-auto -->
 <?php } ?>
 <?php if ($Page->cantidad_en_pedido->Visible) { // cantidad_en_pedido ?>

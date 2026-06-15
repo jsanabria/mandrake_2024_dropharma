@@ -5,6 +5,7 @@ require('rcs/fpdf.php');
 require("../include/connect2.php");
 
 $id_invoice = isset($_REQUEST["id"]) ? intval($_REQUEST["id"]) : 0;
+$GLOBALS["id_invoice"] = $id_invoice;
 
 function enc_pdf($txt) {
     $texto = html_entity_decode((string)$txt, ENT_QUOTES | ENT_HTML5, 'UTF-8');
@@ -17,10 +18,12 @@ $rs = mysqli_query($GLOBALS['link'], $sql);
 $row = mysqli_fetch_array($rs);
 $GLOBALS["moneda_default"] = $row["moneda"] ?? "Bs.";
 
+/*
 $sql = "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S' LIMIT 1";
 $rs = mysqli_query($GLOBALS['link'], $sql);
 $row = mysqli_fetch_array($rs);
 $GLOBALS["alicuota_dinamica"] = floatval($row["alicuota"] ?? 0);
+*/
 
 // Normalizar cantidad_movimiento si viene NULL
 $sql = "SELECT id FROM entradas_salidas WHERE id_documento = {$id_invoice} AND tipo_documento = 'TDCFCV' AND cantidad_movimiento IS NULL LIMIT 1";
@@ -51,7 +54,7 @@ $sql = "SELECT
             descuento,
             descuento2,
             moneda,
-            impreso, IFNULL(doc_afe, 0) AS doc_afe  
+            impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota 
         FROM salidas
         WHERE id = '{$id_invoice}'
         LIMIT 1";
@@ -68,13 +71,15 @@ if ($formato_usd == "S") {
     die();
 }
 
+$GLOBALS["id"] = $row["id"];
 $GLOBALS["invoice"] = $row["nro_documento"];
 $GLOBALS["cliente"] = $row["cliente"];
 $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["control"] = $row["nro_control"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
-$GLOBALS["estatus"] = $row["estatus"] == "ANULADO" ? $row["estatus"] . " - " : "";
+$GLOBALS["estatus_doc"] = $row["estatus"];
+$GLOBALS["estatus"] = $row["estatus"];
 $GLOBALS["documento"] = $row["documento"];
 $GLOBALS["dias_credito"] = $row["dias_credito"];
 $GLOBALS["fec_venc"] = $row["fec_venc"];
@@ -82,6 +87,7 @@ $GLOBALS["doc_afectado"] = $row["doc_afectado"];
 $GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["moneda"] = $row["moneda"];
 $GLOBALS["impreso"] = $row["impreso"];
+$GLOBALS["alicuota_dinamica"] = floatval($row["igtf_alicuota"] ?? 0);
 
 if (trim($GLOBALS["nro_documento"] ?? "") != "") {
     if ($row["impreso"] != "S") {
@@ -171,19 +177,20 @@ class PDF extends FPDF
         $ciudad = $rowCia["ciudad"] ?? "";
 
         $sql = "SELECT
-                    LPAD(a.id, 8, '0') AS id,
-                    a.ci_rif,
-                    a.nombre,
+                    LPAD(s.cliente, 8, '0') AS id,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_ci_rif, '') ELSE IFNULL(a.ci_rif, '') END AS ci_rif,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_nombre, '') ELSE IFNULL(a.nombre, '') END AS nombre,
                     a.contacto,
                     a.email1,
-                    a.direccion,
-                    b.campo_descripcion AS ciudad,
-                    CONCAT(IFNULL(a.telefono1,''), ' ', IFNULL(a.telefono2,'')) AS telf,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_direccion, '') ELSE TRIM(CONCAT(IFNULL(a.direccion, ''), '. ', IFNULL(b.campo_descripcion, ''))) END AS direccion,
+                    CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_telefono, '') ELSE CONCAT(IFNULL(a.telefono1,''), ' ', IFNULL(a.telefono2,'')) END AS telf,
                     a.web,
                     a.email2 AS SICM
-                FROM cliente AS a
+                FROM salidas AS s
+                LEFT JOIN cliente AS a ON a.id = s.cliente
                 LEFT JOIN tabla AS b ON b.campo_codigo = a.ciudad AND b.tabla = 'CIUDAD'
-                WHERE a.id = '" . $GLOBALS["cliente"] . "'";
+                WHERE s.id = '" . $GLOBALS["id_invoice"] . "'
+                LIMIT 1";
         $rs = mysqli_query($link, $sql);
         $row = mysqli_fetch_array($rs);
 
@@ -191,22 +198,38 @@ class PDF extends FPDF
         $rif = $row["ci_rif"] ?? "";
         $razon_social = html_entity_decode($row["nombre"] ?? "", ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $razon_social = str_ireplace(['&AMP;', '&amp;'], '&', $razon_social);
-        $direccion_cliente = trim(($row["direccion"] ?? "") . ". " . ($row["ciudad"] ?? ""));
+        $direccion_cliente = trim($row["direccion"] ?? "");
         $telf = $row["telf"] ?? "";
 
-        $this->Ln(25);
+        $this->Ln(20);
         $this->SetFont('Arial', '', 10);
+
+        // Si es una prefactura (sin número asignado y estatus NUEVO)
+        $nroDocumento = $GLOBALS["nro_documento"];
+        $fechaDocumento = $GLOBALS["fecha"];
+
+        if (trim($GLOBALS["nro_documento"] ?? "") == "" && $GLOBALS["estatus"] == "NUEVO") {
+            $nroDocumento = "PREFACT-" . $GLOBALS["id"];
+            $fechaDocumento = date("d/m/Y");
+        }
+
         $this->Cell(125, 6);
-        $tdoc = ($GLOBALS["documento"] == "FC" ? "Nro. Factura: " : ($GLOBALS["documento"] == "NC" ? "Nro. Nota de Crédito: " : ($GLOBALS["documento"] == "ND" ? "Nro. Nota de Débito: " : "N/A")));
+
+        $tdoc = (
+            $GLOBALS["documento"] == "FC" ? "Nro. Factura: " :
+            ($GLOBALS["documento"] == "NC" ? "Nro. Nota de Crédito: " :
+            ($GLOBALS["documento"] == "ND" ? "Nro. Nota de Débito: " : "N/A"))
+        );
+
         $this->Cell(30, 6, enc_pdf($tdoc), 0, 0, 'L');
-        $this->Cell(45, 6, $GLOBALS["nro_documento"], 0, 0, 'R');
+        $this->Cell(45, 6, $nroDocumento, 0, 0, 'R');
 
         $this->Ln(5);
         $this->SetFont('Arial', 'B', 10);
         $this->Cell(125, 6);
         $this->Cell(30, 6, 'Fecha: ', 0, 0, 'L');
         $this->SetFont('Arial', '', 10);
-        $this->Cell(45, 6, enc_pdf($ciudad . ", " . $GLOBALS["fecha"]), 0, 0, 'R');
+        $this->Cell(45, 6, enc_pdf($ciudad . ", " . $fechaDocumento), 0, 0, 'R');
 
         if (trim($GLOBALS["doc_afectado"] ?? "") != "" && in_array($GLOBALS["documento"], ["NC", "ND"])) {
             $this->Ln(5);
@@ -234,7 +257,7 @@ class PDF extends FPDF
         $this->Ln();
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(10, 4);
-        $this->Cell(30, 4, "CUENTA Nº: ", 0, 0, 'L');
+        $this->Cell(30, 4, "CUENTA Nro: ", 0, 0, 'L');
         $this->SetFont('Arial', '', 7);
         $this->Cell(110, 4, $id, 0, 0, 'L');
 
@@ -326,13 +349,7 @@ class PDF extends FPDF
         $doc = "";
         $asociado = "";
 
-        $igtf_porc = floatval($GLOBALS["alicuota_dinamica"]);
-        if ($igtf_porc <= 0) {
-            $sql = "SELECT valor1 AS igtf FROM parametro WHERE codigo = '037' LIMIT 1";
-            $rs = mysqli_query($link, $sql);
-            $rowIgtf = mysqli_fetch_array($rs);
-            $igtf_porc = floatval($rowIgtf["igtf"] ?? 0);
-        }
+        $igtf_porc = $GLOBALS["alicuota_dinamica"];
 
         $sql = "SELECT
                     a.alicuota_iva,
@@ -400,7 +417,7 @@ class PDF extends FPDF
         }
 
         // Ubicar resumen en media carta superior, como formato DECODIBO
-        $this->Ln(100 - $this->GetY());
+        $this->Ln(95 - $this->GetY());
 
         $this->Cell(10, 3, "", 0, 0, 'R');
         $this->SetFont('Arial', '', 7);
@@ -532,8 +549,11 @@ $pdf->AddPage();
 $pdf->SetFont('Arial', '', 7);
 
 $sql = "SELECT
-            IFNULL(b.codigo, '') AS codigo,
-            LTRIM(RTRIM(CONCAT(IFNULL(b.codigo, ''), ' ', SUBSTRING(IFNULL(b.principio_activo, ''), 1, 65), ' ', IFNULL(a.lote, '')))) AS articulo,
+            CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(a.articulo_codigo, '') ELSE IFNULL(b.codigo, '') END AS codigo,
+            CASE
+                WHEN s.estatus = 'PROCESADO' THEN LTRIM(RTRIM(CONCAT(IFNULL(a.articulo_codigo, ''), ' ', IFNULL(a.articulo_descripcion, ''), ' ', IFNULL(a.lote, ''))))
+                ELSE LTRIM(RTRIM(CONCAT(IFNULL(b.codigo, ''), ' ', SUBSTRING(IFNULL(b.principio_activo, ''), 1, 65), ' ', IFNULL(a.lote, ''))))
+            END AS articulo,
             a.lote,
             DATE_FORMAT(a.fecha_vencimiento, '%d/%m/%Y') AS vencimiento,
             a.cantidad_articulo AS cantidad,
@@ -545,11 +565,12 @@ $sql = "SELECT
             a.descuento,
             a.precio_unidad_sin_desc AS precio_ful
         FROM entradas_salidas AS a
+        JOIN salidas AS s ON s.id = a.id_documento AND s.tipo_documento = a.tipo_documento
         LEFT JOIN articulo AS b ON b.id = a.articulo
         LEFT JOIN fabricante AS c ON c.id = a.fabricante
         WHERE a.id_documento = '{$id_invoice}'
           AND a.tipo_documento = '" . $GLOBALS["tipo_documento"] . "'
-        ORDER BY b.principio_activo, b.presentacion";
+        ORDER BY articulo";
 
 $rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 while ($row = mysqli_fetch_array($rs)) {

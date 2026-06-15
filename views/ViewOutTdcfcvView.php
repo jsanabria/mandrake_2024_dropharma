@@ -94,6 +94,17 @@ loadjs.ready("head", function () {
         <div class="<?= $Page->MultiPages->tabPaneClasses(1) ?>" id="tab_view_out_tdcfcv1" role="tabpanel"><!-- multi-page .tab-pane -->
 <?php } ?>
 <table class="<?= $Page->TableClass ?>">
+<?php if ($Page->id->Visible) { // id ?>
+    <tr id="r_id"<?= $Page->id->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcfcv_id"><?= $Page->id->caption() ?></span></td>
+        <td data-name="id"<?= $Page->id->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_id" data-page="1">
+<span<?= $Page->id->viewAttributes() ?>>
+<?= $Page->id->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
     <tr id="r_documento"<?= $Page->documento->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcfcv_documento"><?= $Page->documento->caption() ?></span></td>
@@ -211,6 +222,17 @@ loadjs.ready("head", function () {
 <span id="el_view_out_tdcfcv_impreso" data-page="1">
 <span<?= $Page->impreso->viewAttributes() ?>>
 <?= $Page->impreso->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->fecha_despacho->Visible) { // fecha_despacho ?>
+    <tr id="r_fecha_despacho"<?= $Page->fecha_despacho->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_out_tdcfcv_fecha_despacho"><?= $Page->fecha_despacho->caption() ?></span></td>
+        <td data-name="fecha_despacho"<?= $Page->fecha_despacho->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_fecha_despacho" data-page="1">
+<span<?= $Page->fecha_despacho->viewAttributes() ?>>
+<?= $Page->fecha_despacho->getViewValue() ?></span>
 </span>
 </td>
     </tr>

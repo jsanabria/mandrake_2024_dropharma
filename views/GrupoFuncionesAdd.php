@@ -80,12 +80,12 @@ $Page->showMessage();
     <select
         id="x_funcion"
         name="x_funcion"
-        class="form-select ew-select<?= $Page->funcion->isInvalidClass() ?>"
-        <?php if (!$Page->funcion->IsNativeSelect) { ?>
+        class="form-control ew-select<?= $Page->funcion->isInvalidClass() ?>"
         data-select2-id="fgrupo_funcionesadd_x_funcion"
-        <?php } ?>
         data-table="grupo_funciones"
         data-field="x_funcion"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->funcion->caption())) ?>"
+        data-modal-lookup="true"
         data-value-separator="<?= $Page->funcion->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Page->funcion->getPlaceHolder()) ?>"
         <?= $Page->funcion->editAttributes() ?>>
@@ -94,26 +94,18 @@ $Page->showMessage();
     <?= $Page->funcion->getCustomMessage() ?>
     <div class="invalid-feedback"><?= $Page->funcion->getErrorMessage() ?></div>
 <?= $Page->funcion->Lookup->getParamTag($Page, "p_x_funcion") ?>
-<?php if (!$Page->funcion->IsNativeSelect) { ?>
 <script>
 loadjs.ready("fgrupo_funcionesadd", function() {
-    var options = { name: "x_funcion", selectId: "fgrupo_funcionesadd_x_funcion" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    var options = { name: "x_funcion", selectId: "fgrupo_funcionesadd_x_funcion" };
     if (fgrupo_funcionesadd.lists.funcion?.lookupOptions.length) {
         options.data = { id: "x_funcion", form: "fgrupo_funcionesadd" };
     } else {
         options.ajax = { id: "x_funcion", form: "fgrupo_funcionesadd", limit: ew.LOOKUP_PAGE_SIZE };
     }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.grupo_funciones.fields.funcion.selectOptions);
-    ew.createSelect(options);
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.grupo_funciones.fields.funcion.modalLookupOptions);
+    ew.createModalLookup(options);
 });
 </script>
-<?php } ?>
 </span>
 </div></div>
     </div>

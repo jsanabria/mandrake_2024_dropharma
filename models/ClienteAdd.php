@@ -132,29 +132,29 @@ class ClienteAdd extends Cliente
         $this->id->Visible = false;
         $this->ci_rif->setVisibility();
         $this->nombre->setVisibility();
-        $this->sucursal->setVisibility();
-        $this->contacto->setVisibility();
-        $this->ciudad->setVisibility();
-        $this->zona->setVisibility();
+        $this->sucursal->Visible = false;
+        $this->contacto->Visible = false;
+        $this->ciudad->Visible = false;
+        $this->zona->Visible = false;
         $this->direccion->setVisibility();
         $this->telefono1->setVisibility();
         $this->telefono2->setVisibility();
         $this->email1->setVisibility();
-        $this->email2->setVisibility();
+        $this->email2->Visible = false;
         $this->codigo_ims->Visible = false;
-        $this->web->setVisibility();
-        $this->tipo_cliente->setVisibility();
+        $this->web->Visible = false;
+        $this->tipo_cliente->Visible = false;
         $this->tarifa->setVisibility();
-        $this->consignacion->setVisibility();
-        $this->limite_credito->setVisibility();
-        $this->condicion->setVisibility();
+        $this->consignacion->Visible = false;
+        $this->limite_credito->Visible = false;
+        $this->condicion->Visible = false;
         $this->codigo->setVisibility();
         $this->cuenta->Visible = false;
         $this->activo->setVisibility();
-        $this->foto1->setVisibility();
-        $this->foto2->setVisibility();
-        $this->dias_credito->setVisibility();
-        $this->descuento->setVisibility();
+        $this->foto1->Visible = false;
+        $this->foto2->Visible = false;
+        $this->dias_credito->Visible = false;
+        $this->descuento->Visible = false;
     }
 
     // Constructor
@@ -624,11 +624,7 @@ class ClienteAdd extends Cliente
                     if ($this->getSuccessMessage() == "" && Post("addopt") != "1") { // Skip success message for addopt (done in JavaScript)
                         $this->setSuccessMessage($Language->phrase("AddSuccess")); // Set up success message
                     }
-                    if ($this->getCurrentDetailTable() != "") { // Master/detail add
-                        $returnUrl = $this->getDetailUrl();
-                    } else {
-                        $returnUrl = $this->getReturnUrl();
-                    }
+                    $returnUrl = $this->getViewUrl();
                     if (GetPageName($returnUrl) == "ClienteList") {
                         $returnUrl = $this->addMasterUrl($returnUrl); // List page, return to List page with correct master key if necessary
                     } elseif (GetPageName($returnUrl) == "ClienteView") {
@@ -704,12 +700,6 @@ class ClienteAdd extends Cliente
     protected function getUploadFiles()
     {
         global $CurrentForm, $Language;
-        $this->foto1->Upload->Index = $CurrentForm->Index;
-        $this->foto1->Upload->uploadFile();
-        $this->foto1->CurrentValue = $this->foto1->Upload->FileName;
-        $this->foto2->Upload->Index = $CurrentForm->Index;
-        $this->foto2->Upload->uploadFile();
-        $this->foto2->CurrentValue = $this->foto2->Upload->FileName;
     }
 
     // Load default values
@@ -745,46 +735,6 @@ class ClienteAdd extends Cliente
                 $this->nombre->Visible = false; // Disable update for API request
             } else {
                 $this->nombre->setFormValue($val);
-            }
-        }
-
-        // Check field name 'sucursal' first before field var 'x_sucursal'
-        $val = $CurrentForm->hasValue("sucursal") ? $CurrentForm->getValue("sucursal") : $CurrentForm->getValue("x_sucursal");
-        if (!$this->sucursal->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->sucursal->Visible = false; // Disable update for API request
-            } else {
-                $this->sucursal->setFormValue($val);
-            }
-        }
-
-        // Check field name 'contacto' first before field var 'x_contacto'
-        $val = $CurrentForm->hasValue("contacto") ? $CurrentForm->getValue("contacto") : $CurrentForm->getValue("x_contacto");
-        if (!$this->contacto->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->contacto->Visible = false; // Disable update for API request
-            } else {
-                $this->contacto->setFormValue($val);
-            }
-        }
-
-        // Check field name 'ciudad' first before field var 'x_ciudad'
-        $val = $CurrentForm->hasValue("ciudad") ? $CurrentForm->getValue("ciudad") : $CurrentForm->getValue("x_ciudad");
-        if (!$this->ciudad->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->ciudad->Visible = false; // Disable update for API request
-            } else {
-                $this->ciudad->setFormValue($val);
-            }
-        }
-
-        // Check field name 'zona' first before field var 'x_zona'
-        $val = $CurrentForm->hasValue("zona") ? $CurrentForm->getValue("zona") : $CurrentForm->getValue("x_zona");
-        if (!$this->zona->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->zona->Visible = false; // Disable update for API request
-            } else {
-                $this->zona->setFormValue($val);
             }
         }
 
@@ -828,36 +778,6 @@ class ClienteAdd extends Cliente
             }
         }
 
-        // Check field name 'email2' first before field var 'x_email2'
-        $val = $CurrentForm->hasValue("email2") ? $CurrentForm->getValue("email2") : $CurrentForm->getValue("x_email2");
-        if (!$this->email2->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->email2->Visible = false; // Disable update for API request
-            } else {
-                $this->email2->setFormValue($val);
-            }
-        }
-
-        // Check field name 'web' first before field var 'x_web'
-        $val = $CurrentForm->hasValue("web") ? $CurrentForm->getValue("web") : $CurrentForm->getValue("x_web");
-        if (!$this->web->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->web->Visible = false; // Disable update for API request
-            } else {
-                $this->web->setFormValue($val);
-            }
-        }
-
-        // Check field name 'tipo_cliente' first before field var 'x_tipo_cliente'
-        $val = $CurrentForm->hasValue("tipo_cliente") ? $CurrentForm->getValue("tipo_cliente") : $CurrentForm->getValue("x_tipo_cliente");
-        if (!$this->tipo_cliente->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->tipo_cliente->Visible = false; // Disable update for API request
-            } else {
-                $this->tipo_cliente->setFormValue($val);
-            }
-        }
-
         // Check field name 'tarifa' first before field var 'x_tarifa'
         $val = $CurrentForm->hasValue("tarifa") ? $CurrentForm->getValue("tarifa") : $CurrentForm->getValue("x_tarifa");
         if (!$this->tarifa->IsDetailKey) {
@@ -865,36 +785,6 @@ class ClienteAdd extends Cliente
                 $this->tarifa->Visible = false; // Disable update for API request
             } else {
                 $this->tarifa->setFormValue($val);
-            }
-        }
-
-        // Check field name 'consignacion' first before field var 'x_consignacion'
-        $val = $CurrentForm->hasValue("consignacion") ? $CurrentForm->getValue("consignacion") : $CurrentForm->getValue("x_consignacion");
-        if (!$this->consignacion->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->consignacion->Visible = false; // Disable update for API request
-            } else {
-                $this->consignacion->setFormValue($val);
-            }
-        }
-
-        // Check field name 'limite_credito' first before field var 'x_limite_credito'
-        $val = $CurrentForm->hasValue("limite_credito") ? $CurrentForm->getValue("limite_credito") : $CurrentForm->getValue("x_limite_credito");
-        if (!$this->limite_credito->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->limite_credito->Visible = false; // Disable update for API request
-            } else {
-                $this->limite_credito->setFormValue($val, true, $validate);
-            }
-        }
-
-        // Check field name 'condicion' first before field var 'x_condicion'
-        $val = $CurrentForm->hasValue("condicion") ? $CurrentForm->getValue("condicion") : $CurrentForm->getValue("x_condicion");
-        if (!$this->condicion->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->condicion->Visible = false; // Disable update for API request
-            } else {
-                $this->condicion->setFormValue($val);
             }
         }
 
@@ -918,29 +808,8 @@ class ClienteAdd extends Cliente
             }
         }
 
-        // Check field name 'dias_credito' first before field var 'x_dias_credito'
-        $val = $CurrentForm->hasValue("dias_credito") ? $CurrentForm->getValue("dias_credito") : $CurrentForm->getValue("x_dias_credito");
-        if (!$this->dias_credito->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->dias_credito->Visible = false; // Disable update for API request
-            } else {
-                $this->dias_credito->setFormValue($val);
-            }
-        }
-
-        // Check field name 'descuento' first before field var 'x_descuento'
-        $val = $CurrentForm->hasValue("descuento") ? $CurrentForm->getValue("descuento") : $CurrentForm->getValue("x_descuento");
-        if (!$this->descuento->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->descuento->Visible = false; // Disable update for API request
-            } else {
-                $this->descuento->setFormValue($val, true, $validate);
-            }
-        }
-
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
-        $this->getUploadFiles(); // Get upload files
     }
 
     // Restore form values
@@ -949,25 +818,13 @@ class ClienteAdd extends Cliente
         global $CurrentForm;
         $this->ci_rif->CurrentValue = $this->ci_rif->FormValue;
         $this->nombre->CurrentValue = $this->nombre->FormValue;
-        $this->sucursal->CurrentValue = $this->sucursal->FormValue;
-        $this->contacto->CurrentValue = $this->contacto->FormValue;
-        $this->ciudad->CurrentValue = $this->ciudad->FormValue;
-        $this->zona->CurrentValue = $this->zona->FormValue;
         $this->direccion->CurrentValue = $this->direccion->FormValue;
         $this->telefono1->CurrentValue = $this->telefono1->FormValue;
         $this->telefono2->CurrentValue = $this->telefono2->FormValue;
         $this->email1->CurrentValue = $this->email1->FormValue;
-        $this->email2->CurrentValue = $this->email2->FormValue;
-        $this->web->CurrentValue = $this->web->FormValue;
-        $this->tipo_cliente->CurrentValue = $this->tipo_cliente->FormValue;
         $this->tarifa->CurrentValue = $this->tarifa->FormValue;
-        $this->consignacion->CurrentValue = $this->consignacion->FormValue;
-        $this->limite_credito->CurrentValue = $this->limite_credito->FormValue;
-        $this->condicion->CurrentValue = $this->condicion->FormValue;
         $this->codigo->CurrentValue = $this->codigo->FormValue;
         $this->activo->CurrentValue = $this->activo->FormValue;
-        $this->dias_credito->CurrentValue = $this->dias_credito->FormValue;
-        $this->descuento->CurrentValue = $this->descuento->FormValue;
     }
 
     /**
@@ -1346,28 +1203,6 @@ class ClienteAdd extends Cliente
                 $this->activo->ViewValue = null;
             }
 
-            // foto1
-            if (!EmptyValue($this->foto1->Upload->DbValue)) {
-                $this->foto1->ImageWidth = 120;
-                $this->foto1->ImageHeight = 120;
-                $this->foto1->ImageAlt = $this->foto1->alt();
-                $this->foto1->ImageCssClass = "ew-image";
-                $this->foto1->ViewValue = $this->foto1->Upload->DbValue;
-            } else {
-                $this->foto1->ViewValue = "";
-            }
-
-            // foto2
-            if (!EmptyValue($this->foto2->Upload->DbValue)) {
-                $this->foto2->ImageWidth = 120;
-                $this->foto2->ImageHeight = 120;
-                $this->foto2->ImageAlt = $this->foto2->alt();
-                $this->foto2->ImageCssClass = "ew-image";
-                $this->foto2->ViewValue = $this->foto2->Upload->DbValue;
-            } else {
-                $this->foto2->ViewValue = "";
-            }
-
             // dias_credito
             $curVal = strval($this->dias_credito->CurrentValue);
             if ($curVal != "") {
@@ -1402,18 +1237,6 @@ class ClienteAdd extends Cliente
             // nombre
             $this->nombre->HrefValue = "";
 
-            // sucursal
-            $this->sucursal->HrefValue = "";
-
-            // contacto
-            $this->contacto->HrefValue = "";
-
-            // ciudad
-            $this->ciudad->HrefValue = "";
-
-            // zona
-            $this->zona->HrefValue = "";
-
             // direccion
             $this->direccion->HrefValue = "";
 
@@ -1426,62 +1249,14 @@ class ClienteAdd extends Cliente
             // email1
             $this->email1->HrefValue = "";
 
-            // email2
-            $this->email2->HrefValue = "";
-
-            // web
-            $this->web->HrefValue = "";
-
-            // tipo_cliente
-            $this->tipo_cliente->HrefValue = "";
-
             // tarifa
             $this->tarifa->HrefValue = "";
-
-            // consignacion
-            $this->consignacion->HrefValue = "";
-
-            // limite_credito
-            $this->limite_credito->HrefValue = "";
-
-            // condicion
-            $this->condicion->HrefValue = "";
 
             // codigo
             $this->codigo->HrefValue = "";
 
             // activo
             $this->activo->HrefValue = "";
-
-            // foto1
-            if (!EmptyValue($this->foto1->Upload->DbValue)) {
-                $this->foto1->HrefValue = GetFileUploadUrl($this->foto1, $this->foto1->htmlDecode($this->foto1->Upload->DbValue)); // Add prefix/suffix
-                $this->foto1->LinkAttrs["target"] = "_blank"; // Add target
-                if ($this->isExport()) {
-                    $this->foto1->HrefValue = FullUrl($this->foto1->HrefValue, "href");
-                }
-            } else {
-                $this->foto1->HrefValue = "";
-            }
-            $this->foto1->ExportHrefValue = $this->foto1->UploadPath . $this->foto1->Upload->DbValue;
-
-            // foto2
-            if (!EmptyValue($this->foto2->Upload->DbValue)) {
-                $this->foto2->HrefValue = GetFileUploadUrl($this->foto2, $this->foto2->htmlDecode($this->foto2->Upload->DbValue)); // Add prefix/suffix
-                $this->foto2->LinkAttrs["target"] = "_blank"; // Add target
-                if ($this->isExport()) {
-                    $this->foto2->HrefValue = FullUrl($this->foto2->HrefValue, "href");
-                }
-            } else {
-                $this->foto2->HrefValue = "";
-            }
-            $this->foto2->ExportHrefValue = $this->foto2->UploadPath . $this->foto2->Upload->DbValue;
-
-            // dias_credito
-            $this->dias_credito->HrefValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // ci_rif
             $this->ci_rif->setupEditAttributes();
@@ -1498,60 +1273,6 @@ class ClienteAdd extends Cliente
             }
             $this->nombre->EditValue = HtmlEncode($this->nombre->CurrentValue);
             $this->nombre->PlaceHolder = RemoveHtml($this->nombre->caption());
-
-            // sucursal
-            $this->sucursal->setupEditAttributes();
-            if (!$this->sucursal->Raw) {
-                $this->sucursal->CurrentValue = HtmlDecode($this->sucursal->CurrentValue);
-            }
-            $this->sucursal->EditValue = HtmlEncode($this->sucursal->CurrentValue);
-            $this->sucursal->PlaceHolder = RemoveHtml($this->sucursal->caption());
-
-            // contacto
-            $this->contacto->setupEditAttributes();
-            if (!$this->contacto->Raw) {
-                $this->contacto->CurrentValue = HtmlDecode($this->contacto->CurrentValue);
-            }
-            $this->contacto->EditValue = HtmlEncode($this->contacto->CurrentValue);
-            $this->contacto->PlaceHolder = RemoveHtml($this->contacto->caption());
-
-            // ciudad
-            $this->ciudad->setupEditAttributes();
-            if (!$this->ciudad->Raw) {
-                $this->ciudad->CurrentValue = HtmlDecode($this->ciudad->CurrentValue);
-            }
-            $this->ciudad->EditValue = HtmlEncode($this->ciudad->CurrentValue);
-            $curVal = strval($this->ciudad->CurrentValue);
-            if ($curVal != "") {
-                $this->ciudad->EditValue = $this->ciudad->lookupCacheOption($curVal);
-                if ($this->ciudad->EditValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->ciudad->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->ciudad->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->ciudad->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->ciudad->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->ciudad->Lookup->renderViewRow($rswrk[0]);
-                        $this->ciudad->EditValue = $this->ciudad->displayValue($arwrk);
-                    } else {
-                        $this->ciudad->EditValue = HtmlEncode($this->ciudad->CurrentValue);
-                    }
-                }
-            } else {
-                $this->ciudad->EditValue = null;
-            }
-            $this->ciudad->PlaceHolder = RemoveHtml($this->ciudad->caption());
-
-            // zona
-            $this->zona->setupEditAttributes();
-            if (!$this->zona->Raw) {
-                $this->zona->CurrentValue = HtmlDecode($this->zona->CurrentValue);
-            }
-            $this->zona->EditValue = HtmlEncode($this->zona->CurrentValue);
-            $this->zona->PlaceHolder = RemoveHtml($this->zona->caption());
 
             // direccion
             $this->direccion->setupEditAttributes();
@@ -1582,50 +1303,6 @@ class ClienteAdd extends Cliente
             $this->email1->EditValue = HtmlEncode($this->email1->CurrentValue);
             $this->email1->PlaceHolder = RemoveHtml($this->email1->caption());
 
-            // email2
-            $this->email2->setupEditAttributes();
-            if (!$this->email2->Raw) {
-                $this->email2->CurrentValue = HtmlDecode($this->email2->CurrentValue);
-            }
-            $this->email2->EditValue = HtmlEncode($this->email2->CurrentValue);
-            $this->email2->PlaceHolder = RemoveHtml($this->email2->caption());
-
-            // web
-            $this->web->setupEditAttributes();
-            if (!$this->web->Raw) {
-                $this->web->CurrentValue = HtmlDecode($this->web->CurrentValue);
-            }
-            $this->web->EditValue = HtmlEncode($this->web->CurrentValue);
-            $this->web->PlaceHolder = RemoveHtml($this->web->caption());
-
-            // tipo_cliente
-            $this->tipo_cliente->setupEditAttributes();
-            $curVal = trim(strval($this->tipo_cliente->CurrentValue));
-            if ($curVal != "") {
-                $this->tipo_cliente->ViewValue = $this->tipo_cliente->lookupCacheOption($curVal);
-            } else {
-                $this->tipo_cliente->ViewValue = $this->tipo_cliente->Lookup !== null && is_array($this->tipo_cliente->lookupOptions()) && count($this->tipo_cliente->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->tipo_cliente->ViewValue !== null) { // Load from cache
-                $this->tipo_cliente->EditValue = array_values($this->tipo_cliente->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->tipo_cliente->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $this->tipo_cliente->CurrentValue, $this->tipo_cliente->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->tipo_cliente->getSelectFilter($this); // PHP
-                $sqlWrk = $this->tipo_cliente->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->tipo_cliente->EditValue = $arwrk;
-            }
-            $this->tipo_cliente->PlaceHolder = RemoveHtml($this->tipo_cliente->caption());
-
             // tarifa
             $this->tarifa->setupEditAttributes();
             $curVal = trim(strval($this->tarifa->CurrentValue));
@@ -1654,23 +1331,6 @@ class ClienteAdd extends Cliente
             }
             $this->tarifa->PlaceHolder = RemoveHtml($this->tarifa->caption());
 
-            // consignacion
-            $this->consignacion->setupEditAttributes();
-            $this->consignacion->EditValue = $this->consignacion->options(true);
-            $this->consignacion->PlaceHolder = RemoveHtml($this->consignacion->caption());
-
-            // limite_credito
-            $this->limite_credito->setupEditAttributes();
-            $this->limite_credito->EditValue = $this->limite_credito->CurrentValue;
-            $this->limite_credito->PlaceHolder = RemoveHtml($this->limite_credito->caption());
-            if (strval($this->limite_credito->EditValue) != "" && is_numeric($this->limite_credito->EditValue)) {
-                $this->limite_credito->EditValue = FormatNumber($this->limite_credito->EditValue, null);
-            }
-
-            // condicion
-            $this->condicion->EditValue = $this->condicion->options(false);
-            $this->condicion->PlaceHolder = RemoveHtml($this->condicion->caption());
-
             // codigo
             $this->codigo->setupEditAttributes();
             if (!$this->codigo->Raw) {
@@ -1684,84 +1344,6 @@ class ClienteAdd extends Cliente
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
-            // foto1
-            $this->foto1->setupEditAttributes();
-            if (!EmptyValue($this->foto1->Upload->DbValue)) {
-                $this->foto1->ImageWidth = 120;
-                $this->foto1->ImageHeight = 120;
-                $this->foto1->ImageAlt = $this->foto1->alt();
-                $this->foto1->ImageCssClass = "ew-image";
-                $this->foto1->EditValue = $this->foto1->Upload->DbValue;
-            } else {
-                $this->foto1->EditValue = "";
-            }
-            if (!EmptyValue($this->foto1->CurrentValue)) {
-                $this->foto1->Upload->FileName = $this->foto1->CurrentValue;
-            }
-            if (!Config("CREATE_UPLOAD_FILE_ON_COPY")) {
-                $this->foto1->Upload->DbValue = null;
-            }
-            if ($this->isShow() || $this->isCopy()) {
-                RenderUploadField($this->foto1);
-            }
-
-            // foto2
-            $this->foto2->setupEditAttributes();
-            if (!EmptyValue($this->foto2->Upload->DbValue)) {
-                $this->foto2->ImageWidth = 120;
-                $this->foto2->ImageHeight = 120;
-                $this->foto2->ImageAlt = $this->foto2->alt();
-                $this->foto2->ImageCssClass = "ew-image";
-                $this->foto2->EditValue = $this->foto2->Upload->DbValue;
-            } else {
-                $this->foto2->EditValue = "";
-            }
-            if (!EmptyValue($this->foto2->CurrentValue)) {
-                $this->foto2->Upload->FileName = $this->foto2->CurrentValue;
-            }
-            if (!Config("CREATE_UPLOAD_FILE_ON_COPY")) {
-                $this->foto2->Upload->DbValue = null;
-            }
-            if ($this->isShow() || $this->isCopy()) {
-                RenderUploadField($this->foto2);
-            }
-
-            // dias_credito
-            $this->dias_credito->setupEditAttributes();
-            $curVal = trim(strval($this->dias_credito->CurrentValue));
-            if ($curVal != "") {
-                $this->dias_credito->ViewValue = $this->dias_credito->lookupCacheOption($curVal);
-            } else {
-                $this->dias_credito->ViewValue = $this->dias_credito->Lookup !== null && is_array($this->dias_credito->lookupOptions()) && count($this->dias_credito->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->dias_credito->ViewValue !== null) { // Load from cache
-                $this->dias_credito->EditValue = array_values($this->dias_credito->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->dias_credito->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $this->dias_credito->CurrentValue, $this->dias_credito->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->dias_credito->getSelectFilter($this); // PHP
-                $sqlWrk = $this->dias_credito->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->dias_credito->EditValue = $arwrk;
-            }
-            $this->dias_credito->PlaceHolder = RemoveHtml($this->dias_credito->caption());
-
-            // descuento
-            $this->descuento->setupEditAttributes();
-            $this->descuento->EditValue = $this->descuento->CurrentValue;
-            $this->descuento->PlaceHolder = RemoveHtml($this->descuento->caption());
-            if (strval($this->descuento->EditValue) != "" && is_numeric($this->descuento->EditValue)) {
-                $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
-            }
-
             // Add refer script
 
             // ci_rif
@@ -1769,18 +1351,6 @@ class ClienteAdd extends Cliente
 
             // nombre
             $this->nombre->HrefValue = "";
-
-            // sucursal
-            $this->sucursal->HrefValue = "";
-
-            // contacto
-            $this->contacto->HrefValue = "";
-
-            // ciudad
-            $this->ciudad->HrefValue = "";
-
-            // zona
-            $this->zona->HrefValue = "";
 
             // direccion
             $this->direccion->HrefValue = "";
@@ -1794,62 +1364,14 @@ class ClienteAdd extends Cliente
             // email1
             $this->email1->HrefValue = "";
 
-            // email2
-            $this->email2->HrefValue = "";
-
-            // web
-            $this->web->HrefValue = "";
-
-            // tipo_cliente
-            $this->tipo_cliente->HrefValue = "";
-
             // tarifa
             $this->tarifa->HrefValue = "";
-
-            // consignacion
-            $this->consignacion->HrefValue = "";
-
-            // limite_credito
-            $this->limite_credito->HrefValue = "";
-
-            // condicion
-            $this->condicion->HrefValue = "";
 
             // codigo
             $this->codigo->HrefValue = "";
 
             // activo
             $this->activo->HrefValue = "";
-
-            // foto1
-            if (!EmptyValue($this->foto1->Upload->DbValue)) {
-                $this->foto1->HrefValue = GetFileUploadUrl($this->foto1, $this->foto1->htmlDecode($this->foto1->Upload->DbValue)); // Add prefix/suffix
-                $this->foto1->LinkAttrs["target"] = "_blank"; // Add target
-                if ($this->isExport()) {
-                    $this->foto1->HrefValue = FullUrl($this->foto1->HrefValue, "href");
-                }
-            } else {
-                $this->foto1->HrefValue = "";
-            }
-            $this->foto1->ExportHrefValue = $this->foto1->UploadPath . $this->foto1->Upload->DbValue;
-
-            // foto2
-            if (!EmptyValue($this->foto2->Upload->DbValue)) {
-                $this->foto2->HrefValue = GetFileUploadUrl($this->foto2, $this->foto2->htmlDecode($this->foto2->Upload->DbValue)); // Add prefix/suffix
-                $this->foto2->LinkAttrs["target"] = "_blank"; // Add target
-                if ($this->isExport()) {
-                    $this->foto2->HrefValue = FullUrl($this->foto2->HrefValue, "href");
-                }
-            } else {
-                $this->foto2->HrefValue = "";
-            }
-            $this->foto2->ExportHrefValue = $this->foto2->UploadPath . $this->foto2->Upload->DbValue;
-
-            // dias_credito
-            $this->dias_credito->HrefValue = "";
-
-            // descuento
-            $this->descuento->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1869,67 +1391,19 @@ class ClienteAdd extends Cliente
         // Set up CurrentValue
         $this->ci_rif->CurrentValue = $row["ci_rif"] ?? null;
         $this->nombre->CurrentValue = $row["nombre"] ?? null;
-        $this->sucursal->CurrentValue = $row["sucursal"] ?? null;
-        $this->contacto->CurrentValue = $row["contacto"] ?? null;
-        $this->ciudad->CurrentValue = $row["ciudad"] ?? null;
-        $this->zona->CurrentValue = $row["zona"] ?? null;
         $this->direccion->CurrentValue = $row["direccion"] ?? null;
         $this->telefono1->CurrentValue = $row["telefono1"] ?? null;
         $this->telefono2->CurrentValue = $row["telefono2"] ?? null;
         $this->email1->CurrentValue = $row["email1"] ?? null;
-        $this->email2->CurrentValue = $row["email2"] ?? null;
-        $this->web->CurrentValue = $row["web"] ?? null;
-        $this->tipo_cliente->CurrentValue = $row["tipo_cliente"] ?? null;
         $this->tarifa->CurrentValue = $row["tarifa"] ?? null;
-        $this->consignacion->CurrentValue = $row["consignacion"] ?? null;
-        $this->limite_credito->CurrentValue = $row["limite_credito"] ?? null;
-        $this->condicion->CurrentValue = $row["condicion"] ?? null;
         $this->codigo->CurrentValue = $row["codigo"] ?? null;
         $this->activo->CurrentValue = $row["activo"] ?? null;
-        $this->foto1->CurrentValue = $row["foto1"] ?? null;
-        $this->foto2->CurrentValue = $row["foto2"] ?? null;
-        $this->dias_credito->CurrentValue = $row["dias_credito"] ?? null;
-        $this->descuento->CurrentValue = $row["descuento"] ?? null;
 
         // ci_rif
         $this->ci_rif->ViewValue = $this->ci_rif->CurrentValue;
 
         // nombre
         $this->nombre->ViewValue = $this->nombre->CurrentValue;
-
-        // sucursal
-        $this->sucursal->ViewValue = $this->sucursal->CurrentValue;
-
-        // contacto
-        $this->contacto->ViewValue = $this->contacto->CurrentValue;
-
-        // ciudad
-        $this->ciudad->ViewValue = $this->ciudad->CurrentValue;
-        $curVal = strval($this->ciudad->CurrentValue);
-        if ($curVal != "") {
-            $this->ciudad->ViewValue = $this->ciudad->lookupCacheOption($curVal);
-            if ($this->ciudad->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->ciudad->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->ciudad->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                $lookupFilter = $this->ciudad->getSelectFilter($this); // PHP
-                $sqlWrk = $this->ciudad->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->ciudad->Lookup->renderViewRow($rswrk[0]);
-                    $this->ciudad->ViewValue = $this->ciudad->displayValue($arwrk);
-                } else {
-                    $this->ciudad->ViewValue = $this->ciudad->CurrentValue;
-                }
-            }
-        } else {
-            $this->ciudad->ViewValue = null;
-        }
-
-        // zona
-        $this->zona->ViewValue = $this->zona->CurrentValue;
 
         // direccion
         $this->direccion->ViewValue = $this->direccion->CurrentValue;
@@ -1942,36 +1416,6 @@ class ClienteAdd extends Cliente
 
         // email1
         $this->email1->ViewValue = $this->email1->CurrentValue;
-
-        // email2
-        $this->email2->ViewValue = $this->email2->CurrentValue;
-
-        // web
-        $this->web->ViewValue = $this->web->CurrentValue;
-
-        // tipo_cliente
-        $curVal = strval($this->tipo_cliente->CurrentValue);
-        if ($curVal != "") {
-            $this->tipo_cliente->ViewValue = $this->tipo_cliente->lookupCacheOption($curVal);
-            if ($this->tipo_cliente->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->tipo_cliente->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_cliente->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                $lookupFilter = $this->tipo_cliente->getSelectFilter($this); // PHP
-                $sqlWrk = $this->tipo_cliente->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->tipo_cliente->Lookup->renderViewRow($rswrk[0]);
-                    $this->tipo_cliente->ViewValue = $this->tipo_cliente->displayValue($arwrk);
-                } else {
-                    $this->tipo_cliente->ViewValue = $this->tipo_cliente->CurrentValue;
-                }
-            }
-        } else {
-            $this->tipo_cliente->ViewValue = null;
-        }
 
         // tarifa
         $curVal = strval($this->tarifa->CurrentValue);
@@ -1997,24 +1441,6 @@ class ClienteAdd extends Cliente
             $this->tarifa->ViewValue = null;
         }
 
-        // consignacion
-        if (strval($this->consignacion->CurrentValue) != "") {
-            $this->consignacion->ViewValue = $this->consignacion->optionCaption($this->consignacion->CurrentValue);
-        } else {
-            $this->consignacion->ViewValue = null;
-        }
-
-        // limite_credito
-        $this->limite_credito->ViewValue = $this->limite_credito->CurrentValue;
-        $this->limite_credito->ViewValue = FormatNumber($this->limite_credito->ViewValue, $this->limite_credito->formatPattern());
-
-        // condicion
-        if (strval($this->condicion->CurrentValue) != "") {
-            $this->condicion->ViewValue = $this->condicion->optionCaption($this->condicion->CurrentValue);
-        } else {
-            $this->condicion->ViewValue = null;
-        }
-
         // codigo
         $this->codigo->ViewValue = $this->codigo->CurrentValue;
 
@@ -2025,80 +1451,16 @@ class ClienteAdd extends Cliente
             $this->activo->ViewValue = null;
         }
 
-        // foto1
-        if (!EmptyValue($this->foto1->Upload->DbValue)) {
-            $this->foto1->ImageWidth = 120;
-            $this->foto1->ImageHeight = 120;
-            $this->foto1->ImageAlt = $this->foto1->alt();
-            $this->foto1->ImageCssClass = "ew-image";
-            $this->foto1->ViewValue = $this->foto1->Upload->DbValue;
-        } else {
-            $this->foto1->ViewValue = "";
-        }
-
-        // foto2
-        if (!EmptyValue($this->foto2->Upload->DbValue)) {
-            $this->foto2->ImageWidth = 120;
-            $this->foto2->ImageHeight = 120;
-            $this->foto2->ImageAlt = $this->foto2->alt();
-            $this->foto2->ImageCssClass = "ew-image";
-            $this->foto2->ViewValue = $this->foto2->Upload->DbValue;
-        } else {
-            $this->foto2->ViewValue = "";
-        }
-
-        // dias_credito
-        $curVal = strval($this->dias_credito->CurrentValue);
-        if ($curVal != "") {
-            $this->dias_credito->ViewValue = $this->dias_credito->lookupCacheOption($curVal);
-            if ($this->dias_credito->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->dias_credito->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->dias_credito->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
-                $lookupFilter = $this->dias_credito->getSelectFilter($this); // PHP
-                $sqlWrk = $this->dias_credito->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->dias_credito->Lookup->renderViewRow($rswrk[0]);
-                    $this->dias_credito->ViewValue = $this->dias_credito->displayValue($arwrk);
-                } else {
-                    $this->dias_credito->ViewValue = FormatNumber($this->dias_credito->CurrentValue, $this->dias_credito->formatPattern());
-                }
-            }
-        } else {
-            $this->dias_credito->ViewValue = null;
-        }
-
-        // descuento
-        $this->descuento->ViewValue = $this->descuento->CurrentValue;
-        $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
-
         // Set up $row
         $row["ci_rif"] = $this->ci_rif->ViewValue;
         $row["nombre"] = $this->nombre->ViewValue;
-        $row["sucursal"] = $this->sucursal->ViewValue;
-        $row["contacto"] = $this->contacto->ViewValue;
-        $row["ciudad"] = $this->ciudad->ViewValue;
-        $row["zona"] = $this->zona->ViewValue;
         $row["direccion"] = $this->direccion->ViewValue;
         $row["telefono1"] = $this->telefono1->ViewValue;
         $row["telefono2"] = $this->telefono2->ViewValue;
         $row["email1"] = $this->email1->ViewValue;
-        $row["email2"] = $this->email2->ViewValue;
-        $row["web"] = $this->web->ViewValue;
-        $row["tipo_cliente"] = $this->tipo_cliente->ViewValue;
         $row["tarifa"] = $this->tarifa->ViewValue;
-        $row["consignacion"] = $this->consignacion->ViewValue;
-        $row["limite_credito"] = $this->limite_credito->ViewValue;
-        $row["condicion"] = $this->condicion->ViewValue;
         $row["codigo"] = $this->codigo->ViewValue;
         $row["activo"] = $this->activo->ViewValue;
-        $row["foto1"] = $this->foto1->ViewValue;
-        $row["foto2"] = $this->foto2->ViewValue;
-        $row["dias_credito"] = $this->dias_credito->ViewValue;
-        $row["descuento"] = $this->descuento->ViewValue;
         return $row;
     }
 
@@ -2120,26 +1482,6 @@ class ClienteAdd extends Cliente
             if ($this->nombre->Visible && $this->nombre->Required) {
                 if (!$this->nombre->IsDetailKey && EmptyValue($this->nombre->FormValue)) {
                     $this->nombre->addErrorMessage(str_replace("%s", $this->nombre->caption(), $this->nombre->RequiredErrorMessage));
-                }
-            }
-            if ($this->sucursal->Visible && $this->sucursal->Required) {
-                if (!$this->sucursal->IsDetailKey && EmptyValue($this->sucursal->FormValue)) {
-                    $this->sucursal->addErrorMessage(str_replace("%s", $this->sucursal->caption(), $this->sucursal->RequiredErrorMessage));
-                }
-            }
-            if ($this->contacto->Visible && $this->contacto->Required) {
-                if (!$this->contacto->IsDetailKey && EmptyValue($this->contacto->FormValue)) {
-                    $this->contacto->addErrorMessage(str_replace("%s", $this->contacto->caption(), $this->contacto->RequiredErrorMessage));
-                }
-            }
-            if ($this->ciudad->Visible && $this->ciudad->Required) {
-                if (!$this->ciudad->IsDetailKey && EmptyValue($this->ciudad->FormValue)) {
-                    $this->ciudad->addErrorMessage(str_replace("%s", $this->ciudad->caption(), $this->ciudad->RequiredErrorMessage));
-                }
-            }
-            if ($this->zona->Visible && $this->zona->Required) {
-                if (!$this->zona->IsDetailKey && EmptyValue($this->zona->FormValue)) {
-                    $this->zona->addErrorMessage(str_replace("%s", $this->zona->caption(), $this->zona->RequiredErrorMessage));
                 }
             }
             if ($this->direccion->Visible && $this->direccion->Required) {
@@ -2165,42 +1507,9 @@ class ClienteAdd extends Cliente
             if (!CheckEmail($this->email1->FormValue)) {
                 $this->email1->addErrorMessage($this->email1->getErrorMessage(false));
             }
-            if ($this->email2->Visible && $this->email2->Required) {
-                if (!$this->email2->IsDetailKey && EmptyValue($this->email2->FormValue)) {
-                    $this->email2->addErrorMessage(str_replace("%s", $this->email2->caption(), $this->email2->RequiredErrorMessage));
-                }
-            }
-            if ($this->web->Visible && $this->web->Required) {
-                if (!$this->web->IsDetailKey && EmptyValue($this->web->FormValue)) {
-                    $this->web->addErrorMessage(str_replace("%s", $this->web->caption(), $this->web->RequiredErrorMessage));
-                }
-            }
-            if ($this->tipo_cliente->Visible && $this->tipo_cliente->Required) {
-                if (!$this->tipo_cliente->IsDetailKey && EmptyValue($this->tipo_cliente->FormValue)) {
-                    $this->tipo_cliente->addErrorMessage(str_replace("%s", $this->tipo_cliente->caption(), $this->tipo_cliente->RequiredErrorMessage));
-                }
-            }
             if ($this->tarifa->Visible && $this->tarifa->Required) {
                 if (!$this->tarifa->IsDetailKey && EmptyValue($this->tarifa->FormValue)) {
                     $this->tarifa->addErrorMessage(str_replace("%s", $this->tarifa->caption(), $this->tarifa->RequiredErrorMessage));
-                }
-            }
-            if ($this->consignacion->Visible && $this->consignacion->Required) {
-                if (!$this->consignacion->IsDetailKey && EmptyValue($this->consignacion->FormValue)) {
-                    $this->consignacion->addErrorMessage(str_replace("%s", $this->consignacion->caption(), $this->consignacion->RequiredErrorMessage));
-                }
-            }
-            if ($this->limite_credito->Visible && $this->limite_credito->Required) {
-                if (!$this->limite_credito->IsDetailKey && EmptyValue($this->limite_credito->FormValue)) {
-                    $this->limite_credito->addErrorMessage(str_replace("%s", $this->limite_credito->caption(), $this->limite_credito->RequiredErrorMessage));
-                }
-            }
-            if (!CheckNumber($this->limite_credito->FormValue)) {
-                $this->limite_credito->addErrorMessage($this->limite_credito->getErrorMessage(false));
-            }
-            if ($this->condicion->Visible && $this->condicion->Required) {
-                if ($this->condicion->FormValue == "") {
-                    $this->condicion->addErrorMessage(str_replace("%s", $this->condicion->caption(), $this->condicion->RequiredErrorMessage));
                 }
             }
             if ($this->codigo->Visible && $this->codigo->Required) {
@@ -2212,29 +1521,6 @@ class ClienteAdd extends Cliente
                 if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
                     $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
                 }
-            }
-            if ($this->foto1->Visible && $this->foto1->Required) {
-                if ($this->foto1->Upload->FileName == "" && !$this->foto1->Upload->KeepFile) {
-                    $this->foto1->addErrorMessage(str_replace("%s", $this->foto1->caption(), $this->foto1->RequiredErrorMessage));
-                }
-            }
-            if ($this->foto2->Visible && $this->foto2->Required) {
-                if ($this->foto2->Upload->FileName == "" && !$this->foto2->Upload->KeepFile) {
-                    $this->foto2->addErrorMessage(str_replace("%s", $this->foto2->caption(), $this->foto2->RequiredErrorMessage));
-                }
-            }
-            if ($this->dias_credito->Visible && $this->dias_credito->Required) {
-                if (!$this->dias_credito->IsDetailKey && EmptyValue($this->dias_credito->FormValue)) {
-                    $this->dias_credito->addErrorMessage(str_replace("%s", $this->dias_credito->caption(), $this->dias_credito->RequiredErrorMessage));
-                }
-            }
-            if ($this->descuento->Visible && $this->descuento->Required) {
-                if (!$this->descuento->IsDetailKey && EmptyValue($this->descuento->FormValue)) {
-                    $this->descuento->addErrorMessage(str_replace("%s", $this->descuento->caption(), $this->descuento->RequiredErrorMessage));
-                }
-            }
-            if (!CheckInteger($this->descuento->FormValue)) {
-                $this->descuento->addErrorMessage($this->descuento->getErrorMessage(false));
             }
 
         // Validate detail grid
@@ -2264,20 +1550,6 @@ class ClienteAdd extends Cliente
 
         // Get new row
         $rsnew = $this->getAddRow();
-        if ($this->foto1->Visible && !$this->foto1->Upload->KeepFile) {
-            if (!EmptyValue($this->foto1->Upload->FileName)) {
-                $this->foto1->Upload->DbValue = null;
-                FixUploadFileNames($this->foto1);
-                $this->foto1->setDbValueDef($rsnew, $this->foto1->Upload->FileName, false);
-            }
-        }
-        if ($this->foto2->Visible && !$this->foto2->Upload->KeepFile) {
-            if (!EmptyValue($this->foto2->Upload->FileName)) {
-                $this->foto2->Upload->DbValue = null;
-                FixUploadFileNames($this->foto2);
-                $this->foto2->setDbValueDef($rsnew, $this->foto2->Upload->FileName, false);
-            }
-        }
 
         // Update current values
         $this->setCurrentValues($rsnew);
@@ -2296,20 +1568,6 @@ class ClienteAdd extends Cliente
         if ($insertRow) {
             $addRow = $this->insert($rsnew);
             if ($addRow) {
-                if ($this->foto1->Visible && !$this->foto1->Upload->KeepFile) {
-                    $this->foto1->Upload->DbValue = null;
-                    if (!SaveUploadFiles($this->foto1, $rsnew['foto1'], false)) {
-                        $this->setFailureMessage($Language->phrase("UploadError7"));
-                        return false;
-                    }
-                }
-                if ($this->foto2->Visible && !$this->foto2->Upload->KeepFile) {
-                    $this->foto2->Upload->DbValue = null;
-                    if (!SaveUploadFiles($this->foto2, $rsnew['foto2'], false)) {
-                        $this->setFailureMessage($Language->phrase("UploadError7"));
-                        return false;
-                    }
-                }
             } elseif (!EmptyValue($this->DbErrorMessage)) { // Show database error
                 $this->setFailureMessage($this->DbErrorMessage);
             }
@@ -2389,18 +1647,6 @@ class ClienteAdd extends Cliente
         // nombre
         $this->nombre->setDbValueDef($rsnew, $this->nombre->CurrentValue, false);
 
-        // sucursal
-        $this->sucursal->setDbValueDef($rsnew, $this->sucursal->CurrentValue, false);
-
-        // contacto
-        $this->contacto->setDbValueDef($rsnew, $this->contacto->CurrentValue, false);
-
-        // ciudad
-        $this->ciudad->setDbValueDef($rsnew, $this->ciudad->CurrentValue, false);
-
-        // zona
-        $this->zona->setDbValueDef($rsnew, $this->zona->CurrentValue, false);
-
         // direccion
         $this->direccion->setDbValueDef($rsnew, $this->direccion->CurrentValue, false);
 
@@ -2413,58 +1659,14 @@ class ClienteAdd extends Cliente
         // email1
         $this->email1->setDbValueDef($rsnew, $this->email1->CurrentValue, false);
 
-        // email2
-        $this->email2->setDbValueDef($rsnew, $this->email2->CurrentValue, false);
-
-        // web
-        $this->web->setDbValueDef($rsnew, $this->web->CurrentValue, false);
-
-        // tipo_cliente
-        $this->tipo_cliente->setDbValueDef($rsnew, $this->tipo_cliente->CurrentValue, false);
-
         // tarifa
         $this->tarifa->setDbValueDef($rsnew, $this->tarifa->CurrentValue, false);
-
-        // consignacion
-        $this->consignacion->setDbValueDef($rsnew, $this->consignacion->CurrentValue, strval($this->consignacion->CurrentValue) == "");
-
-        // limite_credito
-        $this->limite_credito->setDbValueDef($rsnew, $this->limite_credito->CurrentValue, false);
-
-        // condicion
-        $this->condicion->setDbValueDef($rsnew, $this->condicion->CurrentValue, false);
 
         // codigo
         $this->codigo->setDbValueDef($rsnew, $this->codigo->CurrentValue, false);
 
         // activo
         $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, strval($this->activo->CurrentValue) == "");
-
-        // foto1
-        if ($this->foto1->Visible && !$this->foto1->Upload->KeepFile) {
-            if ($this->foto1->Upload->FileName == "") {
-                $rsnew['foto1'] = null;
-            } else {
-                FixUploadTempFileNames($this->foto1);
-                $rsnew['foto1'] = $this->foto1->Upload->FileName;
-            }
-        }
-
-        // foto2
-        if ($this->foto2->Visible && !$this->foto2->Upload->KeepFile) {
-            if ($this->foto2->Upload->FileName == "") {
-                $rsnew['foto2'] = null;
-            } else {
-                FixUploadTempFileNames($this->foto2);
-                $rsnew['foto2'] = $this->foto2->Upload->FileName;
-            }
-        }
-
-        // dias_credito
-        $this->dias_credito->setDbValueDef($rsnew, $this->dias_credito->CurrentValue, false);
-
-        // descuento
-        $this->descuento->setDbValueDef($rsnew, $this->descuento->CurrentValue, false);
         return $rsnew;
     }
 
@@ -2480,18 +1682,6 @@ class ClienteAdd extends Cliente
         if (isset($row['nombre'])) { // nombre
             $this->nombre->setFormValue($row['nombre']);
         }
-        if (isset($row['sucursal'])) { // sucursal
-            $this->sucursal->setFormValue($row['sucursal']);
-        }
-        if (isset($row['contacto'])) { // contacto
-            $this->contacto->setFormValue($row['contacto']);
-        }
-        if (isset($row['ciudad'])) { // ciudad
-            $this->ciudad->setFormValue($row['ciudad']);
-        }
-        if (isset($row['zona'])) { // zona
-            $this->zona->setFormValue($row['zona']);
-        }
         if (isset($row['direccion'])) { // direccion
             $this->direccion->setFormValue($row['direccion']);
         }
@@ -2504,44 +1694,14 @@ class ClienteAdd extends Cliente
         if (isset($row['email1'])) { // email1
             $this->email1->setFormValue($row['email1']);
         }
-        if (isset($row['email2'])) { // email2
-            $this->email2->setFormValue($row['email2']);
-        }
-        if (isset($row['web'])) { // web
-            $this->web->setFormValue($row['web']);
-        }
-        if (isset($row['tipo_cliente'])) { // tipo_cliente
-            $this->tipo_cliente->setFormValue($row['tipo_cliente']);
-        }
         if (isset($row['tarifa'])) { // tarifa
             $this->tarifa->setFormValue($row['tarifa']);
-        }
-        if (isset($row['consignacion'])) { // consignacion
-            $this->consignacion->setFormValue($row['consignacion']);
-        }
-        if (isset($row['limite_credito'])) { // limite_credito
-            $this->limite_credito->setFormValue($row['limite_credito']);
-        }
-        if (isset($row['condicion'])) { // condicion
-            $this->condicion->setFormValue($row['condicion']);
         }
         if (isset($row['codigo'])) { // codigo
             $this->codigo->setFormValue($row['codigo']);
         }
         if (isset($row['activo'])) { // activo
             $this->activo->setFormValue($row['activo']);
-        }
-        if (isset($row['foto1'])) { // foto1
-            $this->foto1->setFormValue($row['foto1']);
-        }
-        if (isset($row['foto2'])) { // foto2
-            $this->foto2->setFormValue($row['foto2']);
-        }
-        if (isset($row['dias_credito'])) { // dias_credito
-            $this->dias_credito->setFormValue($row['dias_credito']);
-        }
-        if (isset($row['descuento'])) { // descuento
-            $this->descuento->setFormValue($row['descuento']);
         }
     }
 

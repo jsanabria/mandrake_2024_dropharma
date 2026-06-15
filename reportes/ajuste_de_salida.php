@@ -18,13 +18,55 @@ $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
 $GLOBALS["estatus"] = $row["estatus"];
 
+$GLOBALS["ocultar_costos"] = false;
+
+if ($row["tipo_documento"] == "TDCASA") {
+    $GLOBALS["ocultar_costos"] = true;
+}
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	function MarcaDeAgua()
+	{
+	    $this->SetFont('Arial','B',32);
+	    $this->SetTextColor(245,245,245);
+
+	    $this->RotatedText(
+	        65,
+	        120,
+	        mb_convert_encoding("SIN DERECHO A CRÃ‰DITO FISCAL", "ISO-8859-1"),
+	        25
+	    );
+
+	    $this->SetTextColor(0,0,0);
+	}
+
+	function RotatedText($x, $y, $txt, $angle)
+	{
+	    $this->_out(
+	        sprintf(
+	            'q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm CP n',
+	            cos(deg2rad($angle)),
+	            sin(deg2rad($angle)),
+	            -sin(deg2rad($angle)),
+	            cos(deg2rad($angle)),
+	            $x,
+	            $y,
+	            -$x,
+	            -$y
+	        )
+	    );
+
+	    $this->Text($x, $y, $txt);
+	    $this->_out('Q');
+	}
+
+	// Cabecera de p?gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
+		$this->MarcaDeAgua();
+
+		// Consulto datos de la compa??a 
 		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
@@ -131,24 +173,31 @@ class PDF extends FPDF
 		$this->Cell(10, 6);
 		$this->Cell(20, 6, "CODIGO", 1, 0, 'L');
 		$this->Cell(25, 6, "LAB", 1, 0, 'L');
-		$this->Cell(55, 6, "ARTICULO", 1, 0, 'L');
+		$anchoArticulo = ($GLOBALS["ocultar_costos"]) ? 90 : 55;
+		$this->Cell($anchoArticulo, 6, "ARTICULO", 1, 0, 'L');
+
 		$this->Cell(20, 6, "LOTE", 1, 0, 'L');
 		$this->Cell(15, 6, "VENCE", 1, 0, 'L');
 		$this->Cell(15, 6, "ALMACEN", 1, 0, 'C');
+
 		$this->Cell(10, 6, "CANT", 1, 0, 'R');
-		$this->Cell(17, 6, "COSTO", 1, 0, 'R');
-		$this->Cell(18, 6, "TOTAL", 1, 0, 'R');
+
+		if (!$GLOBALS["ocultar_costos"]) {
+		    $this->Cell(17, 6, "COSTO", 1, 0, 'R');
+		    $this->Cell(18, 6, "TOTAL", 1, 0, 'R');
+		}
+
 		$this->Ln(6);
 	}
 	
-	// Pie de página
+	// Pie de p?gina
 	function Footer()
 	{
-		// Posición: a 1,5 cm del final
+		// Posici?n: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Arial','I',8);
-		// Número de página
+		// N?mero de p?gina
 		$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
@@ -157,14 +206,23 @@ class PDF extends FPDF
 		//$this->AddPage();
 		//require("../connect.php");
 		$this->Ln();
-		$this->Cell(145, 6, "ITEMS: "  . $items, 0, 0, 'R');
-		$this->Cell(25, 6, "UNIDADES: "  . $unidades, 0, 0, 'R');
-		$this->Cell(35, 6, "TOTAL: "  . number_format($tot, 2, ",", "."), 0, 0, 'R');
+		if ($GLOBALS["ocultar_costos"]) {
+
+		    $this->Cell(170, 6, "ITEMS: "  . $items, 0, 0, 'R');
+		    $this->Cell(35, 6, "UNIDADES: "  . $unidades, 0, 0, 'R');
+
+		} else {
+
+		    $this->Cell(145, 6, "ITEMS: "  . $items, 0, 0, 'R');
+		    $this->Cell(25, 6, "UNIDADES: "  . $unidades, 0, 0, 'R');
+		    $this->Cell(35, 6, "TOTAL: "  . number_format($tot, 2, ",", "."), 0, 0, 'R');
+
+		}
 		//require("../include/desconnect.php");
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaci?n del objeto de la clase heredada
 $pdf = new PDF('P', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();
@@ -204,10 +262,13 @@ while($row = mysqli_fetch_array($rs))
 	$pdf->Cell(10, 4);
 	$pdf->Cell(20, 4, $row["codigo"], 0, 0, 'L');
 	$pdf->Cell(25, 4, substr($row["lab"], 0, 10), 0, 0, 'L');
-	if(strlen($row["articulo"]) < 30) 
-		$pdf->Cell(55, 4, trim($row["articulo"]), 0, 0, 'L');
-	else 
-		$pdf->Cell(55, 4, trim(substr($row["articulo"], 0, 30)), 0, 0, 'L');
+
+	$anchoArticulo = ($GLOBALS["ocultar_costos"]) ? 90 : 55;
+	if(strlen($row["articulo"]) < 65)
+	    $pdf->Cell($anchoArticulo, 4, trim($row["articulo"]), 0, 0, 'L');
+	else
+	    $pdf->Cell($anchoArticulo, 4, trim(substr($row["articulo"], 0, 50)), 0, 0, 'L');
+
 	$pdf->Cell(20, 4, $row["lote"], 0, 0, 'C');
 	$pdf->Cell(15, 4, $row["fecha_vencimiento"], 0, 0, 'C');
 	$abrev = explode(" ", $row["almacen"]);
@@ -216,14 +277,21 @@ while($row = mysqli_fetch_array($rs))
 		$almacen .= substr($value, 0, 5) . " ";
 	}
 	$pdf->Cell(15, 4, $almacen, 0, 0, 'L');
-	$pdf->Cell(10, 4, $row["cantidad"], 0, 0, 'R');
-	$pdf->Cell(17, 4, number_format($row["costo_unidad"], 2,'.',','), 0, 0, 'R');
-	$pdf->Cell(18, 4, number_format($row["costo"], 2,'.',','), 0, 0, 'R');
 
+	$pdf->Cell(10, 4, $row["cantidad"], 0, 0, 'R');
+
+	if (!$GLOBALS["ocultar_costos"]) {
+	    $pdf->Cell(17, 4, number_format($row["costo_unidad"], 2,'.',','), 0, 0, 'R');
+	    $pdf->Cell(18, 4, number_format($row["costo"], 2,'.',','), 0, 0, 'R');
+	}
 	if(strlen($row["articulo"]) >= 30) {
 		$pdf->Ln();
+		$anchoArticulo = ($GLOBALS["ocultar_costos"]) ? 90 : 55;
+
 		$pdf->Cell(55, 4);
-		$pdf->MultiCell(55, 4, trim(substr($row["articulo"], 30, strlen($row["articulo"]))), 0, 'L');
+		$pdf->MultiCell(
+		    $anchoArticulo,
+		    4, trim(substr($row["articulo"], 30, strlen($row["articulo"]))), 0, 'L');
 	}
 	else $pdf->Ln();
 

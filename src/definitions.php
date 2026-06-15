@@ -306,6 +306,8 @@ return [
     "devoluciones_buscar" => \DI\create(DevolucionesBuscar::class),
     "devoluciones_guardar" => \DI\create(DevolucionesGuardar::class),
     "devoluciones_ver" => \DI\create(DevolucionesVer::class),
+    "cliente_rapido_add" => \DI\create(ClienteRapidoAdd::class),
+    "transferencia_almacen_multiple" => \DI\create(TransferenciaAlmacenMultiple::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

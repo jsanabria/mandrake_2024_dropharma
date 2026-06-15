@@ -42,21 +42,31 @@ try {
         }
     }
 
-    // Nro Factura / Nota
-    $sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '$docu';";
+    // Series para estimar consecutivos
+    $serie_doc = $documento . "_DOC";     // FC_DOC, NC_DOC, ND_DOC
+    $serie_ctrl = $documento . "_CTRL";   // FC_CTRL, NC_CTRL, ND_CTRL
+
+    // Configuración de Factura / Nota
+    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
     $rowFact = ExecuteRow($sql);
-    $numero = intval($rowFact["valor1"]) + 1;
+
+    $numero = ObtenerConsecutivoActual("TDCFCV", $serie_doc) + 1;
+
     $prefijo = trim($rowFact["valor2"]);
     $padeo = intval($rowFact["valor3"]);
-    $factura = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT); 
 
-    // Nro Control
-    $sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
+    $factura = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT);
+
+    // Configuración de Control
+    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
     $rowCtrl = ExecuteRow($sql);
-    $numeroCtrl = intval($rowCtrl["valor1"]) + 1;
+
+    $numeroCtrl = ObtenerConsecutivoActual("TDCFCV", $serie_ctrl) + 1;
+
     $prefijoCtrl = trim($rowCtrl["valor2"]);
     $padeoCtrl = intval($rowCtrl["valor3"]);
-    $facturaCTRL = $prefijoCtrl . str_pad($numeroCtrl, $padeoCtrl, "0", STR_PAD_LEFT); 
+
+    $facturaCTRL = $prefijoCtrl . str_pad($numeroCtrl, $padeoCtrl, "0", STR_PAD_LEFT);
 
     // Fecha actual del servidor
     $fechaActual = date("Y-m-d H:i:s");
@@ -66,7 +76,9 @@ try {
         "factura" => $factura,
         "control" => $facturaCTRL,
         "fecha" => $fechaActual,
-        "tipo_doc" => $documento
+        "tipo_doc" => $documento,
+        "estimado" => true,
+        "mensaje_estimado" => "Número estimado. La asignación definitiva se hará al procesar."
     ]);
 
 } catch (\Exception $e) {

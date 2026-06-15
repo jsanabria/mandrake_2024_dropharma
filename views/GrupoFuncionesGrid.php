@@ -131,12 +131,12 @@ $Grid->ListOptions->render("body", "left", $Grid->RowCount);
     <select
         id="x<?= $Grid->RowIndex ?>_funcion"
         name="x<?= $Grid->RowIndex ?>_funcion"
-        class="form-select ew-select<?= $Grid->funcion->isInvalidClass() ?>"
-        <?php if (!$Grid->funcion->IsNativeSelect) { ?>
+        class="form-control ew-select<?= $Grid->funcion->isInvalidClass() ?>"
         data-select2-id="fgrupo_funcionesgrid_x<?= $Grid->RowIndex ?>_funcion"
-        <?php } ?>
         data-table="grupo_funciones"
         data-field="x_funcion"
+        data-caption="<?= HtmlEncode(RemoveHtml($Grid->funcion->caption())) ?>"
+        data-modal-lookup="true"
         data-value-separator="<?= $Grid->funcion->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Grid->funcion->getPlaceHolder()) ?>"
         <?= $Grid->funcion->editAttributes() ?>>
@@ -144,26 +144,18 @@ $Grid->ListOptions->render("body", "left", $Grid->RowCount);
     </select>
     <div class="invalid-feedback"><?= $Grid->funcion->getErrorMessage() ?></div>
 <?= $Grid->funcion->Lookup->getParamTag($Grid, "p_x" . $Grid->RowIndex . "_funcion") ?>
-<?php if (!$Grid->funcion->IsNativeSelect) { ?>
 <script>
 loadjs.ready("fgrupo_funcionesgrid", function() {
-    var options = { name: "x<?= $Grid->RowIndex ?>_funcion", selectId: "fgrupo_funcionesgrid_x<?= $Grid->RowIndex ?>_funcion" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    var options = { name: "x<?= $Grid->RowIndex ?>_funcion", selectId: "fgrupo_funcionesgrid_x<?= $Grid->RowIndex ?>_funcion" };
     if (fgrupo_funcionesgrid.lists.funcion?.lookupOptions.length) {
         options.data = { id: "x<?= $Grid->RowIndex ?>_funcion", form: "fgrupo_funcionesgrid" };
     } else {
         options.ajax = { id: "x<?= $Grid->RowIndex ?>_funcion", form: "fgrupo_funcionesgrid", limit: ew.LOOKUP_PAGE_SIZE };
     }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.grupo_funciones.fields.funcion.selectOptions);
-    ew.createSelect(options);
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.grupo_funciones.fields.funcion.modalLookupOptions);
+    ew.createModalLookup(options);
 });
 </script>
-<?php } ?>
 </span>
 <input type="hidden" data-table="grupo_funciones" data-field="x_funcion" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_funcion" id="o<?= $Grid->RowIndex ?>_funcion" value="<?= HtmlEncode($Grid->funcion->OldValue) ?>">
 <?php } ?>
@@ -172,12 +164,12 @@ loadjs.ready("fgrupo_funcionesgrid", function() {
     <select
         id="x<?= $Grid->RowIndex ?>_funcion"
         name="x<?= $Grid->RowIndex ?>_funcion"
-        class="form-select ew-select<?= $Grid->funcion->isInvalidClass() ?>"
-        <?php if (!$Grid->funcion->IsNativeSelect) { ?>
+        class="form-control ew-select<?= $Grid->funcion->isInvalidClass() ?>"
         data-select2-id="fgrupo_funcionesgrid_x<?= $Grid->RowIndex ?>_funcion"
-        <?php } ?>
         data-table="grupo_funciones"
         data-field="x_funcion"
+        data-caption="<?= HtmlEncode(RemoveHtml($Grid->funcion->caption())) ?>"
+        data-modal-lookup="true"
         data-value-separator="<?= $Grid->funcion->displayValueSeparatorAttribute() ?>"
         data-placeholder="<?= HtmlEncode($Grid->funcion->getPlaceHolder()) ?>"
         <?= $Grid->funcion->editAttributes() ?>>
@@ -185,26 +177,18 @@ loadjs.ready("fgrupo_funcionesgrid", function() {
     </select>
     <div class="invalid-feedback"><?= $Grid->funcion->getErrorMessage() ?></div>
 <?= $Grid->funcion->Lookup->getParamTag($Grid, "p_x" . $Grid->RowIndex . "_funcion") ?>
-<?php if (!$Grid->funcion->IsNativeSelect) { ?>
 <script>
 loadjs.ready("fgrupo_funcionesgrid", function() {
-    var options = { name: "x<?= $Grid->RowIndex ?>_funcion", selectId: "fgrupo_funcionesgrid_x<?= $Grid->RowIndex ?>_funcion" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    var options = { name: "x<?= $Grid->RowIndex ?>_funcion", selectId: "fgrupo_funcionesgrid_x<?= $Grid->RowIndex ?>_funcion" };
     if (fgrupo_funcionesgrid.lists.funcion?.lookupOptions.length) {
         options.data = { id: "x<?= $Grid->RowIndex ?>_funcion", form: "fgrupo_funcionesgrid" };
     } else {
         options.ajax = { id: "x<?= $Grid->RowIndex ?>_funcion", form: "fgrupo_funcionesgrid", limit: ew.LOOKUP_PAGE_SIZE };
     }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.grupo_funciones.fields.funcion.selectOptions);
-    ew.createSelect(options);
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.grupo_funciones.fields.funcion.modalLookupOptions);
+    ew.createModalLookup(options);
 });
 </script>
-<?php } ?>
 </span>
 <?php } ?>
 <?php if ($Grid->RowType == RowType::VIEW) { // View record ?>

@@ -2,8 +2,13 @@
 session_start();
 require("include/connect2.php");
 
+mysqli_set_charset($link, "utf8");
+mysqli_query($link, "SET NAMES 'utf8' COLLATE 'utf8_general_ci'");
+mysqli_query($link, "SET CHARACTER SET utf8");
+mysqli_query($link, "SET collation_connection = 'utf8_general_ci'");
+
 $tipo_documento = "TDCFCV";
-$limite = 500;
+$limite = 3000;
 
 // 1) Congelar datos fiscales del cliente en salidas
 $sql = "
@@ -11,13 +16,16 @@ $sql = "
         s.id,
         c.ci_rif,
         c.nombre,
-        CONCAT(IFNULL(c.direccion,''), ' ', IFNULL(t.campo_descripcion,'')) AS direccion,
-        CONCAT(REPLACE(IFNULL(c.telefono1,''), ' ', ''), ' ', REPLACE(IFNULL(c.telefono2,''), ' ', '')) AS telefono
+        IFNULL(c.direccion,'') AS direccion,
+        CONCAT(
+            REPLACE(IFNULL(c.telefono1,''), ' ', ''),
+            ' ',
+            REPLACE(IFNULL(c.telefono2,''), ' ', '')
+        ) AS telefono
     FROM salidas s
     JOIN cliente c ON c.id = s.cliente
-    LEFT JOIN tabla t ON t.campo_codigo = c.ciudad AND t.tabla = 'CIUDAD'
-    WHERE s.tipo_documento = '{$tipo_documento}'
-      AND s.estatus = 'PROCESADO'
+    WHERE s.tipo_documento = CONVERT('{$tipo_documento}' USING utf8) COLLATE utf8_general_ci
+        AND s.estatus = CONVERT('PROCESADO' USING utf8) COLLATE utf8_general_ci
       AND (
             s.cliente_ci_rif IS NULL OR s.cliente_ci_rif = ''
          OR s.cliente_nombre IS NULL OR s.cliente_nombre = ''
@@ -40,13 +48,13 @@ while ($row = mysqli_fetch_assoc($rs)) {
     $telefono = mysqli_real_escape_string($link, trim($row["telefono"]));
 
     $update = "
-        UPDATE salidas
+    UPDATE salidas
         SET
-            cliente_ci_rif = IF(cliente_ci_rif IS NULL OR cliente_ci_rif = '', '{$ci_rif}', cliente_ci_rif),
-            cliente_nombre = IF(cliente_nombre IS NULL OR cliente_nombre = '', '{$nombre}', cliente_nombre),
-            cliente_direccion = IF(cliente_direccion IS NULL OR cliente_direccion = '', '{$direccion}', cliente_direccion),
-            cliente_telefono = IF(cliente_telefono IS NULL OR cliente_telefono = '', '{$telefono}', cliente_telefono), 
-            igtf_alicuota = 3 
+            cliente_ci_rif = IF(cliente_ci_rif IS NULL OR CHAR_LENGTH(TRIM(cliente_ci_rif)) = 0, '{$ci_rif}', cliente_ci_rif),
+            cliente_nombre = IF(cliente_nombre IS NULL OR CHAR_LENGTH(TRIM(cliente_nombre)) = 0, '{$nombre}', cliente_nombre),
+            cliente_direccion = IF(cliente_direccion IS NULL OR CHAR_LENGTH(TRIM(cliente_direccion)) = 0, '{$direccion}', cliente_direccion),
+            cliente_telefono = IF(cliente_telefono IS NULL OR CHAR_LENGTH(TRIM(cliente_telefono)) = 0, '{$telefono}', cliente_telefono),
+            igtf_alicuota = 3
         WHERE id = {$id}
         LIMIT 1
     ";
@@ -55,6 +63,7 @@ while ($row = mysqli_fetch_assoc($rs)) {
     $salidasActualizadas++;
 }
 
+// 2) Congelar datos del artículo en entradas_salidas
 // 2) Congelar datos del artículo en entradas_salidas
 $sql = "
     SELECT
@@ -68,13 +77,18 @@ $sql = "
             IFNULL(a.presentacion, '')
         ))) AS articulo_descripcion
     FROM entradas_salidas e
-    JOIN salidas s ON s.id = e.id_documento AND s.tipo_documento = e.tipo_documento
+    JOIN salidas s 
+        ON s.id = e.id_documento 
+       AND CONVERT(s.tipo_documento USING utf8) COLLATE utf8_general_ci =
+           CONVERT(e.tipo_documento USING utf8) COLLATE utf8_general_ci
     JOIN articulo a ON a.id = e.articulo
-    WHERE e.tipo_documento = '{$tipo_documento}'
-      AND s.estatus = 'PROCESADO'
+    WHERE CONVERT(e.tipo_documento USING utf8) COLLATE utf8_general_ci =
+          CONVERT('{$tipo_documento}' USING utf8) COLLATE utf8_general_ci
+      AND CONVERT(s.estatus USING utf8) COLLATE utf8_general_ci =
+          CONVERT('PROCESADO' USING utf8) COLLATE utf8_general_ci
       AND (
-            e.articulo_codigo IS NULL OR e.articulo_codigo = ''
-         OR e.articulo_descripcion IS NULL OR e.articulo_descripcion = ''
+            e.articulo_codigo IS NULL OR CHAR_LENGTH(TRIM(e.articulo_codigo)) = 0
+         OR e.articulo_descripcion IS NULL OR CHAR_LENGTH(TRIM(e.articulo_descripcion)) = 0
       )
     LIMIT {$limite}
 ";
@@ -92,8 +106,8 @@ while ($row = mysqli_fetch_assoc($rs)) {
     $update = "
         UPDATE entradas_salidas
         SET
-            articulo_codigo = IF(articulo_codigo IS NULL OR articulo_codigo = '', '{$codigo}', articulo_codigo),
-            articulo_descripcion = IF(articulo_descripcion IS NULL OR articulo_descripcion = '', '{$descripcion}', articulo_descripcion)
+            articulo_codigo = '{$codigo}',
+            articulo_descripcion = '{$descripcion}'
         WHERE id = {$id}
         LIMIT 1
     ";

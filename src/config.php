@@ -122,10 +122,10 @@ require_once __DIR__ . "/userlevelsettings.php";
 $CONFIG = [
 
     // Debug
-    "DEBUG" => true, // Enabled
+    "DEBUG" => false, // Enabled
     "REPORT_ALL_ERRORS" => false, // Treat PHP warnings and notices as errors
     "LOG_ERROR_TO_FILE" => false, // Log error to file
-    "LOG_ERROR_DETAILS" => true, // Log error details
+    "LOG_ERROR_DETAILS" => false, // Log error details
     "DEBUG_MESSAGE_TEMPLATE" => '<div class="card card-danger ew-debug"><div class="card-header">' .
         '<h3 class="card-title">%t</h3>' .
         '<div class="card-tools"><button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fa-solid fa-minus"></i></button></div>' .
@@ -274,7 +274,7 @@ $CONFIG = [
      * Database time zone
      * Difference to Greenwich time (GMT) with colon between hours and minutes, e.g. +02:00
      */
-    "DB_TIME_ZONE" => "",
+    "DB_TIME_ZONE" => "-04:00",
 
     /**
      * MySQL charset (for SET NAMES statement, not used by default)
@@ -310,7 +310,7 @@ $CONFIG = [
     "SESSION_TIMEOUT" => 360, // Session timeout time (minutes)
 
     // Session keep alive interval
-    "SESSION_KEEP_ALIVE_INTERVAL" => 0, // Session keep alive interval (seconds)
+    "SESSION_KEEP_ALIVE_INTERVAL" => 300, // Session keep alive interval (seconds)
     "SESSION_TIMEOUT_COUNTDOWN" => 240, // Session timeout count down interval (seconds)
 
     // Language settings

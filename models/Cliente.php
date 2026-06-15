@@ -379,7 +379,6 @@ class Cliente extends DbTable
             'TEXT' // Edit Tag
         );
         $this->email1->InputTextType = "text";
-        $this->email1->Required = true; // Required field
         $this->email1->DefaultErrorMessage = $Language->phrase("IncorrectEmail");
         $this->email1->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['email1'] = &$this->email1;

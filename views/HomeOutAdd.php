@@ -8,7 +8,6 @@ $HomeOutAdd = &$Page;
 <?php
 $Page->showMessage();
 ?>
-
 <?php
 $tipo_documento = $_REQUEST["tipo_documento"];
 $tipo_documento_nombre = ExecuteScalar("SELECT descripcion FROM tipo_documento WHERE codigo = '$tipo_documento';");
@@ -82,6 +81,32 @@ if(intval($cliente) > 0) {
   $row = ExecuteRow($sql);
   $clienteTarifa = $row["nombre"];
 }
+
+// Valido si el usuario está autorizado para crar nuevos clientes //
+$userLevelId = CurrentUserLevel();
+
+$puedeAgregarCliente = false;
+
+if ($userLevelId == -1) {
+
+    $puedeAgregarCliente = true;
+
+} else {
+
+    $sql = "
+        SELECT permission
+        FROM userlevelpermissions
+        WHERE userlevelid = " . intval($userLevelId) . "
+          AND tablename = 'cliente'
+        LIMIT 1
+    ";
+
+    $permiso = intval(ExecuteScalar($sql));
+
+    $puedeAgregarCliente = (($permiso & 2) == 2);
+}
+// --- //
+
 ?>
 
 
@@ -103,16 +128,60 @@ if(intval($cliente) > 0) {
             <strong>Cliente</strong> 
             </div>
             <div class="col-sm-10">
-            <form id="frm" name="frm" method="post" action="<?= $myform  ?>">
-                <input type="hidden" name="<?= $TokenNameKey ?>" value="<?= $TokenName ?>"><!-- CSRF token name -->
-                <input type="hidden" name="<?= $TokenValueKey ?>" value="<?= $TokenValue ?>"><!-- CSRF token value -->
+
+            <form id="frm" name="frm" method="post" action="<?= $myform ?>">
+                <input type="hidden" name="<?= $TokenNameKey ?>" value="<?= $TokenName ?>">
+                <input type="hidden" name="<?= $TokenValueKey ?>" value="<?= $TokenValue ?>">
 
                 <input type="hidden" name="tipo_documento" value="<?= $tipo_documento ?>">
 
-                <input name="cliente" id="cliente" type="text" class="form-control form-control-sm" placeholder="Buscar Cliente" size="50" value="<?= $clienteNombre ?>" />
-                <input name="codcli" id="codcli" type="hidden" class="form-control form-control-sm" value="<?= $cliente ?>" />
-                <input name="username" id="username" type="hidden" class="form-control form-control-sm" value="<?= CurrentUserName() ?>" />
-                <button id="btnCrear" class="btn btn-sm btn-primary form-control" type="submit" disabled>Crear <?= $tipo_documento_nombre ?></button>
+                <div class="row g-2 align-items-center">
+
+                    <!-- Cliente -->
+                    <div class="col-md-4">
+                        <div class="input-group input-group-sm">
+                            <input name="cliente"
+                                id="cliente"
+                                type="text"
+                                class="form-control"
+                                placeholder="Buscar Cliente"
+                                value="<?= $clienteNombre ?>" />
+
+                            <?php if ($puedeAgregarCliente) { ?>
+                            <button type="button"
+                                    class="btn btn-success"
+                                    title="Nuevo Cliente"
+                                    onclick="abrirModalCliente();">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                    <!-- Botón Crear -->
+                    <div class="col-md-4">
+                        <button id="btnCrear"
+                                class="btn btn-primary btn-sm w-100"
+                                type="submit"
+                                disabled>
+                            Crear <?= $tipo_documento_nombre ?>
+                        </button>
+                    </div>
+
+                    <div class="col-md-4">
+                    </div>
+                </div>
+
+                <input name="codcli"
+                    id="codcli"
+                    type="hidden"
+                    value="<?= $cliente ?>" />
+
+                <input name="username"
+                    id="username"
+                    type="hidden"
+                    value="<?= CurrentUserName() ?>" />
+
             </form>
 
             <ul id="lista" class="list-group"></ul>
@@ -307,6 +376,26 @@ if(intval($cliente) > 0) {
     </div>
 </div>
 
+<div class="modal fade" id="modalClienteAdd" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-user-plus"></i> Agregar Cliente
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-0" style="height:70vh;">
+                <iframe id="iframeClienteAdd"
+                        src=""
+                        style="width:100%; height:100%; border:0;">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
   document.getElementById("cliente").addEventListener("keyup", getCodigos)
   document.getElementById("cliente").addEventListener("click", getCodigos)
@@ -407,5 +496,14 @@ if(intval($cliente) > 0) {
     document.getElementById("cliente").disabled = true
     document.getElementById("btnCrear").disabled = false
   }
+
+
+  function abrirModalCliente() {
+      var tipo_documento = "<?=  $tipo_documento ?>";
+      document.getElementById("iframeClienteAdd").src = "ClienteRapidoAdd?tipo_documento=" + tipo_documento;
+      const modal = new bootstrap.Modal(document.getElementById("modalClienteAdd"));
+      modal.show();
+  }
+
 </script>
 <?= GetDebugMessage() ?>

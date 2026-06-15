@@ -1,6 +1,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 
-USE `decodbnt_windeco`;
+-- USE `decodbnt_windeco`;
 
 
 /* Create table in target */

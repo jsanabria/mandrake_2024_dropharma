@@ -219,7 +219,7 @@ class TasaUsd extends DbTable
             CastDateFieldForLike("`hora`", 4, "DB"), // Basic search expression
             134, // Type
             10, // Size
-            4, // Date/Time format
+            -1, // Date/Time format
             false, // Is upload field
             '`hora`', // Virtual expression
             false, // Is virtual
@@ -1206,7 +1206,6 @@ class TasaUsd extends DbTable
 
         // hora
         $this->hora->ViewValue = $this->hora->CurrentValue;
-        $this->hora->ViewValue = FormatDateTime($this->hora->ViewValue, $this->hora->formatPattern());
 
         // id
         $this->id->HrefValue = "";

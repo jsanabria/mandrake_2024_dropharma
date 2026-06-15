@@ -38,6 +38,14 @@ function Database_Connecting(&$info) {
 	//var_dump($info);
 	//echo "<br><br>" . CurrentUserIP() .  "<br><br>";
 	date_default_timezone_set('America/La_Paz');
+
+    /*
+    $connInfo = $info->getSubject();
+    if (!isset($connInfo["options"])) {
+        $connInfo["options"] = [];
+    }
+    $connInfo["options"][\PDO::MYSQL_ATTR_INIT_COMMAND] = "SET time_zone = '-04:00';";
+    */
 	if (!IsLocal()) {
 		$info["host"] = "localhost";
 		$info["user"] = "drophqsc_drake";
@@ -154,7 +162,7 @@ function Page_Rendering()
     $pagina = strtolower(CurrentPageName());
 
     // No mostrar alerta en login/logout
-    if (in_array($pagina, ["login.php", "logout.php"])) {
+    if (in_array($pagina, ["login", "logout", "ClienteRapidoAdd"])) {
         return;
     }
     $sql = "
@@ -176,9 +184,9 @@ function Page_Rendering()
         $mensaje = '
             <div class="alert alert-warning alert-dismissible fade show mb-2" role="alert">
                 <i class="fa-solid fa-triangle-exclamation"></i>
-                <strong>Atención:</strong> Existen <strong>' . $cantidad . '</strong> nota(s) de entrega pendiente(s) por facturar.
+                <strong>Atención:</strong> Existen <strong>' . $cantidad . '</strong> orden(es) de entrega pendiente(s) por facturar.
                 <a href="ViewOutTdcnetList?cmd=search&x_estatus=NUEVO" class="alert-link ms-2">
-                    Ver notas pendientes
+                    Ver ordenes pendientes
                 </a>
             </div>
         ';
@@ -408,38 +416,6 @@ function VerificaFuncion($xFunc) {
 		return false;
 }
 
-/*
-function ActualizarUnidadesSalidas($id_documento, $tipo_documento) {
-	// Se actualizan las cantidades de unidades en el encabezado de la salida 21-01-2021 
-	if($tipo_documento=="TDCPDV" or $tipo_documento=="TDCNET" or $tipo_documento=="TDCFCV" or $tipo_documento=="TDCASA") {
-		$sql = "SELECT 
-					cantidad_articulo, cantidad_movimiento 
-				FROM 
-					entradas_salidas 
-				WHERE
-					id_documento = $id_documento
-					AND tipo_documento = '$tipo_documento' 
-					AND cantidad_movimiento IS NULL;";
-		if($row = ExecuteRow($sql)) {
-			$sql = "UPDATE entradas_salidas
-						SET cantidad_movimiento = (-1)*cantidad_articulo 
-					WHERE
-						id_documento = $id_documento
-						AND tipo_documento = '$tipo_documento' 
-						AND cantidad_movimiento IS NULL;";
-			Execute($sql);
-		}
-		$sql = "UPDATE 
-					salidas AS a 
-					JOIN (SELECT id_documento, tipo_documento, ABS(SUM(cantidad_movimiento)) AS cantidad FROM entradas_salidas GROUP BY id_documento, tipo_documento) AS b ON b.id_documento = a.id AND b.tipo_documento = a.tipo_documento 
-				SET 
-					a.unidades = b.cantidad 
-				WHERE a.id = $id_documento
-					AND a.tipo_documento = '$tipo_documento';";
-		Execute($sql);
-	}
-}
-*/
 function ActualizarTotalFacturaVenta($id_documento, $tipo_documento) {
 	/* Se actualizan el total del monto con o sin descuento en la factura de venta 01-02-2021 */
 	if($tipo_documento=="TDCFCV") {
@@ -481,15 +457,6 @@ function ActualizarTotalFacturaVenta($id_documento, $tipo_documento) {
 		$total = floatval($row["total"]);
 		if($tasa == 0) $xtasa = 1;
 		else $xtasa = $tasa;
-
-		/*$sql = "SELECT
-				SUM(precio) AS precio, 
-				SUM((precio * (alicuota/100))) AS iva, 
-				SUM(precio) + SUM((precio * (alicuota/100))) AS total
-			FROM 
-				entradas_salidas
-			WHERE tipo_documento = '$tipo_documento' AND 
-				id_documento = $id_documento";*/
 		$sql = "UPDATE salidas 
 			SET
 				monto_total = $precio, 
@@ -532,14 +499,6 @@ function FiltraFabricantes() {
 	else return "";
 }
 function CuadraComprobante($comprobante) {
-	/*
-	if(isset($_REQUEST["fk_id"]))
-		$comprobante = intval($_REQUEST["fk_id"]);
-	elseif(isset($_REQUEST["id"]))
-		$comprobante = intval($_REQUEST["id"]);
-	else
-		$comprobante = intval(CurrentTable()->id->CurrentValue);
-	*/
 	$sql = "SELECT SUM(debe) AS debe, SUM(haber) AS haber 
 			FROM cont_asiento 
 			WHERE comprobante = " . $comprobante; 
@@ -549,7 +508,6 @@ function CuadraComprobante($comprobante) {
 	if($debe == $haber and $debe != 0 and $haber != 0) return TRUE;
 	else return FALSE;
 }
-
 function CalcularRetenciones($id_documento, $tipo_documento) {
 	$sql = "SELECT agente_retencion FROM compania WHERE id = 1;";
 	$aplica_retencion = ExecuteScalar($sql);
@@ -1727,6 +1685,54 @@ function ew_SetupPage_Visibility($page)
         }
     }
 }
+function ReservarConsecutivoDocumento($tipo_documento, $serie = '') {
+    $tipo_documento = AdjustSql(trim($tipo_documento));
+    $serie = AdjustSql(trim($serie));
+    if ($tipo_documento == "") {
+        throw new \Exception("Tipo de documento vacío.");
+    }
+    Execute("
+        INSERT IGNORE INTO documento_consecutivo
+            (tipo_documento, serie, ultimo_numero, updated_at)
+        VALUES
+            ('$tipo_documento', '$serie', 0, NOW())
+    ");
+    Execute("
+        UPDATE documento_consecutivo
+        SET 
+            ultimo_numero = LAST_INSERT_ID(ultimo_numero + 1),
+            updated_at = NOW()
+        WHERE tipo_documento = '$tipo_documento'
+          AND serie = '$serie'
+    ");
+    $numero = intval(ExecuteScalar("SELECT LAST_INSERT_ID()"));
+    if ($numero <= 0) {
+        throw new \Exception("No se pudo reservar consecutivo para $tipo_documento / $serie.");
+    }
+    return str_pad($numero, 7, "0", STR_PAD_LEFT);
+}
+function ObtenerConsecutivoActual($tipo_documento, $serie = '') {
+    $tipo_documento = AdjustSql(trim($tipo_documento));
+    $serie = AdjustSql(trim($serie));
+    $sql = "
+        SELECT ultimo_numero
+        FROM documento_consecutivo
+        WHERE tipo_documento = '$tipo_documento'
+          AND serie = '$serie'
+        LIMIT 1
+    ";
+    $numero = ExecuteScalar($sql);
+    if ($numero === null || $numero === false || $numero === "") {
+        return 0;
+    }
+    return intval($numero);
+}
+
+/*
+function FormatearConsecutivo($numero, $prefijo = "", $pad = 7) {
+    return trim($prefijo) . str_pad(intval($numero), intval($pad), "0", STR_PAD_LEFT);
+}
+*/
 
 // Add listeners
 AddListener(DatabaseConnectingEvent::NAME, fn(DatabaseConnectingEvent $event) => Database_Connecting($event));

@@ -505,7 +505,11 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_guardar.php","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_guardar.php","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_ver.php","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_ver.php","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}devoluciones_ver.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cliente_rapido_add.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}cliente_rapido_add.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_almacen_multiple.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_almacen_multiple.php","0","0"]];
 
 /**
  * Tables
@@ -759,4 +763,6 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["devoluciones.php","devoluciones","Devoluciones",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","Devoluciones"],
     ["devoluciones_buscar.php","devoluciones_buscar","Devoluciones Notas de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesBuscar"],
     ["devoluciones_guardar.php","devoluciones_guardar","Devoluciones Guardar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesGuardar"],
-    ["devoluciones_ver.php","devoluciones_ver","Devoluciones Ver Nota de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesVer"]];
+    ["devoluciones_ver.php","devoluciones_ver","Devoluciones Ver Nota de Entrega",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DevolucionesVer"],
+    ["cliente_rapido_add.php","cliente_rapido_add","Cliente Agregar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ClienteRapidoAdd"],
+    ["transferencia_almacen_multiple.php","transferencia_almacen_multiple","Transferencia Almacen Multiple",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TransferenciaAlmacenMultiple"]];

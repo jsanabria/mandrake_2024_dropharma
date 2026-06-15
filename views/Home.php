@@ -274,12 +274,33 @@ if ($bloquea == "NO") {
         </div>
 
         <div class="col-lg-4">
+            <!--
             <div class="mdk-metric text-center">
                 <div class="mdk-metric-icon"><i class="fa-solid fa-dollar-sign"></i></div>
                 <div class="text-muted small text-uppercase fw-bold">Tasa del día</div>
                 <h2 class="fw-bold mb-0"><?= number_format($tasaDia, 2, ",", ".") ?></h2>
                 <div class="text-muted">Bs. por 1 USD</div>
             </div>
+            -->
+
+<a href="TasaUsdList" class="text-decoration-none text-reset">
+    <div class="mdk-metric text-center">
+        <div class="mdk-metric-icon">
+            <i class="fa-solid fa-dollar-sign"></i>
+        </div>
+        <div class="text-muted small text-uppercase fw-bold">
+            Tasa del día
+        </div>
+        <h2 class="fw-bold mb-0">
+            <?= number_format($tasaDia, 2, ",", ".") ?>
+        </h2>
+        <div class="text-muted">
+            Bs. por 1 USD
+        </div>
+    </div>
+</a>
+
+
         </div>
 
         <div class="col-lg-4">

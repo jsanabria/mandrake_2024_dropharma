@@ -725,6 +725,12 @@ loadjs.ready("load", function () {
         var $input = $(this);
         var rifOriginal = $input.val();
         if (rifOriginal.trim() == '') return;
+        var primerCaracter = rifOriginal.substring(0, 1).toUpperCase();
+        if (!["V", "E", "J", "G"].includes(primerCaracter)) {
+            ew.alert("El RIF/CI debe comenzar con una letra válida: V, E, J o G.");
+            $input.val("").focus();
+            return false;
+        }
 
         // Detectar automáticamente el entorno mediante la URL para que sirva en ambos formularios
         var tipoEntidad = (window.location.href.toLowerCase().indexOf("proveedor") > -1) ? 'PROVEEDOR' : 'CLIENTE';

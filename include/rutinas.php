@@ -90,4 +90,82 @@ function ActInv($articulo) {
     mysqli_query($link, $sql);
 }
 
+function ReservarConsecutivoDocumentoMySQLi($link, $tipo_documento, $serie = '') {
+
+    $tipo_documento = mysqli_real_escape_string($link, trim($tipo_documento));
+    $serie = mysqli_real_escape_string($link, trim($serie));
+
+    if ($tipo_documento == "") {
+        throw new Exception("Tipo de documento vacío.");
+    }
+
+    mysqli_query($link, "
+        INSERT IGNORE INTO documento_consecutivo
+            (tipo_documento, serie, ultimo_numero, updated_at)
+        VALUES
+            ('$tipo_documento', '$serie', 0, NOW())
+    ");
+
+    if (mysqli_errno($link)) {
+        throw new Exception(mysqli_error($link));
+    }
+
+    mysqli_query($link, "
+        UPDATE documento_consecutivo
+        SET
+            ultimo_numero = LAST_INSERT_ID(ultimo_numero + 1),
+            updated_at = NOW()
+        WHERE tipo_documento = '$tipo_documento'
+          AND serie = '$serie'
+    ");
+
+    if (mysqli_errno($link)) {
+        throw new Exception(mysqli_error($link));
+    }
+
+    $rs = mysqli_query($link, "SELECT LAST_INSERT_ID() AS numero");
+
+    if (!$rs) {
+        throw new Exception(mysqli_error($link));
+    }
+
+    $row = mysqli_fetch_assoc($rs);
+
+    $numero = intval($row["numero"]);
+
+    if ($numero <= 0) {
+        throw new Exception("No se pudo generar consecutivo para $tipo_documento / $serie.");
+    }
+
+    return $numero;
+}
+
+
+function ObtenerConsecutivoActualMySQLi($link, $tipo_documento, $serie = '') {
+
+    $tipo_documento = mysqli_real_escape_string($link, trim($tipo_documento));
+    $serie = mysqli_real_escape_string($link, trim($serie));
+
+    $sql = "
+        SELECT ultimo_numero
+        FROM documento_consecutivo
+        WHERE tipo_documento = '$tipo_documento'
+          AND serie = '$serie'
+        LIMIT 1
+    ";
+
+    $rs = mysqli_query($link, $sql);
+
+    if (!$rs) {
+        return 0;
+    }
+
+    if (!$row = mysqli_fetch_assoc($rs)) {
+        return 0;
+    }
+
+    return intval($row["ultimo_numero"]);
+}
+
+
 ?>

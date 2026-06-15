@@ -24,27 +24,13 @@ loadjs.ready(["wrapper", "head"], function () {
         .setFields([
             ["ci_rif", [fields.ci_rif.visible && fields.ci_rif.required ? ew.Validators.required(fields.ci_rif.caption) : null], fields.ci_rif.isInvalid],
             ["nombre", [fields.nombre.visible && fields.nombre.required ? ew.Validators.required(fields.nombre.caption) : null], fields.nombre.isInvalid],
-            ["sucursal", [fields.sucursal.visible && fields.sucursal.required ? ew.Validators.required(fields.sucursal.caption) : null], fields.sucursal.isInvalid],
-            ["contacto", [fields.contacto.visible && fields.contacto.required ? ew.Validators.required(fields.contacto.caption) : null], fields.contacto.isInvalid],
-            ["ciudad", [fields.ciudad.visible && fields.ciudad.required ? ew.Validators.required(fields.ciudad.caption) : null], fields.ciudad.isInvalid],
-            ["zona", [fields.zona.visible && fields.zona.required ? ew.Validators.required(fields.zona.caption) : null], fields.zona.isInvalid],
             ["direccion", [fields.direccion.visible && fields.direccion.required ? ew.Validators.required(fields.direccion.caption) : null], fields.direccion.isInvalid],
             ["telefono1", [fields.telefono1.visible && fields.telefono1.required ? ew.Validators.required(fields.telefono1.caption) : null], fields.telefono1.isInvalid],
             ["telefono2", [fields.telefono2.visible && fields.telefono2.required ? ew.Validators.required(fields.telefono2.caption) : null], fields.telefono2.isInvalid],
             ["email1", [fields.email1.visible && fields.email1.required ? ew.Validators.required(fields.email1.caption) : null, ew.Validators.email], fields.email1.isInvalid],
-            ["email2", [fields.email2.visible && fields.email2.required ? ew.Validators.required(fields.email2.caption) : null], fields.email2.isInvalid],
-            ["web", [fields.web.visible && fields.web.required ? ew.Validators.required(fields.web.caption) : null], fields.web.isInvalid],
-            ["tipo_cliente", [fields.tipo_cliente.visible && fields.tipo_cliente.required ? ew.Validators.required(fields.tipo_cliente.caption) : null], fields.tipo_cliente.isInvalid],
             ["tarifa", [fields.tarifa.visible && fields.tarifa.required ? ew.Validators.required(fields.tarifa.caption) : null], fields.tarifa.isInvalid],
-            ["consignacion", [fields.consignacion.visible && fields.consignacion.required ? ew.Validators.required(fields.consignacion.caption) : null], fields.consignacion.isInvalid],
-            ["limite_credito", [fields.limite_credito.visible && fields.limite_credito.required ? ew.Validators.required(fields.limite_credito.caption) : null, ew.Validators.float], fields.limite_credito.isInvalid],
-            ["condicion", [fields.condicion.visible && fields.condicion.required ? ew.Validators.required(fields.condicion.caption) : null], fields.condicion.isInvalid],
             ["codigo", [fields.codigo.visible && fields.codigo.required ? ew.Validators.required(fields.codigo.caption) : null], fields.codigo.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
-            ["foto1", [fields.foto1.visible && fields.foto1.required ? ew.Validators.fileRequired(fields.foto1.caption) : null], fields.foto1.isInvalid],
-            ["foto2", [fields.foto2.visible && fields.foto2.required ? ew.Validators.fileRequired(fields.foto2.caption) : null], fields.foto2.isInvalid],
-            ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
-            ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.integer], fields.descuento.isInvalid]
+            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -60,13 +46,8 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
-            "ciudad": <?= $Page->ciudad->toClientList($Page) ?>,
-            "tipo_cliente": <?= $Page->tipo_cliente->toClientList($Page) ?>,
             "tarifa": <?= $Page->tarifa->toClientList($Page) ?>,
-            "consignacion": <?= $Page->consignacion->toClientList($Page) ?>,
-            "condicion": <?= $Page->condicion->toClientList($Page) ?>,
             "activo": <?= $Page->activo->toClientList($Page) ?>,
-            "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -120,80 +101,6 @@ $Page->showMessage();
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->sucursal->Visible) { // sucursal ?>
-    <div id="r_sucursal"<?= $Page->sucursal->rowAttributes() ?>>
-        <label id="elh_cliente_sucursal" for="x_sucursal" class="<?= $Page->LeftColumnClass ?>"><?= $Page->sucursal->caption() ?><?= $Page->sucursal->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->sucursal->cellAttributes() ?>>
-<span id="el_cliente_sucursal">
-<input type="<?= $Page->sucursal->getInputTextType() ?>" name="x_sucursal" id="x_sucursal" data-table="cliente" data-field="x_sucursal" value="<?= $Page->sucursal->EditValue ?>" size="30" maxlength="80" placeholder="<?= HtmlEncode($Page->sucursal->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->sucursal->formatPattern()) ?>"<?= $Page->sucursal->editAttributes() ?> aria-describedby="x_sucursal_help">
-<?= $Page->sucursal->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->sucursal->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->contacto->Visible) { // contacto ?>
-    <div id="r_contacto"<?= $Page->contacto->rowAttributes() ?>>
-        <label id="elh_cliente_contacto" for="x_contacto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->contacto->caption() ?><?= $Page->contacto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->contacto->cellAttributes() ?>>
-<span id="el_cliente_contacto">
-<input type="<?= $Page->contacto->getInputTextType() ?>" name="x_contacto" id="x_contacto" data-table="cliente" data-field="x_contacto" value="<?= $Page->contacto->EditValue ?>" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->contacto->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->contacto->formatPattern()) ?>"<?= $Page->contacto->editAttributes() ?> aria-describedby="x_contacto_help">
-<?= $Page->contacto->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->contacto->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->ciudad->Visible) { // ciudad ?>
-    <div id="r_ciudad"<?= $Page->ciudad->rowAttributes() ?>>
-        <label id="elh_cliente_ciudad" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ciudad->caption() ?><?= $Page->ciudad->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ciudad->cellAttributes() ?>>
-<span id="el_cliente_ciudad">
-    <select
-        id="x_ciudad"
-        name="x_ciudad"
-        class="form-control ew-select<?= $Page->ciudad->isInvalidClass() ?>"
-        data-select2-id="fclienteadd_x_ciudad"
-        data-table="cliente"
-        data-field="x_ciudad"
-        data-caption="<?= HtmlEncode(RemoveHtml($Page->ciudad->caption())) ?>"
-        data-modal-lookup="true"
-        data-value-separator="<?= $Page->ciudad->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->ciudad->getPlaceHolder()) ?>"
-        <?= $Page->ciudad->editAttributes() ?>>
-        <?= $Page->ciudad->selectOptionListHtml("x_ciudad") ?>
-    </select>
-    <?= $Page->ciudad->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->ciudad->getErrorMessage() ?></div>
-<?= $Page->ciudad->Lookup->getParamTag($Page, "p_x_ciudad") ?>
-<script>
-loadjs.ready("fclienteadd", function() {
-    var options = { name: "x_ciudad", selectId: "fclienteadd_x_ciudad" };
-    if (fclienteadd.lists.ciudad?.lookupOptions.length) {
-        options.data = { id: "x_ciudad", form: "fclienteadd" };
-    } else {
-        options.ajax = { id: "x_ciudad", form: "fclienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.cliente.fields.ciudad.modalLookupOptions);
-    ew.createModalLookup(options);
-});
-</script>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->zona->Visible) { // zona ?>
-    <div id="r_zona"<?= $Page->zona->rowAttributes() ?>>
-        <label id="elh_cliente_zona" for="x_zona" class="<?= $Page->LeftColumnClass ?>"><?= $Page->zona->caption() ?><?= $Page->zona->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->zona->cellAttributes() ?>>
-<span id="el_cliente_zona">
-<input type="<?= $Page->zona->getInputTextType() ?>" name="x_zona" id="x_zona" data-table="cliente" data-field="x_zona" value="<?= $Page->zona->EditValue ?>" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->zona->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->zona->formatPattern()) ?>"<?= $Page->zona->editAttributes() ?> aria-describedby="x_zona_help">
-<?= $Page->zona->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->zona->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->direccion->Visible) { // direccion ?>
     <div id="r_direccion"<?= $Page->direccion->rowAttributes() ?>>
         <label id="elh_cliente_direccion" for="x_direccion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->direccion->caption() ?><?= $Page->direccion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -242,76 +149,6 @@ loadjs.ready("fclienteadd", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->email2->Visible) { // email2 ?>
-    <div id="r_email2"<?= $Page->email2->rowAttributes() ?>>
-        <label id="elh_cliente_email2" for="x_email2" class="<?= $Page->LeftColumnClass ?>"><?= $Page->email2->caption() ?><?= $Page->email2->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->email2->cellAttributes() ?>>
-<span id="el_cliente_email2">
-<input type="<?= $Page->email2->getInputTextType() ?>" name="x_email2" id="x_email2" data-table="cliente" data-field="x_email2" value="<?= $Page->email2->EditValue ?>" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->email2->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->email2->formatPattern()) ?>"<?= $Page->email2->editAttributes() ?> aria-describedby="x_email2_help">
-<?= $Page->email2->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->email2->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->web->Visible) { // web ?>
-    <div id="r_web"<?= $Page->web->rowAttributes() ?>>
-        <label id="elh_cliente_web" for="x_web" class="<?= $Page->LeftColumnClass ?>"><?= $Page->web->caption() ?><?= $Page->web->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->web->cellAttributes() ?>>
-<span id="el_cliente_web">
-<input type="<?= $Page->web->getInputTextType() ?>" name="x_web" id="x_web" data-table="cliente" data-field="x_web" value="<?= $Page->web->EditValue ?>" size="30" maxlength="100" placeholder="<?= HtmlEncode($Page->web->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->web->formatPattern()) ?>"<?= $Page->web->editAttributes() ?> aria-describedby="x_web_help">
-<?= $Page->web->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->web->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo_cliente->Visible) { // tipo_cliente ?>
-    <div id="r_tipo_cliente"<?= $Page->tipo_cliente->rowAttributes() ?>>
-        <label id="elh_cliente_tipo_cliente" for="x_tipo_cliente" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_cliente->caption() ?><?= $Page->tipo_cliente->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_cliente->cellAttributes() ?>>
-<span id="el_cliente_tipo_cliente">
-    <select
-        id="x_tipo_cliente"
-        name="x_tipo_cliente"
-        class="form-select ew-select<?= $Page->tipo_cliente->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_cliente->IsNativeSelect) { ?>
-        data-select2-id="fclienteadd_x_tipo_cliente"
-        <?php } ?>
-        data-table="cliente"
-        data-field="x_tipo_cliente"
-        data-value-separator="<?= $Page->tipo_cliente->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_cliente->getPlaceHolder()) ?>"
-        <?= $Page->tipo_cliente->editAttributes() ?>>
-        <?= $Page->tipo_cliente->selectOptionListHtml("x_tipo_cliente") ?>
-    </select>
-    <?= $Page->tipo_cliente->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_cliente->getErrorMessage() ?></div>
-<?= $Page->tipo_cliente->Lookup->getParamTag($Page, "p_x_tipo_cliente") ?>
-<?php if (!$Page->tipo_cliente->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fclienteadd", function() {
-    var options = { name: "x_tipo_cliente", selectId: "fclienteadd_x_tipo_cliente" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fclienteadd.lists.tipo_cliente?.lookupOptions.length) {
-        options.data = { id: "x_tipo_cliente", form: "fclienteadd" };
-    } else {
-        options.ajax = { id: "x_tipo_cliente", form: "fclienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cliente.fields.tipo_cliente.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->tarifa->Visible) { // tarifa ?>
     <div id="r_tarifa"<?= $Page->tarifa->rowAttributes() ?>>
         <label id="elh_cliente_tarifa" for="x_tarifa" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tarifa->caption() ?><?= $Page->tarifa->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -354,94 +191,6 @@ loadjs.ready("fclienteadd", function() {
 });
 </script>
 <?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->consignacion->Visible) { // consignacion ?>
-    <div id="r_consignacion"<?= $Page->consignacion->rowAttributes() ?>>
-        <label id="elh_cliente_consignacion" for="x_consignacion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->consignacion->caption() ?><?= $Page->consignacion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->consignacion->cellAttributes() ?>>
-<span id="el_cliente_consignacion">
-    <select
-        id="x_consignacion"
-        name="x_consignacion"
-        class="form-select ew-select<?= $Page->consignacion->isInvalidClass() ?>"
-        <?php if (!$Page->consignacion->IsNativeSelect) { ?>
-        data-select2-id="fclienteadd_x_consignacion"
-        <?php } ?>
-        data-table="cliente"
-        data-field="x_consignacion"
-        data-value-separator="<?= $Page->consignacion->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->consignacion->getPlaceHolder()) ?>"
-        <?= $Page->consignacion->editAttributes() ?>>
-        <?= $Page->consignacion->selectOptionListHtml("x_consignacion") ?>
-    </select>
-    <?= $Page->consignacion->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->consignacion->getErrorMessage() ?></div>
-<?php if (!$Page->consignacion->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fclienteadd", function() {
-    var options = { name: "x_consignacion", selectId: "fclienteadd_x_consignacion" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fclienteadd.lists.consignacion?.lookupOptions.length) {
-        options.data = { id: "x_consignacion", form: "fclienteadd" };
-    } else {
-        options.ajax = { id: "x_consignacion", form: "fclienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cliente.fields.consignacion.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->limite_credito->Visible) { // limite_credito ?>
-    <div id="r_limite_credito"<?= $Page->limite_credito->rowAttributes() ?>>
-        <label id="elh_cliente_limite_credito" for="x_limite_credito" class="<?= $Page->LeftColumnClass ?>"><?= $Page->limite_credito->caption() ?><?= $Page->limite_credito->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->limite_credito->cellAttributes() ?>>
-<span id="el_cliente_limite_credito">
-<input type="<?= $Page->limite_credito->getInputTextType() ?>" name="x_limite_credito" id="x_limite_credito" data-table="cliente" data-field="x_limite_credito" value="<?= $Page->limite_credito->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->limite_credito->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->limite_credito->formatPattern()) ?>"<?= $Page->limite_credito->editAttributes() ?> aria-describedby="x_limite_credito_help">
-<?= $Page->limite_credito->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->limite_credito->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->condicion->Visible) { // condicion ?>
-    <div id="r_condicion"<?= $Page->condicion->rowAttributes() ?>>
-        <label id="elh_cliente_condicion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->condicion->caption() ?><?= $Page->condicion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->condicion->cellAttributes() ?>>
-<span id="el_cliente_condicion">
-<template id="tp_x_condicion">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="cliente" data-field="x_condicion" name="x_condicion" id="x_condicion"<?= $Page->condicion->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x_condicion" class="ew-item-list"></div>
-<selection-list hidden
-    id="x_condicion"
-    name="x_condicion"
-    value="<?= HtmlEncode($Page->condicion->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x_condicion"
-    data-target="dsl_x_condicion"
-    data-repeatcolumn="5"
-    class="form-control<?= $Page->condicion->isInvalidClass() ?>"
-    data-table="cliente"
-    data-field="x_condicion"
-    data-value-separator="<?= $Page->condicion->displayValueSeparatorAttribute() ?>"
-    <?= $Page->condicion->editAttributes() ?>></selection-list>
-<?= $Page->condicion->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->condicion->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -503,134 +252,6 @@ loadjs.ready("fclienteadd", function() {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->foto1->Visible) { // foto1 ?>
-    <div id="r_foto1"<?= $Page->foto1->rowAttributes() ?>>
-        <label id="elh_cliente_foto1" class="<?= $Page->LeftColumnClass ?>"><?= $Page->foto1->caption() ?><?= $Page->foto1->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->foto1->cellAttributes() ?>>
-<span id="el_cliente_foto1">
-<div id="fd_x_foto1" class="fileinput-button ew-file-drop-zone">
-    <input
-        type="file"
-        id="x_foto1"
-        name="x_foto1"
-        class="form-control ew-file-input"
-        title="<?= $Page->foto1->title() ?>"
-        lang="<?= CurrentLanguageID() ?>"
-        data-table="cliente"
-        data-field="x_foto1"
-        data-size="254"
-        data-accept-file-types="<?= $Page->foto1->acceptFileTypes() ?>"
-        data-max-file-size="<?= $Page->foto1->UploadMaxFileSize ?>"
-        data-max-number-of-files="null"
-        data-disable-image-crop="<?= $Page->foto1->ImageCropper ? 0 : 1 ?>"
-        aria-describedby="x_foto1_help"
-        <?= ($Page->foto1->ReadOnly || $Page->foto1->Disabled) ? " disabled" : "" ?>
-        <?= $Page->foto1->editAttributes() ?>
-    >
-    <div class="text-body-secondary ew-file-text"><?= $Language->phrase("ChooseFile") ?></div>
-    <?= $Page->foto1->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->foto1->getErrorMessage() ?></div>
-</div>
-<input type="hidden" name="fn_x_foto1" id= "fn_x_foto1" value="<?= $Page->foto1->Upload->FileName ?>">
-<input type="hidden" name="fa_x_foto1" id= "fa_x_foto1" value="0">
-<table id="ft_x_foto1" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->foto2->Visible) { // foto2 ?>
-    <div id="r_foto2"<?= $Page->foto2->rowAttributes() ?>>
-        <label id="elh_cliente_foto2" class="<?= $Page->LeftColumnClass ?>"><?= $Page->foto2->caption() ?><?= $Page->foto2->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->foto2->cellAttributes() ?>>
-<span id="el_cliente_foto2">
-<div id="fd_x_foto2" class="fileinput-button ew-file-drop-zone">
-    <input
-        type="file"
-        id="x_foto2"
-        name="x_foto2"
-        class="form-control ew-file-input"
-        title="<?= $Page->foto2->title() ?>"
-        lang="<?= CurrentLanguageID() ?>"
-        data-table="cliente"
-        data-field="x_foto2"
-        data-size="254"
-        data-accept-file-types="<?= $Page->foto2->acceptFileTypes() ?>"
-        data-max-file-size="<?= $Page->foto2->UploadMaxFileSize ?>"
-        data-max-number-of-files="null"
-        data-disable-image-crop="<?= $Page->foto2->ImageCropper ? 0 : 1 ?>"
-        aria-describedby="x_foto2_help"
-        <?= ($Page->foto2->ReadOnly || $Page->foto2->Disabled) ? " disabled" : "" ?>
-        <?= $Page->foto2->editAttributes() ?>
-    >
-    <div class="text-body-secondary ew-file-text"><?= $Language->phrase("ChooseFile") ?></div>
-    <?= $Page->foto2->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->foto2->getErrorMessage() ?></div>
-</div>
-<input type="hidden" name="fn_x_foto2" id= "fn_x_foto2" value="<?= $Page->foto2->Upload->FileName ?>">
-<input type="hidden" name="fa_x_foto2" id= "fa_x_foto2" value="0">
-<table id="ft_x_foto2" class="table table-sm float-start ew-upload-table"><tbody class="files"></tbody></table>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->dias_credito->Visible) { // dias_credito ?>
-    <div id="r_dias_credito"<?= $Page->dias_credito->rowAttributes() ?>>
-        <label id="elh_cliente_dias_credito" for="x_dias_credito" class="<?= $Page->LeftColumnClass ?>"><?= $Page->dias_credito->caption() ?><?= $Page->dias_credito->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->dias_credito->cellAttributes() ?>>
-<span id="el_cliente_dias_credito">
-    <select
-        id="x_dias_credito"
-        name="x_dias_credito"
-        class="form-select ew-select<?= $Page->dias_credito->isInvalidClass() ?>"
-        <?php if (!$Page->dias_credito->IsNativeSelect) { ?>
-        data-select2-id="fclienteadd_x_dias_credito"
-        <?php } ?>
-        data-table="cliente"
-        data-field="x_dias_credito"
-        data-value-separator="<?= $Page->dias_credito->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->dias_credito->getPlaceHolder()) ?>"
-        <?= $Page->dias_credito->editAttributes() ?>>
-        <?= $Page->dias_credito->selectOptionListHtml("x_dias_credito") ?>
-    </select>
-    <?= $Page->dias_credito->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->dias_credito->getErrorMessage() ?></div>
-<?= $Page->dias_credito->Lookup->getParamTag($Page, "p_x_dias_credito") ?>
-<?php if (!$Page->dias_credito->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fclienteadd", function() {
-    var options = { name: "x_dias_credito", selectId: "fclienteadd_x_dias_credito" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fclienteadd.lists.dias_credito?.lookupOptions.length) {
-        options.data = { id: "x_dias_credito", form: "fclienteadd" };
-    } else {
-        options.ajax = { id: "x_dias_credito", form: "fclienteadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.cliente.fields.dias_credito.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->descuento->Visible) { // descuento ?>
-    <div id="r_descuento"<?= $Page->descuento->rowAttributes() ?>>
-        <label id="elh_cliente_descuento" for="x_descuento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->descuento->caption() ?><?= $Page->descuento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->descuento->cellAttributes() ?>>
-<span id="el_cliente_descuento">
-<input type="<?= $Page->descuento->getInputTextType() ?>" name="x_descuento" id="x_descuento" data-table="cliente" data-field="x_descuento" value="<?= $Page->descuento->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->descuento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->descuento->formatPattern()) ?>"<?= $Page->descuento->editAttributes() ?> aria-describedby="x_descuento_help">
-<?= $Page->descuento->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->descuento->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 </div><!-- /page* -->
 <?php
     if (in_array("adjunto", explode(",", $Page->getCurrentDetailTable())) && $adjunto->DetailAdd) {
@@ -676,6 +297,12 @@ loadjs.ready("load", function () {
         var $input = $(this);
         var rifOriginal = $input.val();
         if (rifOriginal.trim() == '') return;
+        var primerCaracter = rifOriginal.substring(0, 1).toUpperCase();
+        if (!["V", "E", "J", "G"].includes(primerCaracter)) {
+            ew.alert("El RIF/CI debe comenzar con una letra válida: V, E, J o G.");
+            $input.val("").focus();
+            return false;
+        }
 
         // Detectar automáticamente el entorno mediante la URL para que sirva en ambos formularios
         var tipoEntidad = (window.location.href.toLowerCase().indexOf("proveedor") > -1) ? 'PROVEEDOR' : 'CLIENTE';

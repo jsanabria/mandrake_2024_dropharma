@@ -4146,9 +4146,6 @@ class ArticuloList extends Articulo
             $this->cantidad_en_mano->setupEditAttributes();
             $this->cantidad_en_mano->EditValue = $this->cantidad_en_mano->AdvancedSearch->SearchValue;
             $this->cantidad_en_mano->PlaceHolder = RemoveHtml($this->cantidad_en_mano->caption());
-            $this->cantidad_en_mano->setupEditAttributes();
-            $this->cantidad_en_mano->EditValue2 = $this->cantidad_en_mano->AdvancedSearch->SearchValue2;
-            $this->cantidad_en_mano->PlaceHolder = RemoveHtml($this->cantidad_en_mano->caption());
 
             // cantidad_en_almacenes
             $this->cantidad_en_almacenes->setupEditAttributes();
@@ -4199,9 +4196,6 @@ class ArticuloList extends Articulo
             return true;
         }
         if (!CheckNumber($this->cantidad_en_mano->AdvancedSearch->SearchValue)) {
-            $this->cantidad_en_mano->addErrorMessage($this->cantidad_en_mano->getErrorMessage(false));
-        }
-        if (!CheckNumber($this->cantidad_en_mano->AdvancedSearch->SearchValue2)) {
             $this->cantidad_en_mano->addErrorMessage($this->cantidad_en_mano->getErrorMessage(false));
         }
         if (!CheckNumber($this->cantidad_en_pedido->AdvancedSearch->SearchValue)) {

@@ -3,32 +3,43 @@ require('rcs/fpdf.php');
 require("../include/connect.php");
 
 $id_invoice = isset($_REQUEST["id"])?$_REQUEST["id"]:"0";
+$GLOBALS["id_invoice"] = $id_invoice;
 
 $sql = "SELECT
 			id, date_format(fecha, '%d/%m/%Y') as fecha,
 			date_format(fecha, '%Y/%m/%d') AS fech, cliente, nro_documento, nro_control, tipo_documento, estatus,
-			asesor, documento, monto_usd, tasa_dia, moneda
+			asesor, documento, monto_usd, tasa_dia, moneda, IFNULL(igtf_alicuota, 0) AS igtf_alicuota, IFNULL(impreso, 'N') AS impreso, doc_afectado 
 		FROM salidas where id = '$id_invoice'";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
+$GLOBALS["id"] = $row["id"];
 $GLOBALS["invoice"] = $row["nro_documento"];
 $GLOBALS["cliente"] = $row["cliente"];
 $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["control"] = $row["nro_control"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
-$GLOBALS["estatus"] = $row["estatus"]=="ANULADO" ? $row["estatus"] . " - " : "";
+$GLOBALS["estatus_doc"] = $row["estatus"];
+$GLOBALS["estatus"] = $row["estatus"];
 $GLOBALS["documento"] = $row["documento"];
 $GLOBALS["moneda"] = $row["moneda"];
-
-if(substr($row["nro_documento"], 0, 6) == "1PREFAC") {
-	header("Location: factura_de_venta_prefactura.php?id=$id_invoice&tipo=TDCFCV");
-	die();
-}
+$GLOBALS["alicuota_dinamica"] = floatval($row["igtf_alicuota"] ?? 0);
+$GLOBALS["impreso"] = $row["impreso"];
+$GLOBALS["doc_afectado"] = $row["doc_afectado"];
 
 $monto_usd = floatval($row["monto_usd"]);
 $tasa_dia = floatval($row["tasa_dia"]);
 $asesor = $row["asesor"];
+
+if (trim($GLOBALS["nro_documento"] ?? "") != "") {
+    if ($row["impreso"] != "S") {
+        mysqli_query($link, "UPDATE salidas SET impreso = 'S' WHERE id = '{$id_invoice}'");
+    }
+}
+
+if (trim($GLOBALS["nro_documento"] ?? "") == "") {
+    $GLOBALS["impreso"] = "S";
+}
 
 // Se limpia esta l?nea para asegurar que no haya caracteres invisibles antes de $sql
 if(($monto_usd==0 or $tasa_dia==0) and strtotime($row["fech"]) >= strtotime("2020-09-27 00:00:00")) {
@@ -59,9 +70,39 @@ $GLOBALS["tasa_dia"] = $tasa_dia;
 
 class PDF extends FPDF
 {
+    function RotatedText($x, $y, $txt, $angle)
+    {
+        $this->_out(sprintf(
+            'q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm CP n',
+            cos(deg2rad($angle)),
+            sin(deg2rad($angle)),
+            -sin(deg2rad($angle)),
+            cos(deg2rad($angle)),
+            $x,
+            $y,
+            -$x,
+            -$y
+        ));
+        $this->Text($x, $y, $txt);
+        $this->_out('Q');
+    }
+
+    function MarcaDeAgua()
+    {
+        $this->SetFont('Arial', 'B', 34);
+        $this->SetTextColor(225, 225, 225);
+        $this->RotatedText(75, 115, enc_pdf("SIN DERECHO A CRÉDITO FISCAL"), 25);
+
+        $this->SetTextColor(0, 0, 0);
+    }
+
 	// Cabecera de p?gina
 	function Header()
 	{
+        if ($GLOBALS["impreso"] == "S") {
+            $this->MarcaDeAgua();
+        }
+
 		// Consulto datos de la compa??a
 		require("../include/connect.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
@@ -101,16 +142,24 @@ class PDF extends FPDF
 
 		
 		$sql = "SELECT
-					LPAD(a.id, 8, '0') AS id, a.ci_rif, a.nombre, a.contacto,
-					a.email1, a.direccion, b.campo_descripcion AS ciudad,
-					CONCAT(ifnull(a.telefono1,''), ' ', ifnull(a.telefono2,'')) as telf, a.web,
+					LPAD(s.cliente, 8, '0') AS id,
+					CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_ci_rif, '') ELSE IFNULL(a.ci_rif, '') END AS ci_rif,
+					CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_nombre, '') ELSE IFNULL(a.nombre, '') END AS nombre,
+					a.contacto,
+					a.email1,
+					CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_direccion, '') ELSE IFNULL(a.direccion, '') END AS direccion,
+					CASE WHEN s.estatus = 'PROCESADO' THEN '' ELSE IFNULL(b.campo_descripcion, '') END AS ciudad,
+					CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(s.cliente_telefono, '') ELSE CONCAT(IFNULL(a.telefono1,''), ' ', IFNULL(a.telefono2,'')) END AS telf,
+					a.web,
 					a.email2 AS SICM
-				FROM cliente AS a
+				FROM salidas AS s
+					LEFT OUTER JOIN cliente AS a ON a.id = s.cliente
 					LEFT OUTER JOIN tabla AS b ON b.campo_codigo = a.ciudad AND b.tabla = 'CIUDAD'
-				WHERE a.id = '" . $GLOBALS["cliente"] . "';";
+				WHERE s.id = '" . $GLOBALS["id_invoice"] . "'
+				LIMIT 1;";
 		$rs = mysqli_query($link, $sql);
 		$row = mysqli_fetch_array($rs);
-		
+
 		$id = $row["id"];
 		$rif = $row["ci_rif"];
 		// $razon_social = html_entity_decode($row["nombre"]);
@@ -124,30 +173,58 @@ class PDF extends FPDF
 		$web = $row["web"];
 		$SICM = $row["SICM"];
 
-		$this->Ln(25);
-		$this->SetFont('Arial','',10);
-		
+		// Si es una prefactura (sin número asignado y estatus NUEVO)
+		$nroDocumento = $GLOBALS["nro_documento"];
+		$fechaDocumento = $GLOBALS["fecha"];
+
+		if (trim($GLOBALS["nro_documento"] ?? "") == "" && $GLOBALS["estatus"] == "NUEVO") {
+		    $nroDocumento = "PREFACT-" . $GLOBALS["id"];
+		    $fechaDocumento = date("d/m/Y");
+		}
+
+		$this->Ln(20);
+		$this->SetFont('Arial', '', 10);
+
 		$this->Cell(125, 6);
-		$tdoc = ($GLOBALS["documento"]=="FC" ? "Nro. Factura: " : ($GLOBALS["documento"]=="NC" ? "Nro. Nota de Cr?dito: " : ($GLOBALS["documento"]=="ND" ? "Nro. Nota de D?bito: ":"N/A")));
-		$this->Cell(30, 6, $tdoc,'0','0','L');
-		$this->SetFont('Arial','',10);
-		$this->Cell(45, 6, $GLOBALS["nro_documento"],'0','0','R');
 
-		$this->Ln(5);
-		$this->SetFont('Arial','B',10);
-		$this->Cell(125, 6);
-		$this->Cell(30, 6,'Fecha: ','0','0','L');
-		$this->SetFont('Arial','',10);
-		$this->Cell(45, 6, $ciudad . ", " . $GLOBALS["fecha"], 0, 0, 'R');
+		$tdoc = (
+		    $GLOBALS["documento"] == "FC" ? "Nro. Factura: " :
+		    ($GLOBALS["documento"] == "NC" ? "Nro. Nota de Crédito: " :
+		    ($GLOBALS["documento"] == "ND" ? "Nro. Nota de Débito: " : "N/A"))
+		);
 
+		$this->Cell(30, 6, enc_pdf($tdoc), 0, 0, 'L');
+		$this->Cell(45, 6, $nroDocumento, 0, 0, 'R');
 
-		$this->Ln(6);
+        $this->Ln(5);
+        $this->SetFont('Arial', 'B', 10);
+        $this->Cell(125, 6);
+        $this->Cell(30, 6, 'Fecha: ', 0, 0, 'L');
+        $this->SetFont('Arial', '', 10);
+        $this->Cell(45, 6, enc_pdf($ciudad . ", " . $fechaDocumento), 0, 0, 'R');
+
+        if (trim($GLOBALS["doc_afectado"] ?? "") != "" && in_array($GLOBALS["documento"], ["NC", "ND"])) {
+            $this->Ln(5);
+            $this->SetFont('Arial', 'B', 7);
+            $this->Cell(125, 4);
+            $this->Cell(38, 4, 'Documento Afectado:', 0, 0, 'L');
+            $this->SetFont('Arial', '', 7);
+            $this->Cell(37, 4, $GLOBALS["doc_afectado"], 0, 0, 'R');
+        }
+
+        if ($GLOBALS["impreso"] == "S") {
+            $this->Ln(5);
+            $this->SetFont('Arial', 'B', 8);
+            $this->Cell(0, 4, enc_pdf("SIN DERECHO A CRÉDITO FISCAL"), 0, 1, 'C');
+        } else {
+            $this->Ln(6);
+        }
 
 		$this->SetFont('Arial','B',7);
 		$this->Cell(10, 4);
 		$this->Cell(30, 4,"CLIENTE: ",'0','0','L');
 		$this->SetFont('Arial','',7);
-		$this->Cell(110, 4, utf8_decode(substr(utf8_decode($razon_social), 0, 70)),'0','0','L');
+		$this->Cell(110, 4, substr(enc_pdf($razon_social), 0, 70),'0','0','L');
 
 		/*
 		$this->Ln();
@@ -160,15 +237,15 @@ class PDF extends FPDF
 		$this->Cell(10, 4);
 		$this->Cell(30, 4,"CUENTA N?: ",'0','0','L');
 		$this->SetFont('Arial','',7);
-		$this->Cell(110, 4, utf8_decode(substr($id, 0, 55)),'0','0','L');
+		$this->Cell(110, 4, enc_pdf(substr($id, 0, 55)),'0','0','L');
 
 		$this->Ln();
 		$this->Cell(10, 4);
 		$this->SetFont('Arial','B',7);
 		$this->Cell(30, 4,'DIRECCION: ','0','0','L');
 		$this->SetFont('Arial','',7);
-		$direccion_cliente = "$direccion_cliente. $ciudad_cliente";
-		$this->MultiCell(160, 4, utf8_decode($direccion_cliente), '0', 'L');
+		$direccion_cliente = trim($direccion_cliente . (trim($ciudad_cliente) != "" ? ". " . $ciudad_cliente : ""));
+		$this->MultiCell(160, 4, enc_pdf($direccion_cliente), '0', 'L');
 
 		
 		$this->Ln();
@@ -224,10 +301,7 @@ class PDF extends FPDF
 		require("../include/connect.php");
 		$doc = "";
 
-		$sql = "SELECT valor1 AS igtf FROM parametro WHERE codigo = '037';";
-		$rs = mysqli_query($link, $sql);
-		$row = mysqli_fetch_array($rs);
-		$igtf_porc = floatval($row["igtf"]);
+		$igtf_porc = $GLOBALS["alicuota_dinamica"];
 
 		$sql = "SELECT
 					a.alicuota_iva,
@@ -242,9 +316,9 @@ class PDF extends FPDF
 		$rs = mysqli_query($link, $sql);
 		$row = mysqli_fetch_array($rs);
 		$alicuota_salidas = $row["alicuota_iva"];
-		$nota = utf8_decode($row["nota"]);
-		$moneda = utf8_decode($row["moneda"]);
-		$asesor = utf8_decode($row["asesor"]);
+		$nota = enc_pdf($row["nota"]);
+		$moneda = enc_pdf($row["moneda"]);
+		$asesor = enc_pdf($row["asesor"]);
 		$monto_total = floatval($row["monto_total"]);
 		$monto_sin_descuento = floatval($row["monto_sin_descuento"]);
 
@@ -329,16 +403,16 @@ class PDF extends FPDF
 
 		if($sw) $asociado = "Documento(s) Asociado(s): $tdoc $doc / ";
 
-		$this->Ln(100-$this->GetY());
+		$this->Ln(95-$this->GetY());
 
 		$this->Cell(10, 3, "", 0, 0, 'R');
 		$this->SetFont('Arial','BI',7);
-		$this->MultiCell(190, 3, strtoupper(utf8_decode($nota . " " . $asociado)), 0, 'L');
+		$this->MultiCell(190, 3, strtoupper(enc_pdf($nota . " " . $asociado)), 0, 'L');
 
 
 		$this->SetFont('Arial','',6);
 		$this->Cell(10, 3, "", 0, 0, 'L');
-		$this->Cell(90, 3, "Este documento se expresa en D?lares Americanos con su equivalente en Bol?vares al tipo de cambio corriente", 0, 0, 'L');
+		$this->Cell(90, 3, enc_pdf("Este documento se expresa en Dólares Americanos con su equivalente en Bolívares al tipo de cambio corriente"), 0, 0, 'L');
 		$this->SetFont('Arial','B',7);
 		$this->Cell(63, 3, "SUB-TOTAL EXENTO:", 0, 0, 'R');
 		$this->SetFont('Arial','',7);
@@ -348,7 +422,7 @@ class PDF extends FPDF
 
 		$this->SetFont('Arial','',6);
 		$this->Cell(10, 3, "", 0, 0, 'L');
-		$this->Cell(90, 3, "del mercado a la fecha de su emisi?n, seg?n lo establecido en el art?culo 13 numeral 14 de la Providencia ", 0, 0, 'L');
+		$this->Cell(90, 3, enc_pdf("del mercado a la fecha de su emisión, según lo establecido en el artículo 13 numeral 14 de la Providencia "), 0, 0, 'L');
 		$this->SetFont('Arial','B',7);
 		$this->Cell(63,3, "SUB-TOTAL GRAVADO:", 0, 0, 'R');
 		$this->SetFont('Arial','',7);
@@ -361,7 +435,7 @@ class PDF extends FPDF
 		if($descuento > 0) {
 			$this->SetFont('Arial','',6);
 			$this->Cell(10, 3, "", 0, 0, 'L');
-			$this->Cell(90, 3, "Administrativa SNAT/2011/0071, el art?culo 128 de la Ley del Banco Central de Venezuela, el art?culo 25 de la", 0, 0, 'L');
+			$this->Cell(90, 3, enc_pdf("Administrativa SNAT/2011/0071, el artículo 128 de la Ley del Banco Central de Venezuela, el artículo 25 de la"), 0, 0, 'L');
 			$this->SetFont('Arial','B',7);
 			$this->Cell(63,3, "Descuento " . number_format($descuento, 2, ",", ".") . "%:", 0, 0, 'R');
 			$this->SetFont('Arial','',7);
@@ -405,40 +479,36 @@ class PDF extends FPDF
 		$this->Cell(15, 3, number_format($total_usd, 2, ",", "."), 0, 0, 'R');
 		
 
-        // IGTF Logic
-		if($igtf == "S") {
-			// Nota: Se utiliza el total Bs de la DB ($total_bs_db) para el c?lculo del total general en Bs antes de la conversi?n/recalculo
-			$totaligtf = $total_bs_db + $monto_igtf;
-			
-			// 1. CALCULAR VALORES IGTF EN USD (?LTIMA COLUMNA)
-			$monto_igtf_usd = round($monto_igtf / $tasa_dia, 2);
-			$totaligtf_usd = round($totaligtf / $tasa_dia, 2);
-			
-			// 2. RECALCULAR VALORES IGTF EN BS (PEN?LTIMA COLUMNA)
-			$monto_igtf_bs_recalculado = $monto_igtf_usd * $tasa_dia;
-			$totaligtf_bs_recalculado = $totaligtf_usd * $tasa_dia;
-			
+        // IGTF Logic - igual al formato decodibo: muestra base en Bs. y nota legal
+        $base_igtf_bs = ($monto_base_igtf > 0) ? $monto_base_igtf : $total_bs_recalculado;
+        $monto_impuesto_igtf_bs = ($monto_igtf > 0) ? $monto_igtf : ($base_igtf_bs * ($igtf_porc / 100));
+        $total_general_bs = $total_bs_recalculado + $monto_impuesto_igtf_bs;
 
-			$this->Ln(3);
-			$this->SetFont('Arial','B',7);
-			$this->Cell(30, 3, "", 0, 0, 'R');
-			$this->Cell(90, 3, "", 0, 0, 'R');
-			$this->Cell(43, 3, "I.G.T.F. " . number_format($igtf_porc, 0, "", "") . "% SOBRE EL MONTO A PAGAR:", 0, 0, 'R');
-			$this->SetFont('Arial','',7);
-			
-			$this->Cell(22, 3, "", 0, 0, 'R');
-			$this->Cell(15, 3, number_format($monto_igtf_usd, 2, ",", "."), 0, 0, 'R');
+        $monto_impuesto_igtf_usd = ($tasa_dia > 0) ? round($monto_impuesto_igtf_bs / $tasa_dia, 2) : 0;
+        $total_general_usd = ($tasa_dia > 0) ? round($total_general_bs / $tasa_dia, 2) : 0;
 
-			$this->Ln(3);
-			$this->SetFont('Arial','B',7);
-			$this->Cell(30, 3, "", 0, 0, 'R');
-			$this->Cell(90, 3, "", 0, 0, 'R');
-			$this->Cell(43, 3, "TOTAL GENERAL:", 0, 0, 'R');
-			$this->SetFont('Arial','',7);
-			
-			$this->Cell(22, 3, "", 0, 0, 'R');
-			$this->Cell(15, 3, number_format($totaligtf_usd, 2, ",", "."), 0, 0, 'R');
-		}
+        $this->Ln(3);
+        $this->SetFont('Arial','B',6);
+        $this->Cell(100, 3, "", 0, 0, 'R');
+        $this->Cell(63, 3, "I.G.T.F. (" . number_format($igtf_porc, 2, ",", ".") . "%) SOBRE Bs. " . number_format($base_igtf_bs, 2, ",", ".") . ":", 0, 0, 'R');
+        $this->SetFont('Arial','',7);
+        $this->Cell(22, 3, number_format($monto_impuesto_igtf_bs, 2, ",", "."), 0, 0, 'R');
+        $this->Cell(15, 3, number_format($monto_impuesto_igtf_usd, 2, ",", "."), 0, 0, 'R');
+
+        $this->Ln(3);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(100, 3, "", 0, 0, 'R');
+        $this->Cell(63, 3, "TOTAL GENERAL:", 0, 0, 'R');
+        $this->SetFont('Arial','',7);
+        $this->Cell(22, 3, number_format($total_general_bs, 2, ",", "."), 0, 0, 'R');
+        $this->Cell(15, 3, number_format($total_general_usd, 2, ",", "."), 0, 0, 'R');
+
+        // Nota fija de la Gaceta, como en factura_de_venta_decodibo.php
+        $this->Ln(5);
+        $this->SetFont('Arial','B',7);
+        $this->Cell(10, 3, "", 0, 0, 'L');
+        $this->Cell(125, 3, enc_pdf("IGTF Sujeto a Pago Recibido (Efectivo $) segun Art 1 GO 42339 17/03/2022."), 0, 0, 'L');
+        $this->Cell(65, 3, enc_pdf("Tasa BCV del Dia: " . number_format($tasa_dia, 2, ",", ".")), 0, 0, 'R');
 
 
 		require("../include/desconnect.php");
@@ -454,8 +524,11 @@ $pdf->SetFont('Arial','',7);
 
 
 $sql = "SELECT
-			IFNULL(b.codigo, '') AS codigo,
-			LTRIM(RTRIM(CONCAT(IFNULL(b.codigo, ''), ' ', SUBSTRING(IFNULL(b.principio_activo, ''), 1, 65), ' ', IFNULL(a.lote, '')))) AS articulo,
+			CASE WHEN s.estatus = 'PROCESADO' THEN IFNULL(a.articulo_codigo, '') ELSE IFNULL(b.codigo, '') END AS codigo,
+			CASE
+				WHEN s.estatus = 'PROCESADO' THEN LTRIM(RTRIM(CONCAT(IFNULL(a.articulo_codigo, ''), ' ', IFNULL(a.articulo_descripcion, ''), ' ', IFNULL(a.lote, ''))))
+				ELSE LTRIM(RTRIM(CONCAT(IFNULL(b.codigo, ''), ' ', SUBSTRING(IFNULL(b.principio_activo, ''), 1, 65), ' ', IFNULL(a.lote, ''))))
+			END AS articulo,
 			a.lote, date_format(a.fecha_vencimiento, '%d/%m/%Y') as vencimiento,
 			a.cantidad_articulo AS cantidad,
 			(SELECT SUBSTRING(descripcion,1,3) FROM unidad_medida WHERE codigo = a.articulo_unidad_medida) AS unidad_medida,
@@ -466,11 +539,12 @@ $sql = "SELECT
 			a.descuento, a.precio_unidad_sin_desc AS precio_ful
 		FROM
 			entradas_salidas AS a
+			JOIN salidas AS s ON s.id = a.id_documento AND s.tipo_documento = a.tipo_documento
 			LEFT OUTER JOIN articulo AS b ON b.id = a.articulo
 			LEFT OUTER JOIN fabricante AS c ON c.id = a.fabricante
 		WHERE
 			a.id_documento = '$id_invoice' AND a.tipo_documento = '" . $GLOBALS["tipo_documento"] . "'
-		ORDER BY b.principio_activo, b.presentacion;";
+		ORDER BY articulo;";
 
 $rs = mysqli_query($link, $sql) or die(mysqli_error());
 while($row = mysqli_fetch_array($rs))
@@ -482,9 +556,9 @@ while($row = mysqli_fetch_array($rs))
 	$pdf->Cell(15, 3, number_format($row["cantidad"], 0, "", ""), "", 0, 'C');
 
 	if(strlen(trim($row["articulo"])) < 70)
-		$pdf->Cell(110, 3, ($row["alicuota"]==0.00?"(E) ":"") . trim(utf8_decode($row["articulo"])), 0, 0, 'L');
+		$pdf->Cell(110, 3, ($row["alicuota"]==0.00?"(E) ":"") . trim(enc_pdf($row["articulo"])), 0, 0, 'L');
 	else
-		$pdf->Cell(110, 3, ($row["alicuota"]==0.00?"(E) ":"") . trim(substr(utf8_decode($row["articulo"]), 0, 70)), 0, 0, 'L');
+		$pdf->Cell(110, 3, ($row["alicuota"]==0.00?"(E) ":"") . trim(substr(enc_pdf($row["articulo"]), 0, 70)), 0, 0, 'L');
 
 
 	$pdf->Cell(20, 3, number_format($row["precio_unidad"], 2, ",", "."), 0, 0, 'R');
@@ -510,9 +584,9 @@ while($row = mysqli_fetch_array($rs))
 
 	if(strlen($row["articulo"]) >= 70) {
 		$pdf->Ln();
-		if(substr(trim(utf8_decode($row["articulo"])), 70, strlen($row["articulo"])) != "") {
+		if(substr(trim(enc_pdf($row["articulo"])), 70, strlen($row["articulo"])) != "") {
 			$pdf->Cell(25, 3);
-			$pdf->MultiCell(110, 3, substr(trim(utf8_decode($row["articulo"])), 70, strlen($row["articulo"])), 0, 'L');			
+			$pdf->MultiCell(110, 3, substr(trim(enc_pdf($row["articulo"])), 70, strlen($row["articulo"])), 0, 'L');			
 		}
 	}
 	else $pdf->Ln();
@@ -526,4 +600,11 @@ $pdf->EndReport($id_invoice);
 require("../include/desconnect.php");
 
 $pdf->Output();
+
+function enc_pdf($txt) {
+    $texto = html_entity_decode((string)$txt, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return mb_convert_encoding($texto, 'ISO-8859-1', 'UTF-8');
+}
+
+
 ?>

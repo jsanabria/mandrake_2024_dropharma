@@ -1,7 +1,10 @@
-<ew-language date="2026/6/9" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/6/14" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1467">
+      <phrase id="menutext" value="Cliente Agregar" />
+    </menu>
     <menu id="19">
       <phrase id="menutext" value="Maestros" />
     </menu>
@@ -199,6 +202,9 @@
     </menu>
     <menu id="929">
       <phrase id="menutext" value="Transferencias" />
+    </menu>
+    <menu id="1468">
+      <phrase id="menutext" value="Transferencia Almacen Multiple" />
     </menu>
     <menu id="1463">
       <phrase id="menutext" value="Devoluciones" />
@@ -6727,7 +6733,7 @@
       <phrase id="tblpagecaption4" value="Datos Pago" />
       <phrase id="tblpagecaption5" value="Page 5" />
       <field id="id">
-        <phrase id="fldcaption" value="Id" />
+        <phrase id="fldcaption" value="Id/Prefact" />
       </field>
       <field id="tipo_documento">
         <phrase id="fldcaption" value="tipo documento" />
@@ -6854,7 +6860,7 @@
         <phrase id="fldcaption" value="Usuario Bultos" />
       </field>
       <field id="fecha_despacho">
-        <phrase id="fldcaption" value="Fecha Despacho" />
+        <phrase id="fldcaption" value="Fecha Registro" />
       </field>
       <field id="user_despacho">
         <phrase id="fldcaption" value="Usuario Despacho" />
@@ -7939,6 +7945,12 @@
     </table>
     <table id="devoluciones_ver">
       <phrase id="tblcaption" value="Devoluciones Ver Nota de Entrega" />
+    </table>
+    <table id="cliente_rapido_add">
+      <phrase id="tblcaption" value="Cliente Agregar" />
+    </table>
+    <table id="transferencia_almacen_multiple">
+      <phrase id="tblcaption" value="Transferencia Almacen Multiple" />
     </table>
   </project>
 </ew-language>

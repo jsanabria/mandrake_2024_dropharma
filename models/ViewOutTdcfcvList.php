@@ -153,7 +153,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->Visible = false;
+        $this->id->setVisibility();
         $this->tipo_documento->Visible = false;
         $this->documento->setVisibility();
         $this->nro_documento->setVisibility();
@@ -186,7 +186,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->bultos->Visible = false;
         $this->fecha_bultos->Visible = false;
         $this->user_bultos->Visible = false;
-        $this->fecha_despacho->Visible = false;
+        $this->fecha_despacho->setVisibility();
         $this->user_despacho->Visible = false;
         $this->consignacion->Visible = false;
         $this->descuento->Visible = false;
@@ -2185,6 +2185,15 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $captionClass = $this->isExport("email") ? "ew-filter-caption-email" : "ew-filter-caption";
         $captionSuffix = $this->isExport("email") ? ": " : "";
 
+        // Field id
+        $filter = $this->queryBuilderWhere("id");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->id, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->id->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field documento
         $filter = $this->queryBuilderWhere("documento");
         if (!$filter) {
@@ -2300,6 +2309,15 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->impreso->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field fecha_despacho
+        $filter = $this->queryBuilderWhere("fecha_despacho");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->fecha_despacho, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->fecha_despacho->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field asesor_asignado
@@ -2822,6 +2840,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if (Get("order") !== null) {
             $this->CurrentOrder = Get("order");
             $this->CurrentOrderType = Get("ordertype", "");
+            $this->updateSort($this->id); // id
             $this->updateSort($this->documento); // documento
             $this->updateSort($this->nro_documento); // nro_documento
             $this->updateSort($this->fecha); // fecha
@@ -2835,6 +2854,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->id_documento_padre); // id_documento_padre
             $this->updateSort($this->pagado); // pagado
             $this->updateSort($this->impreso); // impreso
+            $this->updateSort($this->fecha_despacho); // fecha_despacho
             $this->updateSort($this->asesor_asignado); // asesor_asignado
             $this->setStartRecordNumber(1); // Reset start position
         }
@@ -3298,6 +3318,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $item = &$option->addGroupOption();
             $item->Body = "";
             $item->Visible = $this->UseColumnVisibility;
+            $this->createColumnOption($option, "id");
             $this->createColumnOption($option, "documento");
             $this->createColumnOption($option, "nro_documento");
             $this->createColumnOption($option, "fecha");
@@ -3311,6 +3332,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "id_documento_padre");
             $this->createColumnOption($option, "pagado");
             $this->createColumnOption($option, "impreso");
+            $this->createColumnOption($option, "fecha_despacho");
             $this->createColumnOption($option, "asesor_asignado");
         }
 
@@ -5187,6 +5209,10 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->visita->ViewValue = $this->visita->CurrentValue;
             $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
 
+            // id
+            $this->id->HrefValue = "";
+            $this->id->TooltipValue = "";
+
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -5239,10 +5265,19 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->impreso->HrefValue = "";
             $this->impreso->TooltipValue = "";
 
+            // fecha_despacho
+            $this->fecha_despacho->HrefValue = "";
+            $this->fecha_despacho->TooltipValue = "";
+
             // asesor_asignado
             $this->asesor_asignado->HrefValue = "";
             $this->asesor_asignado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
+            // id
+            $this->id->setupEditAttributes();
+            $this->id->EditValue = $this->id->AdvancedSearch->SearchValue;
+            $this->id->PlaceHolder = RemoveHtml($this->id->caption());
+
             // documento
             $this->documento->setupEditAttributes();
             $this->documento->EditValue = $this->documento->options(true);
@@ -5347,6 +5382,14 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->impreso->EditValue = $this->impreso->options(false);
             $this->impreso->PlaceHolder = RemoveHtml($this->impreso->caption());
 
+            // fecha_despacho
+            $this->fecha_despacho->setupEditAttributes();
+            $this->fecha_despacho->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha_despacho->AdvancedSearch->SearchValue, $this->fecha_despacho->formatPattern()), $this->fecha_despacho->formatPattern()));
+            $this->fecha_despacho->PlaceHolder = RemoveHtml($this->fecha_despacho->caption());
+            $this->fecha_despacho->setupEditAttributes();
+            $this->fecha_despacho->EditValue2 = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha_despacho->AdvancedSearch->SearchValue2, $this->fecha_despacho->formatPattern()), $this->fecha_despacho->formatPattern()));
+            $this->fecha_despacho->PlaceHolder = RemoveHtml($this->fecha_despacho->caption());
+
             // asesor_asignado
             $this->asesor_asignado->setupEditAttributes();
             $this->asesor_asignado->PlaceHolder = RemoveHtml($this->asesor_asignado->caption());
@@ -5368,11 +5411,20 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if (!Config("SERVER_VALIDATE")) {
             return true;
         }
+        if (!CheckInteger($this->id->AdvancedSearch->SearchValue)) {
+            $this->id->addErrorMessage($this->id->getErrorMessage(false));
+        }
         if (!CheckDate($this->fecha->AdvancedSearch->SearchValue, $this->fecha->formatPattern())) {
             $this->fecha->addErrorMessage($this->fecha->getErrorMessage(false));
         }
         if (!CheckDate($this->fecha->AdvancedSearch->SearchValue2, $this->fecha->formatPattern())) {
             $this->fecha->addErrorMessage($this->fecha->getErrorMessage(false));
+        }
+        if (!CheckDate($this->fecha_despacho->AdvancedSearch->SearchValue, $this->fecha_despacho->formatPattern())) {
+            $this->fecha_despacho->addErrorMessage($this->fecha_despacho->getErrorMessage(false));
+        }
+        if (!CheckDate($this->fecha_despacho->AdvancedSearch->SearchValue2, $this->fecha_despacho->formatPattern())) {
+            $this->fecha_despacho->addErrorMessage($this->fecha_despacho->getErrorMessage(false));
         }
 
         // Return validate result
@@ -6154,6 +6206,8 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->fecha->Visible = false;
         $this->unidades->Visible = false;
         $this->asesor_asignado->Visible = false;
+        $this->id->Visible = FALSE;
+        $this->fecha_despacho->Visible = FALSE;
     }
 
     // Row Custom Action event

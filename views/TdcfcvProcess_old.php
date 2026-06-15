@@ -150,39 +150,37 @@ if(trim($nro_documento) == "") {
         }
     }
 
-    $serie_doc = $documento . "_DOC";   // FC_DOC, NC_DOC, ND_DOC
-    $serie_ctrl = $documento . "_CTRL"; // FC_CTRL, NC_CTRL, ND_CTRL
-
-    $numeroDoc = ReservarConsecutivoDocumento("TDCFCV", $serie_doc);
-    $numeroCtrl = ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl);
-
-    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
+    $sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '$docu';";
     $row = ExecuteRow($sql);
+    $numero = intval($row["valor1"]) + 1;
     $prefijo = trim($row["valor2"]);
     $padeo = intval($row["valor3"]);
-    $factura = $prefijo . str_pad($numeroDoc, $padeo, "0", STR_PAD_LEFT);
+    $factura = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT); 
+    $sql = "UPDATE parametro SET valor1='$numero' 
+        WHERE codigo = '$docu';";
+    Execute($sql);
 
-    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
+    //// Nro Ctrol ////
+    // Tomo el siguiente número de control de factura
+    $sql = "SELECT valor1, valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
     $row = ExecuteRow($sql);
+    $numero = intval($row["valor1"]) + 1;
     $prefijo = trim($row["valor2"]);
     $padeo = intval($row["valor3"]);
-    $facturaCTRL = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
+    $facturaCTRL = $prefijo . str_pad($numero, $padeo, "0", STR_PAD_LEFT); 
+    $sql = "UPDATE parametro SET valor1='$numero' 
+            WHERE codigo = '$crtl';";
+            Execute($sql);
+    ///////////////////
 
     // $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
     // $faltan_datos = ExecuteScalar($sql);
     // if($faltan_datos == "N") $estatus = "PROCESADO";
     $estatus = "PROCESADO";
 
-    $sql = "UPDATE salidas 
-            SET fecha = '" . date("Y-m-d H:i:s") . "', 
-                nro_documento = '$factura', 
-                nro_control = '$facturaCTRL', 
-                estatus = '$estatus', 
-                username = '" . CurrentUserName() . "' 
-            WHERE id = $pedido
-            AND (nro_documento IS NULL OR nro_documento = '')";
+    $sql = "UPDATE salidas SET fecha = '" . date("Y-m-d H:i:s") . "', nro_documento = '$factura', nro_control = '$facturaCTRL', estatus = '$estatus', username = '" . CurrentUserName() . "' WHERE id = $pedido;";
     Execute($sql);
-    
+
     // Congela la foto fiscal del cliente y de los articulos al momento de emitir.
     CongelarSnapshotFiscalTdcfcv($pedido);
 

@@ -12,65 +12,113 @@ $Page->showMessage();
 $id = isset($_REQUEST["id"]) ? intval($_REQUEST["id"]) : 0;
 $codcli = isset($_REQUEST["codcli"]) ? intval($_REQUEST["codcli"]) : 0;
 $tipo_documento = isset($_REQUEST["tipo_documento"]) ? $_REQUEST["tipo_documento"] : "TDCASA";
+$tipo_documento_sql = AdjustSql($tipo_documento);
 
-// NOTA: Asegurar que ExecuteScalar escape internamente $tipo_documento
-$titulo = ExecuteScalar("SELECT descripcion FROM tipo_documento WHERE codigo = '$tipo_documento';");
+$titulo = ExecuteScalar("SELECT descripcion FROM tipo_documento WHERE codigo = '$tipo_documento_sql';");
+if ($titulo == "") $titulo = $tipo_documento;
 $username = CurrentUserName();
 
-if($id == 0) {
-    $sql = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0, 1;"; 
-    $row = ExecuteRow($sql); 
-    $tasa = floatval($row["tasa"]);
+// Valores por defecto para documento nuevo. IMPORTANTE:
+// Ya no se crea la cabecera aquí; se creará en findme_agregar.php
+// cuando el usuario agregue el primer renglón.
+$sql = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 1;";
+$row = ExecuteRow($sql);
+$tasa_dia = floatval($row["tasa"] ?? 0);
 
-    $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
+$sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default' LIMIT 1;";
+$row = ExecuteRow($sql);
+$moneda = $row["moneda"] ?? "Bs.";
+
+$fecha = date("d/m/Y");
+$tipo = $titulo;
+$cliente = "";
+$nro_documento = "Se asignará al agregar";
+$nota = "";
+$factura = "N";
+$ci_rif = "";
+$nombre = "";
+$direccion = "";
+$telefono = "";
+$email = "";
+$descuento = 0;
+
+if ($id > 0) {
+    $sql = "SELECT 
+        DATE_FORMAT(a.fecha, '%d/%m/%Y') AS fecha_factura, 
+        c.descripcion AS tipo, b.nombre AS cliente, a.nro_documento, 
+        a.fecha, a.tipo_documento, a.nota, a.factura, 
+        a.ci_rif, a.nombre, a.direccion, a.telefono, a.email, a.tasa_dia, IFNULL(a.descuento, 0) AS descuento,
+        a.cliente AS codcli, a.moneda
+    FROM 
+        salidas AS a 
+        LEFT OUTER JOIN cliente AS b ON b.id = a.cliente 
+        LEFT OUTER JOIN tipo_documento AS c ON c.codigo = a.tipo_documento 
+    WHERE 
+        a.id = '$id';"; 
     $row = ExecuteRow($sql);
+
+    if (!$row) {
+        header("Location: ViewOutTdcnetList");
+        die();
+    }
+
+    $fecha = $row["fecha_factura"];
+    $tipo = $row["tipo"];
+    $tipo_documento = $row["tipo_documento"];
+    $codcli = intval($row["codcli"]);
+    $cliente = $row["cliente"];
+    $nro_documento = $row["nro_documento"];
+    $nota = $row["nota"];
+    $factura = $row["factura"]; 
+    $ci_rif = $row["ci_rif"]; 
+    $nombre = $row["nombre"]; 
+    $direccion = $row["direccion"]; 
+    $telefono = $row["telefono"]; 
+    $email = $row["email"];
+    $tasa_dia = floatval($row["tasa_dia"]); 
+    $descuento = floatval($row["descuento"]);
     $moneda = $row["moneda"];
+} else {
+    if ($codcli <= 0) {
+        $_SESSION["error"] = "Debe indicar un cliente para crear el ajuste.";
+        header("Location: ViewOutTdcnetList");
+        die();
+    }
 
-    $sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS cosecutivo FROM salidas WHERE tipo_documento = '$tipo_documento';";
-    $consecutivo = intval(ExecuteScalar($sql)) + 1;
-    $nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
-
-    $sql = "INSERT INTO salidas
-                (id, tipo_documento, username, fecha,
-                cliente, nro_documento,
-                nota, estatus, moneda, factura, tasa_dia)
-            VALUES 
-                (NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "',
-                $codcli, '$nro_documento',
-                '', 'NUEVO', '$moneda', 'N', $tasa);"; 
-    Execute($sql);
-
-    $row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
-    $id = intval($row["id"]);
+    $sql = "SELECT nombre FROM cliente WHERE id = $codcli LIMIT 1;";
+    $cliente = ExecuteScalar($sql);
+    if ($cliente == "") $cliente = "Cliente no encontrado";
 }
 
-$sql = "SELECT 
-    DATE_FORMAT(a.fecha, '%d/%m/%Y') AS fecha_factura, 
-    c.descripcion AS tipo, b.nombre AS cliente, a.nro_documento, 
-    a.fecha, a.tipo_documento, a.nota, a.factura, 
-    a.ci_rif, a.nombre, a.direccion, a.telefono, a.email, a.tasa_dia, IFNULL(a.descuento, 0) AS descuento  
-FROM 
-    salidas AS a 
-    LEFT OUTER JOIN cliente AS b ON b.id = a.cliente 
-    LEFT OUTER JOIN tipo_documento AS c ON c.codigo = a.tipo_documento 
-WHERE 
-    a.id = '$id';"; 
-$row = ExecuteRow($sql);
+// Precarga datos del cliente si los campos de despacho están vacíos
+if ($codcli > 0) {
+    $sql = "SELECT ci_rif, nombre, direccion, telefono1 
+            FROM cliente 
+            WHERE id = $codcli 
+            LIMIT 1;";
+    $rowCli = ExecuteRow($sql);
 
-$fecha = $row["fecha_factura"];
-$tipo = $row["tipo"];
-$tipo_documento = $row["tipo_documento"];
-$cliente = $row["cliente"];
-$nro_documento = $row["nro_documento"];
-$nota = $row["nota"];
-$factura = $row["factura"]; 
-$ci_rif = $row["ci_rif"]; 
-$nombre = $row["nombre"]; 
-$direccion = $row["direccion"]; 
-$telefono = $row["telefono"]; 
-$email = $row["email"];
-$tasa_dia = floatval($row["tasa_dia"]); 
-$descuento = floatval($row["descuento"]);
+    if ($rowCli) {
+        if (trim($ci_rif ?? "") == "") {
+            $ci_rif = $rowCli["ci_rif"];
+        }
+
+        if (trim($nombre ?? "") == "") {
+            $nombre = $rowCli["nombre"];
+        }
+
+        if (trim($direccion ?? "") == "") {
+            $direccion = $rowCli["direccion"];
+        }
+
+        if (trim($telefono ?? "") == "") {
+            $telefono = $rowCli["telefono1"];
+        }
+    }
+
+    // Control visual para ajustes de salida
+    $ocultarFinanzasAjusteSalida = ($tipo_documento == "TDCASA");    
+}
 ?>
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -92,8 +140,18 @@ $descuento = floatval($row["descuento"]);
                     <i class="fa fa-print"></i> Imprimir Orden de Entrega
                 </a>
             <?php endif; ?>
-            <a class="btn btn-sm btn-info text-white" href="ViewOutTdcnetList">
-                <i class="fa fa-list"></i> Listar Ordenes de Entrega
+            <?php
+            $listaUrl = "ViewOutTdcnetList";
+            $listaTexto = "Listar Ordenes de Entrega";
+
+            if ($tipo_documento == "TDCASA") {
+                $listaUrl = "ViewOutTdcasaList";
+                $listaTexto = "Listar Ajustes de Salida";
+            }
+            ?>
+
+            <a class="btn btn-sm btn-info text-white" href="<?= $listaUrl ?>">
+                <i class="fa fa-list"></i> <?= $listaTexto ?>
             </a>
         </div>
     </div>
@@ -117,6 +175,7 @@ $descuento = floatval($row["descuento"]);
                             <label class="form-label small fw-bold mb-1">Nro Documento</label>
                             <input type="text"
                                    class="form-control form-control-sm bg-light fw-bold text-primary"
+                                   id="txt_nro_documento"
                                    value="<?= $nro_documento ?>"
                                    readonly>
                         </div>
@@ -151,7 +210,7 @@ $descuento = floatval($row["descuento"]);
             </div>
 
             <div class="card shadow-sm mb-3" id="DatosFactura" style="display:none;">
-                <div class="card-header bg-light py-2"><span class="small fw-bold text-secondary">Información de Facturación / Despacho</span></div>
+                <div class="card-header bg-light py-2"><span class="small fw-bold text-secondary">Información de Recibo / Despacho</span></div>
                 <div class="card-body p-3">
                     <div class="row g-2">
                         <div class="col-md-6">
@@ -191,9 +250,9 @@ $descuento = floatval($row["descuento"]);
             </div>
         </div>
 
-        <div class="col-lg-4" id="ContenedorFinancieroDinamico">
-
-        </div>
+        <?php if (!$ocultarFinanzasAjusteSalida) { ?>
+            <div class="col-lg-4" id="ContenedorFinancieroDinamico"></div>
+        <?php } ?>
     </div>
 
     <!-- FILA 2 -->
@@ -209,8 +268,14 @@ $descuento = floatval($row["descuento"]);
 
 
 <input type="hidden" id="id" value="<?= $id; ?>">
-<input type="hidden" id="cantidad_items" value="<?= $cantidad; ?>">
+<input type="hidden" id="codcli" value="<?= $codcli; ?>">
+<input type="hidden" id="tipo_documento_actual" value="<?= htmlspecialchars($tipo_documento); ?>">
+<input type="hidden" id="moneda_actual" value="<?= htmlspecialchars($moneda); ?>">
+<input type="hidden" id="tasa_dia_actual" value="<?= $tasa_dia; ?>">
+<input type="hidden" id="nro_documento" value="<?= htmlspecialchars($nro_documento); ?>">
+<input type="hidden" id="cantidad_items" value="<?= $cantidad ?? 0; ?>">
 <input type="hidden" id="username" value="<?= htmlspecialchars($username); ?>">
+<input type="hidden" id="ocultar_finanzas_ajuste" value="<?= $ocultarFinanzasAjusteSalida ? 'S' : 'N'; ?>">
 
 <div class="modal fade" id="modalAutorizarDescuento" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
@@ -241,10 +306,11 @@ $descuento = floatval($row["descuento"]);
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    function iniciarAjusteSalida() {
+
         // Manejo inicial y cambio del panel de facturación
         toggleDatosFactura($("#factura").val());
         $("#factura").change(function() {
@@ -309,9 +375,10 @@ $descuento = floatval($row["descuento"]);
             }
         });
 
+        registrarEventosAutorizacion();
         CargarDetalle();
         CargarFinanciero();
-    });
+    }
 
     var puedeModificarPrecioDescuento = <?= VerificaFuncion("040") ? "true" : "false"; ?>;
 
@@ -455,7 +522,11 @@ $descuento = floatval($row["descuento"]);
             type: "POST",
             dataType: "json", // Manejo correcto del estándar JSON de tu backend
             data: {
-                "id": idDocumento, 
+                "id": idDocumento,
+                "codcli": $("#codcli").val(),
+                "tipo_documento": $("#tipo_documento_actual").val(),
+                "moneda": $("#moneda_actual").val(),
+                "tasa_dia": $("#tasa_dia_actual").val(),
                 "username": $("#username").val() ? $("#username").val().trim() : "",
                 "nota": $("#nota").val() ? $("#nota").val() : "",
                 "factura": $("#factura").val() ? $("#factura").val() : "",
@@ -480,6 +551,13 @@ $descuento = floatval($row["descuento"]);
                 $("#" + idCantidadInput).attr('disabled', false);
 
                 if (response && response.success) {
+                    if (response.id_documento && parseInt(response.id_documento, 10) > 0) {
+                        $("#id").val(response.id_documento);
+                    }
+                    if (response.nro_documento) {
+                        $("#txt_nro_documento").val(response.nro_documento);
+                        $("#nro_documento").val(response.nro_documento);
+                    }
                     // Refresco asíncronico unificado inmediato
                     CargarDetalle();
                     CargarFinanciero();
@@ -513,6 +591,11 @@ $descuento = floatval($row["descuento"]);
                 success: function (response) {
                     $("#ContenedorCestaDinamica").css('opacity', '1');
                     if (response && response.success) {
+                        if (response.redirect_to) {
+                            ew.alert(response.message || "Documento eliminado.");
+                            window.location.href = response.redirect_to;
+                            return;
+                        }
                         // Refrescamos de manera dinámica la vista completa
                         CargarDetalle();
                         CargarFinanciero();
@@ -537,6 +620,11 @@ $descuento = floatval($row["descuento"]);
         var nombre = $("#nombre").val().trim();
         var direccion = $("#direccion").val().trim();
         var telefono = $("#telefono").val().trim();
+
+        if (!$("#id").val() || $("#id").val() == "0") {
+            ew.alert("Primero debe agregar al menos un artículo. La cabecera se creará automáticamente al insertar el primer renglón.");
+            return false;
+        }
 
         if(factura === "S" && (ci_rif === "" || nombre === "" || direccion === "" || telefono === "")) {
             ew.alert("Faltan datos fiscales obligatorios; Verifique");
@@ -615,6 +703,11 @@ $descuento = floatval($row["descuento"]);
         var direccion = $("#direccion").val().trim();
         var telefono = $("#telefono").val().trim();
 
+        if (!$("#id").val() || $("#id").val() == "0") {
+            ew.alert("Primero debe agregar al menos un artículo. La cabecera se creará automáticamente al insertar el primer renglón.");
+            return false;
+        }
+
         if(factura === "S" && (ci_rif === "" || nombre === "" || direccion === "" || telefono === "")) {
             ew.alert("Faltan datos fiscales obligatorios; Verifique");
             return false;
@@ -637,14 +730,59 @@ $descuento = floatval($row["descuento"]);
             url: "include/findme_cabecera_update.php",
             type: 'post',
             success: function (response) {
-                // Al guardar, refresca el DOM dinámico si es necesario o recarga parcial.
                 ew.alert("Datos de la cabecera actualizados correctamente.");
-                location.reload(); // Recarga recomendada para actualizar los bloques de cálculo PHP.
+
+                var idDocumento = $("#id").val();
+                var tipoDocumento = $("#tipo_documento_actual").val();
+
+                if (tipoDocumento === "TDCASA") {
+                    if (confirm("¿Desea procesar el ajuste de salida?")) {
+                        ProcesarAjusteSalida(idDocumento);
+                        return;
+                    }
+                }
+
+                if (idDocumento && idDocumento != "0") {
+                    window.location.href = "AjusteSalida?id=" + idDocumento + "&tipo_documento=" + encodeURIComponent(tipoDocumento);
+                } else {
+                    CargarDetalle();
+                    CargarFinanciero();
+                }
+            }
+        });
+    }
+
+    function ProcesarAjusteSalida(idDocumento) {
+        $.ajax({
+            url: "include/procesar_ajuste_salida.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                id: idDocumento,
+                username: $("#username").val().trim()
+            },
+            success: function(resp) {
+                if (resp && resp.success) {
+                    ew.alert(resp.message);
+
+                    window.location.href = "AjusteSalida?id=" + idDocumento + "&tipo_documento=TDCASA";
+                } else {
+                    ew.alert(resp.error || "No se pudo procesar el ajuste de salida.");
+                }
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                ew.alert("Error de comunicación al procesar el ajuste.");
             }
         });
     }
 
     function VaciarCesta() {
+        if (!$("#id").val() || $("#id").val() == "0") {
+            ew.alert("No hay documento creado para vaciar.");
+            return false;
+        }
+
         if (!confirm("¿Seguro de vaciar por completo la cesta de este documento?"))
             return false;
 
@@ -686,7 +824,10 @@ $descuento = floatval($row["descuento"]);
         var idDocumento = $("#id").val();
         var tipoDocumento = new URLSearchParams(window.location.search).get('tipo_documento') || 'TDCNET';
 
-        if (!idDocumento || idDocumento == "0") return;
+        if (!idDocumento || idDocumento == "0") {
+            $("#ContenedorCestaDinamica").html('');
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -697,6 +838,18 @@ $descuento = floatval($row["descuento"]);
             },
             success: function (htmlData) {
                 $("#ContenedorCestaDinamica").html(htmlData);
+
+                if ($("#ocultar_finanzas_ajuste").val() === "S") {
+                    $("#ContenedorCestaDinamica").find("th, td").filter(function () {
+                        var txt = $(this).text().trim().toUpperCase();
+                        return txt === "PRECIO U." || txt === "TOTAL";
+                    }).each(function () {
+                        var index = $(this).index() + 1;
+                        $("#ContenedorCestaDinamica table tr").each(function () {
+                            $(this).children(":nth-child(" + index + ")").hide();
+                        });
+                    });
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error al refrescar componentes dinámicos:", error);
@@ -705,11 +858,19 @@ $descuento = floatval($row["descuento"]);
     }
 
     function CargarFinanciero() {
+        if ($("#ocultar_finanzas_ajuste").val() === "S") {
+            $("#ContenedorFinancieroDinamico").html("");
+            return;
+        }
+
         var idDocumento = $("#id").val();
         var tipoDocumento = new URLSearchParams(window.location.search).get('tipo_documento') || 'TDCNET';
         var tasa_dia = <?= $tasa_dia ?>;
         
-        if (!idDocumento || idDocumento == "0") return;
+        if (!idDocumento || idDocumento == "0") {
+            $("#ContenedorFinancieroDinamico").html('');
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -721,9 +882,6 @@ $descuento = floatval($row["descuento"]);
             },
             success: function (htmlData) {
                 $("#ContenedorFinancieroDinamico").html(htmlData);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error al refrescar componentes dinámicos:", error);
             }
         });
     }
@@ -781,123 +939,11 @@ $descuento = floatval($row["descuento"]);
 
     var revertiendoDescuento = false;
 
-    $(document).on("focus", "#descuento, #descuento2", function () {
-        $(this).attr("data-original", $(this).val());
-    });
-
-    $(document).on("change", "#descuento, #descuento2", function () {
-        if (revertiendoDescuento) return;
-
-        descuentoPendiente.descuento = parseFloat($("#descuento").val()) || 0;
-        descuentoPendiente.descuento2 = parseFloat($("#descuento2").val()) || 0;
-        descuentoPendiente.descuentoOriginal = parseFloat($("#descuento").attr("data-original")) || 0;
-        descuentoPendiente.descuento2Original = parseFloat($("#descuento2").attr("data-original")) || 0;
-
-        if (puedeModificarPrecioDescuento) {
-            ActualizarDescuentos();
-            return;
-        }
-
-        $("#auth_user_descuento").val("");
-        $("#auth_pass_descuento").val("");
-        $("#modalAutorizarDescuento").modal("show");
-    });
-
-    $("#btnCancelarDescuento").on("click", function () {
-        if (precioPendiente.inputId !== "") {
-            $("#" + precioPendiente.inputId).val(precioPendiente.precioOriginal);
-            $("#" + precioPendiente.inputId).attr("data-original", precioPendiente.precioOriginal);
-
-            precioPendiente.inputId = "";
-            precioPendiente.precioOriginal = "";
-            precioPendiente.precioNuevo = "";
-        } else {
-            revertiendoDescuento = true;
-
-            $("#descuento").val(descuentoPendiente.descuentoOriginal);
-            $("#descuento2").val(descuentoPendiente.descuento2Original);
-
-            setTimeout(function () {
-                revertiendoDescuento = false;
-            }, 300);
-        }
-
-        $("#modalAutorizarDescuento").modal("hide");
-    });
-
-    $("#btnAceptarDescuento").on("click", function () {
-        var xuser = $("#auth_user_descuento").val().trim();
-        var xpass = $("#auth_pass_descuento").val().trim();
-
-        var tipo_documento = "<?= $tipo_documento ?>";
-        var nro_documento  = "<?= $nro_documento ?>";
-        var usercaja = "<?= CurrentUserName() ?>";
-        var pedido = $("#id").val();
-
-        if (xuser === "" || xpass === "") {
-            ew.alert("Debe ingresar usuario y clave.");
-            return false;
-        }
-
-        $.ajax({
-            url: "include/Validar_Usuario_desc_precio.php",
-            type: "GET",
-            data: {
-                usernama: xuser,
-                password: xpass,
-                contexto: "DESCUENTO_SALIDA",
-                tipo_documento: tipo_documento,
-                nro_documento: nro_documento,
-                usercaja: usercaja,
-                idPurga: pedido
-            }
-        })
-        .done(function (MyResult) {
-            if (MyResult.trim() === "S") {
-                $("#modalAutorizarDescuento").modal("hide");
-
-                if (precioPendiente.inputId !== "") {
-                    $("#" + precioPendiente.inputId).attr("data-original", precioPendiente.precioNuevo);
-
-                    precioPendiente.inputId = "";
-                    precioPendiente.precioOriginal = "";
-                    precioPendiente.precioNuevo = "";
-                } else {
-                    ActualizarDescuentos();
-                }
-            } else {
-                RestaurarPrecioPendiente();
-
-                revertiendoDescuento = true;
-
-                $("#descuento").val(descuentoPendiente.descuentoOriginal);
-                $("#descuento2").val(descuentoPendiente.descuento2Original);
-
-                setTimeout(function () {
-                    revertiendoDescuento = false;
-                }, 300);
-
-                $("#modalAutorizarDescuento").modal("hide");
-
-                ew.alert("!!! NO AUTORIZADO !!!");
-            }            
-        })
-        .fail(function () {
-            ew.alert("Error de comunicación con el servidor.");
-        });
-    });
-
     var precioPendiente = {
         inputId: "",
         precioOriginal: "",
         precioNuevo: ""
     };
-
-    $(document).on("focus", ".precio-autorizado", function () {
-        if ($(this).attr("data-original") === undefined || $(this).attr("data-original") === "") {
-            $(this).attr("data-original", $(this).val());
-        }
-    });
 
     function RestaurarPrecioPendiente() {
         if (precioPendiente.inputId !== "") {
@@ -912,23 +958,167 @@ $descuento = floatval($row["descuento"]);
         }
     }
 
-    $(document).on("change", ".precio-autorizado", function () {
-        var $input = $(this);
-
-        precioPendiente.inputId = $input.attr("id");
-        precioPendiente.precioOriginal = $input.attr("data-original");
-        precioPendiente.precioNuevo = $input.val();
-
-        if (puedeModificarPrecioDescuento) {
-            precioPendiente.inputId = "";
-            $input.attr("data-original", $input.val());
+    function registrarEventosAutorizacion() {
+        if (window.__ajusteSalidaEventosAutorizacionRegistrados) {
             return;
         }
 
-        $("#auth_user_descuento").val("");
-        $("#auth_pass_descuento").val("");
-        $("#modalAutorizarDescuento").modal("show");
-    });
+        window.__ajusteSalidaEventosAutorizacionRegistrados = true;
 
+        $(document).on("focus", "#descuento, #descuento2", function () {
+            $(this).attr("data-original", $(this).val());
+        });
+
+        $(document).on("change", "#descuento, #descuento2", function () {
+            if (revertiendoDescuento) return;
+
+            descuentoPendiente.descuento = parseFloat($("#descuento").val()) || 0;
+            descuentoPendiente.descuento2 = parseFloat($("#descuento2").val()) || 0;
+            descuentoPendiente.descuentoOriginal = parseFloat($("#descuento").attr("data-original")) || 0;
+            descuentoPendiente.descuento2Original = parseFloat($("#descuento2").attr("data-original")) || 0;
+
+            if (puedeModificarPrecioDescuento) {
+                ActualizarDescuentos();
+                return;
+            }
+
+            $("#auth_user_descuento").val("");
+            $("#auth_pass_descuento").val("");
+            $("#modalAutorizarDescuento").modal("show");
+        });
+
+        $("#btnCancelarDescuento").on("click", function () {
+            if (precioPendiente.inputId !== "") {
+                $("#" + precioPendiente.inputId).val(precioPendiente.precioOriginal);
+                $("#" + precioPendiente.inputId).attr("data-original", precioPendiente.precioOriginal);
+
+                precioPendiente.inputId = "";
+                precioPendiente.precioOriginal = "";
+                precioPendiente.precioNuevo = "";
+            } else {
+                revertiendoDescuento = true;
+
+                $("#descuento").val(descuentoPendiente.descuentoOriginal);
+                $("#descuento2").val(descuentoPendiente.descuento2Original);
+
+                setTimeout(function () {
+                    revertiendoDescuento = false;
+                }, 300);
+            }
+
+            $("#modalAutorizarDescuento").modal("hide");
+        });
+
+        $("#btnAceptarDescuento").on("click", function () {
+            var xuser = $("#auth_user_descuento").val().trim();
+            var xpass = $("#auth_pass_descuento").val().trim();
+
+            var tipo_documento = "<?= $tipo_documento ?>";
+            var nro_documento  = "<?= $nro_documento ?>";
+            var usercaja = "<?= CurrentUserName() ?>";
+            var pedido = $("#id").val();
+
+            if (xuser === "" || xpass === "") {
+                ew.alert("Debe ingresar usuario y clave.");
+                return false;
+            }
+
+            $.ajax({
+                url: "include/Validar_Usuario_desc_precio.php",
+                type: "GET",
+                data: {
+                    usernama: xuser,
+                    password: xpass,
+                    contexto: "DESCUENTO_SALIDA",
+                    tipo_documento: tipo_documento,
+                    nro_documento: nro_documento,
+                    usercaja: usercaja,
+                    idPurga: pedido
+                }
+            })
+            .done(function (MyResult) {
+                if (MyResult.trim() === "S") {
+                    $("#modalAutorizarDescuento").modal("hide");
+
+                    if (precioPendiente.inputId !== "") {
+                        $("#" + precioPendiente.inputId).attr("data-original", precioPendiente.precioNuevo);
+
+                        precioPendiente.inputId = "";
+                        precioPendiente.precioOriginal = "";
+                        precioPendiente.precioNuevo = "";
+                    } else {
+                        ActualizarDescuentos();
+                    }
+                } else {
+                    RestaurarPrecioPendiente();
+
+                    revertiendoDescuento = true;
+
+                    $("#descuento").val(descuentoPendiente.descuentoOriginal);
+                    $("#descuento2").val(descuentoPendiente.descuento2Original);
+
+                    setTimeout(function () {
+                        revertiendoDescuento = false;
+                    }, 300);
+
+                    $("#modalAutorizarDescuento").modal("hide");
+
+                    ew.alert("!!! NO AUTORIZADO !!!");
+                }            
+            })
+            .fail(function () {
+                ew.alert("Error de comunicación con el servidor.");
+            });
+        });
+
+        $(document).on("focus", ".precio-autorizado", function () {
+            if ($(this).attr("data-original") === undefined || $(this).attr("data-original") === "") {
+                $(this).attr("data-original", $(this).val());
+            }
+        });
+
+        $(document).on("change", ".precio-autorizado", function () {
+            var $input = $(this);
+
+            precioPendiente.inputId = $input.attr("id");
+            precioPendiente.precioOriginal = $input.attr("data-original");
+            precioPendiente.precioNuevo = $input.val();
+
+            if (puedeModificarPrecioDescuento) {
+                precioPendiente.inputId = "";
+                $input.attr("data-original", $input.val());
+                return;
+            }
+
+            $("#auth_user_descuento").val("");
+            $("#auth_pass_descuento").val("");
+            $("#modalAutorizarDescuento").modal("show");
+        });
+    }
+
+    (function esperarJQueryYCargarSelect2() {
+
+        if (typeof window.jQuery === "undefined" || typeof window.$ === "undefined") {
+            setTimeout(esperarJQueryYCargarSelect2, 50);
+            return;
+        }
+
+        if ($.fn.select2) {
+            iniciarAjusteSalida();
+            return;
+        }
+
+        var script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js";
+        script.onload = function () {
+            iniciarAjusteSalida();
+        };
+        script.onerror = function () {
+            ew.alert("No se pudo cargar Select2.");
+        };
+
+        document.head.appendChild(script);
+
+    })();
 </script>
 <?= GetDebugMessage() ?>

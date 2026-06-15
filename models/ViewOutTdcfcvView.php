@@ -1818,6 +1818,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $this->visita->ViewValue = $this->visita->CurrentValue;
             $this->visita->ViewValue = FormatNumber($this->visita->ViewValue, $this->visita->formatPattern());
 
+            // id
+            $this->id->HrefValue = "";
+            $this->id->TooltipValue = "";
+
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -1913,6 +1917,10 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             // impreso
             $this->impreso->HrefValue = "";
             $this->impreso->TooltipValue = "";
+
+            // fecha_despacho
+            $this->fecha_despacho->HrefValue = "";
+            $this->fecha_despacho->TooltipValue = "";
 
             // descuento
             $this->descuento->HrefValue = "";

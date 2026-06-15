@@ -267,7 +267,7 @@ foreach ($rows as $row) {
     if ($tipo_documento_inventario == "TDCFCV") {
         $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" onchange="validarCantidadLote(' . $i . ');" value="' . ($xCant == 0 ? "" : $xCant) . '" style="width:80px;"' . $disabled . '>';
     } else {
-        $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" value="' . ($xCant == 0 ? "" : $xCant) . '" style="width:80px;"' . $disabled . '>';
+        $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xCant == 0 ? "" : $xCant) . '" style="width:80px;"' . $disabled . '>';
     }
 
     $html .= '<input type="hidden" id="x' . $i . '_moneda" name="x' . $i . '_moneda" value="' . TdcfcvH($moneda) . '">';

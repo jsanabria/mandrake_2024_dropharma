@@ -2270,7 +2270,6 @@ class TasaUsdList extends TasaUsd
 
             // hora
             $this->hora->ViewValue = $this->hora->CurrentValue;
-            $this->hora->ViewValue = FormatDateTime($this->hora->ViewValue, $this->hora->formatPattern());
 
             // moneda
             $this->moneda->HrefValue = "";
@@ -2328,7 +2327,7 @@ class TasaUsdList extends TasaUsd
 
             // hora
             $this->hora->setupEditAttributes();
-            $this->hora->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->hora->AdvancedSearch->SearchValue, $this->hora->formatPattern()), $this->hora->formatPattern()));
+            $this->hora->EditValue = HtmlEncode(UnFormatDateTime($this->hora->AdvancedSearch->SearchValue, $this->hora->formatPattern()));
             $this->hora->PlaceHolder = RemoveHtml($this->hora->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row

@@ -1848,7 +1848,6 @@ class GrupoFuncionesGrid extends GrupoFunciones
             $this->funcion->TooltipValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // funcion
-            $this->funcion->setupEditAttributes();
             $curVal = trim(strval($this->funcion->CurrentValue));
             if ($curVal != "") {
                 $this->funcion->ViewValue = $this->funcion->lookupCacheOption($curVal);
@@ -1857,6 +1856,9 @@ class GrupoFuncionesGrid extends GrupoFunciones
             }
             if ($this->funcion->ViewValue !== null) { // Load from cache
                 $this->funcion->EditValue = array_values($this->funcion->lookupOptions());
+                if ($this->funcion->ViewValue == "") {
+                    $this->funcion->ViewValue = $Language->phrase("PleaseSelect");
+                }
             } else { // Lookup from database
                 if ($curVal == "") {
                     $filterWrk = "0=1";
@@ -1869,6 +1871,12 @@ class GrupoFuncionesGrid extends GrupoFunciones
                 $config->setResultCache($this->Cache);
                 $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
                 $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->funcion->Lookup->renderViewRow($rswrk[0]);
+                    $this->funcion->ViewValue = $this->funcion->displayValue($arwrk);
+                } else {
+                    $this->funcion->ViewValue = $Language->phrase("PleaseSelect");
+                }
                 $arwrk = $rswrk;
                 $this->funcion->EditValue = $arwrk;
             }
@@ -1880,7 +1888,6 @@ class GrupoFuncionesGrid extends GrupoFunciones
             $this->funcion->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // funcion
-            $this->funcion->setupEditAttributes();
             $curVal = trim(strval($this->funcion->CurrentValue));
             if ($curVal != "") {
                 $this->funcion->ViewValue = $this->funcion->lookupCacheOption($curVal);
@@ -1889,6 +1896,9 @@ class GrupoFuncionesGrid extends GrupoFunciones
             }
             if ($this->funcion->ViewValue !== null) { // Load from cache
                 $this->funcion->EditValue = array_values($this->funcion->lookupOptions());
+                if ($this->funcion->ViewValue == "") {
+                    $this->funcion->ViewValue = $Language->phrase("PleaseSelect");
+                }
             } else { // Lookup from database
                 if ($curVal == "") {
                     $filterWrk = "0=1";
@@ -1901,6 +1911,12 @@ class GrupoFuncionesGrid extends GrupoFunciones
                 $config->setResultCache($this->Cache);
                 $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
                 $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->funcion->Lookup->renderViewRow($rswrk[0]);
+                    $this->funcion->ViewValue = $this->funcion->displayValue($arwrk);
+                } else {
+                    $this->funcion->ViewValue = $Language->phrase("PleaseSelect");
+                }
                 $arwrk = $rswrk;
                 $this->funcion->EditValue = $arwrk;
             }

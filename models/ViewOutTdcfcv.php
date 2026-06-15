@@ -4590,6 +4590,7 @@ class ViewOutTdcfcv extends DbTable
             if ($doc->Horizontal) { // Horizontal format, write header
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
+                    $doc->exportCaption($this->id);
                     $doc->exportCaption($this->documento);
                     $doc->exportCaption($this->nro_documento);
                     $doc->exportCaption($this->fecha);
@@ -4614,6 +4615,7 @@ class ViewOutTdcfcv extends DbTable
                     $doc->exportCaption($this->entregado);
                     $doc->exportCaption($this->pagado);
                     $doc->exportCaption($this->impreso);
+                    $doc->exportCaption($this->fecha_despacho);
                     $doc->exportCaption($this->descuento);
                     $doc->exportCaption($this->descuento2);
                     $doc->exportCaption($this->nro_despacho);
@@ -4717,6 +4719,7 @@ class ViewOutTdcfcv extends DbTable
                 if (!$doc->ExportCustom) {
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
+                        $doc->exportField($this->id);
                         $doc->exportField($this->documento);
                         $doc->exportField($this->nro_documento);
                         $doc->exportField($this->fecha);
@@ -4741,6 +4744,7 @@ class ViewOutTdcfcv extends DbTable
                         $doc->exportField($this->entregado);
                         $doc->exportField($this->pagado);
                         $doc->exportField($this->impreso);
+                        $doc->exportField($this->fecha_despacho);
                         $doc->exportField($this->descuento);
                         $doc->exportField($this->descuento2);
                         $doc->exportField($this->nro_despacho);

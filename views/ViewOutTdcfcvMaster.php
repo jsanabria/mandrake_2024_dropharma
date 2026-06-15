@@ -10,6 +10,17 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 <div class="ew-master-div">
 <table id="tbl_view_out_tdcfcvmaster" class="table ew-view-table ew-master-table ew-vertical">
     <tbody>
+<?php if ($view_out_tdcfcv->id->Visible) { // id ?>
+        <tr id="r_id"<?= $view_out_tdcfcv->id->rowAttributes() ?>>
+            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->id->caption() ?></td>
+            <td<?= $view_out_tdcfcv->id->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_id">
+<span<?= $view_out_tdcfcv->id->viewAttributes() ?>>
+<?= $view_out_tdcfcv->id->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
 <?php if ($view_out_tdcfcv->documento->Visible) { // documento ?>
         <tr id="r_documento"<?= $view_out_tdcfcv->documento->rowAttributes() ?>>
             <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->documento->caption() ?></td>
@@ -149,6 +160,17 @@ $view_out_tdcfcv->TableClass = "table table-sm ew-table ew-master-table";
 <span id="el_view_out_tdcfcv_impreso">
 <span<?= $view_out_tdcfcv->impreso->viewAttributes() ?>>
 <?= $view_out_tdcfcv->impreso->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($view_out_tdcfcv->fecha_despacho->Visible) { // fecha_despacho ?>
+        <tr id="r_fecha_despacho"<?= $view_out_tdcfcv->fecha_despacho->rowAttributes() ?>>
+            <td class="<?= $view_out_tdcfcv->TableLeftColumnClass ?>"><?= $view_out_tdcfcv->fecha_despacho->caption() ?></td>
+            <td<?= $view_out_tdcfcv->fecha_despacho->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_fecha_despacho">
+<span<?= $view_out_tdcfcv->fecha_despacho->viewAttributes() ?>>
+<?= $view_out_tdcfcv->fecha_despacho->getViewValue() ?></span>
 </span>
 </td>
         </tr>

@@ -67,26 +67,54 @@ if($descuento_lineal == 0)
 $PorDesMin = 0;
 $PorDesMax = 100;
 $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $descuento_lineal));
+
+$puedeModificarPrecioDescuento = false;
+if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
+    $puedeModificarPrecioDescuento = VerificaFuncion("040");
+}
 ?>
 
 <script type="text/javascript">
+  function tdcpdvReady(fn) {
+    var intentos = 0;
+
+    function ejecutarCuandoEsteListo() {
+      if (window.jQuery) {
+        jQuery(function () {
+          fn(jQuery);
+        });
+        return;
+      }
+
+      intentos++;
+
+      if (intentos <= 100) {
+        setTimeout(ejecutarCuandoEsteListo, 50);
+      } else {
+        console.error("jQuery no está disponible para TdcpdvAdd.");
+      }
+    }
+
+    ejecutarCuandoEsteListo();
+  }
+
   function insertar(i) { 
-    var pedido = $("#pedido").value();
-    var cliente = $("#codcli").value();
-    var precioFull = $("#x" + i + "_precioFull").value();
-    var descuento = $("#x" + i + "_descuento").value();
-    var descuento2 = $("#x" + i + "_descuento2").value();
-    var precio = $("#x" + i + "_precio").value();
-    var moneda = $("#moneda").value();
-    var cantidad = $("#x" + i + "_cantidad").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var pedido = $("#pedido").val();
+    var cliente = $("#codcli").val();
+    var precioFull = $("#x" + i + "_precioFull").val();
+    var descuento = $("#x" + i + "_descuento").val();
+    var descuento2 = $("#x" + i + "_descuento2").val();
+    var precio = $("#x" + i + "_precio").val();
+    var moneda = $("#moneda").val();
+    var cantidad = $("#x" + i + "_cantidad").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
-    var descuentoG = $("#PorDesAct").value();
+    var descuentoG = $("#PorDesAct").val();
     var descTransferencista = $("#descTransferencista").val();
-    var nota = $("#nota").value();
-    var lista_pedido = $("#lista_pedido").value();
-    var dias_credito = $("#dias_credito").value();
+    var nota = $("#nota").val();
+    var lista_pedido = $("#lista_pedido").val();
+    var dias_credito = $("#dias_credito").val();
     // alert(pedido + " - " + cliente + " - " + precioFull + " - " + descuento + " - " + precio + " - " + moneda + " - " + cantidad + " - " + username);
 
     if(isNaN(parseFloat(precioFull))) {
@@ -170,15 +198,15 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   }
 
   function eliminar(i, id_item) {
-    var pedido = $("#pedido").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var pedido = $("#pedido").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
-    var descuento = $("#PorDesAct").value();
+    var descuento = $("#PorDesAct").val();
     var descTransferencista = $("#descTransferencista").val();
-    var nota = $("#nota").value();
-    var lista_pedido = $("#lista_pedido").value();
+    var nota = $("#nota").val();
+    var lista_pedido = $("#lista_pedido").val();
 
     // alert(pedido + " - " + cliente + " - " + precio + " - " + descuento + " - " + precioFull + " - " + moneda + " - " + onhand + " - " + cantidad + " - " + username);
     // Using the core $.ajax() method
@@ -251,12 +279,12 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
 
   function vaciar(i) {
     var username = '<?= CurrentUserName() ?>';
-    var lista_pedido = $("#lista_pedido").value();
+    var lista_pedido = $("#lista_pedido").val();
 
     if(i > 0) {
       if(!confirm("Seguro que quiere vaciar la cesta de pedidos?")) return false;
 
-      var pedido = $("#pedido").value();
+      var pedido = $("#pedido").val();
       // Using the core $.ajax() method
       $.ajax({
         // The URL for the request
@@ -305,9 +333,9 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   }
 
   function listar_pedido(i) {
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+    var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     $.ajax({
       // The URL for the request
@@ -373,6 +401,205 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   });
 
 
+  const puedeModificarPrecioDescuento = <?= ($puedeModificarPrecioDescuento ? "true" : "false") ?>;
+
+  let descuentoOriginal = 0;
+  let transferenciaOriginal = 0;
+
+  let descuentoPendiente = {
+      tipo: "",
+      original: "",
+      nuevo: ""
+  };
+
+  function showModalAutorizarTdcpdv() {
+      const modalEl = document.getElementById("modalAutorizarTdcpdv");
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+  }
+
+  function hideModalAutorizarTdcpdv() {
+      const modalEl = document.getElementById("modalAutorizarTdcpdv");
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+  }
+
+  function PintarDescuentoCliente(valor) {
+      $("#PorDesAct").val(valor);
+      $("#rangoDescuentoCliente").val(valor);
+      $("#lblDescuentoCliente").text(valor + "%");
+  }
+
+  function PintarTransferencista(valor) {
+      $("#descTransferencista").val(valor);
+      $("#rangoTransferencista").val(valor);
+      $("#lblTransferencista").text(valor + "%");
+  }
+
+  tdcpdvReady(function ($) {
+
+    descuentoOriginal = parseInt($("#PorDesAct").val() || 0, 10);
+    transferenciaOriginal = parseInt($("#descTransferencista").val() || 0, 10);
+
+  $(document).on("mousedown touchstart focus", "#rangoDescuentoCliente", function () {
+      descuentoOriginal = parseInt($("#PorDesAct").val() || 0, 10);
+  });
+
+  $(document).on("input", "#rangoDescuentoCliente", function () {
+      $("#lblDescuentoCliente").text($(this).val() + "%");
+  });
+
+  $(document).on("change", "#rangoDescuentoCliente", function () {
+      const pedido = $("#pedido").val();
+      const nuevo = parseInt($(this).val(), 10);
+
+      if (pedido == 0) {
+          PintarDescuentoCliente(descuentoOriginal);
+          return false;
+      }
+
+      descuentoPendiente = {
+          tipo: "cliente",
+          original: descuentoOriginal,
+          nuevo: nuevo
+      };
+
+      if (puedeModificarPrecioDescuento) {
+          PintarDescuentoCliente(nuevo);
+          RefreshDescuento(pedido, nuevo);
+          return;
+      }
+
+      $("#auth_user_tdcpdv").val("");
+      $("#auth_pass_tdcpdv").val("");
+      showModalAutorizarTdcpdv();
+  });
+
+  $(document).on("mousedown touchstart focus", "#rangoTransferencista", function () {
+      transferenciaOriginal = parseInt($("#descTransferencista").val() || 0, 10);
+  });
+
+  $(document).on("input", "#rangoTransferencista", function () {
+      $("#lblTransferencista").text($(this).val() + "%");
+  });
+
+  $(document).on("change", "#rangoTransferencista", function () {
+      const nuevo = parseInt($(this).val(), 10);
+
+      descuentoPendiente = {
+          tipo: "transferencista",
+          original: transferenciaOriginal,
+          nuevo: nuevo
+      };
+
+      if (puedeModificarPrecioDescuento) {
+          PintarTransferencista(nuevo);
+          DiasCred();
+          return;
+      }
+
+      $("#auth_user_tdcpdv").val("");
+      $("#auth_pass_tdcpdv").val("");
+      showModalAutorizarTdcpdv();
+  });
+
+  $(document).on("click", "#btnCancelarAutorizarTdcpdv", function () {
+      if (descuentoPendiente.tipo === "cliente") {
+          PintarDescuentoCliente(descuentoPendiente.original);
+      }
+
+      if (descuentoPendiente.tipo === "transferencista") {
+          PintarTransferencista(descuentoPendiente.original);
+      }
+
+      descuentoPendiente = {
+          tipo: "",
+          original: "",
+          nuevo: ""
+      };
+
+      hideModalAutorizarTdcpdv();
+  });
+
+  $(document).on("click", "#btnAceptarAutorizarTdcpdv", function () {
+      const xuser = $("#auth_user_tdcpdv").val().trim();
+      const xpass = $("#auth_pass_tdcpdv").val().trim();
+
+      if (xuser === "" || xpass === "") {
+          alert("Debe indicar usuario autorizador y clave.");
+          return false;
+      }
+
+      $("#btnAceptarAutorizarTdcpdv")
+          .prop("disabled", true)
+          .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Validando...');
+
+      $.ajax({
+          url: "include/Validar_Usuario_desc_precio.php",
+          type: "GET",
+          data: {
+              usernama: xuser,
+              password: xpass,
+              contexto: "TDCPDV_PRECIO_DESCUENTO",
+              tipo_documento: $("#tipo_documento").val(),
+              nro_documento: $("#nro_documento").val(),
+              usercaja: $("#username").val(),
+              idPurga: $("#pedido").val()
+          }
+      })
+      .done(function (result) {
+          if (String(result).trim() === "S") {
+
+              if (descuentoPendiente.tipo === "cliente") {
+                  PintarDescuentoCliente(descuentoPendiente.nuevo);
+                  RefreshDescuento($("#pedido").val(), descuentoPendiente.nuevo);
+              }
+
+              if (descuentoPendiente.tipo === "transferencista") {
+                  PintarTransferencista(descuentoPendiente.nuevo);
+                  DiasCred();
+              }
+
+              descuentoPendiente = {
+                  tipo: "",
+                  original: "",
+                  nuevo: ""
+              };
+
+              hideModalAutorizarTdcpdv();
+
+          } else {
+              alert("!!! NO AUTORIZADO !!!");
+
+              if (descuentoPendiente.tipo === "cliente") {
+                  PintarDescuentoCliente(descuentoPendiente.original);
+              }
+
+              if (descuentoPendiente.tipo === "transferencista") {
+                  PintarTransferencista(descuentoPendiente.original);
+              }
+
+              descuentoPendiente = {
+                  tipo: "",
+                  original: "",
+                  nuevo: ""
+              };
+
+              hideModalAutorizarTdcpdv();
+          }
+      })
+      .fail(function () {
+          alert("Error de comunicación con el servidor.");
+      })
+      .always(function () {
+          $("#btnAceptarAutorizarTdcpdv")
+              .prop("disabled", false)
+              .html('<i class="fa-solid fa-check me-1"></i> Autorizar');
+      });
+  });
+
+  });
+
+
   function buscarItem2(i, j) {
     var pedido = <?= $pedido ?>;
     $("#pagina").val(i);
@@ -388,15 +615,15 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   }
 
   function sendProccess(i) {
-    var PorDesAct = $("#PorDesAct").value();
+    var PorDesAct = $("#PorDesAct").val();
     window.location.href = "TdcpdvProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
   }
 
   function ProgLess() {
-    var i = $("#pedido").value();
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var i = $("#pedido").val();
+    var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+    var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     if(i == 0) return false;
 
@@ -409,10 +636,10 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   }
 
   function ProgPlus() {
-    var i = $("#pedido").value();
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var i = $("#pedido").val();
+    var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+    var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     if(i == 0) return false;
 
@@ -425,16 +652,16 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   }
 
   function DiasCred() {
-    var i = $("#pedido").value();
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var i = $("#pedido").val();
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     if(i == 0) return false;
     RefreshDescuento(i, PorDesAct);
   }
 
   function RefreshDescuento(i, j) {
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
     var descTransferencista = $("#descTransferencista").val();
 
@@ -521,40 +748,71 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   <input type="hidden" id="PorDesMax" name="PorDesMax" value="<?= $PorDesMax ?>">
   <input type="hidden" id="PorDesAct" name="PorDesAct" value="<?= $PorDesAct ?>">
 
-<div class="row">
-  <div class="col-sm-2" style="text-align: right">
-    <strong>Descuento cliente</strong>
-  </div>  
-  <div class="col-sm-1" style="text-align: right; vertical-align: middle;">
-    <span><a onclick="js:ProgLess();"><i class="fa-solid fa-minus"></i></a></span>
-  </div>
-  <div class="col-sm-2" id="xProgress">
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" style="width: <?= $PorDesAct ?>%" aria-valuenow="<?= $PorDesAct ?>" aria-valuemin="<?= $PorDesMin ?>" aria-valuemax="<?= $PorDesMax ?>"><?= intval($PorDesAct) ?>%</div>
+<div class="row g-3 align-items-end">
+
+    <div class="col-12 col-md-4">
+        <div class="border rounded p-2 bg-light h-100">
+            <label for="rangoDescuentoCliente" class="form-label small fw-bold mb-1">
+                Descuento cliente:
+                <span id="lblDescuentoCliente" class="text-primary"><?= intval($PorDesAct) ?>%</span>
+            </label>
+
+            <input type="range"
+                   class="form-range"
+                   min="<?= $PorDesMin ?>"
+                   max="99"
+                   step="1"
+                   id="rangoDescuentoCliente"
+                   value="<?= intval($PorDesAct) ?>">
+        </div>
     </div>
-  </div>
-  <div class="col-sm-1" style="text-align: left; vertical-align: middle;">
-    <span><a onclick="js:ProgPlus();"><i class="fa-solid fa-plus"></i></a></span>
-  </div>
 
-  <div class="col-sm-2">
-      <?php
-      echo '<input type="text" id="descTransferencista" name="descTransferencista" value="' . $descTransferencista . '" class="form-control form-control-sm" size="4" onchange="js: DiasCred();"> % Transferencista';
-      ?>
-  </div>
+    <div class="col-12 col-md-4">
+        <div class="border rounded p-2 bg-light h-100">
+            <label for="rangoTransferencista" class="form-label small fw-bold mb-1">
+                % Transferencista:
+                <span id="lblTransferencista" class="text-primary"><?= intval($descTransferencista) ?>%</span>
+            </label>
 
-  <div class="col-sm-2">
-    <select id="dias_credito" name="dias_credito" class="form-select form-select-sm" onchange="js: guardar_nota();">
-      <option value"">d&iacute;as de cr&eacute;dito</option>
-      <?php
-      $sql = "SELECT CAST(valor1 AS SIGNED) AS dias FROM parametro WHERE codigo = '007' ORDER BY dias;";
-      $rows = ExecuteRows($sql); 
-      foreach ($rows as $key => $value) {
-        echo '<option value"' . $value["dias"] . '" ' . (intval($value["dias"]) == $dias_credito ? 'selected="selected"' : '') . '>' . $value["dias"] . ' d&iacute;as de cr&eacute;dito</option>';
-      }
-      ?>
-    </select>
-  </div>
+            <input type="hidden"
+                   id="descTransferencista"
+                   name="descTransferencista"
+                   value="<?= $descTransferencista ?>">
+
+            <input type="range"
+                   class="form-range"
+                   min="0"
+                   max="99"
+                   step="1"
+                   id="rangoTransferencista"
+                   value="<?= intval($descTransferencista) ?>">
+        </div>
+    </div>
+
+    <div class="col-12 col-md-2">
+        <div class="border rounded p-2 bg-light h-100">
+
+            <label for="dias_credito"
+                   class="form-label small fw-bold mb-1">
+                Días crédito
+            </label>
+
+            <select id="dias_credito"
+                    name="dias_credito"
+                    class="form-select form-select-sm">
+
+                <?php
+                $sql = "SELECT CAST(valor1 AS SIGNED) AS dias FROM parametro WHERE codigo = '007' ORDER BY dias;";
+                $rows = ExecuteRows($sql); 
+                foreach ($rows as $key => $value) {
+                  echo '<option value"' . $value["dias"] . '" ' . (intval($value["dias"]) == $dias_credito ? 'selected="selected"' : '') . '>' . $value["dias"] . ' d&iacute;as de cr&eacute;dito</option>';
+                }
+                ?>
+            </select>
+
+        </div>
+    </div>
+
 </div>
 
 <hr class="border border-primary" />
@@ -684,16 +942,53 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
   </div>
 </div>
 
+<div class="modal fade" id="modalAutorizarTdcpdv" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-warning shadow">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title">
+          <i class="fa-solid fa-key me-1"></i> Autorizar cambio
+        </h5>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert alert-warning small">
+          Este cambio requiere autorización.
+        </div>
+
+        <label class="form-label">Usuario autorizador</label>
+        <input type="text" id="auth_user_tdcpdv" class="form-control form-control-sm mb-2">
+
+        <label class="form-label">Clave</label>
+        <input type="password" id="auth_pass_tdcpdv" class="form-control form-control-sm">
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="btnCancelarAutorizarTdcpdv" class="btn btn-sm btn-secondary">
+          Cancelar
+        </button>
+
+        <button type="button" id="btnAceptarAutorizarTdcpdv" class="btn btn-sm btn-success">
+          <i class="fa-solid fa-check me-1"></i> Autorizar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
-  $("#laboratorio").prop("disabled", true);
-  $("#articulo").prop("disabled", true);
+  tdcpdvReady(function ($) {
+    $("#laboratorio").prop("disabled", true);
+    $("#articulo").prop("disabled", true);
 
-  document.getElementById("laboratorio").addEventListener("keyup", getCodigos)
-  document.getElementById("laboratorio").addEventListener("click", getCodigos)
-  document.getElementById("articulo").addEventListener("keyup", getCodigos2)
-  document.getElementById("lista_pedido").addEventListener("change", limpiar)
+    document.getElementById("laboratorio").addEventListener("keyup", getCodigos);
+    document.getElementById("laboratorio").addEventListener("click", getCodigos);
+    document.getElementById("articulo").addEventListener("keyup", getCodigos2);
+    document.getElementById("lista_pedido").addEventListener("change", limpiar);
+    document.getElementById("nota").addEventListener("change", guardar_nota);
 
-  document.getElementById("nota").addEventListener("change", guardar_nota)
+    getCodigos3(<?= $pedido ?>);
+  });
 
   function getCodigos() {
       let inputCP = document.getElementById("laboratorio").value
@@ -869,7 +1164,5 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : $d
       } 
   }
 
-  getCodigos3( <?= $pedido ?> )
 </script>
-
 <?= GetDebugMessage() ?>

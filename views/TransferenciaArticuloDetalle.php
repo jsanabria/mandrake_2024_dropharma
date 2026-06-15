@@ -115,8 +115,14 @@ $articulo = $_POST["xArticulo"];
 			<tr>
 				<td>
 					<?php if(intval($value["cantidad"]) > 0) { ?>
-					<input type="checkbox" name="<?php echo "x" . $i . "_Lote"; ?>" id="<?php echo "x" . $i . "_Lote"; ?>" value="<?= ($value["articulo"] . "|" .$value["lote"] . "|" . $value["fecha"] . "|" . intval($value["cantidad"]) . "|" . $value["codalm"]) ?>">
-					<?php } ?>
+					<input
+                        type="checkbox"
+                        name="<?php echo "x" . $i . "_Lote"; ?>"
+                        id="<?php echo "x" . $i . "_Lote"; ?>"
+                        value="<?= ($value["articulo"] . "|" .$value["lote"] . "|" . $value["fecha"] . "|" . intval($value["cantidad"]) . "|" . $value["codalm"]) ?>"
+                        onchange="limpiarFilaSiNoSeleccionada(<?= $i ?>);"
+                    >
+                    <?php } ?>
 				</td>
 				<td>
 					<?php echo $value["lote"]; ?>
@@ -134,10 +140,10 @@ $articulo = $_POST["xArticulo"];
 					<?php echo $value["nom_almacen"]; ?>
 				</td>
 				<td>
-					<select class="form-control" name="<?php echo "x" . $i . "_Almacen"; ?>" id="<?php echo "x" . $i . "_Almacen"; ?>">
+					<select class="form-select" name="<?php echo "x" . $i . "_Almacen"; ?>" id="<?php echo "x" . $i . "_Almacen"; ?>">
 						<option value=""></option>
 						<?php
-						$sql = "SELECT codigo, descripcion FROM almacen WHERE movimiento = 'S' AND codigo <> '" . $value["cod_almacen"] . "';";
+						$sql = "SELECT codigo, descripcion FROM almacen WHERE movimiento = 'S' AND codigo <> '" . $value["codalm"] . "';";
 						$rows2 = ExecuteRows($sql);
 						foreach ($rows2 as $key2 => $value2) {
 							echo '<option value="' . $value2["codigo"] . '">' . $value2["descripcion"] . '</option>';
@@ -146,8 +152,17 @@ $articulo = $_POST["xArticulo"];
 					</select>
 				</td>
 				<td>
-					<input class="form-control" type="number" name="<?php echo "x" . $i . "_Cantidad"; ?>" id="<?php echo "x" . $i . "_Cantidad"; ?>" value="" onchange="js: validarCantidad(this.name); ">
-				</td>
+					<input
+                        class="form-control"
+                        type="number"
+                        min="1"
+                        max="<?php echo intval($value["cantidad"]); ?>"
+                        name="<?php echo "x" . $i . "_Cantidad"; ?>"
+                        id="<?php echo "x" . $i . "_Cantidad"; ?>"
+                        value=""
+                        onchange="validarCantidad(this.name);"
+                    >
+                </td>
 			</tr>
 			<?php
 			$i++;
@@ -174,60 +189,102 @@ $articulo = $_POST["xArticulo"];
 	</form>
 
 <script>
-	function validarCantidad(xCtrl) {
-		var id = xCtrl.substring(1, 2);
-		var Lote = $("#x" + id + "_Lote").val();
-		var Existencia = parseInt($("#x" + id + "_Existencia").val());
-		var Almacen = $("#x" + id + "_Almacen").val();
-		if($("#x" + id + "_Cantidad").val() == "") {
-			alert("Debe colocar una cantidad.");
-			return false;
-		}
-		var Cantidad = parseInt($("#x" + id + "_Cantidad").val());
 
-		if(Cantidad <= 0) {
-			alert("La cantidad debe ser mayor a 0.");
-			$("#x" + id + "_Cantidad").val("");
-			return false;
-		}
-		
-		if(Cantidad > Existencia) {
-			alert("La cantidad no debe ser mayor a la existencia.");
-			$("#x" + id + "_Cantidad").val("");
-			return false;
-		}
+function obtenerIdFila(nombreControl) {
+    const match = nombreControl.match(/^x(\d+)_/);
+    return match ? match[1] : null;
+}
 
-		if(Almacen == "") {
-			alert("Debe seleccionar un almacen de destino.");
-			return false;
-		}
+function validarCantidad(nombreControl) {
 
-		return true;
-	}
+    const id = obtenerIdFila(nombreControl);
 
-	function validarEnvio(xVal) {
-		var sw = false;
-		for(i=1; i<=xVal; i++) {
-			if($('#x' + i + '_Lote').is(':checked')) {
-				if(validarCantidad("x" + i + "_Ctrl") == false) {
-					return false;
-				}
+    if (!id) {
+        ew.alert("No se pudo identificar la fila.");
+        return false;
+    }
 
-				sw = true;
-			}
-		}
-		if(sw) {
-			if(confirm("Está seguro de procesar esta transferencia?")) {
-				$('#frm').submit();
-				return true;
-			}
-			else return false;
-		}
-		else {
-			alert("Debe seleccionar al menos un lote para realizar la transferencia...");
-			return false;
-		}
-	}	
+    const chkLote = $("#x" + id + "_Lote");
+    const existenciaCtrl = $("#x" + id + "_Existencia");
+    const almacenCtrl = $("#x" + id + "_Almacen");
+    const cantidadCtrl = $("#x" + id + "_Cantidad");
+
+    const existencia = parseInt(existenciaCtrl.val(), 10) || 0;
+    const almacen = almacenCtrl.val();
+    const cantidad = parseInt(cantidadCtrl.val(), 10) || 0;
+
+    if (!chkLote.is(":checked")) {
+        ew.alert("Debe seleccionar el lote.");
+        cantidadCtrl.val("");
+        chkLote.focus();
+        return false;
+    }
+
+    if (almacen === "") {
+        ew.alert("Debe seleccionar un almacén destino.");
+        cantidadCtrl.val("");
+        almacenCtrl.focus();
+        return false;
+    }
+
+    if (cantidad <= 0) {
+        ew.alert("La cantidad debe ser mayor a cero.");
+        cantidadCtrl.val("");
+        cantidadCtrl.focus();
+        return false;
+    }
+
+    if (cantidad > existencia) {
+        ew.alert("La cantidad no puede ser mayor que la existencia.");
+        cantidadCtrl.val("");
+        cantidadCtrl.focus();
+        return false;
+    }
+
+    return true;
+}
+
+function limpiarFilaSiNoSeleccionada(id) {
+
+    const chkLote = $("#x" + id + "_Lote");
+
+    if (!chkLote.is(":checked")) {
+        $("#x" + id + "_Almacen").val("");
+        $("#x" + id + "_Cantidad").val("");
+    }
+}
+
+function validarEnvio(totalFilas) {
+
+    let selecciono = false;
+
+    for (let i = 1; i <= totalFilas; i++) {
+
+        const chkLote = $("#x" + i + "_Lote");
+
+        if (chkLote.length && chkLote.is(":checked")) {
+
+            selecciono = true;
+
+            if (!validarCantidad("x" + i + "_Cantidad")) {
+                return false;
+            }
+        }
+    }
+
+    if (!selecciono) {
+        ew.alert("Debe seleccionar al menos un lote.");
+        return false;
+    }
+
+    if (confirm("¿Está seguro de procesar esta transferencia?")) {
+        $("#frm").submit();
+        return true;
+    }
+
+    return false;
+}
+
 </script>
 
 <?= GetDebugMessage() ?>
