@@ -4,13 +4,6 @@ namespace PHPMaker2024\mandrake;
 
 // Page object
 $TransferenciaAlmacenMultiple = &$Page;
-?>
-<?php
-$Page->showMessage();
-?>
-<?php
-// Page object
-$TransferenciaAlmacenMultiple = &$Page;
 
 ob_start();
 
@@ -704,5 +697,4 @@ loadjs.ready(["jquery"], function () {
     });
 });
 </script>
-
 <?= GetDebugMessage() ?>

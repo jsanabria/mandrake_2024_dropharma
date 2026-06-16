@@ -33,10 +33,9 @@ $doc_afectado = "";
 $nro_documento = "";
 $descTransferencista = 0.00;
 $descFabricante = 0.00;
-$id_documento_padre = 0;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre FROM salidas WHERE id = $pedido;";
+    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3 FROM salidas WHERE id = $pedido;";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -48,7 +47,6 @@ if(isset($_REQUEST["pedido"])) {
       $nro_documento = $row["nro_documento"]; 
       $descTransferencista = floatval($row["descuento2"]);
       $descFabricante = floatval($row["descuento3"]);
-      $id_documento_padre = intval($row["id_documento_padre"]);
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -1309,25 +1307,10 @@ loadjs.ready(["jquery"], function () {
 
                 // Desenlazar eventos anteriores del botón de confirmación para evitar ejecuciones múltiples
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
-                    const btn = $(this);
-                    const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
+                    $(this).prop("disabled", true).html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
+                    window.location.href = "TdcfcvProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
+                });
 
-                    let generarNE = "N";
-
-                    if (idDocumentoPadre == 0) {
-                        generarNE = confirm(
-                            "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
-                        ) ? "S" : "N";
-                    }
-
-                    btn.prop("disabled", true)
-                    .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
-
-                    window.location.href =
-                        "TdcfcvProcess?pedido=" + i +
-                        "&PorDesAct=" + PorDesAct +
-                        "&generar_ne=" + generarNE;
-                });                
             } else {
                 alertMsg("Error al recuperar correlativos fiscales: " + (response.mensaje ?? "Intente de nuevo."));
             }

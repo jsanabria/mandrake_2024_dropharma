@@ -545,4 +545,5 @@ loadjs.ready(["jquery"], function () {
     box-shadow: 0 0 0 .15rem rgba(13, 110, 253, .20);
 }
 </style>
+
 <?= GetDebugMessage() ?>

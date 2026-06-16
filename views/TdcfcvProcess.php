@@ -47,7 +47,8 @@ function CongelarSnapshotFiscalTdcfcv($pedido)
     if ($row) {
         $cliente_ci_rif = TdcfcvSqlValue($row["cliente_ci_rif"] ?? "");
         $cliente_nombre = TdcfcvSqlValue($row["cliente_nombre"] ?? "");
-        $cliente_direccion = TdcfcvSqlValue($row["cliente_direccion"] ?? "");
+        // $cliente_direccion = TdcfcvSqlValue($row["cliente_direccion"] ?? "");
+        $cliente_direccion = TdcfcvSqlValue(mb_substr($row["cliente_direccion"] ?? "", 0, 150, "UTF-8"));
         $cliente_telefono = TdcfcvSqlValue($row["cliente_telefono"] ?? "");
 
         $sql = "UPDATE salidas
@@ -225,10 +226,23 @@ else {
     if($faltan_datos == "N") $estatus = "PROCESADO";
 }
 
-if($estatus == "PROCESADO")
+if ($estatus == "PROCESADO") {
+
+    $generar_ne = strtoupper(trim($_GET["generar_ne"] ?? $_POST["generar_ne"] ?? "N"));
+
+    if ($generar_ne == "S") {
+        header("Location: CrearNotaEntregaAutomaticaWait?id=$pedido&return=ViewOutTdcfcvList");
+        die();
+    }
+
     header("Location: ViewOutTdcfcvView/" . $pedido . "?showdetail=");
-else 
+    die();
+
+} else {
+
     header("Location: ViewOutTdcfcvEdit/" . $pedido . "?showdetail=&my_estatus=PROCESADO");
-die();
+    die();
+
+}
 ?>
 <?= GetDebugMessage() ?>
