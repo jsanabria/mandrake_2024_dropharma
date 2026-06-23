@@ -77,21 +77,42 @@ loadjs.ready(["jquery"], function () {
             ajax: "S"
         },
         success: function(resp) {
-            let tipo = resp.success ? "success" : "warning";
-            let icono = resp.success ? "fa-check-circle" : "fa-triangle-exclamation";
-            let titulo = resp.success ? "Orden de Entrega creada" : "Aviso";
+            let tieneWarning = resp.warning && resp.warning !== "";
+
+            let tipo = resp.success
+                ? (tieneWarning ? "warning" : "success")
+                : "warning";
+
+            let icono = resp.success
+                ? (tieneWarning ? "fa-triangle-exclamation" : "fa-check-circle")
+                : "fa-triangle-exclamation";
+
+            let titulo = resp.success
+                ? (tieneWarning ? "Orden creada con advertencia" : "Orden de Entrega creada")
+                : "Aviso";
+
+            let warningHtml = "";
+
+            if (tieneWarning) {
+                warningHtml =
+                    '<div class="alert alert-warning mt-3 mb-0">' +
+                        '<strong><i class="fa fa-triangle-exclamation"></i> Advertencia:</strong><br>' +
+                        resp.warning +
+                    '</div>';
+            }
 
             $("#estadoNE").html(
                 '<div class="alert alert-' + tipo + ' text-start">' +
                     '<h5><i class="fa ' + icono + '"></i> ' + titulo + '</h5>' +
                     '<div>' + (resp.message || "Proceso finalizado.") + '</div>' +
                     (resp.nro_documento ? '<div class="mt-2"><strong>Nro:</strong> ' + resp.nro_documento + '</div>' : '') +
+                    warningHtml +
                 '</div>' +
                 '<button type="button" id="btnContinuarNE" class="btn btn-primary">' +
                     '<i class="fa fa-arrow-right"></i> Continuar' +
                 '</button>'
             );
-        },
+        },        
         error: function(xhr) {
             console.log(xhr.responseText);
 

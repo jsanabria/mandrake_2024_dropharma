@@ -176,6 +176,7 @@ HTML;
             if ($id == "sal_articulo") {
                 $sql = "SELECT
                             a.id, 
+                            a.estatus, 
                             a.nro_documento, 
                             date_format(a.fecha, '%d/%m/%Y') AS fecha, 
                             g.id AS codigo, 
@@ -206,6 +207,7 @@ HTML;
                 // "sal_articulo_neas"
                 $sql = "SELECT
                             a.id, 
+                            a.estatus, 
                             a.nro_documento, 
                             date_format(a.fecha, '%d/%m/%Y') AS fecha, 
                             g.id AS codigo, 
@@ -237,6 +239,16 @@ HTML;
             $art = 0;
             for($i = 0; $i < $contar; $i++) {
                 $row = $rows[$i];
+
+                $estatus_salida = strtoupper(trim($row["estatus"] ?? ""));
+
+                $filaWarning = "";
+                $iconoWarning = "";
+
+                if ($estatus_salida == "NUEVO") {
+                    $filaWarning = 'style="background-color:#fff3cd !important;"';
+                    $iconoWarning = '<i class="fa-solid fa-triangle-exclamation text-warning me-1" title="NEA pendiente / documento en estatus NUEVO"></i>';
+                }
 
                 // Asignaciones seguras contra nulos (PHP 8.1+)
                 $tipo_doc     = trim($row["tipo"] ?? '');
@@ -275,9 +287,9 @@ HTML;
                 $fabricante_val   = !empty($fabricante) ? $fabricante : '<span class="text-muted">-</span>';
 
                 $out .= <<<HTML
-                <tr>
+                <tr {$filaWarning}>
                     <td class="text-nowrap">{$tipo_doc}</td>
-                    <td class="font-monospace text-nowrap">{$nro_doc}</td>
+                    <td class="font-monospace text-nowrap">{$iconoWarning}{$nro_doc}</td>
                     <td class="text-center text-nowrap">{$fecha}</td>
                     <td class="text-uppercase text-wrap">{$cliente_val}</td>
                     <td class="font-monospace text-secondary">{$cod_art}</td>

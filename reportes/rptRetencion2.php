@@ -4,170 +4,243 @@ session_start();
 require('rcs/fpdf.php');
 require("../include/connect.php");
 
-$Nretencion = $_GET["Nretencion"];
+$Nretencion = isset($_GET["Nretencion"]) ? $_GET["Nretencion"] : "";
 $GLOBALS["Nretencion"] = $Nretencion;
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	function Txt($txt)
+	{
+		return strtoupper(trim($txt));
+	}
+
+	function FmtRif($rif)
+	{
+		$rif = trim($rif);
+		$rif = str_replace(array('-', '.', ' '), '', $rif);
+		if (strlen($rif) >= 3) {
+			return substr($rif,0,1)."-".substr($rif,1,strlen($rif)-2)."-".substr($rif,strlen($rif)-1,1);
+		}
+		return $rif;
+	}
+
+	function FmtNum($num)
+	{
+		return number_format((float)$num, 2, ',', '.');
+	}
+
+	function Corta($txt, $len)
+	{
+		$txt = $this->Txt($txt);
+		return strlen($txt) > $len ? substr($txt, 0, $len) : $txt;
+	}
+
 	function Header()
 	{
-		// Consulto datos de la compañía 
 		require("../include/connect.php");
 
 		$sql = "SELECT 
 					date_format(a.fecha, '%Y-%m-%d') fecha_factura 
-				FROM compra a WHERE a.id =  ".$GLOBALS["Nretencion"].";";  
-		$rs = mysqli_query($link, $sql);
+				FROM compra a 
+				WHERE a.id = ".intval($GLOBALS["Nretencion"]).";";
+		$rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 		$row_datos = mysqli_fetch_array($rs);
-		$fecha_factura = $row_datos["fecha_factura"];
-
-		$date = date_create($fecha_factura);
-		$fecha_solictud = date_format($date, 'Y-m-d');
+		$fecha_factura_db = $row_datos["fecha_factura"];
 
 		$codigo_cia = 1;
-		$sql = "SELECT a.nombre AS razon_social, a.ci_rif AS rif, a.direccion AS direccion, 
-					CONCAT(IFNULL(a.telefono1, ''), '/', IFNULL(a.telefono2, '')) AS telefono 
-				FROM compania AS a WHERE a.id = $codigo_cia;"; 
-		$rs = mysqli_query($link, $sql);
-		$row_datos = mysqli_fetch_array($rs);
-		
-		$razon_social = $row_datos["razon_social"];
-		$rif = $row_datos["rif"];
-		$direccion = $row_datos["direccion"];
-		$telefono = $row_datos["telefono"];
-		$nit = "";
-		
 		$sql = "SELECT 
-					replace(b.ci_rif, '-', '') AS RIF, b.nombre AS proveedor, a.documento AS nro_factura, a.nro_control AS nro_control, 
-					a.monto_gravado AS base_imponible, '' AS tipo_docu, 
+					a.nombre AS razon_social, 
+					a.ci_rif AS rif, 
+					a.direccion AS direccion, 
+					CONCAT(IFNULL(a.telefono1, ''), '/', IFNULL(a.telefono2, '')) AS telefono 
+				FROM compania AS a 
+				WHERE a.id = $codigo_cia;";
+		$rs = mysqli_query($link, $sql) or die(mysqli_error($link));
+		$row_cia = mysqli_fetch_array($rs);
+
+		$razon_social = $row_cia["razon_social"];
+		$rif = $row_cia["rif"];
+		$direccion = $row_cia["direccion"];
+		$telefono = $row_cia["telefono"];
+		$nit = "";
+
+		$sql = "SELECT 
+					replace(b.ci_rif, '-', '') AS RIF, 
+					b.nombre AS proveedor, 
+					a.documento AS nro_factura, 
+					a.nro_control AS nro_control, 
+					a.monto_gravado AS base_imponible, 
+					'' AS tipo_docu, 
 					date_format(a.fecha_registro,'%d/%m/%Y') as fecha_emision, 
 					date_format(a.fecha,'%d/%m/%Y') as fecha_factura, 
-					a.tipo_islr AS porc_apli, a.sustraendo AS sustraendo, 
-					a.ret_islr AS monto_ret, '' AS codigo, descripcion AS descripcion, '' AS consecutivo 
-				FROM 
-					compra a 
+					a.tipo_islr AS porc_apli, 
+					a.sustraendo AS sustraendo, 
+					a.ret_islr AS monto_ret, 
+					'' AS codigo, 
+					descripcion AS descripcion, 
+					'' AS consecutivo 
+				FROM compra a 
 					JOIN proveedor AS b ON b.id = a.proveedor 
-				WHERE a.id = ".$GLOBALS["Nretencion"].";";  
-
-
-		$rs = mysqli_query($link, $sql);
+				WHERE a.id = ".intval($GLOBALS["Nretencion"]).";";
+		$rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 		$row = mysqli_fetch_array($rs);
 
 		$proveedor = $row["proveedor"];
-		$RIF = substr($row["RIF"],0,1)."-".substr($row["RIF"],1,strlen($row["RIF"])-2)."-".substr($row["RIF"],strlen($row["RIF"])-1,1);
+		$rif_proveedor = $this->FmtRif($row["RIF"]);
 
-		$this->Image('../images/Logo.png',10,10,-150);
-		
-		$this->SetFont('Courier','',6);
-		//Linea 1
-		$this->Ln(24);
-		$this->Cell(75,4);
-		$this->Cell(10,4,"FECHA",0,0,'L');
-		$this->Cell(15,4,$row["fecha_factura"],0,0,'R');
-		$this->Ln();
-		$this->Cell(75,4);
-		$this->Cell(10,4,"HORA",0,0,'L');
-		$this->Cell(15,4,date("H:i:s"),0,0,'R');
-		$this->Ln();
-		//Linea 2
-		$this->Cell(100,4,"COMPROBANTE DE RETENCION DE IMPUESTO",0,0,'C');
-		$this->Ln();
-		$this->Cell(100,4,str_repeat("=",38),0,0,'C');
-		$this->Ln(6);
-		//Linea 3
-		$this->Cell(30,6,"AGENTE DE RETENCION:",0,0,'L');
-		$this->Cell(70,6,$razon_social,0,0,'L');
-		$this->Ln();
-		//Linea 4
-		$this->Cell(30,6,"RIF................:",0,0,'L');
-		$this->Cell(70,6,$rif,0,0,'L');
-		$this->Ln();
-		//Linea 5
-		$this->Cell(30,8,"NIT................:",0,0,'L');
-		$this->Cell(70,8,$nit,0,0,'L');
-		$this->Ln();
-		//Linea 6
-		$this->Cell(100,3,"DIRECCION DEL AGENTE DE RETENCION:",0,0,'L');
-		$this->Ln();
-		$this->MultiCell(100,3,$direccion,0,'L');
-		$this->Ln();
-		//Linea 7
-		$this->Cell(30,6,"BENEFICIARIO.......:",0,0,'L');
-		$this->Cell(70,6,$proveedor,0,0,'L');
-		$this->Ln();
-		//Linea 8
-		$this->Cell(30,6,"RIF................:",0,0,'L');
-		$this->Cell(70,6,$RIF,0,0,'L');
-		$this->Ln();
-		//Linea 9
-		$this->Cell(30,6,"IMPTE. OBJETO DE LA RETENCION:",0,0,'L');
-		$this->Cell(70,6,"Bs. ".number_format($row["base_imponible"],2,",","."),0,0,'R');
-		$this->Ln();
-		//Linea 10
-		$this->Cell(30,6,"DOCUMENTO:",0,0,'L');
-		$this->Cell(70,6,$row["tipo_docu"]." ".$row["nro_factura"],0,0,'L');
-		$this->Ln();
-		//Linea 11
-		$this->Cell(30,6,"TASA APLICABLE:",0,0,'L');
-		$this->Cell(70,6,number_format($row["porc_apli"],2,",",".")."%",0,0,'R');
-		$this->Ln();
-		//Linea 11
-		$this->Cell(30,6,"SUSTRAENDO:",0,0,'L');
-		$this->Cell(70,6,"Bs. ".number_format($row["sustraendo"],2,",","."),0,0,'R');
-		$this->Ln();
-		//Linea 11
-		$this->Cell(30,6,"CANTIDAD RETENIDA:",0,0,'L');
-		$this->Cell(70,6,"Bs. ".number_format($row["monto_ret"],2,",","."),0,0,'R');
-		$this->Ln();
-		//Linea 12
-		$this->Cell(100,6,"DECRETO   1808 DE FECHA 23 DE NOVIEMBRE DE 1997",0,0,'L');
-		$this->Ln();
-		//Linea 13
-		$this->Cell(100,6,"GACETA DEL: 12/05/1997 NUMERO 36203",0,0,'L');
-		$this->Ln();
-		//Linea 14
-		$this->Cell(30,6,"CONCEPTO...........:",0,0,'L');
-		$this->Cell(5,6,$row["codigo"],0,0,'L');
-		$this->Cell(65,6,$row["descripcion"],0,0,'L');
-		$this->Ln();
-		//Linea 15
-		$this->Cell(30,6,"FECHA..............:",0,0,'L');
-		$this->Cell(70,6,$row["fecha_factura"],0,0,'L');
-		$this->Ln();
+		$nro_documento = ltrim($row["nro_factura"], '0');
+		if ($nro_documento == "") $nro_documento = $row["nro_factura"];
+
+		$tipo_docu = trim($row["tipo_docu"]);
+		if ($tipo_docu == "") $tipo_docu = "FC";
+
+		$codigo = trim($row["codigo"]);
+		if ($codigo == "") $codigo = "11A";
+
+		$this->SetFont('Courier','',7);
+		$this->SetLineWidth(0.2);
+
+		// Encabezado superior
+		$this->ln(10);
+		$this->Cell(230, 4, "COMPROBANTE DE RETENCION DEL IMPUESTO SOBRE LA RENTA", 0, 0, 'C');
+		$this->SetXY(10, 25);
+		$this->Cell(230, 3, str_repeat("=", 56), 0, 0, 'C');
+
+		$this->SetXY(230, 20);
+		$this->Cell(20, 4, "PAGINA...:", 0, 0, 'L');
+		$this->Cell(12, 4, $this->PageNo(), 0, 0, 'L');
+		$this->SetXY(230, 25);
+		$this->Cell(20, 4, "FECHA....:", 0, 0, 'L');
+		$this->Cell(25, 4, $row["fecha_factura"], 0, 0, 'L');
+		$this->SetXY(230, 30);
+		$this->Cell(20, 4, "HORA.....:", 0, 0, 'L');
+		$this->Cell(25, 4, date("H:i:s"), 0, 0, 'L');
+
+		// Datos del agente
+		$this->SetXY(12, 35);
+		$this->Cell(95, 4, "NOMBRE O RAZON SOCIAL DEL AGENTE DE RETENCION", 0, 0, 'L');
+		$this->SetXY(12, 38);
+		$this->Cell(150, 4, $this->Corta($razon_social, 70), 0, 0, 'L');
+
+		$this->SetXY(12, 45);
+		$this->Cell(95, 4, "DIRECCION FISCAL DEL AGENTE DE RETENCION", 0, 0, 'L');
+		$this->SetXY(12, 48);
+		$this->MultiCell(125, 3, $this->Corta($direccion, 180), 0, 'L');
+
+		$this->SetXY(142, 35);
+		$this->Cell(80, 4, "REGISTRO DE INFORMACION FISCAL (R.I.F) DEL AGENTE DE RETENCION", 0, 0, 'L');
+		$this->SetXY(142, 38);
+		$this->Cell(80, 4, $rif, 0, 0, 'L');
+
+		if(trim($nit) != "") {
+			$this->SetXY(142, 46);
+			$this->Cell(80, 4, "NIT: ".$nit, 0, 0, 'L');
+		}
+
+		// Datos del sujeto retenido
+		$this->SetXY(12, 56);
+		$this->Cell(100, 4, "NOMBRE O RAZON SOCIAL DEL SUJETO DE RETENCION", 0, 0, 'L');
+		$this->SetXY(12, 59);
+		$this->Cell(120, 4, $this->Corta($proveedor, 60), 0, 0, 'L');
+
+		$this->SetXY(142, 56);
+		$this->Cell(100, 4, "REGISTRO DE INFORMACION FISCAL (R.I.F) DEL SUJETO DE RETENCION", 0, 0, 'L');
+		$this->SetXY(142, 59);
+		$this->Cell(90, 4, $rif_proveedor, 0, 0, 'L');
+
+		// LÃ­nea superior de tabla
+		$y = 65;
+		$this->SetXY(12, $y);
+		$this->Cell(255, 3, str_repeat("=", 170), 0, 0, 'L');
+
+		// Encabezados de tabla
+		$y += 3;
+		$this->SetXY(12, $y);
+		$this->Cell(20, 4, "FECHA", 0, 0, 'C');
+		$this->Cell(60, 4, "DOCUMENTO", 0, 0, 'C');
+		$this->Cell(60, 4, "R E T E N C I O N", 0, 0, 'L');
+		$this->Cell(28, 4, "BASE DE", 0, 0, 'R');
+		$this->Cell(22, 4, "TASA", 0, 0, 'R');
+		$this->Cell(28, 4, "SUSTRAENDO", 0, 0, 'R');
+		$this->Cell(28, 4, "CANTIDAD", 0, 0, 'R');
+
+		$y += 4;
+		$this->SetXY(12, $y);
+		$this->Cell(20, 4, "DOCUMENTO", 0, 0, 'C');
+		$this->Cell(15, 4, "TIPO", 0, 0, 'C');
+		$this->Cell(30, 4, "NUMERO", 0, 0, 'C');
+		$this->Cell(10, 4, "CODIGO", 0, 0, 'C');
+		$this->Cell(65, 4, "DESCRIPCION", 0, 0, 'L');
+		$this->Cell(28, 4, "RETENCION", 0, 0, 'R');
+		$this->Cell(22, 4, "APLICADA", 0, 0, 'R');
+		$this->Cell(28, 4, "", 0, 0, 'R');
+		$this->Cell(28, 4, "RETENIDA", 0, 0, 'R');
+
+		$y += 3;
+		$this->SetXY(12, $y);
+		$this->Cell(255, 3, str_repeat("=", 170), 0, 0, 'L');
+
+		// Detalle
+		$y += 4;
+		$this->SetXY(12, $y);
+		$this->Cell(20, 4, $row["fecha_factura"], 0, 0, 'C');
+		$this->Cell(15, 4, $tipo_docu, 0, 0, 'C');
+		$this->Cell(30, 4, $nro_documento, 0, 0, 'C');
+		$this->Cell(10, 4, $codigo, 0, 0, 'C');
+		$this->Cell(65, 4, $this->Corta($row["descripcion"], 31), 0, 0, 'L');
+		$this->Cell(28, 4, $this->FmtNum($row["base_imponible"]), 0, 0, 'R');
+		$this->Cell(22, 4, $this->FmtNum($row["porc_apli"])."%", 0, 0, 'R');
+		$this->Cell(28, 4, $this->FmtNum($row["sustraendo"]), 0, 0, 'R');
+		$this->Cell(28, 4, $this->FmtNum($row["monto_ret"]), 0, 0, 'R');
+
+		// Totales
+		$yTot = 170;
+		$this->SetXY(125, $yTot);
+		$this->Cell(46, 4, "T O T A L E S ...:", 0, 0, 'L');
+		$this->Line(152, $yTot - 2, 180, $yTot - 2);
+		$this->SetXY(152, $yTot);
+		$this->Cell(28, 4, $this->FmtNum($row["base_imponible"]), 0, 0, 'R');
+		$this->Line(202, $yTot - 2, 230, $yTot - 2);
+		$this->SetXY(202, $yTot);
+		$this->Cell(28, 4, $this->FmtNum($row["sustraendo"]), 0, 0, 'R');
+		$this->Line(230, $yTot - 2, 258, $yTot - 2);
+		$this->SetXY(230, $yTot);
+		$this->Cell(27, 4, $this->FmtNum($row["monto_ret"]), 0, 0, 'R');
+
+		// Datos legales
+		$this->SetXY(30, 183);
+		$this->Cell(30, 4, "DECRETO 1808 DE FECHA 23 DE NOVIEMBRE DE 1997", 0, 0, 'L');
+		$this->SetXY(30, 187);
+		$this->Cell(30, 4, "GACETA DEL: 12/05/1997 NUMERO 36203", 0, 0, 'L');
+
+		// Firma integrada en el cuerpo
+		if (file_exists('../images/firma_reterncion.jpg')) {
+			$this->Image('../images/firma_reterncion.jpg', 30, 135, 40);
+		}
+		$this->SetXY(100, 190);
+		$this->Cell(75, 4, "FIRMA DEL AGENTE DE RETENCION", 'T', 0, 'C');
+
 		require("../include/desconnect.php");
 	}
-	
-	// Pie de página
+
 	function Footer()
 	{
-		$this->ln(5);
-		$this->Cell(40,6,'FIRMA DEL AGENTE DE RETENCION',"T",0,'C');
-		$this->SetY(-30);
-
-		$this->Image('../images/firma_reterncion.jpg',80,150,50);
+		// El formato requerido maneja el cierre dentro del cuerpo del comprobante.
 	}
-	
+
 	function EndReport()
 	{
 		$this->Ln(10);
-		$this->Cell(100);
-		$this->Ln();
 	}
 }
 
-// Creación del objeto de la clase heredada
-$pdf = new PDF();
-$pdf->SetMargins(10,15,10);
+$pdf = new PDF('L', 'mm', 'Letter');
+$pdf->SetMargins(10, 10, 10);
+$pdf->SetAutoPageBreak(false);
 $pdf->AliasNbPages();
-$pdf->AddPage("L","Letter");
-//$pdf->SetFont("Courier");
-//$pdf->SetFontSize(8);
-
-
+$pdf->AddPage();
 $pdf->EndReport();
 
 require("../include/desconnect.php");
-
 $pdf->Output();
 ?>

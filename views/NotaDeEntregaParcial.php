@@ -70,7 +70,9 @@ $tipo_documento = $row["tipo_documento"];
                 <table class="table table-striped table-bordered table-hover align-middle">
                     <thead class="table-light text-center small fw-bold">
                         <tr>
-                            <th width="4%"><i class="fa-solid fa-square-check"></i></th>
+                            <th width="4%" class="text-center">
+                                <input type="checkbox" class="form-check-input" id="chkTodos">
+                            </th>
                             <th width="5%">#</th>
                             <th width="12%">CÓDIGO</th>
                             <th>ARTÍCULO / LABORATORIO</th>
@@ -177,6 +179,18 @@ $tipo_documento = $row["tipo_documento"];
 <script type="text/javascript">
 // PHPMaker 2024 garantiza la carga segura mediante loadjs.ready
 loadjs.ready("makerjs", function() {
+    // Marcar / Desmarcar todos
+    jQuery(document).on("change", "#chkTodos", function() {
+
+        var marcar = jQuery(this).is(":checked");
+
+        jQuery(".chk-item").each(function() {
+
+            jQuery(this).prop("checked", marcar).trigger("change");
+
+        });
+
+    });
     
     // Event Listener para controlar el encendido/apagado del Checklist (Reemplaza a toggleLinea)
     jQuery(document).on("change", ".chk-item", function() {
@@ -194,6 +208,16 @@ loadjs.ready("makerjs", function() {
             jQuery("#fila_" + id).removeClass("table-info");
         }
     });
+
+    // Actualizar el estado del checkbox maestro
+    jQuery(document).on("change", ".chk-item", function() {
+
+        var total = jQuery(".chk-item").length;
+        var marcados = jQuery(".chk-item:checked").length;
+
+        jQuery("#chkTodos").prop("checked", total > 0 && total == marcados);
+
+    });   
 
     // Event Listener para la validación reactiva del input numérico (Reemplaza a validarCantidadInput)
     jQuery(document).on("change textup keyup", ".cant-despacho", function() {

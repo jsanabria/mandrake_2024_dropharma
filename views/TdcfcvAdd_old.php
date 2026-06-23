@@ -33,9 +33,10 @@ $doc_afectado = "";
 $nro_documento = "";
 $descTransferencista = 0.00;
 $descFabricante = 0.00;
+$id_documento_padre = 0;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3 FROM salidas WHERE id = $pedido;";
+    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre FROM salidas WHERE id = $pedido;";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -47,6 +48,7 @@ if(isset($_REQUEST["pedido"])) {
       $nro_documento = $row["nro_documento"]; 
       $descTransferencista = floatval($row["descuento2"]);
       $descFabricante = floatval($row["descuento3"]);
+      $id_documento_padre = intval($row["id_documento_padre"]);
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -65,6 +67,11 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 $puedeModificarPrecioDescuento = false;
 if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
     $puedeModificarPrecioDescuento = VerificaFuncion("040");
+}
+
+$urlImprimir = "#";
+if (intval($pedido) > 0) {
+    $urlImprimir = "reportes/factura_de_venta.php?id=" . intval($pedido) . "&tipo=TDCFCV";
 }
 ?>
 
@@ -311,7 +318,7 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
 
     </div>
       <strong>Observaciones:</strong>
-      <textarea cols="35" rows="3" placeholder="Observaciones" class="form-control form-control-sm" id="nota" onblur="js:guardar_nota();"><?= $nota ?></textarea>
+      <textarea cols="35" rows="3" placeholder="Observaciones" class="form-control form-control-sm" id="nota" onchange="js:guardar_nota();"><?= $nota ?></textarea>
   </div>
 </div>
 
@@ -623,6 +630,11 @@ loadjs.ready(["jquery"], function () {
         const xuser = $("#auth_user_tdcfcv").val().trim();
         const xpass = $("#auth_pass_tdcfcv").val().trim();
 
+        const tipo_documento = $("#tipo_documento").val();
+        const nro_documento  = $("#nro_documento").val();
+        const usercaja       = $("#username").val();
+        const pedido         = $("#pedido").val();
+
         if (xuser === "" || xpass === "") {
             alertMsg("Debe indicar usuario autorizador y clave.");
             return false;
@@ -638,7 +650,11 @@ loadjs.ready(["jquery"], function () {
             data: {
                 usernama: xuser,
                 password: xpass,
-                contexto: "TDCFCV_PRECIO_DESCUENTO"
+                contexto: "TDCFCV_PRECIO_DESCUENTO",
+                tipo_documento: tipo_documento,
+                nro_documento: nro_documento,
+                usercaja: usercaja,
+                idPurga: pedido
             }
         })
         .done(function (result) {
@@ -832,6 +848,7 @@ loadjs.ready(["jquery"], function () {
                 setPedidoButtons(json);
                 $("#pedido").val(json.pedido);
                 updateTotals(json);
+                ActualizarVistaPrevia(json.pedido);
 
                 $("#x" + i + "_cantidad, #x" + i + "_precioFull, #x" + i + "_descuento, #x" + i + "_lote, #x" + i + "_vence")
                     .prop("disabled", true);
@@ -1019,6 +1036,7 @@ loadjs.ready(["jquery"], function () {
                 setPedidoButtons(json);
                 $("#pedido").val(json.pedido);
                 updateTotals(json);
+                ActualizarVistaPrevia(json.pedido);
 
                 const PorDesAct = json.descuento ?? 0;
                 PintarProgressBar(PorDesAct);
@@ -1291,10 +1309,25 @@ loadjs.ready(["jquery"], function () {
 
                 // Desenlazar eventos anteriores del botón de confirmación para evitar ejecuciones múltiples
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
-                    $(this).prop("disabled", true).html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
-                    window.location.href = "TdcfcvProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
-                });
+                    const btn = $(this);
+                    const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
 
+                    let generarNE = "N";
+
+                    if (idDocumentoPadre == 0) {
+                        generarNE = confirm(
+                            "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
+                        ) ? "S" : "N";
+                    }
+
+                    btn.prop("disabled", true)
+                    .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
+
+                    window.location.href =
+                        "TdcfcvProcess?pedido=" + i +
+                        "&PorDesAct=" + PorDesAct +
+                        "&generar_ne=" + generarNE;
+                });                
             } else {
                 alertMsg("Error al recuperar correlativos fiscales: " + (response.mensaje ?? "Intente de nuevo."));
             }
@@ -1531,10 +1564,53 @@ loadjs.ready(["jquery"], function () {
         }
     };   
 
-    $(document).on("keyup change", "#articulo", function () {
+    function ActualizarVistaPrevia(pedido) {
+
+        if (parseInt(pedido) > 0) {
+
+            $("#btnVistaPrevia")
+                .attr(
+                    "href",
+                    "reportes/factura_de_venta.php?id=" +
+                    pedido +
+                    "&tipo=TDCFCV"
+                )
+                .removeClass("disabled");
+
+        } else {
+
+            $("#btnVistaPrevia")
+                .attr("href", "#")
+                .addClass("disabled");
+        }
+    }
+
+    // $(document).on("keyup change", "#articulo", function () {
+    /*
+    $(document).on("keyup", "#articulo", function () {
         console.log("Buscando artículo:", $(this).val());
         getCodigos2();
     });
+    */
+
+    $(document).on("keydown", "#articulo", function(e) {
+
+        if (e.which == 13) {
+            // ENTER
+            e.preventDefault();
+            getCodigos2();
+        }
+        else if (e.which == 9) {
+            // TAB
+            getCodigos2();
+        }
+        else if (e.which == 46) {
+            // DELETE
+            getCodigos2();
+        }
+
+    });
+
 
     /// Laboratorios ///
     $(document).on("keyup change", "#laboratorio", function () {
@@ -1619,10 +1695,29 @@ loadjs.ready(["jquery"], function () {
           </div>
         </div>
       </div>
-      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">
-        <button type="button" class="btn btn-sm btn-outline-secondary px-3" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i> Cancelar</button>
-        <button type="button" id="btnConfirmarProcesar" class="btn btn-sm btn-success px-4 fw-bold"><i class="fa-solid fa-check me-1"></i> Sí, Procesar</button>
-      </div>
+        <div class="modal-footer bg-white border-top-0 pt-0 justify-content-between">
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary px-3"
+                    data-bs-dismiss="modal">
+                <i class="fa-solid fa-xmark me-1"></i>
+                Cancelar
+            </button>
+
+            <a id="btnVistaPrevia"
+                href="<?= $urlImprimir ?>"
+                target="_blank"
+                class="btn btn-sm btn-outline-primary px-3 <?= ($urlImprimir == '#' ? 'disabled' : '') ?>">
+                    <i class="fa-solid fa-magnifying-glass me-1"></i>
+                    Vista Previa
+            </a>
+
+            <button type="button"
+                    id="btnConfirmarProcesar"
+                    class="btn btn-sm btn-success px-4 fw-bold">
+                <i class="fa-solid fa-check me-1"></i>
+                Sí, Procesar
+            </button>
+        </div>
     </div>
   </div>
 </div>

@@ -121,18 +121,18 @@ class VisitasDelete extends Visitas
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->setVisibility();
+        $this->id->Visible = false;
         $this->nombre->setVisibility();
         $this->apellido->setVisibility();
         $this->correo->setVisibility();
         $this->telefono->setVisibility();
         $this->producto->setVisibility();
         $this->referencia->setVisibility();
-        $this->comentario->setVisibility();
+        $this->comentario->Visible = false;
         $this->seguimiento->setVisibility();
         $this->fecha->setVisibility();
-        $this->fecha_registro->setVisibility();
-        $this->usuario->setVisibility();
+        $this->fecha_registro->Visible = false;
+        $this->usuario->Visible = false;
     }
 
     // Constructor
@@ -408,6 +408,9 @@ class VisitasDelete extends Visitas
         if ($this->UseAjaxActions) {
             $this->InlineDelete = true;
         }
+
+        // Set up lookup cache
+        $this->setupLookupOptions($this->usuario);
 
         // Set up Breadcrumb
         $this->setupBreadcrumb();
@@ -698,10 +701,27 @@ class VisitasDelete extends Visitas
 
             // usuario
             $this->usuario->ViewValue = $this->usuario->CurrentValue;
-
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
+            $curVal = strval($this->usuario->CurrentValue);
+            if ($curVal != "") {
+                $this->usuario->ViewValue = $this->usuario->lookupCacheOption($curVal);
+                if ($this->usuario->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->usuario->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->usuario->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                    $sqlWrk = $this->usuario->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->usuario->Lookup->renderViewRow($rswrk[0]);
+                        $this->usuario->ViewValue = $this->usuario->displayValue($arwrk);
+                    } else {
+                        $this->usuario->ViewValue = $this->usuario->CurrentValue;
+                    }
+                }
+            } else {
+                $this->usuario->ViewValue = null;
+            }
 
             // nombre
             $this->nombre->HrefValue = "";
@@ -727,10 +747,6 @@ class VisitasDelete extends Visitas
             $this->referencia->HrefValue = "";
             $this->referencia->TooltipValue = "";
 
-            // comentario
-            $this->comentario->HrefValue = "";
-            $this->comentario->TooltipValue = "";
-
             // seguimiento
             $this->seguimiento->HrefValue = "";
             $this->seguimiento->TooltipValue = "";
@@ -738,14 +754,6 @@ class VisitasDelete extends Visitas
             // fecha
             $this->fecha->HrefValue = "";
             $this->fecha->TooltipValue = "";
-
-            // fecha_registro
-            $this->fecha_registro->HrefValue = "";
-            $this->fecha_registro->TooltipValue = "";
-
-            // usuario
-            $this->usuario->HrefValue = "";
-            $this->usuario->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -877,6 +885,8 @@ class VisitasDelete extends Visitas
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
+                case "x_usuario":
+                    break;
                 default:
                     $lookupFilter = "";
                     break;

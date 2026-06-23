@@ -154,8 +154,8 @@ if(trim($nro_documento) == "") {
     $serie_doc = $documento . "_DOC";   // FC_DOC, NC_DOC, ND_DOC
     $serie_ctrl = $documento . "_CTRL"; // FC_CTRL, NC_CTRL, ND_CTRL
 
-    $numeroDoc = ReservarConsecutivoDocumento("TDCFCV", $serie_doc);
-    $numeroCtrl = ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl);
+    $numeroDoc = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
+    $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
 
     $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
     $row = ExecuteRow($sql);

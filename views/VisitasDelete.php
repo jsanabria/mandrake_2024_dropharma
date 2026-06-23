@@ -50,9 +50,6 @@ $Page->showMessage();
 <table class="<?= $Page->TableClass ?>">
     <thead>
     <tr class="ew-table-header">
-<?php if ($Page->id->Visible) { // id ?>
-        <th class="<?= $Page->id->headerCellClass() ?>"><span id="elh_visitas_id" class="visitas_id"><?= $Page->id->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->nombre->Visible) { // nombre ?>
         <th class="<?= $Page->nombre->headerCellClass() ?>"><span id="elh_visitas_nombre" class="visitas_nombre"><?= $Page->nombre->caption() ?></span></th>
 <?php } ?>
@@ -71,20 +68,11 @@ $Page->showMessage();
 <?php if ($Page->referencia->Visible) { // referencia ?>
         <th class="<?= $Page->referencia->headerCellClass() ?>"><span id="elh_visitas_referencia" class="visitas_referencia"><?= $Page->referencia->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->comentario->Visible) { // comentario ?>
-        <th class="<?= $Page->comentario->headerCellClass() ?>"><span id="elh_visitas_comentario" class="visitas_comentario"><?= $Page->comentario->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->seguimiento->Visible) { // seguimiento ?>
         <th class="<?= $Page->seguimiento->headerCellClass() ?>"><span id="elh_visitas_seguimiento" class="visitas_seguimiento"><?= $Page->seguimiento->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
         <th class="<?= $Page->fecha->headerCellClass() ?>"><span id="elh_visitas_fecha" class="visitas_fecha"><?= $Page->fecha->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
-        <th class="<?= $Page->fecha_registro->headerCellClass() ?>"><span id="elh_visitas_fecha_registro" class="visitas_fecha_registro"><?= $Page->fecha_registro->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->usuario->Visible) { // usuario ?>
-        <th class="<?= $Page->usuario->headerCellClass() ?>"><span id="elh_visitas_usuario" class="visitas_usuario"><?= $Page->usuario->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -107,14 +95,6 @@ while ($Page->fetch()) {
     $Page->renderRow();
 ?>
     <tr <?= $Page->rowAttributes() ?>>
-<?php if ($Page->id->Visible) { // id ?>
-        <td<?= $Page->id->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->id->viewAttributes() ?>>
-<?= $Page->id->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->nombre->Visible) { // nombre ?>
         <td<?= $Page->nombre->cellAttributes() ?>>
 <span id="">
@@ -163,14 +143,6 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->comentario->Visible) { // comentario ?>
-        <td<?= $Page->comentario->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->comentario->viewAttributes() ?>>
-<?= $Page->comentario->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->seguimiento->Visible) { // seguimiento ?>
         <td<?= $Page->seguimiento->cellAttributes() ?>>
 <span id="">
@@ -184,22 +156,6 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->fecha->viewAttributes() ?>>
 <?= $Page->fecha->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
-        <td<?= $Page->fecha_registro->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->fecha_registro->viewAttributes() ?>>
-<?= $Page->fecha_registro->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->usuario->Visible) { // usuario ?>
-        <td<?= $Page->usuario->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->usuario->viewAttributes() ?>>
-<?= $Page->usuario->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

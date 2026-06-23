@@ -229,6 +229,28 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+    <tr id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_moneda"><?= $Page->moneda->caption() ?></span></td>
+        <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
+<span id="el_compra_moneda" data-page="1">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
+    <tr id="r_tasa_dia"<?= $Page->tasa_dia->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_tasa_dia"><?= $Page->tasa_dia->caption() ?></span></td>
+        <td data-name="tasa_dia"<?= $Page->tasa_dia->cellAttributes() ?>>
+<span id="el_compra_tasa_dia" data-page="1">
+<span<?= $Page->tasa_dia->viewAttributes() ?>>
+<?= $Page->tasa_dia->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
 <?php if (!$Page->isExport()) { ?>
         </div><!-- /multi-page .tab-pane -->

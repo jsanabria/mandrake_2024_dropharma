@@ -33,6 +33,9 @@ $sql = "SELECT ci_rif, nombre FROM proveedor WHERE id = $codpro;";
 $row = ExecuteRow($sql);
 $proveedor = $row["nombre"];
 
+$sql = "SELECT codigo, descripcion FROM almacen WHERE movimiento = 'S';";
+$rs_alm = ExecuteRows($sql);
+
 ?>
 
 <script type="text/javascript">
@@ -45,6 +48,7 @@ $proveedor = $row["nombre"];
     var nota = $("#nota").value();
     var lote = $("#x" + i + "_lote").value();
     var vence = $("#x" + i + "_vence").value();
+    var almacen = $("#almacen").value();
     // alert(pedido + " - " + proveedor + " - " + costoFull + " - " + descuento + " - " + costo + " - " + moneda + " - " + total + " - " + cantidad + " - " + username);
 
     // Using the core $.ajax() method
@@ -61,7 +65,8 @@ $proveedor = $row["nombre"];
               username: username, 
               nota: nota,
               lote: lote, 
-              vence: vence, 
+              vence: vence,
+              almacen: almacen, 
             },
       // Whether this is a POST or GET request
       type: "POST",
@@ -76,7 +81,7 @@ $proveedor = $row["nombre"];
         if(json.estatus == 1) {
           // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
 
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcaenList\');"><i class="fa-solid fa-list"></i> Ajustes </button>');
           $("#pedido").val(json.pedido);
           $("#xReglones").html(json.renglones);
           $("#xUnidades").html(json.unidades);
@@ -139,7 +144,7 @@ $proveedor = $row["nombre"];
         if(json.estatus == 1) {
           document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
 
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcaenList\');"><i class="fa-solid fa-list"></i> Ajustes </button>');
           $("#pedido").val(json.pedido);
           $("#xReglones").html(json.renglones);
           $("#xUnidades").html(json.unidades);
@@ -191,7 +196,7 @@ $proveedor = $row["nombre"];
           json = jQuery.parseJSON(json);
           // alert(json.pedido + " -- " + json.mensaje);
 
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: 0 (0000000)</button> <button type="button" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: 0 (0000000)</button> <button type="button" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcaenList\');"><i class="fa-solid fa-list"></i> Ajustes </button>');
           $("#pedido").val(0);
           $("#xReglones").html(0);
           $("#xUnidades").html(0);
@@ -233,7 +238,7 @@ $proveedor = $row["nombre"];
         // alert(json.pedido + " -- " + json.mensaje);
 
         if(json.estatus == 1) {
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:sendProccess(' + json.pedido + ')" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-microchip"></i> Procesar Documento </button>');
+          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:sendProccess(' + json.pedido + ')" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-microchip"></i> Procesar Documento </button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcaenList\');"><i class="fa-solid fa-list"></i> Ajustes </button>');
           $("#pedido").val(json.pedido);
           $("#xReglones").html(json.renglones);
           $("#xUnidades").html(json.unidades);
@@ -291,7 +296,7 @@ $proveedor = $row["nombre"];
 		  <h5>Proveedor: <?= $proveedor ?></h5>
       <div id="nroPedido">
           <button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: <?= $pedido ?> </button> 
-          <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:vaciar(' . $pedido . ')"' : ''); ?> class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> 
+          <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:vaciar(' . $pedido . ')"' : ''); ?> class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button>  <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace('ViewInTdcaenList');"><i class="fa-solid fa-list"></i> Ajustes </button>
           <button type="button" <?php echo ( $pedido != 0 ? 'onclick="js:getCodigos3(' . $pedido . ')"' : ''); ?> class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button>
       </div>
 	    <input name="pedido" id="pedido" type="hidden" value="<?= $pedido ?>" />
@@ -338,21 +343,34 @@ $proveedor = $row["nombre"];
 
 <hr class="border border-primary" />
 
-  <div class="row">
-    <div class="col-sm-4">
-        Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
+    <div class="row">
+        <div class="col-sm-1">
+            Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
+        </div>
+
+        <div class="col-sm-3">
+            Almacén:
+            <select name="almacen" id="almacen" class="form-control form-control-sm">
+                <?php foreach($rs_alm as $alm) { ?>
+                    <option value="<?= $alm["codigo"] ?>" <?= ($alm["codigo"] == "ALM001") ? "selected" : "" ?>>
+                        <?= $alm["descripcion"] ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="col-sm-4">
+            Fabricante:
+            <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
+            <input name="codlab" id="codlab" type="hidden" />
+            <ul id="lista" class="list-group"></ul>
+        </div>
+
+        <div class="col-sm-4">
+            Art&iacute;culo:
+            <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
+        </div>
     </div>
-    <div class="col-sm-4">
-      Fabricante:
-		<input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-		<input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
-      <ul id="lista" class="list-group"></ul>
-    </div>
-    <div class="col-sm-4">
-      Art&iacute;culo:
-      <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
-    </div>
-  </div>
 
 <hr class="border border-primary" />
 
@@ -454,6 +472,7 @@ $proveedor = $row["nombre"];
       let inputCP6 = document.getElementById("pedido").value
       let inputCP7 = document.getElementById("username").value
       let inputCP8 = document.getElementById("tipo_documento").value
+      let inputCP9 = (document.getElementById('hubb').checked ? "SI" : "NO")
 
       document.getElementById("lista2").innerHTML = ""
 
@@ -467,6 +486,7 @@ $proveedor = $row["nombre"];
           formData.append("pedido", inputCP6)
           formData.append("username", inputCP7)
           formData.append("tipo_documento", inputCP8)
+          formData.append("hubb", inputCP9)
 
           fetch(url, {
               method: "POST",
@@ -530,7 +550,7 @@ $proveedor = $row["nombre"];
       let inputCP = document.getElementById("pedido").value
       let inputCP2 = document.getElementById("nota").value
       if (inputCP > 0) {
-          let url = "include/guardar_nota.php"
+          let url = "include/tdcaen/guardar_nota.php"
           let formData = new FormData()
           formData.append("pedido", inputCP)
           formData.append("nota", inputCP2)

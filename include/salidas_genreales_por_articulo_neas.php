@@ -15,6 +15,7 @@
     }
 
     $contar = 0;
+    $total_unidades = 0;
 
     // 2. Encabezado de la tabla y botón de acción con diseño optimizado
     $out .= <<<HTML
@@ -77,6 +78,7 @@ HTML;
         $fabricante    = trim($row["fabricante"] ?? '');
         
         $cant_mov      = $row["cantidad_movimiento"] ?? 0;
+        $total_unidades += $cant_mov;
         $cantidad_form = number_format($cant_mov, 0, "", ".");
 
         // Fallbacks visuales para textos vacíos
@@ -103,14 +105,21 @@ HTML;
 
     // 5. Fila de resumen de totales
     $total_articulos = number_format($contar, 0, "", ".");
+    $total_unidades_fmt = number_format($total_unidades, 0, "", ".");
+
     $out .= <<<HTML
-            <tr>
-                <th colspan="6" class="text-end table-light py-3 pe-4 text-secondary">
-                    Total Artículos: <span class="text-dark">{$total_articulos}</span>
-                </th>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <tr class="table-warning">
+        <th colspan="2" class="text-start py-3 ps-4">
+            Artículos: <span class="text-dark fw-bold">{$total_articulos}</span>
+        </th>
+
+        <th colspan="2" class="text-center py-3">
+            Unidades: <span class="text-dark fw-bold">{$total_unidades_fmt}</span>
+        </th>
+
+        <th colspan="2" class="text-center py-3">
+            
+        </th>
+    </tr>
 HTML;
 ?>

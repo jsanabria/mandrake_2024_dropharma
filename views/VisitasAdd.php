@@ -29,10 +29,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["producto", [fields.producto.visible && fields.producto.required ? ew.Validators.required(fields.producto.caption) : null], fields.producto.isInvalid],
             ["referencia", [fields.referencia.visible && fields.referencia.required ? ew.Validators.required(fields.referencia.caption) : null], fields.referencia.isInvalid],
             ["comentario", [fields.comentario.visible && fields.comentario.required ? ew.Validators.required(fields.comentario.caption) : null], fields.comentario.isInvalid],
-            ["seguimiento", [fields.seguimiento.visible && fields.seguimiento.required ? ew.Validators.required(fields.seguimiento.caption) : null], fields.seguimiento.isInvalid],
-            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null], fields.fecha.isInvalid],
-            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
-            ["usuario", [fields.usuario.visible && fields.usuario.required ? ew.Validators.required(fields.usuario.caption) : null], fields.usuario.isInvalid]
+            ["seguimiento", [fields.seguimiento.visible && fields.seguimiento.required ? ew.Validators.required(fields.seguimiento.caption) : null], fields.seguimiento.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -154,7 +151,7 @@ $Page->showMessage();
         <label id="elh_visitas_comentario" for="x_comentario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->comentario->caption() ?><?= $Page->comentario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->comentario->cellAttributes() ?>>
 <span id="el_visitas_comentario">
-<input type="<?= $Page->comentario->getInputTextType() ?>" name="x_comentario" id="x_comentario" data-table="visitas" data-field="x_comentario" value="<?= $Page->comentario->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->comentario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->comentario->formatPattern()) ?>"<?= $Page->comentario->editAttributes() ?> aria-describedby="x_comentario_help">
+<textarea data-table="visitas" data-field="x_comentario" name="x_comentario" id="x_comentario" cols="35" rows="2" placeholder="<?= HtmlEncode($Page->comentario->getPlaceHolder()) ?>"<?= $Page->comentario->editAttributes() ?> aria-describedby="x_comentario_help"><?= $Page->comentario->EditValue ?></textarea>
 <?= $Page->comentario->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->comentario->getErrorMessage() ?></div>
 </span>
@@ -166,74 +163,9 @@ $Page->showMessage();
         <label id="elh_visitas_seguimiento" for="x_seguimiento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->seguimiento->caption() ?><?= $Page->seguimiento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->seguimiento->cellAttributes() ?>>
 <span id="el_visitas_seguimiento">
-<input type="<?= $Page->seguimiento->getInputTextType() ?>" name="x_seguimiento" id="x_seguimiento" data-table="visitas" data-field="x_seguimiento" value="<?= $Page->seguimiento->EditValue ?>" size="30" maxlength="65535" placeholder="<?= HtmlEncode($Page->seguimiento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->seguimiento->formatPattern()) ?>"<?= $Page->seguimiento->editAttributes() ?> aria-describedby="x_seguimiento_help">
+<textarea data-table="visitas" data-field="x_seguimiento" name="x_seguimiento" id="x_seguimiento" cols="35" rows="2" placeholder="<?= HtmlEncode($Page->seguimiento->getPlaceHolder()) ?>"<?= $Page->seguimiento->editAttributes() ?> aria-describedby="x_seguimiento_help"><?= $Page->seguimiento->EditValue ?></textarea>
 <?= $Page->seguimiento->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->seguimiento->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->fecha->Visible) { // fecha ?>
-    <div id="r_fecha"<?= $Page->fecha->rowAttributes() ?>>
-        <label id="elh_visitas_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
-<span id="el_visitas_fecha">
-<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="visitas" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
-<?= $Page->fecha->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
-    <div id="r_fecha_registro"<?= $Page->fecha_registro->rowAttributes() ?>>
-        <label id="elh_visitas_fecha_registro" for="x_fecha_registro" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha_registro->caption() ?><?= $Page->fecha_registro->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha_registro->cellAttributes() ?>>
-<span id="el_visitas_fecha_registro">
-<input type="<?= $Page->fecha_registro->getInputTextType() ?>" name="x_fecha_registro" id="x_fecha_registro" data-table="visitas" data-field="x_fecha_registro" value="<?= $Page->fecha_registro->EditValue ?>" placeholder="<?= HtmlEncode($Page->fecha_registro->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_registro->formatPattern()) ?>"<?= $Page->fecha_registro->editAttributes() ?> aria-describedby="x_fecha_registro_help">
-<?= $Page->fecha_registro->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha_registro->getErrorMessage() ?></div>
-<?php if (!$Page->fecha_registro->ReadOnly && !$Page->fecha_registro->Disabled && !isset($Page->fecha_registro->EditAttrs["readonly"]) && !isset($Page->fecha_registro->EditAttrs["disabled"])) { ?>
-<script>
-loadjs.ready(["fvisitasadd", "datetimepicker"], function () {
-    let format = "<?= DateFormat(0) ?>",
-        options = {
-            localization: {
-                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
-                hourCycle: format.match(/H/) ? "h24" : "h12",
-                format,
-                ...ew.language.phrase("datetimepicker")
-            },
-            display: {
-                icons: {
-                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
-                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
-                },
-                components: {
-                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
-                    hours: !!format.match(/h/i),
-                    minutes: !!format.match(/m/),
-                    seconds: !!format.match(/s/i)
-                },
-                theme: ew.getPreferredTheme()
-            }
-        };
-    ew.createDateTimePicker("fvisitasadd", "x_fecha_registro", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->usuario->Visible) { // usuario ?>
-    <div id="r_usuario"<?= $Page->usuario->rowAttributes() ?>>
-        <label id="elh_visitas_usuario" for="x_usuario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->usuario->caption() ?><?= $Page->usuario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->usuario->cellAttributes() ?>>
-<span id="el_visitas_usuario">
-<input type="<?= $Page->usuario->getInputTextType() ?>" name="x_usuario" id="x_usuario" data-table="visitas" data-field="x_usuario" value="<?= $Page->usuario->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->usuario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->usuario->formatPattern()) ?>"<?= $Page->usuario->editAttributes() ?> aria-describedby="x_usuario_help">
-<?= $Page->usuario->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->usuario->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

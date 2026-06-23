@@ -162,10 +162,6 @@ class ArticuloList extends Articulo
         $this->fabricante->setVisibility();
         $this->codigo_ims->Visible = false;
         $this->codigo_de_barra->Visible = false;
-        $this->categoria->setVisibility();
-        $this->lista_pedido->setVisibility();
-        $this->categoria_madre->setVisibility();
-        $this->sub_categoria->Visible = false;
         $this->tipo->Visible = false;
         $this->unidad_medida_defecto->Visible = false;
         $this->cantidad_por_unidad_medida->Visible = false;
@@ -177,9 +173,13 @@ class ArticuloList extends Articulo
         $this->cantidad_en_transito->setVisibility();
         $this->ultimo_costo->Visible = false;
         $this->descuento->setVisibility();
+        $this->categoria->setVisibility();
+        $this->lista_pedido->setVisibility();
+        $this->categoria_madre->setVisibility();
+        $this->sub_categoria->setVisibility();
         $this->precio->Visible = false;
         $this->alicuota->Visible = false;
-        $this->articulo_inventario->Visible = false;
+        $this->articulo_inventario->setVisibility();
         $this->indexado->Visible = false;
         $this->pies_cubico->Visible = false;
         $this->color->Visible = false;
@@ -735,11 +735,11 @@ class ArticuloList extends Articulo
 
         // Set up lookup cache
         $this->setupLookupOptions($this->fabricante);
-        $this->setupLookupOptions($this->categoria);
-        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->unidad_medida_defecto);
         $this->setupLookupOptions($this->cantidad_por_unidad_medida);
+        $this->setupLookupOptions($this->categoria);
+        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->indexado);
@@ -1129,10 +1129,6 @@ class ArticuloList extends Articulo
         $filterList = Concat($filterList, $this->fabricante->AdvancedSearch->toJson(), ","); // Field fabricante
         $filterList = Concat($filterList, $this->codigo_ims->AdvancedSearch->toJson(), ","); // Field codigo_ims
         $filterList = Concat($filterList, $this->codigo_de_barra->AdvancedSearch->toJson(), ","); // Field codigo_de_barra
-        $filterList = Concat($filterList, $this->categoria->AdvancedSearch->toJson(), ","); // Field categoria
-        $filterList = Concat($filterList, $this->lista_pedido->AdvancedSearch->toJson(), ","); // Field lista_pedido
-        $filterList = Concat($filterList, $this->categoria_madre->AdvancedSearch->toJson(), ","); // Field categoria_madre
-        $filterList = Concat($filterList, $this->sub_categoria->AdvancedSearch->toJson(), ","); // Field sub_categoria
         $filterList = Concat($filterList, $this->tipo->AdvancedSearch->toJson(), ","); // Field tipo
         $filterList = Concat($filterList, $this->unidad_medida_defecto->AdvancedSearch->toJson(), ","); // Field unidad_medida_defecto
         $filterList = Concat($filterList, $this->cantidad_por_unidad_medida->AdvancedSearch->toJson(), ","); // Field cantidad_por_unidad_medida
@@ -1144,6 +1140,10 @@ class ArticuloList extends Articulo
         $filterList = Concat($filterList, $this->cantidad_en_transito->AdvancedSearch->toJson(), ","); // Field cantidad_en_transito
         $filterList = Concat($filterList, $this->ultimo_costo->AdvancedSearch->toJson(), ","); // Field ultimo_costo
         $filterList = Concat($filterList, $this->descuento->AdvancedSearch->toJson(), ","); // Field descuento
+        $filterList = Concat($filterList, $this->categoria->AdvancedSearch->toJson(), ","); // Field categoria
+        $filterList = Concat($filterList, $this->lista_pedido->AdvancedSearch->toJson(), ","); // Field lista_pedido
+        $filterList = Concat($filterList, $this->categoria_madre->AdvancedSearch->toJson(), ","); // Field categoria_madre
+        $filterList = Concat($filterList, $this->sub_categoria->AdvancedSearch->toJson(), ","); // Field sub_categoria
         $filterList = Concat($filterList, $this->precio->AdvancedSearch->toJson(), ","); // Field precio
         $filterList = Concat($filterList, $this->alicuota->AdvancedSearch->toJson(), ","); // Field alicuota
         $filterList = Concat($filterList, $this->articulo_inventario->AdvancedSearch->toJson(), ","); // Field articulo_inventario
@@ -1268,38 +1268,6 @@ class ArticuloList extends Articulo
         $this->codigo_de_barra->AdvancedSearch->SearchOperator2 = @$filter["w_codigo_de_barra"];
         $this->codigo_de_barra->AdvancedSearch->save();
 
-        // Field categoria
-        $this->categoria->AdvancedSearch->SearchValue = @$filter["x_categoria"];
-        $this->categoria->AdvancedSearch->SearchOperator = @$filter["z_categoria"];
-        $this->categoria->AdvancedSearch->SearchCondition = @$filter["v_categoria"];
-        $this->categoria->AdvancedSearch->SearchValue2 = @$filter["y_categoria"];
-        $this->categoria->AdvancedSearch->SearchOperator2 = @$filter["w_categoria"];
-        $this->categoria->AdvancedSearch->save();
-
-        // Field lista_pedido
-        $this->lista_pedido->AdvancedSearch->SearchValue = @$filter["x_lista_pedido"];
-        $this->lista_pedido->AdvancedSearch->SearchOperator = @$filter["z_lista_pedido"];
-        $this->lista_pedido->AdvancedSearch->SearchCondition = @$filter["v_lista_pedido"];
-        $this->lista_pedido->AdvancedSearch->SearchValue2 = @$filter["y_lista_pedido"];
-        $this->lista_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_lista_pedido"];
-        $this->lista_pedido->AdvancedSearch->save();
-
-        // Field categoria_madre
-        $this->categoria_madre->AdvancedSearch->SearchValue = @$filter["x_categoria_madre"];
-        $this->categoria_madre->AdvancedSearch->SearchOperator = @$filter["z_categoria_madre"];
-        $this->categoria_madre->AdvancedSearch->SearchCondition = @$filter["v_categoria_madre"];
-        $this->categoria_madre->AdvancedSearch->SearchValue2 = @$filter["y_categoria_madre"];
-        $this->categoria_madre->AdvancedSearch->SearchOperator2 = @$filter["w_categoria_madre"];
-        $this->categoria_madre->AdvancedSearch->save();
-
-        // Field sub_categoria
-        $this->sub_categoria->AdvancedSearch->SearchValue = @$filter["x_sub_categoria"];
-        $this->sub_categoria->AdvancedSearch->SearchOperator = @$filter["z_sub_categoria"];
-        $this->sub_categoria->AdvancedSearch->SearchCondition = @$filter["v_sub_categoria"];
-        $this->sub_categoria->AdvancedSearch->SearchValue2 = @$filter["y_sub_categoria"];
-        $this->sub_categoria->AdvancedSearch->SearchOperator2 = @$filter["w_sub_categoria"];
-        $this->sub_categoria->AdvancedSearch->save();
-
         // Field tipo
         $this->tipo->AdvancedSearch->SearchValue = @$filter["x_tipo"];
         $this->tipo->AdvancedSearch->SearchOperator = @$filter["z_tipo"];
@@ -1387,6 +1355,38 @@ class ArticuloList extends Articulo
         $this->descuento->AdvancedSearch->SearchValue2 = @$filter["y_descuento"];
         $this->descuento->AdvancedSearch->SearchOperator2 = @$filter["w_descuento"];
         $this->descuento->AdvancedSearch->save();
+
+        // Field categoria
+        $this->categoria->AdvancedSearch->SearchValue = @$filter["x_categoria"];
+        $this->categoria->AdvancedSearch->SearchOperator = @$filter["z_categoria"];
+        $this->categoria->AdvancedSearch->SearchCondition = @$filter["v_categoria"];
+        $this->categoria->AdvancedSearch->SearchValue2 = @$filter["y_categoria"];
+        $this->categoria->AdvancedSearch->SearchOperator2 = @$filter["w_categoria"];
+        $this->categoria->AdvancedSearch->save();
+
+        // Field lista_pedido
+        $this->lista_pedido->AdvancedSearch->SearchValue = @$filter["x_lista_pedido"];
+        $this->lista_pedido->AdvancedSearch->SearchOperator = @$filter["z_lista_pedido"];
+        $this->lista_pedido->AdvancedSearch->SearchCondition = @$filter["v_lista_pedido"];
+        $this->lista_pedido->AdvancedSearch->SearchValue2 = @$filter["y_lista_pedido"];
+        $this->lista_pedido->AdvancedSearch->SearchOperator2 = @$filter["w_lista_pedido"];
+        $this->lista_pedido->AdvancedSearch->save();
+
+        // Field categoria_madre
+        $this->categoria_madre->AdvancedSearch->SearchValue = @$filter["x_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchOperator = @$filter["z_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchCondition = @$filter["v_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchValue2 = @$filter["y_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->SearchOperator2 = @$filter["w_categoria_madre"];
+        $this->categoria_madre->AdvancedSearch->save();
+
+        // Field sub_categoria
+        $this->sub_categoria->AdvancedSearch->SearchValue = @$filter["x_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchOperator = @$filter["z_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchCondition = @$filter["v_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchValue2 = @$filter["y_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->SearchOperator2 = @$filter["w_sub_categoria"];
+        $this->sub_categoria->AdvancedSearch->save();
 
         // Field precio
         $this->precio->AdvancedSearch->SearchValue = @$filter["x_precio"];
@@ -1512,10 +1512,6 @@ class ArticuloList extends Articulo
         $this->buildSearchSql($where, $this->fabricante, $default, false); // fabricante
         $this->buildSearchSql($where, $this->codigo_ims, $default, false); // codigo_ims
         $this->buildSearchSql($where, $this->codigo_de_barra, $default, false); // codigo_de_barra
-        $this->buildSearchSql($where, $this->categoria, $default, false); // categoria
-        $this->buildSearchSql($where, $this->lista_pedido, $default, false); // lista_pedido
-        $this->buildSearchSql($where, $this->categoria_madre, $default, false); // categoria_madre
-        $this->buildSearchSql($where, $this->sub_categoria, $default, false); // sub_categoria
         $this->buildSearchSql($where, $this->tipo, $default, false); // tipo
         $this->buildSearchSql($where, $this->unidad_medida_defecto, $default, false); // unidad_medida_defecto
         $this->buildSearchSql($where, $this->cantidad_por_unidad_medida, $default, false); // cantidad_por_unidad_medida
@@ -1527,6 +1523,10 @@ class ArticuloList extends Articulo
         $this->buildSearchSql($where, $this->cantidad_en_transito, $default, false); // cantidad_en_transito
         $this->buildSearchSql($where, $this->ultimo_costo, $default, false); // ultimo_costo
         $this->buildSearchSql($where, $this->descuento, $default, false); // descuento
+        $this->buildSearchSql($where, $this->categoria, $default, false); // categoria
+        $this->buildSearchSql($where, $this->lista_pedido, $default, false); // lista_pedido
+        $this->buildSearchSql($where, $this->categoria_madre, $default, false); // categoria_madre
+        $this->buildSearchSql($where, $this->sub_categoria, $default, false); // sub_categoria
         $this->buildSearchSql($where, $this->precio, $default, false); // precio
         $this->buildSearchSql($where, $this->alicuota, $default, false); // alicuota
         $this->buildSearchSql($where, $this->articulo_inventario, $default, false); // articulo_inventario
@@ -1555,10 +1555,6 @@ class ArticuloList extends Articulo
             $this->fabricante->AdvancedSearch->save(); // fabricante
             $this->codigo_ims->AdvancedSearch->save(); // codigo_ims
             $this->codigo_de_barra->AdvancedSearch->save(); // codigo_de_barra
-            $this->categoria->AdvancedSearch->save(); // categoria
-            $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
-            $this->categoria_madre->AdvancedSearch->save(); // categoria_madre
-            $this->sub_categoria->AdvancedSearch->save(); // sub_categoria
             $this->tipo->AdvancedSearch->save(); // tipo
             $this->unidad_medida_defecto->AdvancedSearch->save(); // unidad_medida_defecto
             $this->cantidad_por_unidad_medida->AdvancedSearch->save(); // cantidad_por_unidad_medida
@@ -1570,6 +1566,10 @@ class ArticuloList extends Articulo
             $this->cantidad_en_transito->AdvancedSearch->save(); // cantidad_en_transito
             $this->ultimo_costo->AdvancedSearch->save(); // ultimo_costo
             $this->descuento->AdvancedSearch->save(); // descuento
+            $this->categoria->AdvancedSearch->save(); // categoria
+            $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
+            $this->categoria_madre->AdvancedSearch->save(); // categoria_madre
+            $this->sub_categoria->AdvancedSearch->save(); // sub_categoria
             $this->precio->AdvancedSearch->save(); // precio
             $this->alicuota->AdvancedSearch->save(); // alicuota
             $this->articulo_inventario->AdvancedSearch->save(); // articulo_inventario
@@ -1622,10 +1622,6 @@ class ArticuloList extends Articulo
             $this->fabricante->AdvancedSearch->save(); // fabricante
             $this->codigo_ims->AdvancedSearch->save(); // codigo_ims
             $this->codigo_de_barra->AdvancedSearch->save(); // codigo_de_barra
-            $this->categoria->AdvancedSearch->save(); // categoria
-            $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
-            $this->categoria_madre->AdvancedSearch->save(); // categoria_madre
-            $this->sub_categoria->AdvancedSearch->save(); // sub_categoria
             $this->tipo->AdvancedSearch->save(); // tipo
             $this->unidad_medida_defecto->AdvancedSearch->save(); // unidad_medida_defecto
             $this->cantidad_por_unidad_medida->AdvancedSearch->save(); // cantidad_por_unidad_medida
@@ -1637,6 +1633,10 @@ class ArticuloList extends Articulo
             $this->cantidad_en_transito->AdvancedSearch->save(); // cantidad_en_transito
             $this->ultimo_costo->AdvancedSearch->save(); // ultimo_costo
             $this->descuento->AdvancedSearch->save(); // descuento
+            $this->categoria->AdvancedSearch->save(); // categoria
+            $this->lista_pedido->AdvancedSearch->save(); // lista_pedido
+            $this->categoria_madre->AdvancedSearch->save(); // categoria_madre
+            $this->sub_categoria->AdvancedSearch->save(); // sub_categoria
             $this->precio->AdvancedSearch->save(); // precio
             $this->alicuota->AdvancedSearch->save(); // alicuota
             $this->articulo_inventario->AdvancedSearch->save(); // articulo_inventario
@@ -1760,33 +1760,6 @@ class ArticuloList extends Articulo
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->fabricante->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field categoria
-        $filter = $this->queryBuilderWhere("categoria");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->categoria, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->categoria->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field lista_pedido
-        $filter = $this->queryBuilderWhere("lista_pedido");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->lista_pedido, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->lista_pedido->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field categoria_madre
-        $filter = $this->queryBuilderWhere("categoria_madre");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->categoria_madre, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->categoria_madre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field cantidad_en_mano
         $filter = $this->queryBuilderWhere("cantidad_en_mano");
         if (!$filter) {
@@ -1832,6 +1805,51 @@ class ArticuloList extends Articulo
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->descuento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field categoria
+        $filter = $this->queryBuilderWhere("categoria");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->categoria, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->categoria->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field lista_pedido
+        $filter = $this->queryBuilderWhere("lista_pedido");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->lista_pedido, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->lista_pedido->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field categoria_madre
+        $filter = $this->queryBuilderWhere("categoria_madre");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->categoria_madre, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->categoria_madre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field sub_categoria
+        $filter = $this->queryBuilderWhere("sub_categoria");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->sub_categoria, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->sub_categoria->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field articulo_inventario
+        $filter = $this->queryBuilderWhere("articulo_inventario");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->articulo_inventario, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->articulo_inventario->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field activo
         $filter = $this->queryBuilderWhere("activo");
         if (!$filter) {
@@ -1873,12 +1891,12 @@ class ArticuloList extends Articulo
         $searchFlds[] = &$this->presentacion;
         $searchFlds[] = &$this->codigo_ims;
         $searchFlds[] = &$this->codigo_de_barra;
+        $searchFlds[] = &$this->tipo;
+        $searchFlds[] = &$this->unidad_medida_defecto;
         $searchFlds[] = &$this->categoria;
         $searchFlds[] = &$this->lista_pedido;
         $searchFlds[] = &$this->categoria_madre;
         $searchFlds[] = &$this->sub_categoria;
-        $searchFlds[] = &$this->tipo;
-        $searchFlds[] = &$this->unidad_medida_defecto;
         $searchFlds[] = &$this->alicuota;
         $searchFlds[] = &$this->color;
         $searchFlds[] = &$this->cojin;
@@ -1941,18 +1959,6 @@ class ArticuloList extends Articulo
         if ($this->codigo_de_barra->AdvancedSearch->issetSession()) {
             return true;
         }
-        if ($this->categoria->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->lista_pedido->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->categoria_madre->AdvancedSearch->issetSession()) {
-            return true;
-        }
-        if ($this->sub_categoria->AdvancedSearch->issetSession()) {
-            return true;
-        }
         if ($this->tipo->AdvancedSearch->issetSession()) {
             return true;
         }
@@ -1984,6 +1990,18 @@ class ArticuloList extends Articulo
             return true;
         }
         if ($this->descuento->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->categoria->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->lista_pedido->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->categoria_madre->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->sub_categoria->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->precio->AdvancedSearch->issetSession()) {
@@ -2069,10 +2087,6 @@ class ArticuloList extends Articulo
         $this->fabricante->AdvancedSearch->unsetSession();
         $this->codigo_ims->AdvancedSearch->unsetSession();
         $this->codigo_de_barra->AdvancedSearch->unsetSession();
-        $this->categoria->AdvancedSearch->unsetSession();
-        $this->lista_pedido->AdvancedSearch->unsetSession();
-        $this->categoria_madre->AdvancedSearch->unsetSession();
-        $this->sub_categoria->AdvancedSearch->unsetSession();
         $this->tipo->AdvancedSearch->unsetSession();
         $this->unidad_medida_defecto->AdvancedSearch->unsetSession();
         $this->cantidad_por_unidad_medida->AdvancedSearch->unsetSession();
@@ -2084,6 +2098,10 @@ class ArticuloList extends Articulo
         $this->cantidad_en_transito->AdvancedSearch->unsetSession();
         $this->ultimo_costo->AdvancedSearch->unsetSession();
         $this->descuento->AdvancedSearch->unsetSession();
+        $this->categoria->AdvancedSearch->unsetSession();
+        $this->lista_pedido->AdvancedSearch->unsetSession();
+        $this->categoria_madre->AdvancedSearch->unsetSession();
+        $this->sub_categoria->AdvancedSearch->unsetSession();
         $this->precio->AdvancedSearch->unsetSession();
         $this->alicuota->AdvancedSearch->unsetSession();
         $this->articulo_inventario->AdvancedSearch->unsetSession();
@@ -2117,10 +2135,6 @@ class ArticuloList extends Articulo
         $this->fabricante->AdvancedSearch->load();
         $this->codigo_ims->AdvancedSearch->load();
         $this->codigo_de_barra->AdvancedSearch->load();
-        $this->categoria->AdvancedSearch->load();
-        $this->lista_pedido->AdvancedSearch->load();
-        $this->categoria_madre->AdvancedSearch->load();
-        $this->sub_categoria->AdvancedSearch->load();
         $this->tipo->AdvancedSearch->load();
         $this->unidad_medida_defecto->AdvancedSearch->load();
         $this->cantidad_por_unidad_medida->AdvancedSearch->load();
@@ -2132,6 +2146,10 @@ class ArticuloList extends Articulo
         $this->cantidad_en_transito->AdvancedSearch->load();
         $this->ultimo_costo->AdvancedSearch->load();
         $this->descuento->AdvancedSearch->load();
+        $this->categoria->AdvancedSearch->load();
+        $this->lista_pedido->AdvancedSearch->load();
+        $this->categoria_madre->AdvancedSearch->load();
+        $this->sub_categoria->AdvancedSearch->load();
         $this->precio->AdvancedSearch->load();
         $this->alicuota->AdvancedSearch->load();
         $this->articulo_inventario->AdvancedSearch->load();
@@ -2168,14 +2186,16 @@ class ArticuloList extends Articulo
             $this->updateSort($this->principio_activo); // principio_activo
             $this->updateSort($this->presentacion); // presentacion
             $this->updateSort($this->fabricante); // fabricante
-            $this->updateSort($this->categoria); // categoria
-            $this->updateSort($this->lista_pedido); // lista_pedido
-            $this->updateSort($this->categoria_madre); // categoria_madre
             $this->updateSort($this->cantidad_en_mano); // cantidad_en_mano
             $this->updateSort($this->cantidad_en_almacenes); // cantidad_en_almacenes
             $this->updateSort($this->cantidad_en_pedido); // cantidad_en_pedido
             $this->updateSort($this->cantidad_en_transito); // cantidad_en_transito
             $this->updateSort($this->descuento); // descuento
+            $this->updateSort($this->categoria); // categoria
+            $this->updateSort($this->lista_pedido); // lista_pedido
+            $this->updateSort($this->categoria_madre); // categoria_madre
+            $this->updateSort($this->sub_categoria); // sub_categoria
+            $this->updateSort($this->articulo_inventario); // articulo_inventario
             $this->updateSort($this->activo); // activo
             $this->setStartRecordNumber(1); // Reset start position
         }
@@ -2210,10 +2230,6 @@ class ArticuloList extends Articulo
                 $this->fabricante->setSort("");
                 $this->codigo_ims->setSort("");
                 $this->codigo_de_barra->setSort("");
-                $this->categoria->setSort("");
-                $this->lista_pedido->setSort("");
-                $this->categoria_madre->setSort("");
-                $this->sub_categoria->setSort("");
                 $this->tipo->setSort("");
                 $this->unidad_medida_defecto->setSort("");
                 $this->cantidad_por_unidad_medida->setSort("");
@@ -2225,6 +2241,10 @@ class ArticuloList extends Articulo
                 $this->cantidad_en_transito->setSort("");
                 $this->ultimo_costo->setSort("");
                 $this->descuento->setSort("");
+                $this->categoria->setSort("");
+                $this->lista_pedido->setSort("");
+                $this->categoria_madre->setSort("");
+                $this->sub_categoria->setSort("");
                 $this->precio->setSort("");
                 $this->alicuota->setSort("");
                 $this->articulo_inventario->setSort("");
@@ -2772,14 +2792,16 @@ class ArticuloList extends Articulo
             $this->createColumnOption($option, "principio_activo");
             $this->createColumnOption($option, "presentacion");
             $this->createColumnOption($option, "fabricante");
-            $this->createColumnOption($option, "categoria");
-            $this->createColumnOption($option, "lista_pedido");
-            $this->createColumnOption($option, "categoria_madre");
             $this->createColumnOption($option, "cantidad_en_mano");
             $this->createColumnOption($option, "cantidad_en_almacenes");
             $this->createColumnOption($option, "cantidad_en_pedido");
             $this->createColumnOption($option, "cantidad_en_transito");
             $this->createColumnOption($option, "descuento");
+            $this->createColumnOption($option, "categoria");
+            $this->createColumnOption($option, "lista_pedido");
+            $this->createColumnOption($option, "categoria_madre");
+            $this->createColumnOption($option, "sub_categoria");
+            $this->createColumnOption($option, "articulo_inventario");
             $this->createColumnOption($option, "activo");
         }
 
@@ -3206,38 +3228,6 @@ class ArticuloList extends Articulo
             }
         }
 
-        // categoria
-        if ($this->categoria->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->categoria->AdvancedSearch->SearchValue != "" || $this->categoria->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // lista_pedido
-        if ($this->lista_pedido->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->lista_pedido->AdvancedSearch->SearchValue != "" || $this->lista_pedido->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // categoria_madre
-        if ($this->categoria_madre->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->categoria_madre->AdvancedSearch->SearchValue != "" || $this->categoria_madre->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
-        // sub_categoria
-        if ($this->sub_categoria->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->sub_categoria->AdvancedSearch->SearchValue != "" || $this->sub_categoria->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
         // tipo
         if ($this->tipo->AdvancedSearch->get()) {
             $hasValue = true;
@@ -3322,6 +3312,38 @@ class ArticuloList extends Articulo
         if ($this->descuento->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->descuento->AdvancedSearch->SearchValue != "" || $this->descuento->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // categoria
+        if ($this->categoria->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->categoria->AdvancedSearch->SearchValue != "" || $this->categoria->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // lista_pedido
+        if ($this->lista_pedido->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->lista_pedido->AdvancedSearch->SearchValue != "" || $this->lista_pedido->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // categoria_madre
+        if ($this->categoria_madre->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->categoria_madre->AdvancedSearch->SearchValue != "" || $this->categoria_madre->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // sub_categoria
+        if ($this->sub_categoria->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->sub_categoria->AdvancedSearch->SearchValue != "" || $this->sub_categoria->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -3535,10 +3557,6 @@ class ArticuloList extends Articulo
         $this->fabricante->setDbValue($row['fabricante']);
         $this->codigo_ims->setDbValue($row['codigo_ims']);
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
-        $this->categoria->setDbValue($row['categoria']);
-        $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->categoria_madre->setDbValue($row['categoria_madre']);
-        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
@@ -3550,6 +3568,10 @@ class ArticuloList extends Articulo
         $this->cantidad_en_transito->setDbValue($row['cantidad_en_transito']);
         $this->ultimo_costo->setDbValue($row['ultimo_costo']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->categoria->setDbValue($row['categoria']);
+        $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
@@ -3578,10 +3600,6 @@ class ArticuloList extends Articulo
         $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['codigo_ims'] = $this->codigo_ims->DefaultValue;
         $row['codigo_de_barra'] = $this->codigo_de_barra->DefaultValue;
-        $row['categoria'] = $this->categoria->DefaultValue;
-        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
-        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
-        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['tipo'] = $this->tipo->DefaultValue;
         $row['unidad_medida_defecto'] = $this->unidad_medida_defecto->DefaultValue;
         $row['cantidad_por_unidad_medida'] = $this->cantidad_por_unidad_medida->DefaultValue;
@@ -3593,6 +3611,10 @@ class ArticuloList extends Articulo
         $row['cantidad_en_transito'] = $this->cantidad_en_transito->DefaultValue;
         $row['ultimo_costo'] = $this->ultimo_costo->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['categoria'] = $this->categoria->DefaultValue;
+        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
+        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
+        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['precio'] = $this->precio->DefaultValue;
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['articulo_inventario'] = $this->articulo_inventario->DefaultValue;
@@ -3664,14 +3686,6 @@ class ArticuloList extends Articulo
 
         // codigo_de_barra
 
-        // categoria
-
-        // lista_pedido
-
-        // categoria_madre
-
-        // sub_categoria
-
         // tipo
 
         // unidad_medida_defecto
@@ -3693,6 +3707,14 @@ class ArticuloList extends Articulo
         // ultimo_costo
 
         // descuento
+
+        // categoria
+
+        // lista_pedido
+
+        // categoria_madre
+
+        // sub_categoria
 
         // precio
 
@@ -3774,6 +3796,37 @@ class ArticuloList extends Articulo
             // codigo_de_barra
             $this->codigo_de_barra->ViewValue = $this->codigo_de_barra->CurrentValue;
 
+            // tipo
+            if (strval($this->tipo->CurrentValue) != "") {
+                $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
+            } else {
+                $this->tipo->ViewValue = null;
+            }
+
+            // cantidad_en_mano
+            $this->cantidad_en_mano->ViewValue = $this->cantidad_en_mano->CurrentValue;
+            $this->cantidad_en_mano->ViewValue = FormatNumber($this->cantidad_en_mano->ViewValue, $this->cantidad_en_mano->formatPattern());
+
+            // cantidad_en_almacenes
+            $this->cantidad_en_almacenes->ViewValue = $this->cantidad_en_almacenes->CurrentValue;
+            $this->cantidad_en_almacenes->ViewValue = FormatNumber($this->cantidad_en_almacenes->ViewValue, $this->cantidad_en_almacenes->formatPattern());
+
+            // cantidad_en_pedido
+            $this->cantidad_en_pedido->ViewValue = $this->cantidad_en_pedido->CurrentValue;
+            $this->cantidad_en_pedido->ViewValue = FormatNumber($this->cantidad_en_pedido->ViewValue, $this->cantidad_en_pedido->formatPattern());
+
+            // cantidad_en_transito
+            $this->cantidad_en_transito->ViewValue = $this->cantidad_en_transito->CurrentValue;
+            $this->cantidad_en_transito->ViewValue = FormatNumber($this->cantidad_en_transito->ViewValue, $this->cantidad_en_transito->formatPattern());
+
+            // ultimo_costo
+            $this->ultimo_costo->ViewValue = $this->ultimo_costo->CurrentValue;
+            $this->ultimo_costo->ViewValue = FormatNumber($this->ultimo_costo->ViewValue, $this->ultimo_costo->formatPattern());
+
+            // descuento
+            $this->descuento->ViewValue = $this->descuento->CurrentValue;
+            $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
+
             // categoria
             $curVal = strval($this->categoria->CurrentValue);
             if ($curVal != "") {
@@ -3828,37 +3881,6 @@ class ArticuloList extends Articulo
             // sub_categoria
             $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
-            // tipo
-            if (strval($this->tipo->CurrentValue) != "") {
-                $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
-            } else {
-                $this->tipo->ViewValue = null;
-            }
-
-            // cantidad_en_mano
-            $this->cantidad_en_mano->ViewValue = $this->cantidad_en_mano->CurrentValue;
-            $this->cantidad_en_mano->ViewValue = FormatNumber($this->cantidad_en_mano->ViewValue, $this->cantidad_en_mano->formatPattern());
-
-            // cantidad_en_almacenes
-            $this->cantidad_en_almacenes->ViewValue = $this->cantidad_en_almacenes->CurrentValue;
-            $this->cantidad_en_almacenes->ViewValue = FormatNumber($this->cantidad_en_almacenes->ViewValue, $this->cantidad_en_almacenes->formatPattern());
-
-            // cantidad_en_pedido
-            $this->cantidad_en_pedido->ViewValue = $this->cantidad_en_pedido->CurrentValue;
-            $this->cantidad_en_pedido->ViewValue = FormatNumber($this->cantidad_en_pedido->ViewValue, $this->cantidad_en_pedido->formatPattern());
-
-            // cantidad_en_transito
-            $this->cantidad_en_transito->ViewValue = $this->cantidad_en_transito->CurrentValue;
-            $this->cantidad_en_transito->ViewValue = FormatNumber($this->cantidad_en_transito->ViewValue, $this->cantidad_en_transito->formatPattern());
-
-            // ultimo_costo
-            $this->ultimo_costo->ViewValue = $this->ultimo_costo->CurrentValue;
-            $this->ultimo_costo->ViewValue = FormatNumber($this->ultimo_costo->ViewValue, $this->ultimo_costo->formatPattern());
-
-            // descuento
-            $this->descuento->ViewValue = $this->descuento->CurrentValue;
-            $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
-
             // precio
             $this->precio->ViewValue = $this->precio->CurrentValue;
             $this->precio->ViewValue = FormatNumber($this->precio->ViewValue, $this->precio->formatPattern());
@@ -3885,6 +3907,13 @@ class ArticuloList extends Articulo
                 }
             } else {
                 $this->alicuota->ViewValue = null;
+            }
+
+            // articulo_inventario
+            if (strval($this->articulo_inventario->CurrentValue) != "") {
+                $this->articulo_inventario->ViewValue = $this->articulo_inventario->optionCaption($this->articulo_inventario->CurrentValue);
+            } else {
+                $this->articulo_inventario->ViewValue = null;
             }
 
             // indexado
@@ -3967,18 +3996,6 @@ class ArticuloList extends Articulo
             $this->fabricante->HrefValue = "";
             $this->fabricante->TooltipValue = "";
 
-            // categoria
-            $this->categoria->HrefValue = "";
-            $this->categoria->TooltipValue = "";
-
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-            $this->lista_pedido->TooltipValue = "";
-
-            // categoria_madre
-            $this->categoria_madre->HrefValue = "";
-            $this->categoria_madre->TooltipValue = "";
-
             // cantidad_en_mano
             $this->cantidad_en_mano->HrefValue = "";
             $this->cantidad_en_mano->TooltipValue = "";
@@ -3998,6 +4015,26 @@ class ArticuloList extends Articulo
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // categoria
+            $this->categoria->HrefValue = "";
+            $this->categoria->TooltipValue = "";
+
+            // lista_pedido
+            $this->lista_pedido->HrefValue = "";
+            $this->lista_pedido->TooltipValue = "";
+
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+            $this->categoria_madre->TooltipValue = "";
+
+            // sub_categoria
+            $this->sub_categoria->HrefValue = "";
+            $this->sub_categoria->TooltipValue = "";
+
+            // articulo_inventario
+            $this->articulo_inventario->HrefValue = "";
+            $this->articulo_inventario->TooltipValue = "";
 
             // activo
             $this->activo->HrefValue = "";
@@ -4078,6 +4115,37 @@ class ArticuloList extends Articulo
             }
             $this->fabricante->PlaceHolder = RemoveHtml($this->fabricante->caption());
 
+            // cantidad_en_mano
+            $this->cantidad_en_mano->setupEditAttributes();
+            $this->cantidad_en_mano->EditValue = $this->cantidad_en_mano->AdvancedSearch->SearchValue;
+            $this->cantidad_en_mano->PlaceHolder = RemoveHtml($this->cantidad_en_mano->caption());
+
+            // cantidad_en_almacenes
+            $this->cantidad_en_almacenes->setupEditAttributes();
+            $this->cantidad_en_almacenes->EditValue = $this->cantidad_en_almacenes->AdvancedSearch->SearchValue;
+            $this->cantidad_en_almacenes->PlaceHolder = RemoveHtml($this->cantidad_en_almacenes->caption());
+
+            // cantidad_en_pedido
+            $this->cantidad_en_pedido->setupEditAttributes();
+            $this->cantidad_en_pedido->EditValue = $this->cantidad_en_pedido->AdvancedSearch->SearchValue;
+            $this->cantidad_en_pedido->PlaceHolder = RemoveHtml($this->cantidad_en_pedido->caption());
+            $this->cantidad_en_pedido->setupEditAttributes();
+            $this->cantidad_en_pedido->EditValue2 = $this->cantidad_en_pedido->AdvancedSearch->SearchValue2;
+            $this->cantidad_en_pedido->PlaceHolder = RemoveHtml($this->cantidad_en_pedido->caption());
+
+            // cantidad_en_transito
+            $this->cantidad_en_transito->setupEditAttributes();
+            $this->cantidad_en_transito->EditValue = $this->cantidad_en_transito->AdvancedSearch->SearchValue;
+            $this->cantidad_en_transito->PlaceHolder = RemoveHtml($this->cantidad_en_transito->caption());
+            $this->cantidad_en_transito->setupEditAttributes();
+            $this->cantidad_en_transito->EditValue2 = $this->cantidad_en_transito->AdvancedSearch->SearchValue2;
+            $this->cantidad_en_transito->PlaceHolder = RemoveHtml($this->cantidad_en_transito->caption());
+
+            // descuento
+            $this->descuento->setupEditAttributes();
+            $this->descuento->EditValue = $this->descuento->AdvancedSearch->SearchValue;
+            $this->descuento->PlaceHolder = RemoveHtml($this->descuento->caption());
+
             // categoria
             $this->categoria->setupEditAttributes();
             $curVal = trim(strval($this->categoria->AdvancedSearch->SearchValue));
@@ -4142,36 +4210,18 @@ class ArticuloList extends Articulo
             $this->categoria_madre->EditValue = HtmlEncode($this->categoria_madre->AdvancedSearch->SearchValue);
             $this->categoria_madre->PlaceHolder = RemoveHtml($this->categoria_madre->caption());
 
-            // cantidad_en_mano
-            $this->cantidad_en_mano->setupEditAttributes();
-            $this->cantidad_en_mano->EditValue = $this->cantidad_en_mano->AdvancedSearch->SearchValue;
-            $this->cantidad_en_mano->PlaceHolder = RemoveHtml($this->cantidad_en_mano->caption());
+            // sub_categoria
+            $this->sub_categoria->setupEditAttributes();
+            if (!$this->sub_categoria->Raw) {
+                $this->sub_categoria->AdvancedSearch->SearchValue = HtmlDecode($this->sub_categoria->AdvancedSearch->SearchValue);
+            }
+            $this->sub_categoria->EditValue = HtmlEncode($this->sub_categoria->AdvancedSearch->SearchValue);
+            $this->sub_categoria->PlaceHolder = RemoveHtml($this->sub_categoria->caption());
 
-            // cantidad_en_almacenes
-            $this->cantidad_en_almacenes->setupEditAttributes();
-            $this->cantidad_en_almacenes->EditValue = $this->cantidad_en_almacenes->AdvancedSearch->SearchValue;
-            $this->cantidad_en_almacenes->PlaceHolder = RemoveHtml($this->cantidad_en_almacenes->caption());
-
-            // cantidad_en_pedido
-            $this->cantidad_en_pedido->setupEditAttributes();
-            $this->cantidad_en_pedido->EditValue = $this->cantidad_en_pedido->AdvancedSearch->SearchValue;
-            $this->cantidad_en_pedido->PlaceHolder = RemoveHtml($this->cantidad_en_pedido->caption());
-            $this->cantidad_en_pedido->setupEditAttributes();
-            $this->cantidad_en_pedido->EditValue2 = $this->cantidad_en_pedido->AdvancedSearch->SearchValue2;
-            $this->cantidad_en_pedido->PlaceHolder = RemoveHtml($this->cantidad_en_pedido->caption());
-
-            // cantidad_en_transito
-            $this->cantidad_en_transito->setupEditAttributes();
-            $this->cantidad_en_transito->EditValue = $this->cantidad_en_transito->AdvancedSearch->SearchValue;
-            $this->cantidad_en_transito->PlaceHolder = RemoveHtml($this->cantidad_en_transito->caption());
-            $this->cantidad_en_transito->setupEditAttributes();
-            $this->cantidad_en_transito->EditValue2 = $this->cantidad_en_transito->AdvancedSearch->SearchValue2;
-            $this->cantidad_en_transito->PlaceHolder = RemoveHtml($this->cantidad_en_transito->caption());
-
-            // descuento
-            $this->descuento->setupEditAttributes();
-            $this->descuento->EditValue = $this->descuento->AdvancedSearch->SearchValue;
-            $this->descuento->PlaceHolder = RemoveHtml($this->descuento->caption());
+            // articulo_inventario
+            $this->articulo_inventario->setupEditAttributes();
+            $this->articulo_inventario->EditValue = $this->articulo_inventario->options(true);
+            $this->articulo_inventario->PlaceHolder = RemoveHtml($this->articulo_inventario->caption());
 
             // activo
             $this->activo->setupEditAttributes();
@@ -4235,10 +4285,6 @@ class ArticuloList extends Articulo
         $this->fabricante->AdvancedSearch->load();
         $this->codigo_ims->AdvancedSearch->load();
         $this->codigo_de_barra->AdvancedSearch->load();
-        $this->categoria->AdvancedSearch->load();
-        $this->lista_pedido->AdvancedSearch->load();
-        $this->categoria_madre->AdvancedSearch->load();
-        $this->sub_categoria->AdvancedSearch->load();
         $this->tipo->AdvancedSearch->load();
         $this->unidad_medida_defecto->AdvancedSearch->load();
         $this->cantidad_por_unidad_medida->AdvancedSearch->load();
@@ -4250,6 +4296,10 @@ class ArticuloList extends Articulo
         $this->cantidad_en_transito->AdvancedSearch->load();
         $this->ultimo_costo->AdvancedSearch->load();
         $this->descuento->AdvancedSearch->load();
+        $this->categoria->AdvancedSearch->load();
+        $this->lista_pedido->AdvancedSearch->load();
+        $this->categoria_madre->AdvancedSearch->load();
+        $this->sub_categoria->AdvancedSearch->load();
         $this->precio->AdvancedSearch->load();
         $this->alicuota->AdvancedSearch->load();
         $this->articulo_inventario->AdvancedSearch->load();
@@ -4512,6 +4562,13 @@ class ArticuloList extends Articulo
                     break;
                 case "x_fabricante":
                     break;
+                case "x_tipo":
+                    break;
+                case "x_unidad_medida_defecto":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_cantidad_por_unidad_medida":
+                    break;
                 case "x_categoria":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -4521,13 +4578,6 @@ class ArticuloList extends Articulo
                 case "x_categoria_madre":
                     break;
                 case "x_sub_categoria":
-                    break;
-                case "x_tipo":
-                    break;
-                case "x_unidad_medida_defecto":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_cantidad_por_unidad_medida":
                     break;
                 case "x_alicuota":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
@@ -4921,6 +4971,7 @@ class ArticuloList extends Articulo
     {
         // Example:
         //$this->ListOptions["new"]->Body = "xxx";
+            $this->articulo_inventario->Visible = false;
     }
 
     // Row Custom Action event

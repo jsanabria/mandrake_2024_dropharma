@@ -214,18 +214,18 @@ if ($codcli > 0) {
                 <div class="card-body p-3">
                     <div class="row g-2">
                         <div class="col-md-6">
-                            <label class="form-label small mb-1">CI / RIF <span class="text-danger">*</span></label>
+                            <label class="form-label small mb-1">CI / RIF <!--<span class="text-danger">*</span>--></label>
                             <input type="text" id="ci_rif" name="ci_rif" class="form-control form-control-sm" value="<?= htmlspecialchars($ci_rif ?? ""); ?>">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small mb-1">Teléfono <span class="text-danger">*</span></label>
+                            <label class="form-label small mb-1">Teléfono <!--<span class="text-danger">*</span>--></label>
                             <input type="text" id="telefono" name="telefono" class="form-control form-control-sm" value="<?= htmlspecialchars($telefono ?? ""); ?>">
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label small mb-1">Nombre / Razón Social <span class="text-danger">*</span></label>
+                            <label class="form-label small mb-1">Nombre / Razón Social de quien recibe <!--<span class="text-danger">*</span>--></label>
                             <textarea type="text" id="nombre" name="nombre" class="form-control form-control-sm" rows="1"><?= htmlspecialchars($nombre ?? ""); ?></textarea>
                         </div>
-                            <label class="form-label small mb-1">Dirección Fiscal <span class="text-danger">*</span></label>
+                            <label class="form-label small mb-1">Dirección de Entrega <!--<span class="text-danger">*</span>--></label>
                         <div class="col-12">
                             <textarea type="text" id="direccion" name="direccion" class="form-control form-control-sm" rows="1"><?= htmlspecialchars($direccion ?? ""); ?></textarea>
                         </div>
@@ -626,6 +626,7 @@ if ($codcli > 0) {
             return false;
         }
 
+        /*
         if(factura === "S" && (ci_rif === "" || nombre === "" || direccion === "" || telefono === "")) {
             ew.alert("Faltan datos fiscales obligatorios; Verifique");
             if(ci_rif === "") { $("#ci_rif").focus(); return false; }
@@ -633,6 +634,7 @@ if ($codcli > 0) {
             if(direccion === "") { $("#direccion").focus(); return false; }
             if(telefono === "") { $("#telefono").focus(); return false; }
         }
+        */
 
         if (factura !== "S") {
             ci_rif = ""; nombre = ""; direccion = ""; telefono = "";
@@ -708,10 +710,12 @@ if ($codcli > 0) {
             return false;
         }
 
+        /*
         if(factura === "S" && (ci_rif === "" || nombre === "" || direccion === "" || telefono === "")) {
             ew.alert("Faltan datos fiscales obligatorios; Verifique");
             return false;
         }
+        */
 
         $.ajax({
             data: {

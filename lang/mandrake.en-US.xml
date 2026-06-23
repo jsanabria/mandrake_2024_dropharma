@@ -1,9 +1,18 @@
-<ew-language date="2026/6/15" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/6/23" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1469">
+      <phrase id="menutext" value="Crear Nota de Entrega Automática" />
+    </menu>
+    <menu id="1470">
+      <phrase id="menutext" value="Crear Nota de Entrega Automatica" />
+    </menu>
     <menu id="1467">
       <phrase id="menutext" value="Cliente Agregar" />
+    </menu>
+    <menu id="1460">
+      <phrase id="menutext" value="Visitas" />
     </menu>
     <menu id="19">
       <phrase id="menutext" value="Maestros" />
@@ -347,6 +356,9 @@
     <menu id="11">
       <phrase id="menutext" value="Tablas" />
     </menu>
+    <menu id="1471">
+      <phrase id="menutext" value="Consecutivo de Documentos" />
+    </menu>
     <menu id="54">
       <phrase id="menutext" value="Almacen" />
     </menu>
@@ -442,9 +454,6 @@
     </menu>
     <menu id="1459">
       <phrase id="menutext" value="transferencia banco" />
-    </menu>
-    <menu id="1460">
-      <phrase id="menutext" value="visitas" />
     </menu>
     <menu id="1210">
       <phrase id="menutext" value="Registrar Pagos de Clientes" />
@@ -1037,18 +1046,6 @@
       <field id="codigo_de_barra">
         <phrase id="fldcaption" value="Código de Barra" />
       </field>
-      <field id="categoria">
-        <phrase id="fldcaption" value="Categoría" />
-      </field>
-      <field id="lista_pedido">
-        <phrase id="fldcaption" value="Lista Pedido" />
-      </field>
-      <field id="categoria_madre">
-        <phrase id="fldcaption" value="Categoria Madre" />
-      </field>
-      <field id="sub_categoria">
-        <phrase id="fldcaption" value="Sub Categoria" />
-      </field>
       <field id="tipo">
         <phrase id="fldcaption" value="Tipo" />
         <phrase id="fldtagvalue1" value="PIEZA" />
@@ -1085,6 +1082,18 @@
       </field>
       <field id="descuento">
         <phrase id="fldcaption" value="% Desc" />
+      </field>
+      <field id="categoria">
+        <phrase id="fldcaption" value="Categoría" />
+      </field>
+      <field id="lista_pedido">
+        <phrase id="fldcaption" value="Lista Pedido" />
+      </field>
+      <field id="categoria_madre">
+        <phrase id="fldcaption" value="Categoria Madre" />
+      </field>
+      <field id="sub_categoria">
+        <phrase id="fldcaption" value="Sub Categoria" />
       </field>
       <field id="precio">
         <phrase id="fldcaption" value="Precio" />
@@ -7892,37 +7901,37 @@
         <phrase id="fldcaption" value="id" />
       </field>
       <field id="nombre">
-        <phrase id="fldcaption" value="nombre" />
+        <phrase id="fldcaption" value="Nombre" />
       </field>
       <field id="apellido">
-        <phrase id="fldcaption" value="apellido" />
+        <phrase id="fldcaption" value="Apellido" />
       </field>
       <field id="correo">
-        <phrase id="fldcaption" value="correo" />
+        <phrase id="fldcaption" value="Correo" />
       </field>
       <field id="telefono">
-        <phrase id="fldcaption" value="telefono" />
+        <phrase id="fldcaption" value="Teléfono" />
       </field>
       <field id="producto">
-        <phrase id="fldcaption" value="producto" />
+        <phrase id="fldcaption" value="Producto" />
       </field>
       <field id="referencia">
-        <phrase id="fldcaption" value="referencia" />
+        <phrase id="fldcaption" value="Referencia" />
       </field>
       <field id="comentario">
-        <phrase id="fldcaption" value="comentario" />
+        <phrase id="fldcaption" value="Comentario" />
       </field>
       <field id="seguimiento">
-        <phrase id="fldcaption" value="seguimiento" />
+        <phrase id="fldcaption" value="Seguimiento" />
       </field>
       <field id="fecha">
-        <phrase id="fldcaption" value="fecha" />
+        <phrase id="fldcaption" value="Fecha" />
       </field>
       <field id="fecha_registro">
-        <phrase id="fldcaption" value="fecha registro" />
+        <phrase id="fldcaption" value="Fecha Registro" />
       </field>
       <field id="usuario">
-        <phrase id="fldcaption" value="usuario" />
+        <phrase id="fldcaption" value="Usuario" />
       </field>
     </table>
     <table id="ya_fue_procesado">
@@ -7951,6 +7960,27 @@
     </table>
     <table id="transferencia_almacen_multiple">
       <phrase id="tblcaption" value="Transferencia Almacen Multiple" />
+    </table>
+    <table id="crear_nota_entrega_automatica">
+      <phrase id="tblcaption" value="Crear Nota de Entrega Automática" />
+    </table>
+    <table id="crear_nota_entrega_automatica_wait">
+      <phrase id="tblcaption" value="Crear Nota de Entrega Automatica" />
+    </table>
+    <table id="documento_consecutivo">
+      <phrase id="tblcaption" value="Consecutivo de Documentos" />
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
+      <field id="serie">
+        <phrase id="fldcaption" value="serie" />
+      </field>
+      <field id="ultimo_numero">
+        <phrase id="fldcaption" value="ultimo numero" />
+      </field>
+      <field id="updated_at">
+        <phrase id="fldcaption" value="updated at" />
+      </field>
     </table>
   </project>
 </ew-language>

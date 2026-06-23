@@ -38,10 +38,6 @@ loadjs.ready(["wrapper", "head"], function () {
             ["presentacion", [fields.presentacion.visible && fields.presentacion.required ? ew.Validators.required(fields.presentacion.caption) : null], fields.presentacion.isInvalid],
             ["fabricante", [fields.fabricante.visible && fields.fabricante.required ? ew.Validators.required(fields.fabricante.caption) : null], fields.fabricante.isInvalid],
             ["codigo_de_barra", [fields.codigo_de_barra.visible && fields.codigo_de_barra.required ? ew.Validators.required(fields.codigo_de_barra.caption) : null], fields.codigo_de_barra.isInvalid],
-            ["categoria", [fields.categoria.visible && fields.categoria.required ? ew.Validators.required(fields.categoria.caption) : null], fields.categoria.isInvalid],
-            ["lista_pedido", [fields.lista_pedido.visible && fields.lista_pedido.required ? ew.Validators.required(fields.lista_pedido.caption) : null], fields.lista_pedido.isInvalid],
-            ["categoria_madre", [fields.categoria_madre.visible && fields.categoria_madre.required ? ew.Validators.required(fields.categoria_madre.caption) : null], fields.categoria_madre.isInvalid],
-            ["sub_categoria", [fields.sub_categoria.visible && fields.sub_categoria.required ? ew.Validators.required(fields.sub_categoria.caption) : null], fields.sub_categoria.isInvalid],
             ["tipo", [fields.tipo.visible && fields.tipo.required ? ew.Validators.required(fields.tipo.caption) : null], fields.tipo.isInvalid],
             ["unidad_medida_defecto", [fields.unidad_medida_defecto.visible && fields.unidad_medida_defecto.required ? ew.Validators.required(fields.unidad_medida_defecto.caption) : null], fields.unidad_medida_defecto.isInvalid],
             ["cantidad_por_unidad_medida", [fields.cantidad_por_unidad_medida.visible && fields.cantidad_por_unidad_medida.required ? ew.Validators.required(fields.cantidad_por_unidad_medida.caption) : null], fields.cantidad_por_unidad_medida.isInvalid],
@@ -49,6 +45,10 @@ loadjs.ready(["wrapper", "head"], function () {
             ["cantidad_maxima", [fields.cantidad_maxima.visible && fields.cantidad_maxima.required ? ew.Validators.required(fields.cantidad_maxima.caption) : null, ew.Validators.float], fields.cantidad_maxima.isInvalid],
             ["ultimo_costo", [fields.ultimo_costo.visible && fields.ultimo_costo.required ? ew.Validators.required(fields.ultimo_costo.caption) : null, ew.Validators.float], fields.ultimo_costo.isInvalid],
             ["descuento", [fields.descuento.visible && fields.descuento.required ? ew.Validators.required(fields.descuento.caption) : null, ew.Validators.float], fields.descuento.isInvalid],
+            ["categoria", [fields.categoria.visible && fields.categoria.required ? ew.Validators.required(fields.categoria.caption) : null], fields.categoria.isInvalid],
+            ["lista_pedido", [fields.lista_pedido.visible && fields.lista_pedido.required ? ew.Validators.required(fields.lista_pedido.caption) : null], fields.lista_pedido.isInvalid],
+            ["categoria_madre", [fields.categoria_madre.visible && fields.categoria_madre.required ? ew.Validators.required(fields.categoria_madre.caption) : null], fields.categoria_madre.isInvalid],
+            ["sub_categoria", [fields.sub_categoria.visible && fields.sub_categoria.required ? ew.Validators.required(fields.sub_categoria.caption) : null], fields.sub_categoria.isInvalid],
             ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
             ["articulo_inventario", [fields.articulo_inventario.visible && fields.articulo_inventario.required ? ew.Validators.required(fields.articulo_inventario.caption) : null], fields.articulo_inventario.isInvalid],
             ["indexado", [fields.indexado.visible && fields.indexado.required ? ew.Validators.required(fields.indexado.caption) : null], fields.indexado.isInvalid],
@@ -79,13 +79,13 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "presentacion": <?= $Page->presentacion->toClientList($Page) ?>,
             "fabricante": <?= $Page->fabricante->toClientList($Page) ?>,
+            "tipo": <?= $Page->tipo->toClientList($Page) ?>,
+            "unidad_medida_defecto": <?= $Page->unidad_medida_defecto->toClientList($Page) ?>,
+            "cantidad_por_unidad_medida": <?= $Page->cantidad_por_unidad_medida->toClientList($Page) ?>,
             "categoria": <?= $Page->categoria->toClientList($Page) ?>,
             "lista_pedido": <?= $Page->lista_pedido->toClientList($Page) ?>,
             "categoria_madre": <?= $Page->categoria_madre->toClientList($Page) ?>,
             "sub_categoria": <?= $Page->sub_categoria->toClientList($Page) ?>,
-            "tipo": <?= $Page->tipo->toClientList($Page) ?>,
-            "unidad_medida_defecto": <?= $Page->unidad_medida_defecto->toClientList($Page) ?>,
-            "cantidad_por_unidad_medida": <?= $Page->cantidad_por_unidad_medida->toClientList($Page) ?>,
             "alicuota": <?= $Page->alicuota->toClientList($Page) ?>,
             "articulo_inventario": <?= $Page->articulo_inventario->toClientList($Page) ?>,
             "indexado": <?= $Page->indexado->toClientList($Page) ?>,
@@ -467,6 +467,147 @@ loadjs.ready("farticuloedit", function() {
 </div></div>
     </div>
 <?php } ?>
+<?php if ($Page->tipo->Visible) { // tipo ?>
+    <div id="r_tipo"<?= $Page->tipo->rowAttributes() ?>>
+        <label id="elh_articulo_tipo" for="x_tipo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo->caption() ?><?= $Page->tipo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo->cellAttributes() ?>>
+<span id="el_articulo_tipo">
+    <select
+        id="x_tipo"
+        name="x_tipo"
+        class="form-select ew-select<?= $Page->tipo->isInvalidClass() ?>"
+        <?php if (!$Page->tipo->IsNativeSelect) { ?>
+        data-select2-id="farticuloedit_x_tipo"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_tipo"
+        data-page="3"
+        data-value-separator="<?= $Page->tipo->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo->getPlaceHolder()) ?>"
+        <?= $Page->tipo->editAttributes() ?>>
+        <?= $Page->tipo->selectOptionListHtml("x_tipo") ?>
+    </select>
+    <?= $Page->tipo->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo->getErrorMessage() ?></div>
+<?php if (!$Page->tipo->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_tipo", selectId: "farticuloedit_x_tipo" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticuloedit.lists.tipo?.lookupOptions.length) {
+        options.data = { id: "x_tipo", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_tipo", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.tipo.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->unidad_medida_defecto->Visible) { // unidad_medida_defecto ?>
+    <div id="r_unidad_medida_defecto"<?= $Page->unidad_medida_defecto->rowAttributes() ?>>
+        <label id="elh_articulo_unidad_medida_defecto" for="x_unidad_medida_defecto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->unidad_medida_defecto->caption() ?><?= $Page->unidad_medida_defecto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->unidad_medida_defecto->cellAttributes() ?>>
+<span id="el_articulo_unidad_medida_defecto">
+    <select
+        id="x_unidad_medida_defecto"
+        name="x_unidad_medida_defecto"
+        class="form-select ew-select<?= $Page->unidad_medida_defecto->isInvalidClass() ?>"
+        <?php if (!$Page->unidad_medida_defecto->IsNativeSelect) { ?>
+        data-select2-id="farticuloedit_x_unidad_medida_defecto"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_unidad_medida_defecto"
+        data-page="3"
+        data-value-separator="<?= $Page->unidad_medida_defecto->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->unidad_medida_defecto->getPlaceHolder()) ?>"
+        data-ew-action="update-options"
+        <?= $Page->unidad_medida_defecto->editAttributes() ?>>
+        <?= $Page->unidad_medida_defecto->selectOptionListHtml("x_unidad_medida_defecto") ?>
+    </select>
+    <?= $Page->unidad_medida_defecto->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->unidad_medida_defecto->getErrorMessage() ?></div>
+<?= $Page->unidad_medida_defecto->Lookup->getParamTag($Page, "p_x_unidad_medida_defecto") ?>
+<?php if (!$Page->unidad_medida_defecto->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_unidad_medida_defecto", selectId: "farticuloedit_x_unidad_medida_defecto" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticuloedit.lists.unidad_medida_defecto?.lookupOptions.length) {
+        options.data = { id: "x_unidad_medida_defecto", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_unidad_medida_defecto", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.unidad_medida_defecto.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->cantidad_por_unidad_medida->Visible) { // cantidad_por_unidad_medida ?>
+    <div id="r_cantidad_por_unidad_medida"<?= $Page->cantidad_por_unidad_medida->rowAttributes() ?>>
+        <label id="elh_articulo_cantidad_por_unidad_medida" for="x_cantidad_por_unidad_medida" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cantidad_por_unidad_medida->caption() ?><?= $Page->cantidad_por_unidad_medida->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cantidad_por_unidad_medida->cellAttributes() ?>>
+<span id="el_articulo_cantidad_por_unidad_medida">
+    <select
+        id="x_cantidad_por_unidad_medida"
+        name="x_cantidad_por_unidad_medida"
+        class="form-select ew-select<?= $Page->cantidad_por_unidad_medida->isInvalidClass() ?>"
+        <?php if (!$Page->cantidad_por_unidad_medida->IsNativeSelect) { ?>
+        data-select2-id="farticuloedit_x_cantidad_por_unidad_medida"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_cantidad_por_unidad_medida"
+        data-page="3"
+        data-value-separator="<?= $Page->cantidad_por_unidad_medida->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->cantidad_por_unidad_medida->getPlaceHolder()) ?>"
+        <?= $Page->cantidad_por_unidad_medida->editAttributes() ?>>
+        <?= $Page->cantidad_por_unidad_medida->selectOptionListHtml("x_cantidad_por_unidad_medida") ?>
+    </select>
+    <?= $Page->cantidad_por_unidad_medida->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->cantidad_por_unidad_medida->getErrorMessage() ?></div>
+<?= $Page->cantidad_por_unidad_medida->Lookup->getParamTag($Page, "p_x_cantidad_por_unidad_medida") ?>
+<?php if (!$Page->cantidad_por_unidad_medida->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticuloedit", function() {
+    var options = { name: "x_cantidad_por_unidad_medida", selectId: "farticuloedit_x_cantidad_por_unidad_medida" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticuloedit.lists.cantidad_por_unidad_medida?.lookupOptions.length) {
+        options.data = { id: "x_cantidad_por_unidad_medida", form: "farticuloedit" };
+    } else {
+        options.ajax = { id: "x_cantidad_por_unidad_medida", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.cantidad_por_unidad_medida.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
 <?php if ($Page->categoria->Visible) { // categoria ?>
     <div id="r_categoria"<?= $Page->categoria->rowAttributes() ?>>
         <label id="elh_articulo_categoria" for="x_categoria" class="<?= $Page->LeftColumnClass ?>"><?= $Page->categoria->caption() ?><?= $Page->categoria->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -635,147 +776,6 @@ loadjs.ready("farticuloedit", function() {
     ew.createModalLookup(options);
 });
 </script>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo->Visible) { // tipo ?>
-    <div id="r_tipo"<?= $Page->tipo->rowAttributes() ?>>
-        <label id="elh_articulo_tipo" for="x_tipo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo->caption() ?><?= $Page->tipo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo->cellAttributes() ?>>
-<span id="el_articulo_tipo">
-    <select
-        id="x_tipo"
-        name="x_tipo"
-        class="form-select ew-select<?= $Page->tipo->isInvalidClass() ?>"
-        <?php if (!$Page->tipo->IsNativeSelect) { ?>
-        data-select2-id="farticuloedit_x_tipo"
-        <?php } ?>
-        data-table="articulo"
-        data-field="x_tipo"
-        data-page="3"
-        data-value-separator="<?= $Page->tipo->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo->getPlaceHolder()) ?>"
-        <?= $Page->tipo->editAttributes() ?>>
-        <?= $Page->tipo->selectOptionListHtml("x_tipo") ?>
-    </select>
-    <?= $Page->tipo->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo->getErrorMessage() ?></div>
-<?php if (!$Page->tipo->IsNativeSelect) { ?>
-<script>
-loadjs.ready("farticuloedit", function() {
-    var options = { name: "x_tipo", selectId: "farticuloedit_x_tipo" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (farticuloedit.lists.tipo?.lookupOptions.length) {
-        options.data = { id: "x_tipo", form: "farticuloedit" };
-    } else {
-        options.ajax = { id: "x_tipo", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.tipo.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->unidad_medida_defecto->Visible) { // unidad_medida_defecto ?>
-    <div id="r_unidad_medida_defecto"<?= $Page->unidad_medida_defecto->rowAttributes() ?>>
-        <label id="elh_articulo_unidad_medida_defecto" for="x_unidad_medida_defecto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->unidad_medida_defecto->caption() ?><?= $Page->unidad_medida_defecto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->unidad_medida_defecto->cellAttributes() ?>>
-<span id="el_articulo_unidad_medida_defecto">
-    <select
-        id="x_unidad_medida_defecto"
-        name="x_unidad_medida_defecto"
-        class="form-select ew-select<?= $Page->unidad_medida_defecto->isInvalidClass() ?>"
-        <?php if (!$Page->unidad_medida_defecto->IsNativeSelect) { ?>
-        data-select2-id="farticuloedit_x_unidad_medida_defecto"
-        <?php } ?>
-        data-table="articulo"
-        data-field="x_unidad_medida_defecto"
-        data-page="3"
-        data-value-separator="<?= $Page->unidad_medida_defecto->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->unidad_medida_defecto->getPlaceHolder()) ?>"
-        data-ew-action="update-options"
-        <?= $Page->unidad_medida_defecto->editAttributes() ?>>
-        <?= $Page->unidad_medida_defecto->selectOptionListHtml("x_unidad_medida_defecto") ?>
-    </select>
-    <?= $Page->unidad_medida_defecto->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->unidad_medida_defecto->getErrorMessage() ?></div>
-<?= $Page->unidad_medida_defecto->Lookup->getParamTag($Page, "p_x_unidad_medida_defecto") ?>
-<?php if (!$Page->unidad_medida_defecto->IsNativeSelect) { ?>
-<script>
-loadjs.ready("farticuloedit", function() {
-    var options = { name: "x_unidad_medida_defecto", selectId: "farticuloedit_x_unidad_medida_defecto" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (farticuloedit.lists.unidad_medida_defecto?.lookupOptions.length) {
-        options.data = { id: "x_unidad_medida_defecto", form: "farticuloedit" };
-    } else {
-        options.ajax = { id: "x_unidad_medida_defecto", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.unidad_medida_defecto.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->cantidad_por_unidad_medida->Visible) { // cantidad_por_unidad_medida ?>
-    <div id="r_cantidad_por_unidad_medida"<?= $Page->cantidad_por_unidad_medida->rowAttributes() ?>>
-        <label id="elh_articulo_cantidad_por_unidad_medida" for="x_cantidad_por_unidad_medida" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cantidad_por_unidad_medida->caption() ?><?= $Page->cantidad_por_unidad_medida->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->cantidad_por_unidad_medida->cellAttributes() ?>>
-<span id="el_articulo_cantidad_por_unidad_medida">
-    <select
-        id="x_cantidad_por_unidad_medida"
-        name="x_cantidad_por_unidad_medida"
-        class="form-select ew-select<?= $Page->cantidad_por_unidad_medida->isInvalidClass() ?>"
-        <?php if (!$Page->cantidad_por_unidad_medida->IsNativeSelect) { ?>
-        data-select2-id="farticuloedit_x_cantidad_por_unidad_medida"
-        <?php } ?>
-        data-table="articulo"
-        data-field="x_cantidad_por_unidad_medida"
-        data-page="3"
-        data-value-separator="<?= $Page->cantidad_por_unidad_medida->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->cantidad_por_unidad_medida->getPlaceHolder()) ?>"
-        <?= $Page->cantidad_por_unidad_medida->editAttributes() ?>>
-        <?= $Page->cantidad_por_unidad_medida->selectOptionListHtml("x_cantidad_por_unidad_medida") ?>
-    </select>
-    <?= $Page->cantidad_por_unidad_medida->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->cantidad_por_unidad_medida->getErrorMessage() ?></div>
-<?= $Page->cantidad_por_unidad_medida->Lookup->getParamTag($Page, "p_x_cantidad_por_unidad_medida") ?>
-<?php if (!$Page->cantidad_por_unidad_medida->IsNativeSelect) { ?>
-<script>
-loadjs.ready("farticuloedit", function() {
-    var options = { name: "x_cantidad_por_unidad_medida", selectId: "farticuloedit_x_cantidad_por_unidad_medida" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (farticuloedit.lists.cantidad_por_unidad_medida?.lookupOptions.length) {
-        options.data = { id: "x_cantidad_por_unidad_medida", form: "farticuloedit" };
-    } else {
-        options.ajax = { id: "x_cantidad_por_unidad_medida", form: "farticuloedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.cantidad_por_unidad_medida.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
 </span>
 </div></div>
     </div>

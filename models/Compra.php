@@ -84,6 +84,8 @@ class Compra extends DbTable
     public $tipo_municipal;
     public $anulado;
     public $pagado;
+    public $moneda;
+    public $tasa_dia;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -861,6 +863,52 @@ class Compra extends DbTable
         $this->pagado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['pagado'] = &$this->pagado;
 
+        // moneda
+        $this->moneda = new DbField(
+            $this, // Table
+            'x_moneda', // Variable name
+            'moneda', // Name
+            '`moneda`', // Expression
+            '`moneda`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`moneda`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->moneda->InputTextType = "text";
+        $this->moneda->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['moneda'] = &$this->moneda;
+
+        // tasa_dia
+        $this->tasa_dia = new DbField(
+            $this, // Table
+            'x_tasa_dia', // Variable name
+            'tasa_dia', // Name
+            '`tasa_dia`', // Expression
+            '`tasa_dia`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tasa_dia`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tasa_dia->InputTextType = "text";
+        $this->tasa_dia->Raw = true;
+        $this->tasa_dia->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->tasa_dia->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tasa_dia'] = &$this->tasa_dia;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -1423,6 +1471,8 @@ class Compra extends DbTable
         $this->tipo_municipal->DbValue = $row['tipo_municipal'];
         $this->anulado->DbValue = $row['anulado'];
         $this->pagado->DbValue = $row['pagado'];
+        $this->moneda->DbValue = $row['moneda'];
+        $this->tasa_dia->DbValue = $row['tasa_dia'];
     }
 
     // Delete uploaded files
@@ -1805,6 +1855,8 @@ class Compra extends DbTable
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
         $this->pagado->setDbValue($row['pagado']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->tasa_dia->setDbValue($row['tasa_dia']);
     }
 
     // Render list content
@@ -1894,6 +1946,10 @@ class Compra extends DbTable
         // anulado
 
         // pagado
+
+        // moneda
+
+        // tasa_dia
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2078,6 +2134,13 @@ class Compra extends DbTable
             $this->pagado->ViewValue = null;
         }
 
+        // moneda
+        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+        // tasa_dia
+        $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
+        $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -2229,6 +2292,14 @@ class Compra extends DbTable
         // pagado
         $this->pagado->HrefValue = "";
         $this->pagado->TooltipValue = "";
+
+        // moneda
+        $this->moneda->HrefValue = "";
+        $this->moneda->TooltipValue = "";
+
+        // tasa_dia
+        $this->tasa_dia->HrefValue = "";
+        $this->tasa_dia->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2449,6 +2520,22 @@ class Compra extends DbTable
         $this->pagado->EditValue = $this->pagado->options(false);
         $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
 
+        // moneda
+        $this->moneda->setupEditAttributes();
+        if (!$this->moneda->Raw) {
+            $this->moneda->CurrentValue = HtmlDecode($this->moneda->CurrentValue);
+        }
+        $this->moneda->EditValue = $this->moneda->CurrentValue;
+        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
+        // tasa_dia
+        $this->tasa_dia->setupEditAttributes();
+        $this->tasa_dia->EditValue = $this->tasa_dia->CurrentValue;
+        $this->tasa_dia->PlaceHolder = RemoveHtml($this->tasa_dia->caption());
+        if (strval($this->tasa_dia->EditValue) != "" && is_numeric($this->tasa_dia->EditValue)) {
+            $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, null);
+        }
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -2507,6 +2594,8 @@ class Compra extends DbTable
                     $doc->exportCaption($this->tipo_municipal);
                     $doc->exportCaption($this->anulado);
                     $doc->exportCaption($this->pagado);
+                    $doc->exportCaption($this->moneda);
+                    $doc->exportCaption($this->tasa_dia);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->proveedor);
@@ -2538,6 +2627,8 @@ class Compra extends DbTable
                     $doc->exportCaption($this->tipo_municipal);
                     $doc->exportCaption($this->anulado);
                     $doc->exportCaption($this->pagado);
+                    $doc->exportCaption($this->moneda);
+                    $doc->exportCaption($this->tasa_dia);
                 }
                 $doc->endExportRow();
             }
@@ -2594,6 +2685,8 @@ class Compra extends DbTable
                         $doc->exportField($this->tipo_municipal);
                         $doc->exportField($this->anulado);
                         $doc->exportField($this->pagado);
+                        $doc->exportField($this->moneda);
+                        $doc->exportField($this->tasa_dia);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->proveedor);
@@ -2625,6 +2718,8 @@ class Compra extends DbTable
                         $doc->exportField($this->tipo_municipal);
                         $doc->exportField($this->anulado);
                         $doc->exportField($this->pagado);
+                        $doc->exportField($this->moneda);
+                        $doc->exportField($this->tasa_dia);
                     }
                     $doc->endExportRow($rowCnt);
                 }

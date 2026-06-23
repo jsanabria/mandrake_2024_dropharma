@@ -85,13 +85,14 @@ loadjs.ready(["wrapper", "head"], function () {
         // Add fields
         .addFields([
             ["fabricante", [], fields.fabricante.isInvalid],
-            ["categoria", [], fields.categoria.isInvalid],
-            ["lista_pedido", [], fields.lista_pedido.isInvalid],
             ["cantidad_en_mano", [ew.Validators.float], fields.cantidad_en_mano.isInvalid],
             ["cantidad_en_pedido", [ew.Validators.float], fields.cantidad_en_pedido.isInvalid],
             ["y_cantidad_en_pedido", [ew.Validators.between], false],
             ["cantidad_en_transito", [ew.Validators.float], fields.cantidad_en_transito.isInvalid],
             ["y_cantidad_en_transito", [ew.Validators.between], false],
+            ["categoria", [], fields.categoria.isInvalid],
+            ["lista_pedido", [], fields.lista_pedido.isInvalid],
+            ["articulo_inventario", [], fields.articulo_inventario.isInvalid],
             ["activo", [], fields.activo.isInvalid]
         ])
         // Validate form
@@ -130,6 +131,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "fabricante": <?= $Page->fabricante->toClientList($Page) ?>,
             "categoria": <?= $Page->categoria->toClientList($Page) ?>,
             "lista_pedido": <?= $Page->lista_pedido->toClientList($Page) ?>,
+            "articulo_inventario": <?= $Page->articulo_inventario->toClientList($Page) ?>,
             "activo": <?= $Page->activo->toClientList($Page) ?>,
         })
 
@@ -201,6 +203,88 @@ loadjs.ready("farticulosrch", function() {
 </div>
         <div class="d-flex my-1 my-sm-0">
         </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+<?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
+<?php
+if (!$Page->cantidad_en_mano->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_cantidad_en_mano" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cantidad_en_mano->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_cantidad_en_mano" class="ew-search-caption ew-label"><?= $Page->cantidad_en_mano->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase(">=") ?>
+<input type="hidden" name="z_cantidad_en_mano" id="z_cantidad_en_mano" value="&gt;=">
+</div>
+        </div>
+        <div id="el_articulo_cantidad_en_mano" class="ew-search-field">
+<input type="<?= $Page->cantidad_en_mano->getInputTextType() ?>" name="x_cantidad_en_mano" id="x_cantidad_en_mano" data-table="articulo" data-field="x_cantidad_en_mano" value="<?= $Page->cantidad_en_mano->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_mano->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_mano->formatPattern()) ?>"<?= $Page->cantidad_en_mano->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_en_mano->getErrorMessage(false) ?></div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+<?php if ($Page->cantidad_en_pedido->Visible) { // cantidad_en_pedido ?>
+<?php
+if (!$Page->cantidad_en_pedido->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_cantidad_en_pedido" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cantidad_en_pedido->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_cantidad_en_pedido" class="ew-search-caption ew-label"><?= $Page->cantidad_en_pedido->caption() ?></label>
+            <div class="ew-search-operator">
+<select name="z_cantidad_en_pedido" id="z_cantidad_en_pedido" class="form-select ew-operator-select" data-ew-action="search-operator">
+<?php foreach ($Page->cantidad_en_pedido->SearchOperators as $opr) { ?>
+<option value="<?= HtmlEncode($opr) ?>"<?= $Page->cantidad_en_pedido->AdvancedSearch->SearchOperator == $opr ? " selected" : "" ?>><?= $Language->phrase($opr == "=" ? "EQUAL" : $opr) ?></option>
+<?php } ?>
+</select>
+</div>
+        </div>
+        <div id="el_articulo_cantidad_en_pedido" class="ew-search-field">
+<input type="<?= $Page->cantidad_en_pedido->getInputTextType() ?>" name="x_cantidad_en_pedido" id="x_cantidad_en_pedido" data-table="articulo" data-field="x_cantidad_en_pedido" value="<?= $Page->cantidad_en_pedido->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_pedido->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_pedido->formatPattern()) ?>"<?= $Page->cantidad_en_pedido->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_en_pedido->getErrorMessage(false) ?></div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+            <div class="ew-search-and d-none"><label><?= $Language->phrase("AND") ?></label></div>
+        </div><!-- /.ew-search-field -->
+        <div id="el2_articulo_cantidad_en_pedido" class="ew-search-field2 d-none">
+<input type="<?= $Page->cantidad_en_pedido->getInputTextType() ?>" name="y_cantidad_en_pedido" id="y_cantidad_en_pedido" data-table="articulo" data-field="x_cantidad_en_pedido" value="<?= $Page->cantidad_en_pedido->EditValue2 ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_pedido->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_pedido->formatPattern()) ?>"<?= $Page->cantidad_en_pedido->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_en_pedido->getErrorMessage(false) ?></div>
+</div>
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+<?php if ($Page->cantidad_en_transito->Visible) { // cantidad_en_transito ?>
+<?php
+if (!$Page->cantidad_en_transito->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_cantidad_en_transito" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cantidad_en_transito->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_cantidad_en_transito" class="ew-search-caption ew-label"><?= $Page->cantidad_en_transito->caption() ?></label>
+            <div class="ew-search-operator">
+<select name="z_cantidad_en_transito" id="z_cantidad_en_transito" class="form-select ew-operator-select" data-ew-action="search-operator">
+<?php foreach ($Page->cantidad_en_transito->SearchOperators as $opr) { ?>
+<option value="<?= HtmlEncode($opr) ?>"<?= $Page->cantidad_en_transito->AdvancedSearch->SearchOperator == $opr ? " selected" : "" ?>><?= $Language->phrase($opr == "=" ? "EQUAL" : $opr) ?></option>
+<?php } ?>
+</select>
+</div>
+        </div>
+        <div id="el_articulo_cantidad_en_transito" class="ew-search-field">
+<input type="<?= $Page->cantidad_en_transito->getInputTextType() ?>" name="x_cantidad_en_transito" id="x_cantidad_en_transito" data-table="articulo" data-field="x_cantidad_en_transito" value="<?= $Page->cantidad_en_transito->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_transito->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_transito->formatPattern()) ?>"<?= $Page->cantidad_en_transito->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_en_transito->getErrorMessage(false) ?></div>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+            <div class="ew-search-and d-none"><label><?= $Language->phrase("AND") ?></label></div>
+        </div><!-- /.ew-search-field -->
+        <div id="el2_articulo_cantidad_en_transito" class="ew-search-field2 d-none">
+<input type="<?= $Page->cantidad_en_transito->getInputTextType() ?>" name="y_cantidad_en_transito" id="y_cantidad_en_transito" data-table="articulo" data-field="x_cantidad_en_transito" value="<?= $Page->cantidad_en_transito->EditValue2 ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_transito->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_transito->formatPattern()) ?>"<?= $Page->cantidad_en_transito->editAttributes() ?>>
+<div class="invalid-feedback"><?= $Page->cantidad_en_transito->getErrorMessage(false) ?></div>
+</div>
     </div><!-- /.col-sm-auto -->
 <?php } ?>
 <?php if ($Page->categoria->Visible) { // categoria ?>
@@ -315,86 +399,59 @@ loadjs.ready("farticulosrch", function() {
         </div><!-- /.ew-search-field -->
     </div><!-- /.col-sm-auto -->
 <?php } ?>
-<?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
+<?php if ($Page->articulo_inventario->Visible) { // articulo_inventario ?>
 <?php
-if (!$Page->cantidad_en_mano->UseFilter) {
+if (!$Page->articulo_inventario->UseFilter) {
     $Page->SearchColumnCount++;
 }
 ?>
-    <div id="xs_cantidad_en_mano" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cantidad_en_mano->UseFilter ? " ew-filter-field" : "" ?>">
+    <div id="xs_articulo_inventario" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->articulo_inventario->UseFilter ? " ew-filter-field" : "" ?>">
         <div class="d-flex my-1 my-sm-0">
-            <label for="x_cantidad_en_mano" class="ew-search-caption ew-label"><?= $Page->cantidad_en_mano->caption() ?></label>
+            <label for="x_articulo_inventario" class="ew-search-caption ew-label"><?= $Page->articulo_inventario->caption() ?></label>
             <div class="ew-search-operator">
-<?= $Language->phrase(">=") ?>
-<input type="hidden" name="z_cantidad_en_mano" id="z_cantidad_en_mano" value="&gt;=">
+<?= $Language->phrase("=") ?>
+<input type="hidden" name="z_articulo_inventario" id="z_articulo_inventario" value="=">
 </div>
         </div>
-        <div id="el_articulo_cantidad_en_mano" class="ew-search-field">
-<input type="<?= $Page->cantidad_en_mano->getInputTextType() ?>" name="x_cantidad_en_mano" id="x_cantidad_en_mano" data-table="articulo" data-field="x_cantidad_en_mano" value="<?= $Page->cantidad_en_mano->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_mano->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_mano->formatPattern()) ?>"<?= $Page->cantidad_en_mano->editAttributes() ?>>
-<div class="invalid-feedback"><?= $Page->cantidad_en_mano->getErrorMessage(false) ?></div>
+        <div id="el_articulo_articulo_inventario" class="ew-search-field">
+    <select
+        id="x_articulo_inventario"
+        name="x_articulo_inventario"
+        class="form-select ew-select<?= $Page->articulo_inventario->isInvalidClass() ?>"
+        <?php if (!$Page->articulo_inventario->IsNativeSelect) { ?>
+        data-select2-id="farticulosrch_x_articulo_inventario"
+        <?php } ?>
+        data-table="articulo"
+        data-field="x_articulo_inventario"
+        data-value-separator="<?= $Page->articulo_inventario->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->articulo_inventario->getPlaceHolder()) ?>"
+        <?= $Page->articulo_inventario->editAttributes() ?>>
+        <?= $Page->articulo_inventario->selectOptionListHtml("x_articulo_inventario") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->articulo_inventario->getErrorMessage(false) ?></div>
+<?php if (!$Page->articulo_inventario->IsNativeSelect) { ?>
+<script>
+loadjs.ready("farticulosrch", function() {
+    var options = { name: "x_articulo_inventario", selectId: "farticulosrch_x_articulo_inventario" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (farticulosrch.lists.articulo_inventario?.lookupOptions.length) {
+        options.data = { id: "x_articulo_inventario", form: "farticulosrch" };
+    } else {
+        options.ajax = { id: "x_articulo_inventario", form: "farticulosrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.articulo.fields.articulo_inventario.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </div>
         <div class="d-flex my-1 my-sm-0">
         </div><!-- /.ew-search-field -->
-    </div><!-- /.col-sm-auto -->
-<?php } ?>
-<?php if ($Page->cantidad_en_pedido->Visible) { // cantidad_en_pedido ?>
-<?php
-if (!$Page->cantidad_en_pedido->UseFilter) {
-    $Page->SearchColumnCount++;
-}
-?>
-    <div id="xs_cantidad_en_pedido" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cantidad_en_pedido->UseFilter ? " ew-filter-field" : "" ?>">
-        <div class="d-flex my-1 my-sm-0">
-            <label for="x_cantidad_en_pedido" class="ew-search-caption ew-label"><?= $Page->cantidad_en_pedido->caption() ?></label>
-            <div class="ew-search-operator">
-<select name="z_cantidad_en_pedido" id="z_cantidad_en_pedido" class="form-select ew-operator-select" data-ew-action="search-operator">
-<?php foreach ($Page->cantidad_en_pedido->SearchOperators as $opr) { ?>
-<option value="<?= HtmlEncode($opr) ?>"<?= $Page->cantidad_en_pedido->AdvancedSearch->SearchOperator == $opr ? " selected" : "" ?>><?= $Language->phrase($opr == "=" ? "EQUAL" : $opr) ?></option>
-<?php } ?>
-</select>
-</div>
-        </div>
-        <div id="el_articulo_cantidad_en_pedido" class="ew-search-field">
-<input type="<?= $Page->cantidad_en_pedido->getInputTextType() ?>" name="x_cantidad_en_pedido" id="x_cantidad_en_pedido" data-table="articulo" data-field="x_cantidad_en_pedido" value="<?= $Page->cantidad_en_pedido->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_pedido->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_pedido->formatPattern()) ?>"<?= $Page->cantidad_en_pedido->editAttributes() ?>>
-<div class="invalid-feedback"><?= $Page->cantidad_en_pedido->getErrorMessage(false) ?></div>
-</div>
-        <div class="d-flex my-1 my-sm-0">
-            <div class="ew-search-and d-none"><label><?= $Language->phrase("AND") ?></label></div>
-        </div><!-- /.ew-search-field -->
-        <div id="el2_articulo_cantidad_en_pedido" class="ew-search-field2 d-none">
-<input type="<?= $Page->cantidad_en_pedido->getInputTextType() ?>" name="y_cantidad_en_pedido" id="y_cantidad_en_pedido" data-table="articulo" data-field="x_cantidad_en_pedido" value="<?= $Page->cantidad_en_pedido->EditValue2 ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_pedido->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_pedido->formatPattern()) ?>"<?= $Page->cantidad_en_pedido->editAttributes() ?>>
-<div class="invalid-feedback"><?= $Page->cantidad_en_pedido->getErrorMessage(false) ?></div>
-</div>
-    </div><!-- /.col-sm-auto -->
-<?php } ?>
-<?php if ($Page->cantidad_en_transito->Visible) { // cantidad_en_transito ?>
-<?php
-if (!$Page->cantidad_en_transito->UseFilter) {
-    $Page->SearchColumnCount++;
-}
-?>
-    <div id="xs_cantidad_en_transito" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->cantidad_en_transito->UseFilter ? " ew-filter-field" : "" ?>">
-        <div class="d-flex my-1 my-sm-0">
-            <label for="x_cantidad_en_transito" class="ew-search-caption ew-label"><?= $Page->cantidad_en_transito->caption() ?></label>
-            <div class="ew-search-operator">
-<select name="z_cantidad_en_transito" id="z_cantidad_en_transito" class="form-select ew-operator-select" data-ew-action="search-operator">
-<?php foreach ($Page->cantidad_en_transito->SearchOperators as $opr) { ?>
-<option value="<?= HtmlEncode($opr) ?>"<?= $Page->cantidad_en_transito->AdvancedSearch->SearchOperator == $opr ? " selected" : "" ?>><?= $Language->phrase($opr == "=" ? "EQUAL" : $opr) ?></option>
-<?php } ?>
-</select>
-</div>
-        </div>
-        <div id="el_articulo_cantidad_en_transito" class="ew-search-field">
-<input type="<?= $Page->cantidad_en_transito->getInputTextType() ?>" name="x_cantidad_en_transito" id="x_cantidad_en_transito" data-table="articulo" data-field="x_cantidad_en_transito" value="<?= $Page->cantidad_en_transito->EditValue ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_transito->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_transito->formatPattern()) ?>"<?= $Page->cantidad_en_transito->editAttributes() ?>>
-<div class="invalid-feedback"><?= $Page->cantidad_en_transito->getErrorMessage(false) ?></div>
-</div>
-        <div class="d-flex my-1 my-sm-0">
-            <div class="ew-search-and d-none"><label><?= $Language->phrase("AND") ?></label></div>
-        </div><!-- /.ew-search-field -->
-        <div id="el2_articulo_cantidad_en_transito" class="ew-search-field2 d-none">
-<input type="<?= $Page->cantidad_en_transito->getInputTextType() ?>" name="y_cantidad_en_transito" id="y_cantidad_en_transito" data-table="articulo" data-field="x_cantidad_en_transito" value="<?= $Page->cantidad_en_transito->EditValue2 ?>" size="30" placeholder="<?= HtmlEncode($Page->cantidad_en_transito->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cantidad_en_transito->formatPattern()) ?>"<?= $Page->cantidad_en_transito->editAttributes() ?>>
-<div class="invalid-feedback"><?= $Page->cantidad_en_transito->getErrorMessage(false) ?></div>
-</div>
     </div><!-- /.col-sm-auto -->
 <?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
@@ -542,15 +599,6 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->fabricante->Visible) { // fabricante ?>
         <th data-name="fabricante" class="<?= $Page->fabricante->headerCellClass() ?>"><div id="elh_articulo_fabricante" class="articulo_fabricante"><?= $Page->renderFieldHeader($Page->fabricante) ?></div></th>
 <?php } ?>
-<?php if ($Page->categoria->Visible) { // categoria ?>
-        <th data-name="categoria" class="<?= $Page->categoria->headerCellClass() ?>"><div id="elh_articulo_categoria" class="articulo_categoria"><?= $Page->renderFieldHeader($Page->categoria) ?></div></th>
-<?php } ?>
-<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-        <th data-name="lista_pedido" class="<?= $Page->lista_pedido->headerCellClass() ?>"><div id="elh_articulo_lista_pedido" class="articulo_lista_pedido"><?= $Page->renderFieldHeader($Page->lista_pedido) ?></div></th>
-<?php } ?>
-<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
-        <th data-name="categoria_madre" class="<?= $Page->categoria_madre->headerCellClass() ?>"><div id="elh_articulo_categoria_madre" class="articulo_categoria_madre"><?= $Page->renderFieldHeader($Page->categoria_madre) ?></div></th>
-<?php } ?>
 <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <th data-name="cantidad_en_mano" class="<?= $Page->cantidad_en_mano->headerCellClass() ?>"><div id="elh_articulo_cantidad_en_mano" class="articulo_cantidad_en_mano"><?= $Page->renderFieldHeader($Page->cantidad_en_mano) ?></div></th>
 <?php } ?>
@@ -565,6 +613,21 @@ $Page->ListOptions->render("header", "left");
 <?php } ?>
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th data-name="descuento" class="<?= $Page->descuento->headerCellClass() ?>"><div id="elh_articulo_descuento" class="articulo_descuento"><?= $Page->renderFieldHeader($Page->descuento) ?></div></th>
+<?php } ?>
+<?php if ($Page->categoria->Visible) { // categoria ?>
+        <th data-name="categoria" class="<?= $Page->categoria->headerCellClass() ?>"><div id="elh_articulo_categoria" class="articulo_categoria"><?= $Page->renderFieldHeader($Page->categoria) ?></div></th>
+<?php } ?>
+<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
+        <th data-name="lista_pedido" class="<?= $Page->lista_pedido->headerCellClass() ?>"><div id="elh_articulo_lista_pedido" class="articulo_lista_pedido"><?= $Page->renderFieldHeader($Page->lista_pedido) ?></div></th>
+<?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <th data-name="categoria_madre" class="<?= $Page->categoria_madre->headerCellClass() ?>"><div id="elh_articulo_categoria_madre" class="articulo_categoria_madre"><?= $Page->renderFieldHeader($Page->categoria_madre) ?></div></th>
+<?php } ?>
+<?php if ($Page->sub_categoria->Visible) { // sub_categoria ?>
+        <th data-name="sub_categoria" class="<?= $Page->sub_categoria->headerCellClass() ?>"><div id="elh_articulo_sub_categoria" class="articulo_sub_categoria"><?= $Page->renderFieldHeader($Page->sub_categoria) ?></div></th>
+<?php } ?>
+<?php if ($Page->articulo_inventario->Visible) { // articulo_inventario ?>
+        <th data-name="articulo_inventario" class="<?= $Page->articulo_inventario->headerCellClass() ?>"><div id="elh_articulo_articulo_inventario" class="articulo_articulo_inventario"><?= $Page->renderFieldHeader($Page->articulo_inventario) ?></div></th>
 <?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <th data-name="activo" class="<?= $Page->activo->headerCellClass() ?>"><div id="elh_articulo_activo" class="articulo_activo"><?= $Page->renderFieldHeader($Page->activo) ?></div></th>
@@ -646,30 +709,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->categoria->Visible) { // categoria ?>
-        <td data-name="categoria"<?= $Page->categoria->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_categoria" class="el_articulo_categoria">
-<span<?= $Page->categoria->viewAttributes() ?>>
-<?= $Page->categoria->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-        <td data-name="lista_pedido"<?= $Page->lista_pedido->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_lista_pedido" class="el_articulo_lista_pedido">
-<span<?= $Page->lista_pedido->viewAttributes() ?>>
-<?= $Page->lista_pedido->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
-        <td data-name="categoria_madre"<?= $Page->categoria_madre->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_categoria_madre" class="el_articulo_categoria_madre">
-<span<?= $Page->categoria_madre->viewAttributes() ?>>
-<?= $Page->categoria_madre->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <td data-name="cantidad_en_mano"<?= $Page->cantidad_en_mano->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_cantidad_en_mano" class="el_articulo_cantidad_en_mano">
@@ -707,6 +746,46 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_descuento" class="el_articulo_descuento">
 <span<?= $Page->descuento->viewAttributes() ?>>
 <?= $Page->descuento->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->categoria->Visible) { // categoria ?>
+        <td data-name="categoria"<?= $Page->categoria->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_categoria" class="el_articulo_categoria">
+<span<?= $Page->categoria->viewAttributes() ?>>
+<?= $Page->categoria->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
+        <td data-name="lista_pedido"<?= $Page->lista_pedido->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_lista_pedido" class="el_articulo_lista_pedido">
+<span<?= $Page->lista_pedido->viewAttributes() ?>>
+<?= $Page->lista_pedido->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <td data-name="categoria_madre"<?= $Page->categoria_madre->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_categoria_madre" class="el_articulo_categoria_madre">
+<span<?= $Page->categoria_madre->viewAttributes() ?>>
+<?= $Page->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->sub_categoria->Visible) { // sub_categoria ?>
+        <td data-name="sub_categoria"<?= $Page->sub_categoria->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_sub_categoria" class="el_articulo_sub_categoria">
+<span<?= $Page->sub_categoria->viewAttributes() ?>>
+<?= $Page->sub_categoria->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->articulo_inventario->Visible) { // articulo_inventario ?>
+        <td data-name="articulo_inventario"<?= $Page->articulo_inventario->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_articulo_articulo_inventario" class="el_articulo_articulo_inventario">
+<span<?= $Page->articulo_inventario->viewAttributes() ?>>
+<?= $Page->articulo_inventario->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

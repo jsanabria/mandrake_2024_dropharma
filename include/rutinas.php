@@ -137,7 +137,7 @@ function ReservarConsecutivoDocumentoMySQLi($link, $tipo_documento, $serie = '')
         throw new Exception("No se pudo generar consecutivo para $tipo_documento / $serie.");
     }
 
-    return $numero;
+    return str_pad($numero, 7, "0", STR_PAD_LEFT);
 }
 
 

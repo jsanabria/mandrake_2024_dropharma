@@ -31,7 +31,6 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Add fields
         .setFields([
-            ["id", [fields.id.visible && fields.id.required ? ew.Validators.required(fields.id.caption) : null], fields.id.isInvalid],
             ["nombre", [fields.nombre.visible && fields.nombre.required ? ew.Validators.required(fields.nombre.caption) : null], fields.nombre.isInvalid],
             ["apellido", [fields.apellido.visible && fields.apellido.required ? ew.Validators.required(fields.apellido.caption) : null], fields.apellido.isInvalid],
             ["correo", [fields.correo.visible && fields.correo.required ? ew.Validators.required(fields.correo.caption) : null], fields.correo.isInvalid],
@@ -40,9 +39,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["referencia", [fields.referencia.visible && fields.referencia.required ? ew.Validators.required(fields.referencia.caption) : null], fields.referencia.isInvalid],
             ["comentario", [fields.comentario.visible && fields.comentario.required ? ew.Validators.required(fields.comentario.caption) : null], fields.comentario.isInvalid],
             ["seguimiento", [fields.seguimiento.visible && fields.seguimiento.required ? ew.Validators.required(fields.seguimiento.caption) : null], fields.seguimiento.isInvalid],
-            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null], fields.fecha.isInvalid],
-            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
-            ["usuario", [fields.usuario.visible && fields.usuario.required ? ew.Validators.required(fields.usuario.caption) : null], fields.usuario.isInvalid]
+            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -82,18 +79,6 @@ loadjs.ready("head", function () {
 <?php } ?>
 <input type="hidden" name="<?= $Page->OldKeyName ?>" value="<?= $Page->OldKey ?>">
 <div class="ew-edit-div"><!-- page* -->
-<?php if ($Page->id->Visible) { // id ?>
-    <div id="r_id"<?= $Page->id->rowAttributes() ?>>
-        <label id="elh_visitas_id" class="<?= $Page->LeftColumnClass ?>"><?= $Page->id->caption() ?><?= $Page->id->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->id->cellAttributes() ?>>
-<span id="el_visitas_id">
-<span<?= $Page->id->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->id->getDisplayValue($Page->id->EditValue))) ?>"></span>
-<input type="hidden" data-table="visitas" data-field="x_id" data-hidden="1" name="x_id" id="x_id" value="<?= HtmlEncode($Page->id->CurrentValue) ?>">
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->nombre->Visible) { // nombre ?>
     <div id="r_nombre"<?= $Page->nombre->rowAttributes() ?>>
         <label id="elh_visitas_nombre" for="x_nombre" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nombre->caption() ?><?= $Page->nombre->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -171,7 +156,7 @@ loadjs.ready("head", function () {
         <label id="elh_visitas_comentario" for="x_comentario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->comentario->caption() ?><?= $Page->comentario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->comentario->cellAttributes() ?>>
 <span id="el_visitas_comentario">
-<input type="<?= $Page->comentario->getInputTextType() ?>" name="x_comentario" id="x_comentario" data-table="visitas" data-field="x_comentario" value="<?= $Page->comentario->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->comentario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->comentario->formatPattern()) ?>"<?= $Page->comentario->editAttributes() ?> aria-describedby="x_comentario_help">
+<textarea data-table="visitas" data-field="x_comentario" name="x_comentario" id="x_comentario" cols="35" rows="2" placeholder="<?= HtmlEncode($Page->comentario->getPlaceHolder()) ?>"<?= $Page->comentario->editAttributes() ?> aria-describedby="x_comentario_help"><?= $Page->comentario->EditValue ?></textarea>
 <?= $Page->comentario->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->comentario->getErrorMessage() ?></div>
 </span>
@@ -183,7 +168,7 @@ loadjs.ready("head", function () {
         <label id="elh_visitas_seguimiento" for="x_seguimiento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->seguimiento->caption() ?><?= $Page->seguimiento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->seguimiento->cellAttributes() ?>>
 <span id="el_visitas_seguimiento">
-<input type="<?= $Page->seguimiento->getInputTextType() ?>" name="x_seguimiento" id="x_seguimiento" data-table="visitas" data-field="x_seguimiento" value="<?= $Page->seguimiento->EditValue ?>" size="30" maxlength="65535" placeholder="<?= HtmlEncode($Page->seguimiento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->seguimiento->formatPattern()) ?>"<?= $Page->seguimiento->editAttributes() ?> aria-describedby="x_seguimiento_help">
+<textarea data-table="visitas" data-field="x_seguimiento" name="x_seguimiento" id="x_seguimiento" cols="35" rows="2" placeholder="<?= HtmlEncode($Page->seguimiento->getPlaceHolder()) ?>"<?= $Page->seguimiento->editAttributes() ?> aria-describedby="x_seguimiento_help"><?= $Page->seguimiento->EditValue ?></textarea>
 <?= $Page->seguimiento->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->seguimiento->getErrorMessage() ?></div>
 </span>
@@ -198,22 +183,10 @@ loadjs.ready("head", function () {
 <input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="visitas" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
 <?= $Page->fecha->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
-    <div id="r_fecha_registro"<?= $Page->fecha_registro->rowAttributes() ?>>
-        <label id="elh_visitas_fecha_registro" for="x_fecha_registro" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha_registro->caption() ?><?= $Page->fecha_registro->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha_registro->cellAttributes() ?>>
-<span id="el_visitas_fecha_registro">
-<input type="<?= $Page->fecha_registro->getInputTextType() ?>" name="x_fecha_registro" id="x_fecha_registro" data-table="visitas" data-field="x_fecha_registro" value="<?= $Page->fecha_registro->EditValue ?>" placeholder="<?= HtmlEncode($Page->fecha_registro->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_registro->formatPattern()) ?>"<?= $Page->fecha_registro->editAttributes() ?> aria-describedby="x_fecha_registro_help">
-<?= $Page->fecha_registro->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha_registro->getErrorMessage() ?></div>
-<?php if (!$Page->fecha_registro->ReadOnly && !$Page->fecha_registro->Disabled && !isset($Page->fecha_registro->EditAttrs["readonly"]) && !isset($Page->fecha_registro->EditAttrs["disabled"])) { ?>
+<?php if (!$Page->fecha->ReadOnly && !$Page->fecha->Disabled && !isset($Page->fecha->EditAttrs["readonly"]) && !isset($Page->fecha->EditAttrs["disabled"])) { ?>
 <script>
 loadjs.ready(["fvisitasedit", "datetimepicker"], function () {
-    let format = "<?= DateFormat(0) ?>",
+    let format = "<?= DateFormat(7) ?>",
         options = {
             localization: {
                 locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
@@ -235,7 +208,7 @@ loadjs.ready(["fvisitasedit", "datetimepicker"], function () {
                 theme: ew.getPreferredTheme()
             }
         };
-    ew.createDateTimePicker("fvisitasedit", "x_fecha_registro", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+    ew.createDateTimePicker("fvisitasedit", "x_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
 });
 </script>
 <?php } ?>
@@ -243,19 +216,8 @@ loadjs.ready(["fvisitasedit", "datetimepicker"], function () {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->usuario->Visible) { // usuario ?>
-    <div id="r_usuario"<?= $Page->usuario->rowAttributes() ?>>
-        <label id="elh_visitas_usuario" for="x_usuario" class="<?= $Page->LeftColumnClass ?>"><?= $Page->usuario->caption() ?><?= $Page->usuario->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->usuario->cellAttributes() ?>>
-<span id="el_visitas_usuario">
-<input type="<?= $Page->usuario->getInputTextType() ?>" name="x_usuario" id="x_usuario" data-table="visitas" data-field="x_usuario" value="<?= $Page->usuario->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->usuario->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->usuario->formatPattern()) ?>"<?= $Page->usuario->editAttributes() ?> aria-describedby="x_usuario_help">
-<?= $Page->usuario->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->usuario->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 </div><!-- /page* -->
+    <input type="hidden" data-table="visitas" data-field="x_id" data-hidden="1" name="x_id" id="x_id" value="<?= HtmlEncode($Page->id->CurrentValue) ?>">
 <?= $Page->IsModal ? '<template class="ew-modal-buttons">' : '<div class="row ew-buttons">' ?><!-- buttons .row -->
     <div class="<?= $Page->OffsetColumnClass ?>"><!-- buttons offset -->
 <button class="btn btn-primary ew-btn" name="btn-action" id="btn-action" type="submit" form="fvisitasedit"><?= $Language->phrase("SaveBtn") ?></button>

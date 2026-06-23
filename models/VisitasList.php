@@ -145,18 +145,18 @@ class VisitasList extends Visitas
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->setVisibility();
+        $this->id->Visible = false;
         $this->nombre->setVisibility();
         $this->apellido->setVisibility();
         $this->correo->setVisibility();
         $this->telefono->setVisibility();
         $this->producto->setVisibility();
         $this->referencia->setVisibility();
-        $this->comentario->setVisibility();
+        $this->comentario->Visible = false;
         $this->seguimiento->setVisibility();
         $this->fecha->setVisibility();
-        $this->fecha_registro->setVisibility();
-        $this->usuario->setVisibility();
+        $this->fecha_registro->Visible = false;
+        $this->usuario->Visible = false;
     }
 
     // Constructor
@@ -699,6 +699,9 @@ class VisitasList extends Visitas
 
         // Setup other options
         $this->setupOtherOptions();
+
+        // Set up lookup cache
+        $this->setupLookupOptions($this->usuario);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1304,7 +1307,7 @@ class VisitasList extends Visitas
     {
         // Load default Sorting Order
         if ($this->Command != "json") {
-            $defaultSort = ""; // Set up default sort
+            $defaultSort = $this->id->Expression . " DESC"; // Set up default sort
             if ($this->getSessionOrderBy() == "" && $defaultSort != "") {
                 $this->setSessionOrderBy($defaultSort);
             }
@@ -1314,18 +1317,14 @@ class VisitasList extends Visitas
         if (Get("order") !== null) {
             $this->CurrentOrder = Get("order");
             $this->CurrentOrderType = Get("ordertype", "");
-            $this->updateSort($this->id); // id
             $this->updateSort($this->nombre); // nombre
             $this->updateSort($this->apellido); // apellido
             $this->updateSort($this->correo); // correo
             $this->updateSort($this->telefono); // telefono
             $this->updateSort($this->producto); // producto
             $this->updateSort($this->referencia); // referencia
-            $this->updateSort($this->comentario); // comentario
             $this->updateSort($this->seguimiento); // seguimiento
             $this->updateSort($this->fecha); // fecha
-            $this->updateSort($this->fecha_registro); // fecha_registro
-            $this->updateSort($this->usuario); // usuario
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -1597,18 +1596,14 @@ class VisitasList extends Visitas
             $item = &$option->addGroupOption();
             $item->Body = "";
             $item->Visible = $this->UseColumnVisibility;
-            $this->createColumnOption($option, "id");
             $this->createColumnOption($option, "nombre");
             $this->createColumnOption($option, "apellido");
             $this->createColumnOption($option, "correo");
             $this->createColumnOption($option, "telefono");
             $this->createColumnOption($option, "producto");
             $this->createColumnOption($option, "referencia");
-            $this->createColumnOption($option, "comentario");
             $this->createColumnOption($option, "seguimiento");
             $this->createColumnOption($option, "fecha");
-            $this->createColumnOption($option, "fecha_registro");
-            $this->createColumnOption($option, "usuario");
         }
 
         // Set up custom actions
@@ -2174,10 +2169,27 @@ class VisitasList extends Visitas
 
             // usuario
             $this->usuario->ViewValue = $this->usuario->CurrentValue;
-
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
+            $curVal = strval($this->usuario->CurrentValue);
+            if ($curVal != "") {
+                $this->usuario->ViewValue = $this->usuario->lookupCacheOption($curVal);
+                if ($this->usuario->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->usuario->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->usuario->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                    $sqlWrk = $this->usuario->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->usuario->Lookup->renderViewRow($rswrk[0]);
+                        $this->usuario->ViewValue = $this->usuario->displayValue($arwrk);
+                    } else {
+                        $this->usuario->ViewValue = $this->usuario->CurrentValue;
+                    }
+                }
+            } else {
+                $this->usuario->ViewValue = null;
+            }
 
             // nombre
             $this->nombre->HrefValue = "";
@@ -2203,10 +2215,6 @@ class VisitasList extends Visitas
             $this->referencia->HrefValue = "";
             $this->referencia->TooltipValue = "";
 
-            // comentario
-            $this->comentario->HrefValue = "";
-            $this->comentario->TooltipValue = "";
-
             // seguimiento
             $this->seguimiento->HrefValue = "";
             $this->seguimiento->TooltipValue = "";
@@ -2214,14 +2222,6 @@ class VisitasList extends Visitas
             // fecha
             $this->fecha->HrefValue = "";
             $this->fecha->TooltipValue = "";
-
-            // fecha_registro
-            $this->fecha_registro->HrefValue = "";
-            $this->fecha_registro->TooltipValue = "";
-
-            // usuario
-            $this->usuario->HrefValue = "";
-            $this->usuario->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -2473,6 +2473,8 @@ class VisitasList extends Visitas
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
+                case "x_usuario":
+                    break;
                 default:
                     $lookupFilter = "";
                     break;

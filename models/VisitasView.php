@@ -539,6 +539,9 @@ class VisitasView extends Visitas
             $this->InlineDelete = true;
         }
 
+        // Set up lookup cache
+        $this->setupLookupOptions($this->usuario);
+
         // Check modal
         if ($this->IsModal) {
             $SkipHeaderFooter = true;
@@ -956,10 +959,27 @@ class VisitasView extends Visitas
 
             // usuario
             $this->usuario->ViewValue = $this->usuario->CurrentValue;
-
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
+            $curVal = strval($this->usuario->CurrentValue);
+            if ($curVal != "") {
+                $this->usuario->ViewValue = $this->usuario->lookupCacheOption($curVal);
+                if ($this->usuario->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->usuario->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->usuario->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                    $sqlWrk = $this->usuario->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->usuario->Lookup->renderViewRow($rswrk[0]);
+                        $this->usuario->ViewValue = $this->usuario->displayValue($arwrk);
+                    } else {
+                        $this->usuario->ViewValue = $this->usuario->CurrentValue;
+                    }
+                }
+            } else {
+                $this->usuario->ViewValue = null;
+            }
 
             // nombre
             $this->nombre->HrefValue = "";
@@ -1036,6 +1056,8 @@ class VisitasView extends Visitas
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
+                case "x_usuario":
+                    break;
                 default:
                     $lookupFilter = "";
                     break;

@@ -177,6 +177,8 @@ class CompraView extends Compra
         $this->tipo_municipal->setVisibility();
         $this->anulado->setVisibility();
         $this->pagado->setVisibility();
+        $this->moneda->setVisibility();
+        $this->tasa_dia->setVisibility();
     }
 
     // Constructor
@@ -905,6 +907,8 @@ class CompraView extends Compra
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
         $this->pagado->setDbValue($row['pagado']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->tasa_dia->setDbValue($row['tasa_dia']);
     }
 
     // Return a row with default values
@@ -941,6 +945,8 @@ class CompraView extends Compra
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
         $row['pagado'] = $this->pagado->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
         return $row;
     }
 
@@ -1021,6 +1027,10 @@ class CompraView extends Compra
         // anulado
 
         // pagado
+
+        // moneda
+
+        // tasa_dia
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1207,6 +1217,13 @@ class CompraView extends Compra
                 $this->pagado->ViewValue = null;
             }
 
+            // moneda
+            $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+            // tasa_dia
+            $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
+            $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
+
             // id
             $this->id->HrefValue = "";
             $this->id->TooltipValue = "";
@@ -1358,6 +1375,14 @@ class CompraView extends Compra
             // pagado
             $this->pagado->HrefValue = "";
             $this->pagado->TooltipValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+            $this->moneda->TooltipValue = "";
+
+            // tasa_dia
+            $this->tasa_dia->HrefValue = "";
+            $this->tasa_dia->TooltipValue = "";
         }
 
         // Call Row Rendered event

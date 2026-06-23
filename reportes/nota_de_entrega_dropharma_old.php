@@ -32,18 +32,8 @@ if($row = mysqli_fetch_array($rs)) {
 /////////////////////////////
 
 $sql = "SELECT 
-			id, 
-			DATE_FORMAT(fecha, '%d/%m/%Y') AS fecha, 
-			cliente, 
-			nro_documento, 
-			tipo_documento, 
-			estatus, 
-			asesor, 
-			username,
-			IFNULL(ci_rif,'') AS ci_rif_envio,
-			IFNULL(nombre,'') AS nombre_envio,
-			IFNULL(direccion,'') AS direccion_envio,
-			IFNULL(telefono,'') AS telefono_envio   
+			id, date_format(fecha, '%d/%m/%Y') as fecha, cliente, nro_documento, tipo_documento, estatus, 
+			asesor, username  
 		FROM salidas where id = '$id'"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -54,10 +44,6 @@ $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
 $GLOBALS["estatus"] = $row["estatus"];
 $GLOBALS["username"] = $row["username"];
-$GLOBALS["ci_rif_envio"] = $row["ci_rif_envio"];
-$GLOBALS["nombre_envio"] = $row["nombre_envio"];
-$GLOBALS["direccion_envio"] = $row["direccion_envio"];
-$GLOBALS["telefono_envio"] = $row["telefono_envio"];
 
 $sql = "SELECT a.nombre  
 		FROM 
@@ -148,7 +134,7 @@ class PDF extends FPDF
 		$direccion = $row["direccion"]; 
 		$cia =  $row["nombre"];
 		$logo =  $row["logo"];
-		$ci_rif = $row["ci_rif"];
+
 		
 		
 		$sql = "SELECT 
@@ -177,7 +163,7 @@ class PDF extends FPDF
 			$this->Image("../carpetacarga/$logo", 10, 10, 50);
 		}
 		
-		$this->Ln(15);
+		$this->Ln(25);
 		
 		$this->SetFont('Arial','',12);
 		$this->Cell(200, 6, $row["descripcion"],0,0,'C');
@@ -187,90 +173,54 @@ class PDF extends FPDF
 		$this->Cell(200, 6, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 0, 0, 'C');
 
 		$this->Ln(8);
-
+		
 		$this->SetFont('Arial','',8);
+		$this->Cell(200, 6, "ESTATUS: " . $GLOBALS["estatus"] . " / " . "No. Doc.: " . $GLOBALS["nro_documento"],0,0,'R');
 
+		$this->Ln(8);
+		$this->Cell(10, 6);
+		$this->Cell(150, 6);
+		$this->SetFont('Arial','B',8);
+		$this->Cell(20, 5,'Fecha: ','0','0','R');
+		$this->SetFont('Arial','',8);
+		$this->Cell(20, 5, $GLOBALS["fecha"], 0, 0, 'R');
+		$this->Ln(10);
+
+		$this->Cell(10, 6);
+
+		$this->SetFont('Arial','B',8);
+		$this->Cell(30, 6,"RAZON SOCIAL: ",'0','0','L');
+		$this->SetFont('Arial','',8);
+		$this->Cell(130, 6, mb_convert_encoding($razon_social, "ISO-8859-1"),'0','0','L');
+	
+
+		$this->Ln(10);
 		$this->Cell(10, 5);
-		$this->Cell(50, 5, mb_convert_encoding($cia, "ISO-8859-1", "UTF-8"), 0, 0, 'L');
-		$this->Cell(140, 5, "ESTATUS: " . $GLOBALS["estatus"] . " / " . "No. Doc.: " . $GLOBALS["nro_documento"], 0, 0, 'R');
+		$this->SetFont('Arial','B',8);
+		$this->Cell(30, 5,'DIRECCION: ','0','0','L');
+		$this->SetFont('Arial','',8);
+		$this->MultiCell(160, 5, mb_convert_encoding("$direccion_cliente. $ciudad_cliente", "ISO-8859-1"), '0', 'L');
 
-		$this->Ln();
+		$this->Ln(6);
 		$this->Cell(10, 5);
-		$this->Cell(100, 5, "R.I.F: " . $ci_rif, 0, 0, "L");
-		$this->Cell(50, 5, "CIUDAD: $ciudad", 0, 0, 'R');
-		$this->Cell(40, 5, "FECHA: " . $GLOBALS["fecha"], 0, 0, 'R');
+		$this->SetFont('Arial','B',8);
+		$this->Cell(10,5,'R.I.F.: ','0',0,'L');
+		$this->SetFont('Arial','',8);
+		$this->Cell(25,5,$rif,'0',0,'L');
+		$this->SetFont('Arial','B',8);
+		$this->Cell(10,5,'Telf:','0','0','L');
+		$this->SetFont('Arial','',8);
+		$this->Cell(55,5,$telf,'0','0','L');
 
-		$this->Ln();
+		$this->SetFont('Arial','B',8);
+		$this->Cell(10,5,'WEB:','0','0','L');
+		$this->SetFont('Arial','',8);
+		$this->Cell(20,5,$web,'0','0','L');
 
-		$this->Cell(10, 4);
-		$this->Cell(30, 4, "CLIENTE: ", '0', '0', 'L');
-		$this->Cell(120, 4, mb_convert_encoding($razon_social, "ISO-8859-1", "UTF-8"), '0', '0', 'L');
-		$this->Cell(40, 4, "User: " . $GLOBALS['username'], 0, 0, 'R');
-
-		$this->Ln();
-		$this->Cell(10, 4);
-		$this->Cell(30, 4, 'DIRECCION: ', '0', '0', 'L');
-		$this->MultiCell(160, 4, mb_convert_encoding("$direccion_cliente. $ciudad_cliente", "ISO-8859-1", "UTF-8"), '0', 'L');
-
-		$this->Cell(10, 5);
-		$this->Cell(70, 5, 'R.I.F.: ' . $rif, '0', 0, 'L');
-		$this->Cell(80, 5, 'Telf:' . $telf, '0', '0', 'L');
-		$this->Cell(50, 5, 'CONTADO', '0', 0, 'C');
-
-		$mostrar_envio =
-			trim($GLOBALS["ci_rif_envio"]) != "" ||
-			trim($GLOBALS["nombre_envio"]) != "" ||
-			trim($GLOBALS["direccion_envio"]) != "" ||
-			trim($GLOBALS["telefono_envio"]) != "";
-
-		if ($mostrar_envio) {
-
-			$this->Ln(6);
-
-			$this->SetFont('Arial','B',8);
-			$this->Cell(10,4);
-			$this->Cell(190,4,
-				mb_convert_encoding("DATOS DE ENVÍO", "ISO-8859-1", "UTF-8"),
-				0,0,'L');
-
-			$this->Ln(5);
-			$this->SetFont('Arial','',8);
-
-			if(trim($GLOBALS["nombre_envio"]) != "") {
-				$this->Cell(10,4);
-				$this->Cell(
-					190,
-					4,
-					mb_convert_encoding("Nombre: " . $GLOBALS["nombre_envio"], "ISO-8859-1", "UTF-8"),
-					0,0,'L'
-				);
-				$this->Ln();
-			}
-
-			if(trim($GLOBALS["ci_rif_envio"]) != "") {
-				$this->Cell(10,4);
-				$this->Cell(190,4,"C.I./R.I.F.: " . $GLOBALS["ci_rif_envio"],0,0,'L');
-				$this->Ln();
-			}
-
-			if(trim($GLOBALS["telefono_envio"]) != "") {
-				$this->Cell(10,4);
-				$this->Cell(190,4,"Telefono: " . $GLOBALS["telefono_envio"],0,0,'L');
-				$this->Ln();
-			}
-
-			if(trim($GLOBALS["direccion_envio"]) != "") {
-				$this->Cell(10,4);
-				$this->Cell(30,4,'Direccion: ','0','0','L');
-				$this->MultiCell(
-					160,
-					4,
-					mb_convert_encoding($GLOBALS["direccion_envio"], "ISO-8859-1", "UTF-8"),
-					0,
-					'L'
-				);
-			}
-		}
+		$this->SetFont('Arial','B',8);
+		$this->Cell(15,5,'Asesor:','0','0','L');
+		$this->SetFont('Arial','',8);
+		$this->Cell(45,5,$GLOBALS["asesor"],'0','0','L');
 
 		require("../include/desconnect.php");
 		$this->Ln(6);

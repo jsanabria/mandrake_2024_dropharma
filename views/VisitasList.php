@@ -35,7 +35,7 @@ ew.PREVIEW_NAV_STYLE ??= "tabs"; // tabs/pills/underline
 ew.PREVIEW_MODAL_CLASS ??= "modal modal-fullscreen-sm-down";
 ew.PREVIEW_ROW ??= true;
 ew.PREVIEW_SINGLE_ROW ??= false;
-ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.js?v=24.16.0", "preview");
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=24.16.0", "preview");
 </script>
 <script>
 loadjs.ready("head", function () {
@@ -169,9 +169,6 @@ $Page->renderListOptions();
 // Render list options (header, left)
 $Page->ListOptions->render("header", "left");
 ?>
-<?php if ($Page->id->Visible) { // id ?>
-        <th data-name="id" class="<?= $Page->id->headerCellClass() ?>"><div id="elh_visitas_id" class="visitas_id"><?= $Page->renderFieldHeader($Page->id) ?></div></th>
-<?php } ?>
 <?php if ($Page->nombre->Visible) { // nombre ?>
         <th data-name="nombre" class="<?= $Page->nombre->headerCellClass() ?>"><div id="elh_visitas_nombre" class="visitas_nombre"><?= $Page->renderFieldHeader($Page->nombre) ?></div></th>
 <?php } ?>
@@ -190,20 +187,11 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->referencia->Visible) { // referencia ?>
         <th data-name="referencia" class="<?= $Page->referencia->headerCellClass() ?>"><div id="elh_visitas_referencia" class="visitas_referencia"><?= $Page->renderFieldHeader($Page->referencia) ?></div></th>
 <?php } ?>
-<?php if ($Page->comentario->Visible) { // comentario ?>
-        <th data-name="comentario" class="<?= $Page->comentario->headerCellClass() ?>"><div id="elh_visitas_comentario" class="visitas_comentario"><?= $Page->renderFieldHeader($Page->comentario) ?></div></th>
-<?php } ?>
 <?php if ($Page->seguimiento->Visible) { // seguimiento ?>
         <th data-name="seguimiento" class="<?= $Page->seguimiento->headerCellClass() ?>"><div id="elh_visitas_seguimiento" class="visitas_seguimiento"><?= $Page->renderFieldHeader($Page->seguimiento) ?></div></th>
 <?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
         <th data-name="fecha" class="<?= $Page->fecha->headerCellClass() ?>"><div id="elh_visitas_fecha" class="visitas_fecha"><?= $Page->renderFieldHeader($Page->fecha) ?></div></th>
-<?php } ?>
-<?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
-        <th data-name="fecha_registro" class="<?= $Page->fecha_registro->headerCellClass() ?>"><div id="elh_visitas_fecha_registro" class="visitas_fecha_registro"><?= $Page->renderFieldHeader($Page->fecha_registro) ?></div></th>
-<?php } ?>
-<?php if ($Page->usuario->Visible) { // usuario ?>
-        <th data-name="usuario" class="<?= $Page->usuario->headerCellClass() ?>"><div id="elh_visitas_usuario" class="visitas_usuario"><?= $Page->renderFieldHeader($Page->usuario) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -233,14 +221,6 @@ while ($Page->RecordCount < $Page->StopRecord || $Page->RowIndex === '$rowindex$
 // Render list options (body, left)
 $Page->ListOptions->render("body", "left", $Page->RowCount);
 ?>
-    <?php if ($Page->id->Visible) { // id ?>
-        <td data-name="id"<?= $Page->id->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_id" class="el_visitas_id">
-<span<?= $Page->id->viewAttributes() ?>>
-<?= $Page->id->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->nombre->Visible) { // nombre ?>
         <td data-name="nombre"<?= $Page->nombre->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_nombre" class="el_visitas_nombre">
@@ -289,14 +269,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->comentario->Visible) { // comentario ?>
-        <td data-name="comentario"<?= $Page->comentario->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_comentario" class="el_visitas_comentario">
-<span<?= $Page->comentario->viewAttributes() ?>>
-<?= $Page->comentario->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->seguimiento->Visible) { // seguimiento ?>
         <td data-name="seguimiento"<?= $Page->seguimiento->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_seguimiento" class="el_visitas_seguimiento">
@@ -310,22 +282,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_fecha" class="el_visitas_fecha">
 <span<?= $Page->fecha->viewAttributes() ?>>
 <?= $Page->fecha->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
-        <td data-name="fecha_registro"<?= $Page->fecha_registro->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_fecha_registro" class="el_visitas_fecha_registro">
-<span<?= $Page->fecha_registro->viewAttributes() ?>>
-<?= $Page->fecha_registro->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->usuario->Visible) { // usuario ?>
-        <td data-name="usuario"<?= $Page->usuario->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_visitas_usuario" class="el_visitas_usuario">
-<span<?= $Page->usuario->viewAttributes() ?>>
-<?= $Page->usuario->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

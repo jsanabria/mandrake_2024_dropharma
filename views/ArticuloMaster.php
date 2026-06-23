@@ -77,39 +77,6 @@ $articulo->TableClass = "table table-sm ew-table ew-master-table";
 </td>
         </tr>
 <?php } ?>
-<?php if ($articulo->categoria->Visible) { // categoria ?>
-        <tr id="r_categoria"<?= $articulo->categoria->rowAttributes() ?>>
-            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->categoria->caption() ?></td>
-            <td<?= $articulo->categoria->cellAttributes() ?>>
-<span id="el_articulo_categoria">
-<span<?= $articulo->categoria->viewAttributes() ?>>
-<?= $articulo->categoria->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($articulo->lista_pedido->Visible) { // lista_pedido ?>
-        <tr id="r_lista_pedido"<?= $articulo->lista_pedido->rowAttributes() ?>>
-            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->lista_pedido->caption() ?></td>
-            <td<?= $articulo->lista_pedido->cellAttributes() ?>>
-<span id="el_articulo_lista_pedido">
-<span<?= $articulo->lista_pedido->viewAttributes() ?>>
-<?= $articulo->lista_pedido->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
-<?php if ($articulo->categoria_madre->Visible) { // categoria_madre ?>
-        <tr id="r_categoria_madre"<?= $articulo->categoria_madre->rowAttributes() ?>>
-            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->categoria_madre->caption() ?></td>
-            <td<?= $articulo->categoria_madre->cellAttributes() ?>>
-<span id="el_articulo_categoria_madre">
-<span<?= $articulo->categoria_madre->viewAttributes() ?>>
-<?= $articulo->categoria_madre->getViewValue() ?></span>
-</span>
-</td>
-        </tr>
-<?php } ?>
 <?php if ($articulo->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <tr id="r_cantidad_en_mano"<?= $articulo->cantidad_en_mano->rowAttributes() ?>>
             <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->cantidad_en_mano->caption() ?></td>
@@ -161,6 +128,61 @@ $articulo->TableClass = "table table-sm ew-table ew-master-table";
 <span id="el_articulo_descuento">
 <span<?= $articulo->descuento->viewAttributes() ?>>
 <?= $articulo->descuento->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($articulo->categoria->Visible) { // categoria ?>
+        <tr id="r_categoria"<?= $articulo->categoria->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->categoria->caption() ?></td>
+            <td<?= $articulo->categoria->cellAttributes() ?>>
+<span id="el_articulo_categoria">
+<span<?= $articulo->categoria->viewAttributes() ?>>
+<?= $articulo->categoria->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($articulo->lista_pedido->Visible) { // lista_pedido ?>
+        <tr id="r_lista_pedido"<?= $articulo->lista_pedido->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->lista_pedido->caption() ?></td>
+            <td<?= $articulo->lista_pedido->cellAttributes() ?>>
+<span id="el_articulo_lista_pedido">
+<span<?= $articulo->lista_pedido->viewAttributes() ?>>
+<?= $articulo->lista_pedido->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($articulo->categoria_madre->Visible) { // categoria_madre ?>
+        <tr id="r_categoria_madre"<?= $articulo->categoria_madre->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->categoria_madre->caption() ?></td>
+            <td<?= $articulo->categoria_madre->cellAttributes() ?>>
+<span id="el_articulo_categoria_madre">
+<span<?= $articulo->categoria_madre->viewAttributes() ?>>
+<?= $articulo->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($articulo->sub_categoria->Visible) { // sub_categoria ?>
+        <tr id="r_sub_categoria"<?= $articulo->sub_categoria->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->sub_categoria->caption() ?></td>
+            <td<?= $articulo->sub_categoria->cellAttributes() ?>>
+<span id="el_articulo_sub_categoria">
+<span<?= $articulo->sub_categoria->viewAttributes() ?>>
+<?= $articulo->sub_categoria->getViewValue() ?></span>
+</span>
+</td>
+        </tr>
+<?php } ?>
+<?php if ($articulo->articulo_inventario->Visible) { // articulo_inventario ?>
+        <tr id="r_articulo_inventario"<?= $articulo->articulo_inventario->rowAttributes() ?>>
+            <td class="<?= $articulo->TableLeftColumnClass ?>"><?= $articulo->articulo_inventario->caption() ?></td>
+            <td<?= $articulo->articulo_inventario->cellAttributes() ?>>
+<span id="el_articulo_articulo_inventario">
+<span<?= $articulo->articulo_inventario->viewAttributes() ?>>
+<?= $articulo->articulo_inventario->getViewValue() ?></span>
 </span>
 </td>
         </tr>

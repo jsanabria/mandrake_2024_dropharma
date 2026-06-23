@@ -68,15 +68,6 @@ $Page->showMessage();
 <?php if ($Page->fabricante->Visible) { // fabricante ?>
         <th class="<?= $Page->fabricante->headerCellClass() ?>"><span id="elh_articulo_fabricante" class="articulo_fabricante"><?= $Page->fabricante->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->categoria->Visible) { // categoria ?>
-        <th class="<?= $Page->categoria->headerCellClass() ?>"><span id="elh_articulo_categoria" class="articulo_categoria"><?= $Page->categoria->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-        <th class="<?= $Page->lista_pedido->headerCellClass() ?>"><span id="elh_articulo_lista_pedido" class="articulo_lista_pedido"><?= $Page->lista_pedido->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
-        <th class="<?= $Page->categoria_madre->headerCellClass() ?>"><span id="elh_articulo_categoria_madre" class="articulo_categoria_madre"><?= $Page->categoria_madre->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <th class="<?= $Page->cantidad_en_mano->headerCellClass() ?>"><span id="elh_articulo_cantidad_en_mano" class="articulo_cantidad_en_mano"><?= $Page->cantidad_en_mano->caption() ?></span></th>
 <?php } ?>
@@ -91,6 +82,21 @@ $Page->showMessage();
 <?php } ?>
 <?php if ($Page->descuento->Visible) { // descuento ?>
         <th class="<?= $Page->descuento->headerCellClass() ?>"><span id="elh_articulo_descuento" class="articulo_descuento"><?= $Page->descuento->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->categoria->Visible) { // categoria ?>
+        <th class="<?= $Page->categoria->headerCellClass() ?>"><span id="elh_articulo_categoria" class="articulo_categoria"><?= $Page->categoria->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
+        <th class="<?= $Page->lista_pedido->headerCellClass() ?>"><span id="elh_articulo_lista_pedido" class="articulo_lista_pedido"><?= $Page->lista_pedido->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <th class="<?= $Page->categoria_madre->headerCellClass() ?>"><span id="elh_articulo_categoria_madre" class="articulo_categoria_madre"><?= $Page->categoria_madre->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->sub_categoria->Visible) { // sub_categoria ?>
+        <th class="<?= $Page->sub_categoria->headerCellClass() ?>"><span id="elh_articulo_sub_categoria" class="articulo_sub_categoria"><?= $Page->sub_categoria->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->articulo_inventario->Visible) { // articulo_inventario ?>
+        <th class="<?= $Page->articulo_inventario->headerCellClass() ?>"><span id="elh_articulo_articulo_inventario" class="articulo_articulo_inventario"><?= $Page->articulo_inventario->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
         <th class="<?= $Page->activo->headerCellClass() ?>"><span id="elh_articulo_activo" class="articulo_activo"><?= $Page->activo->caption() ?></span></th>
@@ -165,30 +171,6 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->categoria->Visible) { // categoria ?>
-        <td<?= $Page->categoria->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->categoria->viewAttributes() ?>>
-<?= $Page->categoria->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
-        <td<?= $Page->lista_pedido->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->lista_pedido->viewAttributes() ?>>
-<?= $Page->lista_pedido->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
-        <td<?= $Page->categoria_madre->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->categoria_madre->viewAttributes() ?>>
-<?= $Page->categoria_madre->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->cantidad_en_mano->Visible) { // cantidad_en_mano ?>
         <td<?= $Page->cantidad_en_mano->cellAttributes() ?>>
 <span id="">
@@ -226,6 +208,46 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->descuento->viewAttributes() ?>>
 <?= $Page->descuento->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->categoria->Visible) { // categoria ?>
+        <td<?= $Page->categoria->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->categoria->viewAttributes() ?>>
+<?= $Page->categoria->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->lista_pedido->Visible) { // lista_pedido ?>
+        <td<?= $Page->lista_pedido->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->lista_pedido->viewAttributes() ?>>
+<?= $Page->lista_pedido->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+        <td<?= $Page->categoria_madre->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->categoria_madre->viewAttributes() ?>>
+<?= $Page->categoria_madre->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->sub_categoria->Visible) { // sub_categoria ?>
+        <td<?= $Page->sub_categoria->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->sub_categoria->viewAttributes() ?>>
+<?= $Page->sub_categoria->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->articulo_inventario->Visible) { // articulo_inventario ?>
+        <td<?= $Page->articulo_inventario->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->articulo_inventario->viewAttributes() ?>>
+<?= $Page->articulo_inventario->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

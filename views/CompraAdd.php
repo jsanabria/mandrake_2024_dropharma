@@ -33,7 +33,9 @@ loadjs.ready(["wrapper", "head"], function () {
             ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
             ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
             ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
-            ["pagado", [fields.pagado.visible && fields.pagado.required ? ew.Validators.required(fields.pagado.caption) : null], fields.pagado.isInvalid]
+            ["pagado", [fields.pagado.visible && fields.pagado.required ? ew.Validators.required(fields.pagado.caption) : null], fields.pagado.isInvalid],
+            ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
+            ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null, ew.Validators.float], fields.tasa_dia.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -296,6 +298,30 @@ loadjs.ready(["fcompraadd", "datetimepicker"], function () {
     <?= $Page->pagado->editAttributes() ?>></selection-list>
 <?= $Page->pagado->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->pagado->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+    <div id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
+        <label id="elh_compra_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->moneda->cellAttributes() ?>>
+<span id="el_compra_moneda">
+<input type="<?= $Page->moneda->getInputTextType() ?>" name="x_moneda" id="x_moneda" data-table="compra" data-field="x_moneda" value="<?= $Page->moneda->EditValue ?>" data-page="1" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->moneda->formatPattern()) ?>"<?= $Page->moneda->editAttributes() ?> aria-describedby="x_moneda_help">
+<?= $Page->moneda->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
+    <div id="r_tasa_dia"<?= $Page->tasa_dia->rowAttributes() ?>>
+        <label id="elh_compra_tasa_dia" for="x_tasa_dia" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tasa_dia->caption() ?><?= $Page->tasa_dia->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tasa_dia->cellAttributes() ?>>
+<span id="el_compra_tasa_dia">
+<input type="<?= $Page->tasa_dia->getInputTextType() ?>" name="x_tasa_dia" id="x_tasa_dia" data-table="compra" data-field="x_tasa_dia" value="<?= $Page->tasa_dia->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->tasa_dia->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->tasa_dia->formatPattern()) ?>"<?= $Page->tasa_dia->editAttributes() ?> aria-describedby="x_tasa_dia_help">
+<?= $Page->tasa_dia->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->tasa_dia->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

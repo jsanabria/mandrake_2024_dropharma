@@ -1,17 +1,48 @@
 <?php
 include "../connect.php";
 
-
-$pedido = intval($_REQUEST["pedido"]); 
+$pedido = intval($_REQUEST["pedido"]);
 $username_permiso_codigo_barra = isset($_REQUEST["username"]) ? trim($_REQUEST["username"]) : "";
-$username_permiso_codigo_barra_sql = mysqli_real_escape_string($link, $username_permiso_codigo_barra);
-$puede_editar_codigo_barra = false;
-$sqlPermisoCodigoBarra = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '045' AND valor1 = '$username_permiso_codigo_barra_sql' LIMIT 1;";
-$rsPermisoCodigoBarra = mysqli_query($link, $sqlPermisoCodigoBarra);
-if ($rsPermisoCodigoBarra && mysqli_fetch_array($rsPermisoCodigoBarra)) {
-  $puede_editar_codigo_barra = true;
-}
 
+$username_permiso_codigo_barra_sql = mysqli_real_escape_string($link, $username_permiso_codigo_barra);
+
+$puede_editar_codigo_barra = false;
+
+if ($username_permiso_codigo_barra != "") {
+    $sqlUsuarioNivel = "
+        SELECT userlevelid
+        FROM usuario
+        WHERE username = '$username_permiso_codigo_barra_sql'
+        LIMIT 1
+    ";
+
+    $rsUsuarioNivel = mysqli_query($link, $sqlUsuarioNivel);
+    if ($rsUsuarioNivel && $rowUsuarioNivel = mysqli_fetch_array($rsUsuarioNivel)) {
+        $nivel = intval($rowUsuarioNivel["userlevelid"]);
+        if ($nivel == -1) {
+            $puede_editar_codigo_barra = true;
+        } else {
+            $sqlPermisoArticulo = "
+                SELECT permission
+                FROM userlevelpermissions
+                WHERE userlevelid = $nivel
+                  AND tablename LIKE '%}articulo'
+                LIMIT 1
+            ";
+
+            $rsPermisoArticulo = mysqli_query($link, $sqlPermisoArticulo);
+            if ($rsPermisoArticulo && $rowPermisoArticulo = mysqli_fetch_array($rsPermisoArticulo)) {
+                $permiso = intval($rowPermisoArticulo["permission"]);
+                $puedeAgregarArticulo = (($permiso & 1) == 1);
+                $puedeModificarArticulo = (($permiso & 4) == 4);
+
+                if ($puedeAgregarArticulo || $puedeModificarArticulo) {
+                    $puede_editar_codigo_barra = true;
+                }
+            }
+        }
+    }
+}
 
 $tipo_documento = "TDCNRP";
 

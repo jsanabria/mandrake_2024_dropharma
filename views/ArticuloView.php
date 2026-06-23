@@ -298,6 +298,39 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->tipo->Visible) { // tipo ?>
+    <tr id="r_tipo"<?= $Page->tipo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_tipo"><?= $Page->tipo->caption() ?></span></td>
+        <td data-name="tipo"<?= $Page->tipo->cellAttributes() ?>>
+<span id="el_articulo_tipo" data-page="3">
+<span<?= $Page->tipo->viewAttributes() ?>>
+<?= $Page->tipo->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->unidad_medida_defecto->Visible) { // unidad_medida_defecto ?>
+    <tr id="r_unidad_medida_defecto"<?= $Page->unidad_medida_defecto->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_unidad_medida_defecto"><?= $Page->unidad_medida_defecto->caption() ?></span></td>
+        <td data-name="unidad_medida_defecto"<?= $Page->unidad_medida_defecto->cellAttributes() ?>>
+<span id="el_articulo_unidad_medida_defecto" data-page="3">
+<span<?= $Page->unidad_medida_defecto->viewAttributes() ?>>
+<?= $Page->unidad_medida_defecto->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->cantidad_por_unidad_medida->Visible) { // cantidad_por_unidad_medida ?>
+    <tr id="r_cantidad_por_unidad_medida"<?= $Page->cantidad_por_unidad_medida->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_cantidad_por_unidad_medida"><?= $Page->cantidad_por_unidad_medida->caption() ?></span></td>
+        <td data-name="cantidad_por_unidad_medida"<?= $Page->cantidad_por_unidad_medida->cellAttributes() ?>>
+<span id="el_articulo_cantidad_por_unidad_medida" data-page="3">
+<span<?= $Page->cantidad_por_unidad_medida->viewAttributes() ?>>
+<?= $Page->cantidad_por_unidad_medida->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->categoria->Visible) { // categoria ?>
     <tr id="r_categoria"<?= $Page->categoria->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_categoria"><?= $Page->categoria->caption() ?></span></td>
@@ -338,39 +371,6 @@ loadjs.ready("head", function () {
 <span id="el_articulo_sub_categoria" data-page="3">
 <span<?= $Page->sub_categoria->viewAttributes() ?>>
 <?= $Page->sub_categoria->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->tipo->Visible) { // tipo ?>
-    <tr id="r_tipo"<?= $Page->tipo->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_tipo"><?= $Page->tipo->caption() ?></span></td>
-        <td data-name="tipo"<?= $Page->tipo->cellAttributes() ?>>
-<span id="el_articulo_tipo" data-page="3">
-<span<?= $Page->tipo->viewAttributes() ?>>
-<?= $Page->tipo->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->unidad_medida_defecto->Visible) { // unidad_medida_defecto ?>
-    <tr id="r_unidad_medida_defecto"<?= $Page->unidad_medida_defecto->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_unidad_medida_defecto"><?= $Page->unidad_medida_defecto->caption() ?></span></td>
-        <td data-name="unidad_medida_defecto"<?= $Page->unidad_medida_defecto->cellAttributes() ?>>
-<span id="el_articulo_unidad_medida_defecto" data-page="3">
-<span<?= $Page->unidad_medida_defecto->viewAttributes() ?>>
-<?= $Page->unidad_medida_defecto->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->cantidad_por_unidad_medida->Visible) { // cantidad_por_unidad_medida ?>
-    <tr id="r_cantidad_por_unidad_medida"<?= $Page->cantidad_por_unidad_medida->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_articulo_cantidad_por_unidad_medida"><?= $Page->cantidad_por_unidad_medida->caption() ?></span></td>
-        <td data-name="cantidad_por_unidad_medida"<?= $Page->cantidad_por_unidad_medida->cellAttributes() ?>>
-<span id="el_articulo_cantidad_por_unidad_medida" data-page="3">
-<span<?= $Page->cantidad_por_unidad_medida->viewAttributes() ?>>
-<?= $Page->cantidad_por_unidad_medida->getViewValue() ?></span>
 </span>
 </td>
     </tr>

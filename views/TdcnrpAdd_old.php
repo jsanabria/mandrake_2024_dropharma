@@ -8,7 +8,6 @@ $TdcnrpAdd = &$Page;
 <?php
 $Page->showMessage();
 ?>
-
 <?php
 $codpro = $_REQUEST["codpro"];
 $tipo_documento = $_REQUEST["tipo_documento"];
@@ -55,6 +54,12 @@ $sql = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '045' AND valor1 
 if (ExecuteScalar($sql) != "") {
     $puedeEditarCodigoBarra = true;
 }
+
+$puedeAgregarArticulo = Security()->canAdd("articulo");
+$fabricantesNuevo = ExecuteRows("SELECT Id, nombre FROM fabricante WHERE activo = 'S' ORDER BY nombre");
+$alicuotasNuevo = ExecuteRows("SELECT codigo, nombre FROM alicuota WHERE activo = 'S' ORDER BY nombre");
+$categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS nombre FROM tabla WHERE tabla = 'CATEGORIA' ORDER BY campo_descripcion");
+
 ?>
 
 <script type="text/javascript">
@@ -567,6 +572,96 @@ if (ExecuteScalar($sql) != "") {
         // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
     });     
   }
+
+  function abrirModalNuevoArticulo() {
+      $("#nuevoArticuloMsg").addClass("d-none").html("");
+
+      $("#nuevo_codigo").val("");
+      $("#nuevo_nombre_comercial").val("");
+      $("#nuevo_principio_activo").val("");
+      $("#nuevo_presentacion").val("");
+      $("#nuevo_codigo_de_barra").val("");
+      $("#nuevo_alicuota").val("");
+      $("#nuevo_articulo_inventario").val("S");
+
+      const modalEl = document.getElementById("modalNuevoArticulo");
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+
+      setTimeout(function () {
+          inicializarSelect2NuevoArticulo();
+      }, 250);
+  }
+
+  function inicializarSelect2NuevoArticulo() {
+      if (typeof jQuery === "undefined" || !jQuery.fn.select2) {
+          return;
+      }
+
+      const $modal = $("#modalNuevoArticulo .modal-content");
+
+      if ($("#nuevo_fabricante").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_fabricante").select2("destroy");
+      }
+
+      if ($("#nuevo_categoria").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_categoria").select2("destroy");
+      }
+
+      $("#nuevo_fabricante").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+
+      $("#nuevo_categoria").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+  }
+
+  function guardarNuevoArticulo() {
+      const data = {
+          codigo: $.trim($("#nuevo_codigo").val()),
+          nombre_comercial: $.trim($("#nuevo_nombre_comercial").val()),
+          principio_activo: $.trim($("#nuevo_principio_activo").val()),
+          presentacion: $.trim($("#nuevo_presentacion").val()),
+          fabricante: $("#nuevo_fabricante").val() || "",
+          codigo_de_barra: $.trim($("#nuevo_codigo_de_barra").val()),
+          categoria: $("#nuevo_categoria").val() || "",
+          alicuota: $("#nuevo_alicuota").val() || "",
+          articulo_inventario: $("#nuevo_articulo_inventario").val() || "S",
+          username: $("#username").val()
+      };
+
+      $.ajax({
+          url: "include/crear_articulo_rapido.php",
+          type: "POST",
+          dataType: "json",
+          data: data
+      }).done(function(resp) {
+          if (resp && resp.success === true) {
+              bootstrap.Modal.getOrCreateInstance(
+                  document.getElementById("modalNuevoArticulo")
+              ).hide();
+
+              $("#articulo").val(data.nombre_comercial);
+              getCodigos2();
+          } else {
+              $("#nuevoArticuloMsg")
+                  .removeClass("d-none")
+                  .html((resp && resp.error) ? resp.error : "No se pudo crear el artículo.");
+          }
+      }).fail(function(xhr) {
+          console.log(xhr.responseText);
+          $("#nuevoArticuloMsg")
+              .removeClass("d-none")
+              .html("Error creando el artículo.");
+      });
+  }
+
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -691,26 +786,40 @@ if (ExecuteScalar($sql) != "") {
 
 <hr class="border border-primary" />
 
-  <div class="row">
-    <div class="col-sm-3">
+  <div class="row align-items-end g-2">
+    <div class="col-md-2">
       <select id="consignacion" name="consignacion" class="form-select form-select-sm">
         <option value="">Consignaci&oacute;n</option>
         <option value="N"<?= ($consignacion=="N" ? ' selected="selected"' : '') ?>>Consignaci&oacute;n (NO)</option>
         <option value="S"<?= ($consignacion=="S" ? ' selected="selected"' : '') ?>>Consignaci&oacute;n (SI)</option>
       </select>
     </div>
-    <div class="col-sm-3">
-        Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
+
+    <div class="col-md-1 text-center">
+      <label class="form-label d-block mb-1">Rep. Art.</label>
+      <input type="checkbox" id="hubb" name="hubb" value="SI" checked>
     </div>
-    <div class="col-sm-3">
-      Fabricante:
-    <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-    <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+
+    <div class="col-md-3">
+      <label class="form-label mb-1">Fabricante:</label>
+      <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
+      <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
       <ul id="lista" class="list-group"></ul>
     </div>
-    <div class="col-sm-3">
-      Art&iacute;culo:
+
+    <div class="col-md-4">
+      <label class="form-label mb-1">Art&iacute;culo:</label>
       <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
+    </div>
+
+    <div class="col-md-2 text-end">
+      <button type="button"
+              id="btnNuevoArticulo"
+              class="btn btn-success btn-sm w-100"
+              <?= (!$puedeAgregarArticulo ? "disabled" : "") ?>
+              onclick="abrirModalNuevoArticulo();">
+        <i class="fa-solid fa-plus"></i> Nuevo Art&iacute;culo
+      </button>
     </div>
   </div>
 
@@ -862,17 +971,20 @@ if (ExecuteScalar($sql) != "") {
   }
 
   function getCodigos3(i) { 
-      if(i != 0) {
-        $("#laboratorio").prop("disabled", false);
-        $("#articulo").prop("disabled", false);
-        $("#consignacion").prop("disabled", true);
-      } 
-      else {
-        if($("#consignacion").val() != "") {
-          $("#laboratorio").prop("disabled", false);
-          $("#articulo").prop("disabled", false);
-          $("#consignacion").prop("disabled", true);
-        } 
+      const laboratorio = document.getElementById("laboratorio");
+      const articulo = document.getElementById("articulo");
+      const consignacion = document.getElementById("consignacion");
+
+      if (i != 0) {
+          laboratorio.disabled = false;
+          articulo.disabled = false;
+          consignacion.disabled = true;
+      } else {
+          if (consignacion.value != "") {
+              laboratorio.disabled = false;
+              articulo.disabled = false;
+              consignacion.disabled = true;
+          }
       }
 
       let inputCP = i
@@ -1109,7 +1221,22 @@ if (ExecuteScalar($sql) != "") {
   }
 
 
-  getCodigos3( <?= $pedido ?> )
+  // getCodigos3( <?= $pedido ?> )
+  function iniciarTdcnrpAdd() {
+      if (typeof window.jQuery === "undefined") {
+          setTimeout(iniciarTdcnrpAdd, 100);
+          return;
+      }
+
+      getCodigos3(<?= intval($pedido) ?>);
+  }
+
+  if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", iniciarTdcnrpAdd);
+  } else {
+      iniciarTdcnrpAdd();
+  }
+
 </script>
 
 <style>
@@ -1122,6 +1249,62 @@ if (ExecuteScalar($sql) != "") {
 
 #modalCodigoBarraArticulo label{
     margin-top:6px;
+}
+
+#modalNuevoArticulo .form-label{
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .modal-header{
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#modalNuevoArticulo .modal-body{
+    padding: 1.25rem;
+}
+
+#modalNuevoArticulo .select2-container {
+    width: 100% !important;
+}
+
+#modalNuevoArticulo .select2-dropdown {
+    z-index: 2000 !important;
+}
+
+.select2-container--open {
+    z-index: 2000 !important;
+}
+
+#modalNuevoArticulo .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+}
+
+#modalNuevoArticulo .select2-selection__rendered {
+    line-height: 36px !important;
+}
+
+#modalNuevoArticulo .select2-selection__arrow {
+    height: 36px !important;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo label {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo input,
+#modalNuevoArticulo .nuevo-articulo-campo select {
+    width: 100%;
 }
 </style>
 
@@ -1216,4 +1399,162 @@ if (ExecuteScalar($sql) != "") {
   </div>
 </div>
 
+<div class="modal fade" id="modalNuevoArticulo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-box-open"></i>
+                    Nuevo Artículo
+                </h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row g-3">
+
+                    <!-- FILA 1 -->
+
+                    <div class="col-md-4">
+                        <div class="nuevo-articulo-campo">
+                            <label for="nuevo_codigo" class="form-label fw-bold">
+                                Código <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="nuevo_codigo"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>                    
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Comercial <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_nombre_comercial"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Principio Activo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_principio_activo"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <!-- FILA 2 -->
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Presentación
+                        </label>
+                        <input type="text"
+                               id="nuevo_presentacion"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Fabricante <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_fabricante" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+
+                            <?php foreach ($fabricantesNuevo as $f) { ?>
+                                <option value="<?= $f["Id"] ?>">
+                                    <?= HtmlEncode($f["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Código de Barra
+                        </label>
+                        <input type="text"
+                               id="nuevo_codigo_de_barra"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <!-- FILA 3 -->
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Categoría <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_categoria" class="form-select form-select-sm">
+                          <option value="">Seleccione...</option>
+
+                          <?php foreach ($categoriasNuevo as $c) { ?>
+                              <option value="<?= $c["id"] ?>">
+                                  <?= HtmlEncode($c["nombre"]) ?>
+                              </option>
+                          <?php } ?>
+                      </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Alícuota <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_alicuota"
+                                class="form-select form-select-sm">
+
+                            <option value="">Seleccione...</option>
+
+                            <?php foreach ($alicuotasNuevo as $a) { ?>
+                                <option value="<?= $a["codigo"] ?>">
+                                    <?= HtmlEncode($a["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Inventario <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_articulo_inventario"
+                                class="form-select form-select-sm">
+                            <option value="S" selected>Sí</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="nuevoArticuloMsg"
+                     class="alert alert-danger mt-3 d-none">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="guardarNuevoArticulo();">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Artículo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <?= GetDebugMessage() ?>

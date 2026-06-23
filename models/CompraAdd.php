@@ -159,6 +159,8 @@ class CompraAdd extends Compra
         $this->tipo_municipal->Visible = false;
         $this->anulado->Visible = false;
         $this->pagado->setVisibility();
+        $this->moneda->setVisibility();
+        $this->tasa_dia->setVisibility();
     }
 
     // Constructor
@@ -837,6 +839,26 @@ class CompraAdd extends Compra
             }
         }
 
+        // Check field name 'moneda' first before field var 'x_moneda'
+        $val = $CurrentForm->hasValue("moneda") ? $CurrentForm->getValue("moneda") : $CurrentForm->getValue("x_moneda");
+        if (!$this->moneda->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->moneda->Visible = false; // Disable update for API request
+            } else {
+                $this->moneda->setFormValue($val);
+            }
+        }
+
+        // Check field name 'tasa_dia' first before field var 'x_tasa_dia'
+        $val = $CurrentForm->hasValue("tasa_dia") ? $CurrentForm->getValue("tasa_dia") : $CurrentForm->getValue("x_tasa_dia");
+        if (!$this->tasa_dia->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tasa_dia->Visible = false; // Disable update for API request
+            } else {
+                $this->tasa_dia->setFormValue($val, true, $validate);
+            }
+        }
+
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
     }
@@ -858,6 +880,8 @@ class CompraAdd extends Compra
         $this->monto_gravado->CurrentValue = $this->monto_gravado->FormValue;
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
         $this->pagado->CurrentValue = $this->pagado->FormValue;
+        $this->moneda->CurrentValue = $this->moneda->FormValue;
+        $this->tasa_dia->CurrentValue = $this->tasa_dia->FormValue;
     }
 
     /**
@@ -928,6 +952,8 @@ class CompraAdd extends Compra
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
         $this->pagado->setDbValue($row['pagado']);
+        $this->moneda->setDbValue($row['moneda']);
+        $this->tasa_dia->setDbValue($row['tasa_dia']);
     }
 
     // Return a row with default values
@@ -964,6 +990,8 @@ class CompraAdd extends Compra
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
         $row['pagado'] = $this->pagado->DefaultValue;
+        $row['moneda'] = $this->moneda->DefaultValue;
+        $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
         return $row;
     }
 
@@ -1087,6 +1115,12 @@ class CompraAdd extends Compra
 
         // pagado
         $this->pagado->RowCssClass = "row";
+
+        // moneda
+        $this->moneda->RowCssClass = "row";
+
+        // tasa_dia
+        $this->tasa_dia->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1273,6 +1307,13 @@ class CompraAdd extends Compra
                 $this->pagado->ViewValue = null;
             }
 
+            // moneda
+            $this->moneda->ViewValue = $this->moneda->CurrentValue;
+
+            // tasa_dia
+            $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
+            $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
+
             // proveedor
             $this->proveedor->HrefValue = "";
 
@@ -1308,6 +1349,12 @@ class CompraAdd extends Compra
 
             // pagado
             $this->pagado->HrefValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+
+            // tasa_dia
+            $this->tasa_dia->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // proveedor
             $curVal = trim(strval($this->proveedor->CurrentValue));
@@ -1415,6 +1462,22 @@ class CompraAdd extends Compra
             $this->pagado->EditValue = $this->pagado->options(false);
             $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
 
+            // moneda
+            $this->moneda->setupEditAttributes();
+            if (!$this->moneda->Raw) {
+                $this->moneda->CurrentValue = HtmlDecode($this->moneda->CurrentValue);
+            }
+            $this->moneda->EditValue = HtmlEncode($this->moneda->CurrentValue);
+            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
+            // tasa_dia
+            $this->tasa_dia->setupEditAttributes();
+            $this->tasa_dia->EditValue = $this->tasa_dia->CurrentValue;
+            $this->tasa_dia->PlaceHolder = RemoveHtml($this->tasa_dia->caption());
+            if (strval($this->tasa_dia->EditValue) != "" && is_numeric($this->tasa_dia->EditValue)) {
+                $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, null);
+            }
+
             // Add refer script
 
             // proveedor
@@ -1452,6 +1515,12 @@ class CompraAdd extends Compra
 
             // pagado
             $this->pagado->HrefValue = "";
+
+            // moneda
+            $this->moneda->HrefValue = "";
+
+            // tasa_dia
+            $this->tasa_dia->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1544,6 +1613,19 @@ class CompraAdd extends Compra
                 if ($this->pagado->FormValue == "") {
                     $this->pagado->addErrorMessage(str_replace("%s", $this->pagado->caption(), $this->pagado->RequiredErrorMessage));
                 }
+            }
+            if ($this->moneda->Visible && $this->moneda->Required) {
+                if (!$this->moneda->IsDetailKey && EmptyValue($this->moneda->FormValue)) {
+                    $this->moneda->addErrorMessage(str_replace("%s", $this->moneda->caption(), $this->moneda->RequiredErrorMessage));
+                }
+            }
+            if ($this->tasa_dia->Visible && $this->tasa_dia->Required) {
+                if (!$this->tasa_dia->IsDetailKey && EmptyValue($this->tasa_dia->FormValue)) {
+                    $this->tasa_dia->addErrorMessage(str_replace("%s", $this->tasa_dia->caption(), $this->tasa_dia->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->tasa_dia->FormValue)) {
+                $this->tasa_dia->addErrorMessage($this->tasa_dia->getErrorMessage(false));
             }
 
         // Return validate result
@@ -1651,6 +1733,12 @@ class CompraAdd extends Compra
 
         // pagado
         $this->pagado->setDbValueDef($rsnew, $this->pagado->CurrentValue, strval($this->pagado->CurrentValue) == "");
+
+        // moneda
+        $this->moneda->setDbValueDef($rsnew, $this->moneda->CurrentValue, false);
+
+        // tasa_dia
+        $this->tasa_dia->setDbValueDef($rsnew, $this->tasa_dia->CurrentValue, false);
         return $rsnew;
     }
 
@@ -1695,6 +1783,12 @@ class CompraAdd extends Compra
         }
         if (isset($row['pagado'])) { // pagado
             $this->pagado->setFormValue($row['pagado']);
+        }
+        if (isset($row['moneda'])) { // moneda
+            $this->moneda->setFormValue($row['moneda']);
+        }
+        if (isset($row['tasa_dia'])) { // tasa_dia
+            $this->tasa_dia->setFormValue($row['tasa_dia']);
         }
     }
 

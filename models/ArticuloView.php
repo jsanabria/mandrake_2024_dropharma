@@ -156,10 +156,6 @@ class ArticuloView extends Articulo
         $this->fabricante->setVisibility();
         $this->codigo_ims->setVisibility();
         $this->codigo_de_barra->setVisibility();
-        $this->categoria->setVisibility();
-        $this->lista_pedido->setVisibility();
-        $this->categoria_madre->setVisibility();
-        $this->sub_categoria->setVisibility();
         $this->tipo->setVisibility();
         $this->unidad_medida_defecto->setVisibility();
         $this->cantidad_por_unidad_medida->setVisibility();
@@ -171,6 +167,10 @@ class ArticuloView extends Articulo
         $this->cantidad_en_transito->setVisibility();
         $this->ultimo_costo->setVisibility();
         $this->descuento->setVisibility();
+        $this->categoria->setVisibility();
+        $this->lista_pedido->setVisibility();
+        $this->categoria_madre->setVisibility();
+        $this->sub_categoria->setVisibility();
         $this->precio->setVisibility();
         $this->alicuota->setVisibility();
         $this->articulo_inventario->setVisibility();
@@ -578,11 +578,11 @@ class ArticuloView extends Articulo
 
         // Set up lookup cache
         $this->setupLookupOptions($this->fabricante);
-        $this->setupLookupOptions($this->categoria);
-        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->unidad_medida_defecto);
         $this->setupLookupOptions($this->cantidad_por_unidad_medida);
+        $this->setupLookupOptions($this->categoria);
+        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->indexado);
@@ -1015,10 +1015,6 @@ class ArticuloView extends Articulo
         $this->fabricante->setDbValue($row['fabricante']);
         $this->codigo_ims->setDbValue($row['codigo_ims']);
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
-        $this->categoria->setDbValue($row['categoria']);
-        $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->categoria_madre->setDbValue($row['categoria_madre']);
-        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
@@ -1030,6 +1026,10 @@ class ArticuloView extends Articulo
         $this->cantidad_en_transito->setDbValue($row['cantidad_en_transito']);
         $this->ultimo_costo->setDbValue($row['ultimo_costo']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->categoria->setDbValue($row['categoria']);
+        $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
@@ -1058,10 +1058,6 @@ class ArticuloView extends Articulo
         $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['codigo_ims'] = $this->codigo_ims->DefaultValue;
         $row['codigo_de_barra'] = $this->codigo_de_barra->DefaultValue;
-        $row['categoria'] = $this->categoria->DefaultValue;
-        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
-        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
-        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['tipo'] = $this->tipo->DefaultValue;
         $row['unidad_medida_defecto'] = $this->unidad_medida_defecto->DefaultValue;
         $row['cantidad_por_unidad_medida'] = $this->cantidad_por_unidad_medida->DefaultValue;
@@ -1073,6 +1069,10 @@ class ArticuloView extends Articulo
         $row['cantidad_en_transito'] = $this->cantidad_en_transito->DefaultValue;
         $row['ultimo_costo'] = $this->ultimo_costo->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['categoria'] = $this->categoria->DefaultValue;
+        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
+        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
+        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['precio'] = $this->precio->DefaultValue;
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['articulo_inventario'] = $this->articulo_inventario->DefaultValue;
@@ -1125,14 +1125,6 @@ class ArticuloView extends Articulo
 
         // codigo_de_barra
 
-        // categoria
-
-        // lista_pedido
-
-        // categoria_madre
-
-        // sub_categoria
-
         // tipo
 
         // unidad_medida_defecto
@@ -1154,6 +1146,14 @@ class ArticuloView extends Articulo
         // ultimo_costo
 
         // descuento
+
+        // categoria
+
+        // lista_pedido
+
+        // categoria_madre
+
+        // sub_categoria
 
         // precio
 
@@ -1234,60 +1234,6 @@ class ArticuloView extends Articulo
 
             // codigo_de_barra
             $this->codigo_de_barra->ViewValue = $this->codigo_de_barra->CurrentValue;
-
-            // categoria
-            $curVal = strval($this->categoria->CurrentValue);
-            if ($curVal != "") {
-                $this->categoria->ViewValue = $this->categoria->lookupCacheOption($curVal);
-                if ($this->categoria->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->categoria->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->categoria->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->categoria->Lookup->renderViewRow($rswrk[0]);
-                        $this->categoria->ViewValue = $this->categoria->displayValue($arwrk);
-                    } else {
-                        $this->categoria->ViewValue = $this->categoria->CurrentValue;
-                    }
-                }
-            } else {
-                $this->categoria->ViewValue = null;
-            }
-
-            // lista_pedido
-            $curVal = strval($this->lista_pedido->CurrentValue);
-            if ($curVal != "") {
-                $this->lista_pedido->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
-                if ($this->lista_pedido->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->lista_pedido->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->lista_pedido->Lookup->renderViewRow($rswrk[0]);
-                        $this->lista_pedido->ViewValue = $this->lista_pedido->displayValue($arwrk);
-                    } else {
-                        $this->lista_pedido->ViewValue = $this->lista_pedido->CurrentValue;
-                    }
-                }
-            } else {
-                $this->lista_pedido->ViewValue = null;
-            }
-
-            // categoria_madre
-            $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
-
-            // sub_categoria
-            $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
             // tipo
             if (strval($this->tipo->CurrentValue) != "") {
@@ -1374,6 +1320,60 @@ class ArticuloView extends Articulo
             // descuento
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
+
+            // categoria
+            $curVal = strval($this->categoria->CurrentValue);
+            if ($curVal != "") {
+                $this->categoria->ViewValue = $this->categoria->lookupCacheOption($curVal);
+                if ($this->categoria->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->categoria->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->categoria->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->categoria->Lookup->renderViewRow($rswrk[0]);
+                        $this->categoria->ViewValue = $this->categoria->displayValue($arwrk);
+                    } else {
+                        $this->categoria->ViewValue = $this->categoria->CurrentValue;
+                    }
+                }
+            } else {
+                $this->categoria->ViewValue = null;
+            }
+
+            // lista_pedido
+            $curVal = strval($this->lista_pedido->CurrentValue);
+            if ($curVal != "") {
+                $this->lista_pedido->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
+                if ($this->lista_pedido->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->lista_pedido->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->lista_pedido->Lookup->renderViewRow($rswrk[0]);
+                        $this->lista_pedido->ViewValue = $this->lista_pedido->displayValue($arwrk);
+                    } else {
+                        $this->lista_pedido->ViewValue = $this->lista_pedido->CurrentValue;
+                    }
+                }
+            } else {
+                $this->lista_pedido->ViewValue = null;
+            }
+
+            // categoria_madre
+            $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
+
+            // sub_categoria
+            $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
             // precio
             $this->precio->ViewValue = $this->precio->CurrentValue;
@@ -1494,22 +1494,6 @@ class ArticuloView extends Articulo
             $this->codigo_de_barra->HrefValue = "";
             $this->codigo_de_barra->TooltipValue = "";
 
-            // categoria
-            $this->categoria->HrefValue = "";
-            $this->categoria->TooltipValue = "";
-
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-            $this->lista_pedido->TooltipValue = "";
-
-            // categoria_madre
-            $this->categoria_madre->HrefValue = "";
-            $this->categoria_madre->TooltipValue = "";
-
-            // sub_categoria
-            $this->sub_categoria->HrefValue = "";
-            $this->sub_categoria->TooltipValue = "";
-
             // tipo
             $this->tipo->HrefValue = "";
             $this->tipo->TooltipValue = "";
@@ -1553,6 +1537,22 @@ class ArticuloView extends Articulo
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // categoria
+            $this->categoria->HrefValue = "";
+            $this->categoria->TooltipValue = "";
+
+            // lista_pedido
+            $this->lista_pedido->HrefValue = "";
+            $this->lista_pedido->TooltipValue = "";
+
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+            $this->categoria_madre->TooltipValue = "";
+
+            // sub_categoria
+            $this->sub_categoria->HrefValue = "";
+            $this->sub_categoria->TooltipValue = "";
 
             // precio
             $this->precio->HrefValue = "";
@@ -1693,6 +1693,13 @@ class ArticuloView extends Articulo
                     break;
                 case "x_fabricante":
                     break;
+                case "x_tipo":
+                    break;
+                case "x_unidad_medida_defecto":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_cantidad_por_unidad_medida":
+                    break;
                 case "x_categoria":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -1702,13 +1709,6 @@ class ArticuloView extends Articulo
                 case "x_categoria_madre":
                     break;
                 case "x_sub_categoria":
-                    break;
-                case "x_tipo":
-                    break;
-                case "x_unidad_medida_defecto":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_cantidad_por_unidad_medida":
                     break;
                 case "x_alicuota":
                     $lookupFilter = $fld->getSelectFilter(); // PHP

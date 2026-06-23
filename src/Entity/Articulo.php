@@ -58,18 +58,6 @@ class Articulo extends AbstractEntity
     private ?string $codigoDeBarra;
 
     #[Column(type: "string", nullable: true)]
-    private ?string $categoria;
-
-    #[Column(name: "lista_pedido", type: "string", nullable: true)]
-    private ?string $listaPedido;
-
-    #[Column(name: "categoria_madre", type: "string", nullable: true)]
-    private ?string $categoriaMadre;
-
-    #[Column(name: "sub_categoria", type: "string", nullable: true)]
-    private ?string $subCategoria;
-
-    #[Column(type: "string", nullable: true)]
     private ?string $tipo;
 
     #[Column(name: "unidad_medida_defecto", type: "string", nullable: true)]
@@ -101,6 +89,18 @@ class Articulo extends AbstractEntity
 
     #[Column(type: "decimal")]
     private string $descuento;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $categoria;
+
+    #[Column(name: "lista_pedido", type: "string", nullable: true)]
+    private ?string $listaPedido;
+
+    #[Column(name: "categoria_madre", type: "string", nullable: true)]
+    private ?string $categoriaMadre;
+
+    #[Column(name: "sub_categoria", type: "string", nullable: true)]
+    private ?string $subCategoria;
 
     #[Column(type: "decimal")]
     private string $precio;
@@ -256,50 +256,6 @@ class Articulo extends AbstractEntity
         return $this;
     }
 
-    public function getCategoria(): ?string
-    {
-        return HtmlDecode($this->categoria);
-    }
-
-    public function setCategoria(?string $value): static
-    {
-        $this->categoria = RemoveXss($value);
-        return $this;
-    }
-
-    public function getListaPedido(): ?string
-    {
-        return HtmlDecode($this->listaPedido);
-    }
-
-    public function setListaPedido(?string $value): static
-    {
-        $this->listaPedido = RemoveXss($value);
-        return $this;
-    }
-
-    public function getCategoriaMadre(): ?string
-    {
-        return HtmlDecode($this->categoriaMadre);
-    }
-
-    public function setCategoriaMadre(?string $value): static
-    {
-        $this->categoriaMadre = RemoveXss($value);
-        return $this;
-    }
-
-    public function getSubCategoria(): ?string
-    {
-        return HtmlDecode($this->subCategoria);
-    }
-
-    public function setSubCategoria(?string $value): static
-    {
-        $this->subCategoria = RemoveXss($value);
-        return $this;
-    }
-
     public function getTipo(): ?string
     {
         return HtmlDecode($this->tipo);
@@ -418,6 +374,50 @@ class Articulo extends AbstractEntity
     public function setDescuento(string $value): static
     {
         $this->descuento = $value;
+        return $this;
+    }
+
+    public function getCategoria(): ?string
+    {
+        return HtmlDecode($this->categoria);
+    }
+
+    public function setCategoria(?string $value): static
+    {
+        $this->categoria = RemoveXss($value);
+        return $this;
+    }
+
+    public function getListaPedido(): ?string
+    {
+        return HtmlDecode($this->listaPedido);
+    }
+
+    public function setListaPedido(?string $value): static
+    {
+        $this->listaPedido = RemoveXss($value);
+        return $this;
+    }
+
+    public function getCategoriaMadre(): ?string
+    {
+        return HtmlDecode($this->categoriaMadre);
+    }
+
+    public function setCategoriaMadre(?string $value): static
+    {
+        $this->categoriaMadre = RemoveXss($value);
+        return $this;
+    }
+
+    public function getSubCategoria(): ?string
+    {
+        return HtmlDecode($this->subCategoria);
+    }
+
+    public function setSubCategoria(?string $value): static
+    {
+        $this->subCategoria = RemoveXss($value);
         return $this;
     }
 

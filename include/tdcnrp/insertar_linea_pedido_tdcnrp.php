@@ -8,11 +8,11 @@ include "../rutinas.php";
 
 $pedido = intval($_REQUEST["pedido"]); 
 $proveedor = $_REQUEST["proveedor"]; 
-$costoFull = $_REQUEST["costoFull"]; 
-$descuento = $_REQUEST["descuento"]; 
-$costo = $_REQUEST["costo"]; 
+$costoFull = floatval($_REQUEST["costoFull"]); 
+$descuento = floatval($_REQUEST["descuento"]); 
+$costo = floatval($_REQUEST["costo"]); 
 $moneda = $_REQUEST["moneda"]; 
-$total = $_REQUEST["total"]; 
+$total = floatval($_REQUEST["total"]); 
 $cantidad = intval($_REQUEST["cantidad"]); 
 $articulo = intval($_REQUEST["articulo"]); 
 $tasa_usd = floatval($_REQUEST["tasa_usd"]); 

@@ -63,10 +63,6 @@ class Articulo extends DbTable
     public $fabricante;
     public $codigo_ims;
     public $codigo_de_barra;
-    public $categoria;
-    public $lista_pedido;
-    public $categoria_madre;
-    public $sub_categoria;
     public $tipo;
     public $unidad_medida_defecto;
     public $cantidad_por_unidad_medida;
@@ -78,6 +74,10 @@ class Articulo extends DbTable
     public $cantidad_en_transito;
     public $ultimo_costo;
     public $descuento;
+    public $categoria;
+    public $lista_pedido;
+    public $categoria_madre;
+    public $sub_categoria;
     public $precio;
     public $alicuota;
     public $articulo_inventario;
@@ -228,6 +228,7 @@ class Articulo extends DbTable
             'TEXT' // Edit Tag
         );
         $this->nombre_comercial->InputTextType = "text";
+        $this->nombre_comercial->Required = true; // Required field
         $this->nombre_comercial->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['nombre_comercial'] = &$this->nombre_comercial;
 
@@ -273,7 +274,6 @@ class Articulo extends DbTable
             'TEXT' // Edit Tag
         );
         $this->presentacion->InputTextType = "text";
-        $this->presentacion->Required = true; // Required field
         $this->presentacion->Lookup = new Lookup($this->presentacion, 'articulo', true, 'presentacion', ["presentacion","","",""], '', '', [], [], [], [], [], [], false, '`presentacion`', '', "`presentacion`");
         $this->presentacion->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['presentacion'] = &$this->presentacion;
@@ -350,107 +350,6 @@ class Articulo extends DbTable
         $this->codigo_de_barra->InputTextType = "text";
         $this->codigo_de_barra->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['codigo_de_barra'] = &$this->codigo_de_barra;
-
-        // categoria
-        $this->categoria = new DbField(
-            $this, // Table
-            'x_categoria', // Variable name
-            'categoria', // Name
-            '`categoria`', // Expression
-            '`categoria`', // Basic search expression
-            200, // Type
-            6, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`categoria`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'SELECT' // Edit Tag
-        );
-        $this->categoria->addMethod("getSelectFilter", fn() => "`tabla` = 'CATEGORIA'");
-        $this->categoria->InputTextType = "text";
-        $this->categoria->setSelectMultiple(false); // Select one
-        $this->categoria->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->categoria->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->categoria->Lookup = new Lookup($this->categoria, 'tabla', false, 'campo_codigo', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion`', '', "`campo_descripcion`");
-        $this->categoria->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
-        $this->Fields['categoria'] = &$this->categoria;
-
-        // lista_pedido
-        $this->lista_pedido = new DbField(
-            $this, // Table
-            'x_lista_pedido', // Variable name
-            'lista_pedido', // Name
-            '`lista_pedido`', // Expression
-            '`lista_pedido`', // Basic search expression
-            200, // Type
-            6, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`lista_pedido`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'SELECT' // Edit Tag
-        );
-        $this->lista_pedido->addMethod("getSelectFilter", fn() => "`tabla` = 'LISTA_PEDIDO'");
-        $this->lista_pedido->InputTextType = "text";
-        $this->lista_pedido->Required = true; // Required field
-        $this->lista_pedido->setSelectMultiple(false); // Select one
-        $this->lista_pedido->UsePleaseSelect = true; // Use PleaseSelect by default
-        $this->lista_pedido->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
-        $this->lista_pedido->Lookup = new Lookup($this->lista_pedido, 'tabla', false, 'campo_codigo', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion` ASC', '', "`campo_descripcion`");
-        $this->lista_pedido->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
-        $this->Fields['lista_pedido'] = &$this->lista_pedido;
-
-        // categoria_madre
-        $this->categoria_madre = new DbField(
-            $this, // Table
-            'x_categoria_madre', // Variable name
-            'categoria_madre', // Name
-            '`categoria_madre`', // Expression
-            '`categoria_madre`', // Basic search expression
-            200, // Type
-            50, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`categoria_madre`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->categoria_madre->InputTextType = "text";
-        $this->categoria_madre->Lookup = new Lookup($this->categoria_madre, 'articulo', true, 'categoria_madre', ["categoria_madre","","",""], '', '', [], [], [], [], [], [], false, '`categoria_madre` ASC', '', "`categoria_madre`");
-        $this->categoria_madre->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['categoria_madre'] = &$this->categoria_madre;
-
-        // sub_categoria
-        $this->sub_categoria = new DbField(
-            $this, // Table
-            'x_sub_categoria', // Variable name
-            'sub_categoria', // Name
-            '`sub_categoria`', // Expression
-            '`sub_categoria`', // Basic search expression
-            200, // Type
-            50, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`sub_categoria`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->sub_categoria->InputTextType = "text";
-        $this->sub_categoria->Lookup = new Lookup($this->sub_categoria, 'articulo', true, 'sub_categoria', ["sub_categoria","","",""], '', '', [], [], [], [], [], [], false, '`sub_categoria` ASC', '', "`sub_categoria`");
-        $this->sub_categoria->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['sub_categoria'] = &$this->sub_categoria;
 
         // tipo
         $this->tipo = new DbField(
@@ -743,6 +642,107 @@ class Articulo extends DbTable
         $this->descuento->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
         $this->descuento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
         $this->Fields['descuento'] = &$this->descuento;
+
+        // categoria
+        $this->categoria = new DbField(
+            $this, // Table
+            'x_categoria', // Variable name
+            'categoria', // Name
+            '`categoria`', // Expression
+            '`categoria`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`categoria`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->categoria->addMethod("getSelectFilter", fn() => "`tabla` = 'CATEGORIA'");
+        $this->categoria->InputTextType = "text";
+        $this->categoria->setSelectMultiple(false); // Select one
+        $this->categoria->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->categoria->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->categoria->Lookup = new Lookup($this->categoria, 'tabla', false, 'campo_codigo', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion`', '', "`campo_descripcion`");
+        $this->categoria->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['categoria'] = &$this->categoria;
+
+        // lista_pedido
+        $this->lista_pedido = new DbField(
+            $this, // Table
+            'x_lista_pedido', // Variable name
+            'lista_pedido', // Name
+            '`lista_pedido`', // Expression
+            '`lista_pedido`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`lista_pedido`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->lista_pedido->addMethod("getSelectFilter", fn() => "`tabla` = 'LISTA_PEDIDO'");
+        $this->lista_pedido->InputTextType = "text";
+        $this->lista_pedido->Required = true; // Required field
+        $this->lista_pedido->setSelectMultiple(false); // Select one
+        $this->lista_pedido->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->lista_pedido->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->lista_pedido->Lookup = new Lookup($this->lista_pedido, 'tabla', false, 'campo_codigo', ["campo_descripcion","","",""], '', '', [], [], [], [], [], [], false, '`campo_descripcion` ASC', '', "`campo_descripcion`");
+        $this->lista_pedido->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['lista_pedido'] = &$this->lista_pedido;
+
+        // categoria_madre
+        $this->categoria_madre = new DbField(
+            $this, // Table
+            'x_categoria_madre', // Variable name
+            'categoria_madre', // Name
+            '`categoria_madre`', // Expression
+            '`categoria_madre`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`categoria_madre`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->categoria_madre->InputTextType = "text";
+        $this->categoria_madre->Lookup = new Lookup($this->categoria_madre, 'articulo', true, 'categoria_madre', ["categoria_madre","","",""], '', '', [], [], [], [], [], [], false, '`categoria_madre` ASC', '', "`categoria_madre`");
+        $this->categoria_madre->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['categoria_madre'] = &$this->categoria_madre;
+
+        // sub_categoria
+        $this->sub_categoria = new DbField(
+            $this, // Table
+            'x_sub_categoria', // Variable name
+            'sub_categoria', // Name
+            '`sub_categoria`', // Expression
+            '`sub_categoria`', // Basic search expression
+            200, // Type
+            50, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`sub_categoria`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->sub_categoria->InputTextType = "text";
+        $this->sub_categoria->Lookup = new Lookup($this->sub_categoria, 'articulo', true, 'sub_categoria', ["sub_categoria","","",""], '', '', [], [], [], [], [], [], false, '`sub_categoria` ASC', '', "`sub_categoria`");
+        $this->sub_categoria->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
+        $this->Fields['sub_categoria'] = &$this->sub_categoria;
 
         // precio
         $this->precio = new DbField(
@@ -1690,10 +1690,6 @@ class Articulo extends DbTable
         $this->fabricante->DbValue = $row['fabricante'];
         $this->codigo_ims->DbValue = $row['codigo_ims'];
         $this->codigo_de_barra->DbValue = $row['codigo_de_barra'];
-        $this->categoria->DbValue = $row['categoria'];
-        $this->lista_pedido->DbValue = $row['lista_pedido'];
-        $this->categoria_madre->DbValue = $row['categoria_madre'];
-        $this->sub_categoria->DbValue = $row['sub_categoria'];
         $this->tipo->DbValue = $row['tipo'];
         $this->unidad_medida_defecto->DbValue = $row['unidad_medida_defecto'];
         $this->cantidad_por_unidad_medida->DbValue = $row['cantidad_por_unidad_medida'];
@@ -1705,6 +1701,10 @@ class Articulo extends DbTable
         $this->cantidad_en_transito->DbValue = $row['cantidad_en_transito'];
         $this->ultimo_costo->DbValue = $row['ultimo_costo'];
         $this->descuento->DbValue = $row['descuento'];
+        $this->categoria->DbValue = $row['categoria'];
+        $this->lista_pedido->DbValue = $row['lista_pedido'];
+        $this->categoria_madre->DbValue = $row['categoria_madre'];
+        $this->sub_categoria->DbValue = $row['sub_categoria'];
         $this->precio->DbValue = $row['precio'];
         $this->alicuota->DbValue = $row['alicuota'];
         $this->articulo_inventario->DbValue = $row['articulo_inventario'];
@@ -2093,10 +2093,6 @@ class Articulo extends DbTable
         $this->fabricante->setDbValue($row['fabricante']);
         $this->codigo_ims->setDbValue($row['codigo_ims']);
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
-        $this->categoria->setDbValue($row['categoria']);
-        $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->categoria_madre->setDbValue($row['categoria_madre']);
-        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
@@ -2108,6 +2104,10 @@ class Articulo extends DbTable
         $this->cantidad_en_transito->setDbValue($row['cantidad_en_transito']);
         $this->ultimo_costo->setDbValue($row['ultimo_costo']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->categoria->setDbValue($row['categoria']);
+        $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
@@ -2169,14 +2169,6 @@ class Articulo extends DbTable
 
         // codigo_de_barra
 
-        // categoria
-
-        // lista_pedido
-
-        // categoria_madre
-
-        // sub_categoria
-
         // tipo
 
         // unidad_medida_defecto
@@ -2198,6 +2190,14 @@ class Articulo extends DbTable
         // ultimo_costo
 
         // descuento
+
+        // categoria
+
+        // lista_pedido
+
+        // categoria_madre
+
+        // sub_categoria
 
         // precio
 
@@ -2280,60 +2280,6 @@ class Articulo extends DbTable
 
         // codigo_de_barra
         $this->codigo_de_barra->ViewValue = $this->codigo_de_barra->CurrentValue;
-
-        // categoria
-        $curVal = strval($this->categoria->CurrentValue);
-        if ($curVal != "") {
-            $this->categoria->ViewValue = $this->categoria->lookupCacheOption($curVal);
-            if ($this->categoria->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                $lookupFilter = $this->categoria->getSelectFilter($this); // PHP
-                $sqlWrk = $this->categoria->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->categoria->Lookup->renderViewRow($rswrk[0]);
-                    $this->categoria->ViewValue = $this->categoria->displayValue($arwrk);
-                } else {
-                    $this->categoria->ViewValue = $this->categoria->CurrentValue;
-                }
-            }
-        } else {
-            $this->categoria->ViewValue = null;
-        }
-
-        // lista_pedido
-        $curVal = strval($this->lista_pedido->CurrentValue);
-        if ($curVal != "") {
-            $this->lista_pedido->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
-            if ($this->lista_pedido->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
-                $sqlWrk = $this->lista_pedido->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->lista_pedido->Lookup->renderViewRow($rswrk[0]);
-                    $this->lista_pedido->ViewValue = $this->lista_pedido->displayValue($arwrk);
-                } else {
-                    $this->lista_pedido->ViewValue = $this->lista_pedido->CurrentValue;
-                }
-            }
-        } else {
-            $this->lista_pedido->ViewValue = null;
-        }
-
-        // categoria_madre
-        $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
-
-        // sub_categoria
-        $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
         // tipo
         if (strval($this->tipo->CurrentValue) != "") {
@@ -2420,6 +2366,60 @@ class Articulo extends DbTable
         // descuento
         $this->descuento->ViewValue = $this->descuento->CurrentValue;
         $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
+
+        // categoria
+        $curVal = strval($this->categoria->CurrentValue);
+        if ($curVal != "") {
+            $this->categoria->ViewValue = $this->categoria->lookupCacheOption($curVal);
+            if ($this->categoria->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                $lookupFilter = $this->categoria->getSelectFilter($this); // PHP
+                $sqlWrk = $this->categoria->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->categoria->Lookup->renderViewRow($rswrk[0]);
+                    $this->categoria->ViewValue = $this->categoria->displayValue($arwrk);
+                } else {
+                    $this->categoria->ViewValue = $this->categoria->CurrentValue;
+                }
+            }
+        } else {
+            $this->categoria->ViewValue = null;
+        }
+
+        // lista_pedido
+        $curVal = strval($this->lista_pedido->CurrentValue);
+        if ($curVal != "") {
+            $this->lista_pedido->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
+            if ($this->lista_pedido->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
+                $sqlWrk = $this->lista_pedido->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->lista_pedido->Lookup->renderViewRow($rswrk[0]);
+                    $this->lista_pedido->ViewValue = $this->lista_pedido->displayValue($arwrk);
+                } else {
+                    $this->lista_pedido->ViewValue = $this->lista_pedido->CurrentValue;
+                }
+            }
+        } else {
+            $this->lista_pedido->ViewValue = null;
+        }
+
+        // categoria_madre
+        $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
+
+        // sub_categoria
+        $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
         // precio
         $this->precio->ViewValue = $this->precio->CurrentValue;
@@ -2548,22 +2548,6 @@ class Articulo extends DbTable
         $this->codigo_de_barra->HrefValue = "";
         $this->codigo_de_barra->TooltipValue = "";
 
-        // categoria
-        $this->categoria->HrefValue = "";
-        $this->categoria->TooltipValue = "";
-
-        // lista_pedido
-        $this->lista_pedido->HrefValue = "";
-        $this->lista_pedido->TooltipValue = "";
-
-        // categoria_madre
-        $this->categoria_madre->HrefValue = "";
-        $this->categoria_madre->TooltipValue = "";
-
-        // sub_categoria
-        $this->sub_categoria->HrefValue = "";
-        $this->sub_categoria->TooltipValue = "";
-
         // tipo
         $this->tipo->HrefValue = "";
         $this->tipo->TooltipValue = "";
@@ -2607,6 +2591,22 @@ class Articulo extends DbTable
         // descuento
         $this->descuento->HrefValue = "";
         $this->descuento->TooltipValue = "";
+
+        // categoria
+        $this->categoria->HrefValue = "";
+        $this->categoria->TooltipValue = "";
+
+        // lista_pedido
+        $this->lista_pedido->HrefValue = "";
+        $this->lista_pedido->TooltipValue = "";
+
+        // categoria_madre
+        $this->categoria_madre->HrefValue = "";
+        $this->categoria_madre->TooltipValue = "";
+
+        // sub_categoria
+        $this->sub_categoria->HrefValue = "";
+        $this->sub_categoria->TooltipValue = "";
 
         // precio
         $this->precio->HrefValue = "";
@@ -2746,30 +2746,6 @@ class Articulo extends DbTable
         $this->codigo_de_barra->EditValue = $this->codigo_de_barra->CurrentValue;
         $this->codigo_de_barra->PlaceHolder = RemoveHtml($this->codigo_de_barra->caption());
 
-        // categoria
-        $this->categoria->setupEditAttributes();
-        $this->categoria->PlaceHolder = RemoveHtml($this->categoria->caption());
-
-        // lista_pedido
-        $this->lista_pedido->setupEditAttributes();
-        $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
-
-        // categoria_madre
-        $this->categoria_madre->setupEditAttributes();
-        if (!$this->categoria_madre->Raw) {
-            $this->categoria_madre->CurrentValue = HtmlDecode($this->categoria_madre->CurrentValue);
-        }
-        $this->categoria_madre->EditValue = $this->categoria_madre->CurrentValue;
-        $this->categoria_madre->PlaceHolder = RemoveHtml($this->categoria_madre->caption());
-
-        // sub_categoria
-        $this->sub_categoria->setupEditAttributes();
-        if (!$this->sub_categoria->Raw) {
-            $this->sub_categoria->CurrentValue = HtmlDecode($this->sub_categoria->CurrentValue);
-        }
-        $this->sub_categoria->EditValue = $this->sub_categoria->CurrentValue;
-        $this->sub_categoria->PlaceHolder = RemoveHtml($this->sub_categoria->caption());
-
         // tipo
         $this->tipo->setupEditAttributes();
         $this->tipo->EditValue = $this->tipo->options(true);
@@ -2846,6 +2822,30 @@ class Articulo extends DbTable
         if (strval($this->descuento->EditValue) != "" && is_numeric($this->descuento->EditValue)) {
             $this->descuento->EditValue = FormatNumber($this->descuento->EditValue, null);
         }
+
+        // categoria
+        $this->categoria->setupEditAttributes();
+        $this->categoria->PlaceHolder = RemoveHtml($this->categoria->caption());
+
+        // lista_pedido
+        $this->lista_pedido->setupEditAttributes();
+        $this->lista_pedido->PlaceHolder = RemoveHtml($this->lista_pedido->caption());
+
+        // categoria_madre
+        $this->categoria_madre->setupEditAttributes();
+        if (!$this->categoria_madre->Raw) {
+            $this->categoria_madre->CurrentValue = HtmlDecode($this->categoria_madre->CurrentValue);
+        }
+        $this->categoria_madre->EditValue = $this->categoria_madre->CurrentValue;
+        $this->categoria_madre->PlaceHolder = RemoveHtml($this->categoria_madre->caption());
+
+        // sub_categoria
+        $this->sub_categoria->setupEditAttributes();
+        if (!$this->sub_categoria->Raw) {
+            $this->sub_categoria->CurrentValue = HtmlDecode($this->sub_categoria->CurrentValue);
+        }
+        $this->sub_categoria->EditValue = $this->sub_categoria->CurrentValue;
+        $this->sub_categoria->PlaceHolder = RemoveHtml($this->sub_categoria->caption());
 
         // precio
         $this->precio->setupEditAttributes();
@@ -2970,10 +2970,6 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->presentacion);
                     $doc->exportCaption($this->fabricante);
                     $doc->exportCaption($this->codigo_de_barra);
-                    $doc->exportCaption($this->categoria);
-                    $doc->exportCaption($this->lista_pedido);
-                    $doc->exportCaption($this->categoria_madre);
-                    $doc->exportCaption($this->sub_categoria);
                     $doc->exportCaption($this->tipo);
                     $doc->exportCaption($this->unidad_medida_defecto);
                     $doc->exportCaption($this->cantidad_por_unidad_medida);
@@ -2985,6 +2981,10 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->cantidad_en_transito);
                     $doc->exportCaption($this->ultimo_costo);
                     $doc->exportCaption($this->descuento);
+                    $doc->exportCaption($this->categoria);
+                    $doc->exportCaption($this->lista_pedido);
+                    $doc->exportCaption($this->categoria_madre);
+                    $doc->exportCaption($this->sub_categoria);
                     $doc->exportCaption($this->precio);
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->articulo_inventario);
@@ -3004,10 +3004,6 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->presentacion);
                     $doc->exportCaption($this->fabricante);
                     $doc->exportCaption($this->codigo_de_barra);
-                    $doc->exportCaption($this->categoria);
-                    $doc->exportCaption($this->lista_pedido);
-                    $doc->exportCaption($this->categoria_madre);
-                    $doc->exportCaption($this->sub_categoria);
                     $doc->exportCaption($this->tipo);
                     $doc->exportCaption($this->cantidad_en_mano);
                     $doc->exportCaption($this->cantidad_en_almacenes);
@@ -3015,6 +3011,10 @@ class Articulo extends DbTable
                     $doc->exportCaption($this->cantidad_en_transito);
                     $doc->exportCaption($this->ultimo_costo);
                     $doc->exportCaption($this->descuento);
+                    $doc->exportCaption($this->categoria);
+                    $doc->exportCaption($this->lista_pedido);
+                    $doc->exportCaption($this->categoria_madre);
+                    $doc->exportCaption($this->sub_categoria);
                     $doc->exportCaption($this->precio);
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->indexado);
@@ -3060,10 +3060,6 @@ class Articulo extends DbTable
                         $doc->exportField($this->presentacion);
                         $doc->exportField($this->fabricante);
                         $doc->exportField($this->codigo_de_barra);
-                        $doc->exportField($this->categoria);
-                        $doc->exportField($this->lista_pedido);
-                        $doc->exportField($this->categoria_madre);
-                        $doc->exportField($this->sub_categoria);
                         $doc->exportField($this->tipo);
                         $doc->exportField($this->unidad_medida_defecto);
                         $doc->exportField($this->cantidad_por_unidad_medida);
@@ -3075,6 +3071,10 @@ class Articulo extends DbTable
                         $doc->exportField($this->cantidad_en_transito);
                         $doc->exportField($this->ultimo_costo);
                         $doc->exportField($this->descuento);
+                        $doc->exportField($this->categoria);
+                        $doc->exportField($this->lista_pedido);
+                        $doc->exportField($this->categoria_madre);
+                        $doc->exportField($this->sub_categoria);
                         $doc->exportField($this->precio);
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->articulo_inventario);
@@ -3094,10 +3094,6 @@ class Articulo extends DbTable
                         $doc->exportField($this->presentacion);
                         $doc->exportField($this->fabricante);
                         $doc->exportField($this->codigo_de_barra);
-                        $doc->exportField($this->categoria);
-                        $doc->exportField($this->lista_pedido);
-                        $doc->exportField($this->categoria_madre);
-                        $doc->exportField($this->sub_categoria);
                         $doc->exportField($this->tipo);
                         $doc->exportField($this->cantidad_en_mano);
                         $doc->exportField($this->cantidad_en_almacenes);
@@ -3105,6 +3101,10 @@ class Articulo extends DbTable
                         $doc->exportField($this->cantidad_en_transito);
                         $doc->exportField($this->ultimo_costo);
                         $doc->exportField($this->descuento);
+                        $doc->exportField($this->categoria);
+                        $doc->exportField($this->lista_pedido);
+                        $doc->exportField($this->categoria_madre);
+                        $doc->exportField($this->sub_categoria);
                         $doc->exportField($this->precio);
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->indexado);

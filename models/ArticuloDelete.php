@@ -138,10 +138,6 @@ class ArticuloDelete extends Articulo
         $this->fabricante->setVisibility();
         $this->codigo_ims->Visible = false;
         $this->codigo_de_barra->Visible = false;
-        $this->categoria->setVisibility();
-        $this->lista_pedido->setVisibility();
-        $this->categoria_madre->setVisibility();
-        $this->sub_categoria->Visible = false;
         $this->tipo->Visible = false;
         $this->unidad_medida_defecto->Visible = false;
         $this->cantidad_por_unidad_medida->Visible = false;
@@ -153,9 +149,13 @@ class ArticuloDelete extends Articulo
         $this->cantidad_en_transito->setVisibility();
         $this->ultimo_costo->Visible = false;
         $this->descuento->setVisibility();
+        $this->categoria->setVisibility();
+        $this->lista_pedido->setVisibility();
+        $this->categoria_madre->setVisibility();
+        $this->sub_categoria->setVisibility();
         $this->precio->Visible = false;
         $this->alicuota->Visible = false;
-        $this->articulo_inventario->Visible = false;
+        $this->articulo_inventario->setVisibility();
         $this->indexado->Visible = false;
         $this->pies_cubico->Visible = false;
         $this->color->Visible = false;
@@ -444,11 +444,11 @@ class ArticuloDelete extends Articulo
 
         // Set up lookup cache
         $this->setupLookupOptions($this->fabricante);
-        $this->setupLookupOptions($this->categoria);
-        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->unidad_medida_defecto);
         $this->setupLookupOptions($this->cantidad_por_unidad_medida);
+        $this->setupLookupOptions($this->categoria);
+        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->indexado);
@@ -646,10 +646,6 @@ class ArticuloDelete extends Articulo
         $this->fabricante->setDbValue($row['fabricante']);
         $this->codigo_ims->setDbValue($row['codigo_ims']);
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
-        $this->categoria->setDbValue($row['categoria']);
-        $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->categoria_madre->setDbValue($row['categoria_madre']);
-        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
@@ -661,6 +657,10 @@ class ArticuloDelete extends Articulo
         $this->cantidad_en_transito->setDbValue($row['cantidad_en_transito']);
         $this->ultimo_costo->setDbValue($row['ultimo_costo']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->categoria->setDbValue($row['categoria']);
+        $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
@@ -689,10 +689,6 @@ class ArticuloDelete extends Articulo
         $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['codigo_ims'] = $this->codigo_ims->DefaultValue;
         $row['codigo_de_barra'] = $this->codigo_de_barra->DefaultValue;
-        $row['categoria'] = $this->categoria->DefaultValue;
-        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
-        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
-        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['tipo'] = $this->tipo->DefaultValue;
         $row['unidad_medida_defecto'] = $this->unidad_medida_defecto->DefaultValue;
         $row['cantidad_por_unidad_medida'] = $this->cantidad_por_unidad_medida->DefaultValue;
@@ -704,6 +700,10 @@ class ArticuloDelete extends Articulo
         $row['cantidad_en_transito'] = $this->cantidad_en_transito->DefaultValue;
         $row['ultimo_costo'] = $this->ultimo_costo->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['categoria'] = $this->categoria->DefaultValue;
+        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
+        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
+        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['precio'] = $this->precio->DefaultValue;
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['articulo_inventario'] = $this->articulo_inventario->DefaultValue;
@@ -750,14 +750,6 @@ class ArticuloDelete extends Articulo
 
         // codigo_de_barra
 
-        // categoria
-
-        // lista_pedido
-
-        // categoria_madre
-
-        // sub_categoria
-
         // tipo
 
         // unidad_medida_defecto
@@ -779,6 +771,14 @@ class ArticuloDelete extends Articulo
         // ultimo_costo
 
         // descuento
+
+        // categoria
+
+        // lista_pedido
+
+        // categoria_madre
+
+        // sub_categoria
 
         // precio
 
@@ -860,6 +860,37 @@ class ArticuloDelete extends Articulo
             // codigo_de_barra
             $this->codigo_de_barra->ViewValue = $this->codigo_de_barra->CurrentValue;
 
+            // tipo
+            if (strval($this->tipo->CurrentValue) != "") {
+                $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
+            } else {
+                $this->tipo->ViewValue = null;
+            }
+
+            // cantidad_en_mano
+            $this->cantidad_en_mano->ViewValue = $this->cantidad_en_mano->CurrentValue;
+            $this->cantidad_en_mano->ViewValue = FormatNumber($this->cantidad_en_mano->ViewValue, $this->cantidad_en_mano->formatPattern());
+
+            // cantidad_en_almacenes
+            $this->cantidad_en_almacenes->ViewValue = $this->cantidad_en_almacenes->CurrentValue;
+            $this->cantidad_en_almacenes->ViewValue = FormatNumber($this->cantidad_en_almacenes->ViewValue, $this->cantidad_en_almacenes->formatPattern());
+
+            // cantidad_en_pedido
+            $this->cantidad_en_pedido->ViewValue = $this->cantidad_en_pedido->CurrentValue;
+            $this->cantidad_en_pedido->ViewValue = FormatNumber($this->cantidad_en_pedido->ViewValue, $this->cantidad_en_pedido->formatPattern());
+
+            // cantidad_en_transito
+            $this->cantidad_en_transito->ViewValue = $this->cantidad_en_transito->CurrentValue;
+            $this->cantidad_en_transito->ViewValue = FormatNumber($this->cantidad_en_transito->ViewValue, $this->cantidad_en_transito->formatPattern());
+
+            // ultimo_costo
+            $this->ultimo_costo->ViewValue = $this->ultimo_costo->CurrentValue;
+            $this->ultimo_costo->ViewValue = FormatNumber($this->ultimo_costo->ViewValue, $this->ultimo_costo->formatPattern());
+
+            // descuento
+            $this->descuento->ViewValue = $this->descuento->CurrentValue;
+            $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
+
             // categoria
             $curVal = strval($this->categoria->CurrentValue);
             if ($curVal != "") {
@@ -914,37 +945,6 @@ class ArticuloDelete extends Articulo
             // sub_categoria
             $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
-            // tipo
-            if (strval($this->tipo->CurrentValue) != "") {
-                $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
-            } else {
-                $this->tipo->ViewValue = null;
-            }
-
-            // cantidad_en_mano
-            $this->cantidad_en_mano->ViewValue = $this->cantidad_en_mano->CurrentValue;
-            $this->cantidad_en_mano->ViewValue = FormatNumber($this->cantidad_en_mano->ViewValue, $this->cantidad_en_mano->formatPattern());
-
-            // cantidad_en_almacenes
-            $this->cantidad_en_almacenes->ViewValue = $this->cantidad_en_almacenes->CurrentValue;
-            $this->cantidad_en_almacenes->ViewValue = FormatNumber($this->cantidad_en_almacenes->ViewValue, $this->cantidad_en_almacenes->formatPattern());
-
-            // cantidad_en_pedido
-            $this->cantidad_en_pedido->ViewValue = $this->cantidad_en_pedido->CurrentValue;
-            $this->cantidad_en_pedido->ViewValue = FormatNumber($this->cantidad_en_pedido->ViewValue, $this->cantidad_en_pedido->formatPattern());
-
-            // cantidad_en_transito
-            $this->cantidad_en_transito->ViewValue = $this->cantidad_en_transito->CurrentValue;
-            $this->cantidad_en_transito->ViewValue = FormatNumber($this->cantidad_en_transito->ViewValue, $this->cantidad_en_transito->formatPattern());
-
-            // ultimo_costo
-            $this->ultimo_costo->ViewValue = $this->ultimo_costo->CurrentValue;
-            $this->ultimo_costo->ViewValue = FormatNumber($this->ultimo_costo->ViewValue, $this->ultimo_costo->formatPattern());
-
-            // descuento
-            $this->descuento->ViewValue = $this->descuento->CurrentValue;
-            $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
-
             // precio
             $this->precio->ViewValue = $this->precio->CurrentValue;
             $this->precio->ViewValue = FormatNumber($this->precio->ViewValue, $this->precio->formatPattern());
@@ -971,6 +971,13 @@ class ArticuloDelete extends Articulo
                 }
             } else {
                 $this->alicuota->ViewValue = null;
+            }
+
+            // articulo_inventario
+            if (strval($this->articulo_inventario->CurrentValue) != "") {
+                $this->articulo_inventario->ViewValue = $this->articulo_inventario->optionCaption($this->articulo_inventario->CurrentValue);
+            } else {
+                $this->articulo_inventario->ViewValue = null;
             }
 
             // indexado
@@ -1053,18 +1060,6 @@ class ArticuloDelete extends Articulo
             $this->fabricante->HrefValue = "";
             $this->fabricante->TooltipValue = "";
 
-            // categoria
-            $this->categoria->HrefValue = "";
-            $this->categoria->TooltipValue = "";
-
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-            $this->lista_pedido->TooltipValue = "";
-
-            // categoria_madre
-            $this->categoria_madre->HrefValue = "";
-            $this->categoria_madre->TooltipValue = "";
-
             // cantidad_en_mano
             $this->cantidad_en_mano->HrefValue = "";
             $this->cantidad_en_mano->TooltipValue = "";
@@ -1084,6 +1079,26 @@ class ArticuloDelete extends Articulo
             // descuento
             $this->descuento->HrefValue = "";
             $this->descuento->TooltipValue = "";
+
+            // categoria
+            $this->categoria->HrefValue = "";
+            $this->categoria->TooltipValue = "";
+
+            // lista_pedido
+            $this->lista_pedido->HrefValue = "";
+            $this->lista_pedido->TooltipValue = "";
+
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+            $this->categoria_madre->TooltipValue = "";
+
+            // sub_categoria
+            $this->sub_categoria->HrefValue = "";
+            $this->sub_categoria->TooltipValue = "";
+
+            // articulo_inventario
+            $this->articulo_inventario->HrefValue = "";
+            $this->articulo_inventario->TooltipValue = "";
 
             // activo
             $this->activo->HrefValue = "";
@@ -1232,6 +1247,13 @@ class ArticuloDelete extends Articulo
                     break;
                 case "x_fabricante":
                     break;
+                case "x_tipo":
+                    break;
+                case "x_unidad_medida_defecto":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_cantidad_por_unidad_medida":
+                    break;
                 case "x_categoria":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -1241,13 +1263,6 @@ class ArticuloDelete extends Articulo
                 case "x_categoria_madre":
                     break;
                 case "x_sub_categoria":
-                    break;
-                case "x_tipo":
-                    break;
-                case "x_unidad_medida_defecto":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_cantidad_por_unidad_medida":
                     break;
                 case "x_alicuota":
                     $lookupFilter = $fld->getSelectFilter(); // PHP

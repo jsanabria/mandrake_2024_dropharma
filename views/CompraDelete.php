@@ -77,17 +77,17 @@ $Page->showMessage();
 <?php if ($Page->monto_pagar->Visible) { // monto_pagar ?>
         <th class="<?= $Page->monto_pagar->headerCellClass() ?>"><span id="elh_compra_monto_pagar" class="compra_monto_pagar"><?= $Page->monto_pagar->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
-        <th class="<?= $Page->ref_iva->headerCellClass() ?>"><span id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->ref_iva->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
-        <th class="<?= $Page->ref_islr->headerCellClass() ?>"><span id="elh_compra_ref_islr" class="compra_ref_islr"><?= $Page->ref_islr->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th class="<?= $Page->anulado->headerCellClass() ?>"><span id="elh_compra_anulado" class="compra_anulado"><?= $Page->anulado->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->pagado->Visible) { // pagado ?>
         <th class="<?= $Page->pagado->headerCellClass() ?>"><span id="elh_compra_pagado" class="compra_pagado"><?= $Page->pagado->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+        <th class="<?= $Page->moneda->headerCellClass() ?>"><span id="elh_compra_moneda" class="compra_moneda"><?= $Page->moneda->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
+        <th class="<?= $Page->tasa_dia->headerCellClass() ?>"><span id="elh_compra_tasa_dia" class="compra_tasa_dia"><?= $Page->tasa_dia->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -182,32 +182,6 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
-        <td<?= $Page->ref_iva->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->ref_iva->viewAttributes() ?>>
-<?php if (!EmptyString($Page->ref_iva->getViewValue()) && $Page->ref_iva->linkAttributes() != "") { ?>
-<a<?= $Page->ref_iva->linkAttributes() ?>><?= $Page->ref_iva->getViewValue() ?></a>
-<?php } else { ?>
-<?= $Page->ref_iva->getViewValue() ?>
-<?php } ?>
-</span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
-        <td<?= $Page->ref_islr->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->ref_islr->viewAttributes() ?>>
-<?php if (!EmptyString($Page->ref_islr->getViewValue()) && $Page->ref_islr->linkAttributes() != "") { ?>
-<a<?= $Page->ref_islr->linkAttributes() ?>><?= $Page->ref_islr->getViewValue() ?></a>
-<?php } else { ?>
-<?= $Page->ref_islr->getViewValue() ?>
-<?php } ?>
-</span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <td<?= $Page->anulado->cellAttributes() ?>>
 <span id="">
@@ -221,6 +195,22 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->pagado->viewAttributes() ?>>
 <?= $Page->pagado->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->moneda->Visible) { // moneda ?>
+        <td<?= $Page->moneda->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->moneda->viewAttributes() ?>>
+<?= $Page->moneda->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
+        <td<?= $Page->tasa_dia->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->tasa_dia->viewAttributes() ?>>
+<?= $Page->tasa_dia->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

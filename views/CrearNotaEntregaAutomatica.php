@@ -195,6 +195,7 @@ try {
     $detalleValidado = [];
     $articulosProcesados = [];
     $consumoPorLote = [];
+    $articulosOmitidos = [];
 
     foreach ($lineas as $linea) {
         $idDetalle = intval($linea["id"]);
@@ -318,8 +319,11 @@ try {
         }
 
         if ($cantidadPendiente > 0) {
-            throw new \Exception("Existencia insuficiente para " . CneaArticuloNombre($articulo) . ". Faltante: " . number_format($cantidadPendiente, 2, ",", ".") . ".");
-        }
+            $articulosOmitidos[] = CneaArticuloNombre($articulo) .
+                " - Faltante: " . number_format($cantidadPendiente, 2, ",", ".");
+
+            continue;
+        }        
     }
 
     if (count($detalleValidado) <= 0) {
@@ -445,19 +449,31 @@ try {
     }
 
     Execute("COMMIT");
+    $mensajeFinal = "Factura procesada y Orden de Entrega automática Nro. $nro_documento generada correctamente.";
+    $mensajeWarning = "";
+
+    if (count($articulosOmitidos) > 0) {
+        $mensajeWarning = "Algunos artículos no fueron incluidos en la Orden de Entrega por falta de existencia: "
+            . implode("; ", $articulosOmitidos);
+    }
+
     if ($ajax == "S") {
         CneaJson([
             "success" => true,
-            "message" => "La Orden de Entrega automática fue creada correctamente.",
+            "message" => $mensajeFinal,
+            "warning" => $mensajeWarning,
             "id" => $new_id,
             "nro_documento" => $nro_documento
         ]);
     }
 
-    CneaSetMessage("success", "Factura procesada y Orden de Entrega automática Nro. $nro_documento generada correctamente.");
-    header("Location: $returnUrl");
-    die();
+    CneaSetMessage("success", $mensajeFinal);
+    if ($mensajeWarning != "") {
+        CneaSetMessage("warning", $mensajeWarning);
+    }
 
+    header("Location: $returnUrl");
+    die();  
 } catch (\Throwable $e) {
     if ($transaccionIniciada) {
         Execute("ROLLBACK");

@@ -242,6 +242,9 @@ if ($bloquea == "NO") {
                         <a href="ViewFacturasVencidasList" class="btn btn-danger btn-sm"><i class="fa-solid fa-bell"></i> <?= $facturas_vencidas ?> vencidas</a>
                     <?php } ?>
                 <?php } ?>
+
+                <a href="VisitasList" class="btn btn-primary btn-sm"><i class="fa-solid fa-list"></i> Lista Visitas</a>
+                <a href="VisitasAdd" class="btn btn-success btn-sm"><i class="fa-solid fa-plus"></i> Nueva Visita</a>
             </div>
         </div>
         <div class="card-body text-center p-4">

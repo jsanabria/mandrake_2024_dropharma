@@ -279,7 +279,7 @@ class Visitas extends DbTable
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
+            'TEXTAREA' // Edit Tag
         );
         $this->comentario->InputTextType = "text";
         $this->comentario->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
@@ -292,8 +292,8 @@ class Visitas extends DbTable
             'seguimiento', // Name
             '`seguimiento`', // Expression
             '`seguimiento`', // Basic search expression
-            200, // Type
-            65535, // Size
+            201, // Type
+            16777215, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`seguimiento`', // Virtual expression
@@ -301,7 +301,7 @@ class Visitas extends DbTable
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
+            'TEXTAREA' // Edit Tag
         );
         $this->seguimiento->InputTextType = "text";
         $this->seguimiento->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
@@ -316,7 +316,7 @@ class Visitas extends DbTable
             '`fecha`', // Basic search expression
             200, // Type
             255, // Size
-            -1, // Date/Time format
+            7, // Date/Time format
             false, // Is upload field
             '`fecha`', // Virtual expression
             false, // Is virtual
@@ -326,6 +326,7 @@ class Visitas extends DbTable
             'TEXT' // Edit Tag
         );
         $this->fecha->InputTextType = "text";
+        $this->fecha->DefaultErrorMessage = str_replace("%s", DateFormat(7), $Language->phrase("IncorrectDate"));
         $this->fecha->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['fecha'] = &$this->fecha;
 
@@ -374,6 +375,7 @@ class Visitas extends DbTable
             'TEXT' // Edit Tag
         );
         $this->usuario->InputTextType = "text";
+        $this->usuario->Lookup = new Lookup($this->usuario, 'usuario', false, 'username', ["nombre","","",""], '', '', [], [], [], [], [], [], false, '', '', "`nombre`");
         $this->usuario->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['usuario'] = &$this->usuario;
 
@@ -1361,6 +1363,27 @@ class Visitas extends DbTable
 
         // usuario
         $this->usuario->ViewValue = $this->usuario->CurrentValue;
+        $curVal = strval($this->usuario->CurrentValue);
+        if ($curVal != "") {
+            $this->usuario->ViewValue = $this->usuario->lookupCacheOption($curVal);
+            if ($this->usuario->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->usuario->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->usuario->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                $sqlWrk = $this->usuario->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->usuario->Lookup->renderViewRow($rswrk[0]);
+                    $this->usuario->ViewValue = $this->usuario->displayValue($arwrk);
+                } else {
+                    $this->usuario->ViewValue = $this->usuario->CurrentValue;
+                }
+            }
+        } else {
+            $this->usuario->ViewValue = null;
+        }
 
         // id
         $this->id->HrefValue = "";
@@ -1479,17 +1502,11 @@ class Visitas extends DbTable
 
         // comentario
         $this->comentario->setupEditAttributes();
-        if (!$this->comentario->Raw) {
-            $this->comentario->CurrentValue = HtmlDecode($this->comentario->CurrentValue);
-        }
         $this->comentario->EditValue = $this->comentario->CurrentValue;
         $this->comentario->PlaceHolder = RemoveHtml($this->comentario->caption());
 
         // seguimiento
         $this->seguimiento->setupEditAttributes();
-        if (!$this->seguimiento->Raw) {
-            $this->seguimiento->CurrentValue = HtmlDecode($this->seguimiento->CurrentValue);
-        }
         $this->seguimiento->EditValue = $this->seguimiento->CurrentValue;
         $this->seguimiento->PlaceHolder = RemoveHtml($this->seguimiento->caption());
 
@@ -1542,7 +1559,6 @@ class Visitas extends DbTable
             if ($doc->Horizontal) { // Horizontal format, write header
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
-                    $doc->exportCaption($this->id);
                     $doc->exportCaption($this->nombre);
                     $doc->exportCaption($this->apellido);
                     $doc->exportCaption($this->correo);
@@ -1593,7 +1609,6 @@ class Visitas extends DbTable
                 if (!$doc->ExportCustom) {
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
-                        $doc->exportField($this->id);
                         $doc->exportField($this->nombre);
                         $doc->exportField($this->apellido);
                         $doc->exportField($this->correo);
@@ -1692,6 +1707,9 @@ class Visitas extends DbTable
     {
         // Enter your code here
         // To cancel, set return value to false
+        $rsnew["fecha"] = date("Y-m-d H:i:s");
+        $rsnew["fecha_registro"] = date("Y-m-d H:i:s");
+        $rsnew["usuario"] = CurrentUserName();
         return true;
     }
 

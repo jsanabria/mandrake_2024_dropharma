@@ -44,7 +44,7 @@ $titulo = isset($titulos_reportes[$id]) ? $titulos_reportes[$id] : $id;
 ?>
 
 <!-- IMPORTANTE: jQuery SIEMPRE debe cargarse de primero antes que cualquier otra librería dependiente -->
-<script type="text/javascript" src="jquery/jquery-3.6.0.js"></script>
+<!-- <script type="text/javascript" src="jquery/jquery-3.6.0.js"></script> -->
 
 <!-- Carga de Bootstrap Icons y recursos necesarios -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">

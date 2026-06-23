@@ -130,9 +130,9 @@ class VisitasAdd extends Visitas
         $this->referencia->setVisibility();
         $this->comentario->setVisibility();
         $this->seguimiento->setVisibility();
-        $this->fecha->setVisibility();
-        $this->fecha_registro->setVisibility();
-        $this->usuario->setVisibility();
+        $this->fecha->Visible = false;
+        $this->fecha_registro->Visible = false;
+        $this->usuario->Visible = false;
     }
 
     // Constructor
@@ -514,6 +514,9 @@ class VisitasAdd extends Visitas
             $this->InlineDelete = true;
         }
 
+        // Set up lookup cache
+        $this->setupLookupOptions($this->usuario);
+
         // Load default values for add
         $this->loadDefaultValues();
 
@@ -753,37 +756,6 @@ class VisitasAdd extends Visitas
             }
         }
 
-        // Check field name 'fecha' first before field var 'x_fecha'
-        $val = $CurrentForm->hasValue("fecha") ? $CurrentForm->getValue("fecha") : $CurrentForm->getValue("x_fecha");
-        if (!$this->fecha->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->fecha->Visible = false; // Disable update for API request
-            } else {
-                $this->fecha->setFormValue($val);
-            }
-        }
-
-        // Check field name 'fecha_registro' first before field var 'x_fecha_registro'
-        $val = $CurrentForm->hasValue("fecha_registro") ? $CurrentForm->getValue("fecha_registro") : $CurrentForm->getValue("x_fecha_registro");
-        if (!$this->fecha_registro->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->fecha_registro->Visible = false; // Disable update for API request
-            } else {
-                $this->fecha_registro->setFormValue($val, true, $validate);
-            }
-            $this->fecha_registro->CurrentValue = UnFormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern());
-        }
-
-        // Check field name 'usuario' first before field var 'x_usuario'
-        $val = $CurrentForm->hasValue("usuario") ? $CurrentForm->getValue("usuario") : $CurrentForm->getValue("x_usuario");
-        if (!$this->usuario->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->usuario->Visible = false; // Disable update for API request
-            } else {
-                $this->usuario->setFormValue($val);
-            }
-        }
-
         // Check field name 'id' first before field var 'x_id'
         $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
     }
@@ -800,10 +772,6 @@ class VisitasAdd extends Visitas
         $this->referencia->CurrentValue = $this->referencia->FormValue;
         $this->comentario->CurrentValue = $this->comentario->FormValue;
         $this->seguimiento->CurrentValue = $this->seguimiento->FormValue;
-        $this->fecha->CurrentValue = $this->fecha->FormValue;
-        $this->fecha_registro->CurrentValue = $this->fecha_registro->FormValue;
-        $this->fecha_registro->CurrentValue = UnFormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern());
-        $this->usuario->CurrentValue = $this->usuario->FormValue;
     }
 
     /**
@@ -982,6 +950,27 @@ class VisitasAdd extends Visitas
 
             // usuario
             $this->usuario->ViewValue = $this->usuario->CurrentValue;
+            $curVal = strval($this->usuario->CurrentValue);
+            if ($curVal != "") {
+                $this->usuario->ViewValue = $this->usuario->lookupCacheOption($curVal);
+                if ($this->usuario->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->usuario->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->usuario->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                    $sqlWrk = $this->usuario->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->usuario->Lookup->renderViewRow($rswrk[0]);
+                        $this->usuario->ViewValue = $this->usuario->displayValue($arwrk);
+                    } else {
+                        $this->usuario->ViewValue = $this->usuario->CurrentValue;
+                    }
+                }
+            } else {
+                $this->usuario->ViewValue = null;
+            }
 
             // nombre
             $this->nombre->HrefValue = "";
@@ -1006,15 +995,6 @@ class VisitasAdd extends Visitas
 
             // seguimiento
             $this->seguimiento->HrefValue = "";
-
-            // fecha
-            $this->fecha->HrefValue = "";
-
-            // fecha_registro
-            $this->fecha_registro->HrefValue = "";
-
-            // usuario
-            $this->usuario->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // nombre
             $this->nombre->setupEditAttributes();
@@ -1066,40 +1046,13 @@ class VisitasAdd extends Visitas
 
             // comentario
             $this->comentario->setupEditAttributes();
-            if (!$this->comentario->Raw) {
-                $this->comentario->CurrentValue = HtmlDecode($this->comentario->CurrentValue);
-            }
             $this->comentario->EditValue = HtmlEncode($this->comentario->CurrentValue);
             $this->comentario->PlaceHolder = RemoveHtml($this->comentario->caption());
 
             // seguimiento
             $this->seguimiento->setupEditAttributes();
-            if (!$this->seguimiento->Raw) {
-                $this->seguimiento->CurrentValue = HtmlDecode($this->seguimiento->CurrentValue);
-            }
             $this->seguimiento->EditValue = HtmlEncode($this->seguimiento->CurrentValue);
             $this->seguimiento->PlaceHolder = RemoveHtml($this->seguimiento->caption());
-
-            // fecha
-            $this->fecha->setupEditAttributes();
-            if (!$this->fecha->Raw) {
-                $this->fecha->CurrentValue = HtmlDecode($this->fecha->CurrentValue);
-            }
-            $this->fecha->EditValue = HtmlEncode($this->fecha->CurrentValue);
-            $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
-
-            // fecha_registro
-            $this->fecha_registro->setupEditAttributes();
-            $this->fecha_registro->EditValue = HtmlEncode(FormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern()));
-            $this->fecha_registro->PlaceHolder = RemoveHtml($this->fecha_registro->caption());
-
-            // usuario
-            $this->usuario->setupEditAttributes();
-            if (!$this->usuario->Raw) {
-                $this->usuario->CurrentValue = HtmlDecode($this->usuario->CurrentValue);
-            }
-            $this->usuario->EditValue = HtmlEncode($this->usuario->CurrentValue);
-            $this->usuario->PlaceHolder = RemoveHtml($this->usuario->caption());
 
             // Add refer script
 
@@ -1126,15 +1079,6 @@ class VisitasAdd extends Visitas
 
             // seguimiento
             $this->seguimiento->HrefValue = "";
-
-            // fecha
-            $this->fecha->HrefValue = "";
-
-            // fecha_registro
-            $this->fecha_registro->HrefValue = "";
-
-            // usuario
-            $this->usuario->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1194,24 +1138,6 @@ class VisitasAdd extends Visitas
             if ($this->seguimiento->Visible && $this->seguimiento->Required) {
                 if (!$this->seguimiento->IsDetailKey && EmptyValue($this->seguimiento->FormValue)) {
                     $this->seguimiento->addErrorMessage(str_replace("%s", $this->seguimiento->caption(), $this->seguimiento->RequiredErrorMessage));
-                }
-            }
-            if ($this->fecha->Visible && $this->fecha->Required) {
-                if (!$this->fecha->IsDetailKey && EmptyValue($this->fecha->FormValue)) {
-                    $this->fecha->addErrorMessage(str_replace("%s", $this->fecha->caption(), $this->fecha->RequiredErrorMessage));
-                }
-            }
-            if ($this->fecha_registro->Visible && $this->fecha_registro->Required) {
-                if (!$this->fecha_registro->IsDetailKey && EmptyValue($this->fecha_registro->FormValue)) {
-                    $this->fecha_registro->addErrorMessage(str_replace("%s", $this->fecha_registro->caption(), $this->fecha_registro->RequiredErrorMessage));
-                }
-            }
-            if (!CheckDate($this->fecha_registro->FormValue, $this->fecha_registro->formatPattern())) {
-                $this->fecha_registro->addErrorMessage($this->fecha_registro->getErrorMessage(false));
-            }
-            if ($this->usuario->Visible && $this->usuario->Required) {
-                if (!$this->usuario->IsDetailKey && EmptyValue($this->usuario->FormValue)) {
-                    $this->usuario->addErrorMessage(str_replace("%s", $this->usuario->caption(), $this->usuario->RequiredErrorMessage));
                 }
             }
 
@@ -1308,15 +1234,6 @@ class VisitasAdd extends Visitas
 
         // seguimiento
         $this->seguimiento->setDbValueDef($rsnew, $this->seguimiento->CurrentValue, false);
-
-        // fecha
-        $this->fecha->setDbValueDef($rsnew, $this->fecha->CurrentValue, false);
-
-        // fecha_registro
-        $this->fecha_registro->setDbValueDef($rsnew, UnFormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern()), false);
-
-        // usuario
-        $this->usuario->setDbValueDef($rsnew, $this->usuario->CurrentValue, false);
         return $rsnew;
     }
 
@@ -1350,15 +1267,6 @@ class VisitasAdd extends Visitas
         if (isset($row['seguimiento'])) { // seguimiento
             $this->seguimiento->setFormValue($row['seguimiento']);
         }
-        if (isset($row['fecha'])) { // fecha
-            $this->fecha->setFormValue($row['fecha']);
-        }
-        if (isset($row['fecha_registro'])) { // fecha_registro
-            $this->fecha_registro->setFormValue($row['fecha_registro']);
-        }
-        if (isset($row['usuario'])) { // usuario
-            $this->usuario->setFormValue($row['usuario']);
-        }
     }
 
     // Set up Breadcrumb
@@ -1385,6 +1293,8 @@ class VisitasAdd extends Visitas
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
+                case "x_usuario":
+                    break;
                 default:
                     $lookupFilter = "";
                     break;

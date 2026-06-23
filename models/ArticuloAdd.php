@@ -138,10 +138,6 @@ class ArticuloAdd extends Articulo
         $this->fabricante->setVisibility();
         $this->codigo_ims->Visible = false;
         $this->codigo_de_barra->setVisibility();
-        $this->categoria->setVisibility();
-        $this->lista_pedido->setVisibility();
-        $this->categoria_madre->setVisibility();
-        $this->sub_categoria->setVisibility();
         $this->tipo->setVisibility();
         $this->unidad_medida_defecto->setVisibility();
         $this->cantidad_por_unidad_medida->setVisibility();
@@ -153,6 +149,10 @@ class ArticuloAdd extends Articulo
         $this->cantidad_en_transito->Visible = false;
         $this->ultimo_costo->Visible = false;
         $this->descuento->Visible = false;
+        $this->categoria->setVisibility();
+        $this->lista_pedido->setVisibility();
+        $this->categoria_madre->setVisibility();
+        $this->sub_categoria->setVisibility();
         $this->precio->Visible = false;
         $this->alicuota->setVisibility();
         $this->articulo_inventario->setVisibility();
@@ -553,11 +553,11 @@ class ArticuloAdd extends Articulo
 
         // Set up lookup cache
         $this->setupLookupOptions($this->fabricante);
-        $this->setupLookupOptions($this->categoria);
-        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->unidad_medida_defecto);
         $this->setupLookupOptions($this->cantidad_por_unidad_medida);
+        $this->setupLookupOptions($this->categoria);
+        $this->setupLookupOptions($this->lista_pedido);
         $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->articulo_inventario);
         $this->setupLookupOptions($this->indexado);
@@ -818,46 +818,6 @@ class ArticuloAdd extends Articulo
             }
         }
 
-        // Check field name 'categoria' first before field var 'x_categoria'
-        $val = $CurrentForm->hasValue("categoria") ? $CurrentForm->getValue("categoria") : $CurrentForm->getValue("x_categoria");
-        if (!$this->categoria->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->categoria->Visible = false; // Disable update for API request
-            } else {
-                $this->categoria->setFormValue($val);
-            }
-        }
-
-        // Check field name 'lista_pedido' first before field var 'x_lista_pedido'
-        $val = $CurrentForm->hasValue("lista_pedido") ? $CurrentForm->getValue("lista_pedido") : $CurrentForm->getValue("x_lista_pedido");
-        if (!$this->lista_pedido->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->lista_pedido->Visible = false; // Disable update for API request
-            } else {
-                $this->lista_pedido->setFormValue($val);
-            }
-        }
-
-        // Check field name 'categoria_madre' first before field var 'x_categoria_madre'
-        $val = $CurrentForm->hasValue("categoria_madre") ? $CurrentForm->getValue("categoria_madre") : $CurrentForm->getValue("x_categoria_madre");
-        if (!$this->categoria_madre->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->categoria_madre->Visible = false; // Disable update for API request
-            } else {
-                $this->categoria_madre->setFormValue($val);
-            }
-        }
-
-        // Check field name 'sub_categoria' first before field var 'x_sub_categoria'
-        $val = $CurrentForm->hasValue("sub_categoria") ? $CurrentForm->getValue("sub_categoria") : $CurrentForm->getValue("x_sub_categoria");
-        if (!$this->sub_categoria->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->sub_categoria->Visible = false; // Disable update for API request
-            } else {
-                $this->sub_categoria->setFormValue($val);
-            }
-        }
-
         // Check field name 'tipo' first before field var 'x_tipo'
         $val = $CurrentForm->hasValue("tipo") ? $CurrentForm->getValue("tipo") : $CurrentForm->getValue("x_tipo");
         if (!$this->tipo->IsDetailKey) {
@@ -905,6 +865,46 @@ class ArticuloAdd extends Articulo
                 $this->cantidad_maxima->Visible = false; // Disable update for API request
             } else {
                 $this->cantidad_maxima->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'categoria' first before field var 'x_categoria'
+        $val = $CurrentForm->hasValue("categoria") ? $CurrentForm->getValue("categoria") : $CurrentForm->getValue("x_categoria");
+        if (!$this->categoria->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->categoria->Visible = false; // Disable update for API request
+            } else {
+                $this->categoria->setFormValue($val);
+            }
+        }
+
+        // Check field name 'lista_pedido' first before field var 'x_lista_pedido'
+        $val = $CurrentForm->hasValue("lista_pedido") ? $CurrentForm->getValue("lista_pedido") : $CurrentForm->getValue("x_lista_pedido");
+        if (!$this->lista_pedido->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->lista_pedido->Visible = false; // Disable update for API request
+            } else {
+                $this->lista_pedido->setFormValue($val);
+            }
+        }
+
+        // Check field name 'categoria_madre' first before field var 'x_categoria_madre'
+        $val = $CurrentForm->hasValue("categoria_madre") ? $CurrentForm->getValue("categoria_madre") : $CurrentForm->getValue("x_categoria_madre");
+        if (!$this->categoria_madre->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->categoria_madre->Visible = false; // Disable update for API request
+            } else {
+                $this->categoria_madre->setFormValue($val);
+            }
+        }
+
+        // Check field name 'sub_categoria' first before field var 'x_sub_categoria'
+        $val = $CurrentForm->hasValue("sub_categoria") ? $CurrentForm->getValue("sub_categoria") : $CurrentForm->getValue("x_sub_categoria");
+        if (!$this->sub_categoria->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->sub_categoria->Visible = false; // Disable update for API request
+            } else {
+                $this->sub_categoria->setFormValue($val);
             }
         }
 
@@ -1023,15 +1023,15 @@ class ArticuloAdd extends Articulo
         $this->presentacion->CurrentValue = $this->presentacion->FormValue;
         $this->fabricante->CurrentValue = $this->fabricante->FormValue;
         $this->codigo_de_barra->CurrentValue = $this->codigo_de_barra->FormValue;
-        $this->categoria->CurrentValue = $this->categoria->FormValue;
-        $this->lista_pedido->CurrentValue = $this->lista_pedido->FormValue;
-        $this->categoria_madre->CurrentValue = $this->categoria_madre->FormValue;
-        $this->sub_categoria->CurrentValue = $this->sub_categoria->FormValue;
         $this->tipo->CurrentValue = $this->tipo->FormValue;
         $this->unidad_medida_defecto->CurrentValue = $this->unidad_medida_defecto->FormValue;
         $this->cantidad_por_unidad_medida->CurrentValue = $this->cantidad_por_unidad_medida->FormValue;
         $this->cantidad_minima->CurrentValue = $this->cantidad_minima->FormValue;
         $this->cantidad_maxima->CurrentValue = $this->cantidad_maxima->FormValue;
+        $this->categoria->CurrentValue = $this->categoria->FormValue;
+        $this->lista_pedido->CurrentValue = $this->lista_pedido->FormValue;
+        $this->categoria_madre->CurrentValue = $this->categoria_madre->FormValue;
+        $this->sub_categoria->CurrentValue = $this->sub_categoria->FormValue;
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
         $this->articulo_inventario->CurrentValue = $this->articulo_inventario->FormValue;
         $this->indexado->CurrentValue = $this->indexado->FormValue;
@@ -1092,10 +1092,6 @@ class ArticuloAdd extends Articulo
         $this->fabricante->setDbValue($row['fabricante']);
         $this->codigo_ims->setDbValue($row['codigo_ims']);
         $this->codigo_de_barra->setDbValue($row['codigo_de_barra']);
-        $this->categoria->setDbValue($row['categoria']);
-        $this->lista_pedido->setDbValue($row['lista_pedido']);
-        $this->categoria_madre->setDbValue($row['categoria_madre']);
-        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->tipo->setDbValue($row['tipo']);
         $this->unidad_medida_defecto->setDbValue($row['unidad_medida_defecto']);
         $this->cantidad_por_unidad_medida->setDbValue($row['cantidad_por_unidad_medida']);
@@ -1107,6 +1103,10 @@ class ArticuloAdd extends Articulo
         $this->cantidad_en_transito->setDbValue($row['cantidad_en_transito']);
         $this->ultimo_costo->setDbValue($row['ultimo_costo']);
         $this->descuento->setDbValue($row['descuento']);
+        $this->categoria->setDbValue($row['categoria']);
+        $this->lista_pedido->setDbValue($row['lista_pedido']);
+        $this->categoria_madre->setDbValue($row['categoria_madre']);
+        $this->sub_categoria->setDbValue($row['sub_categoria']);
         $this->precio->setDbValue($row['precio']);
         $this->alicuota->setDbValue($row['alicuota']);
         $this->articulo_inventario->setDbValue($row['articulo_inventario']);
@@ -1135,10 +1135,6 @@ class ArticuloAdd extends Articulo
         $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['codigo_ims'] = $this->codigo_ims->DefaultValue;
         $row['codigo_de_barra'] = $this->codigo_de_barra->DefaultValue;
-        $row['categoria'] = $this->categoria->DefaultValue;
-        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
-        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
-        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['tipo'] = $this->tipo->DefaultValue;
         $row['unidad_medida_defecto'] = $this->unidad_medida_defecto->DefaultValue;
         $row['cantidad_por_unidad_medida'] = $this->cantidad_por_unidad_medida->DefaultValue;
@@ -1150,6 +1146,10 @@ class ArticuloAdd extends Articulo
         $row['cantidad_en_transito'] = $this->cantidad_en_transito->DefaultValue;
         $row['ultimo_costo'] = $this->ultimo_costo->DefaultValue;
         $row['descuento'] = $this->descuento->DefaultValue;
+        $row['categoria'] = $this->categoria->DefaultValue;
+        $row['lista_pedido'] = $this->lista_pedido->DefaultValue;
+        $row['categoria_madre'] = $this->categoria_madre->DefaultValue;
+        $row['sub_categoria'] = $this->sub_categoria->DefaultValue;
         $row['precio'] = $this->precio->DefaultValue;
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['articulo_inventario'] = $this->articulo_inventario->DefaultValue;
@@ -1224,18 +1224,6 @@ class ArticuloAdd extends Articulo
         // codigo_de_barra
         $this->codigo_de_barra->RowCssClass = "row";
 
-        // categoria
-        $this->categoria->RowCssClass = "row";
-
-        // lista_pedido
-        $this->lista_pedido->RowCssClass = "row";
-
-        // categoria_madre
-        $this->categoria_madre->RowCssClass = "row";
-
-        // sub_categoria
-        $this->sub_categoria->RowCssClass = "row";
-
         // tipo
         $this->tipo->RowCssClass = "row";
 
@@ -1268,6 +1256,18 @@ class ArticuloAdd extends Articulo
 
         // descuento
         $this->descuento->RowCssClass = "row";
+
+        // categoria
+        $this->categoria->RowCssClass = "row";
+
+        // lista_pedido
+        $this->lista_pedido->RowCssClass = "row";
+
+        // categoria_madre
+        $this->categoria_madre->RowCssClass = "row";
+
+        // sub_categoria
+        $this->sub_categoria->RowCssClass = "row";
 
         // precio
         $this->precio->RowCssClass = "row";
@@ -1362,60 +1362,6 @@ class ArticuloAdd extends Articulo
             // codigo_de_barra
             $this->codigo_de_barra->ViewValue = $this->codigo_de_barra->CurrentValue;
 
-            // categoria
-            $curVal = strval($this->categoria->CurrentValue);
-            if ($curVal != "") {
-                $this->categoria->ViewValue = $this->categoria->lookupCacheOption($curVal);
-                if ($this->categoria->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->categoria->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->categoria->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->categoria->Lookup->renderViewRow($rswrk[0]);
-                        $this->categoria->ViewValue = $this->categoria->displayValue($arwrk);
-                    } else {
-                        $this->categoria->ViewValue = $this->categoria->CurrentValue;
-                    }
-                }
-            } else {
-                $this->categoria->ViewValue = null;
-            }
-
-            // lista_pedido
-            $curVal = strval($this->lista_pedido->CurrentValue);
-            if ($curVal != "") {
-                $this->lista_pedido->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
-                if ($this->lista_pedido->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
-                    $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
-                    $sqlWrk = $this->lista_pedido->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->lista_pedido->Lookup->renderViewRow($rswrk[0]);
-                        $this->lista_pedido->ViewValue = $this->lista_pedido->displayValue($arwrk);
-                    } else {
-                        $this->lista_pedido->ViewValue = $this->lista_pedido->CurrentValue;
-                    }
-                }
-            } else {
-                $this->lista_pedido->ViewValue = null;
-            }
-
-            // categoria_madre
-            $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
-
-            // sub_categoria
-            $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
-
             // tipo
             if (strval($this->tipo->CurrentValue) != "") {
                 $this->tipo->ViewValue = $this->tipo->optionCaption($this->tipo->CurrentValue);
@@ -1501,6 +1447,60 @@ class ArticuloAdd extends Articulo
             // descuento
             $this->descuento->ViewValue = $this->descuento->CurrentValue;
             $this->descuento->ViewValue = FormatNumber($this->descuento->ViewValue, $this->descuento->formatPattern());
+
+            // categoria
+            $curVal = strval($this->categoria->CurrentValue);
+            if ($curVal != "") {
+                $this->categoria->ViewValue = $this->categoria->lookupCacheOption($curVal);
+                if ($this->categoria->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->categoria->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->categoria->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->categoria->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->categoria->Lookup->renderViewRow($rswrk[0]);
+                        $this->categoria->ViewValue = $this->categoria->displayValue($arwrk);
+                    } else {
+                        $this->categoria->ViewValue = $this->categoria->CurrentValue;
+                    }
+                }
+            } else {
+                $this->categoria->ViewValue = null;
+            }
+
+            // lista_pedido
+            $curVal = strval($this->lista_pedido->CurrentValue);
+            if ($curVal != "") {
+                $this->lista_pedido->ViewValue = $this->lista_pedido->lookupCacheOption($curVal);
+                if ($this->lista_pedido->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->lista_pedido->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->lista_pedido->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->lista_pedido->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->lista_pedido->Lookup->renderViewRow($rswrk[0]);
+                        $this->lista_pedido->ViewValue = $this->lista_pedido->displayValue($arwrk);
+                    } else {
+                        $this->lista_pedido->ViewValue = $this->lista_pedido->CurrentValue;
+                    }
+                }
+            } else {
+                $this->lista_pedido->ViewValue = null;
+            }
+
+            // categoria_madre
+            $this->categoria_madre->ViewValue = $this->categoria_madre->CurrentValue;
+
+            // sub_categoria
+            $this->sub_categoria->ViewValue = $this->sub_categoria->CurrentValue;
 
             // precio
             $this->precio->ViewValue = $this->precio->CurrentValue;
@@ -1607,18 +1607,6 @@ class ArticuloAdd extends Articulo
             // codigo_de_barra
             $this->codigo_de_barra->HrefValue = "";
 
-            // categoria
-            $this->categoria->HrefValue = "";
-
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-
-            // categoria_madre
-            $this->categoria_madre->HrefValue = "";
-
-            // sub_categoria
-            $this->sub_categoria->HrefValue = "";
-
             // tipo
             $this->tipo->HrefValue = "";
 
@@ -1633,6 +1621,18 @@ class ArticuloAdd extends Articulo
 
             // cantidad_maxima
             $this->cantidad_maxima->HrefValue = "";
+
+            // categoria
+            $this->categoria->HrefValue = "";
+
+            // lista_pedido
+            $this->lista_pedido->HrefValue = "";
+
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+
+            // sub_categoria
+            $this->sub_categoria->HrefValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
@@ -1768,6 +1768,85 @@ class ArticuloAdd extends Articulo
             $this->codigo_de_barra->EditValue = HtmlEncode($this->codigo_de_barra->CurrentValue);
             $this->codigo_de_barra->PlaceHolder = RemoveHtml($this->codigo_de_barra->caption());
 
+            // tipo
+            $this->tipo->setupEditAttributes();
+            $this->tipo->EditValue = $this->tipo->options(true);
+            $this->tipo->PlaceHolder = RemoveHtml($this->tipo->caption());
+
+            // unidad_medida_defecto
+            $this->unidad_medida_defecto->setupEditAttributes();
+            $curVal = trim(strval($this->unidad_medida_defecto->CurrentValue));
+            if ($curVal != "") {
+                $this->unidad_medida_defecto->ViewValue = $this->unidad_medida_defecto->lookupCacheOption($curVal);
+            } else {
+                $this->unidad_medida_defecto->ViewValue = $this->unidad_medida_defecto->Lookup !== null && is_array($this->unidad_medida_defecto->lookupOptions()) && count($this->unidad_medida_defecto->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->unidad_medida_defecto->ViewValue !== null) { // Load from cache
+                $this->unidad_medida_defecto->EditValue = array_values($this->unidad_medida_defecto->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->unidad_medida_defecto->Lookup->getTable()->Fields["codigo"]->searchExpression(), "=", $this->unidad_medida_defecto->CurrentValue, $this->unidad_medida_defecto->Lookup->getTable()->Fields["codigo"]->searchDataType(), "");
+                }
+                $lookupFilter = $this->unidad_medida_defecto->getSelectFilter($this); // PHP
+                $sqlWrk = $this->unidad_medida_defecto->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                $this->unidad_medida_defecto->EditValue = $arwrk;
+            }
+            $this->unidad_medida_defecto->PlaceHolder = RemoveHtml($this->unidad_medida_defecto->caption());
+
+            // cantidad_por_unidad_medida
+            $this->cantidad_por_unidad_medida->setupEditAttributes();
+            $curVal = trim(strval($this->cantidad_por_unidad_medida->CurrentValue));
+            if ($curVal != "") {
+                $this->cantidad_por_unidad_medida->ViewValue = $this->cantidad_por_unidad_medida->lookupCacheOption($curVal);
+            } else {
+                $this->cantidad_por_unidad_medida->ViewValue = $this->cantidad_por_unidad_medida->Lookup !== null && is_array($this->cantidad_por_unidad_medida->lookupOptions()) && count($this->cantidad_por_unidad_medida->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->cantidad_por_unidad_medida->ViewValue !== null) { // Load from cache
+                $this->cantidad_por_unidad_medida->EditValue = array_values($this->cantidad_por_unidad_medida->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->cantidad_por_unidad_medida->Lookup->getTable()->Fields["cantidad"]->searchExpression(), "=", $this->cantidad_por_unidad_medida->CurrentValue, $this->cantidad_por_unidad_medida->Lookup->getTable()->Fields["cantidad"]->searchDataType(), "");
+                }
+                $sqlWrk = $this->cantidad_por_unidad_medida->Lookup->getSql(true, $filterWrk, '', $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                foreach ($arwrk as &$row) {
+                    $row = $this->cantidad_por_unidad_medida->Lookup->renderViewRow($row);
+                }
+                $this->cantidad_por_unidad_medida->EditValue = $arwrk;
+            }
+            $this->cantidad_por_unidad_medida->PlaceHolder = RemoveHtml($this->cantidad_por_unidad_medida->caption());
+
+            // cantidad_minima
+            $this->cantidad_minima->setupEditAttributes();
+            $this->cantidad_minima->EditValue = $this->cantidad_minima->CurrentValue;
+            $this->cantidad_minima->PlaceHolder = RemoveHtml($this->cantidad_minima->caption());
+            if (strval($this->cantidad_minima->EditValue) != "" && is_numeric($this->cantidad_minima->EditValue)) {
+                $this->cantidad_minima->EditValue = FormatNumber($this->cantidad_minima->EditValue, null);
+            }
+
+            // cantidad_maxima
+            $this->cantidad_maxima->setupEditAttributes();
+            $this->cantidad_maxima->EditValue = $this->cantidad_maxima->CurrentValue;
+            $this->cantidad_maxima->PlaceHolder = RemoveHtml($this->cantidad_maxima->caption());
+            if (strval($this->cantidad_maxima->EditValue) != "" && is_numeric($this->cantidad_maxima->EditValue)) {
+                $this->cantidad_maxima->EditValue = FormatNumber($this->cantidad_maxima->EditValue, null);
+            }
+
             // categoria
             $this->categoria->setupEditAttributes();
             $curVal = trim(strval($this->categoria->CurrentValue));
@@ -1855,85 +1934,6 @@ class ArticuloAdd extends Articulo
                 $this->sub_categoria->EditValue = $dispVal;
             }
             $this->sub_categoria->PlaceHolder = RemoveHtml($this->sub_categoria->caption());
-
-            // tipo
-            $this->tipo->setupEditAttributes();
-            $this->tipo->EditValue = $this->tipo->options(true);
-            $this->tipo->PlaceHolder = RemoveHtml($this->tipo->caption());
-
-            // unidad_medida_defecto
-            $this->unidad_medida_defecto->setupEditAttributes();
-            $curVal = trim(strval($this->unidad_medida_defecto->CurrentValue));
-            if ($curVal != "") {
-                $this->unidad_medida_defecto->ViewValue = $this->unidad_medida_defecto->lookupCacheOption($curVal);
-            } else {
-                $this->unidad_medida_defecto->ViewValue = $this->unidad_medida_defecto->Lookup !== null && is_array($this->unidad_medida_defecto->lookupOptions()) && count($this->unidad_medida_defecto->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->unidad_medida_defecto->ViewValue !== null) { // Load from cache
-                $this->unidad_medida_defecto->EditValue = array_values($this->unidad_medida_defecto->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->unidad_medida_defecto->Lookup->getTable()->Fields["codigo"]->searchExpression(), "=", $this->unidad_medida_defecto->CurrentValue, $this->unidad_medida_defecto->Lookup->getTable()->Fields["codigo"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->unidad_medida_defecto->getSelectFilter($this); // PHP
-                $sqlWrk = $this->unidad_medida_defecto->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                $this->unidad_medida_defecto->EditValue = $arwrk;
-            }
-            $this->unidad_medida_defecto->PlaceHolder = RemoveHtml($this->unidad_medida_defecto->caption());
-
-            // cantidad_por_unidad_medida
-            $this->cantidad_por_unidad_medida->setupEditAttributes();
-            $curVal = trim(strval($this->cantidad_por_unidad_medida->CurrentValue));
-            if ($curVal != "") {
-                $this->cantidad_por_unidad_medida->ViewValue = $this->cantidad_por_unidad_medida->lookupCacheOption($curVal);
-            } else {
-                $this->cantidad_por_unidad_medida->ViewValue = $this->cantidad_por_unidad_medida->Lookup !== null && is_array($this->cantidad_por_unidad_medida->lookupOptions()) && count($this->cantidad_por_unidad_medida->lookupOptions()) > 0 ? $curVal : null;
-            }
-            if ($this->cantidad_por_unidad_medida->ViewValue !== null) { // Load from cache
-                $this->cantidad_por_unidad_medida->EditValue = array_values($this->cantidad_por_unidad_medida->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->cantidad_por_unidad_medida->Lookup->getTable()->Fields["cantidad"]->searchExpression(), "=", $this->cantidad_por_unidad_medida->CurrentValue, $this->cantidad_por_unidad_medida->Lookup->getTable()->Fields["cantidad"]->searchDataType(), "");
-                }
-                $sqlWrk = $this->cantidad_por_unidad_medida->Lookup->getSql(true, $filterWrk, '', $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                foreach ($arwrk as &$row) {
-                    $row = $this->cantidad_por_unidad_medida->Lookup->renderViewRow($row);
-                }
-                $this->cantidad_por_unidad_medida->EditValue = $arwrk;
-            }
-            $this->cantidad_por_unidad_medida->PlaceHolder = RemoveHtml($this->cantidad_por_unidad_medida->caption());
-
-            // cantidad_minima
-            $this->cantidad_minima->setupEditAttributes();
-            $this->cantidad_minima->EditValue = $this->cantidad_minima->CurrentValue;
-            $this->cantidad_minima->PlaceHolder = RemoveHtml($this->cantidad_minima->caption());
-            if (strval($this->cantidad_minima->EditValue) != "" && is_numeric($this->cantidad_minima->EditValue)) {
-                $this->cantidad_minima->EditValue = FormatNumber($this->cantidad_minima->EditValue, null);
-            }
-
-            // cantidad_maxima
-            $this->cantidad_maxima->setupEditAttributes();
-            $this->cantidad_maxima->EditValue = $this->cantidad_maxima->CurrentValue;
-            $this->cantidad_maxima->PlaceHolder = RemoveHtml($this->cantidad_maxima->caption());
-            if (strval($this->cantidad_maxima->EditValue) != "" && is_numeric($this->cantidad_maxima->EditValue)) {
-                $this->cantidad_maxima->EditValue = FormatNumber($this->cantidad_maxima->EditValue, null);
-            }
 
             // alicuota
             $this->alicuota->setupEditAttributes();
@@ -2061,18 +2061,6 @@ class ArticuloAdd extends Articulo
             // codigo_de_barra
             $this->codigo_de_barra->HrefValue = "";
 
-            // categoria
-            $this->categoria->HrefValue = "";
-
-            // lista_pedido
-            $this->lista_pedido->HrefValue = "";
-
-            // categoria_madre
-            $this->categoria_madre->HrefValue = "";
-
-            // sub_categoria
-            $this->sub_categoria->HrefValue = "";
-
             // tipo
             $this->tipo->HrefValue = "";
 
@@ -2087,6 +2075,18 @@ class ArticuloAdd extends Articulo
 
             // cantidad_maxima
             $this->cantidad_maxima->HrefValue = "";
+
+            // categoria
+            $this->categoria->HrefValue = "";
+
+            // lista_pedido
+            $this->lista_pedido->HrefValue = "";
+
+            // categoria_madre
+            $this->categoria_madre->HrefValue = "";
+
+            // sub_categoria
+            $this->sub_categoria->HrefValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
@@ -2173,26 +2173,6 @@ class ArticuloAdd extends Articulo
                     $this->codigo_de_barra->addErrorMessage(str_replace("%s", $this->codigo_de_barra->caption(), $this->codigo_de_barra->RequiredErrorMessage));
                 }
             }
-            if ($this->categoria->Visible && $this->categoria->Required) {
-                if (!$this->categoria->IsDetailKey && EmptyValue($this->categoria->FormValue)) {
-                    $this->categoria->addErrorMessage(str_replace("%s", $this->categoria->caption(), $this->categoria->RequiredErrorMessage));
-                }
-            }
-            if ($this->lista_pedido->Visible && $this->lista_pedido->Required) {
-                if (!$this->lista_pedido->IsDetailKey && EmptyValue($this->lista_pedido->FormValue)) {
-                    $this->lista_pedido->addErrorMessage(str_replace("%s", $this->lista_pedido->caption(), $this->lista_pedido->RequiredErrorMessage));
-                }
-            }
-            if ($this->categoria_madre->Visible && $this->categoria_madre->Required) {
-                if (!$this->categoria_madre->IsDetailKey && EmptyValue($this->categoria_madre->FormValue)) {
-                    $this->categoria_madre->addErrorMessage(str_replace("%s", $this->categoria_madre->caption(), $this->categoria_madre->RequiredErrorMessage));
-                }
-            }
-            if ($this->sub_categoria->Visible && $this->sub_categoria->Required) {
-                if (!$this->sub_categoria->IsDetailKey && EmptyValue($this->sub_categoria->FormValue)) {
-                    $this->sub_categoria->addErrorMessage(str_replace("%s", $this->sub_categoria->caption(), $this->sub_categoria->RequiredErrorMessage));
-                }
-            }
             if ($this->tipo->Visible && $this->tipo->Required) {
                 if (!$this->tipo->IsDetailKey && EmptyValue($this->tipo->FormValue)) {
                     $this->tipo->addErrorMessage(str_replace("%s", $this->tipo->caption(), $this->tipo->RequiredErrorMessage));
@@ -2223,6 +2203,26 @@ class ArticuloAdd extends Articulo
             }
             if (!CheckNumber($this->cantidad_maxima->FormValue)) {
                 $this->cantidad_maxima->addErrorMessage($this->cantidad_maxima->getErrorMessage(false));
+            }
+            if ($this->categoria->Visible && $this->categoria->Required) {
+                if (!$this->categoria->IsDetailKey && EmptyValue($this->categoria->FormValue)) {
+                    $this->categoria->addErrorMessage(str_replace("%s", $this->categoria->caption(), $this->categoria->RequiredErrorMessage));
+                }
+            }
+            if ($this->lista_pedido->Visible && $this->lista_pedido->Required) {
+                if (!$this->lista_pedido->IsDetailKey && EmptyValue($this->lista_pedido->FormValue)) {
+                    $this->lista_pedido->addErrorMessage(str_replace("%s", $this->lista_pedido->caption(), $this->lista_pedido->RequiredErrorMessage));
+                }
+            }
+            if ($this->categoria_madre->Visible && $this->categoria_madre->Required) {
+                if (!$this->categoria_madre->IsDetailKey && EmptyValue($this->categoria_madre->FormValue)) {
+                    $this->categoria_madre->addErrorMessage(str_replace("%s", $this->categoria_madre->caption(), $this->categoria_madre->RequiredErrorMessage));
+                }
+            }
+            if ($this->sub_categoria->Visible && $this->sub_categoria->Required) {
+                if (!$this->sub_categoria->IsDetailKey && EmptyValue($this->sub_categoria->FormValue)) {
+                    $this->sub_categoria->addErrorMessage(str_replace("%s", $this->sub_categoria->caption(), $this->sub_categoria->RequiredErrorMessage));
+                }
             }
             if ($this->alicuota->Visible && $this->alicuota->Required) {
                 if (!$this->alicuota->IsDetailKey && EmptyValue($this->alicuota->FormValue)) {
@@ -2450,18 +2450,6 @@ class ArticuloAdd extends Articulo
         // codigo_de_barra
         $this->codigo_de_barra->setDbValueDef($rsnew, $this->codigo_de_barra->CurrentValue, false);
 
-        // categoria
-        $this->categoria->setDbValueDef($rsnew, $this->categoria->CurrentValue, false);
-
-        // lista_pedido
-        $this->lista_pedido->setDbValueDef($rsnew, $this->lista_pedido->CurrentValue, false);
-
-        // categoria_madre
-        $this->categoria_madre->setDbValueDef($rsnew, $this->categoria_madre->CurrentValue, false);
-
-        // sub_categoria
-        $this->sub_categoria->setDbValueDef($rsnew, $this->sub_categoria->CurrentValue, false);
-
         // tipo
         $this->tipo->setDbValueDef($rsnew, $this->tipo->CurrentValue, false);
 
@@ -2476,6 +2464,18 @@ class ArticuloAdd extends Articulo
 
         // cantidad_maxima
         $this->cantidad_maxima->setDbValueDef($rsnew, $this->cantidad_maxima->CurrentValue, strval($this->cantidad_maxima->CurrentValue) == "");
+
+        // categoria
+        $this->categoria->setDbValueDef($rsnew, $this->categoria->CurrentValue, false);
+
+        // lista_pedido
+        $this->lista_pedido->setDbValueDef($rsnew, $this->lista_pedido->CurrentValue, false);
+
+        // categoria_madre
+        $this->categoria_madre->setDbValueDef($rsnew, $this->categoria_madre->CurrentValue, false);
+
+        // sub_categoria
+        $this->sub_categoria->setDbValueDef($rsnew, $this->sub_categoria->CurrentValue, false);
 
         // alicuota
         $this->alicuota->setDbValueDef($rsnew, $this->alicuota->CurrentValue, false);
@@ -2536,18 +2536,6 @@ class ArticuloAdd extends Articulo
         if (isset($row['codigo_de_barra'])) { // codigo_de_barra
             $this->codigo_de_barra->setFormValue($row['codigo_de_barra']);
         }
-        if (isset($row['categoria'])) { // categoria
-            $this->categoria->setFormValue($row['categoria']);
-        }
-        if (isset($row['lista_pedido'])) { // lista_pedido
-            $this->lista_pedido->setFormValue($row['lista_pedido']);
-        }
-        if (isset($row['categoria_madre'])) { // categoria_madre
-            $this->categoria_madre->setFormValue($row['categoria_madre']);
-        }
-        if (isset($row['sub_categoria'])) { // sub_categoria
-            $this->sub_categoria->setFormValue($row['sub_categoria']);
-        }
         if (isset($row['tipo'])) { // tipo
             $this->tipo->setFormValue($row['tipo']);
         }
@@ -2562,6 +2550,18 @@ class ArticuloAdd extends Articulo
         }
         if (isset($row['cantidad_maxima'])) { // cantidad_maxima
             $this->cantidad_maxima->setFormValue($row['cantidad_maxima']);
+        }
+        if (isset($row['categoria'])) { // categoria
+            $this->categoria->setFormValue($row['categoria']);
+        }
+        if (isset($row['lista_pedido'])) { // lista_pedido
+            $this->lista_pedido->setFormValue($row['lista_pedido']);
+        }
+        if (isset($row['categoria_madre'])) { // categoria_madre
+            $this->categoria_madre->setFormValue($row['categoria_madre']);
+        }
+        if (isset($row['sub_categoria'])) { // sub_categoria
+            $this->sub_categoria->setFormValue($row['sub_categoria']);
         }
         if (isset($row['alicuota'])) { // alicuota
             $this->alicuota->setFormValue($row['alicuota']);
@@ -2693,6 +2693,13 @@ class ArticuloAdd extends Articulo
                     break;
                 case "x_fabricante":
                     break;
+                case "x_tipo":
+                    break;
+                case "x_unidad_medida_defecto":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_cantidad_por_unidad_medida":
+                    break;
                 case "x_categoria":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
@@ -2702,13 +2709,6 @@ class ArticuloAdd extends Articulo
                 case "x_categoria_madre":
                     break;
                 case "x_sub_categoria":
-                    break;
-                case "x_tipo":
-                    break;
-                case "x_unidad_medida_defecto":
-                    $lookupFilter = $fld->getSelectFilter(); // PHP
-                    break;
-                case "x_cantidad_por_unidad_medida":
                     break;
                 case "x_alicuota":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
