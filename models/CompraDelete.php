@@ -132,9 +132,9 @@ class CompraDelete extends Compra
         $this->id->setVisibility();
         $this->proveedor->setVisibility();
         $this->tipo_documento->setVisibility();
-        $this->doc_afectado->setVisibility();
+        $this->doc_afectado->Visible = false;
         $this->documento->setVisibility();
-        $this->nro_control->setVisibility();
+        $this->nro_control->Visible = false;
         $this->fecha->setVisibility();
         $this->descripcion->Visible = false;
         $this->aplica_retencion->Visible = false;
@@ -142,14 +142,14 @@ class CompraDelete extends Compra
         $this->monto_gravado->Visible = false;
         $this->alicuota->Visible = false;
         $this->monto_iva->Visible = false;
-        $this->monto_total->setVisibility();
+        $this->monto_total->Visible = false;
         $this->monto_pagar->setVisibility();
         $this->ret_iva->Visible = false;
-        $this->ref_iva->Visible = false;
+        $this->ref_iva->setVisibility();
         $this->ret_islr->Visible = false;
         $this->ref_islr->Visible = false;
         $this->ret_municipal->Visible = false;
-        $this->ref_municipal->Visible = false;
+        $this->ref_municipal->setVisibility();
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
@@ -158,9 +158,9 @@ class CompraDelete extends Compra
         $this->sustraendo->Visible = false;
         $this->tipo_municipal->Visible = false;
         $this->anulado->setVisibility();
-        $this->pagado->setVisibility();
         $this->moneda->setVisibility();
-        $this->tasa_dia->setVisibility();
+        $this->tasa_dia->Visible = false;
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -444,6 +444,7 @@ class CompraDelete extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->pagado);
 
         // Set up Breadcrumb
@@ -657,9 +658,9 @@ class CompraDelete extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
-        $this->pagado->setDbValue($row['pagado']);
         $this->moneda->setDbValue($row['moneda']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -695,9 +696,9 @@ class CompraDelete extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
-        $row['pagado'] = $this->pagado->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -771,11 +772,11 @@ class CompraDelete extends Compra
 
         // anulado
 
-        // pagado
-
         // moneda
 
         // tasa_dia
+
+        // pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -955,19 +956,40 @@ class CompraDelete extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
+
+            // tasa_dia
+            $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
+            $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
+
             // pagado
             if (strval($this->pagado->CurrentValue) != "") {
                 $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
             } else {
                 $this->pagado->ViewValue = null;
             }
-
-            // moneda
-            $this->moneda->ViewValue = $this->moneda->CurrentValue;
-
-            // tasa_dia
-            $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
-            $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
 
             // id
             $this->id->HrefValue = "";
@@ -981,45 +1003,53 @@ class CompraDelete extends Compra
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
 
-            // doc_afectado
-            $this->doc_afectado->HrefValue = "";
-            $this->doc_afectado->TooltipValue = "";
-
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
-
-            // nro_control
-            $this->nro_control->HrefValue = "";
-            $this->nro_control->TooltipValue = "";
 
             // fecha
             $this->fecha->HrefValue = "";
             $this->fecha->TooltipValue = "";
 
-            // monto_total
-            $this->monto_total->HrefValue = "";
-            $this->monto_total->TooltipValue = "";
-
             // monto_pagar
             $this->monto_pagar->HrefValue = "";
             $this->monto_pagar->TooltipValue = "";
+
+            // ref_iva
+            if (!EmptyValue($this->id->CurrentValue)) {
+                $this->ref_iva->HrefValue = $this->ref_iva->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_iva->LinkAttrs["target"] = "_blank"; // Add target
+                if ($this->isExport()) {
+                    $this->ref_iva->HrefValue = FullUrl($this->ref_iva->HrefValue, "href");
+                }
+            } else {
+                $this->ref_iva->HrefValue = "";
+            }
+            $this->ref_iva->TooltipValue = "";
+
+            // ref_municipal
+            if (!EmptyValue($this->id->CurrentValue)) {
+                $this->ref_municipal->HrefValue = $this->ref_municipal->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_municipal->LinkAttrs["target"] = "_blank"; // Add target
+                if ($this->isExport()) {
+                    $this->ref_municipal->HrefValue = FullUrl($this->ref_municipal->HrefValue, "href");
+                }
+            } else {
+                $this->ref_municipal->HrefValue = "";
+            }
+            $this->ref_municipal->TooltipValue = "";
 
             // anulado
             $this->anulado->HrefValue = "";
             $this->anulado->TooltipValue = "";
 
-            // pagado
-            $this->pagado->HrefValue = "";
-            $this->pagado->TooltipValue = "";
-
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
 
-            // tasa_dia
-            $this->tasa_dia->HrefValue = "";
-            $this->tasa_dia->TooltipValue = "";
+            // pagado
+            $this->pagado->HrefValue = "";
+            $this->pagado->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1171,6 +1201,9 @@ class CompraDelete extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_pagado":
                     break;

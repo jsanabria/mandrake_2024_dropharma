@@ -273,35 +273,29 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
         <th data-name="tipo_documento" class="<?= $Page->tipo_documento->headerCellClass() ?>"><div id="elh_compra_tipo_documento" class="compra_tipo_documento"><?= $Page->renderFieldHeader($Page->tipo_documento) ?></div></th>
 <?php } ?>
-<?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
-        <th data-name="doc_afectado" class="<?= $Page->doc_afectado->headerCellClass() ?>"><div id="elh_compra_doc_afectado" class="compra_doc_afectado"><?= $Page->renderFieldHeader($Page->doc_afectado) ?></div></th>
-<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
         <th data-name="documento" class="<?= $Page->documento->headerCellClass() ?>"><div id="elh_compra_documento" class="compra_documento"><?= $Page->renderFieldHeader($Page->documento) ?></div></th>
-<?php } ?>
-<?php if ($Page->nro_control->Visible) { // nro_control ?>
-        <th data-name="nro_control" class="<?= $Page->nro_control->headerCellClass() ?>"><div id="elh_compra_nro_control" class="compra_nro_control"><?= $Page->renderFieldHeader($Page->nro_control) ?></div></th>
 <?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
         <th data-name="fecha" class="<?= $Page->fecha->headerCellClass() ?>"><div id="elh_compra_fecha" class="compra_fecha"><?= $Page->renderFieldHeader($Page->fecha) ?></div></th>
 <?php } ?>
-<?php if ($Page->monto_total->Visible) { // monto_total ?>
-        <th data-name="monto_total" class="<?= $Page->monto_total->headerCellClass() ?>"><div id="elh_compra_monto_total" class="compra_monto_total"><?= $Page->renderFieldHeader($Page->monto_total) ?></div></th>
-<?php } ?>
 <?php if ($Page->monto_pagar->Visible) { // monto_pagar ?>
         <th data-name="monto_pagar" class="<?= $Page->monto_pagar->headerCellClass() ?>"><div id="elh_compra_monto_pagar" class="compra_monto_pagar"><?= $Page->renderFieldHeader($Page->monto_pagar) ?></div></th>
+<?php } ?>
+<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
+        <th data-name="ref_iva" class="<?= $Page->ref_iva->headerCellClass() ?>"><div id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->renderFieldHeader($Page->ref_iva) ?></div></th>
+<?php } ?>
+<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
+        <th data-name="ref_municipal" class="<?= $Page->ref_municipal->headerCellClass() ?>"><div id="elh_compra_ref_municipal" class="compra_ref_municipal"><?= $Page->renderFieldHeader($Page->ref_municipal) ?></div></th>
 <?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th data-name="anulado" class="<?= $Page->anulado->headerCellClass() ?>"><div id="elh_compra_anulado" class="compra_anulado"><?= $Page->renderFieldHeader($Page->anulado) ?></div></th>
 <?php } ?>
-<?php if ($Page->pagado->Visible) { // pagado ?>
-        <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_compra_pagado" class="compra_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
-<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
         <th data-name="moneda" class="<?= $Page->moneda->headerCellClass() ?>"><div id="elh_compra_moneda" class="compra_moneda"><?= $Page->renderFieldHeader($Page->moneda) ?></div></th>
 <?php } ?>
-<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
-        <th data-name="tasa_dia" class="<?= $Page->tasa_dia->headerCellClass() ?>"><div id="elh_compra_tasa_dia" class="compra_tasa_dia"><?= $Page->renderFieldHeader($Page->tasa_dia) ?></div></th>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_compra_pagado" class="compra_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -355,27 +349,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
-        <td data-name="doc_afectado"<?= $Page->doc_afectado->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_doc_afectado" class="el_compra_doc_afectado">
-<span<?= $Page->doc_afectado->viewAttributes() ?>>
-<?= $Page->doc_afectado->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->documento->Visible) { // documento ?>
         <td data-name="documento"<?= $Page->documento->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_documento" class="el_compra_documento">
 <span<?= $Page->documento->viewAttributes() ?>>
 <?= $Page->documento->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->nro_control->Visible) { // nro_control ?>
-        <td data-name="nro_control"<?= $Page->nro_control->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_nro_control" class="el_compra_nro_control">
-<span<?= $Page->nro_control->viewAttributes() ?>>
-<?= $Page->nro_control->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>
@@ -387,19 +365,37 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->monto_total->Visible) { // monto_total ?>
-        <td data-name="monto_total"<?= $Page->monto_total->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_monto_total" class="el_compra_monto_total">
-<span<?= $Page->monto_total->viewAttributes() ?>>
-<?= $Page->monto_total->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->monto_pagar->Visible) { // monto_pagar ?>
         <td data-name="monto_pagar"<?= $Page->monto_pagar->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_monto_pagar" class="el_compra_monto_pagar">
 <span<?= $Page->monto_pagar->viewAttributes() ?>>
 <?= $Page->monto_pagar->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->ref_iva->Visible) { // ref_iva ?>
+        <td data-name="ref_iva"<?= $Page->ref_iva->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_ref_iva" class="el_compra_ref_iva">
+<span<?= $Page->ref_iva->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_iva->getViewValue()) && $Page->ref_iva->linkAttributes() != "") { ?>
+<a<?= $Page->ref_iva->linkAttributes() ?>><?= $Page->ref_iva->getViewValue() ?></a>
+<?php } else { ?>
+<?= $Page->ref_iva->getViewValue() ?>
+<?php } ?>
+</span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
+        <td data-name="ref_municipal"<?= $Page->ref_municipal->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_ref_municipal" class="el_compra_ref_municipal">
+<span<?= $Page->ref_municipal->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_municipal->getViewValue()) && $Page->ref_municipal->linkAttributes() != "") { ?>
+<a<?= $Page->ref_municipal->linkAttributes() ?>><?= $Page->ref_municipal->getViewValue() ?></a>
+<?php } else { ?>
+<?= $Page->ref_municipal->getViewValue() ?>
+<?php } ?>
+</span>
 </span>
 </td>
     <?php } ?>
@@ -411,14 +407,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->pagado->Visible) { // pagado ?>
-        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_pagado" class="el_compra_pagado">
-<span<?= $Page->pagado->viewAttributes() ?>>
-<?= $Page->pagado->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->moneda->Visible) { // moneda ?>
         <td data-name="moneda"<?= $Page->moneda->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_moneda" class="el_compra_moneda">
@@ -427,11 +415,11 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
-        <td data-name="tasa_dia"<?= $Page->tasa_dia->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_tasa_dia" class="el_compra_tasa_dia">
-<span<?= $Page->tasa_dia->viewAttributes() ?>>
-<?= $Page->tasa_dia->getViewValue() ?></span>
+    <?php if ($Page->pagado->Visible) { // pagado ?>
+        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_pagado" class="el_compra_pagado">
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

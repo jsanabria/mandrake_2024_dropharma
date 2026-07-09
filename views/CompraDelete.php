@@ -59,35 +59,29 @@ $Page->showMessage();
 <?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
         <th class="<?= $Page->tipo_documento->headerCellClass() ?>"><span id="elh_compra_tipo_documento" class="compra_tipo_documento"><?= $Page->tipo_documento->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
-        <th class="<?= $Page->doc_afectado->headerCellClass() ?>"><span id="elh_compra_doc_afectado" class="compra_doc_afectado"><?= $Page->doc_afectado->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
         <th class="<?= $Page->documento->headerCellClass() ?>"><span id="elh_compra_documento" class="compra_documento"><?= $Page->documento->caption() ?></span></th>
-<?php } ?>
-<?php if ($Page->nro_control->Visible) { // nro_control ?>
-        <th class="<?= $Page->nro_control->headerCellClass() ?>"><span id="elh_compra_nro_control" class="compra_nro_control"><?= $Page->nro_control->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
         <th class="<?= $Page->fecha->headerCellClass() ?>"><span id="elh_compra_fecha" class="compra_fecha"><?= $Page->fecha->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->monto_total->Visible) { // monto_total ?>
-        <th class="<?= $Page->monto_total->headerCellClass() ?>"><span id="elh_compra_monto_total" class="compra_monto_total"><?= $Page->monto_total->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->monto_pagar->Visible) { // monto_pagar ?>
         <th class="<?= $Page->monto_pagar->headerCellClass() ?>"><span id="elh_compra_monto_pagar" class="compra_monto_pagar"><?= $Page->monto_pagar->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
+        <th class="<?= $Page->ref_iva->headerCellClass() ?>"><span id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->ref_iva->caption() ?></span></th>
+<?php } ?>
+<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
+        <th class="<?= $Page->ref_municipal->headerCellClass() ?>"><span id="elh_compra_ref_municipal" class="compra_ref_municipal"><?= $Page->ref_municipal->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th class="<?= $Page->anulado->headerCellClass() ?>"><span id="elh_compra_anulado" class="compra_anulado"><?= $Page->anulado->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->pagado->Visible) { // pagado ?>
-        <th class="<?= $Page->pagado->headerCellClass() ?>"><span id="elh_compra_pagado" class="compra_pagado"><?= $Page->pagado->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
         <th class="<?= $Page->moneda->headerCellClass() ?>"><span id="elh_compra_moneda" class="compra_moneda"><?= $Page->moneda->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
-        <th class="<?= $Page->tasa_dia->headerCellClass() ?>"><span id="elh_compra_tasa_dia" class="compra_tasa_dia"><?= $Page->tasa_dia->caption() ?></span></th>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <th class="<?= $Page->pagado->headerCellClass() ?>"><span id="elh_compra_pagado" class="compra_pagado"><?= $Page->pagado->caption() ?></span></th>
 <?php } ?>
     </tr>
     </thead>
@@ -134,27 +128,11 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
-        <td<?= $Page->doc_afectado->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->doc_afectado->viewAttributes() ?>>
-<?= $Page->doc_afectado->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
         <td<?= $Page->documento->cellAttributes() ?>>
 <span id="">
 <span<?= $Page->documento->viewAttributes() ?>>
 <?= $Page->documento->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->nro_control->Visible) { // nro_control ?>
-        <td<?= $Page->nro_control->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->nro_control->viewAttributes() ?>>
-<?= $Page->nro_control->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>
@@ -166,19 +144,37 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->monto_total->Visible) { // monto_total ?>
-        <td<?= $Page->monto_total->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->monto_total->viewAttributes() ?>>
-<?= $Page->monto_total->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->monto_pagar->Visible) { // monto_pagar ?>
         <td<?= $Page->monto_pagar->cellAttributes() ?>>
 <span id="">
 <span<?= $Page->monto_pagar->viewAttributes() ?>>
 <?= $Page->monto_pagar->getViewValue() ?></span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->ref_iva->Visible) { // ref_iva ?>
+        <td<?= $Page->ref_iva->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->ref_iva->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_iva->getViewValue()) && $Page->ref_iva->linkAttributes() != "") { ?>
+<a<?= $Page->ref_iva->linkAttributes() ?>><?= $Page->ref_iva->getViewValue() ?></a>
+<?php } else { ?>
+<?= $Page->ref_iva->getViewValue() ?>
+<?php } ?>
+</span>
+</span>
+</td>
+<?php } ?>
+<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
+        <td<?= $Page->ref_municipal->cellAttributes() ?>>
+<span id="">
+<span<?= $Page->ref_municipal->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_municipal->getViewValue()) && $Page->ref_municipal->linkAttributes() != "") { ?>
+<a<?= $Page->ref_municipal->linkAttributes() ?>><?= $Page->ref_municipal->getViewValue() ?></a>
+<?php } else { ?>
+<?= $Page->ref_municipal->getViewValue() ?>
+<?php } ?>
+</span>
 </span>
 </td>
 <?php } ?>
@@ -190,14 +186,6 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->pagado->Visible) { // pagado ?>
-        <td<?= $Page->pagado->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->pagado->viewAttributes() ?>>
-<?= $Page->pagado->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
         <td<?= $Page->moneda->cellAttributes() ?>>
 <span id="">
@@ -206,11 +194,11 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
-        <td<?= $Page->tasa_dia->cellAttributes() ?>>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+        <td<?= $Page->pagado->cellAttributes() ?>>
 <span id="">
-<span<?= $Page->tasa_dia->viewAttributes() ?>>
-<?= $Page->tasa_dia->getViewValue() ?></span>
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

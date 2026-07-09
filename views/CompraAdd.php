@@ -33,7 +33,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
             ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
             ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
-            ["pagado", [fields.pagado.visible && fields.pagado.required ? ew.Validators.required(fields.pagado.caption) : null], fields.pagado.isInvalid],
+            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null, ew.Validators.float], fields.tasa_dia.isInvalid]
         ])
@@ -57,7 +57,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "proveedor": <?= $Page->proveedor->toClientList($Page) ?>,
             "tipo_documento": <?= $Page->tipo_documento->toClientList($Page) ?>,
             "aplica_retencion": <?= $Page->aplica_retencion->toClientList($Page) ?>,
-            "pagado": <?= $Page->pagado->toClientList($Page) ?>,
+            "moneda": <?= $Page->moneda->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -270,34 +270,43 @@ loadjs.ready(["fcompraadd", "datetimepicker"], function () {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->pagado->Visible) { // pagado ?>
-    <div id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
-        <label id="elh_compra_pagado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pagado->caption() ?><?= $Page->pagado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pagado->cellAttributes() ?>>
-<span id="el_compra_pagado">
-<template id="tp_x_pagado">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compra" data-field="x_pagado" name="x_pagado" id="x_pagado"<?= $Page->pagado->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x_pagado" class="ew-item-list"></div>
-<selection-list hidden
-    id="x_pagado"
-    name="x_pagado"
-    value="<?= HtmlEncode($Page->pagado->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x_pagado"
-    data-target="dsl_x_pagado"
-    data-repeatcolumn="5"
-    class="form-control<?= $Page->pagado->isInvalidClass() ?>"
-    data-table="compra"
-    data-field="x_pagado"
-    data-page="1"
-    data-value-separator="<?= $Page->pagado->displayValueSeparatorAttribute() ?>"
-    <?= $Page->pagado->editAttributes() ?>></selection-list>
-<?= $Page->pagado->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->pagado->getErrorMessage() ?></div>
+<?php if ($Page->fecha_registro->Visible) { // fecha_registro ?>
+    <div id="r_fecha_registro"<?= $Page->fecha_registro->rowAttributes() ?>>
+        <label id="elh_compra_fecha_registro" for="x_fecha_registro" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha_registro->caption() ?><?= $Page->fecha_registro->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha_registro->cellAttributes() ?>>
+<span id="el_compra_fecha_registro">
+<input type="<?= $Page->fecha_registro->getInputTextType() ?>" name="x_fecha_registro" id="x_fecha_registro" data-table="compra" data-field="x_fecha_registro" value="<?= $Page->fecha_registro->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha_registro->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_registro->formatPattern()) ?>"<?= $Page->fecha_registro->editAttributes() ?> aria-describedby="x_fecha_registro_help">
+<?= $Page->fecha_registro->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->fecha_registro->getErrorMessage() ?></div>
+<?php if (!$Page->fecha_registro->ReadOnly && !$Page->fecha_registro->Disabled && !isset($Page->fecha_registro->EditAttrs["readonly"]) && !isset($Page->fecha_registro->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fcompraadd", "datetimepicker"], function () {
+    let format = "<?= DateFormat(7) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fcompraadd", "x_fecha_registro", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>
@@ -307,9 +316,44 @@ loadjs.ready(["fcompraadd", "datetimepicker"], function () {
         <label id="elh_compra_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->moneda->cellAttributes() ?>>
 <span id="el_compra_moneda">
-<input type="<?= $Page->moneda->getInputTextType() ?>" name="x_moneda" id="x_moneda" data-table="compra" data-field="x_moneda" value="<?= $Page->moneda->EditValue ?>" data-page="1" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->moneda->formatPattern()) ?>"<?= $Page->moneda->editAttributes() ?> aria-describedby="x_moneda_help">
-<?= $Page->moneda->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
+    <select
+        id="x_moneda"
+        name="x_moneda"
+        class="form-select ew-select<?= $Page->moneda->isInvalidClass() ?>"
+        <?php if (!$Page->moneda->IsNativeSelect) { ?>
+        data-select2-id="fcompraadd_x_moneda"
+        <?php } ?>
+        data-table="compra"
+        data-field="x_moneda"
+        data-page="1"
+        data-value-separator="<?= $Page->moneda->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>"
+        <?= $Page->moneda->editAttributes() ?>>
+        <?= $Page->moneda->selectOptionListHtml("x_moneda") ?>
+    </select>
+    <?= $Page->moneda->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
+<?= $Page->moneda->Lookup->getParamTag($Page, "p_x_moneda") ?>
+<?php if (!$Page->moneda->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fcompraadd", function() {
+    var options = { name: "x_moneda", selectId: "fcompraadd_x_moneda" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fcompraadd.lists.moneda?.lookupOptions.length) {
+        options.data = { id: "x_moneda", form: "fcompraadd" };
+    } else {
+        options.ajax = { id: "x_moneda", form: "fcompraadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.compra.fields.moneda.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>
@@ -461,6 +505,69 @@ loadjs.ready("load", function () {
         	else
         	   	$("#r_doc_afectado").show();
         }
+    });
+    $(document).ready(function() {
+        // Escuchar el cambio en el campo de fecha (asegúrate de usar el ID correcto, usualmente x_fecha)
+        $("#x_fecha").on("blur change", function() {
+            var fechaSeleccionada = $(this).val();
+            if (fechaSeleccionada !== "") {
+                $.ajax({
+                    url: 'include/get_tasa.php',
+                    type: 'GET',
+                    data: { fecha: fechaSeleccionada },
+                    success: function(response) {
+                        // Asignar al campo tasa día
+                        $("#x_tasa_dia").val(response);
+
+                        // Si es 0, podrías resaltar el campo para indicar que requiere carga manual
+                        if (response == 0) {
+                            $("#x_tasa_dia").css("border", "2px solid red");
+                            alert("No se encontró tasa para esta fecha, por favor ingrese manualmente.");
+                        } else {
+                            $("#x_tasa_dia").css("border", "");
+                        }
+                    }
+                });
+            }
+        });
+    });
+    $(document).ready(function() {
+        $("#x_doc_afectado").on("blur", function() {
+            var tipoDoc = $("#x_tipo_documento").val(); // Ajusta según el ID real de tu selector de tipo
+            var docAfectado = $(this).val();
+            var proveedor = $("#x_proveedor").val();
+            if(proveedor === "") {
+                ew.alert("Debe seleccionar un proveedor para poder registrar este tipo de documento.");
+                $("#x_doc_afectado").val("");
+                return false;
+            }
+            if ((tipoDoc == 'NC' || tipoDoc == 'ND') && docAfectado !== "" && proveedor !== "") {
+                $.ajax({
+                    url: 'include/buscar_factura_compra.php',
+                    type: 'POST',
+                    data: { proveedor: proveedor, doc_afectado: docAfectado },
+                    success: function(response) {
+                        if (response.success) {
+                            var data = response.data;
+
+                            // Validar que el monto de la NC no supere el de la FC
+                            // Puedes agregar lógica aquí para comparar con los inputs actuales
+
+                            // Llenar campos automáticamente
+                            $("#x_monto_exento").val(data.monto_exento);
+                            $("#x_monto_gravado").val(data.monto_gravado);
+                            $("#x_alicuota").val(data.alicuota);
+                            $("#x_monto_iva").val(data.monto_iva);
+                            $("#x_monto_total").val(data.monto_total);
+                            $("#x_aplica_retencion").val(data.aplica_retencion);
+                            // ... completar los demás campos según sea necesario
+                        } else {
+                            ew.alert(response.message);
+                        }
+                    }
+                });
+            }
+        });
     });
 });
 </script>

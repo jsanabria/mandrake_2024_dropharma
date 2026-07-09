@@ -118,17 +118,18 @@ class Compra extends AbstractEntity
     private ?string $anulado;
 
     #[Column(type: "string", nullable: true)]
-    private ?string $pagado;
-
-    #[Column(type: "string", nullable: true)]
     private ?string $moneda;
 
     #[Column(name: "tasa_dia", type: "decimal", nullable: true)]
     private ?string $tasaDia;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $pagado;
+
     public function __construct()
     {
         $this->anulado = "N";
+        $this->moneda = "Bs.";
         $this->pagado = "N";
     }
 
@@ -457,20 +458,6 @@ class Compra extends AbstractEntity
         return $this;
     }
 
-    public function getPagado(): ?string
-    {
-        return $this->pagado;
-    }
-
-    public function setPagado(?string $value): static
-    {
-        if (!in_array($value, ["S", "N"])) {
-            throw new \InvalidArgumentException("Invalid 'pagado' value");
-        }
-        $this->pagado = $value;
-        return $this;
-    }
-
     public function getMoneda(): ?string
     {
         return HtmlDecode($this->moneda);
@@ -490,6 +477,20 @@ class Compra extends AbstractEntity
     public function setTasaDia(?string $value): static
     {
         $this->tasaDia = $value;
+        return $this;
+    }
+
+    public function getPagado(): ?string
+    {
+        return $this->pagado;
+    }
+
+    public function setPagado(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'pagado' value");
+        }
+        $this->pagado = $value;
         return $this;
     }
 }

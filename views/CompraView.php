@@ -218,17 +218,6 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->pagado->Visible) { // pagado ?>
-    <tr id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_pagado"><?= $Page->pagado->caption() ?></span></td>
-        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
-<span id="el_compra_pagado" data-page="1">
-<span<?= $Page->pagado->viewAttributes() ?>>
-<?= $Page->pagado->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
     <tr id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_moneda"><?= $Page->moneda->caption() ?></span></td>
@@ -247,6 +236,17 @@ loadjs.ready("head", function () {
 <span id="el_compra_tasa_dia" data-page="1">
 <span<?= $Page->tasa_dia->viewAttributes() ?>>
 <?= $Page->tasa_dia->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->pagado->Visible) { // pagado ?>
+    <tr id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_pagado"><?= $Page->pagado->caption() ?></span></td>
+        <td data-name="pagado"<?= $Page->pagado->cellAttributes() ?>>
+<span id="el_compra_pagado" data-page="1">
+<span<?= $Page->pagado->viewAttributes() ?>>
+<?= $Page->pagado->getViewValue() ?></span>
 </span>
 </td>
     </tr>

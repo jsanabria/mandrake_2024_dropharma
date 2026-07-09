@@ -83,9 +83,9 @@ class Compra extends DbTable
     public $sustraendo;
     public $tipo_municipal;
     public $anulado;
-    public $pagado;
     public $moneda;
     public $tasa_dia;
+    public $pagado;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -234,6 +234,7 @@ class Compra extends DbTable
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
+        $this->doc_afectado->addMethod("getSelectFilter", fn() => "proveedor = '{x_proveedor}' AND tipo_documento IN ('FC', 'ND') AND anulado = 'N'");
         $this->doc_afectado->InputTextType = "text";
         $this->doc_afectado->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['doc_afectado'] = &$this->doc_afectado;
@@ -544,7 +545,7 @@ class Compra extends DbTable
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->ref_iva->addMethod("getLinkPrefix", fn() => "../reportes/rptRetencion.php?Nretencion=");
+        $this->ref_iva->addMethod("getLinkPrefix", fn() => "reportes/rptRetencion.php?Nretencion=");
         $this->ref_iva->InputTextType = "text";
         $this->ref_iva->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['ref_iva'] = &$this->ref_iva;
@@ -591,7 +592,7 @@ class Compra extends DbTable
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
-        $this->ref_islr->addMethod("getLinkPrefix", fn() => "../reportes/rptRetencion2.php?Nretencion=");
+        $this->ref_islr->addMethod("getLinkPrefix", fn() => "reportes/rptRetencion2.php?Nretencion=");
         $this->ref_islr->InputTextType = "text";
         $this->ref_islr->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['ref_islr'] = &$this->ref_islr;
@@ -837,6 +838,60 @@ class Compra extends DbTable
         $this->anulado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['anulado'] = &$this->anulado;
 
+        // moneda
+        $this->moneda = new DbField(
+            $this, // Table
+            'x_moneda', // Variable name
+            'moneda', // Name
+            '`moneda`', // Expression
+            '`moneda`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`moneda`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'SELECT' // Edit Tag
+        );
+        $this->moneda->addMethod("getSelectFilter", fn() => "`codigo` = '006'");
+        $this->moneda->addMethod("getDefault", fn() => "Bs.");
+        $this->moneda->InputTextType = "text";
+        $this->moneda->Required = true; // Required field
+        $this->moneda->setSelectMultiple(false); // Select one
+        $this->moneda->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->moneda->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->moneda->Lookup = new Lookup($this->moneda, 'parametro', false, 'valor1', ["valor1","","",""], '', '', [], [], [], [], [], [], false, '', '', "`valor1`");
+        $this->moneda->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['moneda'] = &$this->moneda;
+
+        // tasa_dia
+        $this->tasa_dia = new DbField(
+            $this, // Table
+            'x_tasa_dia', // Variable name
+            'tasa_dia', // Name
+            '`tasa_dia`', // Expression
+            '`tasa_dia`', // Basic search expression
+            131, // Type
+            16, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tasa_dia`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tasa_dia->InputTextType = "text";
+        $this->tasa_dia->Raw = true;
+        $this->tasa_dia->Required = true; // Required field
+        $this->tasa_dia->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
+        $this->tasa_dia->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->Fields['tasa_dia'] = &$this->tasa_dia;
+
         // pagado
         $this->pagado = new DbField(
             $this, // Table
@@ -862,52 +917,6 @@ class Compra extends DbTable
         $this->pagado->OptionCount = 2;
         $this->pagado->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['pagado'] = &$this->pagado;
-
-        // moneda
-        $this->moneda = new DbField(
-            $this, // Table
-            'x_moneda', // Variable name
-            'moneda', // Name
-            '`moneda`', // Expression
-            '`moneda`', // Basic search expression
-            200, // Type
-            6, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`moneda`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->moneda->InputTextType = "text";
-        $this->moneda->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
-        $this->Fields['moneda'] = &$this->moneda;
-
-        // tasa_dia
-        $this->tasa_dia = new DbField(
-            $this, // Table
-            'x_tasa_dia', // Variable name
-            'tasa_dia', // Name
-            '`tasa_dia`', // Expression
-            '`tasa_dia`', // Basic search expression
-            131, // Type
-            16, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`tasa_dia`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->tasa_dia->InputTextType = "text";
-        $this->tasa_dia->Raw = true;
-        $this->tasa_dia->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
-        $this->tasa_dia->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
-        $this->Fields['tasa_dia'] = &$this->tasa_dia;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1470,9 +1479,9 @@ class Compra extends DbTable
         $this->sustraendo->DbValue = $row['sustraendo'];
         $this->tipo_municipal->DbValue = $row['tipo_municipal'];
         $this->anulado->DbValue = $row['anulado'];
-        $this->pagado->DbValue = $row['pagado'];
         $this->moneda->DbValue = $row['moneda'];
         $this->tasa_dia->DbValue = $row['tasa_dia'];
+        $this->pagado->DbValue = $row['pagado'];
     }
 
     // Delete uploaded files
@@ -1854,9 +1863,9 @@ class Compra extends DbTable
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
-        $this->pagado->setDbValue($row['pagado']);
         $this->moneda->setDbValue($row['moneda']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Render list content
@@ -1945,11 +1954,11 @@ class Compra extends DbTable
 
         // anulado
 
-        // pagado
-
         // moneda
 
         // tasa_dia
+
+        // pagado
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -2127,19 +2136,40 @@ class Compra extends DbTable
             $this->anulado->ViewValue = null;
         }
 
+        // moneda
+        $curVal = strval($this->moneda->CurrentValue);
+        if ($curVal != "") {
+            $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+            if ($this->moneda->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                    $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                } else {
+                    $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                }
+            }
+        } else {
+            $this->moneda->ViewValue = null;
+        }
+
+        // tasa_dia
+        $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
+        $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
+
         // pagado
         if (strval($this->pagado->CurrentValue) != "") {
             $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
         } else {
             $this->pagado->ViewValue = null;
         }
-
-        // moneda
-        $this->moneda->ViewValue = $this->moneda->CurrentValue;
-
-        // tasa_dia
-        $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
-        $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
 
         // id
         $this->id->HrefValue = "";
@@ -2289,10 +2319,6 @@ class Compra extends DbTable
         $this->anulado->HrefValue = "";
         $this->anulado->TooltipValue = "";
 
-        // pagado
-        $this->pagado->HrefValue = "";
-        $this->pagado->TooltipValue = "";
-
         // moneda
         $this->moneda->HrefValue = "";
         $this->moneda->TooltipValue = "";
@@ -2300,6 +2326,10 @@ class Compra extends DbTable
         // tasa_dia
         $this->tasa_dia->HrefValue = "";
         $this->tasa_dia->TooltipValue = "";
+
+        // pagado
+        $this->pagado->HrefValue = "";
+        $this->pagado->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -2322,41 +2352,52 @@ class Compra extends DbTable
 
         // proveedor
         $this->proveedor->setupEditAttributes();
-        $this->proveedor->PlaceHolder = RemoveHtml($this->proveedor->caption());
+        $curVal = strval($this->proveedor->CurrentValue);
+        if ($curVal != "") {
+            $this->proveedor->EditValue = $this->proveedor->lookupCacheOption($curVal);
+            if ($this->proveedor->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->proveedor->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->proveedor->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $sqlWrk = $this->proveedor->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->proveedor->Lookup->renderViewRow($rswrk[0]);
+                    $this->proveedor->EditValue = $this->proveedor->displayValue($arwrk);
+                } else {
+                    $this->proveedor->EditValue = $this->proveedor->CurrentValue;
+                }
+            }
+        } else {
+            $this->proveedor->EditValue = null;
+        }
 
         // tipo_documento
         $this->tipo_documento->setupEditAttributes();
-        $this->tipo_documento->EditValue = $this->tipo_documento->options(true);
-        $this->tipo_documento->PlaceHolder = RemoveHtml($this->tipo_documento->caption());
+        if (strval($this->tipo_documento->CurrentValue) != "") {
+            $this->tipo_documento->EditValue = $this->tipo_documento->optionCaption($this->tipo_documento->CurrentValue);
+        } else {
+            $this->tipo_documento->EditValue = null;
+        }
 
         // doc_afectado
         $this->doc_afectado->setupEditAttributes();
-        if (!$this->doc_afectado->Raw) {
-            $this->doc_afectado->CurrentValue = HtmlDecode($this->doc_afectado->CurrentValue);
-        }
         $this->doc_afectado->EditValue = $this->doc_afectado->CurrentValue;
-        $this->doc_afectado->PlaceHolder = RemoveHtml($this->doc_afectado->caption());
 
         // documento
         $this->documento->setupEditAttributes();
-        if (!$this->documento->Raw) {
-            $this->documento->CurrentValue = HtmlDecode($this->documento->CurrentValue);
-        }
         $this->documento->EditValue = $this->documento->CurrentValue;
-        $this->documento->PlaceHolder = RemoveHtml($this->documento->caption());
 
         // nro_control
         $this->nro_control->setupEditAttributes();
-        if (!$this->nro_control->Raw) {
-            $this->nro_control->CurrentValue = HtmlDecode($this->nro_control->CurrentValue);
-        }
         $this->nro_control->EditValue = $this->nro_control->CurrentValue;
-        $this->nro_control->PlaceHolder = RemoveHtml($this->nro_control->caption());
 
         // fecha
         $this->fecha->setupEditAttributes();
-        $this->fecha->EditValue = FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
-        $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+        $this->fecha->EditValue = $this->fecha->CurrentValue;
+        $this->fecha->EditValue = FormatDateTime($this->fecha->EditValue, $this->fecha->formatPattern());
 
         // descripcion
         $this->descripcion->setupEditAttributes();
@@ -2364,176 +2405,185 @@ class Compra extends DbTable
         $this->descripcion->PlaceHolder = RemoveHtml($this->descripcion->caption());
 
         // aplica_retencion
-        $this->aplica_retencion->EditValue = $this->aplica_retencion->options(false);
-        $this->aplica_retencion->PlaceHolder = RemoveHtml($this->aplica_retencion->caption());
+        $this->aplica_retencion->setupEditAttributes();
+        if (strval($this->aplica_retencion->CurrentValue) != "") {
+            $this->aplica_retencion->EditValue = $this->aplica_retencion->optionCaption($this->aplica_retencion->CurrentValue);
+        } else {
+            $this->aplica_retencion->EditValue = null;
+        }
 
         // monto_exento
         $this->monto_exento->setupEditAttributes();
         $this->monto_exento->EditValue = $this->monto_exento->CurrentValue;
-        $this->monto_exento->PlaceHolder = RemoveHtml($this->monto_exento->caption());
-        if (strval($this->monto_exento->EditValue) != "" && is_numeric($this->monto_exento->EditValue)) {
-            $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, null);
-        }
+        $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, $this->monto_exento->formatPattern());
 
         // monto_gravado
         $this->monto_gravado->setupEditAttributes();
         $this->monto_gravado->EditValue = $this->monto_gravado->CurrentValue;
-        $this->monto_gravado->PlaceHolder = RemoveHtml($this->monto_gravado->caption());
-        if (strval($this->monto_gravado->EditValue) != "" && is_numeric($this->monto_gravado->EditValue)) {
-            $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, null);
-        }
+        $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, $this->monto_gravado->formatPattern());
 
         // alicuota
         $this->alicuota->setupEditAttributes();
         $this->alicuota->EditValue = $this->alicuota->CurrentValue;
-        $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
-        if (strval($this->alicuota->EditValue) != "" && is_numeric($this->alicuota->EditValue)) {
-            $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, null);
-        }
+        $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, $this->alicuota->formatPattern());
 
         // monto_iva
         $this->monto_iva->setupEditAttributes();
         $this->monto_iva->EditValue = $this->monto_iva->CurrentValue;
-        $this->monto_iva->PlaceHolder = RemoveHtml($this->monto_iva->caption());
-        if (strval($this->monto_iva->EditValue) != "" && is_numeric($this->monto_iva->EditValue)) {
-            $this->monto_iva->EditValue = FormatNumber($this->monto_iva->EditValue, null);
-        }
+        $this->monto_iva->EditValue = FormatNumber($this->monto_iva->EditValue, $this->monto_iva->formatPattern());
 
         // monto_total
         $this->monto_total->setupEditAttributes();
         $this->monto_total->EditValue = $this->monto_total->CurrentValue;
-        $this->monto_total->PlaceHolder = RemoveHtml($this->monto_total->caption());
-        if (strval($this->monto_total->EditValue) != "" && is_numeric($this->monto_total->EditValue)) {
-            $this->monto_total->EditValue = FormatNumber($this->monto_total->EditValue, null);
-        }
+        $this->monto_total->EditValue = FormatNumber($this->monto_total->EditValue, $this->monto_total->formatPattern());
 
         // monto_pagar
         $this->monto_pagar->setupEditAttributes();
         $this->monto_pagar->EditValue = $this->monto_pagar->CurrentValue;
-        $this->monto_pagar->PlaceHolder = RemoveHtml($this->monto_pagar->caption());
-        if (strval($this->monto_pagar->EditValue) != "" && is_numeric($this->monto_pagar->EditValue)) {
-            $this->monto_pagar->EditValue = FormatNumber($this->monto_pagar->EditValue, null);
-        }
+        $this->monto_pagar->EditValue = FormatNumber($this->monto_pagar->EditValue, $this->monto_pagar->formatPattern());
+        $this->monto_pagar->CssClass = "fw-bold";
 
         // ret_iva
         $this->ret_iva->setupEditAttributes();
         $this->ret_iva->EditValue = $this->ret_iva->CurrentValue;
-        $this->ret_iva->PlaceHolder = RemoveHtml($this->ret_iva->caption());
-        if (strval($this->ret_iva->EditValue) != "" && is_numeric($this->ret_iva->EditValue)) {
-            $this->ret_iva->EditValue = FormatNumber($this->ret_iva->EditValue, null);
-        }
+        $this->ret_iva->EditValue = FormatNumber($this->ret_iva->EditValue, $this->ret_iva->formatPattern());
+        $this->ret_iva->CssClass = "fw-bold";
 
         // ref_iva
         $this->ref_iva->setupEditAttributes();
-        if (!$this->ref_iva->Raw) {
-            $this->ref_iva->CurrentValue = HtmlDecode($this->ref_iva->CurrentValue);
-        }
         $this->ref_iva->EditValue = $this->ref_iva->CurrentValue;
-        $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
 
         // ret_islr
         $this->ret_islr->setupEditAttributes();
         $this->ret_islr->EditValue = $this->ret_islr->CurrentValue;
-        $this->ret_islr->PlaceHolder = RemoveHtml($this->ret_islr->caption());
-        if (strval($this->ret_islr->EditValue) != "" && is_numeric($this->ret_islr->EditValue)) {
-            $this->ret_islr->EditValue = FormatNumber($this->ret_islr->EditValue, null);
-        }
+        $this->ret_islr->EditValue = FormatNumber($this->ret_islr->EditValue, $this->ret_islr->formatPattern());
+        $this->ret_islr->CssClass = "fw-bold";
 
         // ref_islr
         $this->ref_islr->setupEditAttributes();
-        if (!$this->ref_islr->Raw) {
-            $this->ref_islr->CurrentValue = HtmlDecode($this->ref_islr->CurrentValue);
-        }
         $this->ref_islr->EditValue = $this->ref_islr->CurrentValue;
-        $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
 
         // ret_municipal
         $this->ret_municipal->setupEditAttributes();
         $this->ret_municipal->EditValue = $this->ret_municipal->CurrentValue;
-        $this->ret_municipal->PlaceHolder = RemoveHtml($this->ret_municipal->caption());
-        if (strval($this->ret_municipal->EditValue) != "" && is_numeric($this->ret_municipal->EditValue)) {
-            $this->ret_municipal->EditValue = FormatNumber($this->ret_municipal->EditValue, null);
-        }
+        $this->ret_municipal->EditValue = FormatNumber($this->ret_municipal->EditValue, $this->ret_municipal->formatPattern());
+        $this->ret_municipal->CssClass = "fw-bold";
 
         // ref_municipal
         $this->ref_municipal->setupEditAttributes();
-        if (!$this->ref_municipal->Raw) {
-            $this->ref_municipal->CurrentValue = HtmlDecode($this->ref_municipal->CurrentValue);
-        }
         $this->ref_municipal->EditValue = $this->ref_municipal->CurrentValue;
-        $this->ref_municipal->PlaceHolder = RemoveHtml($this->ref_municipal->caption());
 
         // fecha_registro
         $this->fecha_registro->setupEditAttributes();
-        $this->fecha_registro->EditValue = FormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern());
-        $this->fecha_registro->PlaceHolder = RemoveHtml($this->fecha_registro->caption());
+        $this->fecha_registro->EditValue = $this->fecha_registro->CurrentValue;
+        $this->fecha_registro->EditValue = FormatDateTime($this->fecha_registro->EditValue, $this->fecha_registro->formatPattern());
 
         // username
         $this->_username->setupEditAttributes();
-        if (!$this->_username->Raw) {
-            $this->_username->CurrentValue = HtmlDecode($this->_username->CurrentValue);
-        }
         $this->_username->EditValue = $this->_username->CurrentValue;
-        $this->_username->PlaceHolder = RemoveHtml($this->_username->caption());
+        $curVal = strval($this->_username->CurrentValue);
+        if ($curVal != "") {
+            $this->_username->EditValue = $this->_username->lookupCacheOption($curVal);
+            if ($this->_username->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->_username->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->_username->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                $sqlWrk = $this->_username->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->_username->Lookup->renderViewRow($rswrk[0]);
+                    $this->_username->EditValue = $this->_username->displayValue($arwrk);
+                } else {
+                    $this->_username->EditValue = $this->_username->CurrentValue;
+                }
+            }
+        } else {
+            $this->_username->EditValue = null;
+        }
 
         // comprobante
         $this->comprobante->setupEditAttributes();
-        $this->comprobante->PlaceHolder = RemoveHtml($this->comprobante->caption());
+        $curVal = strval($this->comprobante->CurrentValue);
+        if ($curVal != "") {
+            $this->comprobante->EditValue = $this->comprobante->lookupCacheOption($curVal);
+            if ($this->comprobante->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->comprobante->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->comprobante->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $sqlWrk = $this->comprobante->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->comprobante->Lookup->renderViewRow($rswrk[0]);
+                    $this->comprobante->EditValue = $this->comprobante->displayValue($arwrk);
+                } else {
+                    $this->comprobante->EditValue = $this->comprobante->CurrentValue;
+                }
+            }
+        } else {
+            $this->comprobante->EditValue = null;
+        }
 
         // tipo_iva
         $this->tipo_iva->setupEditAttributes();
-        if (!$this->tipo_iva->Raw) {
-            $this->tipo_iva->CurrentValue = HtmlDecode($this->tipo_iva->CurrentValue);
-        }
         $this->tipo_iva->EditValue = $this->tipo_iva->CurrentValue;
-        $this->tipo_iva->PlaceHolder = RemoveHtml($this->tipo_iva->caption());
 
         // tipo_islr
         $this->tipo_islr->setupEditAttributes();
-        if (!$this->tipo_islr->Raw) {
-            $this->tipo_islr->CurrentValue = HtmlDecode($this->tipo_islr->CurrentValue);
-        }
         $this->tipo_islr->EditValue = $this->tipo_islr->CurrentValue;
-        $this->tipo_islr->PlaceHolder = RemoveHtml($this->tipo_islr->caption());
 
         // sustraendo
         $this->sustraendo->setupEditAttributes();
         $this->sustraendo->EditValue = $this->sustraendo->CurrentValue;
-        $this->sustraendo->PlaceHolder = RemoveHtml($this->sustraendo->caption());
-        if (strval($this->sustraendo->EditValue) != "" && is_numeric($this->sustraendo->EditValue)) {
-            $this->sustraendo->EditValue = FormatNumber($this->sustraendo->EditValue, null);
-        }
+        $this->sustraendo->EditValue = FormatNumber($this->sustraendo->EditValue, $this->sustraendo->formatPattern());
 
         // tipo_municipal
         $this->tipo_municipal->setupEditAttributes();
-        if (!$this->tipo_municipal->Raw) {
-            $this->tipo_municipal->CurrentValue = HtmlDecode($this->tipo_municipal->CurrentValue);
-        }
         $this->tipo_municipal->EditValue = $this->tipo_municipal->CurrentValue;
-        $this->tipo_municipal->PlaceHolder = RemoveHtml($this->tipo_municipal->caption());
 
         // anulado
         $this->anulado->EditValue = $this->anulado->options(false);
         $this->anulado->PlaceHolder = RemoveHtml($this->anulado->caption());
 
-        // pagado
-        $this->pagado->EditValue = $this->pagado->options(false);
-        $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
-
         // moneda
         $this->moneda->setupEditAttributes();
-        if (!$this->moneda->Raw) {
-            $this->moneda->CurrentValue = HtmlDecode($this->moneda->CurrentValue);
+        $curVal = strval($this->moneda->CurrentValue);
+        if ($curVal != "") {
+            $this->moneda->EditValue = $this->moneda->lookupCacheOption($curVal);
+            if ($this->moneda->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                    $this->moneda->EditValue = $this->moneda->displayValue($arwrk);
+                } else {
+                    $this->moneda->EditValue = $this->moneda->CurrentValue;
+                }
+            }
+        } else {
+            $this->moneda->EditValue = null;
         }
-        $this->moneda->EditValue = $this->moneda->CurrentValue;
-        $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
 
         // tasa_dia
         $this->tasa_dia->setupEditAttributes();
         $this->tasa_dia->EditValue = $this->tasa_dia->CurrentValue;
-        $this->tasa_dia->PlaceHolder = RemoveHtml($this->tasa_dia->caption());
-        if (strval($this->tasa_dia->EditValue) != "" && is_numeric($this->tasa_dia->EditValue)) {
-            $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, null);
+        $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, $this->tasa_dia->formatPattern());
+
+        // pagado
+        $this->pagado->setupEditAttributes();
+        if (strval($this->pagado->CurrentValue) != "") {
+            $this->pagado->EditValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
+        } else {
+            $this->pagado->EditValue = null;
         }
 
         // Call Row Rendered event
@@ -2593,9 +2643,9 @@ class Compra extends DbTable
                     $doc->exportCaption($this->sustraendo);
                     $doc->exportCaption($this->tipo_municipal);
                     $doc->exportCaption($this->anulado);
-                    $doc->exportCaption($this->pagado);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->tasa_dia);
+                    $doc->exportCaption($this->pagado);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->proveedor);
@@ -2626,9 +2676,9 @@ class Compra extends DbTable
                     $doc->exportCaption($this->sustraendo);
                     $doc->exportCaption($this->tipo_municipal);
                     $doc->exportCaption($this->anulado);
-                    $doc->exportCaption($this->pagado);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->tasa_dia);
+                    $doc->exportCaption($this->pagado);
                 }
                 $doc->endExportRow();
             }
@@ -2684,9 +2734,9 @@ class Compra extends DbTable
                         $doc->exportField($this->sustraendo);
                         $doc->exportField($this->tipo_municipal);
                         $doc->exportField($this->anulado);
-                        $doc->exportField($this->pagado);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->tasa_dia);
+                        $doc->exportField($this->pagado);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->proveedor);
@@ -2717,9 +2767,9 @@ class Compra extends DbTable
                         $doc->exportField($this->sustraendo);
                         $doc->exportField($this->tipo_municipal);
                         $doc->exportField($this->anulado);
-                        $doc->exportField($this->pagado);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->tasa_dia);
+                        $doc->exportField($this->pagado);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -2914,7 +2964,12 @@ class Compra extends DbTable
     	$rsnew["documento"] = trim($rsnew["documento"]);
     	$tipo_documento = $rsnew["tipo_documento"];
     	$documento = $rsnew["documento"];
-    	$sql = "SELECT documento FROM compra WHERE proveedor = $proveedor AND tipo_documento='$tipo_documento' AND documento = '$documento';";
+    	$sql = "SELECT documento FROM compra 
+                WHERE proveedor = $proveedor 
+                AND tipo_documento = '$tipo_documento' 
+                AND documento = '$documento' 
+                AND anulado = 'N' 
+                LIMIT 1;";
     	if($row = ExecuteRow($sql)){
     		$this->CancelMessage = "El n&uacute;mero de documento ya est&aacute; registrado para el proveedor; verifique.";
     		return FALSE;
@@ -2939,6 +2994,60 @@ class Compra extends DbTable
     		$rsnew["alicuota"] = $alicuota;
     		$rsnew["aplica_retencion"] = "N";
     	}
+
+        // Validar que el monto no sea cero o negativo
+        $montoExento = floatval($rsnew["monto_exento"]);
+        $montoGravado = floatval($rsnew["monto_gravado"]);
+        if ($montoExento <= 0 && $montoGravado <= 0) {
+            $this->setFailureMessage("El documento debe tener al menos un monto (exento o gravado) mayor a cero.");
+            return FALSE; // Esto detiene la inserción/actualización
+        }
+
+        // --- AJUSTE: Nota de Crédito afecta Facturas (FC) y Notas de Débito (ND) ---
+        if ($rsnew["tipo_documento"] == "NC" && !empty($rsnew["doc_afectado"])) {
+            $doc_afectado = AdjustSql($rsnew["doc_afectado"]);
+            $proveedor_id = intval($rsnew["proveedor"]);
+
+            // 1. Obtener el monto base (exento + gravado) del documento original (FC o ND)
+            // Se suma el monto base del documento afectado
+            $sql_doc_original = "SELECT (IFNULL(monto_exento,0) + IFNULL(monto_gravado,0)) as monto_base 
+                                FROM compra 
+                                WHERE proveedor = $proveedor_id 
+                                AND documento = '$doc_afectado' 
+                                AND tipo_documento IN ('FC', 'ND') 
+                                AND anulado = 'N' 
+                                LIMIT 1";
+            $row_original = ExecuteRow($sql_doc_original);
+            if ($row_original) {
+                $monto_base_documento = floatval($row_original["monto_base"]);
+
+                // 2. Obtener la suma del monto base de todas las NC ya registradas que afectan a ese documento
+                $sql_sumatoria = "SELECT SUM(IFNULL(monto_exento,0) + IFNULL(monto_gravado,0)) as total_nc 
+                                FROM compra 
+                                WHERE proveedor = $proveedor_id 
+                                AND doc_afectado = '$doc_afectado' 
+                                AND tipo_documento = 'NC' 
+                                AND anulado = 'N'";
+                $row_sum = ExecuteRow($sql_sumatoria);
+                $total_nc_previas = floatval($row_sum["total_nc"]);
+
+                // 3. Calcular el monto base de la nueva NC
+                $monto_base_actual = floatval($rsnew["monto_exento"]) + floatval($rsnew["monto_gravado"]);
+
+                // 4. Validar que no exceda el monto original
+                $total_acumulado = round($total_nc_previas + $monto_base_actual, 2);
+                $monto_base_redondeado = round($monto_base_documento, 2);
+                if ($total_acumulado > $monto_base_redondeado) {
+                    $disponible = $monto_base_documento - $total_nc_previas;
+                    $this->setFailureMessage("Error: La suma de Notas de Crédito excede el monto del documento afectado ($doc_afectado). Disponible para devolver: " . number_format($disponible, 2));
+                    return FALSE;
+                }
+            } else {
+                $this->setFailureMessage("El documento afectado ($doc_afectado) no existe, está anulado o no pertenece a este proveedor.");
+                return FALSE;
+            }
+        }
+        // --- FIN VALIDACIÓN ---
     	$alicuota = floatval($rsnew["alicuota"]);
     	$monto_exento = floatval($rsnew["monto_exento"]);
     	$monto_gravado = floatval($rsnew["monto_gravado"]);
@@ -2969,6 +3078,20 @@ class Compra extends DbTable
     		$rsnew["ret_iva"] = $MretIVA;
     		$rsnew["ret_islr"] = $MretSLR;
     		$rsnew["ret_municipal"] = $MretMUNI;
+
+            // Asignación de valores y generación de número
+            if ($MretIVA > 0) {
+                $rsnew["ret_iva"] = $MretIVA;
+                $rsnew["ref_iva"] = ObtenerConsecutivoMensual("RETENCION", "IVA");
+            }
+            if ($MretSLR > 0) {
+                $rsnew["ret_islr"] = $MretSLR;
+                $rsnew["ref_islr"] = ObtenerConsecutivoMensual("RETENCION", "ISLR");
+            }
+            if ($MretMUNI > 0) {
+                $rsnew["ret_municipal"] = $MretMUNI;
+                $rsnew["ref_municipal"] = ObtenerConsecutivoMensual("RETENCION", "MUNI");
+            }
     	}
     	else {
     		$retIVA = 0.00;
@@ -3046,7 +3169,7 @@ class Compra extends DbTable
     			return FALSE;
     		}
     	}
-
+    /*
     ///////////////////
     	if($rsold["ref_iva"] != "") {
     		if($rsold["ref_iva"] != $rsnew["ref_iva"]) {
@@ -3141,6 +3264,7 @@ class Compra extends DbTable
     	$rsnew["tipo_islr"] = strval($retISLR);
     	$rsnew["sustraendo"] = $sustraendo;
     	$rsnew["tipo_municipal"] = strval($retMuni);
+    */
     	return TRUE;
     }
 

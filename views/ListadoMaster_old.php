@@ -37,18 +37,10 @@ $titulos_reportes = [
     "cli_sin_compras"             => "CLIENTES SIN COMPRAS RECIENTES",
     "inv_entre_fechas"            => "INVENTARIO ENTRE FECHA",
     "cng_descarga_entradas"       => "DESCARGA ENTRADAS A CONSIGNACION",
-    "sal_articulo_neas"           => "SALIDAS GENERALES POR ARTICULO (NOTAS + AJUSTE SALIDAS)",
-    "REPX"                        => "REPORTE X",
-    "REPZ"                        => "REPORTE Z",
-    "INFO"                        => "REPORTE INFO",
-    "INFOJSON"                    => "REPORTE INFOJSON",
-    "CLOSE"                       => "RECUPERAR IMPRESORA"
+    "sal_articulo_neas"           => "SALIDAS GENERALES POR ARTICULO (NOTAS + AJUSTE SALIDAS)"
 ];
 
 $titulo = isset($titulos_reportes[$id]) ? $titulos_reportes[$id] : $id;
-
-$reportesFiscales = ["REPX","REPZ","INFO","INFOJSON","CLOSE"];
-$esReporteFiscal = in_array($id, $reportesFiscales);
 ?>
 
 <!-- IMPORTANTE: jQuery SIEMPRE debe cargarse de primero antes que cualquier otra librería dependiente -->
@@ -58,10 +50,8 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <!-- Hojas de estilo y scripts de Select2 para mejorar la experiencia de búsqueda en desplegables -->
-<?php if (!$esReporteFiscal): ?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<?php endif; ?>
 
 <!-- Estilo personalizado para adaptar Select2 perfectamente al diseño nativo de Bootstrap 5 -->
 <style type="text/css">
@@ -105,7 +95,7 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                 
                 <div class="row g-3 align-items-end">
                     <!-- Rango de Fechas Desde -->
-                    <div class="col-12 col-md-3 <?= $esReporteFiscal ? "d-none" : "" ?>">
+                    <div class="col-12 col-md-3">
                         <label for="fecha_desde" class="form-label text-muted fw-semibold small">Desde:</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light text-secondary"><i class="bi bi-calendar3"></i></span>
@@ -114,7 +104,7 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                     </div>
                     
                     <!-- Rango de Fechas Hasta -->
-                    <div class="col-12 col-md-3 <?= $esReporteFiscal ? "d-none" : "" ?>">
+                    <div class="col-12 col-md-3">
                         <label for="fecha_hasta" class="form-label text-muted fw-semibold small">Hasta:</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light text-secondary"><i class="bi bi-calendar3"></i></span>
@@ -123,14 +113,13 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                     </div>
                     
                     <!-- Botón de acción principal -->
-                    <div class="<?= $esReporteFiscal ? "col-12" : "col-12 col-md-2" ?>">
+                    <div class="col-12 col-md-2">
                         <button type="button" class="btn btn-primary w-100 py-2 shadow-sm" id="buscar" name="buscar">
                             <i class="bi bi-search me-1"></i> Consultar
                         </button>
                     </div>
 
                     <!-- Selector Dinámico Principal (Agregada clase select2-enable para Categorías, Laboratorios, etc.) -->
-                    <?php if (!$esReporteFiscal): ?>
                     <div class="col-12 col-md-4">
                         <label for="tipo" class="form-label text-muted fw-semibold small">Filtrar Almacen / Cliente / Fabricante /Art&iacute;culo:</label>
                         <select id="tipo" name="tipo" class="form-select fw-normal select2-enable">
@@ -194,7 +183,6 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                             ?>
                         </select>
                     </div>
-                <?php endif; ?>
 
                 </div>
 
@@ -290,7 +278,6 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
 </div>
 
 <script type="text/javascript">
-    <?php if (!$esReporteFiscal): ?>
     $(document).ready(function() {
         // Función asíncrona segura para inicializar Select2 únicamente cuando esté cargada la librería en jQuery
         function inicializarSelect2Seguro() {
@@ -313,71 +300,54 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
         // Ejecutar inicialización protectora
         inicializarSelect2Seguro();
     });
-    <?php endif; ?>
 
-    function iniciarEventosListadoMaster() {
-        $("#buscar").off("click").on("click", function(){
-            var fecha_desde = $("#fecha_desde").val();
-            var fecha_hasta = $("#fecha_hasta").val();
-            var tipo        = $("#tipo").length ? $("#tipo").val() : "";
-            var articulo    = $("#articulo").length ? $("#articulo").val() : "";
-            var cliente     = $("#cliente").length ? $("#cliente").val() : "";
-            var asesor      = $("#asesor").length ? $("#asesor").val() : "";
-            var esReporteFiscal = <?= $esReporteFiscal ? "true" : "false" ?>;
+    $("#buscar").click(function(){
+        var fecha_desde = $("#fecha_desde").val();
+        var fecha_hasta = $("#fecha_hasta").val();
+        var tipo        = $("#tipo").val();
+        var articulo    = $("#articulo").val();
+        var cliente     = $("#cliente").val() || "";
+        var asesor      = $("#asesor").val() || "";
 
-            if (!esReporteFiscal) {
-                if (fecha_desde == "" || fecha_hasta == "") {
-                    ew.alert("¡Por favor, elija un rango de fechas válido!");
-                    return false;
-                }
-            }
+        if(fecha_desde == "" || fecha_hasta == "") {
+            ew.alert("¡Por favor, elija un rango de fechas válido!");
+            return false;
+        }
 
-            $.ajax({
-                url : esReporteFiscal ? "reportes/factura_fiscal_reportes.php" : "<?php echo $url; ?>",
-                type: "GET",
-                data : {
-                    id: '<?php echo $id; ?>', 
-                    documento: '<?php echo $id; ?>',
-                    fecha_desde: fecha_desde, 
-                    fecha_hasta: fecha_hasta, 
-                    tipo: tipo, 
-                    articulo: articulo, 
-                    proveedor: 0, 
-                    cliente: cliente, 
-                    asesor: asesor
-                },
-                beforeSend: function(){
-                    // Renderizado de un Spinner elegante de Bootstrap en lugar de un texto plano
-                    $("#result").html(`
-                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border text-primary me-3" role="status"></div>
-                            <span class="fs-5 fw-semibold">Procesando y organizando el reporte...</span>
-                        </div>
-                    `);
-                }
-            })
-            .done(function(data) {
-                $("#result").html(data);
-            })
-            .fail(function(xhr, status, error) {
+        $.ajax({
+            url : "<?php echo $url; ?>",
+            type: "GET",
+            data : {
+                id: '<?php echo $id; ?>', 
+                fecha_desde: fecha_desde, 
+                fecha_hasta: fecha_hasta, 
+                tipo: tipo, 
+                articulo: articulo, 
+                proveedor: 0, 
+                cliente: cliente, 
+                asesor: asesor
+            },
+            beforeSend: function(){
+                // Renderizado de un Spinner elegante de Bootstrap en lugar de un texto plano
                 $("#result").html(`
-                    <div class="alert alert-danger d-flex align-items-center" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                        <div>Ocurrió un error inesperado al procesar los datos: <strong>${error}</strong></div>
+                    <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
+                        <div class="spinner-border text-primary me-3" role="status"></div>
+                        <span class="fs-5 fw-semibold">Procesando y organizando el reporte...</span>
                     </div>
                 `);
-            });
+            }
+        })
+        .done(function(data) {
+            $("#result").html(data);
+        })
+        .fail(function(xhr, status, error) {
+            $("#result").html(`
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                    <div>Ocurrió un error inesperado al procesar los datos: <strong>${error}</strong></div>
+                </div>
+            `);
         });
-    }
-
-    function esperarJQueryListadoMaster() {
-        if (typeof window.jQuery !== "undefined" && typeof window.$ !== "undefined") {
-            iniciarEventosListadoMaster();
-        } else {
-            setTimeout(esperarJQueryListadoMaster, 50);
-        }
-    }
-
-    esperarJQueryListadoMaster();
+    });
 </script>
 <?= GetDebugMessage() ?>

@@ -156,9 +156,9 @@ class CompraList extends Compra
         $this->id->setVisibility();
         $this->proveedor->setVisibility();
         $this->tipo_documento->setVisibility();
-        $this->doc_afectado->setVisibility();
+        $this->doc_afectado->Visible = false;
         $this->documento->setVisibility();
-        $this->nro_control->setVisibility();
+        $this->nro_control->Visible = false;
         $this->fecha->setVisibility();
         $this->descripcion->Visible = false;
         $this->aplica_retencion->Visible = false;
@@ -166,14 +166,14 @@ class CompraList extends Compra
         $this->monto_gravado->Visible = false;
         $this->alicuota->Visible = false;
         $this->monto_iva->Visible = false;
-        $this->monto_total->setVisibility();
+        $this->monto_total->Visible = false;
         $this->monto_pagar->setVisibility();
         $this->ret_iva->Visible = false;
-        $this->ref_iva->Visible = false;
+        $this->ref_iva->setVisibility();
         $this->ret_islr->Visible = false;
         $this->ref_islr->Visible = false;
         $this->ret_municipal->Visible = false;
-        $this->ref_municipal->Visible = false;
+        $this->ref_municipal->setVisibility();
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
@@ -182,9 +182,9 @@ class CompraList extends Compra
         $this->sustraendo->Visible = false;
         $this->tipo_municipal->Visible = false;
         $this->anulado->setVisibility();
-        $this->pagado->setVisibility();
         $this->moneda->setVisibility();
-        $this->tasa_dia->setVisibility();
+        $this->tasa_dia->Visible = false;
+        $this->pagado->setVisibility();
     }
 
     // Constructor
@@ -735,6 +735,7 @@ class CompraList extends Compra
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
+        $this->setupLookupOptions($this->moneda);
         $this->setupLookupOptions($this->pagado);
 
         // Update form name to avoid conflict
@@ -1141,9 +1142,9 @@ class CompraList extends Compra
         $filterList = Concat($filterList, $this->sustraendo->AdvancedSearch->toJson(), ","); // Field sustraendo
         $filterList = Concat($filterList, $this->tipo_municipal->AdvancedSearch->toJson(), ","); // Field tipo_municipal
         $filterList = Concat($filterList, $this->anulado->AdvancedSearch->toJson(), ","); // Field anulado
-        $filterList = Concat($filterList, $this->pagado->AdvancedSearch->toJson(), ","); // Field pagado
         $filterList = Concat($filterList, $this->moneda->AdvancedSearch->toJson(), ","); // Field moneda
         $filterList = Concat($filterList, $this->tasa_dia->AdvancedSearch->toJson(), ","); // Field tasa_dia
+        $filterList = Concat($filterList, $this->pagado->AdvancedSearch->toJson(), ","); // Field pagado
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1415,14 +1416,6 @@ class CompraList extends Compra
         $this->anulado->AdvancedSearch->SearchOperator2 = @$filter["w_anulado"];
         $this->anulado->AdvancedSearch->save();
 
-        // Field pagado
-        $this->pagado->AdvancedSearch->SearchValue = @$filter["x_pagado"];
-        $this->pagado->AdvancedSearch->SearchOperator = @$filter["z_pagado"];
-        $this->pagado->AdvancedSearch->SearchCondition = @$filter["v_pagado"];
-        $this->pagado->AdvancedSearch->SearchValue2 = @$filter["y_pagado"];
-        $this->pagado->AdvancedSearch->SearchOperator2 = @$filter["w_pagado"];
-        $this->pagado->AdvancedSearch->save();
-
         // Field moneda
         $this->moneda->AdvancedSearch->SearchValue = @$filter["x_moneda"];
         $this->moneda->AdvancedSearch->SearchOperator = @$filter["z_moneda"];
@@ -1438,6 +1431,14 @@ class CompraList extends Compra
         $this->tasa_dia->AdvancedSearch->SearchValue2 = @$filter["y_tasa_dia"];
         $this->tasa_dia->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_dia"];
         $this->tasa_dia->AdvancedSearch->save();
+
+        // Field pagado
+        $this->pagado->AdvancedSearch->SearchValue = @$filter["x_pagado"];
+        $this->pagado->AdvancedSearch->SearchOperator = @$filter["z_pagado"];
+        $this->pagado->AdvancedSearch->SearchCondition = @$filter["v_pagado"];
+        $this->pagado->AdvancedSearch->SearchValue2 = @$filter["y_pagado"];
+        $this->pagado->AdvancedSearch->SearchOperator2 = @$filter["w_pagado"];
+        $this->pagado->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1479,9 +1480,9 @@ class CompraList extends Compra
         $this->buildSearchSql($where, $this->sustraendo, $default, false); // sustraendo
         $this->buildSearchSql($where, $this->tipo_municipal, $default, false); // tipo_municipal
         $this->buildSearchSql($where, $this->anulado, $default, false); // anulado
-        $this->buildSearchSql($where, $this->pagado, $default, false); // pagado
         $this->buildSearchSql($where, $this->moneda, $default, false); // moneda
         $this->buildSearchSql($where, $this->tasa_dia, $default, false); // tasa_dia
+        $this->buildSearchSql($where, $this->pagado, $default, false); // pagado
 
         // Set up search command
         if (!$default && $where != "" && in_array($this->Command, ["", "reset", "resetall"])) {
@@ -1517,9 +1518,9 @@ class CompraList extends Compra
             $this->sustraendo->AdvancedSearch->save(); // sustraendo
             $this->tipo_municipal->AdvancedSearch->save(); // tipo_municipal
             $this->anulado->AdvancedSearch->save(); // anulado
-            $this->pagado->AdvancedSearch->save(); // pagado
             $this->moneda->AdvancedSearch->save(); // moneda
             $this->tasa_dia->AdvancedSearch->save(); // tasa_dia
+            $this->pagado->AdvancedSearch->save(); // pagado
 
             // Clear rules for QueryBuilder
             $this->setSessionRules("");
@@ -1579,9 +1580,9 @@ class CompraList extends Compra
             $this->sustraendo->AdvancedSearch->save(); // sustraendo
             $this->tipo_municipal->AdvancedSearch->save(); // tipo_municipal
             $this->anulado->AdvancedSearch->save(); // anulado
-            $this->pagado->AdvancedSearch->save(); // pagado
             $this->moneda->AdvancedSearch->save(); // moneda
             $this->tasa_dia->AdvancedSearch->save(); // tasa_dia
+            $this->pagado->AdvancedSearch->save(); // pagado
             $this->setSessionRules($rules);
         }
 
@@ -1665,15 +1666,6 @@ class CompraList extends Compra
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tipo_documento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field doc_afectado
-        $filter = $this->queryBuilderWhere("doc_afectado");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->doc_afectado, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->doc_afectado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field documento
         $filter = $this->queryBuilderWhere("documento");
         if (!$filter) {
@@ -1681,15 +1673,6 @@ class CompraList extends Compra
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->documento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
-        // Field nro_control
-        $filter = $this->queryBuilderWhere("nro_control");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->nro_control, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->nro_control->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field fecha
@@ -1701,15 +1684,6 @@ class CompraList extends Compra
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->fecha->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field monto_total
-        $filter = $this->queryBuilderWhere("monto_total");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->monto_total, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_total->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field monto_pagar
         $filter = $this->queryBuilderWhere("monto_pagar");
         if (!$filter) {
@@ -1717,6 +1691,24 @@ class CompraList extends Compra
         }
         if ($filter != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->monto_pagar->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field ref_iva
+        $filter = $this->queryBuilderWhere("ref_iva");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->ref_iva, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_iva->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
+        // Field ref_municipal
+        $filter = $this->queryBuilderWhere("ref_municipal");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->ref_municipal, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_municipal->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field anulado
@@ -1728,15 +1720,6 @@ class CompraList extends Compra
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->anulado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field pagado
-        $filter = $this->queryBuilderWhere("pagado");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->pagado, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pagado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field moneda
         $filter = $this->queryBuilderWhere("moneda");
         if (!$filter) {
@@ -1746,13 +1729,13 @@ class CompraList extends Compra
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->moneda->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field tasa_dia
-        $filter = $this->queryBuilderWhere("tasa_dia");
+        // Field pagado
+        $filter = $this->queryBuilderWhere("pagado");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->tasa_dia, false, false);
+            $this->buildSearchSql($filter, $this->pagado, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tasa_dia->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->pagado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
         if ($this->BasicSearch->Keyword != "") {
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $Language->phrase("BasicSearchKeyword") . "</span>" . $captionSuffix . $this->BasicSearch->Keyword . "</div>";
@@ -1906,13 +1889,13 @@ class CompraList extends Compra
         if ($this->anulado->AdvancedSearch->issetSession()) {
             return true;
         }
-        if ($this->pagado->AdvancedSearch->issetSession()) {
-            return true;
-        }
         if ($this->moneda->AdvancedSearch->issetSession()) {
             return true;
         }
         if ($this->tasa_dia->AdvancedSearch->issetSession()) {
+            return true;
+        }
+        if ($this->pagado->AdvancedSearch->issetSession()) {
             return true;
         }
         return false;
@@ -1979,9 +1962,9 @@ class CompraList extends Compra
         $this->sustraendo->AdvancedSearch->unsetSession();
         $this->tipo_municipal->AdvancedSearch->unsetSession();
         $this->anulado->AdvancedSearch->unsetSession();
-        $this->pagado->AdvancedSearch->unsetSession();
         $this->moneda->AdvancedSearch->unsetSession();
         $this->tasa_dia->AdvancedSearch->unsetSession();
+        $this->pagado->AdvancedSearch->unsetSession();
     }
 
     // Restore all search parameters
@@ -2022,9 +2005,9 @@ class CompraList extends Compra
         $this->sustraendo->AdvancedSearch->load();
         $this->tipo_municipal->AdvancedSearch->load();
         $this->anulado->AdvancedSearch->load();
-        $this->pagado->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
         $this->tasa_dia->AdvancedSearch->load();
+        $this->pagado->AdvancedSearch->load();
     }
 
     // Set up sort parameters
@@ -2045,16 +2028,14 @@ class CompraList extends Compra
             $this->updateSort($this->id); // id
             $this->updateSort($this->proveedor); // proveedor
             $this->updateSort($this->tipo_documento); // tipo_documento
-            $this->updateSort($this->doc_afectado); // doc_afectado
             $this->updateSort($this->documento); // documento
-            $this->updateSort($this->nro_control); // nro_control
             $this->updateSort($this->fecha); // fecha
-            $this->updateSort($this->monto_total); // monto_total
             $this->updateSort($this->monto_pagar); // monto_pagar
+            $this->updateSort($this->ref_iva); // ref_iva
+            $this->updateSort($this->ref_municipal); // ref_municipal
             $this->updateSort($this->anulado); // anulado
-            $this->updateSort($this->pagado); // pagado
             $this->updateSort($this->moneda); // moneda
-            $this->updateSort($this->tasa_dia); // tasa_dia
+            $this->updateSort($this->pagado); // pagado
             $this->setStartRecordNumber(1); // Reset start position
         }
 
@@ -2108,9 +2089,9 @@ class CompraList extends Compra
                 $this->sustraendo->setSort("");
                 $this->tipo_municipal->setSort("");
                 $this->anulado->setSort("");
-                $this->pagado->setSort("");
                 $this->moneda->setSort("");
                 $this->tasa_dia->setSort("");
+                $this->pagado->setSort("");
             }
 
             // Reset start position
@@ -2330,16 +2311,14 @@ class CompraList extends Compra
             $this->createColumnOption($option, "id");
             $this->createColumnOption($option, "proveedor");
             $this->createColumnOption($option, "tipo_documento");
-            $this->createColumnOption($option, "doc_afectado");
             $this->createColumnOption($option, "documento");
-            $this->createColumnOption($option, "nro_control");
             $this->createColumnOption($option, "fecha");
-            $this->createColumnOption($option, "monto_total");
             $this->createColumnOption($option, "monto_pagar");
+            $this->createColumnOption($option, "ref_iva");
+            $this->createColumnOption($option, "ref_municipal");
             $this->createColumnOption($option, "anulado");
-            $this->createColumnOption($option, "pagado");
             $this->createColumnOption($option, "moneda");
-            $this->createColumnOption($option, "tasa_dia");
+            $this->createColumnOption($option, "pagado");
         }
 
         // Set up custom actions
@@ -2925,14 +2904,6 @@ class CompraList extends Compra
             }
         }
 
-        // pagado
-        if ($this->pagado->AdvancedSearch->get()) {
-            $hasValue = true;
-            if (($this->pagado->AdvancedSearch->SearchValue != "" || $this->pagado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
-                $this->Command = "search";
-            }
-        }
-
         // moneda
         if ($this->moneda->AdvancedSearch->get()) {
             $hasValue = true;
@@ -2945,6 +2916,14 @@ class CompraList extends Compra
         if ($this->tasa_dia->AdvancedSearch->get()) {
             $hasValue = true;
             if (($this->tasa_dia->AdvancedSearch->SearchValue != "" || $this->tasa_dia->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
+                $this->Command = "search";
+            }
+        }
+
+        // pagado
+        if ($this->pagado->AdvancedSearch->get()) {
+            $hasValue = true;
+            if (($this->pagado->AdvancedSearch->SearchValue != "" || $this->pagado->AdvancedSearch->SearchValue2 != "") && $this->Command == "") {
                 $this->Command = "search";
             }
         }
@@ -3073,9 +3052,9 @@ class CompraList extends Compra
         $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_municipal->setDbValue($row['tipo_municipal']);
         $this->anulado->setDbValue($row['anulado']);
-        $this->pagado->setDbValue($row['pagado']);
         $this->moneda->setDbValue($row['moneda']);
         $this->tasa_dia->setDbValue($row['tasa_dia']);
+        $this->pagado->setDbValue($row['pagado']);
     }
 
     // Return a row with default values
@@ -3111,9 +3090,9 @@ class CompraList extends Compra
         $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_municipal'] = $this->tipo_municipal->DefaultValue;
         $row['anulado'] = $this->anulado->DefaultValue;
-        $row['pagado'] = $this->pagado->DefaultValue;
         $row['moneda'] = $this->moneda->DefaultValue;
         $row['tasa_dia'] = $this->tasa_dia->DefaultValue;
+        $row['pagado'] = $this->pagado->DefaultValue;
         return $row;
     }
 
@@ -3212,11 +3191,11 @@ class CompraList extends Compra
 
         // anulado
 
-        // pagado
-
         // moneda
 
         // tasa_dia
+
+        // pagado
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -3396,19 +3375,40 @@ class CompraList extends Compra
                 $this->anulado->ViewValue = null;
             }
 
+            // moneda
+            $curVal = strval($this->moneda->CurrentValue);
+            if ($curVal != "") {
+                $this->moneda->ViewValue = $this->moneda->lookupCacheOption($curVal);
+                if ($this->moneda->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->moneda->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->moneda->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->moneda->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->moneda->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->moneda->Lookup->renderViewRow($rswrk[0]);
+                        $this->moneda->ViewValue = $this->moneda->displayValue($arwrk);
+                    } else {
+                        $this->moneda->ViewValue = $this->moneda->CurrentValue;
+                    }
+                }
+            } else {
+                $this->moneda->ViewValue = null;
+            }
+
+            // tasa_dia
+            $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
+            $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
+
             // pagado
             if (strval($this->pagado->CurrentValue) != "") {
                 $this->pagado->ViewValue = $this->pagado->optionCaption($this->pagado->CurrentValue);
             } else {
                 $this->pagado->ViewValue = null;
             }
-
-            // moneda
-            $this->moneda->ViewValue = $this->moneda->CurrentValue;
-
-            // tasa_dia
-            $this->tasa_dia->ViewValue = $this->tasa_dia->CurrentValue;
-            $this->tasa_dia->ViewValue = FormatNumber($this->tasa_dia->ViewValue, $this->tasa_dia->formatPattern());
 
             // id
             $this->id->HrefValue = "";
@@ -3422,45 +3422,53 @@ class CompraList extends Compra
             $this->tipo_documento->HrefValue = "";
             $this->tipo_documento->TooltipValue = "";
 
-            // doc_afectado
-            $this->doc_afectado->HrefValue = "";
-            $this->doc_afectado->TooltipValue = "";
-
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
-
-            // nro_control
-            $this->nro_control->HrefValue = "";
-            $this->nro_control->TooltipValue = "";
 
             // fecha
             $this->fecha->HrefValue = "";
             $this->fecha->TooltipValue = "";
 
-            // monto_total
-            $this->monto_total->HrefValue = "";
-            $this->monto_total->TooltipValue = "";
-
             // monto_pagar
             $this->monto_pagar->HrefValue = "";
             $this->monto_pagar->TooltipValue = "";
+
+            // ref_iva
+            if (!EmptyValue($this->id->CurrentValue)) {
+                $this->ref_iva->HrefValue = $this->ref_iva->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_iva->LinkAttrs["target"] = "_blank"; // Add target
+                if ($this->isExport()) {
+                    $this->ref_iva->HrefValue = FullUrl($this->ref_iva->HrefValue, "href");
+                }
+            } else {
+                $this->ref_iva->HrefValue = "";
+            }
+            $this->ref_iva->TooltipValue = "";
+
+            // ref_municipal
+            if (!EmptyValue($this->id->CurrentValue)) {
+                $this->ref_municipal->HrefValue = $this->ref_municipal->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_municipal->LinkAttrs["target"] = "_blank"; // Add target
+                if ($this->isExport()) {
+                    $this->ref_municipal->HrefValue = FullUrl($this->ref_municipal->HrefValue, "href");
+                }
+            } else {
+                $this->ref_municipal->HrefValue = "";
+            }
+            $this->ref_municipal->TooltipValue = "";
 
             // anulado
             $this->anulado->HrefValue = "";
             $this->anulado->TooltipValue = "";
 
-            // pagado
-            $this->pagado->HrefValue = "";
-            $this->pagado->TooltipValue = "";
-
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
 
-            // tasa_dia
-            $this->tasa_dia->HrefValue = "";
-            $this->tasa_dia->TooltipValue = "";
+            // pagado
+            $this->pagado->HrefValue = "";
+            $this->pagado->TooltipValue = "";
         } elseif ($this->RowType == RowType::SEARCH) {
             // id
             $this->id->setupEditAttributes();
@@ -3507,14 +3515,6 @@ class CompraList extends Compra
             $this->tipo_documento->EditValue = $this->tipo_documento->options(true);
             $this->tipo_documento->PlaceHolder = RemoveHtml($this->tipo_documento->caption());
 
-            // doc_afectado
-            $this->doc_afectado->setupEditAttributes();
-            if (!$this->doc_afectado->Raw) {
-                $this->doc_afectado->AdvancedSearch->SearchValue = HtmlDecode($this->doc_afectado->AdvancedSearch->SearchValue);
-            }
-            $this->doc_afectado->EditValue = HtmlEncode($this->doc_afectado->AdvancedSearch->SearchValue);
-            $this->doc_afectado->PlaceHolder = RemoveHtml($this->doc_afectado->caption());
-
             // documento
             $this->documento->setupEditAttributes();
             if (!$this->documento->Raw) {
@@ -3523,49 +3523,43 @@ class CompraList extends Compra
             $this->documento->EditValue = HtmlEncode($this->documento->AdvancedSearch->SearchValue);
             $this->documento->PlaceHolder = RemoveHtml($this->documento->caption());
 
-            // nro_control
-            $this->nro_control->setupEditAttributes();
-            if (!$this->nro_control->Raw) {
-                $this->nro_control->AdvancedSearch->SearchValue = HtmlDecode($this->nro_control->AdvancedSearch->SearchValue);
-            }
-            $this->nro_control->EditValue = HtmlEncode($this->nro_control->AdvancedSearch->SearchValue);
-            $this->nro_control->PlaceHolder = RemoveHtml($this->nro_control->caption());
-
             // fecha
             $this->fecha->setupEditAttributes();
             $this->fecha->EditValue = HtmlEncode(FormatDateTime(UnFormatDateTime($this->fecha->AdvancedSearch->SearchValue, $this->fecha->formatPattern()), $this->fecha->formatPattern()));
             $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
-
-            // monto_total
-            $this->monto_total->setupEditAttributes();
-            $this->monto_total->EditValue = $this->monto_total->AdvancedSearch->SearchValue;
-            $this->monto_total->PlaceHolder = RemoveHtml($this->monto_total->caption());
 
             // monto_pagar
             $this->monto_pagar->setupEditAttributes();
             $this->monto_pagar->EditValue = $this->monto_pagar->AdvancedSearch->SearchValue;
             $this->monto_pagar->PlaceHolder = RemoveHtml($this->monto_pagar->caption());
 
+            // ref_iva
+            $this->ref_iva->setupEditAttributes();
+            if (!$this->ref_iva->Raw) {
+                $this->ref_iva->AdvancedSearch->SearchValue = HtmlDecode($this->ref_iva->AdvancedSearch->SearchValue);
+            }
+            $this->ref_iva->EditValue = HtmlEncode($this->ref_iva->AdvancedSearch->SearchValue);
+            $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
+
+            // ref_municipal
+            $this->ref_municipal->setupEditAttributes();
+            if (!$this->ref_municipal->Raw) {
+                $this->ref_municipal->AdvancedSearch->SearchValue = HtmlDecode($this->ref_municipal->AdvancedSearch->SearchValue);
+            }
+            $this->ref_municipal->EditValue = HtmlEncode($this->ref_municipal->AdvancedSearch->SearchValue);
+            $this->ref_municipal->PlaceHolder = RemoveHtml($this->ref_municipal->caption());
+
             // anulado
             $this->anulado->EditValue = $this->anulado->options(false);
             $this->anulado->PlaceHolder = RemoveHtml($this->anulado->caption());
 
+            // moneda
+            $this->moneda->setupEditAttributes();
+            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
+
             // pagado
             $this->pagado->EditValue = $this->pagado->options(false);
             $this->pagado->PlaceHolder = RemoveHtml($this->pagado->caption());
-
-            // moneda
-            $this->moneda->setupEditAttributes();
-            if (!$this->moneda->Raw) {
-                $this->moneda->AdvancedSearch->SearchValue = HtmlDecode($this->moneda->AdvancedSearch->SearchValue);
-            }
-            $this->moneda->EditValue = HtmlEncode($this->moneda->AdvancedSearch->SearchValue);
-            $this->moneda->PlaceHolder = RemoveHtml($this->moneda->caption());
-
-            // tasa_dia
-            $this->tasa_dia->setupEditAttributes();
-            $this->tasa_dia->EditValue = $this->tasa_dia->AdvancedSearch->SearchValue;
-            $this->tasa_dia->PlaceHolder = RemoveHtml($this->tasa_dia->caption());
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -3629,9 +3623,9 @@ class CompraList extends Compra
         $this->sustraendo->AdvancedSearch->load();
         $this->tipo_municipal->AdvancedSearch->load();
         $this->anulado->AdvancedSearch->load();
-        $this->pagado->AdvancedSearch->load();
         $this->moneda->AdvancedSearch->load();
         $this->tasa_dia->AdvancedSearch->load();
+        $this->pagado->AdvancedSearch->load();
     }
 
     // Get export HTML tag
@@ -3888,6 +3882,9 @@ class CompraList extends Compra
                 case "x_comprobante":
                     break;
                 case "x_anulado":
+                    break;
+                case "x_moneda":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_pagado":
                     break;

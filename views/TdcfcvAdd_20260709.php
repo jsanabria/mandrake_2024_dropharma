@@ -1830,23 +1830,6 @@ loadjs.ready(["jquery"], function () {
   </div>
 </div>
 
-<?php
-ExecuteStatement("
-    INSERT INTO parametro (codigo, descripcion, valor1)
-    SELECT '112', 'USA IMPRESORA FISCAL', 'N'
-    FROM DUAL
-    WHERE NOT EXISTS (
-        SELECT 1
-        FROM parametro
-        WHERE codigo = '112'
-    )
-");
-
-$impresoraFiscal = strtoupper(trim(
-    ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
-));
-?>
-
 <div class="modal fade" id="modalConfirmarFiscal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarFiscalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-primary shadow-lg">
@@ -1879,18 +1862,6 @@ $impresoraFiscal = strtoupper(trim(
               <input type="text" id="modal_fecha" class="form-control bg-white text-center" readonly style="min-width: 0; flex-grow: 1;">
             </div>
           </div>
-
-          <?php if ($impresoraFiscal == "S") { ?>
-              <div class="col-12">
-                  <div class="alert alert-primary d-flex align-items-center mb-0 py-2 small" role="alert">
-                      <i class="fa-solid fa-print flex-shrink-0 me-2 fs-5 text-primary"></i>
-                      <div>
-                          <strong>Impresora fiscal activa:</strong>
-                          este documento será emitido e impreso en la impresora fiscal configurada.
-                      </div>
-                  </div>
-              </div>
-          <?php } ?>
         </div>
 
         <div class="alert alert-warning d-flex align-items-center mt-3 mb-0 py-2 small" role="alert">

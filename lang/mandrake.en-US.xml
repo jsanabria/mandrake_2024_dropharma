@@ -1,4 +1,4 @@
-<ew-language date="2026/6/23" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/7/9" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -1821,18 +1821,18 @@
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="NO" />
       </field>
+      <field id="moneda">
+        <phrase id="fldcaption" value="Moneda" />
+      </field>
+      <field id="tasa_dia">
+        <phrase id="fldcaption" value="Tasa USD" />
+      </field>
       <field id="pagado">
         <phrase id="fldcaption" value="Pagado" />
         <phrase id="fldtagvalue1" value="S" />
         <phrase id="fldtagcaption1" value="SI" />
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="NO" />
-      </field>
-      <field id="moneda">
-        <phrase id="fldcaption" value="moneda" />
-      </field>
-      <field id="tasa_dia">
-        <phrase id="fldcaption" value="tasa dia" />
       </field>
     </table>
     <table id="conceptos_bancarios">

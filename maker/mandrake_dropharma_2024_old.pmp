@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=1,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=0,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
+<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=1,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
   <Database DBID="DB" DBName="mandrake" DBType="MySQL" DBConnectionMethod="DIRECT" DBHost="localhost" DBPort="3306" DBUID="root" DBQuoteS="`" DBQuoteE="`" DBDBMSName="MySQL" DBDBMSVer="80030" MaxUploadSize="1000000" SecUserLevelFld="userlevelid" SecDefault="0,&quot;Default&quot;,0" SecUserProfileFld="profile" UseDynamicUserLevel="1" UserLevelTbl="userlevels" UserLevelIdFld="userlevelid" UserLevelNameFld="userlevelname" UserLevelPrivTbl="userlevelpermissions" UserLevelPrivTblNameFld="tablename" UserLevelPrivUserLevelFld="userlevelid" UserLevelPrivPrivFld="permission">
     <Table TblName="abono" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblIsMaster="1" TblCaption="Abonos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="nro_recibo" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Nro." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -97,7 +97,7 @@
       <Field FldName="sub_categoria" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Sub Categoria" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Table" FldTagLnkTbl="articulo" FldTagLnkFld="sub_categoria" FldTagLnkDisplay="sub_categoria" FldTagLnkOrderBy="sub_categoria" FldTagLnkOrderType="ASC" FldTagLnkDistinct="1" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="precio" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0.00" FldDbDefault="0.00" FldCaption="Precio" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="alicuota" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="3" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldDefault="&quot;0&quot;" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="3" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="codigo" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`activo` = 'S'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="articulo_inventario" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Articulo de Inventario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="articulo_inventario" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Articulo de Inventario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="indexado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Indexado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pies_cubico" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0.00" FldDbDefault="0.00" FldCaption="Pies Cubico" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="color" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Color" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1228,17 +1228,17 @@
       <Field FldName="fecha" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="DATE" FldRequired="1" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldAutoUpdateValue="CurrentDate()" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="hora" FldType="134" FldTypeName="time" NativeDataType="11" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="TIME" FldRequired="1" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Hora" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="10" FldTagMaxLength="10" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldDtFormat="4" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldAutoUpdateValue="CurrentTime()" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="tdcaen_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Ajuste de Entrada" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcaen_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Ajuste de Entrada" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcaen_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Entrada" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcasa_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcasa_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcnrp_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcnrp_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnrp_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Pedido de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcpdc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Pedido de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -2206,8 +2206,8 @@
     <Table TblName="devoluciones_ver.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Devoluciones Ver Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="cliente_rapido_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=2,custom|class=2" TblList="1" TblCaption="Cliente Agregar" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="transferencia_almacen_multiple.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Transferencia Almacen Multiple" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="crear_nota_entrega_automatica.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota de Entrega Automática" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="crear_nota_entrega_automatica_wait.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota de Entrega Automatica" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="crear_nota_entrega_automatica.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Crear Nota de Entrega Automática" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="crear_nota_entrega_automatica_wait.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Crear Nota de Entrega Automatica" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="documento_consecutivo" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0" TblList="1" TblAdd="1" TblCaption="Consecutivo de Documentos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblCopy="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="serie" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="serie" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -33076,10 +33076,42 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 
 $usuarioCodigoBarra = CurrentUserName();
 $puedeEditarCodigoBarra = false;
-$sql = "SELECT valor1 AS usuario FROM parametro WHERE codigo = '045' AND valor1 = '" . AdjustSql($usuarioCodigoBarra) . "' LIMIT 1;";
-if (ExecuteScalar($sql) != "") {
+
+if (CurrentUserLevel() == -1) {
+
     $puedeEditarCodigoBarra = true;
+
+} else {
+
+    $nivel = intval(CurrentUserLevel());
+
+    $sql_permiso = "
+        SELECT permission
+        FROM userlevelpermissions
+        WHERE userlevelid = $nivel
+          AND tablename LIKE '%}articulo'
+        LIMIT 1
+    ";
+
+    $row_permiso = ExecuteRow($sql_permiso);
+
+    if ($row_permiso) {
+
+        $permiso = intval($row_permiso["permission"]);
+
+        $puedeAgregar = (($permiso & 1) == 1);
+        $puedeModificar = (($permiso & 4) == 4);
+
+        if ($puedeAgregar || $puedeModificar) {
+            $puedeEditarCodigoBarra = true;
+        }
+    }
 }
+
+$fabricantesNuevo = ExecuteRows("SELECT Id, nombre FROM fabricante WHERE activo = 'S' ORDER BY nombre");
+$alicuotasNuevo = ExecuteRows("SELECT codigo, nombre FROM alicuota WHERE activo = 'S' ORDER BY nombre");
+$categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS nombre FROM tabla WHERE tabla = 'CATEGORIA' ORDER BY campo_descripcion");
+
 ?>
 
 <script type="text/javascript">
@@ -33592,6 +33624,96 @@ if (ExecuteScalar($sql) != "") {
         // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
     });     
   }
+
+  function abrirModalNuevoArticulo() {
+      $("#nuevoArticuloMsg").addClass("d-none").html("");
+
+      $("#nuevo_codigo").val("");
+      $("#nuevo_nombre_comercial").val("");
+      $("#nuevo_principio_activo").val("");
+      $("#nuevo_presentacion").val("");
+      $("#nuevo_codigo_de_barra").val("");
+      $("#nuevo_alicuota").val("");
+      $("#nuevo_articulo_inventario").val("S");
+
+      const modalEl = document.getElementById("modalNuevoArticulo");
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+
+      setTimeout(function () {
+          inicializarSelect2NuevoArticulo();
+      }, 250);
+  }
+
+  function inicializarSelect2NuevoArticulo() {
+      if (typeof jQuery === "undefined" || !jQuery.fn.select2) {
+          return;
+      }
+
+      const $modal = $("#modalNuevoArticulo .modal-content");
+
+      if ($("#nuevo_fabricante").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_fabricante").select2("destroy");
+      }
+
+      if ($("#nuevo_categoria").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_categoria").select2("destroy");
+      }
+
+      $("#nuevo_fabricante").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+
+      $("#nuevo_categoria").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+  }
+
+  function guardarNuevoArticulo() {
+      const data = {
+          codigo: $.trim($("#nuevo_codigo").val()),
+          nombre_comercial: $.trim($("#nuevo_nombre_comercial").val()),
+          principio_activo: $.trim($("#nuevo_principio_activo").val()),
+          presentacion: $.trim($("#nuevo_presentacion").val()),
+          fabricante: $("#nuevo_fabricante").val() || "",
+          codigo_de_barra: $.trim($("#nuevo_codigo_de_barra").val()),
+          categoria: $("#nuevo_categoria").val() || "",
+          alicuota: $("#nuevo_alicuota").val() || "",
+          articulo_inventario: $("#nuevo_articulo_inventario").val() || "S",
+          username: $("#username").val()
+      };
+
+      $.ajax({
+          url: "include/crear_articulo_rapido.php",
+          type: "POST",
+          dataType: "json",
+          data: data
+      }).done(function(resp) {
+          if (resp && resp.success === true) {
+              bootstrap.Modal.getOrCreateInstance(
+                  document.getElementById("modalNuevoArticulo")
+              ).hide();
+
+              $("#articulo").val(data.nombre_comercial);
+              getCodigos2();
+          } else {
+              $("#nuevoArticuloMsg")
+                  .removeClass("d-none")
+                  .html((resp && resp.error) ? resp.error : "No se pudo crear el artículo.");
+          }
+      }).fail(function(xhr) {
+          console.log(xhr.responseText);
+          $("#nuevoArticuloMsg")
+              .removeClass("d-none")
+              .html("Error creando el artículo.");
+      });
+  }
+
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -33716,26 +33838,40 @@ if (ExecuteScalar($sql) != "") {
 
 <hr class="border border-primary" />
 
-  <div class="row">
-    <div class="col-sm-3">
+  <div class="row align-items-end g-2">
+    <div class="col-md-2">
       <select id="consignacion" name="consignacion" class="form-select form-select-sm">
         <option value="">Consignaci&oacute;n</option>
         <option value="N"<?= ($consignacion=="N" ? ' selected="selected"' : '') ?>>Consignaci&oacute;n (NO)</option>
         <option value="S"<?= ($consignacion=="S" ? ' selected="selected"' : '') ?>>Consignaci&oacute;n (SI)</option>
       </select>
     </div>
-    <div class="col-sm-3">
-        Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
+
+    <div class="col-md-1 text-center">
+      <label class="form-label d-block mb-1">Rep. Art.</label>
+      <input type="checkbox" id="hubb" name="hubb" value="SI" checked>
     </div>
-    <div class="col-sm-3">
-      Fabricante:
-    <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-    <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+
+    <div class="col-md-3">
+      <label class="form-label mb-1">Fabricante:</label>
+      <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
+      <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
       <ul id="lista" class="list-group"></ul>
     </div>
-    <div class="col-sm-3">
-      Art&iacute;culo:
+
+    <div class="col-md-4">
+      <label class="form-label mb-1">Art&iacute;culo:</label>
       <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
+    </div>
+
+    <div class="col-md-2 text-end">
+      <button type="button"
+              id="btnNuevoArticulo"
+              class="btn btn-success btn-sm w-100"
+              <?= (!$puedeEditarCodigoBarra ? "disabled" : "") ?>
+              onclick="abrirModalNuevoArticulo();">
+        <i class="fa-solid fa-plus"></i> Nuevo Art&iacute;culo
+      </button>
     </div>
   </div>
 
@@ -33887,17 +34023,20 @@ if (ExecuteScalar($sql) != "") {
   }
 
   function getCodigos3(i) { 
-      if(i != 0) {
-        $("#laboratorio").prop("disabled", false);
-        $("#articulo").prop("disabled", false);
-        $("#consignacion").prop("disabled", true);
-      } 
-      else {
-        if($("#consignacion").val() != "") {
-          $("#laboratorio").prop("disabled", false);
-          $("#articulo").prop("disabled", false);
-          $("#consignacion").prop("disabled", true);
-        } 
+      const laboratorio = document.getElementById("laboratorio");
+      const articulo = document.getElementById("articulo");
+      const consignacion = document.getElementById("consignacion");
+
+      if (i != 0) {
+          laboratorio.disabled = false;
+          articulo.disabled = false;
+          consignacion.disabled = true;
+      } else {
+          if (consignacion.value != "") {
+              laboratorio.disabled = false;
+              articulo.disabled = false;
+              consignacion.disabled = true;
+          }
       }
 
       let inputCP = i
@@ -34074,7 +34213,7 @@ if (ExecuteScalar($sql) != "") {
           },
           success: function (response) {
               if (!response || response.success !== true) {
-                  alert(response.error || "No se pudo consultar el artículo.");
+                  ew.alert(response.error || "No se pudo consultar el artículo.");
                   return;
               }
 
@@ -34093,12 +34232,12 @@ if (ExecuteScalar($sql) != "") {
               } else if (typeof jQuery !== "undefined" && jQuery.fn.modal) {
                   $("#modalCodigoBarraArticulo").modal("show");
               } else {
-                  alert("No se pudo abrir el modal: Bootstrap no está disponible.");
+                  ew.alert("No se pudo abrir el modal: Bootstrap no está disponible.");
               }
           },
           error: function (xhr) {
               console.log(xhr.responseText);
-              alert("Error consultando código de barra.");
+              ew.alert("Error consultando código de barra.");
           }
       });
   }
@@ -34125,16 +34264,31 @@ if (ExecuteScalar($sql) != "") {
 
               getCodigos3($("#pedido").val());
           } else {
-              alert(resp.error || "No se pudo actualizar el código de barra.");
+              ew.alert(resp.error || "No se pudo actualizar el código de barra.");
           }
       }).fail(function(xhr) {
           console.log(xhr.responseText);
-          alert("Error actualizando código de barra.");
+          ew.alert("Error actualizando código de barra.");
       });
   }
 
 
-  getCodigos3( <?= $pedido ?> )
+  // getCodigos3( <?= $pedido ?> )
+  function iniciarTdcnrpAdd() {
+      if (typeof window.jQuery === "undefined") {
+          setTimeout(iniciarTdcnrpAdd, 100);
+          return;
+      }
+
+      getCodigos3(<?= intval($pedido) ?>);
+  }
+
+  if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", iniciarTdcnrpAdd);
+  } else {
+      iniciarTdcnrpAdd();
+  }
+
 </script>
 
 <style>
@@ -34147,6 +34301,62 @@ if (ExecuteScalar($sql) != "") {
 
 #modalCodigoBarraArticulo label{
     margin-top:6px;
+}
+
+#modalNuevoArticulo .form-label{
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .modal-header{
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#modalNuevoArticulo .modal-body{
+    padding: 1.25rem;
+}
+
+#modalNuevoArticulo .select2-container {
+    width: 100% !important;
+}
+
+#modalNuevoArticulo .select2-dropdown {
+    z-index: 2000 !important;
+}
+
+.select2-container--open {
+    z-index: 2000 !important;
+}
+
+#modalNuevoArticulo .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+}
+
+#modalNuevoArticulo .select2-selection__rendered {
+    line-height: 36px !important;
+}
+
+#modalNuevoArticulo .select2-selection__arrow {
+    height: 36px !important;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo label {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo input,
+#modalNuevoArticulo .nuevo-articulo-campo select {
+    width: 100%;
 }
 </style>
 
@@ -34239,6 +34449,165 @@ if (ExecuteScalar($sql) != "") {
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="modalNuevoArticulo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-box-open"></i>
+                    Nuevo Artículo
+                </h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="row g-3">
+
+                    <!-- FILA 1 -->
+
+                    <div class="col-md-4">
+                        <div class="nuevo-articulo-campo">
+                            <label for="nuevo_codigo" class="form-label fw-bold">
+                                Código <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="nuevo_codigo"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>                    
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Comercial <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_nombre_comercial"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Art&iacute;culo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_principio_activo"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <!-- FILA 2 -->
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Presentación
+                        </label>
+                        <input type="text"
+                               id="nuevo_presentacion"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Fabricante <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_fabricante" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+
+                            <?php foreach ($fabricantesNuevo as $f) { ?>
+                                <option value="<?= $f["Id"] ?>">
+                                    <?= HtmlEncode($f["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Código de Barra
+                        </label>
+                        <input type="text"
+                               id="nuevo_codigo_de_barra"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <!-- FILA 3 -->
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Categoría <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_categoria" class="form-select form-select-sm">
+                          <option value="">Seleccione...</option>
+
+                          <?php foreach ($categoriasNuevo as $c) { ?>
+                              <option value="<?= $c["id"] ?>">
+                                  <?= HtmlEncode($c["nombre"]) ?>
+                              </option>
+                          <?php } ?>
+                      </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Alícuota <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_alicuota"
+                                class="form-select form-select-sm">
+
+                            <option value="">Seleccione...</option>
+
+                            <?php foreach ($alicuotasNuevo as $a) { ?>
+                                <option value="<?= $a["codigo"] ?>">
+                                    <?= HtmlEncode($a["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Inventario <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_articulo_inventario"
+                                class="form-select form-select-sm">
+                            <option value="S" selected>Sí</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="nuevoArticuloMsg"
+                     class="alert alert-danger mt-3 d-none">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="guardarNuevoArticulo();">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Artículo
+                </button>
+            </div>
+
+        </div>
+    </div>
 </div>]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcnrp_process.php"><![CDATA[<?php
 $pedido = $_REQUEST["pedido"];
@@ -34259,8 +34628,7 @@ foreach ($rows as $key => $value) {
 header("Location: ViewInList?showmaster=view_in_tdcnrp&fk_id=" . $pedido . "&fk_tipo_documento=TDCNRP");
 die();
 ?>]]></CustomScript>
-  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcfcc_add.php"><![CDATA[
-<?php
+  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcfcc_add.php"><![CDATA[<?php
 $codpro = $_REQUEST["codpro"];
 $tipo_documento = $_REQUEST["tipo_documento"];
 
@@ -34299,6 +34667,40 @@ $proveedor = $row["nombre"];
 $PorDesMin = 0;
 $PorDesMax = 100;
 $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0));
+
+$puedeEditarCodigoBarra = false;
+
+if (CurrentUserLevel() == -1) {
+    $puedeEditarCodigoBarra = true;
+} else {
+    $nivel = intval(CurrentUserLevel());
+
+    $sql_permiso = "
+        SELECT permission
+        FROM userlevelpermissions
+        WHERE userlevelid = $nivel
+          AND tablename LIKE '%}articulo'
+        LIMIT 1
+    ";
+
+    $row_permiso = ExecuteRow($sql_permiso);
+
+    if ($row_permiso) {
+        $permiso = intval($row_permiso["permission"]);
+
+        $puedeAgregar = (($permiso & 1) == 1);
+        $puedeModificar = (($permiso & 4) == 4);
+
+        if ($puedeAgregar || $puedeModificar) {
+            $puedeEditarCodigoBarra = true;
+        }
+    }
+}
+
+$fabricantesNuevo = ExecuteRows("SELECT Id, nombre FROM fabricante WHERE activo = 'S' ORDER BY nombre");
+$alicuotasNuevo = ExecuteRows("SELECT codigo, nombre FROM alicuota WHERE activo = 'S' ORDER BY nombre");
+$categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS nombre FROM tabla WHERE tabla = 'CATEGORIA' ORDER BY campo_descripcion");
+
 ?>
 
 <script type="text/javascript">
@@ -34794,6 +35196,95 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
     });  
   }
 
+  function abrirModalNuevoArticulo() {
+      $("#nuevoArticuloMsg").addClass("d-none").html("");
+
+      $("#nuevo_codigo").val("");
+      $("#nuevo_nombre_comercial").val("");
+      $("#nuevo_principio_activo").val("");
+      $("#nuevo_presentacion").val("");
+      $("#nuevo_codigo_de_barra").val("");
+      $("#nuevo_alicuota").val("");
+      $("#nuevo_articulo_inventario").val("S");
+
+      const modalEl = document.getElementById("modalNuevoArticulo");
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+
+      setTimeout(function () {
+          inicializarSelect2NuevoArticulo();
+      }, 250);
+  }
+
+  function inicializarSelect2NuevoArticulo() {
+      if (typeof jQuery === "undefined" || !jQuery.fn.select2) {
+          return;
+      }
+
+      const $modal = $("#modalNuevoArticulo .modal-content");
+
+      if ($("#nuevo_fabricante").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_fabricante").select2("destroy");
+      }
+
+      if ($("#nuevo_categoria").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_categoria").select2("destroy");
+      }
+
+      $("#nuevo_fabricante").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+
+      $("#nuevo_categoria").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+  }
+
+  function guardarNuevoArticulo() {
+      const data = {
+          codigo: $.trim($("#nuevo_codigo").val()),
+          nombre_comercial: $.trim($("#nuevo_nombre_comercial").val()),
+          principio_activo: $.trim($("#nuevo_principio_activo").val()),
+          presentacion: $.trim($("#nuevo_presentacion").val()),
+          fabricante: $("#nuevo_fabricante").val() || "",
+          codigo_de_barra: $.trim($("#nuevo_codigo_de_barra").val()),
+          categoria: $("#nuevo_categoria").val() || "",
+          alicuota: $("#nuevo_alicuota").val() || "",
+          articulo_inventario: $("#nuevo_articulo_inventario").val() || "S",
+          username: $("#username").val()
+      };
+
+      $.ajax({
+          url: "include/crear_articulo_rapido.php",
+          type: "POST",
+          dataType: "json",
+          data: data
+      }).done(function(resp) {
+          if (resp && resp.success === true) {
+              bootstrap.Modal.getOrCreateInstance(
+                  document.getElementById("modalNuevoArticulo")
+              ).hide();
+
+              $("#articulo").val(data.nombre_comercial);
+              getCodigos2();
+          } else {
+              $("#nuevoArticuloMsg")
+                  .removeClass("d-none")
+                  .html((resp && resp.error) ? resp.error : "No se pudo crear el artículo.");
+          }
+      }).fail(function(xhr) {
+          console.log(xhr.responseText);
+          $("#nuevoArticuloMsg")
+              .removeClass("d-none")
+              .html("Error creando el artículo.");
+      });
+  }
+
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -34918,28 +35409,49 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 
 <hr class="border border-primary" />
 
-  <div class="row">
-    <div class="col-sm-3">
-      <select id="consignacion" name="consignacion" class="form-select form-select-sm">
-        <option value="">TIPO DOCUMENTO</option>
-        <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
-        <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>
-        <option value="ND"<?= ($consignacion=="ND" ? ' selected="selected"' : '') ?>>NOTA DE DEBITO</option>
-      </select>
-    </div>
-    <div class="col-sm-3">
-        Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
-    </div>
-    <div class="col-sm-3">
-      Fabricante:
-		<input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-		<input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
-      <ul id="lista" class="list-group"></ul>
-    </div>
-    <div class="col-sm-3">
-      Art&iacute;culo:
-      <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
-    </div>
+  <div class="row align-items-end g-3">
+
+      <div class="col-md-2">
+          <label class="form-label mb-1 fw-bold">Tipo Documento:</label>
+          <select id="consignacion" name="consignacion" class="form-select form-select-sm">
+              <option value="">TIPO DOCUMENTO</option>
+              <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
+              <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>
+              <option value="ND"<?= ($consignacion=="ND" ? ' selected="selected"' : '') ?>>NOTA DE DEBITO</option>
+          </select>
+      </div>
+
+      <div class="col-md-1 text-center">
+          <label class="form-label d-block mb-1">Rep. Art.</label>
+          <input type="checkbox" id="hubb" name="hubb" value="SI" checked>
+      </div>
+
+      <div class="col-md-3">
+          <label class="form-label mb-1 fw-bold">Fabricante:</label>
+          <input name="laboratorio" id="laboratorio" type="text"
+                 class="form-control form-control-sm w-100"
+                 placeholder="Buscar Laboratorio" />
+          <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+          <ul id="lista" class="list-group"></ul>
+      </div>
+
+      <div class="col-md-3">
+          <label class="form-label mb-1 fw-bold">Artículo:</label>
+          <input name="articulo" id="articulo" type="text"
+                 class="form-control form-control-sm w-100"
+                 placeholder="Buscar Artículo" />
+      </div>
+
+      <div class="col-md-3 text-end">
+          <button type="button"
+                  id="btnNuevoArticulo"
+                  class="btn btn-success btn-sm w-100"
+                  <?= (!$puedeEditarCodigoBarra ? "disabled" : "") ?>
+                  onclick="abrirModalNuevoArticulo();">
+              <i class="fa-solid fa-plus"></i> Nuevo Artículo
+          </button>
+      </div>
+
   </div>
 
 <hr class="border border-primary" />
@@ -35190,9 +35702,223 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
       }
   }
 
-  getCodigos3( <?= $pedido ?> )
+  function iniciarTdcfccAdd() {
+      if (typeof window.jQuery === "undefined") {
+          setTimeout(iniciarTdcfccAdd, 100);
+          return;
+      }
+
+      getCodigos3(<?= intval($pedido) ?>);
+  }
+
+  if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", iniciarTdcfccAdd);
+  } else {
+      iniciarTdcfccAdd();
+  }  
 </script>
-]]></CustomScript>
+
+<style>
+#modalNuevoArticulo .form-label{
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .modal-header{
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#modalNuevoArticulo .modal-body{
+    padding: 1.25rem;
+}
+
+#modalNuevoArticulo .select2-container {
+    width: 100% !important;
+}
+
+#modalNuevoArticulo .select2-dropdown {
+    z-index: 2000 !important;
+}
+
+.select2-container--open {
+    z-index: 2000 !important;
+}
+
+#modalNuevoArticulo .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+}
+
+#modalNuevoArticulo .select2-selection__rendered {
+    line-height: 36px !important;
+}
+
+#modalNuevoArticulo .select2-selection__arrow {
+    height: 36px !important;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo label {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo input,
+#modalNuevoArticulo .nuevo-articulo-campo select {
+    width: 100%;
+}
+</style>
+
+<div class="modal fade" id="modalNuevoArticulo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-box-open"></i>
+                    Nuevo Artículo
+                </h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <div class="nuevo-articulo-campo">
+                            <label for="nuevo_codigo" class="form-label fw-bold">
+                                Código <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="nuevo_codigo"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Comercial <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_nombre_comercial"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Art&iacute;culo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_principio_activo"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Presentación
+                        </label>
+                        <input type="text"
+                               id="nuevo_presentacion"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Fabricante <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_fabricante" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($fabricantesNuevo as $f) { ?>
+                                <option value="<?= $f["Id"] ?>">
+                                    <?= HtmlEncode($f["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Código de Barra
+                        </label>
+                        <input type="text"
+                               id="nuevo_codigo_de_barra"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Categoría <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_categoria" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($categoriasNuevo as $c) { ?>
+                                <option value="<?= $c["id"] ?>">
+                                    <?= HtmlEncode($c["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Alícuota <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_alicuota" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($alicuotasNuevo as $a) { ?>
+                                <option value="<?= $a["codigo"] ?>">
+                                    <?= HtmlEncode($a["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Inventario <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_articulo_inventario"
+                                class="form-select form-select-sm">
+                            <option value="S" selected>Sí</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="nuevoArticuloMsg"
+                     class="alert alert-danger mt-3 d-none">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="guardarNuevoArticulo();">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Artículo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcfcc_process.php"><![CDATA[<?php
 $pedido = $_REQUEST["pedido"];
 
@@ -35212,8 +35938,7 @@ foreach ($rows as $key => $value) {
 header("Location: ViewInList?showmaster=view_in_tdcfcc&fk_id=" . $pedido . "&fk_tipo_documento=TDCFCC");
 die();
 ?>]]></CustomScript>
-  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcaen_add.php"><![CDATA[
-<?php
+  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcaen_add.php"><![CDATA[<?php
 $codpro = $_REQUEST["codpro"];
 $tipo_documento = $_REQUEST["tipo_documento"];
 
@@ -35240,6 +35965,38 @@ $proveedor = $row["nombre"];
 $sql = "SELECT codigo, descripcion FROM almacen WHERE movimiento = 'S';";
 $rs_alm = ExecuteRows($sql);
 
+$puedeEditarCodigoBarra = false;
+
+if (CurrentUserLevel() == -1) {
+    $puedeEditarCodigoBarra = true;
+} else {
+    $nivel = intval(CurrentUserLevel());
+
+    $sql_permiso = "
+        SELECT permission
+        FROM userlevelpermissions
+        WHERE userlevelid = $nivel
+          AND tablename LIKE '%}articulo'
+        LIMIT 1
+    ";
+
+    $row_permiso = ExecuteRow($sql_permiso);
+
+    if ($row_permiso) {
+        $permiso = intval($row_permiso["permission"]);
+
+        $puedeAgregar = (($permiso & 1) == 1);
+        $puedeModificar = (($permiso & 4) == 4);
+
+        if ($puedeAgregar || $puedeModificar) {
+            $puedeEditarCodigoBarra = true;
+        }
+    }
+}
+
+$fabricantesNuevo = ExecuteRows("SELECT Id, nombre FROM fabricante WHERE activo = 'S' ORDER BY nombre");
+$alicuotasNuevo = ExecuteRows("SELECT codigo, nombre FROM alicuota WHERE activo = 'S' ORDER BY nombre");
+$categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS nombre FROM tabla WHERE tabla = 'CATEGORIA' ORDER BY campo_descripcion");
 ?>
 
 <script type="text/javascript">
@@ -35491,6 +36248,94 @@ $rs_alm = ExecuteRows($sql);
     window.location.href = "TdcaenProcess?pedido=" + i;
   }
 
+  function abrirModalNuevoArticulo() {
+      $("#nuevoArticuloMsg").addClass("d-none").html("");
+
+      $("#nuevo_codigo").val("");
+      $("#nuevo_nombre_comercial").val("");
+      $("#nuevo_principio_activo").val("");
+      $("#nuevo_presentacion").val("");
+      $("#nuevo_codigo_de_barra").val("");
+      $("#nuevo_alicuota").val("");
+      $("#nuevo_articulo_inventario").val("S");
+
+      const modalEl = document.getElementById("modalNuevoArticulo");
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+
+      setTimeout(function () {
+          inicializarSelect2NuevoArticulo();
+      }, 250);
+  }
+
+  function inicializarSelect2NuevoArticulo() {
+      if (typeof jQuery === "undefined" || !jQuery.fn.select2) {
+          return;
+      }
+
+      const $modal = $("#modalNuevoArticulo .modal-content");
+
+      if ($("#nuevo_fabricante").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_fabricante").select2("destroy");
+      }
+
+      if ($("#nuevo_categoria").hasClass("select2-hidden-accessible")) {
+          $("#nuevo_categoria").select2("destroy");
+      }
+
+      $("#nuevo_fabricante").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+
+      $("#nuevo_categoria").select2({
+          dropdownParent: $modal,
+          width: "100%",
+          placeholder: "Seleccione...",
+          allowClear: true
+      });
+  }
+
+  function guardarNuevoArticulo() {
+      const data = {
+          codigo: $.trim($("#nuevo_codigo").val()),
+          nombre_comercial: $.trim($("#nuevo_nombre_comercial").val()),
+          principio_activo: $.trim($("#nuevo_principio_activo").val()),
+          presentacion: $.trim($("#nuevo_presentacion").val()),
+          fabricante: $("#nuevo_fabricante").val() || "",
+          codigo_de_barra: $.trim($("#nuevo_codigo_de_barra").val()),
+          categoria: $("#nuevo_categoria").val() || "",
+          alicuota: $("#nuevo_alicuota").val() || "",
+          articulo_inventario: $("#nuevo_articulo_inventario").val() || "S",
+          username: $("#username").val()
+      };
+
+      $.ajax({
+          url: "include/crear_articulo_rapido.php",
+          type: "POST",
+          dataType: "json",
+          data: data
+      }).done(function(resp) {
+          if (resp && resp.success === true) {
+              bootstrap.Modal.getOrCreateInstance(
+                  document.getElementById("modalNuevoArticulo")
+              ).hide();
+
+              $("#articulo").val(data.nombre_comercial);
+              getCodigos2();
+          } else {
+              $("#nuevoArticuloMsg")
+                  .removeClass("d-none")
+                  .html((resp && resp.error) ? resp.error : "No se pudo crear el artículo.");
+          }
+      }).fail(function(xhr) {
+          console.log(xhr.responseText);
+          $("#nuevoArticuloMsg")
+              .removeClass("d-none")
+              .html("Error creando el artículo.");
+      });
+  }
 
 </script>
 
@@ -35547,34 +36392,51 @@ $rs_alm = ExecuteRows($sql);
 
 <hr class="border border-primary" />
 
-    <div class="row">
-        <div class="col-sm-1">
-            Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
-        </div>
+  <div class="row align-items-end g-3">
 
-        <div class="col-sm-3">
-            Almacén:
-            <select name="almacen" id="almacen" class="form-control form-control-sm">
-                <?php foreach($rs_alm as $alm) { ?>
-                    <option value="<?= $alm["codigo"] ?>" <?= ($alm["codigo"] == "ALM001") ? "selected" : "" ?>>
-                        <?= $alm["descripcion"] ?>
-                    </option>
-                <?php } ?>
-            </select>
-        </div>
+      <div class="col-md-1 text-center">
+          <label class="form-label d-block mb-1">Rep. Art.</label>
+          <input type="checkbox" id="hubb" name="hubb" value="SI" checked>
+      </div>
 
-        <div class="col-sm-4">
-            Fabricante:
-            <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-            <input name="codlab" id="codlab" type="hidden" />
-            <ul id="lista" class="list-group"></ul>
-        </div>
+      <div class="col-md-2">
+          <label class="form-label mb-1 fw-bold">Almacén:</label>
+          <select name="almacen" id="almacen" class="form-select form-select-sm w-100">
+              <?php foreach($rs_alm as $alm) { ?>
+                  <option value="<?= $alm["codigo"] ?>" <?= ($alm["codigo"] == "ALM001") ? "selected" : "" ?>>
+                      <?= $alm["descripcion"] ?>
+                  </option>
+              <?php } ?>
+          </select>
+      </div>
 
-        <div class="col-sm-4">
-            Art&iacute;culo:
-            <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
-        </div>
-    </div>
+      <div class="col-md-3">
+          <label class="form-label mb-1 fw-bold">Fabricante:</label>
+          <input name="laboratorio" id="laboratorio" type="text"
+                 class="form-control form-control-sm w-100"
+                 placeholder="Buscar Laboratorio" />
+          <input name="codlab" id="codlab" type="hidden" />
+          <ul id="lista" class="list-group"></ul>
+      </div>
+
+      <div class="col-md-3">
+          <label class="form-label mb-1 fw-bold">Artículo:</label>
+          <input name="articulo" id="articulo" type="text"
+                 class="form-control form-control-sm w-100"
+                 placeholder="Buscar Artículo" />
+      </div>
+
+      <div class="col-md-3 text-end">
+          <button type="button"
+                  id="btnNuevoArticulo"
+                  class="btn btn-success btn-sm w-100"
+                  <?= (!$puedeEditarCodigoBarra ? "disabled" : "") ?>
+                  onclick="abrirModalNuevoArticulo();">
+              <i class="fa-solid fa-plus"></i> Nuevo Artículo
+          </button>
+      </div>
+
+  </div>
 
 <hr class="border border-primary" />
 
@@ -35773,6 +36635,208 @@ $rs_alm = ExecuteRows($sql);
 
   getCodigos3( <?= $pedido ?> )
 </script>
+
+<style>
+#modalNuevoArticulo .form-label{
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .modal-header{
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#modalNuevoArticulo .modal-body{
+    padding: 1.25rem;
+}
+
+#modalNuevoArticulo .select2-container {
+    width: 100% !important;
+}
+
+#modalNuevoArticulo .select2-dropdown {
+    z-index: 2000 !important;
+}
+
+.select2-container--open {
+    z-index: 2000 !important;
+}
+
+#modalNuevoArticulo .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+}
+
+#modalNuevoArticulo .select2-selection__rendered {
+    line-height: 36px !important;
+}
+
+#modalNuevoArticulo .select2-selection__arrow {
+    height: 36px !important;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo label {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo input,
+#modalNuevoArticulo .nuevo-articulo-campo select {
+    width: 100%;
+}
+</style>
+
+<div class="modal fade" id="modalNuevoArticulo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-box-open"></i>
+                    Nuevo Artículo
+                </h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <div class="nuevo-articulo-campo">
+                            <label for="nuevo_codigo" class="form-label fw-bold">
+                                Código <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="nuevo_codigo"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Comercial <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_nombre_comercial"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Art&iacute;culo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_principio_activo"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Presentación
+                        </label>
+                        <input type="text"
+                               id="nuevo_presentacion"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Fabricante <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_fabricante" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($fabricantesNuevo as $f) { ?>
+                                <option value="<?= $f["Id"] ?>">
+                                    <?= HtmlEncode($f["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Código de Barra
+                        </label>
+                        <input type="text"
+                               id="nuevo_codigo_de_barra"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Categoría <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_categoria" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($categoriasNuevo as $c) { ?>
+                                <option value="<?= $c["id"] ?>">
+                                    <?= HtmlEncode($c["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Alícuota <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_alicuota" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($alicuotasNuevo as $a) { ?>
+                                <option value="<?= $a["codigo"] ?>">
+                                    <?= HtmlEncode($a["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Inventario <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_articulo_inventario"
+                                class="form-select form-select-sm">
+                            <option value="S" selected>Sí</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="nuevoArticuloMsg"
+                     class="alert alert-danger mt-3 d-none">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="guardarNuevoArticulo();">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Artículo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 ]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcaen_process.php"><![CDATA[<?php
 $pedido = $_REQUEST["pedido"];
@@ -35853,6 +36917,46 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
 $urlImprimir = "#";
 if (intval($pedido) > 0) {
     $urlImprimir = "reportes/factura_de_venta.php?id=" . intval($pedido) . "&tipo=TDCFCV";
+}
+
+$puedeEditarCodigoBarra = false;
+
+if (CurrentUserLevel() == -1) {
+    $puedeEditarCodigoBarra = true;
+} else {
+    $nivel = intval(CurrentUserLevel());
+
+    $sql_permiso = "
+        SELECT permission
+        FROM userlevelpermissions
+        WHERE userlevelid = $nivel
+          AND tablename LIKE '%}articulo'
+        LIMIT 1
+    ";
+
+    $row_permiso = ExecuteRow($sql_permiso);
+
+    if ($row_permiso) {
+        $permiso = intval($row_permiso["permission"]);
+
+        $puedeAgregar = (($permiso & 1) == 1);
+        $puedeModificar = (($permiso & 4) == 4);
+
+        if ($puedeAgregar || $puedeModificar) {
+            $puedeEditarCodigoBarra = true;
+        }
+    }
+}
+
+$fabricantesNuevo = ExecuteRows("SELECT Id, nombre FROM fabricante WHERE activo = 'S' ORDER BY nombre");
+$alicuotasNuevo = ExecuteRows("SELECT codigo, nombre FROM alicuota WHERE activo = 'S' ORDER BY nombre");
+$categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS nombre FROM tabla WHERE tabla = 'CATEGORIA' ORDER BY campo_descripcion");
+
+$preguntarNE = false;
+
+$rowParametro111 = ExecuteRow("SELECT valor1 FROM parametro WHERE codigo = '111' LIMIT 1");
+if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
+    $preguntarNE = true;
 }
 ?>
 
@@ -36041,28 +37145,59 @@ if (intval($pedido) > 0) {
 
 <hr class="border border-primary" />
 
-  <div class="row">
-    <div class="col-sm-3">
-      <select id="consignacion" name="consignacion" class="form-select form-select-sm" disabled="disabled">
-        <option value="">TIPO DOCUMENTO</option>
-        <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
-        <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>
-        <option value="ND"<?= ($consignacion=="ND" ? ' selected="selected"' : '') ?>>NOTA DE DEBITO</option>
-      </select>
-    </div>
-    <div class="col-sm-3">
-        Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
-    </div>
-    <div class="col-sm-3">
-      Fabricante:
-    <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-    <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
-      <ul id="lista" class="list-group"></ul>
-    </div>
-    <div class="col-sm-3">
-      Art&iacute;culo:
-      <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
-    </div>
+  <div class="row align-items-end g-3">
+
+      <div class="col-md-2">
+          <label class="form-label mb-1 fw-bold">Tipo Documento:</label>
+          <select id="consignacion" name="consignacion" class="form-select form-select-sm" disabled="disabled">
+              <option value="">TIPO DOCUMENTO</option>
+              <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
+              <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>
+              <option value="ND"<?= ($consignacion=="ND" ? ' selected="selected"' : '') ?>>NOTA DE DEBITO</option>
+          </select>
+      </div>
+
+      <div class="col-md-1 text-center">
+          <label class="form-label d-block mb-1">Rep. Art.</label>
+          <input type="checkbox" id="hubb" name="hubb" value="SI" checked>
+      </div>
+
+      <div class="col-md-3">
+          <label class="form-label mb-1 fw-bold">Fabricante:</label>
+          <input name="laboratorio" id="laboratorio" type="text"
+                 class="form-control form-control-sm w-100"
+                 placeholder="Buscar Laboratorio" />
+          <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+          <ul id="lista" class="list-group"></ul>
+      </div>
+
+        <div class="col-md-3">
+            <label class="form-label mb-1 fw-bold">Artículo:</label>
+            <input name="articulo" id="articulo" type="text"
+                class="form-control form-control-sm w-100"
+                placeholder="Buscar Artículo" />
+        </div>
+
+        <div class="col-md-1">
+            <label class="form-label mb-1">&nbsp;</label>
+            <button type="button"
+                    id="btnBuscarArticulo"
+                    class="btn btn-primary btn-sm w-100">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <div class="col-md-2 text-end">
+            <label class="form-label mb-1">&nbsp;</label>
+            <button type="button"
+                    id="btnNuevoArticulo"
+                    class="btn btn-success btn-sm w-100"
+                    <?= (!$puedeEditarCodigoBarra ? "disabled" : "") ?>
+                    onclick="abrirModalNuevoArticulo();">
+                <i class="fa-solid fa-plus"></i> Nuevo Artículo
+            </button>
+        </div>
+
   </div>
 
 <hr class="border border-primary" />
@@ -37095,10 +38230,15 @@ loadjs.ready(["jquery"], function () {
 
                     let generarNE = "N";
 
+                    const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
                     if (idDocumentoPadre == 0) {
-                        generarNE = confirm(
-                            "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
-                        ) ? "S" : "N";
+                        if (preguntarNE) {
+                            generarNE = confirm(
+                                "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
+                            ) ? "S" : "N";
+                        } else {
+                            generarNE = "N";
+                        }
                     }
 
                     btn.prop("disabled", true)
@@ -37392,13 +38532,113 @@ loadjs.ready(["jquery"], function () {
 
     });
 
+    $(document).on("click", "#btnBuscarArticulo", function() {
+
+        if ($.trim($("#articulo").val()) === "") {
+            $("#articulo").focus();
+            return;
+        }
+
+        getCodigos2();
+
+    });
+
 
     /// Laboratorios ///
     $(document).on("keyup change", "#laboratorio", function () {
         getLaboratorios();
     });
     ////////////////////
-    
+
+    window.abrirModalNuevoArticulo = function () {
+        $("#nuevoArticuloMsg").addClass("d-none").html("");
+
+        $("#nuevo_codigo").val("");
+        $("#nuevo_nombre_comercial").val("");
+        $("#nuevo_principio_activo").val("");
+        $("#nuevo_presentacion").val("");
+        $("#nuevo_codigo_de_barra").val("");
+        $("#nuevo_alicuota").val("");
+        $("#nuevo_articulo_inventario").val("S");
+
+        const modalEl = document.getElementById("modalNuevoArticulo");
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+
+        setTimeout(function () {
+            inicializarSelect2NuevoArticulo();
+        }, 250);
+    };
+
+    function inicializarSelect2NuevoArticulo() {
+        if (typeof jQuery === "undefined" || !jQuery.fn.select2) {
+            return;
+        }
+
+        const $modal = $("#modalNuevoArticulo .modal-content");
+
+        if ($("#nuevo_fabricante").hasClass("select2-hidden-accessible")) {
+            $("#nuevo_fabricante").select2("destroy");
+        }
+
+        if ($("#nuevo_categoria").hasClass("select2-hidden-accessible")) {
+            $("#nuevo_categoria").select2("destroy");
+        }
+
+        $("#nuevo_fabricante").select2({
+            dropdownParent: $modal,
+            width: "100%",
+            placeholder: "Seleccione...",
+            allowClear: true
+        });
+
+        $("#nuevo_categoria").select2({
+            dropdownParent: $modal,
+            width: "100%",
+            placeholder: "Seleccione...",
+            allowClear: true
+        });
+    }
+
+    window.guardarNuevoArticulo = function () {
+        const data = {
+            codigo: $.trim($("#nuevo_codigo").val()),
+            nombre_comercial: $.trim($("#nuevo_nombre_comercial").val()),
+            principio_activo: $.trim($("#nuevo_principio_activo").val()),
+            presentacion: $.trim($("#nuevo_presentacion").val()),
+            fabricante: $("#nuevo_fabricante").val() || "",
+            codigo_de_barra: $.trim($("#nuevo_codigo_de_barra").val()),
+            categoria: $("#nuevo_categoria").val() || "",
+            alicuota: $("#nuevo_alicuota").val() || "",
+            articulo_inventario: $("#nuevo_articulo_inventario").val() || "S",
+            username: $("#username").val()
+        };
+
+        $.ajax({
+            url: "include/crear_articulo_rapido.php",
+            type: "POST",
+            dataType: "json",
+            data: data
+        }).done(function(resp) {
+            if (resp && resp.success === true) {
+                bootstrap.Modal.getOrCreateInstance(
+                    document.getElementById("modalNuevoArticulo")
+                ).hide();
+
+                $("#articulo").val(data.nombre_comercial);
+                getCodigos2();
+            } else {
+                $("#nuevoArticuloMsg")
+                    .removeClass("d-none")
+                    .html((resp && resp.error) ? resp.error : "No se pudo crear el artículo.");
+            }
+        }).fail(function(xhr) {
+            console.log(xhr.responseText);
+            $("#nuevoArticuloMsg")
+                .removeClass("d-none")
+                .html("Error creando el artículo.");
+        });
+    };
+
     getCodigos3(<?= intval($pedido) ?>);
 });
 </script>
@@ -37501,7 +38741,211 @@ loadjs.ready(["jquery"], function () {
         </div>
     </div>
   </div>
-</div>]]></CustomScript>
+</div>
+
+
+<style>
+#modalNuevoArticulo .form-label{
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .modal-header{
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#modalNuevoArticulo .modal-body{
+    padding: 1.25rem;
+}
+
+#modalNuevoArticulo .select2-container {
+    width: 100% !important;
+}
+
+#modalNuevoArticulo .select2-dropdown {
+    z-index: 2000 !important;
+}
+
+.select2-container--open {
+    z-index: 2000 !important;
+}
+
+#modalNuevoArticulo .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+}
+
+#modalNuevoArticulo .select2-selection__rendered {
+    line-height: 36px !important;
+}
+
+#modalNuevoArticulo .select2-selection__arrow {
+    height: 36px !important;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo label {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo input,
+#modalNuevoArticulo .nuevo-articulo-campo select {
+    width: 100%;
+}
+</style>
+
+<div class="modal fade" id="modalNuevoArticulo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-box-open"></i>
+                    Nuevo Artículo
+                </h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <div class="nuevo-articulo-campo">
+                            <label for="nuevo_codigo" class="form-label fw-bold">
+                                Código <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="nuevo_codigo"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Comercial <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_nombre_comercial"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Art&iacute;culo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_principio_activo"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Presentación
+                        </label>
+                        <input type="text"
+                               id="nuevo_presentacion"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Fabricante <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_fabricante" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($fabricantesNuevo as $f) { ?>
+                                <option value="<?= $f["Id"] ?>">
+                                    <?= HtmlEncode($f["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Código de Barra
+                        </label>
+                        <input type="text"
+                               id="nuevo_codigo_de_barra"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Categoría <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_categoria" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($categoriasNuevo as $c) { ?>
+                                <option value="<?= $c["id"] ?>">
+                                    <?= HtmlEncode($c["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Alícuota <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_alicuota" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($alicuotasNuevo as $a) { ?>
+                                <option value="<?= $a["codigo"] ?>">
+                                    <?= HtmlEncode($a["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Inventario <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_articulo_inventario"
+                                class="form-select form-select-sm">
+                            <option value="S" selected>Sí</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="nuevoArticuloMsg"
+                     class="alert alert-danger mt-3 d-none">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="guardarNuevoArticulo();">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Artículo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcfcv_process.php"><![CDATA[<?php
 
 function TdcfcvSqlValue($value)
@@ -48402,6 +49846,7 @@ try {
     $detalleValidado = [];
     $articulosProcesados = [];
     $consumoPorLote = [];
+    $articulosOmitidos = [];
 
     foreach ($lineas as $linea) {
         $idDetalle = intval($linea["id"]);
@@ -48525,8 +49970,11 @@ try {
         }
 
         if ($cantidadPendiente > 0) {
-            throw new \Exception("Existencia insuficiente para " . CneaArticuloNombre($articulo) . ". Faltante: " . number_format($cantidadPendiente, 2, ",", ".") . ".");
-        }
+            $articulosOmitidos[] = CneaArticuloNombre($articulo) .
+                " - Faltante: " . number_format($cantidadPendiente, 2, ",", ".");
+
+            continue;
+        }        
     }
 
     if (count($detalleValidado) <= 0) {
@@ -48652,19 +50100,31 @@ try {
     }
 
     Execute("COMMIT");
+    $mensajeFinal = "Factura procesada y Orden de Entrega automática Nro. $nro_documento generada correctamente.";
+    $mensajeWarning = "";
+
+    if (count($articulosOmitidos) > 0) {
+        $mensajeWarning = "Algunos artículos no fueron incluidos en la Orden de Entrega por falta de existencia: "
+            . implode("; ", $articulosOmitidos);
+    }
+
     if ($ajax == "S") {
         CneaJson([
             "success" => true,
-            "message" => "La Orden de Entrega automática fue creada correctamente.",
+            "message" => $mensajeFinal,
+            "warning" => $mensajeWarning,
             "id" => $new_id,
             "nro_documento" => $nro_documento
         ]);
     }
 
-    CneaSetMessage("success", "Factura procesada y Orden de Entrega automática Nro. $nro_documento generada correctamente.");
-    header("Location: $returnUrl");
-    die();
+    CneaSetMessage("success", $mensajeFinal);
+    if ($mensajeWarning != "") {
+        CneaSetMessage("warning", $mensajeWarning);
+    }
 
+    header("Location: $returnUrl");
+    die();  
 } catch (\Throwable $e) {
     if ($transaccionIniciada) {
         Execute("ROLLBACK");
@@ -48757,21 +50217,42 @@ loadjs.ready(["jquery"], function () {
             ajax: "S"
         },
         success: function(resp) {
-            let tipo = resp.success ? "success" : "warning";
-            let icono = resp.success ? "fa-check-circle" : "fa-triangle-exclamation";
-            let titulo = resp.success ? "Orden de Entrega creada" : "Aviso";
+            let tieneWarning = resp.warning && resp.warning !== "";
+
+            let tipo = resp.success
+                ? (tieneWarning ? "warning" : "success")
+                : "warning";
+
+            let icono = resp.success
+                ? (tieneWarning ? "fa-triangle-exclamation" : "fa-check-circle")
+                : "fa-triangle-exclamation";
+
+            let titulo = resp.success
+                ? (tieneWarning ? "Orden creada con advertencia" : "Orden de Entrega creada")
+                : "Aviso";
+
+            let warningHtml = "";
+
+            if (tieneWarning) {
+                warningHtml =
+                    '<div class="alert alert-warning mt-3 mb-0">' +
+                        '<strong><i class="fa fa-triangle-exclamation"></i> Advertencia:</strong><br>' +
+                        resp.warning +
+                    '</div>';
+            }
 
             $("#estadoNE").html(
                 '<div class="alert alert-' + tipo + ' text-start">' +
                     '<h5><i class="fa ' + icono + '"></i> ' + titulo + '</h5>' +
                     '<div>' + (resp.message || "Proceso finalizado.") + '</div>' +
                     (resp.nro_documento ? '<div class="mt-2"><strong>Nro:</strong> ' + resp.nro_documento + '</div>' : '') +
+                    warningHtml +
                 '</div>' +
                 '<button type="button" id="btnContinuarNE" class="btn btn-primary">' +
                     '<i class="fa fa-arrow-right"></i> Continuar' +
                 '</button>'
             );
-        },
+        },        
         error: function(xhr) {
             console.log(xhr.responseText);
 
@@ -48801,6 +50282,13 @@ function Row_Inserting($rsold, &$rsnew)
     $rsnew["fecha_registro"] = date("Y-m-d H:i:s");
     $rsnew["usuario"] = CurrentUserName();
     return true;
+}]]></CustomScript>
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="ListOptions_Rendered" ScriptCtrlID="list" ScriptL1Key="articulo"><![CDATA[// ListOptions Rendered event
+function ListOptions_Rendered()
+{
+    // Example:
+    //$this->ListOptions["new"]->Body = "xxx";
+        $this->articulo_inventario->Visible = false;
 }]]></CustomScript>
   <Menu MenuID="1469" MenuText="Crear Nota de Entrega Automática" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="crear_nota_entrega_automatica.php" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="100" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="1470" MenuText="Crear Nota de Entrega Automatica" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="crear_nota_entrega_automatica_wait.php" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="200" MenuIconClass="" MenuNavbar="0" />

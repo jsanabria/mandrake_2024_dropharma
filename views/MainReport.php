@@ -192,7 +192,63 @@ $Page->showMessage();
                     </label>
                 </div>
             </div>
+
+        <?php 
+        ExecuteStatement("
+            INSERT INTO parametro (codigo, descripcion, valor1)
+            SELECT '112', 'USA IMPRESORA FISCAL', 'N'
+            FROM DUAL
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM parametro
+                WHERE codigo = '112'
+            )
+        ");
+
+        $impresoraFiscal = strtoupper(trim(
+            ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
+        )); 
+
+        if ($impresoraFiscal == "S") { 
+        ?>
+
+            <!-- Grupo: Cierres Fiscales -->
+            <hr>
+            <div class="form-group">
+                <div class="radio">
+                    <label for="rep_x">
+                        <input type="radio" id="rep_x" name="id" value="REPX">
+                        REPORTE X
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_z">
+                        <input type="radio" id="rep_z" name="id" value="REPZ">
+                        REPORTE Z
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_info">
+                        <input type="radio" id="rep_info" name="id" value="INFO">
+                        REPORTE INFO
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_infojson">
+                        <input type="radio" id="rep_infojson" name="id" value="INFOJSON">
+                        REPORTE INFOJSON
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_close">
+                        <input type="radio" id="rep_close" name="id" value="CLOSE">
+                        RECUPERAR IMPRESORA
+                    </label>
+                </div>
+            </div>
             <br>
+
+        <?php } ?>
 
             <button type="submit" class="btn btn-primary btn-block-xs">
                 <span class="glyphicon glyphicon-list-alt"></span> Generar Reporte

@@ -37,20 +37,18 @@ loadjs.ready(["wrapper", "head"], function () {
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
             ["documento", [fields.documento.visible && fields.documento.required ? ew.Validators.required(fields.documento.caption) : null], fields.documento.isInvalid],
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
-            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
+            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null], fields.fecha.isInvalid],
             ["descripcion", [fields.descripcion.visible && fields.descripcion.required ? ew.Validators.required(fields.descripcion.caption) : null], fields.descripcion.isInvalid],
-            ["aplica_retencion", [fields.aplica_retencion.visible && fields.aplica_retencion.required ? ew.Validators.required(fields.aplica_retencion.caption) : null], fields.aplica_retencion.isInvalid],
-            ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
-            ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
-            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
+            ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null], fields.monto_exento.isInvalid],
+            ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null], fields.monto_gravado.isInvalid],
+            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
             ["ref_iva", [fields.ref_iva.visible && fields.ref_iva.required ? ew.Validators.required(fields.ref_iva.caption) : null], fields.ref_iva.isInvalid],
             ["ref_islr", [fields.ref_islr.visible && fields.ref_islr.required ? ew.Validators.required(fields.ref_islr.caption) : null], fields.ref_islr.isInvalid],
             ["ref_municipal", [fields.ref_municipal.visible && fields.ref_municipal.required ? ew.Validators.required(fields.ref_municipal.caption) : null], fields.ref_municipal.isInvalid],
-            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
+            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null], fields.fecha_registro.isInvalid],
             ["anulado", [fields.anulado.visible && fields.anulado.required ? ew.Validators.required(fields.anulado.caption) : null], fields.anulado.isInvalid],
-            ["pagado", [fields.pagado.visible && fields.pagado.required ? ew.Validators.required(fields.pagado.caption) : null], fields.pagado.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
-            ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null, ew.Validators.float], fields.tasa_dia.isInvalid]
+            ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null], fields.tasa_dia.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -69,11 +67,7 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
-            "proveedor": <?= $Page->proveedor->toClientList($Page) ?>,
-            "tipo_documento": <?= $Page->tipo_documento->toClientList($Page) ?>,
-            "aplica_retencion": <?= $Page->aplica_retencion->toClientList($Page) ?>,
             "anulado": <?= $Page->anulado->toClientList($Page) ?>,
-            "pagado": <?= $Page->pagado->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -124,36 +118,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_proveedor" for="x_proveedor" class="<?= $Page->LeftColumnClass ?>"><?= $Page->proveedor->caption() ?><?= $Page->proveedor->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->proveedor->cellAttributes() ?>>
 <span id="el_compra_proveedor">
-    <select
-        id="x_proveedor"
-        name="x_proveedor"
-        class="form-control ew-select<?= $Page->proveedor->isInvalidClass() ?>"
-        data-select2-id="fcompraedit_x_proveedor"
-        data-table="compra"
-        data-field="x_proveedor"
-        data-caption="<?= HtmlEncode(RemoveHtml($Page->proveedor->caption())) ?>"
-        data-modal-lookup="true"
-        data-page="1"
-        data-value-separator="<?= $Page->proveedor->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->proveedor->getPlaceHolder()) ?>"
-        <?= $Page->proveedor->editAttributes() ?>>
-        <?= $Page->proveedor->selectOptionListHtml("x_proveedor") ?>
-    </select>
-    <?= $Page->proveedor->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->proveedor->getErrorMessage() ?></div>
-<?= $Page->proveedor->Lookup->getParamTag($Page, "p_x_proveedor") ?>
-<script>
-loadjs.ready("fcompraedit", function() {
-    var options = { name: "x_proveedor", selectId: "fcompraedit_x_proveedor" };
-    if (fcompraedit.lists.proveedor?.lookupOptions.length) {
-        options.data = { id: "x_proveedor", form: "fcompraedit" };
-    } else {
-        options.ajax = { id: "x_proveedor", form: "fcompraedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.compra.fields.proveedor.modalLookupOptions);
-    ew.createModalLookup(options);
-});
-</script>
+<span<?= $Page->proveedor->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->proveedor->getDisplayValue($Page->proveedor->EditValue) ?></span></span>
+<input type="hidden" data-table="compra" data-field="x_proveedor" data-hidden="1" data-page="1" name="x_proveedor" id="x_proveedor" value="<?= HtmlEncode($Page->proveedor->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -163,43 +130,9 @@ loadjs.ready("fcompraedit", function() {
         <label id="elh_compra_tipo_documento" for="x_tipo_documento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_documento->caption() ?><?= $Page->tipo_documento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_documento->cellAttributes() ?>>
 <span id="el_compra_tipo_documento">
-    <select
-        id="x_tipo_documento"
-        name="x_tipo_documento"
-        class="form-select ew-select<?= $Page->tipo_documento->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_documento->IsNativeSelect) { ?>
-        data-select2-id="fcompraedit_x_tipo_documento"
-        <?php } ?>
-        data-table="compra"
-        data-field="x_tipo_documento"
-        data-page="1"
-        data-value-separator="<?= $Page->tipo_documento->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_documento->getPlaceHolder()) ?>"
-        <?= $Page->tipo_documento->editAttributes() ?>>
-        <?= $Page->tipo_documento->selectOptionListHtml("x_tipo_documento") ?>
-    </select>
-    <?= $Page->tipo_documento->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_documento->getErrorMessage() ?></div>
-<?php if (!$Page->tipo_documento->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fcompraedit", function() {
-    var options = { name: "x_tipo_documento", selectId: "fcompraedit_x_tipo_documento" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fcompraedit.lists.tipo_documento?.lookupOptions.length) {
-        options.data = { id: "x_tipo_documento", form: "fcompraedit" };
-    } else {
-        options.ajax = { id: "x_tipo_documento", form: "fcompraedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.compra.fields.tipo_documento.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
+<span<?= $Page->tipo_documento->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->tipo_documento->getDisplayValue($Page->tipo_documento->EditValue) ?></span></span>
+<input type="hidden" data-table="compra" data-field="x_tipo_documento" data-hidden="1" data-page="1" name="x_tipo_documento" id="x_tipo_documento" value="<?= HtmlEncode($Page->tipo_documento->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -209,9 +142,9 @@ loadjs.ready("fcompraedit", function() {
         <label id="elh_compra_doc_afectado" for="x_doc_afectado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->doc_afectado->caption() ?><?= $Page->doc_afectado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->doc_afectado->cellAttributes() ?>>
 <span id="el_compra_doc_afectado">
-<input type="<?= $Page->doc_afectado->getInputTextType() ?>" name="x_doc_afectado" id="x_doc_afectado" data-table="compra" data-field="x_doc_afectado" value="<?= $Page->doc_afectado->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->doc_afectado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afectado->formatPattern()) ?>"<?= $Page->doc_afectado->editAttributes() ?> aria-describedby="x_doc_afectado_help">
-<?= $Page->doc_afectado->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->doc_afectado->getErrorMessage() ?></div>
+<span<?= $Page->doc_afectado->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->doc_afectado->getDisplayValue($Page->doc_afectado->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_doc_afectado" data-hidden="1" data-page="1" name="x_doc_afectado" id="x_doc_afectado" value="<?= HtmlEncode($Page->doc_afectado->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -221,9 +154,9 @@ loadjs.ready("fcompraedit", function() {
         <label id="elh_compra_documento" for="x_documento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->documento->caption() ?><?= $Page->documento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->documento->cellAttributes() ?>>
 <span id="el_compra_documento">
-<input type="<?= $Page->documento->getInputTextType() ?>" name="x_documento" id="x_documento" data-table="compra" data-field="x_documento" value="<?= $Page->documento->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->documento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->documento->formatPattern()) ?>"<?= $Page->documento->editAttributes() ?> aria-describedby="x_documento_help">
-<?= $Page->documento->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->documento->getErrorMessage() ?></div>
+<span<?= $Page->documento->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->documento->getDisplayValue($Page->documento->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_documento" data-hidden="1" data-page="1" name="x_documento" id="x_documento" value="<?= HtmlEncode($Page->documento->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -233,9 +166,9 @@ loadjs.ready("fcompraedit", function() {
         <label id="elh_compra_nro_control" for="x_nro_control" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_control->caption() ?><?= $Page->nro_control->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_control->cellAttributes() ?>>
 <span id="el_compra_nro_control">
-<input type="<?= $Page->nro_control->getInputTextType() ?>" name="x_nro_control" id="x_nro_control" data-table="compra" data-field="x_nro_control" value="<?= $Page->nro_control->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_control->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_control->formatPattern()) ?>"<?= $Page->nro_control->editAttributes() ?> aria-describedby="x_nro_control_help">
-<?= $Page->nro_control->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->nro_control->getErrorMessage() ?></div>
+<span<?= $Page->nro_control->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->nro_control->getDisplayValue($Page->nro_control->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_nro_control" data-hidden="1" data-page="1" name="x_nro_control" id="x_nro_control" value="<?= HtmlEncode($Page->nro_control->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -245,38 +178,9 @@ loadjs.ready("fcompraedit", function() {
         <label id="elh_compra_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
 <span id="el_compra_fecha">
-<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="compra" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
-<?= $Page->fecha->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
-<?php if (!$Page->fecha->ReadOnly && !$Page->fecha->Disabled && !isset($Page->fecha->EditAttrs["readonly"]) && !isset($Page->fecha->EditAttrs["disabled"])) { ?>
-<script>
-loadjs.ready(["fcompraedit", "datetimepicker"], function () {
-    let format = "<?= DateFormat(7) ?>",
-        options = {
-            localization: {
-                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
-                hourCycle: format.match(/H/) ? "h24" : "h12",
-                format,
-                ...ew.language.phrase("datetimepicker")
-            },
-            display: {
-                icons: {
-                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
-                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
-                },
-                components: {
-                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
-                    hours: !!format.match(/h/i),
-                    minutes: !!format.match(/m/),
-                    seconds: !!format.match(/s/i)
-                },
-                theme: ew.getPreferredTheme()
-            }
-        };
-    ew.createDateTimePicker("fcompraedit", "x_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
-});
-</script>
-<?php } ?>
+<span<?= $Page->fecha->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->fecha->getDisplayValue($Page->fecha->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_fecha" data-hidden="1" data-page="1" name="x_fecha" id="x_fecha" value="<?= HtmlEncode($Page->fecha->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -298,70 +202,9 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_fecha_registro" for="x_fecha_registro" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha_registro->caption() ?><?= $Page->fecha_registro->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha_registro->cellAttributes() ?>>
 <span id="el_compra_fecha_registro">
-<input type="<?= $Page->fecha_registro->getInputTextType() ?>" name="x_fecha_registro" id="x_fecha_registro" data-table="compra" data-field="x_fecha_registro" value="<?= $Page->fecha_registro->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha_registro->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_registro->formatPattern()) ?>"<?= $Page->fecha_registro->editAttributes() ?> aria-describedby="x_fecha_registro_help">
-<?= $Page->fecha_registro->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->fecha_registro->getErrorMessage() ?></div>
-<?php if (!$Page->fecha_registro->ReadOnly && !$Page->fecha_registro->Disabled && !isset($Page->fecha_registro->EditAttrs["readonly"]) && !isset($Page->fecha_registro->EditAttrs["disabled"])) { ?>
-<script>
-loadjs.ready(["fcompraedit", "datetimepicker"], function () {
-    let format = "<?= DateFormat(7) ?>",
-        options = {
-            localization: {
-                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
-                hourCycle: format.match(/H/) ? "h24" : "h12",
-                format,
-                ...ew.language.phrase("datetimepicker")
-            },
-            display: {
-                icons: {
-                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
-                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
-                },
-                components: {
-                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
-                    hours: !!format.match(/h/i),
-                    minutes: !!format.match(/m/),
-                    seconds: !!format.match(/s/i)
-                },
-                theme: ew.getPreferredTheme()
-            }
-        };
-    ew.createDateTimePicker("fcompraedit", "x_fecha_registro", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->pagado->Visible) { // pagado ?>
-    <div id="r_pagado"<?= $Page->pagado->rowAttributes() ?>>
-        <label id="elh_compra_pagado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pagado->caption() ?><?= $Page->pagado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pagado->cellAttributes() ?>>
-<span id="el_compra_pagado">
-<template id="tp_x_pagado">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compra" data-field="x_pagado" name="x_pagado" id="x_pagado"<?= $Page->pagado->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x_pagado" class="ew-item-list"></div>
-<selection-list hidden
-    id="x_pagado"
-    name="x_pagado"
-    value="<?= HtmlEncode($Page->pagado->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x_pagado"
-    data-target="dsl_x_pagado"
-    data-repeatcolumn="5"
-    class="form-control<?= $Page->pagado->isInvalidClass() ?>"
-    data-table="compra"
-    data-field="x_pagado"
-    data-page="1"
-    data-value-separator="<?= $Page->pagado->displayValueSeparatorAttribute() ?>"
-    <?= $Page->pagado->editAttributes() ?>></selection-list>
-<?= $Page->pagado->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->pagado->getErrorMessage() ?></div>
+<span<?= $Page->fecha_registro->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->fecha_registro->getDisplayValue($Page->fecha_registro->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_fecha_registro" data-hidden="1" data-page="1" name="x_fecha_registro" id="x_fecha_registro" value="<?= HtmlEncode($Page->fecha_registro->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -371,9 +214,9 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->moneda->cellAttributes() ?>>
 <span id="el_compra_moneda">
-<input type="<?= $Page->moneda->getInputTextType() ?>" name="x_moneda" id="x_moneda" data-table="compra" data-field="x_moneda" value="<?= $Page->moneda->EditValue ?>" data-page="1" size="30" maxlength="6" placeholder="<?= HtmlEncode($Page->moneda->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->moneda->formatPattern()) ?>"<?= $Page->moneda->editAttributes() ?> aria-describedby="x_moneda_help">
-<?= $Page->moneda->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->moneda->getErrorMessage() ?></div>
+<span<?= $Page->moneda->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->moneda->getDisplayValue($Page->moneda->EditValue) ?></span></span>
+<input type="hidden" data-table="compra" data-field="x_moneda" data-hidden="1" data-page="1" name="x_moneda" id="x_moneda" value="<?= HtmlEncode($Page->moneda->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -383,9 +226,9 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_tasa_dia" for="x_tasa_dia" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tasa_dia->caption() ?><?= $Page->tasa_dia->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tasa_dia->cellAttributes() ?>>
 <span id="el_compra_tasa_dia">
-<input type="<?= $Page->tasa_dia->getInputTextType() ?>" name="x_tasa_dia" id="x_tasa_dia" data-table="compra" data-field="x_tasa_dia" value="<?= $Page->tasa_dia->EditValue ?>" data-page="1" size="30" placeholder="<?= HtmlEncode($Page->tasa_dia->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->tasa_dia->formatPattern()) ?>"<?= $Page->tasa_dia->editAttributes() ?> aria-describedby="x_tasa_dia_help">
-<?= $Page->tasa_dia->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->tasa_dia->getErrorMessage() ?></div>
+<span<?= $Page->tasa_dia->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->tasa_dia->getDisplayValue($Page->tasa_dia->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_tasa_dia" data-hidden="1" data-page="1" name="x_tasa_dia" id="x_tasa_dia" value="<?= HtmlEncode($Page->tasa_dia->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -399,9 +242,9 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_monto_exento" for="x_monto_exento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_exento->caption() ?><?= $Page->monto_exento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_exento->cellAttributes() ?>>
 <span id="el_compra_monto_exento">
-<input type="<?= $Page->monto_exento->getInputTextType() ?>" name="x_monto_exento" id="x_monto_exento" data-table="compra" data-field="x_monto_exento" value="<?= $Page->monto_exento->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_exento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_exento->formatPattern()) ?>"<?= $Page->monto_exento->editAttributes() ?> aria-describedby="x_monto_exento_help">
-<?= $Page->monto_exento->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->monto_exento->getErrorMessage() ?></div>
+<span<?= $Page->monto_exento->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->monto_exento->getDisplayValue($Page->monto_exento->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_monto_exento" data-hidden="1" data-page="2" name="x_monto_exento" id="x_monto_exento" value="<?= HtmlEncode($Page->monto_exento->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -411,9 +254,9 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_monto_gravado" for="x_monto_gravado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_gravado->caption() ?><?= $Page->monto_gravado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_gravado->cellAttributes() ?>>
 <span id="el_compra_monto_gravado">
-<input type="<?= $Page->monto_gravado->getInputTextType() ?>" name="x_monto_gravado" id="x_monto_gravado" data-table="compra" data-field="x_monto_gravado" value="<?= $Page->monto_gravado->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_gravado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_gravado->formatPattern()) ?>"<?= $Page->monto_gravado->editAttributes() ?> aria-describedby="x_monto_gravado_help">
-<?= $Page->monto_gravado->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->monto_gravado->getErrorMessage() ?></div>
+<span<?= $Page->monto_gravado->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->monto_gravado->getDisplayValue($Page->monto_gravado->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_monto_gravado" data-hidden="1" data-page="2" name="x_monto_gravado" id="x_monto_gravado" value="<?= HtmlEncode($Page->monto_gravado->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -423,9 +266,9 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_alicuota" for="x_alicuota" class="<?= $Page->LeftColumnClass ?>"><?= $Page->alicuota->caption() ?><?= $Page->alicuota->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->alicuota->cellAttributes() ?>>
 <span id="el_compra_alicuota">
-<input type="<?= $Page->alicuota->getInputTextType() ?>" name="x_alicuota" id="x_alicuota" data-table="compra" data-field="x_alicuota" value="<?= $Page->alicuota->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->alicuota->formatPattern()) ?>"<?= $Page->alicuota->editAttributes() ?> aria-describedby="x_alicuota_help">
-<?= $Page->alicuota->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
+<span<?= $Page->alicuota->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->alicuota->getDisplayValue($Page->alicuota->EditValue))) ?>"></span>
+<input type="hidden" data-table="compra" data-field="x_alicuota" data-hidden="1" data-page="2" name="x_alicuota" id="x_alicuota" value="<?= HtmlEncode($Page->alicuota->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -466,46 +309,19 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         </div><!-- /multi-page .tab-pane -->
         <div class="<?= $Page->MultiPages->tabPaneClasses(3) ?>" id="tab_compra3" role="tabpanel"><!-- multi-page .tab-pane -->
 <div class="ew-edit-div"><!-- page* -->
-<?php if ($Page->aplica_retencion->Visible) { // aplica_retencion ?>
-    <div id="r_aplica_retencion"<?= $Page->aplica_retencion->rowAttributes() ?>>
-        <label id="elh_compra_aplica_retencion" class="<?= $Page->LeftColumnClass ?>"><?= $Page->aplica_retencion->caption() ?><?= $Page->aplica_retencion->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->aplica_retencion->cellAttributes() ?>>
-<span id="el_compra_aplica_retencion">
-<template id="tp_x_aplica_retencion">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compra" data-field="x_aplica_retencion" name="x_aplica_retencion" id="x_aplica_retencion"<?= $Page->aplica_retencion->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x_aplica_retencion" class="ew-item-list"></div>
-<selection-list hidden
-    id="x_aplica_retencion"
-    name="x_aplica_retencion"
-    value="<?= HtmlEncode($Page->aplica_retencion->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x_aplica_retencion"
-    data-target="dsl_x_aplica_retencion"
-    data-repeatcolumn="5"
-    class="form-control<?= $Page->aplica_retencion->isInvalidClass() ?>"
-    data-table="compra"
-    data-field="x_aplica_retencion"
-    data-page="3"
-    data-value-separator="<?= $Page->aplica_retencion->displayValueSeparatorAttribute() ?>"
-    <?= $Page->aplica_retencion->editAttributes() ?>></selection-list>
-<?= $Page->aplica_retencion->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->aplica_retencion->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->ref_iva->Visible) { // ref_iva ?>
     <div id="r_ref_iva"<?= $Page->ref_iva->rowAttributes() ?>>
         <label id="elh_compra_ref_iva" for="x_ref_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_iva->caption() ?><?= $Page->ref_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_iva->cellAttributes() ?>>
 <span id="el_compra_ref_iva">
-<input type="<?= $Page->ref_iva->getInputTextType() ?>" name="x_ref_iva" id="x_ref_iva" data-table="compra" data-field="x_ref_iva" value="<?= $Page->ref_iva->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_iva->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_iva->formatPattern()) ?>"<?= $Page->ref_iva->editAttributes() ?> aria-describedby="x_ref_iva_help">
-<?= $Page->ref_iva->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->ref_iva->getErrorMessage() ?></div>
+<span<?= $Page->ref_iva->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_iva->EditValue) && $Page->ref_iva->linkAttributes() != "") { ?>
+<a<?= $Page->ref_iva->linkAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_iva->getDisplayValue($Page->ref_iva->EditValue))) ?>"></a>
+<?php } else { ?>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_iva->getDisplayValue($Page->ref_iva->EditValue))) ?>">
+<?php } ?>
+</span>
+<input type="hidden" data-table="compra" data-field="x_ref_iva" data-hidden="1" data-page="3" name="x_ref_iva" id="x_ref_iva" value="<?= HtmlEncode($Page->ref_iva->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -515,9 +331,14 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_ref_islr" for="x_ref_islr" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_islr->caption() ?><?= $Page->ref_islr->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_islr->cellAttributes() ?>>
 <span id="el_compra_ref_islr">
-<input type="<?= $Page->ref_islr->getInputTextType() ?>" name="x_ref_islr" id="x_ref_islr" data-table="compra" data-field="x_ref_islr" value="<?= $Page->ref_islr->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_islr->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_islr->formatPattern()) ?>"<?= $Page->ref_islr->editAttributes() ?> aria-describedby="x_ref_islr_help">
-<?= $Page->ref_islr->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->ref_islr->getErrorMessage() ?></div>
+<span<?= $Page->ref_islr->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_islr->EditValue) && $Page->ref_islr->linkAttributes() != "") { ?>
+<a<?= $Page->ref_islr->linkAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_islr->getDisplayValue($Page->ref_islr->EditValue))) ?>"></a>
+<?php } else { ?>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_islr->getDisplayValue($Page->ref_islr->EditValue))) ?>">
+<?php } ?>
+</span>
+<input type="hidden" data-table="compra" data-field="x_ref_islr" data-hidden="1" data-page="3" name="x_ref_islr" id="x_ref_islr" value="<?= HtmlEncode($Page->ref_islr->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -527,9 +348,14 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_ref_municipal" for="x_ref_municipal" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_municipal->caption() ?><?= $Page->ref_municipal->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_municipal->cellAttributes() ?>>
 <span id="el_compra_ref_municipal">
-<input type="<?= $Page->ref_municipal->getInputTextType() ?>" name="x_ref_municipal" id="x_ref_municipal" data-table="compra" data-field="x_ref_municipal" value="<?= $Page->ref_municipal->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_municipal->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_municipal->formatPattern()) ?>"<?= $Page->ref_municipal->editAttributes() ?> aria-describedby="x_ref_municipal_help">
-<?= $Page->ref_municipal->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->ref_municipal->getErrorMessage() ?></div>
+<span<?= $Page->ref_municipal->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_municipal->EditValue) && $Page->ref_municipal->linkAttributes() != "") { ?>
+<a<?= $Page->ref_municipal->linkAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_municipal->getDisplayValue($Page->ref_municipal->EditValue))) ?>"></a>
+<?php } else { ?>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_municipal->getDisplayValue($Page->ref_municipal->EditValue))) ?>">
+<?php } ?>
+</span>
+<input type="hidden" data-table="compra" data-field="x_ref_municipal" data-hidden="1" data-page="3" name="x_ref_municipal" id="x_ref_municipal" value="<?= HtmlEncode($Page->ref_municipal->CurrentValue) ?>">
 </span>
 </div></div>
     </div>

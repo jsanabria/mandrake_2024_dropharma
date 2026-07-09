@@ -92,6 +92,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["y_cantidad_en_transito", [ew.Validators.between], false],
             ["categoria", [], fields.categoria.isInvalid],
             ["lista_pedido", [], fields.lista_pedido.isInvalid],
+            ["categoria_madre", [], fields.categoria_madre.isInvalid],
             ["articulo_inventario", [], fields.articulo_inventario.isInvalid],
             ["activo", [], fields.activo.isInvalid]
         ])
@@ -131,6 +132,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "fabricante": <?= $Page->fabricante->toClientList($Page) ?>,
             "categoria": <?= $Page->categoria->toClientList($Page) ?>,
             "lista_pedido": <?= $Page->lista_pedido->toClientList($Page) ?>,
+            "categoria_madre": <?= $Page->categoria_madre->toClientList($Page) ?>,
             "articulo_inventario": <?= $Page->articulo_inventario->toClientList($Page) ?>,
             "activo": <?= $Page->activo->toClientList($Page) ?>,
         })
@@ -394,6 +396,54 @@ loadjs.ready("farticulosrch", function() {
 });
 </script>
 <?php } ?>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
+<?php if ($Page->categoria_madre->Visible) { // categoria_madre ?>
+<?php
+if (!$Page->categoria_madre->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_categoria_madre" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->categoria_madre->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label class="ew-search-caption ew-label"><?= $Page->categoria_madre->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("LIKE") ?>
+<input type="hidden" name="z_categoria_madre" id="z_categoria_madre" value="LIKE">
+</div>
+        </div>
+        <div id="el_articulo_categoria_madre" class="ew-search-field">
+    <select
+        id="x_categoria_madre"
+        name="x_categoria_madre"
+        class="form-control ew-select<?= $Page->categoria_madre->isInvalidClass() ?>"
+        data-select2-id="farticulosrch_x_categoria_madre"
+        data-table="articulo"
+        data-field="x_categoria_madre"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->categoria_madre->caption())) ?>"
+        data-modal-lookup="true"
+        data-value-separator="<?= $Page->categoria_madre->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->categoria_madre->getPlaceHolder()) ?>"
+        <?= $Page->categoria_madre->editAttributes() ?>>
+        <?= $Page->categoria_madre->selectOptionListHtml("x_categoria_madre") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->categoria_madre->getErrorMessage(false) ?></div>
+<?= $Page->categoria_madre->Lookup->getParamTag($Page, "p_x_categoria_madre") ?>
+<script>
+loadjs.ready("farticulosrch", function() {
+    var options = { name: "x_categoria_madre", selectId: "farticulosrch_x_categoria_madre" };
+    if (farticulosrch.lists.categoria_madre?.lookupOptions.length) {
+        options.data = { id: "x_categoria_madre", form: "farticulosrch" };
+    } else {
+        options.ajax = { id: "x_categoria_madre", form: "farticulosrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.articulo.fields.categoria_madre.modalLookupOptions);
+    ew.createModalLookup(options);
+});
+</script>
 </div>
         <div class="d-flex my-1 my-sm-0">
         </div><!-- /.ew-search-field -->

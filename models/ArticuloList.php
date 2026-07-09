@@ -4208,6 +4208,14 @@ class ArticuloList extends Articulo
                 $this->categoria_madre->AdvancedSearch->SearchValue = HtmlDecode($this->categoria_madre->AdvancedSearch->SearchValue);
             }
             $this->categoria_madre->EditValue = HtmlEncode($this->categoria_madre->AdvancedSearch->SearchValue);
+            $arwrk = [];
+            $arwrk["lf"] = $this->categoria_madre->CurrentValue;
+            $arwrk["df"] = $this->categoria_madre->CurrentValue;
+            $arwrk = $this->categoria_madre->Lookup->renderViewRow($arwrk, $this);
+            $dispVal = $this->categoria_madre->displayValue($arwrk);
+            if ($dispVal != "") {
+                $this->categoria_madre->EditValue = $dispVal;
+            }
             $this->categoria_madre->PlaceHolder = RemoveHtml($this->categoria_madre->caption());
 
             // sub_categoria
