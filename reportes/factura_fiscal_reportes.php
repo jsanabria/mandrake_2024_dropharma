@@ -7,7 +7,7 @@ require_once dirname(__DIR__) . "/include/connect.php";
 // ---------------------------------------------------------------------
 // Configuración del Motor Fiscal
 // ---------------------------------------------------------------------
-$FISCAL_DIR = "C:\\laragon\\www\\mandrake_novedades\\MandrakeFiscal";
+$FISCAL_DIR = "C:\\laragon\\www\\mandrake_2024_dropharma\\MandrakeFiscal";
 $FISCAL_EXE = $FISCAL_DIR . "\\FiscalPrinterV2.exe";
 
 function h($v) {
@@ -113,7 +113,7 @@ function get_parametro_040($link) {
     $row = mysqli_fetch_assoc($rs);
     if (!$row) return array("", "");
 
-    return array(trim($row["valor1"]), trim($row["valor2"]));
+    return array(trim($row["valor1"] ?? ""), trim($row["valor2"] ?? ""));
 }
 
 function guardar_parametro_040($link, $puerto, $serial = "") {

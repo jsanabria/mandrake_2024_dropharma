@@ -112,62 +112,139 @@ function CongelarSnapshotFiscalTdcfcv($pedido)
     }
 }
 
-$pedido = $_REQUEST["pedido"];
+
+function ParametroImpresoraFiscalActivaTdcfcv()
+{
+    ExecuteStatement("
+        INSERT INTO parametro (codigo, descripcion, valor1)
+        SELECT '112', 'USA IMPRESORA FISCAL', 'N'
+        FROM DUAL
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM parametro
+            WHERE codigo = '112'
+        )
+    ");
+
+    return strtoupper(trim(
+        ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
+    ) ?? "") == "S";
+}
+
+function NombreDocumentoFiscalTdcfcv($documento)
+{
+    switch (strtoupper(trim($documento ?? ''))) {
+        case "FC": return "Factura";
+        case "NC": return "Nota de Crédito";
+        case "ND": return "Nota de Débito";
+        default: return "Documento";
+    }
+}
+
+function RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $facturaCTRL, $origen = "SISTEMA")
+{
+    $pedido = intval($pedido);
+    $nombreDocumentoTxt = NombreDocumentoFiscalTdcfcv($documento);
+    $usuarioActual = TdcfcvSqlValue(CurrentUserName());
+    $fechaActualTxt = date("d/m/Y H:i:s");
+    $facturaSql = TdcfcvSqlValue($factura);
+    $origenSql = TdcfcvSqlValue($origen);
+
+    $scriptLog = TdcfcvSqlValue("Emitió documento {$nombreDocumentoTxt} # {$factura} con # de control {$facturaCTRL} de fecha {$fechaActualTxt} ({$origen})");
+
+    $sqlAudit = "INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (NULL, '" . date("Y-m-d H:i:s") . "',
+             '{$scriptLog}',
+             '{$usuarioActual}', 'SENIAT: U', 'view_out_tdcfcv', 'id', '{$pedido}', '', '{$facturaSql}');";
+    Execute($sqlAudit);
+}
+
+$pedido = intval($_REQUEST["pedido"] ?? 0);
 
 $sql = "SELECT documento, nro_documento, estatus FROM salidas WHERE id = $pedido;";
 $row = ExecuteRow($sql);
 $documento = $row["documento"];
 $nro_documento = $row["nro_documento"];
 $estatus =  $row["estatus"];
+$impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
 
-if(trim($nro_documento) == "") {
+if(trim($nro_documento ?? "") == "") {
+    if ($impresoraFiscal) {
+        // En modo impresora fiscal activa, NO reservamos consecutivos desde el sistema.
+        // La impresora fiscal emitirá el documento y factura_fiscal.php actualizará
+        // salidas.nro_documento, salidas.nro_control, estatus e impreso con la respuesta real.
+        CongelarSnapshotFiscalTdcfcv($pedido);
+
+        $generar_ne = strtoupper(trim($_GET["generar_ne"] ?? $_POST["generar_ne"] ?? "N"));
+        $usernameFiscal = urlencode(CurrentUserName());
+        header("Location: reportes/factura_fiscal.php?id={$pedido}&username={$usernameFiscal}&auto_return=1&generar_ne={$generar_ne}");
+        die();
+    }
+
     switch($documento) {
     case "FC":
         $docu = "003";
         break;
+
     case "NC":
         $docu = "010";
         break;
+
     case "ND":
         $docu = "011";
         break;
     }
 
-    $sql = "SELECT valor1 FROM parametro WHERE codigo = '035';";
-    if(ExecuteScalar($sql) == "S") {
+    // ¿El número de control es único para FC, NC y ND?
+    $controlUnificado = (ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '035'") == "S");
+
+    if ($controlUnificado) {
+
+        // Prefijo y padding del parámetro 030
         $crtl = "030";
-    }
-    else {
+
+        // Serie única para los tres documentos
+        $serie_ctrl = "DC_CTRL";
+
+    } else {
+
         switch($documento) {
         case "FC":
             $crtl = "030";
             break;
+
         case "NC":
             $crtl = "031";
             break;
+
         case "ND":
             $crtl = "032";
             break;
         }
+
+        // Cada documento mantiene su propia serie
+        $serie_ctrl = $documento . "_CTRL";
     }
 
-    $serie_doc = $documento . "_DOC";   // FC_DOC, NC_DOC, ND_DOC
-    $serie_ctrl = $documento . "_CTRL"; // FC_CTRL, NC_CTRL, ND_CTRL
+    // El consecutivo del documento SIEMPRE es independiente
+    $serie_doc = $documento . "_DOC";
 
-    $numeroDoc = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
+    $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
     $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
 
     $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
     $row = ExecuteRow($sql);
-    $prefijo = trim($row["valor2"]);
-    $padeo = intval($row["valor3"]);
+    $prefijo = trim($row["valor2"] ?? "");
+    $padeo   = intval($row["valor3"]);
     $factura = $prefijo . str_pad($numeroDoc, $padeo, "0", STR_PAD_LEFT);
 
     $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
     $row = ExecuteRow($sql);
-    $prefijo = trim($row["valor2"]);
-    $padeo = intval($row["valor3"]);
-    $facturaCTRL = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
+    $prefijo      = trim($row["valor2"] ?? "");
+    $padeo        = intval($row["valor3"]);
+    $facturaCTRL  = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
 
     // $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
     // $faltan_datos = ExecuteScalar($sql);
@@ -187,38 +264,8 @@ if(trim($nro_documento) == "") {
     // Congela la foto fiscal del cliente y de los articulos al momento de emitir.
     CongelarSnapshotFiscalTdcfcv($pedido);
 
-    /**********************************************************************************
-     * NUEVO: REGISTRO DE AUDITORÍA DE EMISIÓN DE DOCUMENTO
-     **********************************************************************************/
-    // 1. Identificamos textualmente el tipo de documento para el log
-    $nombreDocumentoTxt = "Documento";
-    switch ($documento) {
-        case "FC":
-            $nombreDocumentoTxt = "Factura";
-            break;
-        case "NC":
-            $nombreDocumentoTxt = "Nota de Crédito";
-            break;
-        case "ND":
-            $nombreDocumentoTxt = "Nota de Débito";
-            break;
-    }
-
-    $usuarioActual = CurrentUserName();
-    $fechaActualTxt = date("d/m/Y H:i:s");
-    
-    // 2. Construimos el texto informativo del log
-    $scriptLog = "Emitió documento {$nombreDocumentoTxt} # {$factura} con # de control {$facturaCTRL} de fecha {$fechaActualTxt}";
-
-    // 3. Insertamos el rastro en audittrail usando Execute() propio de tu entorno PHPMaker
-    $sqlAudit = "INSERT INTO audittrail
-            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
-        VALUES
-            (NULL, '" . date("Y-m-d H:i:s") . "',
-             '{$scriptLog}',
-             '{$usuarioActual}', 'A', 'view_out_tdcfcv', 'id', '{$pedido}', '', '{$factura}');";
-    Execute($sqlAudit);
-    /**********************************************************************************/
+    // Registro de auditoría de emisión de documento no fiscal/manual.
+    RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $facturaCTRL, "SISTEMA");
 } 
 else {
     $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
@@ -245,4 +292,5 @@ if ($estatus == "PROCESADO") {
 
 }
 ?>
+
 <?= GetDebugMessage() ?>

@@ -1727,6 +1727,34 @@ function ObtenerConsecutivoActual($tipo_documento, $serie = '') {
     }
     return intval($numero);
 }
+function ObtenerConsecutivoMensual($tipo_documento, $serie_base) {
+    // 1. Obtener periodo actual YYYYMM
+    $periodo = date("Ym"); 
+    $serie_periodo = $serie_base . "_" . $periodo; // Ej: RET_202607
+
+    // 2. Intentar obtener el registro actual
+    $sql = "SELECT ultimo_numero FROM documento_consecutivo 
+            WHERE tipo_documento = '" . AdjustSql($tipo_documento) . "' 
+            AND serie = '" . AdjustSql($serie_periodo) . "'";
+    $ultimo_numero = ExecuteScalar($sql);
+    if ($ultimo_numero === NULL) {
+        // No existe para este mes, empezamos en 1
+        $nuevo_numero = 1;
+        $sqlInsert = "INSERT INTO documento_consecutivo (tipo_documento, serie, ultimo_numero, updated_at) 
+                      VALUES ('" . AdjustSql($tipo_documento) . "', '" . AdjustSql($serie_periodo) . "', 1, NOW())";
+        Execute($sqlInsert);
+    } else {
+        // Existe, incrementamos
+        $nuevo_numero = intval($ultimo_numero) + 1;
+        $sqlUpdate = "UPDATE documento_consecutivo SET ultimo_numero = $nuevo_numero, updated_at = NOW() 
+                      WHERE tipo_documento = '" . AdjustSql($tipo_documento) . "' 
+                      AND serie = '" . AdjustSql($serie_periodo) . "'";
+        Execute($sqlUpdate);
+    }
+
+    // 3. Formatear a 14 dígitos: YYYYMM + 00000001
+    return $periodo . str_pad($nuevo_numero, 8, "0", STR_PAD_LEFT);
+}
 
 /*
 function FormatearConsecutivo($numero, $prefijo = "", $pad = 7) {

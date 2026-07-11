@@ -73,6 +73,46 @@ $urlImprimir = "#";
 if (intval($pedido) > 0) {
     $urlImprimir = "reportes/factura_de_venta.php?id=" . intval($pedido) . "&tipo=TDCFCV";
 }
+
+$puedeEditarCodigoBarra = false;
+
+if (CurrentUserLevel() == -1) {
+    $puedeEditarCodigoBarra = true;
+} else {
+    $nivel = intval(CurrentUserLevel());
+
+    $sql_permiso = "
+        SELECT permission
+        FROM userlevelpermissions
+        WHERE userlevelid = $nivel
+          AND tablename LIKE '%}articulo'
+        LIMIT 1
+    ";
+
+    $row_permiso = ExecuteRow($sql_permiso);
+
+    if ($row_permiso) {
+        $permiso = intval($row_permiso["permission"]);
+
+        $puedeAgregar = (($permiso & 1) == 1);
+        $puedeModificar = (($permiso & 4) == 4);
+
+        if ($puedeAgregar || $puedeModificar) {
+            $puedeEditarCodigoBarra = true;
+        }
+    }
+}
+
+$fabricantesNuevo = ExecuteRows("SELECT Id, nombre FROM fabricante WHERE activo = 'S' ORDER BY nombre");
+$alicuotasNuevo = ExecuteRows("SELECT codigo, nombre FROM alicuota WHERE activo = 'S' ORDER BY nombre");
+$categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS nombre FROM tabla WHERE tabla = 'CATEGORIA' ORDER BY campo_descripcion");
+
+$preguntarNE = false;
+
+$rowParametro111 = ExecuteRow("SELECT valor1 FROM parametro WHERE codigo = '111' LIMIT 1");
+if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
+    $preguntarNE = true;
+}
 ?>
 
 
@@ -260,28 +300,59 @@ if (intval($pedido) > 0) {
 
 <hr class="border border-primary" />
 
-  <div class="row">
-    <div class="col-sm-3">
-      <select id="consignacion" name="consignacion" class="form-select form-select-sm" disabled="disabled">
-        <option value="">TIPO DOCUMENTO</option>
-        <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
-        <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>
-        <option value="ND"<?= ($consignacion=="ND" ? ' selected="selected"' : '') ?>>NOTA DE DEBITO</option>
-      </select>
-    </div>
-    <div class="col-sm-3">
-        Rep. Art. <input type="checkbox" id="hubb" name="hubb" value="SI" checked> 
-    </div>
-    <div class="col-sm-3">
-      Fabricante:
-    <input name="laboratorio" id="laboratorio" type="text" class="form-control form-control-sm" placeholder="Buscar Laboratorio" />
-    <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
-      <ul id="lista" class="list-group"></ul>
-    </div>
-    <div class="col-sm-3">
-      Art&iacute;culo:
-      <input name="articulo" id="articulo" type="text" class="form-control form-control-sm" placeholder="Buscar Art&iacute;culo" />
-    </div>
+  <div class="row align-items-end g-3">
+
+      <div class="col-md-2">
+          <label class="form-label mb-1 fw-bold">Tipo Documento:</label>
+          <select id="consignacion" name="consignacion" class="form-select form-select-sm" disabled="disabled">
+              <option value="">TIPO DOCUMENTO</option>
+              <option value="FC"<?= ($consignacion=="FC" ? ' selected="selected"' : '') ?>>FACTURA</option>
+              <option value="NC"<?= ($consignacion=="NC" ? ' selected="selected"' : '') ?>>NOTA DE CREDITO</option>
+              <option value="ND"<?= ($consignacion=="ND" ? ' selected="selected"' : '') ?>>NOTA DE DEBITO</option>
+          </select>
+      </div>
+
+      <div class="col-md-1 text-center">
+          <label class="form-label d-block mb-1">Rep. Art.</label>
+          <input type="checkbox" id="hubb" name="hubb" value="SI" checked>
+      </div>
+
+      <div class="col-md-3">
+          <label class="form-label mb-1 fw-bold">Fabricante:</label>
+          <input name="laboratorio" id="laboratorio" type="text"
+                 class="form-control form-control-sm w-100"
+                 placeholder="Buscar Laboratorio" />
+          <input name="codlab" id="codlab" type="hidden" class="form-control form-control-sm" />
+          <ul id="lista" class="list-group"></ul>
+      </div>
+
+        <div class="col-md-3">
+            <label class="form-label mb-1 fw-bold">Artículo:</label>
+            <input name="articulo" id="articulo" type="text"
+                class="form-control form-control-sm w-100"
+                placeholder="Buscar Artículo" />
+        </div>
+
+        <div class="col-md-1">
+            <label class="form-label mb-1">&nbsp;</label>
+            <button type="button"
+                    id="btnBuscarArticulo"
+                    class="btn btn-primary btn-sm w-100">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <div class="col-md-2 text-end">
+            <label class="form-label mb-1">&nbsp;</label>
+            <button type="button"
+                    id="btnNuevoArticulo"
+                    class="btn btn-success btn-sm w-100"
+                    <?= (!$puedeEditarCodigoBarra ? "disabled" : "") ?>
+                    onclick="abrirModalNuevoArticulo();">
+                <i class="fa-solid fa-plus"></i> Nuevo Artículo
+            </button>
+        </div>
+
   </div>
 
 <hr class="border border-primary" />
@@ -1311,22 +1382,45 @@ loadjs.ready(["jquery"], function () {
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
                     const btn = $(this);
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
+                    const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
 
-                    let generarNE = "N";
+                    // Procede con el redireccionamiento final una vez decidido si se genera o no la Orden de Entrega.
+                    const continuarProceso = function (generarNE) {
+                        btn.prop("disabled", true)
+                        .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
 
-                    if (idDocumentoPadre == 0) {
-                        generarNE = confirm(
-                            "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
-                        ) ? "S" : "N";
+                        window.location.href =
+                            "TdcfcvProcess?pedido=" + i +
+                            "&PorDesAct=" + PorDesAct +
+                            "&generar_ne=" + generarNE;
+                    };
+
+                    if (idDocumentoPadre == 0 && preguntarNE) {
+                        // Cerramos el modal de confirmación fiscal y, apenas termine de ocultarse,
+                        // abrimos el modal para preguntar por la Orden de Entrega.
+                        const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
+                        const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
+                        const modalNE = new bootstrap.Modal(document.getElementById('modalConfirmarNE'));
+
+                        modalFiscalEl.addEventListener('hidden.bs.modal', function alHacerseInvisible() {
+                            modalFiscalEl.removeEventListener('hidden.bs.modal', alHacerseInvisible);
+                            modalNE.show();
+                        });
+
+                        modalFiscal.hide();
+
+                        $("#btnGenerarNESi").off("click").on("click", function () {
+                            modalNE.hide();
+                            continuarProceso("S");
+                        });
+
+                        $("#btnGenerarNENo").off("click").on("click", function () {
+                            modalNE.hide();
+                            continuarProceso("N");
+                        });
+                    } else {
+                        continuarProceso("N");
                     }
-
-                    btn.prop("disabled", true)
-                    .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
-
-                    window.location.href =
-                        "TdcfcvProcess?pedido=" + i +
-                        "&PorDesAct=" + PorDesAct +
-                        "&generar_ne=" + generarNE;
                 });                
             } else {
                 alertMsg("Error al recuperar correlativos fiscales: " + (response.mensaje ?? "Intente de nuevo."));
@@ -1611,13 +1705,113 @@ loadjs.ready(["jquery"], function () {
 
     });
 
+    $(document).on("click", "#btnBuscarArticulo", function() {
+
+        if ($.trim($("#articulo").val()) === "") {
+            $("#articulo").focus();
+            return;
+        }
+
+        getCodigos2();
+
+    });
+
 
     /// Laboratorios ///
     $(document).on("keyup change", "#laboratorio", function () {
         getLaboratorios();
     });
     ////////////////////
-    
+
+    window.abrirModalNuevoArticulo = function () {
+        $("#nuevoArticuloMsg").addClass("d-none").html("");
+
+        $("#nuevo_codigo").val("");
+        $("#nuevo_nombre_comercial").val("");
+        $("#nuevo_principio_activo").val("");
+        $("#nuevo_presentacion").val("");
+        $("#nuevo_codigo_de_barra").val("");
+        $("#nuevo_alicuota").val("");
+        $("#nuevo_articulo_inventario").val("S");
+
+        const modalEl = document.getElementById("modalNuevoArticulo");
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+
+        setTimeout(function () {
+            inicializarSelect2NuevoArticulo();
+        }, 250);
+    };
+
+    function inicializarSelect2NuevoArticulo() {
+        if (typeof jQuery === "undefined" || !jQuery.fn.select2) {
+            return;
+        }
+
+        const $modal = $("#modalNuevoArticulo .modal-content");
+
+        if ($("#nuevo_fabricante").hasClass("select2-hidden-accessible")) {
+            $("#nuevo_fabricante").select2("destroy");
+        }
+
+        if ($("#nuevo_categoria").hasClass("select2-hidden-accessible")) {
+            $("#nuevo_categoria").select2("destroy");
+        }
+
+        $("#nuevo_fabricante").select2({
+            dropdownParent: $modal,
+            width: "100%",
+            placeholder: "Seleccione...",
+            allowClear: true
+        });
+
+        $("#nuevo_categoria").select2({
+            dropdownParent: $modal,
+            width: "100%",
+            placeholder: "Seleccione...",
+            allowClear: true
+        });
+    }
+
+    window.guardarNuevoArticulo = function () {
+        const data = {
+            codigo: $.trim($("#nuevo_codigo").val()),
+            nombre_comercial: $.trim($("#nuevo_nombre_comercial").val()),
+            principio_activo: $.trim($("#nuevo_principio_activo").val()),
+            presentacion: $.trim($("#nuevo_presentacion").val()),
+            fabricante: $("#nuevo_fabricante").val() || "",
+            codigo_de_barra: $.trim($("#nuevo_codigo_de_barra").val()),
+            categoria: $("#nuevo_categoria").val() || "",
+            alicuota: $("#nuevo_alicuota").val() || "",
+            articulo_inventario: $("#nuevo_articulo_inventario").val() || "S",
+            username: $("#username").val()
+        };
+
+        $.ajax({
+            url: "include/crear_articulo_rapido.php",
+            type: "POST",
+            dataType: "json",
+            data: data
+        }).done(function(resp) {
+            if (resp && resp.success === true) {
+                bootstrap.Modal.getOrCreateInstance(
+                    document.getElementById("modalNuevoArticulo")
+                ).hide();
+
+                $("#articulo").val(data.nombre_comercial);
+                getCodigos2();
+            } else {
+                $("#nuevoArticuloMsg")
+                    .removeClass("d-none")
+                    .html((resp && resp.error) ? resp.error : "No se pudo crear el artículo.");
+            }
+        }).fail(function(xhr) {
+            console.log(xhr.responseText);
+            $("#nuevoArticuloMsg")
+                .removeClass("d-none")
+                .html("Error creando el artículo.");
+        });
+    };
+
     getCodigos3(<?= intval($pedido) ?>);
 });
 </script>
@@ -1654,6 +1848,23 @@ loadjs.ready(["jquery"], function () {
   </div>
 </div>
 
+<?php
+ExecuteStatement("
+    INSERT INTO parametro (codigo, descripcion, valor1)
+    SELECT '112', 'USA IMPRESORA FISCAL', 'N'
+    FROM DUAL
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM parametro
+        WHERE codigo = '112'
+    )
+");
+
+$impresoraFiscal = strtoupper(trim(
+    ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
+));
+?>
+
 <div class="modal fade" id="modalConfirmarFiscal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarFiscalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-primary shadow-lg">
@@ -1686,6 +1897,18 @@ loadjs.ready(["jquery"], function () {
               <input type="text" id="modal_fecha" class="form-control bg-white text-center" readonly style="min-width: 0; flex-grow: 1;">
             </div>
           </div>
+
+          <?php if ($impresoraFiscal == "S") { ?>
+              <div class="col-12">
+                  <div class="alert alert-primary d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-print flex-shrink-0 me-2 fs-5 text-primary"></i>
+                      <div>
+                          <strong>Impresora fiscal activa:</strong>
+                          este documento será emitido e impreso en la impresora fiscal configurada.
+                      </div>
+                  </div>
+              </div>
+          <?php } ?>
         </div>
 
         <div class="alert alert-warning d-flex align-items-center mt-3 mb-0 py-2 small" role="alert">
@@ -1721,4 +1944,234 @@ loadjs.ready(["jquery"], function () {
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="modalConfirmarNE" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarNELabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-info shadow-lg">
+      <div class="modal-header bg-info text-white py-2">
+        <h5 class="modal-title" id="modalConfirmarNELabel"><i class="fa-solid fa-truck-fast me-2"></i> Orden de Entrega</h5>
+      </div>
+      <div class="modal-body bg-light text-dark text-center py-4">
+        <i class="fa-solid fa-boxes-stacked text-info d-block mb-3" style="font-size: 2.5rem;"></i>
+        <p class="mb-0 fs-6">
+          ¿Desea generar automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados?
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <button type="button" id="btnGenerarNENo" class="btn btn-sm btn-outline-secondary px-4">
+          <i class="fa-solid fa-xmark me-1"></i>
+          No, continuar sin generarla
+        </button>
+        <button type="button" id="btnGenerarNESi" class="btn btn-sm btn-info text-white px-4 fw-bold">
+          <i class="fa-solid fa-check me-1"></i>
+          Sí, generar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+#modalNuevoArticulo .form-label{
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .modal-header{
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+}
+
+#modalNuevoArticulo .modal-body{
+    padding: 1.25rem;
+}
+
+#modalNuevoArticulo .select2-container {
+    width: 100% !important;
+}
+
+#modalNuevoArticulo .select2-dropdown {
+    z-index: 2000 !important;
+}
+
+.select2-container--open {
+    z-index: 2000 !important;
+}
+
+#modalNuevoArticulo .select2-selection--single {
+    height: 38px !important;
+    border: 1px solid #ced4da !important;
+}
+
+#modalNuevoArticulo .select2-selection__rendered {
+    line-height: 36px !important;
+}
+
+#modalNuevoArticulo .select2-selection__arrow {
+    height: 36px !important;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo label {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modalNuevoArticulo .nuevo-articulo-campo input,
+#modalNuevoArticulo .nuevo-articulo-campo select {
+    width: 100%;
+}
+</style>
+
+<div class="modal fade" id="modalNuevoArticulo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-box-open"></i>
+                    Nuevo Artículo
+                </h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <div class="nuevo-articulo-campo">
+                            <label for="nuevo_codigo" class="form-label fw-bold">
+                                Código <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   id="nuevo_codigo"
+                                   class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Comercial <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_nombre_comercial"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Nombre Art&iacute;culo <span class="text-danger">*</span>
+                        </label>
+                        <input type="text"
+                               id="nuevo_principio_activo"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Presentación
+                        </label>
+                        <input type="text"
+                               id="nuevo_presentacion"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Fabricante <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_fabricante" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($fabricantesNuevo as $f) { ?>
+                                <option value="<?= $f["Id"] ?>">
+                                    <?= HtmlEncode($f["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Código de Barra
+                        </label>
+                        <input type="text"
+                               id="nuevo_codigo_de_barra"
+                               class="form-control form-control-sm">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Categoría <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_categoria" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($categoriasNuevo as $c) { ?>
+                                <option value="<?= $c["id"] ?>">
+                                    <?= HtmlEncode($c["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Alícuota <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_alicuota" class="form-select form-select-sm">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($alicuotasNuevo as $a) { ?>
+                                <option value="<?= $a["codigo"] ?>">
+                                    <?= HtmlEncode($a["nombre"]) ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">
+                            Inventario <span class="text-danger">*</span>
+                        </label>
+                        <select id="nuevo_articulo_inventario"
+                                class="form-select form-select-sm">
+                            <option value="S" selected>Sí</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div id="nuevoArticuloMsg"
+                     class="alert alert-danger mt-3 d-none">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="guardarNuevoArticulo();">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Artículo
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <?= GetDebugMessage() ?>

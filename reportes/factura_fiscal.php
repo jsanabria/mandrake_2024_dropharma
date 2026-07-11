@@ -6,21 +6,23 @@ require("../include/connect.php");
 $id = isset($_REQUEST["id"]) ? intval($_REQUEST["id"]) : 0;
 $username = isset($_REQUEST["username"]) ? $_REQUEST["username"] : "";
 $test_fiscal = isset($_REQUEST["test_fiscal"]) ? intval($_REQUEST["test_fiscal"]) : 0;
+$auto_return = isset($_REQUEST["auto_return"]) ? intval($_REQUEST["auto_return"]) : 0;
+$generar_ne = strtoupper(trim($_REQUEST["generar_ne"] ?? "N"));
 
 // ---------------------------------------------------------------------
 // Configuración del Motor Fiscal
 // ---------------------------------------------------------------------
-$FISCAL_DIR = "C:\\laragon\\www\\mandrake_novedades\\MandrakeFiscal";
+$FISCAL_DIR = "C:\\laragon\\www\\mandrake_2024_dropharma\\MandrakeFiscal";
 $FISCAL_EXE = $FISCAL_DIR . "\\FiscalPrinterV2.exe";
 $FISCAL_WORK_DIR = $FISCAL_DIR . "\\Temp";
 $FISCAL_LOG_DIR = $FISCAL_DIR . "\\Logs";
 
 // Modo seguro para pruebas: genera .dat, llama al motor, muestra respuesta,
 // pero NO actualiza salidas como fiscal real. Cámbialo a false al pasar a producción.
-$MODO_PRUEBA_FISCAL = true;
+$MODO_PRUEBA_FISCAL = false;
 
 // Debug visual del comando ejecutado
-$DEBUG_FISCAL = true;
+$DEBUG_FISCAL = false;
 $debug_cmd = "";
 $debug_cwd = "";
 $debug_raw = "";
@@ -516,38 +518,134 @@ function generar_dat_fiscal($link, $id, $username, $puerto, $work_dir, $serial_f
     return array(true, $file, "");
 }
 
+
+function solo_numero_fiscal($valor) {
+    $valor = preg_replace('/\D+/', '', (string)$valor);
+    return intval($valor);
+}
+
+function sincronizar_documento_consecutivo_fiscal($link, $tipo, $numero_doc, $numero_ctrl) {
+    $tipo = strtoupper(trim($tipo));
+    if (!in_array($tipo, array("FC", "NC", "ND"))) {
+        return true;
+    }
+
+    $tipo_documento = mysqli_real_escape_string($link, "TDCFCV");
+    $serie_doc = mysqli_real_escape_string($link, $tipo . "_DOC");
+    $serie_ctrl = mysqli_real_escape_string($link, $tipo . "_CTRL");
+
+    $num_doc = solo_numero_fiscal($numero_doc);
+    $num_ctrl = solo_numero_fiscal($numero_ctrl);
+
+    if ($num_doc > 0) {
+        mysqli_query($link, "
+            INSERT IGNORE INTO documento_consecutivo
+                (tipo_documento, serie, ultimo_numero, updated_at)
+            VALUES
+                ('$tipo_documento', '$serie_doc', 0, NOW())
+        ");
+
+        mysqli_query($link, "
+            UPDATE documento_consecutivo
+               SET ultimo_numero = GREATEST(IFNULL(ultimo_numero, 0), $num_doc),
+                   updated_at = NOW()
+             WHERE tipo_documento = '$tipo_documento'
+               AND serie = '$serie_doc'
+        ");
+    }
+
+    if ($num_ctrl > 0) {
+        mysqli_query($link, "
+            INSERT IGNORE INTO documento_consecutivo
+                (tipo_documento, serie, ultimo_numero, updated_at)
+            VALUES
+                ('$tipo_documento', '$serie_ctrl', 0, NOW())
+        ");
+
+        mysqli_query($link, "
+            UPDATE documento_consecutivo
+               SET ultimo_numero = GREATEST(IFNULL(ultimo_numero, 0), $num_ctrl),
+                   updated_at = NOW()
+             WHERE tipo_documento = '$tipo_documento'
+               AND serie = '$serie_ctrl'
+        ");
+    }
+
+    return true;
+}
+
+function registrar_auditoria_fiscal($link, $id, $tipo, $numero, $control, $username) {
+    $id = intval($id);
+    $tipo = strtoupper(trim($tipo));
+
+    $nombre = "Documento";
+    if ($tipo == "FC") $nombre = "Factura";
+    elseif ($tipo == "NC") $nombre = "Nota de Crédito";
+    elseif ($tipo == "ND") $nombre = "Nota de Débito";
+
+    $usuario = mysqli_real_escape_string($link, trim($username) != "" ? trim($username) : "NA.NA");
+    $numero_sql = mysqli_real_escape_string($link, $numero);
+    $control_sql = mysqli_real_escape_string($link, $control);
+    $fecha_txt = date("d/m/Y H:i:s");
+    $script = mysqli_real_escape_string($link, "Emitió documento $nombre # $numero con # de control $control de fecha $fecha_txt (IMPRESORA FISCAL)");
+
+    mysqli_query($link, "
+        INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (NULL, '" . date("Y-m-d H:i:s") . "',
+             '$script', '$usuario', 'SENIAT: U', 'view_out_tdcfcv', 'id', '$id', '', '$numero_sql')
+    ");
+}
+
 function actualizar_salida_post_fiscal($link, $id, $json) {
-    global $MODO_PRUEBA_FISCAL;
+    global $MODO_PRUEBA_FISCAL, $username;
 
     if ($MODO_PRUEBA_FISCAL) {
         return true;
     }
 
     $id = intval($id);
+    $tipo = isset($json["tipo"]) ? strtoupper(trim($json["tipo"])) : "";
 
     $numero = "";
-    if (isset($json["tipo"]) && $json["tipo"] == "FC") {
+    if ($tipo == "FC") {
         $numero = isset($json["numeroFactura"]) ? $json["numeroFactura"] : "";
-    } elseif (isset($json["tipo"]) && $json["tipo"] == "NC") {
+    } elseif ($tipo == "NC") {
         $numero = isset($json["numeroNotaCredito"]) ? $json["numeroNotaCredito"] : "";
-    } elseif (isset($json["tipo"]) && $json["tipo"] == "ND") {
+    } elseif ($tipo == "ND") {
         $numero = isset($json["numeroNotaDebito"]) ? $json["numeroNotaDebito"] : "";
     }
 
-    $numero = mysqli_real_escape_string($link, $numero);
-    $control = $numero; // isset($json["numeroControl"]) ? mysqli_real_escape_string($link, $json["numeroControl"]) : "";
+    $control = isset($json["numeroControl"]) && trim($json["numeroControl"]) != ""
+        ? $json["numeroControl"]
+        : $numero;
+
+    $numero_sql = mysqli_real_escape_string($link, $numero);
+    $control_sql = mysqli_real_escape_string($link, $control);
+    $usuario_sql = mysqli_real_escape_string($link, trim($username) != "" ? trim($username) : "NA.NA");
 
     $sql = "
         UPDATE salidas
         SET
             fecha = '" . date("Y-m-d H:i:s") . "',
-            nro_documento = '$numero',
-            nro_control = '$control',
+            nro_documento = '$numero_sql',
+            nro_control = '$control_sql',
             estatus = 'PROCESADO',
-            impreso = 'S'
-        WHERE id = $id";
+            impreso = 'S',
+            username = '$usuario_sql'
+        WHERE id = $id
+          AND (nro_documento IS NULL OR nro_documento = '')";
 
-    return mysqli_query($link, $sql);
+    $ok_update = mysqli_query($link, $sql);
+    if (!$ok_update) {
+        return false;
+    }
+
+    sincronizar_documento_consecutivo_fiscal($link, $tipo, $numero, $control);
+    registrar_auditoria_fiscal($link, $id, $tipo, $numero, $control, $username);
+
+    return true;
 }
 
 $ok = false;
@@ -636,6 +734,16 @@ if ($test_fiscal == 1) {
     }
     }
 }
+
+if ($auto_return == 1 && $ok && !$MODO_PRUEBA_FISCAL) {
+    if ($generar_ne == "S") {
+        header("Location: CrearNotaEntregaAutomaticaWait?id=$id&return=ViewOutTdcfcvList");
+        die();
+    }
+
+    header("Location: ../ViewOutTdcfcvView/" . $id . "?showdetail=");
+    die();
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -709,7 +817,7 @@ if ($test_fiscal == 1) {
                 <a class="btn btn-secondary" href="javascript:void(0);" onclick="window.close(); return false;">Cerrar</a>
             <?php } else { ?>
                 <a class="btn btn-warning" href="?test_fiscal=1&id=<?php echo intval($id); ?>&username=<?php echo urlencode($username); ?>">Probar comunicación fiscal</a>
-                <a class="btn btn-secondary" href="javascript:history.back()">Volver</a>
+                <a class="btn btn-secondary" href="../ViewOutTdcfcvList">Listar Facturas</a>
             <?php } ?>
         </div>
     </div>

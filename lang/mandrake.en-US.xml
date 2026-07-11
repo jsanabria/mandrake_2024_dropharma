@@ -1,4 +1,4 @@
-<ew-language date="2026/7/9" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/7/11" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -403,6 +403,9 @@
     </menu>
     <menu id="15">
       <phrase id="menutext" value="Trazas" />
+    </menu>
+    <menu id="1472">
+      <phrase id="menutext" value="Trazas Seniat" />
     </menu>
     <menu id="14">
       <phrase id="menutext" value="Grupos" />
@@ -7980,6 +7983,39 @@
       </field>
       <field id="updated_at">
         <phrase id="fldcaption" value="updated at" />
+      </field>
+    </table>
+    <table id="view_audittrail_seniat">
+      <phrase id="tblcaption" value="Trazas Seniat" />
+      <field id="id">
+        <phrase id="fldcaption" value="Id" />
+      </field>
+      <field id="datetime">
+        <phrase id="fldcaption" value="Fecha Hora" />
+      </field>
+      <field id="script">
+        <phrase id="fldcaption" value="Script" />
+      </field>
+      <field id="user">
+        <phrase id="fldcaption" value="User" />
+      </field>
+      <field id="_action">
+        <phrase id="fldcaption" value="Acción" />
+      </field>
+      <field id="_table">
+        <phrase id="fldcaption" value="Table" />
+      </field>
+      <field id="field">
+        <phrase id="fldcaption" value="Campo" />
+      </field>
+      <field id="keyvalue">
+        <phrase id="fldcaption" value="Valor Clave" />
+      </field>
+      <field id="oldvalue">
+        <phrase id="fldcaption" value="Valor Anterior" />
+      </field>
+      <field id="newvalue">
+        <phrase id="fldcaption" value="Valor Actual" />
       </field>
     </table>
   </project>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=1,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
+<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="controller=1,info=1,entity=1,list=1,list|class=1,add=1,add|class=1,view=1,view|class=1,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=1,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=1,layout=1,menu=1,phpfn=0,userfn=1,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=1,apiroutes=1,routes=1,controllerbase=1,otherscontroller=1,apicontroller=1,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
   <Database DBID="DB" DBName="mandrake" DBType="MySQL" DBConnectionMethod="DIRECT" DBHost="localhost" DBPort="3306" DBUID="root" DBQuoteS="`" DBQuoteE="`" DBDBMSName="MySQL" DBDBMSVer="80030" MaxUploadSize="1000000" SecUserLevelFld="userlevelid" SecDefault="0,&quot;Default&quot;,0" SecUserProfileFld="profile" UseDynamicUserLevel="1" UserLevelTbl="userlevels" UserLevelIdFld="userlevelid" UserLevelNameFld="userlevelname" UserLevelPrivTbl="userlevelpermissions" UserLevelPrivTblNameFld="tablename" UserLevelPrivUserLevelFld="userlevelid" UserLevelPrivPrivFld="permission">
     <Table TblName="abono" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblIsMaster="1" TblCaption="Abonos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="nro_recibo" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Nro." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1235,7 +1235,7 @@
     <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnrp_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -2214,6 +2214,18 @@
       <Field FldName="ultimo_numero" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="ultimo numero" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="updated_at" FldType="135" FldTypeName="datetime" NativeDataType="12" FldSupport="1" FldSize="19" FldAttribute="36" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="updated at" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
+    <Table TblName="view_audittrail_seniat" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,list=1,list|class=1,add=1,add|class=1,view=1,view|class=1" TblList="1" TblView="1" TblAdd="1" TblCaption="Trazas Seniat" TblUpdatable="1" TblSQL="select `audittrail`.`id` AS `id`,`audittrail`.`datetime` AS `datetime`,`audittrail`.`script` AS `script`,`audittrail`.`user` AS `user`,`audittrail`.`action` AS `action`,`audittrail`.`table` AS `table`,`audittrail`.`field` AS `field`,`audittrail`.`keyvalue` AS `keyvalue`,`audittrail`.`oldvalue` AS `oldvalue`,`audittrail`.`newvalue` AS `newvalue` from `audittrail` where (`audittrail`.`action` like 'SENIAT:%')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+      <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="Id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
+      <Field FldName="datetime" FldType="135" FldTypeName="datetime" NativeDataType="12" FldSupport="1" FldSize="76" FldReq="1" FldAttribute="4" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="BETWEEN" FldCaption="Fecha Hora" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="11" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="script" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Script" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="user" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="User" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="action" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Acción" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="table" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Table" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="field" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Campo" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="keyvalue" FldType="201" FldTypeName="longtext" NativeDataType="751" FldSupport="1" FldSize="2147483647" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Valor Clave" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagMaxLength="0" FldSelectType="Values" FldTagCols="35" FldTagRows="4" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="oldvalue" FldType="201" FldTypeName="longtext" NativeDataType="751" FldSupport="1" FldSize="2147483647" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Valor Anterior" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagMaxLength="0" FldSelectType="Values" FldTagCols="35" FldTagRows="4" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="newvalue" FldType="201" FldTypeName="longtext" NativeDataType="751" FldSupport="1" FldSize="2147483647" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Valor Actual" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagMaxLength="0" FldSelectType="Values" FldTagCols="35" FldTagRows="4" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
+    </Table>
   </Database>
   <Extension Name="@phpmaker/captcha" Template="@phpmaker/captcha" XmlFile="captcha.xml" Enabled="0">
     <ExtProject>
@@ -2975,6 +2987,9 @@
         <ExtTable TblName="documento_consecutivo">
           <Properties><![CDATA[[{"Id":"UseDetailPreview","Type":"Boolean","Value":"1"},{"Id":"PreviewType","Type":"String","Value":"row"},{"Id":"PreviewRowColor","Type":"Color","Value":""},{"Id":"SingleRow","Type":"Boolean","Value":"0"},{"Id":"PageSize","Type":"Integer","Value":0},{"Id":"UseModalLinks","Type":"Boolean","Value":"0"}]]]></Properties>
         </ExtTable>
+        <ExtTable TblName="view_audittrail_seniat">
+          <Properties><![CDATA[[{"Id":"UseDetailPreview","Type":"Boolean","Value":"1"},{"Id":"PreviewType","Type":"String","Value":"row"},{"Id":"PreviewRowColor","Type":"Color","Value":""},{"Id":"SingleRow","Type":"Boolean","Value":"0"},{"Id":"PageSize","Type":"Integer","Value":0},{"Id":"UseModalLinks","Type":"Boolean","Value":"0"}]]]></Properties>
+        </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
       </ExtDatabase>
       <Properties><![CDATA[[{"Id":"Icon","Type":"String","Value":"fa-solid fa-caret-right fa-fw"},{"Id":"PopoverDelay","Type":"String","Value":"{ show: 100, hide: 500 }"},{"Id":"PopoverPlacement","Type":"String","Value":"default"},{"Id":"Selector","Type":"String","Value":".ew-preview-btn"},{"Id":"PopoverTrigger","Type":"String","Value":"click"},{"Id":"OffcanvasPlacement","Type":"String","Value":"bottom"},{"Id":"OffcanvasWidth","Type":"String","Value":""},{"Id":"OffcanvasHeight","Type":"String","Value":"50vh"},{"Id":"UseNestedPreview","Type":"Boolean","Value":"1"}]]]></Properties>
@@ -3686,6 +3701,9 @@
           <Properties><![CDATA[[{"Id":"PageOrientation","Type":"String","Value":"ORIENTATION_DEFAULT"},{"Id":"PageSize","Type":"String","Value":"PAPERSIZE_A4"}]]]></Properties>
         </ExtTable>
         <ExtTable TblName="documento_consecutivo">
+          <Properties><![CDATA[[{"Id":"PageOrientation","Type":"String","Value":"ORIENTATION_DEFAULT"},{"Id":"PageSize","Type":"String","Value":"PAPERSIZE_A4"}]]]></Properties>
+        </ExtTable>
+        <ExtTable TblName="view_audittrail_seniat">
           <Properties><![CDATA[[{"Id":"PageOrientation","Type":"String","Value":"ORIENTATION_DEFAULT"},{"Id":"PageSize","Type":"String","Value":"PAPERSIZE_A4"}]]]></Properties>
         </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
@@ -5013,6 +5031,9 @@
         <ExtTable TblName="documento_consecutivo">
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
+        <ExtTable TblName="view_audittrail_seniat">
+          <Properties><![CDATA[[]]]></Properties>
+        </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
       </ExtDatabase>
       <Properties><![CDATA[[{"Id":"InputGroup","Type":"Boolean","Value":"1"},{"Id":"Options","Type":"String","Value":""}]]]></Properties>
@@ -5868,6 +5889,9 @@
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="documento_consecutivo">
+          <Properties><![CDATA[[]]]></Properties>
+        </ExtTable>
+        <ExtTable TblName="view_audittrail_seniat">
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
@@ -38493,27 +38517,45 @@ loadjs.ready(["jquery"], function () {
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
                     const btn = $(this);
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
-
-                    let generarNE = "N";
-
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
-                    if (idDocumentoPadre == 0) {
-                        if (preguntarNE) {
-                            generarNE = confirm(
-                                "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
-                            ) ? "S" : "N";
-                        } else {
-                            generarNE = "N";
-                        }
+
+                    // Procede con el redireccionamiento final una vez decidido si se genera o no la Orden de Entrega.
+                    const continuarProceso = function (generarNE) {
+                        btn.prop("disabled", true)
+                        .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
+
+                        window.location.href =
+                            "TdcfcvProcess?pedido=" + i +
+                            "&PorDesAct=" + PorDesAct +
+                            "&generar_ne=" + generarNE;
+                    };
+
+                    if (idDocumentoPadre == 0 && preguntarNE) {
+                        // Cerramos el modal de confirmación fiscal y, apenas termine de ocultarse,
+                        // abrimos el modal para preguntar por la Orden de Entrega.
+                        const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
+                        const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
+                        const modalNE = new bootstrap.Modal(document.getElementById('modalConfirmarNE'));
+
+                        modalFiscalEl.addEventListener('hidden.bs.modal', function alHacerseInvisible() {
+                            modalFiscalEl.removeEventListener('hidden.bs.modal', alHacerseInvisible);
+                            modalNE.show();
+                        });
+
+                        modalFiscal.hide();
+
+                        $("#btnGenerarNESi").off("click").on("click", function () {
+                            modalNE.hide();
+                            continuarProceso("S");
+                        });
+
+                        $("#btnGenerarNENo").off("click").on("click", function () {
+                            modalNE.hide();
+                            continuarProceso("N");
+                        });
+                    } else {
+                        continuarProceso("N");
                     }
-
-                    btn.prop("disabled", true)
-                    .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
-
-                    window.location.href =
-                        "TdcfcvProcess?pedido=" + i +
-                        "&PorDesAct=" + PorDesAct +
-                        "&generar_ne=" + generarNE;
                 });                
             } else {
                 alertMsg("Error al recuperar correlativos fiscales: " + (response.mensaje ?? "Intente de nuevo."));
@@ -39038,6 +39080,32 @@ $impresoraFiscal = strtoupper(trim(
   </div>
 </div>
 
+<div class="modal fade" id="modalConfirmarNE" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarNELabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-info shadow-lg">
+      <div class="modal-header bg-info text-white py-2">
+        <h5 class="modal-title" id="modalConfirmarNELabel"><i class="fa-solid fa-truck-fast me-2"></i> Orden de Entrega</h5>
+      </div>
+      <div class="modal-body bg-light text-dark text-center py-4">
+        <i class="fa-solid fa-boxes-stacked text-info d-block mb-3" style="font-size: 2.5rem;"></i>
+        <p class="mb-0 fs-6">
+          ¿Desea generar automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados?
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <button type="button" id="btnGenerarNENo" class="btn btn-sm btn-outline-secondary px-4">
+          <i class="fa-solid fa-xmark me-1"></i>
+          No, continuar sin generarla
+        </button>
+        <button type="button" id="btnGenerarNESi" class="btn btn-sm btn-info text-white px-4 fw-bold">
+          <i class="fa-solid fa-check me-1"></i>
+          Sí, generar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <style>
 #modalNuevoArticulo .form-label{
@@ -39345,62 +39413,139 @@ function CongelarSnapshotFiscalTdcfcv($pedido)
     }
 }
 
-$pedido = $_REQUEST["pedido"];
+
+function ParametroImpresoraFiscalActivaTdcfcv()
+{
+    ExecuteStatement("
+        INSERT INTO parametro (codigo, descripcion, valor1)
+        SELECT '112', 'USA IMPRESORA FISCAL', 'N'
+        FROM DUAL
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM parametro
+            WHERE codigo = '112'
+        )
+    ");
+
+    return strtoupper(trim(
+        ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
+    ) ?? "") == "S";
+}
+
+function NombreDocumentoFiscalTdcfcv($documento)
+{
+    switch (strtoupper(trim($documento ?? ''))) {
+        case "FC": return "Factura";
+        case "NC": return "Nota de Crédito";
+        case "ND": return "Nota de Débito";
+        default: return "Documento";
+    }
+}
+
+function RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $facturaCTRL, $origen = "SISTEMA")
+{
+    $pedido = intval($pedido);
+    $nombreDocumentoTxt = NombreDocumentoFiscalTdcfcv($documento);
+    $usuarioActual = TdcfcvSqlValue(CurrentUserName());
+    $fechaActualTxt = date("d/m/Y H:i:s");
+    $facturaSql = TdcfcvSqlValue($factura);
+    $origenSql = TdcfcvSqlValue($origen);
+
+    $scriptLog = TdcfcvSqlValue("Emitió documento {$nombreDocumentoTxt} # {$factura} con # de control {$facturaCTRL} de fecha {$fechaActualTxt} ({$origen})");
+
+    $sqlAudit = "INSERT INTO audittrail
+            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
+        VALUES
+            (NULL, '" . date("Y-m-d H:i:s") . "',
+             '{$scriptLog}',
+             '{$usuarioActual}', 'SENIAT: U', 'view_out_tdcfcv', 'id', '{$pedido}', '', '{$facturaSql}');";
+    Execute($sqlAudit);
+}
+
+$pedido = intval($_REQUEST["pedido"] ?? 0);
 
 $sql = "SELECT documento, nro_documento, estatus FROM salidas WHERE id = $pedido;";
 $row = ExecuteRow($sql);
 $documento = $row["documento"];
 $nro_documento = $row["nro_documento"];
 $estatus =  $row["estatus"];
+$impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
 
-if(trim($nro_documento) == "") {
+if(trim($nro_documento ?? "") == "") {
+    if ($impresoraFiscal) {
+        // En modo impresora fiscal activa, NO reservamos consecutivos desde el sistema.
+        // La impresora fiscal emitirá el documento y factura_fiscal.php actualizará
+        // salidas.nro_documento, salidas.nro_control, estatus e impreso con la respuesta real.
+        CongelarSnapshotFiscalTdcfcv($pedido);
+
+        $generar_ne = strtoupper(trim($_GET["generar_ne"] ?? $_POST["generar_ne"] ?? "N"));
+        $usernameFiscal = urlencode(CurrentUserName());
+        header("Location: reportes/factura_fiscal.php?id={$pedido}&username={$usernameFiscal}&auto_return=1&generar_ne={$generar_ne}");
+        die();
+    }
+
     switch($documento) {
     case "FC":
         $docu = "003";
         break;
+
     case "NC":
         $docu = "010";
         break;
+
     case "ND":
         $docu = "011";
         break;
     }
 
-    $sql = "SELECT valor1 FROM parametro WHERE codigo = '035';";
-    if(ExecuteScalar($sql) == "S") {
+    // ¿El número de control es único para FC, NC y ND?
+    $controlUnificado = (ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '035'") == "S");
+
+    if ($controlUnificado) {
+
+        // Prefijo y padding del parámetro 030
         $crtl = "030";
-    }
-    else {
+
+        // Serie única para los tres documentos
+        $serie_ctrl = "DC_CTRL";
+
+    } else {
+
         switch($documento) {
         case "FC":
             $crtl = "030";
             break;
+
         case "NC":
             $crtl = "031";
             break;
+
         case "ND":
             $crtl = "032";
             break;
         }
+
+        // Cada documento mantiene su propia serie
+        $serie_ctrl = $documento . "_CTRL";
     }
 
-    $serie_doc = $documento . "_DOC";   // FC_DOC, NC_DOC, ND_DOC
-    $serie_ctrl = $documento . "_CTRL"; // FC_CTRL, NC_CTRL, ND_CTRL
+    // El consecutivo del documento SIEMPRE es independiente
+    $serie_doc = $documento . "_DOC";
 
-    $numeroDoc = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
+    $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
     $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
 
     $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
     $row = ExecuteRow($sql);
-    $prefijo = trim($row["valor2"]);
-    $padeo = intval($row["valor3"]);
+    $prefijo = trim($row["valor2"] ?? "");
+    $padeo   = intval($row["valor3"]);
     $factura = $prefijo . str_pad($numeroDoc, $padeo, "0", STR_PAD_LEFT);
 
     $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
     $row = ExecuteRow($sql);
-    $prefijo = trim($row["valor2"]);
-    $padeo = intval($row["valor3"]);
-    $facturaCTRL = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
+    $prefijo      = trim($row["valor2"] ?? "");
+    $padeo        = intval($row["valor3"]);
+    $facturaCTRL  = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
 
     // $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
     // $faltan_datos = ExecuteScalar($sql);
@@ -39420,38 +39565,8 @@ if(trim($nro_documento) == "") {
     // Congela la foto fiscal del cliente y de los articulos al momento de emitir.
     CongelarSnapshotFiscalTdcfcv($pedido);
 
-    /**********************************************************************************
-     * NUEVO: REGISTRO DE AUDITORÍA DE EMISIÓN DE DOCUMENTO
-     **********************************************************************************/
-    // 1. Identificamos textualmente el tipo de documento para el log
-    $nombreDocumentoTxt = "Documento";
-    switch ($documento) {
-        case "FC":
-            $nombreDocumentoTxt = "Factura";
-            break;
-        case "NC":
-            $nombreDocumentoTxt = "Nota de Crédito";
-            break;
-        case "ND":
-            $nombreDocumentoTxt = "Nota de Débito";
-            break;
-    }
-
-    $usuarioActual = CurrentUserName();
-    $fechaActualTxt = date("d/m/Y H:i:s");
-    
-    // 2. Construimos el texto informativo del log
-    $scriptLog = "Emitió documento {$nombreDocumentoTxt} # {$factura} con # de control {$facturaCTRL} de fecha {$fechaActualTxt}";
-
-    // 3. Insertamos el rastro en audittrail usando Execute() propio de tu entorno PHPMaker
-    $sqlAudit = "INSERT INTO audittrail
-            (id, datetime, script, `user`, `action`, `table`, `field`, keyvalue, oldvalue, newvalue)
-        VALUES
-            (NULL, '" . date("Y-m-d H:i:s") . "',
-             '{$scriptLog}',
-             '{$usuarioActual}', 'A', 'view_out_tdcfcv', 'id', '{$pedido}', '', '{$factura}');";
-    Execute($sqlAudit);
-    /**********************************************************************************/
+    // Registro de auditoría de emisión de documento no fiscal/manual.
+    RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $facturaCTRL, "SISTEMA");
 } 
 else {
     $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
@@ -39477,7 +39592,8 @@ if ($estatus == "PROCESADO") {
     die();
 
 }
-?>]]></CustomScript>
+?>
+]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcasa_add.php"><![CDATA[<?php
 echo "Hello World";
 ?>]]></CustomScript>
@@ -50585,6 +50701,149 @@ function ListOptions_Rendered()
     //$this->ListOptions["new"]->Body = "xxx";
         $this->articulo_inventario->Visible = false;
 }]]></CustomScript>
+  <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="view_audittrail_seniat"><![CDATA[<?php
+/////////////////////////////////////////////
+
+$tipo_documento = "TDCPDV";
+$id = $_REQUEST["id"];
+$moneda = $_REQUEST["moneda"];
+$username = $_REQUEST["username"];
+$start = isset($_REQUEST["start"]) ? $_REQUEST["start"] : "";
+$contador = isset($_REQUEST["contador"]) ? $_REQUEST["contador"] : "";
+$nota = $_REQUEST["nota"];
+
+$pagina = $_REQUEST["pagina"];
+$switch_page = $_REQUEST["switch_page"];
+
+$articulo = 0;
+$cantidad_movimiento = 0;
+$cantidad = 0;
+$precio = 0;
+$precio_ful = 0;
+$descuento = 0;
+$total = 0;
+
+$salida = "";
+
+$btnSend = isset($_REQUEST["btnSend"]) ? trim($_REQUEST["btnSend"]) : "";
+$txtArticulo = trim($_REQUEST["txtArticulo"]);
+
+// --- Valido que aun el pedido esté en estatus NUEVO para poderlo modificar 21/12/2020 --- //
+$sql = "SELECT estatus FROM salidas WHERE tipo_documento = '$tipo_documento' AND id = '$id';"; 
+$status_doc = ExecuteScalar($sql);
+if($status_doc != "NUEVO") {
+	$_SESSION['error'] = "Este pedido pas&oacute; a recibido para ser procesado y no se puede modificar. !!! ESTATUS ACTUAL $status_doc !!!";
+	header("Location: pedido_de_venta_detalle.php?id=$id");
+	die();
+}
+// --- //
+
+if($btnSend == "") {
+	header("Location: pedido_de_venta_detalle.php?id=$id&art=$txtArticulo");
+	die();
+}
+
+//die("btnSend = $btnSend -- switch_page = $switch_page -- Location: pedido_de_venta_detalle.php?id=$id&pagina=$pagina");
+
+if($switch_page == "S") {
+	header("Location: pedido_de_venta_detalle.php?id=$id&pagina=$pagina");
+	die();
+}
+
+$sql = "SELECT 
+		  date_format(a.fecha, '%d/%m/%Y') AS fecha, a.nro_documento, b.nombre AS cliente, 
+		  a.cliente AS codcliente 
+		FROM 
+		  salidas AS a 
+		  LEFT OUTER JOIN cliente AS b ON b.id = a.cliente 
+		WHERE 
+		  a.id = $id;";
+if($row = ExecuteRow($sql)) {
+  $documento = $row["nro_documento"];
+  $fecha = $row["fecha"];
+  $cliente = $row["cliente"];
+  $codcliente = $row["codcliente"];
+}
+
+/* Se actualizan las cantidades de unidades en el encabezado de la salida */
+// 21-01-2021
+$sql = "UPDATE 
+			salidas AS a 
+		SET 
+			a.nota = '$nota' 
+		WHERE a.id = $id;";
+Execute($sql);
+/**************/
+
+/* ------- Actualizo cantidad en mano, en pedido y en transito  ------- */
+// ActualizarExitencia();
+
+/////////////////////////////////////////////
+?>
+
+<div class="container">
+	<div class="text-left">
+		<h2>Pedido de Venta # <?php echo $documento; ?> Actualizado Exitosamente</h2>
+	</div>
+
+	<div>
+		<dl>
+		<dt>Cliente</dt>
+		<dd>- <?php echo $cliente; ?></dd>
+		<dt>Nro. Documento</dt>
+		<dd>- <?php echo "# " . $documento; ?></dd>
+		<dt>Fecha</dt>
+		<dd>- <?php echo $fecha; ?></dd>
+		</dl>     		
+	</div>
+
+	<?php if(trim($salida) != "") { ?>
+		<div class="alert alert-danger" role="alert">Los siguientes art&iacute;culos no se agregaron: <br> <?php echo $salida; ?></div>
+	<?php } ?>
+
+	<div>
+		<div class="row">
+		  <div class="col-md-1 text-center">
+			<?php 
+			$url = "reportes/pedido_de_venta.php?id=$id&tipo=TDCPDV";
+			echo '<a class="ewRowLink ewview" title="" data-caption="Imprimir" target="_blank" href="' . $url . '" data-original-title="Imprimir"><span class="glyphicon glyphicon-print ewIcon" style="font-size:25px;"></span></a>';
+			?>
+		  </div>
+
+		  <div class="col-md-1 text-center">
+			<?php 
+			$url = "pedido_de_venta_detalle.php?id=$id";
+			echo '<a class="ewRowLink ewview" title="" data-caption="Editar" href="' . $url . '" data-original-title="Editar"><span class="glyphicon glyphicon-edit ewIcon" style="font-size:25px;"></span></a>';
+			?>
+		  </div>
+
+		  <div class="col-md-1 text-center">
+			<?php 
+			$url = "pedido_de_venta_detalle_agregar.php?id=$codcliente";
+			echo '<a class="ewRowLink ewview" title="" data-caption="Nuevo" href="' . $url . '" data-original-title="Nuevo"><span class="glyphicon glyphicon-file ewIcon" style="font-size:25px;"></span></a>';
+			?>
+		  </div>
+
+		  <div class="col-md-1 text-center">
+			<?php 
+			$url = "salidaslist.php?tipo=TDCPDV";
+			echo '<a class="ewRowLink ewview" title="" data-caption="Listar" href="' . $url . '" data-original-title="Listar"><span class="glyphicon glyphicon-list ewIcon" style="font-size:25px;"></span></a>';
+			?>
+		  </div>
+
+		  <div class="col-md-1 text-center">
+			<?php 
+			$url = "pedido_de_venta_cerrar.php?id=$id&username=" . CurrentUserName();
+			echo '<a class="ewRowLink ewview" title="" data-caption="Listar" href="' . $url . '" data-original-title="Cerrar para Procesar el Pedido"><span class="glyphicon glyphicon-off ewIcon" style="font-size:50px;"></span></a>';
+			?>
+		  </div>
+
+		  <div class="col-md-7 text-center">
+		  </div>
+		</div>
+	</div>
+</div>
+]]></CustomScript>
   <Menu MenuID="1469" MenuText="Crear Nota de Entrega Automática" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="crear_nota_entrega_automatica.php" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="100" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="1470" MenuText="Crear Nota de Entrega Automatica" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="crear_nota_entrega_automatica_wait.php" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="200" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="1467" MenuText="Cliente Agregar" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="cliente_rapido_add.php" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="300" MenuIconClass="" MenuNavbar="0" />
@@ -50719,10 +50978,11 @@ function ListOptions_Rendered()
   <Menu MenuID="1446" MenuText="cierre de caja" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="cierre_de_caja" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="2200" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="18" MenuText="Seguridad" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="" MenuType="" MenuCustomUrl="1" MenuLevel="0" MenuShow="1" MenuDisplayOrder="2300" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="15" MenuText="Trazas" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="audittrail" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="100" MenuIconClass="" MenuNavbar="0" />
-  <Menu MenuID="14" MenuText="Grupos" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="userlevels" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="200" MenuIconClass="" MenuNavbar="0" />
-  <Menu MenuID="13" MenuText="Permisos" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="userlevelpermissions" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="0" MenuDisplayOrder="300" MenuIconClass="" MenuNavbar="0" />
-  <Menu MenuID="12" MenuText="Usuarios" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="usuario" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="400" MenuIconClass="" MenuNavbar="0" />
-  <Menu MenuID="126" MenuText="Funciones" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="funciones" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="500" MenuIconClass="" MenuNavbar="0" />
+  <Menu MenuID="1472" MenuText="Trazas Seniat" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="view_audittrail_seniat" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="200" MenuIconClass="" MenuNavbar="0" />
+  <Menu MenuID="14" MenuText="Grupos" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="userlevels" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="300" MenuIconClass="" MenuNavbar="0" />
+  <Menu MenuID="13" MenuText="Permisos" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="userlevelpermissions" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="0" MenuDisplayOrder="400" MenuIconClass="" MenuNavbar="0" />
+  <Menu MenuID="12" MenuText="Usuarios" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="usuario" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="500" MenuIconClass="" MenuNavbar="0" />
+  <Menu MenuID="126" MenuText="Funciones" MenuParentID="18" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="funciones" MenuType="" MenuCustomUrl="0" MenuLevel="1" MenuShow="1" MenuDisplayOrder="600" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="1447" MenuText="conceptos bancarios" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="conceptos_bancarios" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="2400" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="1448" MenuText="conteo detalle" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="conteo_detalle" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="2500" MenuIconClass="" MenuNavbar="0" />
   <Menu MenuID="1449" MenuText="conteo encabezado" MenuParentID="-1" MenuGroup="0" MenuSource="" MenuExtUrl="" MenuAnonymous="0" MenuSecurity="" MenuUrl="conteo_encabezado" MenuType="" MenuCustomUrl="0" MenuLevel="0" MenuShow="0" MenuDisplayOrder="2600" MenuIconClass="" MenuNavbar="0" />

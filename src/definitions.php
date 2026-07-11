@@ -308,6 +308,10 @@ return [
     "devoluciones_ver" => \DI\create(DevolucionesVer::class),
     "cliente_rapido_add" => \DI\create(ClienteRapidoAdd::class),
     "transferencia_almacen_multiple" => \DI\create(TransferenciaAlmacenMultiple::class),
+    "crear_nota_entrega_automatica" => \DI\create(CrearNotaEntregaAutomatica::class),
+    "crear_nota_entrega_automatica_wait" => \DI\create(CrearNotaEntregaAutomaticaWait::class),
+    "documento_consecutivo" => \DI\create(DocumentoConsecutivo::class),
+    "view_audittrail_seniat" => \DI\create(ViewAudittrailSeniat::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

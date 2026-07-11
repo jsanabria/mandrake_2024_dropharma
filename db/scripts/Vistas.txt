@@ -573,3 +573,9 @@ DROP VIEW IF EXISTS view_out;
 CREATE VIEW view_out AS 
 SELECT * FROM entradas_salidas WHERE tipo_documento IN ('TDCPDV', 'TDCNET', 'TDCFCV', 'TDCASA'); 
 
+
+-- Auditoría SENIAT
+DROP VIEW IF EXISTS view_audittrail_seniat; 
+CREATE VIEW view_audittrail_seniat AS 
+SELECT * FROM audittrail WHERE ACTION LIKE 'SENIAT:%';
+

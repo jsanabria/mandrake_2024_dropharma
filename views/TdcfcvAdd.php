@@ -1382,27 +1382,45 @@ loadjs.ready(["jquery"], function () {
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
                     const btn = $(this);
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
-
-                    let generarNE = "N";
-
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
-                    if (idDocumentoPadre == 0) {
-                        if (preguntarNE) {
-                            generarNE = confirm(
-                                "¿Desea generar automáticamente una Orden de Entrega para los artículos de inventario facturados?"
-                            ) ? "S" : "N";
-                        } else {
-                            generarNE = "N";
-                        }
+
+                    // Procede con el redireccionamiento final una vez decidido si se genera o no la Orden de Entrega.
+                    const continuarProceso = function (generarNE) {
+                        btn.prop("disabled", true)
+                        .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
+
+                        window.location.href =
+                            "TdcfcvProcess?pedido=" + i +
+                            "&PorDesAct=" + PorDesAct +
+                            "&generar_ne=" + generarNE;
+                    };
+
+                    if (idDocumentoPadre == 0 && preguntarNE) {
+                        // Cerramos el modal de confirmación fiscal y, apenas termine de ocultarse,
+                        // abrimos el modal para preguntar por la Orden de Entrega.
+                        const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
+                        const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
+                        const modalNE = new bootstrap.Modal(document.getElementById('modalConfirmarNE'));
+
+                        modalFiscalEl.addEventListener('hidden.bs.modal', function alHacerseInvisible() {
+                            modalFiscalEl.removeEventListener('hidden.bs.modal', alHacerseInvisible);
+                            modalNE.show();
+                        });
+
+                        modalFiscal.hide();
+
+                        $("#btnGenerarNESi").off("click").on("click", function () {
+                            modalNE.hide();
+                            continuarProceso("S");
+                        });
+
+                        $("#btnGenerarNENo").off("click").on("click", function () {
+                            modalNE.hide();
+                            continuarProceso("N");
+                        });
+                    } else {
+                        continuarProceso("N");
                     }
-
-                    btn.prop("disabled", true)
-                    .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
-
-                    window.location.href =
-                        "TdcfcvProcess?pedido=" + i +
-                        "&PorDesAct=" + PorDesAct +
-                        "&generar_ne=" + generarNE;
                 });                
             } else {
                 alertMsg("Error al recuperar correlativos fiscales: " + (response.mensaje ?? "Intente de nuevo."));
@@ -1923,6 +1941,32 @@ $impresoraFiscal = strtoupper(trim(
                 Sí, Procesar
             </button>
         </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalConfirmarNE" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarNELabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-info shadow-lg">
+      <div class="modal-header bg-info text-white py-2">
+        <h5 class="modal-title" id="modalConfirmarNELabel"><i class="fa-solid fa-truck-fast me-2"></i> Orden de Entrega</h5>
+      </div>
+      <div class="modal-body bg-light text-dark text-center py-4">
+        <i class="fa-solid fa-boxes-stacked text-info d-block mb-3" style="font-size: 2.5rem;"></i>
+        <p class="mb-0 fs-6">
+          ¿Desea generar automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados?
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <button type="button" id="btnGenerarNENo" class="btn btn-sm btn-outline-secondary px-4">
+          <i class="fa-solid fa-xmark me-1"></i>
+          No, continuar sin generarla
+        </button>
+        <button type="button" id="btnGenerarNESi" class="btn btn-sm btn-info text-white px-4 fw-bold">
+          <i class="fa-solid fa-check me-1"></i>
+          Sí, generar
+        </button>
+      </div>
     </div>
   </div>
 </div>

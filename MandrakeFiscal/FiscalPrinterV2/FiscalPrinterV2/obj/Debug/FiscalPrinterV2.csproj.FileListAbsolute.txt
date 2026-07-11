@@ -1,0 +1,8 @@
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\bin\Debug\FiscalPrinterV2.exe.config
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\bin\Debug\Configuration\db.ini
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\bin\Debug\FiscalPrinterV2.exe
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\bin\Debug\FiscalPrinterV2.pdb
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\bin\Debug\TfhkaNet.dll
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\obj\Debug\FiscalPrinterV2.exe
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\obj\Debug\FiscalPrinterV2.pdb
+C:\Users\Junior\documents\visual studio 2015\Projects\FiscalPrinterV2\FiscalPrinterV2\obj\Debug\FiscalPrinterV2.csprojResolveAssemblyReference.cache
