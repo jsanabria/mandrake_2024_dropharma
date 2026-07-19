@@ -517,7 +517,9 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}documento_consecutivo","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}documento_consecutivo","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_audittrail_seniat","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_audittrail_seniat","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_audittrail_seniat","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}crear_nota_recepcion_automatica_wait.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}crear_nota_recepcion_automatica_wait.php","0","0"]];
 
 /**
  * Tables
@@ -777,4 +779,5 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["crear_nota_entrega_automatica.php","crear_nota_entrega_automatica","Crear Nota de Entrega Automática",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CrearNotaEntregaAutomatica"],
     ["crear_nota_entrega_automatica_wait.php","crear_nota_entrega_automatica_wait","Crear Nota de Entrega Automatica",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CrearNotaEntregaAutomaticaWait"],
     ["documento_consecutivo","documento_consecutivo","Consecutivo de Documentos",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DocumentoConsecutivoList"],
-    ["view_audittrail_seniat","view_audittrail_seniat","Trazas Seniat",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewAudittrailSeniatList"]];
+    ["view_audittrail_seniat","view_audittrail_seniat","Trazas Seniat",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewAudittrailSeniatList"],
+    ["crear_nota_recepcion_automatica_wait.php","crear_nota_recepcion_automatica_wait","Crear Nota Recepcion Automatica",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CrearNotaRecepcionAutomaticaWait"]];

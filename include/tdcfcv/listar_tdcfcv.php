@@ -48,13 +48,24 @@ $tasa = floatval(ExecuteScalar("
 
 $tasa = ($tasa <= 0 ? 1 : $tasa);
 
-$cliente = ExecuteScalar("
-    SELECT cliente
+$rowSalida = ExecuteRow("
+    SELECT
+        cliente,
+        IFNULL(id_documento_padre,0) AS id_documento_padre
     FROM salidas
     WHERE id = {$pedido}
       AND tipo_documento = '{$tipo_documento}'
     LIMIT 1
 ");
+
+if (!$rowSalida) {
+    TdcfcvHtmlResponse(
+        '<div class="alert alert-warning mb-0">No se encontró el documento solicitado.</div>'
+    );
+}
+
+$cliente = intval($rowSalida["cliente"]);
+$idDocumentoPadre = intval($rowSalida["id_documento_padre"]);
 
 if (!$cliente) {
     TdcfcvHtmlResponse(
@@ -94,7 +105,7 @@ $rows = ExecuteRows("
         IFNULL(z.precio, 0) AS total,
         IFNULL(z.lote, '') AS lote,
         IFNULL(z.fecha_vencimiento, '') AS fecha_vencimiento,
-        IFNULL(z.almacen, '') AS almacen
+        IFNULL(z.almacen, '') AS almacen, IFNULL(a.codigo, '') AS codigo  
     FROM entradas_salidas AS z
     INNER JOIN articulo AS a ON a.id = z.articulo
     LEFT JOIN fabricante AS b ON b.Id = a.fabricante
@@ -145,6 +156,7 @@ foreach ($rows as $row) {
     $principioActivo = TdcfcvH($row["principio_activo"]);
     $presentacion = TdcfcvH($row["presentacion"]);
     $fabricante = TdcfcvH($row["fabricante"]);
+    $codigo_articulo = TdcfcvH($row["codigo"]);
 
     $disabled = ($xCant == 0 ? '' : ' disabled="disabled"');
 
@@ -164,14 +176,28 @@ foreach ($rows as $row) {
     $html .= '<strong>' . $nombreComercial . '</strong><br>';
     $html .= '<small>' . $principioActivo . '</small><br>';
     $html .= '<small><i>' . $presentacion . '</i></small><br>';
+    $html .= '<small><i style="display:inline-block; max-width: 100px; word-break: break-all;">Cod.:' . $codigo_articulo . '</i></small><br>';
     $html .= '<strong><small>Fabricante: ' . $fabricante . '</small></strong><br>';
     $html .= '<small>Unidad</small>';
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
-    $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xCant == 0 ? '' : $xCant) . '" style="width: 80px;"' . $disabled . '>';
+    // $html .= '<input type="number" class="form-control" id="x' . $i . '_cantidad" name="x' . $i . '_cantidad" size="4" onkeyup="myCalc(' . $i . ');" onchange="myCalc(' . $i . ');" value="' . ($xCant == 0 ? '' : $xCant) . '" style="width: 80px;"' . $disabled . '>';
+    $html .= '<input type="number" class="form-control"
+                id="x' . $i . '_cantidad"
+                name="x' . $i . '_cantidad"
+                size="4"
+                onkeyup="myCalc(' . $i . ');"
+                onchange="myCalc(' . $i . ');"
+                data-original-cantidad="' . $xCant . '"
+                value="' . ($xCant == 0 ? '' : $xCant) . '"
+                style="width: 80px;"' . $disabled . '>';
     $html .= '<input type="hidden" id="x' . $i . '_moneda" name="x' . $i . '_moneda" value="' . TdcfcvH($moneda) . '">';
     $html .= '<input type="hidden" id="x' . $i . '_articulo" name="x' . $i . '_articulo" value="' . $idArticulo . '">';
+    $html .= '<input type="hidden"
+                 id="x' . $i . '_id_item"
+                 name="x' . $i . '_id_item"
+                 value="' . $idItem . '">';
     $html .= '</td>';
 
     $html .= '<td class="text-center">';
@@ -207,9 +233,20 @@ foreach ($rows as $row) {
     $html .= '<span id="x' . $i . '_boton_edit">';
     $html .= '<i class="fa-solid fa-pencil text-warning" style="cursor:pointer;" title="Modificar" onclick="js:habilitarEdicion(' . $i . ', ' . $idItem . ')"></i>';
     $html .= '</span>';
+
     $html .= '<span id="x' . $i . '_boton_delete">';
-    $html .= '<i class="fa-solid fa-trash text-danger" style="cursor:pointer;" title="Eliminar" onclick="js:eliminar(' . $i . ', ' . $idItem . ')"></i>';
-    $html .= '</span>';
+    if ($idDocumentoPadre > 0) {
+        $html .= '<i class="fa-solid fa-trash text-secondary"
+                    style="cursor:not-allowed;opacity:.45;"
+                    title="La factura proviene de una Orden de Entrega y no permite eliminar artículos."></i>';
+    } else {
+        $html .= '<i class="fa-solid fa-trash text-danger"
+                    style="cursor:pointer;"
+                    title="Eliminar"
+                    onclick="js:eliminar(' . $i . ', ' . $idItem . ')"></i>';
+    }
+
+    $html .= '</span>';    
     $html .= '</div>';
     $html .= '</td>';
 

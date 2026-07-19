@@ -2732,16 +2732,16 @@ class CobrosClienteDetalleList extends CobrosClienteDetalle
                     <div class="card-body p-2">
                         <div class="d-flex justify-content-between mb-1">
                             <span class="text-muted small fw-bold">TOTAL MONTO PAGOS EFECTUADOS:</span>
-                            <span class="fw-bold text-dark">Bs. ' . number_format($total_pagos_sin_ig, 2, ",", ".") . '</span>
+                            <span class="fw-bold text-dark">Bs. ' . number_format($total_pagos_sin_ig ?? 0, 2, ",", ".") . '</span>
                         </div>
                         <div class="d-flex justify-content-between border-top pt-1 mt-1">
                             <span class="text-danger small fw-bold">TOTAL IGTF (3%):</span>
-                            <span class="fw-bold text-danger">Bs. ' . number_format($total_igtf, 2, ",", ".") . '</span>
+                            <span class="fw-bold text-danger">Bs. ' . number_format($total_igtf ?? 0, 2, ",", ".") . '</span>
                         </div>
                         <div class="d-flex justify-content-between border-top pt-2 mt-1 border-dark">
                             <span class="fw-bold text-uppercase small">Total General Factura:</span>
                             <span class="fw-bold text-primary" style="font-size: 1.1rem;">
-                                Bs. ' . number_format($total_general, 2, ",", ".") . '
+                                Bs. ' . number_format($total_general ?? 0, 2, ",", ".") . '
                             </span>
                         </div>
                     </div>

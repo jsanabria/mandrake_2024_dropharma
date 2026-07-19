@@ -71,8 +71,8 @@ $Page->showMessage();
 <?php if ($Page->ref_iva->Visible) { // ref_iva ?>
         <th class="<?= $Page->ref_iva->headerCellClass() ?>"><span id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->ref_iva->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
-        <th class="<?= $Page->ref_municipal->headerCellClass() ?>"><span id="elh_compra_ref_municipal" class="compra_ref_municipal"><?= $Page->ref_municipal->caption() ?></span></th>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <th class="<?= $Page->ref_islr->headerCellClass() ?>"><span id="elh_compra_ref_islr" class="compra_ref_islr"><?= $Page->ref_islr->caption() ?></span></th>
 <?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th class="<?= $Page->anulado->headerCellClass() ?>"><span id="elh_compra_anulado" class="compra_anulado"><?= $Page->anulado->caption() ?></span></th>
@@ -165,14 +165,14 @@ while ($Page->fetch()) {
 </span>
 </td>
 <?php } ?>
-<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
-        <td<?= $Page->ref_municipal->cellAttributes() ?>>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <td<?= $Page->ref_islr->cellAttributes() ?>>
 <span id="">
-<span<?= $Page->ref_municipal->viewAttributes() ?>>
-<?php if (!EmptyString($Page->ref_municipal->getViewValue()) && $Page->ref_municipal->linkAttributes() != "") { ?>
-<a<?= $Page->ref_municipal->linkAttributes() ?>><?= $Page->ref_municipal->getViewValue() ?></a>
+<span<?= $Page->ref_islr->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_islr->getViewValue()) && $Page->ref_islr->linkAttributes() != "") { ?>
+<a<?= $Page->ref_islr->linkAttributes() ?>><?= $Page->ref_islr->getViewValue() ?></a>
 <?php } else { ?>
-<?= $Page->ref_municipal->getViewValue() ?>
+<?= $Page->ref_islr->getViewValue() ?>
 <?php } ?>
 </span>
 </span>

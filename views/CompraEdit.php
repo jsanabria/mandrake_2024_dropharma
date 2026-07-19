@@ -37,15 +37,15 @@ loadjs.ready(["wrapper", "head"], function () {
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
             ["documento", [fields.documento.visible && fields.documento.required ? ew.Validators.required(fields.documento.caption) : null], fields.documento.isInvalid],
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
-            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null], fields.fecha.isInvalid],
+            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["descripcion", [fields.descripcion.visible && fields.descripcion.required ? ew.Validators.required(fields.descripcion.caption) : null], fields.descripcion.isInvalid],
-            ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null], fields.monto_exento.isInvalid],
-            ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null], fields.monto_gravado.isInvalid],
-            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
+            ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
+            ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
+            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
             ["ref_iva", [fields.ref_iva.visible && fields.ref_iva.required ? ew.Validators.required(fields.ref_iva.caption) : null], fields.ref_iva.isInvalid],
             ["ref_islr", [fields.ref_islr.visible && fields.ref_islr.required ? ew.Validators.required(fields.ref_islr.caption) : null], fields.ref_islr.isInvalid],
             ["ref_municipal", [fields.ref_municipal.visible && fields.ref_municipal.required ? ew.Validators.required(fields.ref_municipal.caption) : null], fields.ref_municipal.isInvalid],
-            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null], fields.fecha_registro.isInvalid],
+            ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
             ["anulado", [fields.anulado.visible && fields.anulado.required ? ew.Validators.required(fields.anulado.caption) : null], fields.anulado.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null], fields.tasa_dia.isInvalid]
@@ -166,9 +166,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_nro_control" for="x_nro_control" class="<?= $Page->LeftColumnClass ?>"><?= $Page->nro_control->caption() ?><?= $Page->nro_control->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->nro_control->cellAttributes() ?>>
 <span id="el_compra_nro_control">
-<span<?= $Page->nro_control->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->nro_control->getDisplayValue($Page->nro_control->EditValue))) ?>"></span>
-<input type="hidden" data-table="compra" data-field="x_nro_control" data-hidden="1" data-page="1" name="x_nro_control" id="x_nro_control" value="<?= HtmlEncode($Page->nro_control->CurrentValue) ?>">
+<input type="<?= $Page->nro_control->getInputTextType() ?>" name="x_nro_control" id="x_nro_control" data-table="compra" data-field="x_nro_control" value="<?= $Page->nro_control->EditValue ?>" data-page="1" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->nro_control->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->nro_control->formatPattern()) ?>"<?= $Page->nro_control->editAttributes() ?> aria-describedby="x_nro_control_help">
+<?= $Page->nro_control->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->nro_control->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -178,9 +178,38 @@ loadjs.ready("head", function () {
         <label id="elh_compra_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
 <span id="el_compra_fecha">
-<span<?= $Page->fecha->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->fecha->getDisplayValue($Page->fecha->EditValue))) ?>"></span>
-<input type="hidden" data-table="compra" data-field="x_fecha" data-hidden="1" data-page="1" name="x_fecha" id="x_fecha" value="<?= HtmlEncode($Page->fecha->CurrentValue) ?>">
+<input type="<?= $Page->fecha->getInputTextType() ?>" name="x_fecha" id="x_fecha" data-table="compra" data-field="x_fecha" value="<?= $Page->fecha->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha->formatPattern()) ?>"<?= $Page->fecha->editAttributes() ?> aria-describedby="x_fecha_help">
+<?= $Page->fecha->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->fecha->getErrorMessage() ?></div>
+<?php if (!$Page->fecha->ReadOnly && !$Page->fecha->Disabled && !isset($Page->fecha->EditAttrs["readonly"]) && !isset($Page->fecha->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fcompraedit", "datetimepicker"], function () {
+    let format = "<?= DateFormat(7) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fcompraedit", "x_fecha", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>
@@ -202,9 +231,38 @@ loadjs.ready("head", function () {
         <label id="elh_compra_fecha_registro" for="x_fecha_registro" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha_registro->caption() ?><?= $Page->fecha_registro->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha_registro->cellAttributes() ?>>
 <span id="el_compra_fecha_registro">
-<span<?= $Page->fecha_registro->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->fecha_registro->getDisplayValue($Page->fecha_registro->EditValue))) ?>"></span>
-<input type="hidden" data-table="compra" data-field="x_fecha_registro" data-hidden="1" data-page="1" name="x_fecha_registro" id="x_fecha_registro" value="<?= HtmlEncode($Page->fecha_registro->CurrentValue) ?>">
+<input type="<?= $Page->fecha_registro->getInputTextType() ?>" name="x_fecha_registro" id="x_fecha_registro" data-table="compra" data-field="x_fecha_registro" value="<?= $Page->fecha_registro->EditValue ?>" data-page="1" placeholder="<?= HtmlEncode($Page->fecha_registro->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->fecha_registro->formatPattern()) ?>"<?= $Page->fecha_registro->editAttributes() ?> aria-describedby="x_fecha_registro_help">
+<?= $Page->fecha_registro->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->fecha_registro->getErrorMessage() ?></div>
+<?php if (!$Page->fecha_registro->ReadOnly && !$Page->fecha_registro->Disabled && !isset($Page->fecha_registro->EditAttrs["readonly"]) && !isset($Page->fecha_registro->EditAttrs["disabled"])) { ?>
+<script>
+loadjs.ready(["fcompraedit", "datetimepicker"], function () {
+    let format = "<?= DateFormat(7) ?>",
+        options = {
+            localization: {
+                locale: ew.LANGUAGE_ID + "-u-nu-" + ew.getNumberingSystem(),
+                hourCycle: format.match(/H/) ? "h24" : "h12",
+                format,
+                ...ew.language.phrase("datetimepicker")
+            },
+            display: {
+                icons: {
+                    previous: ew.IS_RTL ? "fa-solid fa-chevron-right" : "fa-solid fa-chevron-left",
+                    next: ew.IS_RTL ? "fa-solid fa-chevron-left" : "fa-solid fa-chevron-right"
+                },
+                components: {
+                    clock: !!format.match(/h/i) || !!format.match(/m/) || !!format.match(/s/i),
+                    hours: !!format.match(/h/i),
+                    minutes: !!format.match(/m/),
+                    seconds: !!format.match(/s/i)
+                },
+                theme: ew.getPreferredTheme()
+            }
+        };
+    ew.createDateTimePicker("fcompraedit", "x_fecha_registro", ew.deepAssign({"useCurrent":false,"display":{"sideBySide":false}}, options));
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>
@@ -242,9 +300,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_monto_exento" for="x_monto_exento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_exento->caption() ?><?= $Page->monto_exento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_exento->cellAttributes() ?>>
 <span id="el_compra_monto_exento">
-<span<?= $Page->monto_exento->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->monto_exento->getDisplayValue($Page->monto_exento->EditValue))) ?>"></span>
-<input type="hidden" data-table="compra" data-field="x_monto_exento" data-hidden="1" data-page="2" name="x_monto_exento" id="x_monto_exento" value="<?= HtmlEncode($Page->monto_exento->CurrentValue) ?>">
+<input type="<?= $Page->monto_exento->getInputTextType() ?>" name="x_monto_exento" id="x_monto_exento" data-table="compra" data-field="x_monto_exento" value="<?= $Page->monto_exento->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_exento->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_exento->formatPattern()) ?>"<?= $Page->monto_exento->editAttributes() ?> aria-describedby="x_monto_exento_help">
+<?= $Page->monto_exento->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->monto_exento->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -254,9 +312,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_monto_gravado" for="x_monto_gravado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_gravado->caption() ?><?= $Page->monto_gravado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_gravado->cellAttributes() ?>>
 <span id="el_compra_monto_gravado">
-<span<?= $Page->monto_gravado->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->monto_gravado->getDisplayValue($Page->monto_gravado->EditValue))) ?>"></span>
-<input type="hidden" data-table="compra" data-field="x_monto_gravado" data-hidden="1" data-page="2" name="x_monto_gravado" id="x_monto_gravado" value="<?= HtmlEncode($Page->monto_gravado->CurrentValue) ?>">
+<input type="<?= $Page->monto_gravado->getInputTextType() ?>" name="x_monto_gravado" id="x_monto_gravado" data-table="compra" data-field="x_monto_gravado" value="<?= $Page->monto_gravado->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_gravado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_gravado->formatPattern()) ?>"<?= $Page->monto_gravado->editAttributes() ?> aria-describedby="x_monto_gravado_help">
+<?= $Page->monto_gravado->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->monto_gravado->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -266,9 +324,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_alicuota" for="x_alicuota" class="<?= $Page->LeftColumnClass ?>"><?= $Page->alicuota->caption() ?><?= $Page->alicuota->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->alicuota->cellAttributes() ?>>
 <span id="el_compra_alicuota">
-<span<?= $Page->alicuota->viewAttributes() ?>>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->alicuota->getDisplayValue($Page->alicuota->EditValue))) ?>"></span>
-<input type="hidden" data-table="compra" data-field="x_alicuota" data-hidden="1" data-page="2" name="x_alicuota" id="x_alicuota" value="<?= HtmlEncode($Page->alicuota->CurrentValue) ?>">
+<input type="<?= $Page->alicuota->getInputTextType() ?>" name="x_alicuota" id="x_alicuota" data-table="compra" data-field="x_alicuota" value="<?= $Page->alicuota->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->alicuota->formatPattern()) ?>"<?= $Page->alicuota->editAttributes() ?> aria-describedby="x_alicuota_help">
+<?= $Page->alicuota->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -314,14 +372,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_ref_iva" for="x_ref_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_iva->caption() ?><?= $Page->ref_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_iva->cellAttributes() ?>>
 <span id="el_compra_ref_iva">
-<span<?= $Page->ref_iva->viewAttributes() ?>>
-<?php if (!EmptyString($Page->ref_iva->EditValue) && $Page->ref_iva->linkAttributes() != "") { ?>
-<a<?= $Page->ref_iva->linkAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_iva->getDisplayValue($Page->ref_iva->EditValue))) ?>"></a>
-<?php } else { ?>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_iva->getDisplayValue($Page->ref_iva->EditValue))) ?>">
-<?php } ?>
-</span>
-<input type="hidden" data-table="compra" data-field="x_ref_iva" data-hidden="1" data-page="3" name="x_ref_iva" id="x_ref_iva" value="<?= HtmlEncode($Page->ref_iva->CurrentValue) ?>">
+<input type="<?= $Page->ref_iva->getInputTextType() ?>" name="x_ref_iva" id="x_ref_iva" data-table="compra" data-field="x_ref_iva" value="<?= $Page->ref_iva->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_iva->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_iva->formatPattern()) ?>"<?= $Page->ref_iva->editAttributes() ?> aria-describedby="x_ref_iva_help">
+<?= $Page->ref_iva->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->ref_iva->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>
@@ -331,14 +384,9 @@ loadjs.ready("head", function () {
         <label id="elh_compra_ref_islr" for="x_ref_islr" class="<?= $Page->LeftColumnClass ?>"><?= $Page->ref_islr->caption() ?><?= $Page->ref_islr->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->ref_islr->cellAttributes() ?>>
 <span id="el_compra_ref_islr">
-<span<?= $Page->ref_islr->viewAttributes() ?>>
-<?php if (!EmptyString($Page->ref_islr->EditValue) && $Page->ref_islr->linkAttributes() != "") { ?>
-<a<?= $Page->ref_islr->linkAttributes() ?>><input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_islr->getDisplayValue($Page->ref_islr->EditValue))) ?>"></a>
-<?php } else { ?>
-<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->ref_islr->getDisplayValue($Page->ref_islr->EditValue))) ?>">
-<?php } ?>
-</span>
-<input type="hidden" data-table="compra" data-field="x_ref_islr" data-hidden="1" data-page="3" name="x_ref_islr" id="x_ref_islr" value="<?= HtmlEncode($Page->ref_islr->CurrentValue) ?>">
+<input type="<?= $Page->ref_islr->getInputTextType() ?>" name="x_ref_islr" id="x_ref_islr" data-table="compra" data-field="x_ref_islr" value="<?= $Page->ref_islr->EditValue ?>" data-page="3" size="30" maxlength="30" placeholder="<?= HtmlEncode($Page->ref_islr->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->ref_islr->formatPattern()) ?>"<?= $Page->ref_islr->editAttributes() ?> aria-describedby="x_ref_islr_help">
+<?= $Page->ref_islr->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->ref_islr->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

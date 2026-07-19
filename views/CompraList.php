@@ -285,8 +285,8 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->ref_iva->Visible) { // ref_iva ?>
         <th data-name="ref_iva" class="<?= $Page->ref_iva->headerCellClass() ?>"><div id="elh_compra_ref_iva" class="compra_ref_iva"><?= $Page->renderFieldHeader($Page->ref_iva) ?></div></th>
 <?php } ?>
-<?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
-        <th data-name="ref_municipal" class="<?= $Page->ref_municipal->headerCellClass() ?>"><div id="elh_compra_ref_municipal" class="compra_ref_municipal"><?= $Page->renderFieldHeader($Page->ref_municipal) ?></div></th>
+<?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <th data-name="ref_islr" class="<?= $Page->ref_islr->headerCellClass() ?>"><div id="elh_compra_ref_islr" class="compra_ref_islr"><?= $Page->renderFieldHeader($Page->ref_islr) ?></div></th>
 <?php } ?>
 <?php if ($Page->anulado->Visible) { // anulado ?>
         <th data-name="anulado" class="<?= $Page->anulado->headerCellClass() ?>"><div id="elh_compra_anulado" class="compra_anulado"><?= $Page->renderFieldHeader($Page->anulado) ?></div></th>
@@ -386,14 +386,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 </span>
 </td>
     <?php } ?>
-    <?php if ($Page->ref_municipal->Visible) { // ref_municipal ?>
-        <td data-name="ref_municipal"<?= $Page->ref_municipal->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_ref_municipal" class="el_compra_ref_municipal">
-<span<?= $Page->ref_municipal->viewAttributes() ?>>
-<?php if (!EmptyString($Page->ref_municipal->getViewValue()) && $Page->ref_municipal->linkAttributes() != "") { ?>
-<a<?= $Page->ref_municipal->linkAttributes() ?>><?= $Page->ref_municipal->getViewValue() ?></a>
+    <?php if ($Page->ref_islr->Visible) { // ref_islr ?>
+        <td data-name="ref_islr"<?= $Page->ref_islr->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_ref_islr" class="el_compra_ref_islr">
+<span<?= $Page->ref_islr->viewAttributes() ?>>
+<?php if (!EmptyString($Page->ref_islr->getViewValue()) && $Page->ref_islr->linkAttributes() != "") { ?>
+<a<?= $Page->ref_islr->linkAttributes() ?>><?= $Page->ref_islr->getViewValue() ?></a>
 <?php } else { ?>
-<?= $Page->ref_municipal->getViewValue() ?>
+<?= $Page->ref_islr->getViewValue() ?>
 <?php } ?>
 </span>
 </span>

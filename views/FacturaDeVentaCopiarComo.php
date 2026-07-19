@@ -72,7 +72,7 @@ switch($documento) {
                 <input type="hidden" id="tipo_documento" name="tipo_documento" value="<?php echo $tipo_documento; ?>">
                 
                 <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                    <a href="SalidasList?tipo=<?= $tipo_documento ?>" class="btn btn-outline-secondary">
+                    <a href="ViewOutTdcfcvList" class="btn btn-outline-secondary">
                         <i class="fa-solid fa-xmark"></i> Cancelar
                     </a>
                     <button type="submit" class="btn btn-primary">

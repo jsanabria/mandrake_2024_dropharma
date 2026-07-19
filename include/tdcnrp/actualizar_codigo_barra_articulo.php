@@ -25,20 +25,33 @@ try {
 
     $username_sql = mysqli_real_escape_string($link, $username);
 
-    $sqlUsuario = "
-        SELECT userlevelid
-        FROM usuario
-        WHERE username = '$username_sql'
-        LIMIT 1
-    ";
+    /*
+     * Administrator y Admin siempre son administradores.
+     */
+    if (
+        strcasecmp($username, "Administrator") == 0 ||
+        strcasecmp($username, "Admin") == 0
+    ) {
 
-    $rsUsuario = mysqli_query($link, $sqlUsuario);
+        $nivel = -1;
 
-    if (!$rsUsuario || !($rowUsuario = mysqli_fetch_array($rsUsuario))) {
-        throw new Exception("Usuario inválido.");
+    } else {
+
+        $sqlUsuario = "
+            SELECT userlevelid
+            FROM usuario
+            WHERE username = '$username_sql'
+            LIMIT 1
+        ";
+
+        $rsUsuario = mysqli_query($link, $sqlUsuario);
+
+        if (!$rsUsuario || !($rowUsuario = mysqli_fetch_array($rsUsuario))) {
+            throw new Exception("Usuario inválido.");
+        }
+
+        $nivel = intval($rowUsuario["userlevelid"]);
     }
-
-    $nivel = intval($rowUsuario["userlevelid"]);
 
     /* Administrador */
     if ($nivel != -1) {

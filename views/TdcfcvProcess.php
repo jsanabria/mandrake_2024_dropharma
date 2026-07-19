@@ -162,12 +162,23 @@ function RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $factura
 }
 
 $pedido = intval($_REQUEST["pedido"] ?? 0);
+$generar_ne = strtoupper(trim($_GET["generar_ne"] ?? $_POST["generar_ne"] ?? "N"));
+$generar_nr = strtoupper(trim($_GET["generar_nr"] ?? $_POST["generar_nr"] ?? "N"));
 
-$sql = "SELECT documento, nro_documento, estatus FROM salidas WHERE id = $pedido;";
+if ($pedido <= 0) {
+    die("Documento no válido.");
+}
+
+$sql = "SELECT documento, nro_documento, estatus FROM salidas WHERE id = $pedido LIMIT 1;";
 $row = ExecuteRow($sql);
-$documento = $row["documento"];
-$nro_documento = $row["nro_documento"];
-$estatus =  $row["estatus"];
+
+if (!$row) {
+    die("No se encontró el documento solicitado.");
+}
+
+$documento = strtoupper(trim($row["documento"] ?? ""));
+$nro_documento = $row["nro_documento"] ?? "";
+$estatus = $row["estatus"] ?? "";
 $impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
 
 if(trim($nro_documento ?? "") == "") {
@@ -177,9 +188,14 @@ if(trim($nro_documento ?? "") == "") {
         // salidas.nro_documento, salidas.nro_control, estatus e impreso con la respuesta real.
         CongelarSnapshotFiscalTdcfcv($pedido);
 
-        $generar_ne = strtoupper(trim($_GET["generar_ne"] ?? $_POST["generar_ne"] ?? "N"));
         $usernameFiscal = urlencode(CurrentUserName());
-        header("Location: reportes/factura_fiscal.php?id={$pedido}&username={$usernameFiscal}&auto_return=1&generar_ne={$generar_ne}");
+        header(
+            "Location: reportes/factura_fiscal.php?id={$pedido}" .
+            "&username={$usernameFiscal}" .
+            "&auto_return=1" .
+            "&generar_ne={$generar_ne}" .
+            "&generar_nr={$generar_nr}"
+        );
         die();
     }
 
@@ -275,9 +291,14 @@ else {
 
 if ($estatus == "PROCESADO") {
 
-    $generar_ne = strtoupper(trim($_GET["generar_ne"] ?? $_POST["generar_ne"] ?? "N"));
+    // NC: el movimiento de inventario es una ENTRADA mediante Nota de Recepción.
+    if ($documento == "NC" && $generar_nr == "S") {
+        header("Location: CrearNotaRecepcionAutomaticaWait?id=$pedido&return=ViewOutTdcfcvList");
+        die();
+    }
 
-    if ($generar_ne == "S") {
+    // FC / ND: se conserva la SALIDA mediante Orden de Entrega.
+    if ($documento != "NC" && $generar_ne == "S") {
         header("Location: CrearNotaEntregaAutomaticaWait?id=$pedido&return=ViewOutTdcfcvList");
         die();
     }
@@ -292,5 +313,4 @@ if ($estatus == "PROCESADO") {
 
 }
 ?>
-
 <?= GetDebugMessage() ?>

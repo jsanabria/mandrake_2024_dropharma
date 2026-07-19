@@ -2392,12 +2392,16 @@ class Compra extends DbTable
 
         // nro_control
         $this->nro_control->setupEditAttributes();
+        if (!$this->nro_control->Raw) {
+            $this->nro_control->CurrentValue = HtmlDecode($this->nro_control->CurrentValue);
+        }
         $this->nro_control->EditValue = $this->nro_control->CurrentValue;
+        $this->nro_control->PlaceHolder = RemoveHtml($this->nro_control->caption());
 
         // fecha
         $this->fecha->setupEditAttributes();
-        $this->fecha->EditValue = $this->fecha->CurrentValue;
-        $this->fecha->EditValue = FormatDateTime($this->fecha->EditValue, $this->fecha->formatPattern());
+        $this->fecha->EditValue = FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
+        $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
 
         // descripcion
         $this->descripcion->setupEditAttributes();
@@ -2415,17 +2419,26 @@ class Compra extends DbTable
         // monto_exento
         $this->monto_exento->setupEditAttributes();
         $this->monto_exento->EditValue = $this->monto_exento->CurrentValue;
-        $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, $this->monto_exento->formatPattern());
+        $this->monto_exento->PlaceHolder = RemoveHtml($this->monto_exento->caption());
+        if (strval($this->monto_exento->EditValue) != "" && is_numeric($this->monto_exento->EditValue)) {
+            $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, null);
+        }
 
         // monto_gravado
         $this->monto_gravado->setupEditAttributes();
         $this->monto_gravado->EditValue = $this->monto_gravado->CurrentValue;
-        $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, $this->monto_gravado->formatPattern());
+        $this->monto_gravado->PlaceHolder = RemoveHtml($this->monto_gravado->caption());
+        if (strval($this->monto_gravado->EditValue) != "" && is_numeric($this->monto_gravado->EditValue)) {
+            $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, null);
+        }
 
         // alicuota
         $this->alicuota->setupEditAttributes();
         $this->alicuota->EditValue = $this->alicuota->CurrentValue;
-        $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, $this->alicuota->formatPattern());
+        $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
+        if (strval($this->alicuota->EditValue) != "" && is_numeric($this->alicuota->EditValue)) {
+            $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, null);
+        }
 
         // monto_iva
         $this->monto_iva->setupEditAttributes();
@@ -2451,7 +2464,11 @@ class Compra extends DbTable
 
         // ref_iva
         $this->ref_iva->setupEditAttributes();
+        if (!$this->ref_iva->Raw) {
+            $this->ref_iva->CurrentValue = HtmlDecode($this->ref_iva->CurrentValue);
+        }
         $this->ref_iva->EditValue = $this->ref_iva->CurrentValue;
+        $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
 
         // ret_islr
         $this->ret_islr->setupEditAttributes();
@@ -2461,7 +2478,11 @@ class Compra extends DbTable
 
         // ref_islr
         $this->ref_islr->setupEditAttributes();
+        if (!$this->ref_islr->Raw) {
+            $this->ref_islr->CurrentValue = HtmlDecode($this->ref_islr->CurrentValue);
+        }
         $this->ref_islr->EditValue = $this->ref_islr->CurrentValue;
+        $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
 
         // ret_municipal
         $this->ret_municipal->setupEditAttributes();
@@ -2475,8 +2496,8 @@ class Compra extends DbTable
 
         // fecha_registro
         $this->fecha_registro->setupEditAttributes();
-        $this->fecha_registro->EditValue = $this->fecha_registro->CurrentValue;
-        $this->fecha_registro->EditValue = FormatDateTime($this->fecha_registro->EditValue, $this->fecha_registro->formatPattern());
+        $this->fecha_registro->EditValue = FormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern());
+        $this->fecha_registro->PlaceHolder = RemoveHtml($this->fecha_registro->caption());
 
         // username
         $this->_username->setupEditAttributes();
@@ -2960,6 +2981,12 @@ class Compra extends DbTable
     	// Enter your code here
     	// To cancel, set return value to FALSE
     	// Valido que ya no se haya registrado el número de factura 
+        $date = new \DateTime($rsnew["fecha"]);
+        $date->modify('+1 day');
+        $rsnew["fecha"] = $date->format('Y-m-d');
+        $date = new \DateTime($rsnew["fecha_registro"]);
+        $date->modify('+1 day');
+        $rsnew["fecha_registro"] = $date->format('Y-m-d');
     	$proveedor = $rsnew["proveedor"];
     	$rsnew["documento"] = trim($rsnew["documento"]);
     	$tipo_documento = $rsnew["tipo_documento"];
@@ -3054,7 +3081,7 @@ class Compra extends DbTable
     	$monto_iva = $monto_gravado * ($alicuota/100);
     	$monto_total = $monto_exento + $monto_gravado + $monto_iva;
     	$monto_pagar = $monto_total;
-    	if($rsnew["aplica_retencion"] == "S") {
+    	if($rsnew["aplica_retencion"] == "S" AND $tipo_documento != "NC") {
     		//$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
     		$sql = "SELECT 
     					a.ci_rif AS rif, 
@@ -3080,17 +3107,21 @@ class Compra extends DbTable
     		$rsnew["ret_municipal"] = $MretMUNI;
 
             // Asignación de valores y generación de número
+            $nroRetencion = 0;
             if ($MretIVA > 0) {
+                if($nroRetencion == 0) $nroRetencion = ObtenerConsecutivoRetencion("RETENCION");
                 $rsnew["ret_iva"] = $MretIVA;
-                $rsnew["ref_iva"] = ObtenerConsecutivoMensual("RETENCION", "IVA");
+                $rsnew["ref_iva"] = $nroRetencion;
             }
             if ($MretSLR > 0) {
+                if($nroRetencion == 0) $nroRetencion = ObtenerConsecutivoRetencion("RETENCION");
                 $rsnew["ret_islr"] = $MretSLR;
-                $rsnew["ref_islr"] = ObtenerConsecutivoMensual("RETENCION", "ISLR");
+                $rsnew["ref_islr"] = $nroRetencion;
             }
             if ($MretMUNI > 0) {
+                if($nroRetencion == 0) $nroRetencion = ObtenerConsecutivoRetencion("RETENCION");
                 $rsnew["ret_municipal"] = $MretMUNI;
-                $rsnew["ref_municipal"] = ObtenerConsecutivoMensual("RETENCION", "MUNI");
+                $rsnew["ref_municipal"] = $nroRetencion;
             }
     	}
     	else {
@@ -3101,11 +3132,11 @@ class Compra extends DbTable
     		$rsnew["ret_iva"] = $retIVA;
     		$rsnew["ret_islr"] = $retISLR;
     		$rsnew["ret_municipal"] = $retMuni;
+            $rsnew["aplica_retencion"] = "N";
     	}
     	$rsnew["monto_iva"] = $monto_iva;
     	$rsnew["monto_total"] = $monto_total;
     	$rsnew["monto_pagar"] = $monto_pagar;
-    	$rsnew["fecha_registro"] = $rsnew["fecha"];
     	$rsnew["username"] = CurrentUserName();
     	$rsnew["tipo_iva"] = strval($retIVA);
     	$rsnew["tipo_islr"] = strval($retISLR);
@@ -3158,113 +3189,96 @@ class Compra extends DbTable
     public function rowUpdating($rsold, &$rsnew) {
     	// Enter your code here
     	// To cancel, set return value to FALSE
-    	if($rsold["tipo_documento"] != $rsnew["tipo_documento"]) {
-    		$this->CancelMessage = "No se puede cambiar el tipo de documento; verifique.";
-    		return FALSE;
-    	}
-    	$tipo_documento = $rsnew["tipo_documento"];
+        $date = new \DateTime($rsnew["fecha"]);
+        $date->modify('+1 day');
+        $rsnew["fecha"] = $date->format('Y-m-d');
+        $date = new \DateTime($rsnew["fecha_registro"]);
+        $date->modify('+1 day');
+        $rsnew["fecha_registro"] = $date->format('Y-m-d');
+    	$tipo_documento = $rsold["tipo_documento"];
     	if($rsold["anulado"] == "S" and $rsnew["anulado"] == "N") { 
     		if(!VerificaFuncion('019')) {
     			$this->CancelMessage = "No est&aacute; autorizado para cambiar a estatus activo; verifique.";
     			return FALSE;
     		}
     	}
-    /*
-    ///////////////////
-    	if($rsold["ref_iva"] != "") {
-    		if($rsold["ref_iva"] != $rsnew["ref_iva"]) {
-    			if(!VerificaFuncion('016')) {
-    				$this->CancelMessage = "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de IVA; verifique.";
-    				return FALSE;
-    			}
-    		}
-    	}
-    	if($rsold["ref_islr"] != "") {
-    		if($rsold["ref_islr"] != $rsnew["ref_islr"]) {
-    			if(!VerificaFuncion('017')) {
-    				$this->CancelMessage = "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de ISLR; verifique.";
-    				return FALSE;
-    			}
-    		}
-    	}
-    	if($rsold["ref_municipal"] != "") {
-    		if($rsold["ref_municipal"] != $rsnew["ref_municipal"]) {
-    			if(!VerificaFuncion('018')) {
-    				$this->CancelMessage = "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de Impuesto Municipal; verifique.";
-    				return FALSE;
-    			}
-    		}
-    	}
-    ///////////////////
-    	if($rsnew["tipo_documento"] == "FC" or trim($rsnew["tipo_documento"]) == "" or trim($rsnew["tipo_documento"]) == "RC") {
-    		$rsnew["doc_afectado"] == ""; 
-    	} 
-    	else {
-    		if($rsnew["doc_afectado"] == "") {
-    			$this->CancelMessage = "Debe colocar n&uacute;mero de documento afectado.";
-    			return FALSE;
-    		}
-    	}
-    	if($rsnew["tipo_documento"] == "FC") {
-    		if(trim($rsnew["nro_control"]) == "") {
-    			$this->CancelMessage = "Debe colocar n&uacute;mero de control.";
-    			return FALSE;
-    		}
-    	}
-    	if($tipo_documento == "RC") {
-    		$alicuota = 0.00;
-    		$rsnew["alicuota"] = $alicuota;
-    		$rsnew["aplica_retencion"] = "N";
-    	}
-    	$alicuota = floatval($rsnew["alicuota"]);
-    	$monto_exento = floatval($rsnew["monto_exento"]);
-    	$monto_gravado = floatval($rsnew["monto_gravado"]);
-    	$monto_iva = $monto_gravado * ($alicuota/100);
-    	$monto_total = $monto_exento + $monto_gravado + $monto_iva;
-    	$monto_pagar = $monto_total;
-    	if($rsnew["aplica_retencion"] == "S") {
-    		//$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
-    		$sql = "SELECT 
-    					a.ci_rif AS rif, 
-    					(SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_iva) AS tipo_iva, 
-    					(SELECT tarifa FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS tipo_islr, 
-    					(SELECT sustraendo FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS sustraendo, 
-    					(SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_mun) AS tipo_impmun 
-    				FROM
-    					proveedor AS a
-    				WHERE a.id = " . $rsnew["proveedor"] . ";";
-    		$row = ExecuteRow($sql);
-    		$retIVA = floatval($row["tipo_iva"]);
-    		$retISLR = floatval($row["tipo_islr"]);
-    		$sustraendo = floatval($row["sustraendo"]);
-    		$retMuni = floatval($row["tipo_impmun"]);
-    		$rif = trim($row["rif"]);
-    		$MretIVA = $monto_iva * ($retIVA/100);
-    		$MretSLR = (($monto_gravado) * ($retISLR/100)) - $sustraendo;
-    		$MretMUNI = $monto_gravado * ($retMuni/100);
-    		$monto_pagar = $monto_total - ($MretIVA+$MretSLR+$MretMUNI);
-    		$rsnew["ret_iva"] = $MretIVA;
-    		$rsnew["ret_islr"] = $MretSLR;
-    		$rsnew["ret_municipal"] = $MretMUNI;
-    	}
-    	else {
-    		$retIVA = 0.00;
-    		$retISLR = 0.00;
-    		$sustraendo = 0.00;
-    		$retMuni = 0.00;
-    		$rsnew["ret_iva"] = $retIVA;
-    		$rsnew["ret_islr"] = $retISLR;
-    		$rsnew["ret_municipal"] = $retMuni;
-    	}
-    	$rsnew["monto_iva"] = $monto_iva;
-    	$rsnew["monto_total"] = $monto_total;
-    	$rsnew["monto_pagar"] = $monto_pagar;
-    	$rsnew["username"] = CurrentUserName();
-    	$rsnew["tipo_iva"] = strval($retIVA);
-    	$rsnew["tipo_islr"] = strval($retISLR);
-    	$rsnew["sustraendo"] = $sustraendo;
-    	$rsnew["tipo_municipal"] = strval($retMuni);
-    */
+        if($rsold["ref_iva"] != "") {
+            if($rsold["ref_iva"] != $rsnew["ref_iva"]) {
+                if(!VerificaFuncion('016')) {
+                    $this->CancelMessage = "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de IVA; verifique.";
+                    return FALSE;
+                }
+            }
+        }
+        if($rsold["ref_islr"] != "") {
+            if($rsold["ref_islr"] != $rsnew["ref_islr"]) {
+                if(!VerificaFuncion('017')) {
+                    $this->CancelMessage = "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de ISLR; verifique.";
+                    return FALSE;
+                }
+            }
+        }
+        if($rsold["ref_municipal"] != "") {
+            if($rsold["ref_municipal"] != $rsnew["ref_municipal"]) {
+                if(!VerificaFuncion('018')) {
+                    $this->CancelMessage = "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de Impuesto Municipal; verifique.";
+                    return FALSE;
+                }
+            }
+        }
+        if($tipo_documento == "RC") {
+            $alicuota = 0.00;
+            $rsnew["alicuota"] = $alicuota;
+        }
+        $alicuota = floatval($rsnew["alicuota"]);
+        $monto_exento = floatval($rsnew["monto_exento"]);
+        $monto_gravado = floatval($rsnew["monto_gravado"]);
+        $monto_iva = $monto_gravado * ($alicuota/100);
+        $monto_total = $monto_exento + $monto_gravado + $monto_iva;
+        $monto_pagar = $monto_total;
+        if($rsold["aplica_retencion"] == "S" AND $tipo_documento != "NC") {
+            //$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = " . $rsnew["proveedor"] . ";";
+            $sql = "SELECT 
+                        a.ci_rif AS rif, 
+                        (SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_iva) AS tipo_iva, 
+                        (SELECT tarifa FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS tipo_islr, 
+                        (SELECT sustraendo FROM tabla_retenciones WHERE id = a.tipo_ret_islr) AS sustraendo, 
+                        (SELECT campo_descripcion FROM tabla WHERE campo_codigo = a.tipo_ret_mun) AS tipo_impmun 
+                    FROM
+                        proveedor AS a
+                    WHERE a.id = " . $rsold["proveedor"] . ";";
+            $row = ExecuteRow($sql);
+            $retIVA = floatval($row["tipo_iva"]);
+            $retISLR = floatval($row["tipo_islr"]);
+            $sustraendo = floatval($row["sustraendo"]);
+            $retMuni = floatval($row["tipo_impmun"]);
+            $rif = trim($row["rif"]);
+            $MretIVA = $monto_iva * ($retIVA/100);
+            $MretSLR = (($monto_gravado) * ($retISLR/100)) - $sustraendo;
+            $MretMUNI = $monto_gravado * ($retMuni/100);
+            $monto_pagar = $monto_total - ($MretIVA+$MretSLR+$MretMUNI);
+            $rsnew["ret_iva"] = $MretIVA;
+            $rsnew["ret_islr"] = $MretSLR;
+            $rsnew["ret_municipal"] = $MretMUNI;
+        }
+        else {
+            $retIVA = 0.00;
+            $retISLR = 0.00;
+            $sustraendo = 0.00;
+            $retMuni = 0.00;
+            $rsnew["ret_iva"] = $retIVA;
+            $rsnew["ret_islr"] = $retISLR;
+            $rsnew["ret_municipal"] = $retMuni;
+        }
+        $rsnew["monto_iva"] = $monto_iva;
+        $rsnew["monto_total"] = $monto_total;
+        $rsnew["monto_pagar"] = $monto_pagar;
+        $rsnew["username"] = CurrentUserName();
+        $rsnew["tipo_iva"] = strval($retIVA);
+        $rsnew["tipo_islr"] = strval($retISLR);
+        $rsnew["sustraendo"] = $sustraendo;
+        $rsnew["tipo_municipal"] = strval($retMuni);
+        $rsnew["tipo_municipal"] = strval($retMuni);
     	return TRUE;
     }
 

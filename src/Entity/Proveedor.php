@@ -66,15 +66,6 @@ class Proveedor extends AbstractEntity
     #[Column(name: "cuenta_gasto", type: "integer", nullable: true)]
     private ?int $cuentaGasto;
 
-    #[Column(name: "tipo_iva", type: "string", nullable: true)]
-    private ?string $tipoIva;
-
-    #[Column(name: "tipo_islr", type: "string", nullable: true)]
-    private ?string $tipoIslr;
-
-    #[Column(type: "decimal", nullable: true)]
-    private ?string $sustraendo;
-
     #[Column(name: "tipo_ret_iva", type: "string", nullable: true)]
     private ?string $tipoRetIva;
 
@@ -86,6 +77,15 @@ class Proveedor extends AbstractEntity
 
     #[Column(name: "tipo_ret_mun", type: "string", nullable: true)]
     private ?string $tipoRetMun;
+
+    #[Column(name: "tipo_iva", type: "string", nullable: true)]
+    private ?string $tipoIva;
+
+    #[Column(name: "tipo_islr", type: "string", nullable: true)]
+    private ?string $tipoIslr;
+
+    #[Column(type: "decimal", nullable: true)]
+    private ?string $sustraendo;
 
     #[Column(name: "tipo_impmun", type: "string", nullable: true)]
     private ?string $tipoImpmun;
@@ -233,39 +233,6 @@ class Proveedor extends AbstractEntity
         return $this;
     }
 
-    public function getTipoIva(): ?string
-    {
-        return HtmlDecode($this->tipoIva);
-    }
-
-    public function setTipoIva(?string $value): static
-    {
-        $this->tipoIva = RemoveXss($value);
-        return $this;
-    }
-
-    public function getTipoIslr(): ?string
-    {
-        return HtmlDecode($this->tipoIslr);
-    }
-
-    public function setTipoIslr(?string $value): static
-    {
-        $this->tipoIslr = RemoveXss($value);
-        return $this;
-    }
-
-    public function getSustraendo(): ?string
-    {
-        return $this->sustraendo;
-    }
-
-    public function setSustraendo(?string $value): static
-    {
-        $this->sustraendo = $value;
-        return $this;
-    }
-
     public function getTipoRetIva(): ?string
     {
         return HtmlDecode($this->tipoRetIva);
@@ -307,6 +274,39 @@ class Proveedor extends AbstractEntity
     public function setTipoRetMun(?string $value): static
     {
         $this->tipoRetMun = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTipoIva(): ?string
+    {
+        return HtmlDecode($this->tipoIva);
+    }
+
+    public function setTipoIva(?string $value): static
+    {
+        $this->tipoIva = RemoveXss($value);
+        return $this;
+    }
+
+    public function getTipoIslr(): ?string
+    {
+        return HtmlDecode($this->tipoIslr);
+    }
+
+    public function setTipoIslr(?string $value): static
+    {
+        $this->tipoIslr = RemoveXss($value);
+        return $this;
+    }
+
+    public function getSustraendo(): ?string
+    {
+        return $this->sustraendo;
+    }
+
+    public function setSustraendo(?string $value): static
+    {
+        $this->sustraendo = $value;
         return $this;
     }
 

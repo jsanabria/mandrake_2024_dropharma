@@ -647,6 +647,13 @@ loadjs.ready(["jquery"], function () {
         $(this).attr("data-original", $(this).val());
     });
 
+    $(document).on("focus", "[id$='_cantidad']", function () {
+        $(this).attr(
+            "data-original-cantidad",
+            $(this).val()
+        );
+    });
+
     $(document).on("change", ".tdcfcv-autorizado", function () {
         if (revirtiendoAutorizacionTdcfcv) return;
         prepararAutorizacionTdcfcv($(this), "item");
@@ -1308,6 +1315,7 @@ loadjs.ready(["jquery"], function () {
         .catch(err => console.error(err));
     };
 
+    /*
     window.myCalc = function (i) {
         const cantidad = parseFloat($("#x" + i + "_cantidad").val() || 0);
         const precioFull = parseFloat($("#x" + i + "_precioFull").val() || 0);
@@ -1328,6 +1336,165 @@ loadjs.ready(["jquery"], function () {
             return false;
         }
     };
+    */
+    window.myCalc = function (i) {
+        const pedido = parseInt(
+            $("#pedido").val() || 0,
+            10
+        );
+
+        const idItem = parseInt(
+            $("#x" + i + "_id_item").val() || 0,
+            10
+        );
+
+        const cantidad = parseFloat(
+            $("#x" + i + "_cantidad").val() || 0
+        );
+
+        const precioFull = parseFloat(
+            $("#x" + i + "_precioFull").val() || 0
+        );
+
+        const descuento = parseFloat(
+            $("#x" + i + "_descuento").val() || 0
+        );
+
+        const descuento2 = parseFloat(
+            $("#x" + i + "_descuento2").val() || 0
+        );
+
+        let precio = precioFull -
+            (precioFull * (descuento / 100));
+
+        precio = precio -
+            (precio * (descuento2 / 100));
+
+        precio = redondearDecimales(precio, 2);
+
+        const total = redondearDecimales(
+            cantidad * precio,
+            2
+        );
+
+        $("#x" + i + "_precio").val(precio);
+        $("#x" + i + "_total").val(total);
+
+        if (cantidad <= 0) {
+            alertMsg("La cantidad debe ser mayor a cero");
+
+            $("#x" + i + "_cantidad").val("");
+            $("#x" + i + "_total").val("0.00");
+
+            return false;
+        }
+
+        const articulo = parseInt(
+            $("#x" + i + "_articulo").val() || 0,
+            10
+        );
+
+        if (articulo <= 0) {
+            alertMsg("No se pudo identificar el artículo.");
+            return false;
+        }
+
+        const cantidadOriginal = parseFloat(
+            $("#x" + i + "_cantidad")
+                .attr("data-original-cantidad") || 0
+        );
+
+        const cantidadCambio =
+            Math.abs(cantidad - cantidadOriginal) > 0.0001;
+
+        if (!cantidadCambio) {
+            return true;
+        }
+
+        $.ajax({
+            url: "include/tdcfcv/validar_existencia_articulo_tdcfcv.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                pedido: pedido,
+                id_item: idItem,
+                articulo: articulo,
+                cantidad: cantidad
+            }
+        })
+        .done(function (respuesta) {
+            respuesta = normalizeJson(respuesta);
+
+            if (respuesta.estatus != 1) {
+                alertMsg(
+                    respuesta.mensaje ||
+                    "No fue posible validar la cantidad."
+                );
+
+                return;
+            }
+
+            if (respuesta.cantidad_modificable === false) {
+                alertMsg(
+                    respuesta.mensaje ||
+                    "La factura proviene de una Orden de Entrega y no permite modificar la cantidad."
+                );
+
+                const cantidadOriginal = parseFloat(
+                    $("#x" + i + "_cantidad")
+                        .attr("data-original-cantidad") || 0
+                );
+
+                $("#x" + i + "_cantidad")
+                    .val(cantidadOriginal)
+                    .prop("disabled", true);
+
+                const totalOriginal = redondearDecimales(
+                    cantidadOriginal * precio,
+                    2
+                );
+
+                $("#x" + i + "_total").val(totalOriginal);
+
+                return;
+            }
+
+            if (!respuesta.valida_existencia) {
+                return;
+            }
+
+            if (!respuesta.cantidad_valida) {
+                alertMsg(
+                    "La cantidad solicitada (" +
+                    respuesta.cantidad_solicitada +
+                    ") es mayor a la existencia disponible (" +
+                    respuesta.cantidad_disponible +
+                    ")."
+                );
+
+                $("#x" + i + "_cantidad")
+                    .val(cantidadOriginal)
+                    .focus();
+
+                const totalOriginal = redondearDecimales(
+                    cantidadOriginal * precio,
+                    2
+                );
+
+                $("#x" + i + "_total").val(totalOriginal);
+            }            
+        })
+        .fail(function (xhr, status, errorThrown) {
+            console.log(xhr.responseText);
+
+            alertMsg(
+                "Error validando la existencia del artículo: " +
+                errorThrown
+            );
+        });
+
+        return true;
+    }; 
 
     window.redondearDecimales = function (numero, decimales) {
         numero = parseFloat(numero || 0);
@@ -1954,17 +2121,19 @@ $impresoraFiscal = strtoupper(trim(
       <div class="modal-body bg-light text-dark text-center py-4">
         <i class="fa-solid fa-boxes-stacked text-info d-block mb-3" style="font-size: 2.5rem;"></i>
         <p class="mb-0 fs-6">
-          ¿Desea generar automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados?
+          Se generará automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados.
         </p>
       </div>
       <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <!--
         <button type="button" id="btnGenerarNENo" class="btn btn-sm btn-outline-secondary px-4">
           <i class="fa-solid fa-xmark me-1"></i>
           No, continuar sin generarla
         </button>
+        -->
         <button type="button" id="btnGenerarNESi" class="btn btn-sm btn-info text-white px-4 fw-bold">
           <i class="fa-solid fa-check me-1"></i>
-          Sí, generar
+          Generar
         </button>
       </div>
     </div>

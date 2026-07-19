@@ -144,6 +144,50 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->tipo_ret_iva->Visible) { // tipo_ret_iva ?>
+    <tr id="r_tipo_ret_iva"<?= $Page->tipo_ret_iva->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_ret_iva"><?= $Page->tipo_ret_iva->caption() ?></span></td>
+        <td data-name="tipo_ret_iva"<?= $Page->tipo_ret_iva->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_iva">
+<span<?= $Page->tipo_ret_iva->viewAttributes() ?>>
+<?= $Page->tipo_ret_iva->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tipo_ret_islr_concepto->Visible) { // tipo_ret_islr_concepto ?>
+    <tr id="r_tipo_ret_islr_concepto"<?= $Page->tipo_ret_islr_concepto->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_ret_islr_concepto"><?= $Page->tipo_ret_islr_concepto->caption() ?></span></td>
+        <td data-name="tipo_ret_islr_concepto"<?= $Page->tipo_ret_islr_concepto->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_islr_concepto">
+<span<?= $Page->tipo_ret_islr_concepto->viewAttributes() ?>>
+<?= $Page->tipo_ret_islr_concepto->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tipo_ret_islr->Visible) { // tipo_ret_islr ?>
+    <tr id="r_tipo_ret_islr"<?= $Page->tipo_ret_islr->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_ret_islr"><?= $Page->tipo_ret_islr->caption() ?></span></td>
+        <td data-name="tipo_ret_islr"<?= $Page->tipo_ret_islr->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_islr">
+<span<?= $Page->tipo_ret_islr->viewAttributes() ?>>
+<?= $Page->tipo_ret_islr->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
+<?php if ($Page->tipo_ret_mun->Visible) { // tipo_ret_mun ?>
+    <tr id="r_tipo_ret_mun"<?= $Page->tipo_ret_mun->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_tipo_ret_mun"><?= $Page->tipo_ret_mun->caption() ?></span></td>
+        <td data-name="tipo_ret_mun"<?= $Page->tipo_ret_mun->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_mun">
+<span<?= $Page->tipo_ret_mun->viewAttributes() ?>>
+<?= $Page->tipo_ret_mun->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->cta_bco->Visible) { // cta_bco ?>
     <tr id="r_cta_bco"<?= $Page->cta_bco->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_proveedor_cta_bco"><?= $Page->cta_bco->caption() ?></span></td>

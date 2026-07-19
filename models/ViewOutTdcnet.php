@@ -5226,7 +5226,7 @@ class ViewOutTdcnet extends DbTable
     		$this->fecha->CellAttrs["style"] = $color;
     		$this->total->CellAttrs["style"] = $color;
     	}
-        $valor = strtoupper(trim($this->entregado->CurrentValue));
+        $valor = strtoupper(trim($this->entregado->CurrentValue ?? "N"));
         if ($valor == "SI" || $valor == "S") {
             $this->entregado->ViewValue = '<span class="text-success fw-bold" title="Entregado">
                 <i class="fa-solid fa-circle-check"></i> SI

@@ -25,10 +25,10 @@ $GLOBALS["RIF"] = substr($row["RIF"],0,1)."-".substr($row["RIF"],1,strlen($row["
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	// Cabecera de p?gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
+		// Consulto datos de la compa??a 
 		require("../include/connect.php");
 		// $date = new DateTime(trim($GLOBALS["anho"]) . "-" . trim($GLOBALS["mes"]) . "-01");
 		$date = new DateTime("2073-09-29");
@@ -56,18 +56,18 @@ class PDF extends FPDF
 		$this->Ln();
 		//Linea 2
 		$this->Cell(56);
-		$this->Cell(0,3,"LEY IVA – ART.11: “La Administración Tributaria podrá designar como responsable del pago del impuesto, en calidad",0,0,'L');
+		$this->Cell(0,3,"LEY IVA ? ART.11: ?La Administraci?n Tributaria podr? designar como responsable del pago del impuesto, en calidad",0,0,'L');
 		$this->Ln();
 		//Linea 3
 		$this->Cell(56);
-		$this->Cell(149,3,"de agente de retención, a quienes por sus funciones públicas o por razón de sus actividades privadas intervengan",0,0,'L');
+		$this->Cell(149,3,"de agente de retenci?n, a quienes por sus funciones p?blicas o por raz?n de sus actividades privadas intervengan",0,0,'L');
 		$this->Cell(25,3,"0.NRO.COMPROBANTE",0,0,'L');
 		$this->Cell(5,3,"PAG.",0,0,'L');
 		$this->Cell(20,3,"1.FECHA",0,0,'R');
 		$this->Ln();
 		//Linea 4
 		$this->Cell(56);
-		$this->Cell(149,3,"en operaciones gravadas con el impuesto establecido en este decreto con Rango, Valor y Fuerza de Ley”",0,0,'L'); 
+		$this->Cell(149,3,"en operaciones gravadas con el impuesto establecido en este decreto con Rango, Valor y Fuerza de Ley?",0,0,'L'); 
 		$this->Cell(24,3,"-----------------",0,0,'L');		
 		$this->Cell(1,3,"",0,0,'L');		
 		$this->Cell(5,3,"----",0,0,'L');		
@@ -109,7 +109,7 @@ class PDF extends FPDF
 		$this->Cell(22,3,"",0,0,'L');
 		$this->Cell(50,3,$rif,0,0,'C');
 		$this->Cell(113,3,"",0,0,'L');
-		$this->Cell(20,3,"AÑO:".$GLOBALS["anho"]."/"."MES:".$GLOBALS["mes"],0,0,'R');
+		$this->Cell(20,3,"A?O:".$GLOBALS["anho"]."/"."MES:".$GLOBALS["mes"],0,0,'R');
 		$this->Ln(7);
 		
 		//Linea 9
@@ -183,13 +183,13 @@ class PDF extends FPDF
 		require("../include/desconnect.php"); 
 	}
 	
-	// Pie de página
+	// Pie de p?gina
 	function Footer()
 	{
 		$date = date_create(trim($GLOBALS["anho"]) . "-" . trim($GLOBALS["mes"]) . "-01");
 		$fecha_solictud = date_format($date, 'Y-m-d');
 		$fecha_entrega = date('d/m/Y');
-		$nota = "Este comprobante se emite en función a lo establecido en el artículo 16 de la Providencia Administrativa Nº SNAT/2025/000054 de fecha 02/07/2025";
+		$nota = "Este comprobante se emite en funci?n a lo establecido en el art?culo 16 de la Providencia Administrativa N? SNAT/2025/000054 de fecha 02/07/2025";
 		$this->Image('../images/firma_reterncion.jpg',10,170,50);
 
 		$this->SetY(-60);
@@ -212,7 +212,7 @@ class PDF extends FPDF
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaci?n del objeto de la clase heredada
 $pdf = new PDF();
 $pdf->SetMargins(10,15,10);
 $pdf->AliasNbPages();
@@ -274,7 +274,7 @@ while($row = mysqli_fetch_array($rs))
 	$pdf->Cell(8,3,$row["tipo_trans"],'0','0','C');
 	$pdf->Cell(18,3,$row["factura_afectada"],'0','0','C');
 	$pdf->Cell(20,3,number_format($row["total_monto"],2,",","."),'0','0','R');
-	$pdf->Cell(22,3,number_format($row["monto_sin_iva"],2,",","."),'0','0','R');
+	$pdf->Cell(22,3,number_format($row["monto_sin_iva"] ?? 0,2,",","."),'0','0','R');
 	$pdf->Cell(24,3,number_format($row["base_imponible"],2,",","."),'0','0','R');
 	$pdf->Cell(14,3,$row["alicuota"]."%",'0','0','R');
 	$pdf->Cell(22,3,number_format($row["impuesto_iva"],2,",","."),'0','0','R');

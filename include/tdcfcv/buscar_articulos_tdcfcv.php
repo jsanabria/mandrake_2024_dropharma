@@ -149,7 +149,7 @@ $rows = ExecuteRows("
                 -
                 ((c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100))) * (IFNULL(b.descuento, 0) / 100))
             ), 0
-        ) AS precio 
+        ) AS precio, IFNULL(a.codigo, '') AS codigo  
     FROM articulo AS a
     LEFT JOIN fabricante AS b ON b.Id = a.fabricante
     INNER JOIN tarifa_articulo AS c ON c.articulo = a.id AND c.tarifa = {$tarifa}
@@ -242,6 +242,7 @@ foreach ($rows as $row) {
     $principioActivo = TdcfcvH($row["principio_activo"]);
     $presentacion = TdcfcvH($row["presentacion"]);
     $fabricanteNombre = TdcfcvH($row["fabricante"]);
+    $codigo_articulo = TdcfcvH($row["codigo"]);
 
     $html .= '<tr>';
 
@@ -259,6 +260,7 @@ foreach ($rows as $row) {
     $html .= '<strong>' . $nombreComercial . '</strong><br>';
     $html .= '<small>' . $principioActivo . '</small><br>';
     $html .= '<small><i>' . $presentacion . '</i></small><br>';
+    $html .= '<small><i style="display:inline-block; max-width: 100px; word-break: break-all;">Cod.:' . $codigo_articulo . '</i></small><br>';
     $html .= '<strong><small>Fabricante: ' . $fabricanteNombre . '</small></strong><br>';
     $html .= '<small>Unidad</small>';
     $html .= '</td>';

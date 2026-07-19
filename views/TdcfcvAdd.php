@@ -113,6 +113,24 @@ $rowParametro111 = ExecuteRow("SELECT valor1 FROM parametro WHERE codigo = '111'
 if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
     $preguntarNE = true;
 }
+
+// Solo se ofrece la Nota de Recepción automática cuando la Nota de Crédito
+// contiene al menos un artículo que realmente maneja inventario.
+$tieneArticulosInventario = false;
+
+if (intval($pedido) > 0) {
+    $cantidadArticulosInventario = intval(ExecuteScalar("
+        SELECT COUNT(es.id)
+        FROM entradas_salidas AS es
+        INNER JOIN articulo AS a ON a.id = es.articulo
+        WHERE es.id_documento = " . intval($pedido) . "
+          AND es.tipo_documento = 'TDCFCV'
+          AND IFNULL(a.articulo_inventario, 'N') = 'S'
+          AND IFNULL(es.cantidad_articulo, 0) > 0
+    "));
+
+    $tieneArticulosInventario = ($cantidadArticulosInventario > 0);
+}
 ?>
 
 
@@ -645,6 +663,13 @@ loadjs.ready(["jquery"], function () {
 
     $(document).on("focus", ".tdcfcv-autorizado, #descTransferencista", function () {
         $(this).attr("data-original", $(this).val());
+    });
+
+    $(document).on("focus", "[id$='_cantidad']", function () {
+        $(this).attr(
+            "data-original-cantidad",
+            $(this).val()
+        );
     });
 
     $(document).on("change", ".tdcfcv-autorizado", function () {
@@ -1308,6 +1333,7 @@ loadjs.ready(["jquery"], function () {
         .catch(err => console.error(err));
     };
 
+    /*
     window.myCalc = function (i) {
         const cantidad = parseFloat($("#x" + i + "_cantidad").val() || 0);
         const precioFull = parseFloat($("#x" + i + "_precioFull").val() || 0);
@@ -1328,6 +1354,165 @@ loadjs.ready(["jquery"], function () {
             return false;
         }
     };
+    */
+    window.myCalc = function (i) {
+        const pedido = parseInt(
+            $("#pedido").val() || 0,
+            10
+        );
+
+        const idItem = parseInt(
+            $("#x" + i + "_id_item").val() || 0,
+            10
+        );
+
+        const cantidad = parseFloat(
+            $("#x" + i + "_cantidad").val() || 0
+        );
+
+        const precioFull = parseFloat(
+            $("#x" + i + "_precioFull").val() || 0
+        );
+
+        const descuento = parseFloat(
+            $("#x" + i + "_descuento").val() || 0
+        );
+
+        const descuento2 = parseFloat(
+            $("#x" + i + "_descuento2").val() || 0
+        );
+
+        let precio = precioFull -
+            (precioFull * (descuento / 100));
+
+        precio = precio -
+            (precio * (descuento2 / 100));
+
+        precio = redondearDecimales(precio, 2);
+
+        const total = redondearDecimales(
+            cantidad * precio,
+            2
+        );
+
+        $("#x" + i + "_precio").val(precio);
+        $("#x" + i + "_total").val(total);
+
+        if (cantidad <= 0) {
+            alertMsg("La cantidad debe ser mayor a cero");
+
+            $("#x" + i + "_cantidad").val("");
+            $("#x" + i + "_total").val("0.00");
+
+            return false;
+        }
+
+        const articulo = parseInt(
+            $("#x" + i + "_articulo").val() || 0,
+            10
+        );
+
+        if (articulo <= 0) {
+            alertMsg("No se pudo identificar el artículo.");
+            return false;
+        }
+
+        const cantidadOriginal = parseFloat(
+            $("#x" + i + "_cantidad")
+                .attr("data-original-cantidad") || 0
+        );
+
+        const cantidadCambio =
+            Math.abs(cantidad - cantidadOriginal) > 0.0001;
+
+        if (!cantidadCambio) {
+            return true;
+        }
+
+        $.ajax({
+            url: "include/tdcfcv/validar_existencia_articulo_tdcfcv.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                pedido: pedido,
+                id_item: idItem,
+                articulo: articulo,
+                cantidad: cantidad
+            }
+        })
+        .done(function (respuesta) {
+            respuesta = normalizeJson(respuesta);
+
+            if (respuesta.estatus != 1) {
+                alertMsg(
+                    respuesta.mensaje ||
+                    "No fue posible validar la cantidad."
+                );
+
+                return;
+            }
+
+            if (respuesta.cantidad_modificable === false) {
+                alertMsg(
+                    respuesta.mensaje ||
+                    "La factura proviene de una Orden de Entrega y no permite modificar la cantidad."
+                );
+
+                const cantidadOriginal = parseFloat(
+                    $("#x" + i + "_cantidad")
+                        .attr("data-original-cantidad") || 0
+                );
+
+                $("#x" + i + "_cantidad")
+                    .val(cantidadOriginal)
+                    .prop("disabled", true);
+
+                const totalOriginal = redondearDecimales(
+                    cantidadOriginal * precio,
+                    2
+                );
+
+                $("#x" + i + "_total").val(totalOriginal);
+
+                return;
+            }
+
+            if (!respuesta.valida_existencia) {
+                return;
+            }
+
+            if (!respuesta.cantidad_valida) {
+                alertMsg(
+                    "La cantidad solicitada (" +
+                    respuesta.cantidad_solicitada +
+                    ") es mayor a la existencia disponible (" +
+                    respuesta.cantidad_disponible +
+                    ")."
+                );
+
+                $("#x" + i + "_cantidad")
+                    .val(cantidadOriginal)
+                    .focus();
+
+                const totalOriginal = redondearDecimales(
+                    cantidadOriginal * precio,
+                    2
+                );
+
+                $("#x" + i + "_total").val(totalOriginal);
+            }            
+        })
+        .fail(function (xhr, status, errorThrown) {
+            console.log(xhr.responseText);
+
+            alertMsg(
+                "Error validando la existencia del artículo: " +
+                errorThrown
+            );
+        });
+
+        return true;
+    }; 
 
     window.redondearDecimales = function (numero, decimales) {
         numero = parseFloat(numero || 0);
@@ -1384,23 +1569,53 @@ loadjs.ready(["jquery"], function () {
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
 
-                    // Procede con el redireccionamiento final una vez decidido si se genera o no la Orden de Entrega.
-                    const continuarProceso = function (generarNE) {
+                    const tipoDocumentoFiscal = String(response.tipo_doc || "").toUpperCase();
+                    const tieneArticulosInventario = <?= $tieneArticulosInventario ? "true" : "false" ?>;
+
+                    // La decisión de inventario viaja separada para no mezclar
+                    // la Orden de Entrega (salida) con la Nota de Recepción (entrada).
+                    const continuarProceso = function (generarNE, generarNR) {
                         btn.prop("disabled", true)
                         .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
 
                         window.location.href =
                             "TdcfcvProcess?pedido=" + i +
                             "&PorDesAct=" + PorDesAct +
-                            "&generar_ne=" + generarNE;
+                            "&generar_ne=" + generarNE +
+                            "&generar_nr=" + generarNR;
                     };
 
-                    if (idDocumentoPadre == 0 && preguntarNE) {
-                        // Cerramos el modal de confirmación fiscal y, apenas termine de ocultarse,
-                        // abrimos el modal para preguntar por la Orden de Entrega.
-                        const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
-                        const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
-                        const modalNE = new bootstrap.Modal(document.getElementById('modalConfirmarNE'));
+                    const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
+                    const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
+
+                    // NOTA DE CRÉDITO: los artículos de inventario deben regresar
+                    // mediante una Nota de Recepción automática.
+                    if (tipoDocumentoFiscal === "NC" && tieneArticulosInventario) {
+                        const modalNR = bootstrap.Modal.getOrCreateInstance(
+                            document.getElementById('modalConfirmarNR')
+                        );
+
+                        modalFiscalEl.addEventListener('hidden.bs.modal', function alOcultarFiscalNR() {
+                            modalFiscalEl.removeEventListener('hidden.bs.modal', alOcultarFiscalNR);
+                            modalNR.show();
+                        });
+
+                        modalFiscal.hide();
+
+                        $("#btnGenerarNRSi").off("click").on("click", function () {
+                            modalNR.hide();
+                            continuarProceso("N", "S");
+                        });
+
+                        return;
+                    }
+
+                    // FACTURA / NOTA DE DÉBITO: se conserva intacto el flujo
+                    // actual de Orden de Entrega, siempre que no provenga de otro documento.
+                    if (tipoDocumentoFiscal !== "NC" && idDocumentoPadre == 0 && preguntarNE) {
+                        const modalNE = bootstrap.Modal.getOrCreateInstance(
+                            document.getElementById('modalConfirmarNE')
+                        );
 
                         modalFiscalEl.addEventListener('hidden.bs.modal', function alHacerseInvisible() {
                             modalFiscalEl.removeEventListener('hidden.bs.modal', alHacerseInvisible);
@@ -1411,15 +1626,15 @@ loadjs.ready(["jquery"], function () {
 
                         $("#btnGenerarNESi").off("click").on("click", function () {
                             modalNE.hide();
-                            continuarProceso("S");
+                            continuarProceso("S", "N");
                         });
 
                         $("#btnGenerarNENo").off("click").on("click", function () {
                             modalNE.hide();
-                            continuarProceso("N");
+                            continuarProceso("N", "N");
                         });
                     } else {
-                        continuarProceso("N");
+                        continuarProceso("N", "N");
                     }
                 });                
             } else {
@@ -1954,17 +2169,47 @@ $impresoraFiscal = strtoupper(trim(
       <div class="modal-body bg-light text-dark text-center py-4">
         <i class="fa-solid fa-boxes-stacked text-info d-block mb-3" style="font-size: 2.5rem;"></i>
         <p class="mb-0 fs-6">
-          ¿Desea generar automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados?
+          Se generará automáticamente una <strong>Orden de Entrega</strong> para los artículos de inventario facturados.
         </p>
       </div>
       <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <!--
         <button type="button" id="btnGenerarNENo" class="btn btn-sm btn-outline-secondary px-4">
           <i class="fa-solid fa-xmark me-1"></i>
           No, continuar sin generarla
         </button>
+        -->
         <button type="button" id="btnGenerarNESi" class="btn btn-sm btn-info text-white px-4 fw-bold">
           <i class="fa-solid fa-check me-1"></i>
-          Sí, generar
+          Generar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalConfirmarNR" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarNRLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-success shadow-lg">
+      <div class="modal-header bg-success text-white py-2">
+        <h5 class="modal-title" id="modalConfirmarNRLabel">
+          <i class="fa-solid fa-box-open me-2"></i> Nota de Recepción
+        </h5>
+      </div>
+      <div class="modal-body bg-light text-dark text-center py-4">
+        <i class="fa-solid fa-warehouse text-success d-block mb-3" style="font-size: 2.5rem;"></i>
+        <p class="mb-2 fs-6">
+          Esta Nota de Crédito contiene artículos que manejan inventario.
+        </p>
+        <p class="mb-0 fs-6">
+          Se generará automáticamente una <strong>Nota de Recepción</strong>
+          para reincorporarlos al inventario.
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <button type="button" id="btnGenerarNRSi" class="btn btn-sm btn-success px-4 fw-bold">
+          <i class="fa-solid fa-check me-1"></i>
+          Generar Nota de Recepción
         </button>
       </div>
     </div>
@@ -2173,5 +2418,4 @@ $impresoraFiscal = strtoupper(trim(
         </div>
     </div>
 </div>
-
 <?= GetDebugMessage() ?>

@@ -1918,6 +1918,7 @@ class ArticuloView extends Articulo
         // Obtengo la cantidad real del articulo y determino de donde se toman las salidad, si de Nota de Entrega o Factura
         $sql = "SELECT valor1 AS tipo_documento FROM parametro WHERE codigo = '050';";
         $tipo_documento = 'TDCNET';
+        $almacen_defecto = ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '002'");
         if($row = ExecuteRow($sql)) $tipo_documento = $row["tipo_documento"];
         $sql = "SELECT 
                     SUM(x.cantidad_movimiento) AS cantidad 
@@ -1931,7 +1932,7 @@ class ArticuloView extends Articulo
                                 b.tipo_documento = a.tipo_documento
                                 AND b.id = a.id_documento 
                             JOIN almacen AS c ON
-                                c.codigo = a.almacen AND c.movimiento = 'S'
+                                c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
                                 (a.tipo_documento = 'TDCAEN' AND b.estatus <> 'ANULADO') OR 
@@ -1945,7 +1946,7 @@ class ArticuloView extends Articulo
                                 b.tipo_documento = a.tipo_documento
                                 AND b.id = a.id_documento 
                             JOIN almacen AS c ON
-                                c.codigo = a.almacen AND c.movimiento = 'S'
+                                c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
                                 (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
@@ -1978,7 +1979,7 @@ class ArticuloView extends Articulo
                                 b.tipo_documento = a.tipo_documento
                                 AND b.id = a.id_documento 
                             JOIN almacen AS c ON
-                                c.codigo = a.almacen AND c.movimiento = 'S'
+                                c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
                                 (a.tipo_documento = 'TDCAEN' AND b.estatus <> 'ANULADO') OR 
@@ -1994,7 +1995,7 @@ class ArticuloView extends Articulo
                                 b.tipo_documento = a.tipo_documento
                                 AND b.id = a.id_documento 
                             JOIN almacen AS c ON
-                                c.codigo = a.almacen AND c.movimiento = 'S'
+                                c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
                                 (a.tipo_documento IN ('$tipo_documento', 'TDCASA') AND b.estatus <> 'ANULADO') 
@@ -2064,7 +2065,7 @@ class ArticuloView extends Articulo
                         b.tipo_documento = a.tipo_documento
                         AND b.id = a.id_documento 
                     JOIN almacen AS c ON
-                        c.codigo = a.almacen AND c.movimiento = 'S'
+                        c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                 WHERE
                     a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO' 
                     AND a.articulo = " . $this->id->CurrentValue . " AND a.newdata = 'S' 
@@ -2103,7 +2104,7 @@ class ArticuloView extends Articulo
                         b.tipo_documento = a.tipo_documento
                         AND b.id = a.id_documento 
                     JOIN almacen AS c ON
-                        c.codigo = a.almacen AND c.movimiento = 'S'
+                        c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                 WHERE
                     a.tipo_documento IN ('TDCPDC')
                     AND a.articulo = " . $this->id->CurrentValue . " AND b.estatus = 'NUEVO' AND a.newdata = 'S' 
@@ -2137,7 +2138,7 @@ class ArticuloView extends Articulo
                                 b.tipo_documento = a.tipo_documento
                                 AND b.id = a.id_documento 
                             JOIN almacen AS c ON
-                                c.codigo = a.almacen AND c.movimiento = 'S'
+                                c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
                                 (a.tipo_documento = 'TDCAEN' AND b.estatus <> 'ANULADO') OR 
@@ -2153,7 +2154,7 @@ class ArticuloView extends Articulo
                                 b.tipo_documento = a.tipo_documento
                                 AND b.id = a.id_documento 
                             JOIN almacen AS c ON
-                                c.codigo = a.almacen AND c.movimiento = 'S'
+                                c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
                                 (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 

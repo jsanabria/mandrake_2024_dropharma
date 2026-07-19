@@ -127,6 +127,7 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
+            "user": <?= $Page->user->toClientList($Page) ?>,
         })
 
         // Filters
@@ -266,15 +267,29 @@ if (!$Page->user->UseFilter) {
 ?>
     <div id="xs_user" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->user->UseFilter ? " ew-filter-field" : "" ?>">
         <div class="d-flex my-1 my-sm-0">
-            <label for="x_user" class="ew-search-caption ew-label"><?= $Page->user->caption() ?></label>
+            <label class="ew-search-caption ew-label"><?= $Page->user->caption() ?></label>
             <div class="ew-search-operator">
 <?= $Language->phrase("LIKE") ?>
 <input type="hidden" name="z_user" id="z_user" value="LIKE">
 </div>
         </div>
         <div id="el_view_audittrail_seniat_user" class="ew-search-field">
-<input type="<?= $Page->user->getInputTextType() ?>" name="x_user" id="x_user" data-table="view_audittrail_seniat" data-field="x_user" value="<?= $Page->user->EditValue ?>" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->user->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->user->formatPattern()) ?>"<?= $Page->user->editAttributes() ?>>
+<?php
+if (IsRTL()) {
+    $Page->user->EditAttrs["dir"] = "rtl";
+}
+?>
+<span id="as_x_user" class="ew-auto-suggest">
+    <input type="<?= $Page->user->getInputTextType() ?>" class="form-control" name="sv_x_user" id="sv_x_user" value="<?= RemoveHtml($Page->user->EditValue) ?>" autocomplete="off" size="30" maxlength="255" placeholder="<?= HtmlEncode($Page->user->getPlaceHolder()) ?>" data-placeholder="<?= HtmlEncode($Page->user->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->user->formatPattern()) ?>"<?= $Page->user->editAttributes() ?>>
+</span>
+<selection-list hidden class="form-control" data-table="view_audittrail_seniat" data-field="x_user" data-input="sv_x_user" data-value-separator="<?= $Page->user->displayValueSeparatorAttribute() ?>" name="x_user" id="x_user" value="<?= HtmlEncode($Page->user->AdvancedSearch->SearchValue) ?>"></selection-list>
 <div class="invalid-feedback"><?= $Page->user->getErrorMessage(false) ?></div>
+<script>
+loadjs.ready("fview_audittrail_seniatsrch", function() {
+    fview_audittrail_seniatsrch.createAutoSuggest(Object.assign({"id":"x_user","forceSelect":false}, { lookupAllDisplayFields: <?= $Page->user->Lookup->LookupAllDisplayFields ? "true" : "false" ?> }, ew.vars.tables.view_audittrail_seniat.fields.user.autoSuggestOptions));
+});
+</script>
+<?= $Page->user->Lookup->getParamTag($Page, "p_x_user") ?>
 </div>
         <div class="d-flex my-1 my-sm-0">
         </div><!-- /.ew-search-field -->

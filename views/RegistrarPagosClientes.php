@@ -38,7 +38,7 @@ if ($accion == "refrescar") {
                             WHEN a.moneda <> 'Bs.' THEN a.total 
                             ELSE (a.total / NULLIF(a.tasa_dia, 0)) 
                         END AS totalDivisa, 
-                        a.tasa_dia, a.total AS total_factura   
+                        a.tasa_dia, a.total AS total_factura, a.iva   
                 FROM salidas AS a 
                 JOIN cliente AS b ON b.id = a.cliente 
                 WHERE a.id = " . QuotedValue($id_compra, 1);
@@ -150,8 +150,38 @@ if ($accion == "refrescar") {
     // Totales del documento:
     // - total     = Bs (por tu CASE)
     // - totalDivisa = Divisa del doc (por tu CASE)
-    $total_bs  = floatval($factura["total"] ?? 0);
+    $total_bs_original = floatval($factura["total"] ?? 0);
+    $total_bs  = $total_bs_original;
     $total_div = floatval($factura["totalDivisa"] ?? 0);
+
+    // Retenciones RI/RJ/RR: el IVA se maneja en Bs.
+    // Si la factura fue emitida en divisas, convertimos salidas.iva
+    // usando la tasa del documento antes de calcular o validar la retención.
+    $iva_documento = floatval($factura["iva"] ?? 0);
+    $iva_factura = round(
+        ($moneda_doc !== "Bs.") ? ($iva_documento * $tasa_dia) : $iva_documento,
+        2
+    );
+    $retencion_pct = 0;
+    $monto_metodo_default = null;
+
+    if (in_array($tipo_pago_actual, ["RI", "RJ"], true)) {
+        $retencion_pct = floatval(ExecuteScalar("
+            SELECT valor3
+            FROM parametro
+            WHERE codigo = '009'
+              AND valor1 = '" . AdjustSql($tipo_pago_actual) . "'
+            LIMIT 1
+        ") ?: 0);
+
+        if ($retencion_pct > 0) {
+            $monto_metodo_default = round(($iva_factura * $retencion_pct) / 100, 2);
+        } else {
+            $monto_metodo_default = 0;
+        }
+    } elseif ($tipo_pago_actual === "RR") {
+        $monto_metodo_default = 0;
+    }
 
 // ... dentro del bloque if ($accion == "refrescar")
 
@@ -180,7 +210,15 @@ if ($accion == "refrescar") {
         }
     }
 
-    // Cálculo final restando del total original de la factura
+    // Saldo principal de la factura, sin incluir IGTF. Se usa como límite
+    // para que un pago en divisas nunca genere IGTF sobre un monto mayor
+    // al principal realmente pendiente.
+    $saldo_principal_bs = $total_bs_original - $total_bs_pagado;
+    if ($saldo_principal_bs < 0.01) {
+        $saldo_principal_bs = 0;
+    }
+
+    // Cálculo final del total por cobrar, incluyendo las líneas IGTF ya creadas.
     $saldo_bs  = $total_bs - $total_bs_pagado;
 
     // Para el saldo en divisas, lo ideal es recalcularlo en base al saldo BS 
@@ -223,10 +261,13 @@ if ($accion == "refrescar") {
                 </div>
 
                 <input type="hidden" id="pendiente_bs" value="<?= $saldo_bs ?>">
+                <input type="hidden" id="pendiente_principal_bs" value="<?= $saldo_principal_bs ?>">
                 <input type="hidden" id="pendiente_div" value="<?= $saldo_div ?>">
                 <input type="hidden" id="tasa_dia_doc" value="<?= $tasa_dia ?>">
                 <input type="hidden" id="moneda_doc" value="<?= HtmlEncode($moneda_doc) ?>">
                 <input type="hidden" id="igtf_pct" value="<?= $igtf_pct ?>">
+                <input type="hidden" id="iva_factura" value="<?= number_format($iva_factura, 2, ".", "") ?>">
+                <input type="hidden" id="retencion_pct" value="<?= number_format($retencion_pct, 6, ".", "") ?>">
                 <input type="hidden" id="reglas_destino_json" value='<?= HtmlEncode($reglas_json) ?>'>
             </div>
         </div>
@@ -254,7 +295,11 @@ if ($accion == "refrescar") {
         <div class="col-md-4">
             <label class="small fw-bold">MONTO</label>
             <input type="number" id="monto_input" class="form-control form-control-sm fw-bold border-primary"
-                step="0.01" value="<?= ($saldo_bs > 0) ? round($saldo_bs, 2) : '' ?>">
+                step="0.01"
+                max="<?= in_array($tipo_pago_actual, ["RI", "RJ", "RR"], true) ? number_format($iva_factura, 2, ".", "") : "" ?>"
+                value="<?= ($monto_metodo_default !== null)
+                    ? number_format($monto_metodo_default, 2, ".", "")
+                    : (($saldo_bs > 0) ? round($saldo_bs, 2) : '') ?>">
         </div>
 
         <div class="col-md-2">
@@ -300,7 +345,9 @@ if ($accion == "refrescar") {
         </div>
 
         <div class="col-md-4">
-            <label class="small fw-bold">REFERENCIA</label>
+            <label class="small fw-bold" id="label_referencia">
+                <?= in_array($tipo_pago_actual, ["RI", "RJ", "RR"], true) ? "NRO. COMPROBANTE" : "REFERENCIA" ?>
+            </label>
 
             <?php if (in_array($tipo_pago_actual, ["RC", "RD"])): 
                 $tabla = ($tipo_pago_actual == "RC") ? "recarga" : "recarga2";
@@ -310,7 +357,11 @@ if ($accion == "refrescar") {
                 <input type="text" class="form-control form-control-sm bg-white fw-bold"
                     value="<?= number_format($recarga['saldo'] ?? 0, 2, ".", "") ?>" readonly>
             <?php else: ?>
-                <input type="text" id="ref_input" class="form-control form-control-sm" placeholder="Referencia...">
+                <input type="text" id="ref_input" class="form-control form-control-sm"
+                    placeholder="<?= in_array($tipo_pago_actual, ["RI", "RJ", "RR"], true) ? "Nro. comprobante..." : "Referencia..." ?>"
+                    <?= in_array($tipo_pago_actual, ["RI", "RJ", "RR"], true)
+                        ? 'maxlength="14" inputmode="numeric" pattern="[0-9]{14}" autocomplete="off"'
+                        : '' ?>>
             <?php endif; ?>
 
         </div>
@@ -424,13 +475,13 @@ if ($accion == "refrescar") {
         (function(){
             const tipo = ($("#tipo_pago").val() || "").trim();
 
-            const requiereBanco = !["EF","RI","RC","IG","RS","AN"].includes(tipo);
+            const requiereBanco = !["EF","RI","RJ","RR","RC","IG","RS","AN"].includes(tipo);
             const requiereRef   = !["EF","RC","IG","AN"].includes(tipo);
 
             $("#banco_input").prop("disabled", !requiereBanco);
 
             $("#help_ref_banco").text(
-                (["RS","RI"].includes(tipo)) ? "Requiere: referencia." :
+                (["RS","RI","RJ","RR"].includes(tipo)) ? "Requiere: número de comprobante." :
                 (requiereBanco && requiereRef) ? "Requiere: banco y referencia." :
                 (requiereRef) ? "Requiere: referencia." : ""
             );
@@ -445,6 +496,7 @@ if ($accion == "finalizar") {
     if (ob_get_length()) ob_end_clean();
 
     $pagos_json = Param("pagos") ?? "[]";
+    $confirmar_exceso = trim((string)(Param("confirmar_exceso") ?? "0"));
     $lista = json_decode($pagos_json, true);
 
     if (!is_array($lista) || count($lista) == 0) {
@@ -456,7 +508,7 @@ if ($accion == "finalizar") {
     $sqlFact = "SELECT a.id, a.cliente, a.nro_documento, a.moneda,
                        CASE WHEN a.moneda <> 'Bs.' THEN (a.total * a.tasa_dia) ELSE a.total END AS total_bs,
                        CASE WHEN a.moneda <> 'Bs.' THEN a.total ELSE (a.total / NULLIF(a.tasa_dia, 0)) END AS total_div,
-                       a.tasa_dia
+                       a.tasa_dia, a.iva
                 FROM salidas a
                 WHERE a.id = $id_compra;";
 
@@ -468,12 +520,100 @@ if ($accion == "finalizar") {
 
     $cliente_id = intval($factura["cliente"] ?? 0);
     $tasa_dia   = floatval($factura["tasa_dia"] ?? 1);
-    $total_bs   = floatval($factura["total_bs"] ?? 0);
+    $total_factura_bs = floatval($factura["total_bs"] ?? 0);
 
-    $lista_pagos = json_decode($pagos_json, true) ?: [];
-    foreach ($lista_pagos as $pp) {
-        if (trim($pp["tipo"] ?? "") === "IG") 
+    // El límite de las retenciones se valida siempre contra el IVA en Bs.
+    $iva_documento = floatval($factura["iva"] ?? 0);
+    $moneda_factura = trim($factura["moneda"] ?? "Bs.");
+    $iva_factura = round(
+        ($moneda_factura !== "Bs.") ? ($iva_documento * $tasa_dia) : $iva_documento,
+        2
+    );
+
+    // Blindaje para retenciones: RI, RJ y RR nunca pueden superar el IVA en Bs.
+    foreach ($lista as $p) {
+        $tipo_ret = trim($p["tipo"] ?? "");
+        if (!in_array($tipo_ret, ["RI", "RJ", "RR"], true)) continue;
+
+        $ref_ret = trim((string)($p["ref"] ?? ""));
+        if (!preg_match('/^\d{14}$/', $ref_ret)) {
+            jsonResponse([
+                "success" => false,
+                "message" => "El Nro. de Comprobante de " . $tipo_ret .
+                             " debe contener exactamente 14 dígitos numéricos."
+            ]);
+            exit;
+        }
+
+        $monto_ret = round(floatval($p["monto"] ?? 0), 2);
+        if ($monto_ret > $iva_factura + 0.0001) {
+            jsonResponse([
+                "success" => false,
+                "message" => "El monto de " . $tipo_ret . " no puede ser mayor al IVA de la factura (Bs. " .
+                             number_format($iva_factura, 2, ".", ",") . ")."
+            ]);
+            exit;
+        }
+    }
+
+    // Blindaje del lado servidor: recalcular cada línea IGTF usando como
+    // base máxima el principal pendiente de la factura. Así, aunque el
+    // navegador envíe un IGTF inflado, nunca se guarda de más.
+    $igtf_pct = floatval(ExecuteScalar(
+        "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S'"
+    ) ?: 0);
+    if ($igtf_pct > 0 && $igtf_pct < 1) {
+        $igtf_pct *= 100;
+    }
+
+    $saldo_principal_igtf_bs = $total_factura_bs;
+    $igtf_esperado_por_gid = [];
+
+    foreach ($lista as $i => $p) {
+        $tipo = trim($p["tipo"] ?? "");
+        if ($tipo === "IG") continue;
+
+        $monto = floatval($p["monto"] ?? 0);
+        $mon   = trim($p["moneda"] ?? "Bs.");
+        if ($monto <= 0) continue;
+
+        $monto_bs = ($mon === "Bs.") ? $monto : ($monto * $tasa_dia);
+
+        if ($mon !== "Bs." && $igtf_pct > 0) {
+            $base_igtf_bs = min($monto_bs, max(0, $saldo_principal_igtf_bs));
+            $gid = (string)($p["gid"] ?? "");
+
+            // Base fiscal real del método de pago. Debe permanecer igual
+            // aunque luego el pago sea recortado para excluir el vuelto.
+            $lista[$i]["base_igtf_bs"] = round($base_igtf_bs, 2);
+
+            if ($gid !== "") {
+                $igtf_esperado_por_gid[$gid] = round(($base_igtf_bs * $igtf_pct) / 100, 2);
+            }
+        }
+
+        $saldo_principal_igtf_bs = max(0, $saldo_principal_igtf_bs - $monto_bs);
+    }
+
+    foreach ($lista as $i => $p) {
+        if (trim($p["tipo"] ?? "") !== "IG") continue;
+
+        $gid = (string)($p["gid"] ?? "");
+        $lista[$i]["monto"] = ($gid !== "" && isset($igtf_esperado_por_gid[$gid]))
+            ? $igtf_esperado_por_gid[$gid]
+            : 0;
+        $lista[$i]["moneda"] = "Bs.";
+    }
+
+    $lista = array_values(array_filter($lista, function ($p) {
+        return floatval($p["monto"] ?? 0) > 0;
+    }));
+
+    $total_bs = $total_factura_bs;
+    foreach ($lista as $pp) {
+        if (trim($pp["tipo"] ?? "") === "IG") {
             $total_bs += floatval($pp["monto"] ?? 0);
+        }
     }
 
     // Recalcular pagado BS (ignorando IG)
@@ -490,15 +630,141 @@ if ($accion == "finalizar") {
         $pagado_bs += $bs;
     }
 
-    // Validación: no pagar de más (tolerancia 0.02)
-    if ($pagado_bs > ($total_bs + 0.02)) {
-        jsonResponse([
-            "success" => false,
-            "message" => "El total pagado excede el total de la factura. Total Bs: " .
-                         number_format($total_bs, 2, ".", ",") .
-                         " / Pagado Bs: " . number_format($pagado_bs, 2, ".", ",")
-        ]);
-        exit;
+    $vuelto_bs = $pagado_bs - $total_bs;
+    $vuelto_usd_info = 0;
+
+    // Si el pago supera el total a cobrar, primero mostramos al usuario el
+    // vuelto en Bs. y USD. Al confirmar, el excedente no se guarda como pago:
+    // se recorta desde el último método agregado, sin tocar anticipos.
+    if ($vuelto_bs > 0.02) {
+        if ($confirmar_exceso !== "1") {
+            $vuelto_usd = ($tasa_dia > 0) ? ($vuelto_bs / $tasa_dia) : 0;
+
+            jsonResponse([
+                "success" => false,
+                "requiere_confirmacion" => true,
+                "message" => "El total pagado excede el total de la factura.",
+                "total_bs" => round($total_bs, 2),
+                "pagado_bs" => round($pagado_bs, 2),
+                "vuelto_bs" => round($vuelto_bs, 2),
+                "vuelto_usd" => round($vuelto_usd, 2)
+            ]);
+            exit;
+        }
+
+        $vuelto_usd_info = ($tasa_dia > 0) ? ($vuelto_bs / $tasa_dia) : 0;
+        $remaining = $vuelto_bs;
+        $gids_removidos = [];
+        $gids_ajustados = [];
+
+        // Recortar desde el último pago agregado. Los anticipos no pueden
+        // convertirse en vuelto y las líneas IGTF se ajustan después.
+        for ($i = count($lista) - 1; $i >= 0 && $remaining > 0.02; $i--) {
+            $p = $lista[$i];
+            $tipo = trim($p["tipo"] ?? "");
+
+            if ($tipo === "IG" || $tipo === "AN") {
+                continue;
+            }
+
+            $monto = floatval($p["monto"] ?? 0);
+            $mon = trim($p["moneda"] ?? "Bs.");
+            if ($monto <= 0) {
+                continue;
+            }
+
+            $item_bs = ($mon === "Bs.") ? $monto : ($monto * $tasa_dia);
+            $gid = (string)($p["gid"] ?? "");
+
+            if ($item_bs <= $remaining + 0.0001) {
+                $remaining -= $item_bs;
+                $lista[$i]["monto"] = 0;
+
+                if ($gid !== "") {
+                    $gids_removidos[] = $gid;
+                }
+            } else {
+                $nuevo_item_bs = $item_bs - $remaining;
+                $nuevo_monto = ($mon === "Bs.")
+                    ? $nuevo_item_bs
+                    : (($tasa_dia > 0) ? ($nuevo_item_bs / $tasa_dia) : 0);
+
+                $lista[$i]["monto"] = round($nuevo_monto, 2);
+
+                // Conservar el valor exacto en Bs. Aunque la divisa se
+                // redondee a 2 decimales, el monto_bs debe cubrir exactamente
+                // factura + IGTF.
+                $lista[$i]["monto_bs_forzado"] = round($nuevo_item_bs, 2);
+
+                if ($gid !== "") {
+                    $gids_ajustados[$gid] = round($nuevo_item_bs, 2);
+                }
+
+                $remaining = 0;
+            }
+        }
+
+        // Recalcular las líneas IGTF vinculadas a pagos recortados.
+        foreach ($lista as $i => $p) {
+            if (trim($p["tipo"] ?? "") !== "IG") {
+                continue;
+            }
+
+            $gid = (string)($p["gid"] ?? "");
+            if ($gid === "") {
+                continue;
+            }
+
+            if (in_array($gid, $gids_removidos, true)) {
+                $lista[$i]["monto"] = 0;
+            } elseif (isset($gids_ajustados[$gid])) {
+                // El IGTF ya está calculado sobre la base correcta de la
+                // factura. No debe recalcularse sobre el pago recortado.
+                $lista[$i]["moneda"] = "Bs.";
+            }
+        }
+
+        $lista = array_values(array_filter($lista, function ($p) {
+            return floatval($p["monto"] ?? 0) > 0;
+        }));
+
+        // Recalcular todo luego del recorte.
+        $total_bs = $total_factura_bs;
+        foreach ($lista as $p) {
+            if (trim($p["tipo"] ?? "") === "IG") {
+                $total_bs += floatval($p["monto"] ?? 0);
+            }
+        }
+
+        $pagado_bs = 0;
+        foreach ($lista as $p) {
+            $tipo = trim($p["tipo"] ?? "");
+            if ($tipo === "IG") {
+                continue;
+            }
+
+            $monto = floatval($p["monto"] ?? 0);
+            $mon = trim($p["moneda"] ?? "Bs.");
+            if ($monto <= 0) {
+                continue;
+            }
+
+            $monto_bs_forzado = floatval($p["monto_bs_forzado"] ?? 0);
+            $pagado_bs += ($monto_bs_forzado > 0)
+                ? $monto_bs_forzado
+                : (($mon === "Bs.") ? $monto : ($monto * $tasa_dia));
+        }
+
+        // Si todavía existe exceso, necesariamente proviene de un anticipo.
+        if (($pagado_bs - $total_bs) > 0.02) {
+            jsonResponse([
+                "success" => false,
+                "message" => "No se pudo ajustar el pago al total de la factura porque el excedente proviene " .
+                             "de un anticipo aplicado, y un anticipo no puede devolverse como vuelto. " .
+                             "Ajuste manualmente el monto del anticipo o de los demás pagos."
+            ]);
+            exit;
+        }
     }
 
     // Validación: anticipos (si hay AN) contra saldo disponible
@@ -594,14 +860,21 @@ if ($accion == "finalizar") {
             $mon   = trim($p["moneda"] ?? "Bs.");
             if ($monto <= 0 || $tipo === "") continue;
 
-            // Calcula Bs segun tasa del documento (siempre con moneda ORIGINAL)
-            $monto_bs = ($mon === "Bs.") ? $monto : ($monto * $tasa_dia);
+            // Calcula Bs según tasa del documento. Si el pago fue
+            // recortado por vuelto, conservar el monto exacto en Bs.
+            $monto_bs_forzado = floatval($p["monto_bs_forzado"] ?? 0);
+            $monto_bs = ($monto_bs_forzado > 0)
+                ? $monto_bs_forzado
+                : (($mon === "Bs.") ? $monto : ($monto * $tasa_dia));
 
             // ---- acumuladores IGTF ----
             // 1) Base IGTF: SOLO pagos en divisa que generan IG (o sea, mon != Bs y tipo != IG)
             // (si quieres excluir AN cuando el IGTF lo cobras al aplicar anticipo, dime y lo excluimos aquí)
             if ($tipo !== "IG" && $mon !== "Bs.") {
-                $x_monto_base_igtf += $monto_bs;  // base en Bs
+                $base_igtf_guardada = floatval($p["base_igtf_bs"] ?? 0);
+                $x_monto_base_igtf += ($base_igtf_guardada > 0)
+                    ? $base_igtf_guardada
+                    : $monto_bs;
             }
 
             // 2) IGTF acumulado: registros IG (siempre Bs)
@@ -704,10 +977,20 @@ if ($accion == "finalizar") {
 
         $conn->commit();
 
+        $mensaje_ok = "Cobro registrado correctamente.";
+        if ($vuelto_bs > 0.02) {
+            $mensaje_ok .= " Vuelto entregado: Bs. " .
+                number_format($vuelto_bs, 2, ".", ",") .
+                " / USD " . number_format($vuelto_usd_info, 2, ".", ",") .
+                " (el excedente no se registró como abono).";
+        }
+
         jsonResponse([
             "success" => true,
-            "message" => "Cobro registrado correctamente.",
-            "cobro_id" => $cobro_id
+            "message" => $mensaje_ok,
+            "cobro_id" => $cobro_id,
+            "vuelto_bs" => round($vuelto_bs, 2),
+            "vuelto_usd" => round($vuelto_usd_info, 2)
         ]);
         exit;
 
@@ -755,6 +1038,49 @@ if ($accion == "finalizar") {
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                 <button type="button" class="btn btn-danger" id="btnConfirmarCancelar">Sí, cancelar</button>
             </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="mdlVuelto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">El pago excede el total de la factura</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row g-2">
+                        <div class="col-6 text-muted">Total Factura Bs:</div>
+                        <div class="col-6 text-end fw-bold" id="vuelto_total_bs">-</div>
+
+                        <div class="col-6 text-muted">Pagado Bs:</div>
+                        <div class="col-6 text-end fw-bold" id="vuelto_pagado_bs">-</div>
+
+                        <div class="col-12"><hr class="my-1"></div>
+
+                        <div class="col-6 text-success">Vuelto Bs:</div>
+                        <div class="col-6 text-end fw-bold text-success" id="vuelto_bs">-</div>
+
+                        <div class="col-6 text-success">Vuelto USD:</div>
+                        <div class="col-6 text-end fw-bold text-success" id="vuelto_usd">-</div>
+                    </div>
+
+                    <div class="small text-muted mt-3">
+                        El pago registrado supera el total de la factura.
+                        Verifique el vuelto que debe entregar al cliente antes de continuar.
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-success fw-bold" id="btnContinuarVuelto">
+                        Continuar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -835,12 +1161,34 @@ function agregarPago(e) {
         return false;
     }
 
+    if (["RI", "RJ", "RR"].includes(tipo)) {
+        // El comprobante debe contener exactamente 14 dígitos numéricos.
+        if (!/^\d{14}$/.test(ref)) {
+            ew.alert("El Nro. de Comprobante debe contener exactamente 14 dígitos numéricos.");
+            $("#ref_input").focus();
+            return false;
+        }
+
+        const ivaFactura = parseFloat($("#iva_factura").val() || "0");
+        if (m > ivaFactura + 0.0001) {
+            ew.alert(
+                "El monto no puede ser mayor al IVA de la factura: Bs. " +
+                ivaFactura.toLocaleString("es-VE", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+            );
+            $("#monto_input").focus();
+            return false;
+        }
+    }
+
     // Reglas banco/ref:
-    // - Si tipo = (RS, RI): obligatorio SOLO referencia.
+    // - Si tipo = (RS, RI, RJ, RR): obligatorio SOLO comprobante/referencia.
     // - Si tipo distinto a (EF, RI, RC, IG, RS, AN): obligatorio banco + referencia.
     // - Si tipo = EF, RC, IG, AN: no exigir ref/banco.
     const requiereRef = !["EF", "RC", "IG", "AN"].includes(tipo);
-    const requiereBanco = !["EF", "RI", "RC", "IG", "RS", "AN"].includes(tipo);
+    const requiereBanco = !["EF", "RI", "RJ", "RR", "RC", "IG", "RS", "AN"].includes(tipo);
 
     const destinoId = ($("#destino_input").val() || "").toString().trim();
 
@@ -852,9 +1200,9 @@ function agregarPago(e) {
         return false;
     }
 
-    if (["RS", "RI"].includes(tipo)) {
+    if (["RS", "RI", "RJ", "RR"].includes(tipo)) {
         if (!ref) {
-            ew.alert("Debe indicar el número de referencia.");
+            ew.alert(["RI", "RJ", "RR"].includes(tipo) ? "Debe indicar el número de comprobante." : "Debe indicar el número de referencia.");
             return false;
         }
     } else {
@@ -940,7 +1288,15 @@ function agregarPago(e) {
     if (monSel !== "Bs." && igtfPct > 0) {
 
         const montoPagoBs = (tasaDiaDoc > 0) ? (m * tasaDiaDoc) : 0;
-        const montoIgtfBs = (montoPagoBs * igtfPct) / 100;
+        const pendientePrincipalBs = parseFloat($("#pendiente_principal_bs").val() || "0");
+
+        // El IGTF solo se calcula sobre la parte del pago que realmente
+        // cubre el principal pendiente. El excedente no genera IGTF.
+        const baseIgtfBs = Math.min(
+            montoPagoBs,
+            Math.max(0, pendientePrincipalBs)
+        );
+        const montoIgtfBs = (baseIgtfBs * igtfPct) / 100;
 
         // 🔹 eliminar IG previo del mismo gid si existiera
         lista = lista.filter(x => !(
@@ -1006,45 +1362,103 @@ function eliminarPago(i) {
     return false;
 }
 
-function finalizar() {
+function fmtMoneda(n) {
+    n = parseFloat(n || 0);
+    return n.toLocaleString("es-VE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function mostrarModalVuelto(resp) {
+    $("#vuelto_total_bs").text(fmtMoneda(resp.total_bs));
+    $("#vuelto_pagado_bs").text(fmtMoneda(resp.pagado_bs));
+    $("#vuelto_bs").text(fmtMoneda(resp.vuelto_bs));
+    $("#vuelto_usd").text(fmtMoneda(resp.vuelto_usd));
+
+    const el = document.getElementById("mdlVuelto");
+    const modal = bootstrap.Modal.getOrCreateInstance(el);
+
+    $("#btnContinuarVuelto").off("click").on("click", function () {
+        modal.hide();
+        finalizar(true);
+    });
+
+    modal.show();
+}
+
+function finalizar(forzarConExceso = false) {
+    if (ajaxInFlight) {
+        return false;
+    }
+
     const pagos = $("#json_pagos").val() || "[]";
 
     let data = {
         accion: "finalizar",
         id_compra: "<?= $id_compra ?>",
-        pagos: pagos
+        pagos: pagos,
+        confirmar_exceso: forzarConExceso ? "1" : "0"
     };
 
-    // tokens PHPMaker
+    // Tokens PHPMaker
     if (window.ew) {
-        if (ew.TOKEN_NAME_KEY && ew.TOKEN_NAME) data[ew.TOKEN_NAME_KEY] = ew.TOKEN_NAME;
-        if (ew.ANTIFORGERY_TOKEN_KEY && ew.ANTIFORGERY_TOKEN) data[ew.ANTIFORGERY_TOKEN_KEY] = ew.ANTIFORGERY_TOKEN;
+        if (ew.TOKEN_NAME_KEY && ew.TOKEN_NAME) {
+            data[ew.TOKEN_NAME_KEY] = ew.TOKEN_NAME;
+        }
+        if (ew.ANTIFORGERY_TOKEN_KEY && ew.ANTIFORGERY_TOKEN) {
+            data[ew.ANTIFORGERY_TOKEN_KEY] = ew.ANTIFORGERY_TOKEN;
+        }
     }
+
+    ajaxInFlight = true;
+    $("#btn-registrar-final").prop("disabled", true);
 
     $.ajax({
         url: window.location.href,
         type: "POST",
-        dataType: "text", // 👈 así vemos el error real
+        dataType: "text",
         data: data,
+
         success: function (txt) {
-            console.log("RESP:", txt);
+            ajaxInFlight = false;
 
             let resp = null;
-            try { resp = JSON.parse(txt); } catch (e) {}
+            try {
+                resp = JSON.parse(txt);
+            } catch (e) {}
 
             if (resp && resp.success) {
                 window.location.href = "ViewOutTdcfcvView/<?= $id_compra ?>?showdetail=";
-            } else {
-                // Si no es JSON, te muestro el texto devuelto (PHP error/HTML)
-                ew.alert((resp && resp.message) ? resp.message : (txt || "Respuesta vacía del servidor."));
+                return;
             }
+
+            $("#btn-registrar-final").prop("disabled", false);
+
+            if (resp && resp.requiere_confirmacion) {
+                mostrarModalVuelto(resp);
+                return;
+            }
+
+            ew.alert(
+                (resp && resp.message)
+                    ? resp.message
+                    : (txt || "Respuesta vacía del servidor.")
+            );
         },
+
         error: function (xhr, status, err) {
-            console.log("AJAX ERROR:", status, err);
-            console.log("RESPTEXT:", xhr.responseText);
-            ew.alert("Error servidor: " + status + " / " + err + "\n\n" + (xhr.responseText || ""));
+            ajaxInFlight = false;
+            $("#btn-registrar-final").prop("disabled", false);
+
+            ew.alert(
+                "Error servidor: " + status + " / " + err +
+                "\n\n" + (xhr.responseText || "")
+            );
         }
     });
+
+    return false;
 }
 
 function cancelar(e) {
@@ -1102,6 +1516,25 @@ function cancelar(e) {
 }
 
 function recalcularMontoSegunMoneda() {
+    const tipo = ($("#tipo_pago").val() || "").trim();
+    const ivaFactura = parseFloat($("#iva_factura").val() || "0");
+
+    // RI/RJ: aplicar el porcentaje de retención al IVA ya convertido a Bs.
+    // RR: cero por defecto.
+    if (["RI", "RJ"].includes(tipo)) {
+        const pct = parseFloat($("#retencion_pct").val() || "0");
+        const monto = (pct > 0) ? ((ivaFactura * pct) / 100) : 0;
+        $("#monto_input").val(monto.toFixed(2)).attr("max", ivaFactura.toFixed(2));
+        return;
+    }
+
+    if (tipo === "RR") {
+        $("#monto_input").val("0.00").attr("max", ivaFactura.toFixed(2));
+        return;
+    }
+
+    $("#monto_input").removeAttr("max");
+
     const saldoBs = parseFloat($("#pendiente_bs").val() || "0");
     const tasaDia = parseFloat($("#tasa_dia_doc").val() || "1");
     const monSel  = ($("#moneda_input").val() || "Bs.").trim();
@@ -1116,47 +1549,6 @@ function recalcularMontoSegunMoneda() {
     }
 }
 
-
-(function(){
-    const tipo = ($("#tipo_pago").val() || "").trim();
-    const requiereBanco = !["EF","RI","RC","IG","RS","AN"].includes(tipo);
-    const requiereRef = !["EF","RC","IG","AN"].includes(tipo);
-
-    const $b = $("#banco_input");
-    $b.prop("disabled", !requiereBanco);
-
-    if ($b.hasClass("select2-hidden-accessible")) {
-        $b.trigger("change.select2");
-    }
-
-    $("#help_ref_banco").text(
-        (["RS","RI"].includes(tipo)) ? "Requiere: referencia." :
-        (requiereBanco && requiereRef) ? "Requiere: banco y referencia." :
-        (requiereRef) ? "Requiere: referencia." : ""
-    );
-})();
-
-$(document).on("change", "#tipo_pago", function () {
-    const tipo = ($(this).val() || "").trim();
-
-    const requiereBanco = !["EF","RI","RC","IG","RS","AN"].includes(tipo);
-    const requiereRef   = !["EF","RC","IG","AN"].includes(tipo);
-
-    const $b = $("#banco_input");
-    $b.prop("disabled", !requiereBanco);
-
-    if ($b.hasClass("select2-hidden-accessible")) {
-        $b.trigger("change.select2");
-    }
-
-    $("#help_ref_banco").text(
-        (["RS","RI"].includes(tipo)) ? "Requiere: referencia." :
-        (requiereBanco && requiereRef) ? "Requiere: banco y referencia." :
-        (requiereRef) ? "Requiere: referencia." : ""
-    );
-
-    aplicarDestinoAuto(true);
-});
 
 function initBancoSelect2() {
     const $sel = $("#banco_input");
@@ -1242,7 +1634,7 @@ function aplicarDestinoAuto(force) {
     const monedaSel = ($("#moneda_input").val() || "").trim();
 
     // Tipos que no llevan destino
-    if (["IG","RC","RI","RS","NC","AN"].includes(metodoSel)) {
+    if (["IG","RC","RI","RJ","RR","RS","NC","AN"].includes(metodoSel)) {
         $("#destino_input").val("");
         $("#help_destino").text("No aplica cuenta destino.");
         return;
@@ -1258,23 +1650,78 @@ function aplicarDestinoAuto(force) {
 }
 /////
 
-$(document).on("change", "#anticipo_input", function () {
-    const mon = ($(this).find("option:selected").data("moneda") || "").toString().trim();
-    if (mon) {
-        $("#moneda_input").val(mon).trigger("change");
-    }
-});
 
-$(document).on("change", "#moneda_input", function () {
-    recalcularMontoSegunMoneda();
-    aplicarDestinoAuto(true);
-});
+loadjs.ready("head", function () {
+    // PHPMaker puede cargar jQuery en modo noConflict. Dejamos el alias
+    // disponible para este Custom File y para los scripts AJAX insertados.
+    window.$ = window.jQuery;
 
-$(document).on("change", "#destino_auto", function () {
-    if ($(this).is(":checked")) aplicarDestinoAuto(true);
-});
+    (function(){
+        const tipo = ($("#tipo_pago").val() || "").trim();
+        const requiereBanco = !["EF","RI","RJ","RR","RC","IG","RS","AN"].includes(tipo);
+        const requiereRef = !["EF","RC","IG","AN"].includes(tipo);
 
-$(document).ready(function () {
+        const $b = $("#banco_input");
+        $b.prop("disabled", !requiereBanco);
+
+        if ($b.hasClass("select2-hidden-accessible")) {
+            $b.trigger("change.select2");
+        }
+
+        $("#help_ref_banco").text(
+            (["RS","RI","RJ","RR"].includes(tipo)) ? "Requiere: número de comprobante." :
+            (requiereBanco && requiereRef) ? "Requiere: banco y referencia." :
+            (requiereRef) ? "Requiere: referencia." : ""
+        );
+    })();
+
+    $(document).on("change", "#tipo_pago", function () {
+        const tipo = ($(this).val() || "").trim();
+
+        const requiereBanco = !["EF","RI","RJ","RR","RC","IG","RS","AN"].includes(tipo);
+        const requiereRef   = !["EF","RC","IG","AN"].includes(tipo);
+
+        const $b = $("#banco_input");
+        $b.prop("disabled", !requiereBanco);
+
+        if ($b.hasClass("select2-hidden-accessible")) {
+            $b.trigger("change.select2");
+        }
+
+        $("#help_ref_banco").text(
+            (["RS","RI","RJ","RR"].includes(tipo)) ? "Requiere: número de comprobante." :
+            (requiereBanco && requiereRef) ? "Requiere: banco y referencia." :
+            (requiereRef) ? "Requiere: referencia." : ""
+        );
+
+        aplicarDestinoAuto(true);
+    });
+
+    // RI, RJ y RR: permitir únicamente números y un máximo de 14 dígitos.
+    $(document).on("input", "#ref_input", function () {
+        const tipo = ($("#tipo_pago").val() || "").trim();
+
+        if (["RI", "RJ", "RR"].includes(tipo)) {
+            this.value = this.value.replace(/\D/g, "").substring(0, 14);
+        }
+    });
+
+    $(document).on("change", "#anticipo_input", function () {
+        const mon = ($(this).find("option:selected").data("moneda") || "").toString().trim();
+        if (mon) {
+            $("#moneda_input").val(mon).trigger("change");
+        }
+    });
+
+    $(document).on("change", "#moneda_input", function () {
+        recalcularMontoSegunMoneda();
+        aplicarDestinoAuto(true);
+    });
+
+    $(document).on("change", "#destino_auto", function () {
+        if ($(this).is(":checked")) aplicarDestinoAuto(true);
+    });
+
     refrescar("");
 });
 </script>

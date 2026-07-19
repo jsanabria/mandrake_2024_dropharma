@@ -101,6 +101,7 @@ $Page->showMessage();
         <label id="elh_compra_proveedor" for="x_proveedor" class="<?= $Page->LeftColumnClass ?>"><?= $Page->proveedor->caption() ?><?= $Page->proveedor->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->proveedor->cellAttributes() ?>>
 <span id="el_compra_proveedor">
+<div class="input-group flex-nowrap">
     <select
         id="x_proveedor"
         name="x_proveedor"
@@ -116,8 +117,12 @@ $Page->showMessage();
         <?= $Page->proveedor->editAttributes() ?>>
         <?= $Page->proveedor->selectOptionListHtml("x_proveedor") ?>
     </select>
-    <?= $Page->proveedor->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->proveedor->getErrorMessage() ?></div>
+    <?php if (AllowAdd(CurrentProjectID() . "proveedor") && !$Page->proveedor->ReadOnly) { ?>
+    <button type="button" class="btn btn-default ew-add-opt-btn" id="aol_x_proveedor" title="<?= HtmlTitle($Language->phrase("AddLink")) . "&nbsp;" . $Page->proveedor->caption() ?>" data-title="<?= $Page->proveedor->caption() ?>" data-ew-action="add-option" data-el="x_proveedor" data-url="<?= GetUrl("ProveedorAddopt") ?>"><i class="fa-solid fa-plus ew-icon"></i></button>
+    <?php } ?>
+</div>
+<?= $Page->proveedor->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->proveedor->getErrorMessage() ?></div>
 <?= $Page->proveedor->Lookup->getParamTag($Page, "p_x_proveedor") ?>
 <script>
 loadjs.ready("fcompraadd", function() {
@@ -532,15 +537,20 @@ loadjs.ready("load", function () {
         });
     });
     $(document).ready(function() {
-        $("#x_doc_afectado").on("blur", function() {
-            var tipoDoc = $("#x_tipo_documento").val(); // Ajusta según el ID real de tu selector de tipo
-            var docAfectado = $(this).val();
+        // Función centralizada para buscar el documento afectado
+        function buscarDocumentoAfectado() {
+            var tipoDoc = $("#x_tipo_documento").val();
+            var docAfectado = $("#x_doc_afectado").val();
             var proveedor = $("#x_proveedor").val();
-            if(proveedor === "") {
+
+            // Validación inicial
+            if (proveedor === "") {
                 ew.alert("Debe seleccionar un proveedor para poder registrar este tipo de documento.");
                 $("#x_doc_afectado").val("");
                 return false;
             }
+
+            // Ejecutar solo si es necesario y los datos están completos
             if ((tipoDoc == 'NC' || tipoDoc == 'ND') && docAfectado !== "" && proveedor !== "") {
                 $.ajax({
                     url: 'include/buscar_factura_compra.php',
@@ -550,24 +560,58 @@ loadjs.ready("load", function () {
                         if (response.success) {
                             var data = response.data;
 
-                            // Validar que el monto de la NC no supere el de la FC
-                            // Puedes agregar lógica aquí para comparar con los inputs actuales
-
-                            // Llenar campos automáticamente
+                            // Llenado de campos
                             $("#x_monto_exento").val(data.monto_exento);
                             $("#x_monto_gravado").val(data.monto_gravado);
                             $("#x_alicuota").val(data.alicuota);
                             $("#x_monto_iva").val(data.monto_iva);
                             $("#x_monto_total").val(data.monto_total);
                             $("#x_aplica_retencion").val(data.aplica_retencion);
-                            // ... completar los demás campos según sea necesario
                         } else {
                             ew.alert(response.message);
+                            $("#x_doc_afectado").val("");
                         }
                     }
                 });
             }
-        });
+        }
+
+        // Vinculación de eventos
+        $("#x_doc_afectado").on("blur", buscarDocumentoAfectado);
+        $("#x_tipo_documento").on("change", buscarDocumentoAfectado);
+        $("#x_proveedor").on("change", buscarDocumentoAfectado);
+    });
+    $(document).ready(function() {
+        // Definimos la función de validación
+        function verificarDuplicado() {
+            var proveedor = $("#x_proveedor").val();
+            var documento = $("#x_documento").val();
+            var tipoDoc = $("#x_tipo_documento").val();
+
+            // Solo validamos si los tres campos tienen valor
+            if (proveedor !== "" && documento !== "" && tipoDoc !== "") {
+                $.ajax({
+                    url: 'include/verificar_duplicado_compra.php',
+                    type: 'POST',
+                    data: { 
+                        proveedor: proveedor, 
+                        documento: documento, 
+                        tipo_documento: tipoDoc 
+                    },
+                    success: function(response) {
+                        if (response.existe) {
+                            ew.alert("El número de documento ya está registrado para este proveedor; verifique.");
+                            $("#x_documento").val(""); // Limpiamos el documento para forzar la corrección
+                        }
+                    }
+                });
+            }
+        }
+
+        // Vinculamos la misma función a los cambios de los tres campos
+        $("#x_proveedor").on("change", verificarDuplicado);
+        $("#x_tipo_documento").on("change", verificarDuplicado);
+        $("#x_documento").on("blur", verificarDuplicado);
     });
 });
 </script>

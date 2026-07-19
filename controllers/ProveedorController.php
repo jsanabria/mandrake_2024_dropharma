@@ -29,6 +29,13 @@ class ProveedorController extends ControllerBase
         return $this->runPage($request, $response, $args, "ProveedorAdd");
     }
 
+    // addopt
+    #[Map(["GET","POST","OPTIONS"], "/ProveedorAddopt", [PermissionMiddleware::class], "addopt.proveedor")]
+    public function addopt(Request $request, Response $response, array $args): Response
+    {
+        return $this->runPage($request, $response, $args, "ProveedorAddopt", null, false);
+    }
+
     // view
     #[Map(["GET","POST","OPTIONS"], "/ProveedorView[/{id}]", [PermissionMiddleware::class], "view.proveedor")]
     public function view(Request $request, Response $response, array $args): Response

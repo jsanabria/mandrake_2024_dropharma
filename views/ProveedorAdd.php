@@ -30,8 +30,11 @@ loadjs.ready(["wrapper", "head"], function () {
             ["telefono2", [fields.telefono2.visible && fields.telefono2.required ? ew.Validators.required(fields.telefono2.caption) : null], fields.telefono2.isInvalid],
             ["email1", [fields.email1.visible && fields.email1.required ? ew.Validators.required(fields.email1.caption) : null, ew.Validators.email], fields.email1.isInvalid],
             ["email2", [fields.email2.visible && fields.email2.required ? ew.Validators.required(fields.email2.caption) : null, ew.Validators.email], fields.email2.isInvalid],
-            ["cta_bco", [fields.cta_bco.visible && fields.cta_bco.required ? ew.Validators.required(fields.cta_bco.caption) : null], fields.cta_bco.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
+            ["tipo_ret_iva", [fields.tipo_ret_iva.visible && fields.tipo_ret_iva.required ? ew.Validators.required(fields.tipo_ret_iva.caption) : null], fields.tipo_ret_iva.isInvalid],
+            ["tipo_ret_islr_concepto", [fields.tipo_ret_islr_concepto.visible && fields.tipo_ret_islr_concepto.required ? ew.Validators.required(fields.tipo_ret_islr_concepto.caption) : null], fields.tipo_ret_islr_concepto.isInvalid],
+            ["tipo_ret_islr", [fields.tipo_ret_islr.visible && fields.tipo_ret_islr.required ? ew.Validators.required(fields.tipo_ret_islr.caption) : null], fields.tipo_ret_islr.isInvalid],
+            ["tipo_ret_mun", [fields.tipo_ret_mun.visible && fields.tipo_ret_mun.required ? ew.Validators.required(fields.tipo_ret_mun.caption) : null], fields.tipo_ret_mun.isInvalid],
+            ["cta_bco", [fields.cta_bco.visible && fields.cta_bco.required ? ew.Validators.required(fields.cta_bco.caption) : null], fields.cta_bco.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -48,7 +51,10 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "ciudad": <?= $Page->ciudad->toClientList($Page) ?>,
-            "activo": <?= $Page->activo->toClientList($Page) ?>,
+            "tipo_ret_iva": <?= $Page->tipo_ret_iva->toClientList($Page) ?>,
+            "tipo_ret_islr_concepto": <?= $Page->tipo_ret_islr_concepto->toClientList($Page) ?>,
+            "tipo_ret_islr": <?= $Page->tipo_ret_islr->toClientList($Page) ?>,
+            "tipo_ret_mun": <?= $Page->tipo_ret_mun->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -200,6 +206,183 @@ loadjs.ready("fproveedoradd", function() {
 </div></div>
     </div>
 <?php } ?>
+<?php if ($Page->tipo_ret_iva->Visible) { // tipo_ret_iva ?>
+    <div id="r_tipo_ret_iva"<?= $Page->tipo_ret_iva->rowAttributes() ?>>
+        <label id="elh_proveedor_tipo_ret_iva" for="x_tipo_ret_iva" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_ret_iva->caption() ?><?= $Page->tipo_ret_iva->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_ret_iva->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_iva">
+    <select
+        id="x_tipo_ret_iva"
+        name="x_tipo_ret_iva"
+        class="form-select ew-select<?= $Page->tipo_ret_iva->isInvalidClass() ?>"
+        <?php if (!$Page->tipo_ret_iva->IsNativeSelect) { ?>
+        data-select2-id="fproveedoradd_x_tipo_ret_iva"
+        <?php } ?>
+        data-table="proveedor"
+        data-field="x_tipo_ret_iva"
+        data-value-separator="<?= $Page->tipo_ret_iva->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo_ret_iva->getPlaceHolder()) ?>"
+        <?= $Page->tipo_ret_iva->editAttributes() ?>>
+        <?= $Page->tipo_ret_iva->selectOptionListHtml("x_tipo_ret_iva") ?>
+    </select>
+    <?= $Page->tipo_ret_iva->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo_ret_iva->getErrorMessage() ?></div>
+<?= $Page->tipo_ret_iva->Lookup->getParamTag($Page, "p_x_tipo_ret_iva") ?>
+<?php if (!$Page->tipo_ret_iva->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fproveedoradd", function() {
+    var options = { name: "x_tipo_ret_iva", selectId: "fproveedoradd_x_tipo_ret_iva" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fproveedoradd.lists.tipo_ret_iva?.lookupOptions.length) {
+        options.data = { id: "x_tipo_ret_iva", form: "fproveedoradd" };
+    } else {
+        options.ajax = { id: "x_tipo_ret_iva", form: "fproveedoradd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.tipo_ret_iva.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tipo_ret_islr_concepto->Visible) { // tipo_ret_islr_concepto ?>
+    <div id="r_tipo_ret_islr_concepto"<?= $Page->tipo_ret_islr_concepto->rowAttributes() ?>>
+        <label id="elh_proveedor_tipo_ret_islr_concepto" for="x_tipo_ret_islr_concepto" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_ret_islr_concepto->caption() ?><?= $Page->tipo_ret_islr_concepto->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_ret_islr_concepto->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_islr_concepto">
+    <select
+        id="x_tipo_ret_islr_concepto"
+        name="x_tipo_ret_islr_concepto"
+        class="form-control ew-select<?= $Page->tipo_ret_islr_concepto->isInvalidClass() ?>"
+        data-select2-id="fproveedoradd_x_tipo_ret_islr_concepto"
+        data-table="proveedor"
+        data-field="x_tipo_ret_islr_concepto"
+        data-caption="<?= HtmlEncode(RemoveHtml($Page->tipo_ret_islr_concepto->caption())) ?>"
+        data-modal-lookup="true"
+        data-value-separator="<?= $Page->tipo_ret_islr_concepto->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo_ret_islr_concepto->getPlaceHolder()) ?>"
+        data-ew-action="update-options"
+        <?= $Page->tipo_ret_islr_concepto->editAttributes() ?>>
+        <?= $Page->tipo_ret_islr_concepto->selectOptionListHtml("x_tipo_ret_islr_concepto") ?>
+    </select>
+    <?= $Page->tipo_ret_islr_concepto->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo_ret_islr_concepto->getErrorMessage() ?></div>
+<?= $Page->tipo_ret_islr_concepto->Lookup->getParamTag($Page, "p_x_tipo_ret_islr_concepto") ?>
+<script>
+loadjs.ready("fproveedoradd", function() {
+    var options = { name: "x_tipo_ret_islr_concepto", selectId: "fproveedoradd_x_tipo_ret_islr_concepto" };
+    if (fproveedoradd.lists.tipo_ret_islr_concepto?.lookupOptions.length) {
+        options.data = { id: "x_tipo_ret_islr_concepto", form: "fproveedoradd" };
+    } else {
+        options.ajax = { id: "x_tipo_ret_islr_concepto", form: "fproveedoradd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options = Object.assign({}, ew.modalLookupOptions, options, ew.vars.tables.proveedor.fields.tipo_ret_islr_concepto.modalLookupOptions);
+    ew.createModalLookup(options);
+});
+</script>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tipo_ret_islr->Visible) { // tipo_ret_islr ?>
+    <div id="r_tipo_ret_islr"<?= $Page->tipo_ret_islr->rowAttributes() ?>>
+        <label id="elh_proveedor_tipo_ret_islr" for="x_tipo_ret_islr" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_ret_islr->caption() ?><?= $Page->tipo_ret_islr->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_ret_islr->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_islr">
+    <select
+        id="x_tipo_ret_islr"
+        name="x_tipo_ret_islr"
+        class="form-select ew-select<?= $Page->tipo_ret_islr->isInvalidClass() ?>"
+        <?php if (!$Page->tipo_ret_islr->IsNativeSelect) { ?>
+        data-select2-id="fproveedoradd_x_tipo_ret_islr"
+        <?php } ?>
+        data-table="proveedor"
+        data-field="x_tipo_ret_islr"
+        data-value-separator="<?= $Page->tipo_ret_islr->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo_ret_islr->getPlaceHolder()) ?>"
+        <?= $Page->tipo_ret_islr->editAttributes() ?>>
+        <?= $Page->tipo_ret_islr->selectOptionListHtml("x_tipo_ret_islr") ?>
+    </select>
+    <?= $Page->tipo_ret_islr->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo_ret_islr->getErrorMessage() ?></div>
+<?= $Page->tipo_ret_islr->Lookup->getParamTag($Page, "p_x_tipo_ret_islr") ?>
+<?php if (!$Page->tipo_ret_islr->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fproveedoradd", function() {
+    var options = { name: "x_tipo_ret_islr", selectId: "fproveedoradd_x_tipo_ret_islr" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fproveedoradd.lists.tipo_ret_islr?.lookupOptions.length) {
+        options.data = { id: "x_tipo_ret_islr", form: "fproveedoradd" };
+    } else {
+        options.ajax = { id: "x_tipo_ret_islr", form: "fproveedoradd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.tipo_ret_islr.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tipo_ret_mun->Visible) { // tipo_ret_mun ?>
+    <div id="r_tipo_ret_mun"<?= $Page->tipo_ret_mun->rowAttributes() ?>>
+        <label id="elh_proveedor_tipo_ret_mun" for="x_tipo_ret_mun" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_ret_mun->caption() ?><?= $Page->tipo_ret_mun->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_ret_mun->cellAttributes() ?>>
+<span id="el_proveedor_tipo_ret_mun">
+    <select
+        id="x_tipo_ret_mun"
+        name="x_tipo_ret_mun"
+        class="form-select ew-select<?= $Page->tipo_ret_mun->isInvalidClass() ?>"
+        <?php if (!$Page->tipo_ret_mun->IsNativeSelect) { ?>
+        data-select2-id="fproveedoradd_x_tipo_ret_mun"
+        <?php } ?>
+        data-table="proveedor"
+        data-field="x_tipo_ret_mun"
+        data-value-separator="<?= $Page->tipo_ret_mun->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->tipo_ret_mun->getPlaceHolder()) ?>"
+        <?= $Page->tipo_ret_mun->editAttributes() ?>>
+        <?= $Page->tipo_ret_mun->selectOptionListHtml("x_tipo_ret_mun") ?>
+    </select>
+    <?= $Page->tipo_ret_mun->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->tipo_ret_mun->getErrorMessage() ?></div>
+<?= $Page->tipo_ret_mun->Lookup->getParamTag($Page, "p_x_tipo_ret_mun") ?>
+<?php if (!$Page->tipo_ret_mun->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fproveedoradd", function() {
+    var options = { name: "x_tipo_ret_mun", selectId: "fproveedoradd_x_tipo_ret_mun" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fproveedoradd.lists.tipo_ret_mun?.lookupOptions.length) {
+        options.data = { id: "x_tipo_ret_mun", form: "fproveedoradd" };
+    } else {
+        options.ajax = { id: "x_tipo_ret_mun", form: "fproveedoradd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.tipo_ret_mun.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
 <?php if ($Page->cta_bco->Visible) { // cta_bco ?>
     <div id="r_cta_bco"<?= $Page->cta_bco->rowAttributes() ?>>
         <label id="elh_proveedor_cta_bco" for="x_cta_bco" class="<?= $Page->LeftColumnClass ?>"><?= $Page->cta_bco->caption() ?><?= $Page->cta_bco->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -208,51 +391,6 @@ loadjs.ready("fproveedoradd", function() {
 <input type="<?= $Page->cta_bco->getInputTextType() ?>" name="x_cta_bco" id="x_cta_bco" data-table="proveedor" data-field="x_cta_bco" value="<?= $Page->cta_bco->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->cta_bco->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->cta_bco->formatPattern()) ?>"<?= $Page->cta_bco->editAttributes() ?> aria-describedby="x_cta_bco_help">
 <?= $Page->cta_bco->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->cta_bco->getErrorMessage() ?></div>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->activo->Visible) { // activo ?>
-    <div id="r_activo"<?= $Page->activo->rowAttributes() ?>>
-        <label id="elh_proveedor_activo" for="x_activo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->activo->caption() ?><?= $Page->activo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->activo->cellAttributes() ?>>
-<span id="el_proveedor_activo">
-    <select
-        id="x_activo"
-        name="x_activo"
-        class="form-select ew-select<?= $Page->activo->isInvalidClass() ?>"
-        <?php if (!$Page->activo->IsNativeSelect) { ?>
-        data-select2-id="fproveedoradd_x_activo"
-        <?php } ?>
-        data-table="proveedor"
-        data-field="x_activo"
-        data-value-separator="<?= $Page->activo->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->activo->getPlaceHolder()) ?>"
-        <?= $Page->activo->editAttributes() ?>>
-        <?= $Page->activo->selectOptionListHtml("x_activo") ?>
-    </select>
-    <?= $Page->activo->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->activo->getErrorMessage() ?></div>
-<?php if (!$Page->activo->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fproveedoradd", function() {
-    var options = { name: "x_activo", selectId: "fproveedoradd_x_activo" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fproveedoradd.lists.activo?.lookupOptions.length) {
-        options.data = { id: "x_activo", form: "fproveedoradd" };
-    } else {
-        options.ajax = { id: "x_activo", form: "fproveedoradd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.proveedor.fields.activo.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
 </span>
 </div></div>
     </div>

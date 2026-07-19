@@ -93,11 +93,11 @@ if (strlen($txtNota) < 20) {
                             (id, tipo_documento, id_documento, 
                             fabricante, articulo, almacen, 
                             cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
-                            cantidad_movimiento, costo_unidad, costo)
+                            cantidad_movimiento, costo_unidad, costo, check_ne)
                         VALUES(NULL, 'TDCNRP', $newid,
                             1, $articulo, '$almacen',
                             $cantidad, 'UDM001', 1,
-                            $cantidad, $costo, $costo_total);";
+                            $cantidad, $costo, $costo_total, 'S');";
                 Execute($sql);
 
                 $articulo_insertado_ok = true;

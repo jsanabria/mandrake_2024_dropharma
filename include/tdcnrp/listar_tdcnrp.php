@@ -8,7 +8,18 @@ $username_permiso_codigo_barra_sql = mysqli_real_escape_string($link, $username_
 
 $puede_editar_codigo_barra = false;
 
-if ($username_permiso_codigo_barra != "") {
+/*
+ * Administrator siempre tiene permiso.
+ */
+if (
+    strcasecmp($username_permiso_codigo_barra, "Administrator") == 0 ||
+    strcasecmp($username_permiso_codigo_barra, "Admin") == 0
+) {
+
+    $puede_editar_codigo_barra = true;
+
+} elseif ($username_permiso_codigo_barra != "") {
+
     $sqlUsuarioNivel = "
         SELECT userlevelid
         FROM usuario
@@ -18,10 +29,15 @@ if ($username_permiso_codigo_barra != "") {
 
     $rsUsuarioNivel = mysqli_query($link, $sqlUsuarioNivel);
     if ($rsUsuarioNivel && $rowUsuarioNivel = mysqli_fetch_array($rsUsuarioNivel)) {
+
         $nivel = intval($rowUsuarioNivel["userlevelid"]);
+
         if ($nivel == -1) {
+
             $puede_editar_codigo_barra = true;
+
         } else {
+
             $sqlPermisoArticulo = "
                 SELECT permission
                 FROM userlevelpermissions
@@ -31,8 +47,11 @@ if ($username_permiso_codigo_barra != "") {
             ";
 
             $rsPermisoArticulo = mysqli_query($link, $sqlPermisoArticulo);
+
             if ($rsPermisoArticulo && $rowPermisoArticulo = mysqli_fetch_array($rsPermisoArticulo)) {
+
                 $permiso = intval($rowPermisoArticulo["permission"]);
+
                 $puedeAgregarArticulo = (($permiso & 1) == 1);
                 $puedeModificarArticulo = (($permiso & 4) == 4);
 
@@ -201,7 +220,7 @@ while ($row = mysqli_fetch_array($result)) {
                     '</strong><br><small>' . htmlspecialchars($row["principio_activo"] ?? "", ENT_QUOTES, "UTF-8") . '</small><br>
                     <small><i>' . htmlspecialchars($row["presentacion"] ?? "", ENT_QUOTES, "UTF-8") . '</i></small><br>
                     <strong><small>Fabricante: ' . htmlspecialchars($row["fabricante"] ?? "", ENT_QUOTES, "UTF-8") . '</small></strong><br>
-                    <strong><small>COD: ' . htmlspecialchars($row["codigo"] ?? "", ENT_QUOTES, "UTF-8") . '</small></strong><br>
+                    <strong><small><i style="display:inline-block; max-width: 100px; word-break: break-all;">COD: ' . htmlspecialchars($row["codigo"] ?? "", ENT_QUOTES, "UTF-8") . '</i></small></strong><br>
                     <strong><small>Barra: ' . $codigoBarraHtml . '</small></strong><br>
                     <small> Unidad</small>
                 </td>';

@@ -2198,7 +2198,7 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
                     $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
                     break;
                 case "NC":
-                    // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
                     break;
                 case "ND":
                     $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
@@ -2219,11 +2219,11 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
             $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
 
             // 6. Botón Revertir (Si no está impreso y si tiene permiso)
-            if ($this->impreso->CurrentValue == "N") {
+            // if ($this->impreso->CurrentValue == "N") {
                 if (VerificaFuncion('014')) {
                     $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
                 }
-            }
+            // }
         } else {
             // 7. Botón Registrar Pago
             if ($this->estatus->CurrentValue == "PROCESADO") {

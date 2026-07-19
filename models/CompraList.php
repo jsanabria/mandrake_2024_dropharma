@@ -171,9 +171,9 @@ class CompraList extends Compra
         $this->ret_iva->Visible = false;
         $this->ref_iva->setVisibility();
         $this->ret_islr->Visible = false;
-        $this->ref_islr->Visible = false;
+        $this->ref_islr->setVisibility();
         $this->ret_municipal->Visible = false;
-        $this->ref_municipal->setVisibility();
+        $this->ref_municipal->Visible = false;
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
@@ -1702,13 +1702,13 @@ class CompraList extends Compra
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_iva->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field ref_municipal
-        $filter = $this->queryBuilderWhere("ref_municipal");
+        // Field ref_islr
+        $filter = $this->queryBuilderWhere("ref_islr");
         if (!$filter) {
-            $this->buildSearchSql($filter, $this->ref_municipal, false, false);
+            $this->buildSearchSql($filter, $this->ref_islr, false, false);
         }
         if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_municipal->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->ref_islr->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
         // Field anulado
@@ -2032,7 +2032,7 @@ class CompraList extends Compra
             $this->updateSort($this->fecha); // fecha
             $this->updateSort($this->monto_pagar); // monto_pagar
             $this->updateSort($this->ref_iva); // ref_iva
-            $this->updateSort($this->ref_municipal); // ref_municipal
+            $this->updateSort($this->ref_islr); // ref_islr
             $this->updateSort($this->anulado); // anulado
             $this->updateSort($this->moneda); // moneda
             $this->updateSort($this->pagado); // pagado
@@ -2315,7 +2315,7 @@ class CompraList extends Compra
             $this->createColumnOption($option, "fecha");
             $this->createColumnOption($option, "monto_pagar");
             $this->createColumnOption($option, "ref_iva");
-            $this->createColumnOption($option, "ref_municipal");
+            $this->createColumnOption($option, "ref_islr");
             $this->createColumnOption($option, "anulado");
             $this->createColumnOption($option, "moneda");
             $this->createColumnOption($option, "pagado");
@@ -3446,17 +3446,17 @@ class CompraList extends Compra
             }
             $this->ref_iva->TooltipValue = "";
 
-            // ref_municipal
+            // ref_islr
             if (!EmptyValue($this->id->CurrentValue)) {
-                $this->ref_municipal->HrefValue = $this->ref_municipal->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
-                $this->ref_municipal->LinkAttrs["target"] = "_blank"; // Add target
+                $this->ref_islr->HrefValue = $this->ref_islr->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_islr->LinkAttrs["target"] = "_blank"; // Add target
                 if ($this->isExport()) {
-                    $this->ref_municipal->HrefValue = FullUrl($this->ref_municipal->HrefValue, "href");
+                    $this->ref_islr->HrefValue = FullUrl($this->ref_islr->HrefValue, "href");
                 }
             } else {
-                $this->ref_municipal->HrefValue = "";
+                $this->ref_islr->HrefValue = "";
             }
-            $this->ref_municipal->TooltipValue = "";
+            $this->ref_islr->TooltipValue = "";
 
             // anulado
             $this->anulado->HrefValue = "";
@@ -3541,13 +3541,13 @@ class CompraList extends Compra
             $this->ref_iva->EditValue = HtmlEncode($this->ref_iva->AdvancedSearch->SearchValue);
             $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
 
-            // ref_municipal
-            $this->ref_municipal->setupEditAttributes();
-            if (!$this->ref_municipal->Raw) {
-                $this->ref_municipal->AdvancedSearch->SearchValue = HtmlDecode($this->ref_municipal->AdvancedSearch->SearchValue);
+            // ref_islr
+            $this->ref_islr->setupEditAttributes();
+            if (!$this->ref_islr->Raw) {
+                $this->ref_islr->AdvancedSearch->SearchValue = HtmlDecode($this->ref_islr->AdvancedSearch->SearchValue);
             }
-            $this->ref_municipal->EditValue = HtmlEncode($this->ref_municipal->AdvancedSearch->SearchValue);
-            $this->ref_municipal->PlaceHolder = RemoveHtml($this->ref_municipal->caption());
+            $this->ref_islr->EditValue = HtmlEncode($this->ref_islr->AdvancedSearch->SearchValue);
+            $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
 
             // anulado
             $this->anulado->EditValue = $this->anulado->options(false);

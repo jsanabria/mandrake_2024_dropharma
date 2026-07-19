@@ -19,7 +19,7 @@ if (empty($items_seleccionados)) {
 }
 
 // 1. Obtener la metadata esencial de la Nota de Entrega Original (Padre)
-$sqlOriginal = "SELECT tipo_documento, cliente, moneda, id_documento_padre, asesor, documento, dias_credito, consignacion, nro_documento 
+$sqlOriginal = "SELECT tipo_documento, cliente, moneda, id_documento_padre, asesor, documento, dias_credito, consignacion, nro_documento, estatus 
                 FROM salidas WHERE id = $id;";
 $meta = ExecuteRow($sqlOriginal);
 $tipo = $meta["tipo_documento"];
@@ -105,14 +105,14 @@ else {
     $consecutivo_rem = $consecutivo + 1;
     $nro_documento_remanente = str_pad($consecutivo_rem, 7, "0", STR_PAD_LEFT);
 
-    // D) Insertamos la cabecera de la Nueva Nota Padre (Nace como 'NUEVO', entregado 'N' para que se pueda volver a despachar)
+    // D) Insertamos la cabecera de la Nueva Nota Padre (Nace como Antes 'NUEVO' Ahora $meta['estatus'], entregado 'N' para que se pueda volver a despachar)
     $sqlInsertNuevoPadre = "INSERT INTO salidas
                         (id, tipo_documento, username, fecha, cliente, nro_documento,
                         nota, estatus, moneda, id_documento_padre, asesor, documento, 
                         dias_credito, consignacion, doc_afectado, entregado)
                       VALUES 
                         (NULL, '$tipo', '" . CurrentUserName() . "', NOW(), " . $meta['cliente'] . ", '$nro_documento_remanente',
-                        'Saldo Pendiente - Ex Ref. #" . $meta['nro_documento'] . "', 'NUEVO', '" . $meta['moneda'] . "', 
+                        'Saldo Pendiente - Ex Ref. #" . $meta['nro_documento'] . "', '" . $meta['estatus'] . "', '" . $meta['moneda'] . "', 
                         " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . ($meta['asesor'] ?? 'NULL') . ", '" . $meta['documento'] . "', 
                         " . ($meta['dias_credito'] ?? '0') . ", '" . $meta['consignacion'] . "', '" . $meta['nro_documento'] . "', 'N');";
     Execute($sqlInsertNuevoPadre);

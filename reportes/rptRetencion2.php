@@ -100,6 +100,8 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',7);
 		$this->SetLineWidth(0.2);
 
+		$this->Image('../images/Logo.png',10,10,-170);
+
 		// Encabezado superior
 		$this->ln(10);
 		$this->Cell(230, 4, "COMPROBANTE DE RETENCION DEL IMPUESTO SOBRE LA RENTA", 0, 0, 'C');
@@ -109,12 +111,30 @@ class PDF extends FPDF
 		$this->SetXY(230, 20);
 		$this->Cell(20, 4, "PAGINA...:", 0, 0, 'L');
 		$this->Cell(12, 4, $this->PageNo(), 0, 0, 'L');
+		/*$this->SetXY(230, 25);
+		$this->Cell(20, 4, "FECHA....:", 0, 0, 'L');
+		$this->Cell(25, 4, $row["fecha_factura"], 0, 0, 'L');*/
+		// 1. Posicionamos el puntero donde empieza todo
+		$this->SetXY(10, 28); 
+
+		// 2. Imprimimos el RIF primero
+		$this->SetFont('Courier', 'b', 10);
+		$this->Cell(80, 4, "R.I.F. Nro: $rif", 0, 0, 'L');
+
+		// 3. Imprimimos la fecha a continuación (sin hacer un nuevo SetXY, 
+		// o usando un SetXY relativo si necesitas ajustar el espacio)
 		$this->SetXY(230, 25);
+		$this->SetFont('Courier', '', 7); // Ajusté el tamaño de 6 a 10 para que sea legible
 		$this->Cell(20, 4, "FECHA....:", 0, 0, 'L');
 		$this->Cell(25, 4, $row["fecha_factura"], 0, 0, 'L');
+
+		// 4. Solo al terminar toda la línea hacemos el salto de línea
+		$this->Ln(10);
+
 		$this->SetXY(230, 30);
 		$this->Cell(20, 4, "HORA.....:", 0, 0, 'L');
 		$this->Cell(25, 4, date("H:i:s"), 0, 0, 'L');
+
 
 		// Datos del agente
 		$this->SetXY(12, 35);

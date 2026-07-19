@@ -147,9 +147,9 @@ class CompraDelete extends Compra
         $this->ret_iva->Visible = false;
         $this->ref_iva->setVisibility();
         $this->ret_islr->Visible = false;
-        $this->ref_islr->Visible = false;
+        $this->ref_islr->setVisibility();
         $this->ret_municipal->Visible = false;
-        $this->ref_municipal->setVisibility();
+        $this->ref_municipal->Visible = false;
         $this->fecha_registro->Visible = false;
         $this->_username->Visible = false;
         $this->comprobante->Visible = false;
@@ -1027,17 +1027,17 @@ class CompraDelete extends Compra
             }
             $this->ref_iva->TooltipValue = "";
 
-            // ref_municipal
+            // ref_islr
             if (!EmptyValue($this->id->CurrentValue)) {
-                $this->ref_municipal->HrefValue = $this->ref_municipal->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
-                $this->ref_municipal->LinkAttrs["target"] = "_blank"; // Add target
+                $this->ref_islr->HrefValue = $this->ref_islr->getLinkPrefix() . $this->id->CurrentValue; // Add prefix/suffix
+                $this->ref_islr->LinkAttrs["target"] = "_blank"; // Add target
                 if ($this->isExport()) {
-                    $this->ref_municipal->HrefValue = FullUrl($this->ref_municipal->HrefValue, "href");
+                    $this->ref_islr->HrefValue = FullUrl($this->ref_islr->HrefValue, "href");
                 }
             } else {
-                $this->ref_municipal->HrefValue = "";
+                $this->ref_islr->HrefValue = "";
             }
-            $this->ref_municipal->TooltipValue = "";
+            $this->ref_islr->TooltipValue = "";
 
             // anulado
             $this->anulado->HrefValue = "";

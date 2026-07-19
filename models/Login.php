@@ -654,7 +654,7 @@ class Login extends Usuario
                     '" . date("Y-m-d H:i:s") . "',
                     'Intento fallido de inicio de sesión',
                     '{$usrSql}',
-                    'LOGIN_ERROR',
+                    'SENIAT: LOGIN_ERROR',
                     'users',
                     'username',
                     '{$usrSql}',

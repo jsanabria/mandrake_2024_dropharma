@@ -141,16 +141,16 @@ class ProveedorAdd extends Proveedor
         $this->fabricante->Visible = false;
         $this->cuenta_auxiliar->Visible = false;
         $this->cuenta_gasto->Visible = false;
+        $this->tipo_ret_iva->setVisibility();
+        $this->tipo_ret_islr_concepto->setVisibility();
+        $this->tipo_ret_islr->setVisibility();
+        $this->tipo_ret_mun->setVisibility();
         $this->tipo_iva->Visible = false;
         $this->tipo_islr->Visible = false;
         $this->sustraendo->Visible = false;
-        $this->tipo_ret_iva->Visible = false;
-        $this->tipo_ret_islr_concepto->Visible = false;
-        $this->tipo_ret_islr->Visible = false;
-        $this->tipo_ret_mun->Visible = false;
         $this->tipo_impmun->Visible = false;
         $this->cta_bco->setVisibility();
-        $this->activo->setVisibility();
+        $this->activo->Visible = false;
     }
 
     // Constructor
@@ -536,6 +536,10 @@ class ProveedorAdd extends Proveedor
         $this->setupLookupOptions($this->ciudad);
         $this->setupLookupOptions($this->cuenta_auxiliar);
         $this->setupLookupOptions($this->cuenta_gasto);
+        $this->setupLookupOptions($this->tipo_ret_iva);
+        $this->setupLookupOptions($this->tipo_ret_islr_concepto);
+        $this->setupLookupOptions($this->tipo_ret_islr);
+        $this->setupLookupOptions($this->tipo_ret_mun);
         $this->setupLookupOptions($this->tipo_iva);
         $this->setupLookupOptions($this->tipo_islr);
         $this->setupLookupOptions($this->sustraendo);
@@ -792,6 +796,46 @@ class ProveedorAdd extends Proveedor
             }
         }
 
+        // Check field name 'tipo_ret_iva' first before field var 'x_tipo_ret_iva'
+        $val = $CurrentForm->hasValue("tipo_ret_iva") ? $CurrentForm->getValue("tipo_ret_iva") : $CurrentForm->getValue("x_tipo_ret_iva");
+        if (!$this->tipo_ret_iva->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tipo_ret_iva->Visible = false; // Disable update for API request
+            } else {
+                $this->tipo_ret_iva->setFormValue($val);
+            }
+        }
+
+        // Check field name 'tipo_ret_islr_concepto' first before field var 'x_tipo_ret_islr_concepto'
+        $val = $CurrentForm->hasValue("tipo_ret_islr_concepto") ? $CurrentForm->getValue("tipo_ret_islr_concepto") : $CurrentForm->getValue("x_tipo_ret_islr_concepto");
+        if (!$this->tipo_ret_islr_concepto->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tipo_ret_islr_concepto->Visible = false; // Disable update for API request
+            } else {
+                $this->tipo_ret_islr_concepto->setFormValue($val);
+            }
+        }
+
+        // Check field name 'tipo_ret_islr' first before field var 'x_tipo_ret_islr'
+        $val = $CurrentForm->hasValue("tipo_ret_islr") ? $CurrentForm->getValue("tipo_ret_islr") : $CurrentForm->getValue("x_tipo_ret_islr");
+        if (!$this->tipo_ret_islr->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tipo_ret_islr->Visible = false; // Disable update for API request
+            } else {
+                $this->tipo_ret_islr->setFormValue($val);
+            }
+        }
+
+        // Check field name 'tipo_ret_mun' first before field var 'x_tipo_ret_mun'
+        $val = $CurrentForm->hasValue("tipo_ret_mun") ? $CurrentForm->getValue("tipo_ret_mun") : $CurrentForm->getValue("x_tipo_ret_mun");
+        if (!$this->tipo_ret_mun->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tipo_ret_mun->Visible = false; // Disable update for API request
+            } else {
+                $this->tipo_ret_mun->setFormValue($val);
+            }
+        }
+
         // Check field name 'cta_bco' first before field var 'x_cta_bco'
         $val = $CurrentForm->hasValue("cta_bco") ? $CurrentForm->getValue("cta_bco") : $CurrentForm->getValue("x_cta_bco");
         if (!$this->cta_bco->IsDetailKey) {
@@ -799,16 +843,6 @@ class ProveedorAdd extends Proveedor
                 $this->cta_bco->Visible = false; // Disable update for API request
             } else {
                 $this->cta_bco->setFormValue($val);
-            }
-        }
-
-        // Check field name 'activo' first before field var 'x_activo'
-        $val = $CurrentForm->hasValue("activo") ? $CurrentForm->getValue("activo") : $CurrentForm->getValue("x_activo");
-        if (!$this->activo->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->activo->Visible = false; // Disable update for API request
-            } else {
-                $this->activo->setFormValue($val);
             }
         }
 
@@ -828,8 +862,11 @@ class ProveedorAdd extends Proveedor
         $this->telefono2->CurrentValue = $this->telefono2->FormValue;
         $this->email1->CurrentValue = $this->email1->FormValue;
         $this->email2->CurrentValue = $this->email2->FormValue;
+        $this->tipo_ret_iva->CurrentValue = $this->tipo_ret_iva->FormValue;
+        $this->tipo_ret_islr_concepto->CurrentValue = $this->tipo_ret_islr_concepto->FormValue;
+        $this->tipo_ret_islr->CurrentValue = $this->tipo_ret_islr->FormValue;
+        $this->tipo_ret_mun->CurrentValue = $this->tipo_ret_mun->FormValue;
         $this->cta_bco->CurrentValue = $this->cta_bco->FormValue;
-        $this->activo->CurrentValue = $this->activo->FormValue;
     }
 
     /**
@@ -882,13 +919,13 @@ class ProveedorAdd extends Proveedor
         $this->fabricante->setDbValue($row['fabricante']);
         $this->cuenta_auxiliar->setDbValue($row['cuenta_auxiliar']);
         $this->cuenta_gasto->setDbValue($row['cuenta_gasto']);
-        $this->tipo_iva->setDbValue($row['tipo_iva']);
-        $this->tipo_islr->setDbValue($row['tipo_islr']);
-        $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_ret_iva->setDbValue($row['tipo_ret_iva']);
         $this->tipo_ret_islr_concepto->setDbValue($row['tipo_ret_islr_concepto']);
         $this->tipo_ret_islr->setDbValue($row['tipo_ret_islr']);
         $this->tipo_ret_mun->setDbValue($row['tipo_ret_mun']);
+        $this->tipo_iva->setDbValue($row['tipo_iva']);
+        $this->tipo_islr->setDbValue($row['tipo_islr']);
+        $this->sustraendo->setDbValue($row['sustraendo']);
         $this->tipo_impmun->setDbValue($row['tipo_impmun']);
         $this->cta_bco->setDbValue($row['cta_bco']);
         $this->activo->setDbValue($row['activo']);
@@ -910,13 +947,13 @@ class ProveedorAdd extends Proveedor
         $row['fabricante'] = $this->fabricante->DefaultValue;
         $row['cuenta_auxiliar'] = $this->cuenta_auxiliar->DefaultValue;
         $row['cuenta_gasto'] = $this->cuenta_gasto->DefaultValue;
-        $row['tipo_iva'] = $this->tipo_iva->DefaultValue;
-        $row['tipo_islr'] = $this->tipo_islr->DefaultValue;
-        $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_ret_iva'] = $this->tipo_ret_iva->DefaultValue;
         $row['tipo_ret_islr_concepto'] = $this->tipo_ret_islr_concepto->DefaultValue;
         $row['tipo_ret_islr'] = $this->tipo_ret_islr->DefaultValue;
         $row['tipo_ret_mun'] = $this->tipo_ret_mun->DefaultValue;
+        $row['tipo_iva'] = $this->tipo_iva->DefaultValue;
+        $row['tipo_islr'] = $this->tipo_islr->DefaultValue;
+        $row['sustraendo'] = $this->sustraendo->DefaultValue;
         $row['tipo_impmun'] = $this->tipo_impmun->DefaultValue;
         $row['cta_bco'] = $this->cta_bco->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
@@ -990,15 +1027,6 @@ class ProveedorAdd extends Proveedor
         // cuenta_gasto
         $this->cuenta_gasto->RowCssClass = "row";
 
-        // tipo_iva
-        $this->tipo_iva->RowCssClass = "row";
-
-        // tipo_islr
-        $this->tipo_islr->RowCssClass = "row";
-
-        // sustraendo
-        $this->sustraendo->RowCssClass = "row";
-
         // tipo_ret_iva
         $this->tipo_ret_iva->RowCssClass = "row";
 
@@ -1010,6 +1038,15 @@ class ProveedorAdd extends Proveedor
 
         // tipo_ret_mun
         $this->tipo_ret_mun->RowCssClass = "row";
+
+        // tipo_iva
+        $this->tipo_iva->RowCssClass = "row";
+
+        // tipo_islr
+        $this->tipo_islr->RowCssClass = "row";
+
+        // sustraendo
+        $this->sustraendo->RowCssClass = "row";
 
         // tipo_impmun
         $this->tipo_impmun->RowCssClass = "row";
@@ -1123,6 +1160,101 @@ class ProveedorAdd extends Proveedor
                 $this->cuenta_gasto->ViewValue = null;
             }
 
+            // tipo_ret_iva
+            $curVal = strval($this->tipo_ret_iva->CurrentValue);
+            if ($curVal != "") {
+                $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->lookupCacheOption($curVal);
+                if ($this->tipo_ret_iva->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->tipo_ret_iva->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_ret_iva->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->tipo_ret_iva->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->tipo_ret_iva->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->tipo_ret_iva->Lookup->renderViewRow($rswrk[0]);
+                        $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->displayValue($arwrk);
+                    } else {
+                        $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->CurrentValue;
+                    }
+                }
+            } else {
+                $this->tipo_ret_iva->ViewValue = null;
+            }
+
+            // tipo_ret_islr_concepto
+            $curVal = strval($this->tipo_ret_islr_concepto->CurrentValue);
+            if ($curVal != "") {
+                $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->lookupCacheOption($curVal);
+                if ($this->tipo_ret_islr_concepto->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->tipo_ret_islr_concepto->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_ret_islr_concepto->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->tipo_ret_islr_concepto->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->tipo_ret_islr_concepto->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->tipo_ret_islr_concepto->Lookup->renderViewRow($rswrk[0]);
+                        $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->displayValue($arwrk);
+                    } else {
+                        $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->CurrentValue;
+                    }
+                }
+            } else {
+                $this->tipo_ret_islr_concepto->ViewValue = null;
+            }
+
+            // tipo_ret_islr
+            $curVal = strval($this->tipo_ret_islr->CurrentValue);
+            if ($curVal != "") {
+                $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->lookupCacheOption($curVal);
+                if ($this->tipo_ret_islr->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->tipo_ret_islr->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->tipo_ret_islr->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->tipo_ret_islr->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->tipo_ret_islr->Lookup->renderViewRow($rswrk[0]);
+                        $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->displayValue($arwrk);
+                    } else {
+                        $this->tipo_ret_islr->ViewValue = FormatNumber($this->tipo_ret_islr->CurrentValue, $this->tipo_ret_islr->formatPattern());
+                    }
+                }
+            } else {
+                $this->tipo_ret_islr->ViewValue = null;
+            }
+
+            // tipo_ret_mun
+            $curVal = strval($this->tipo_ret_mun->CurrentValue);
+            if ($curVal != "") {
+                $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->lookupCacheOption($curVal);
+                if ($this->tipo_ret_mun->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->tipo_ret_mun->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_ret_mun->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                    $lookupFilter = $this->tipo_ret_mun->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->tipo_ret_mun->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->tipo_ret_mun->Lookup->renderViewRow($rswrk[0]);
+                        $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->displayValue($arwrk);
+                    } else {
+                        $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->CurrentValue;
+                    }
+                }
+            } else {
+                $this->tipo_ret_mun->ViewValue = null;
+            }
+
             // tipo_iva
             $curVal = strval($this->tipo_iva->CurrentValue);
             if ($curVal != "") {
@@ -1195,19 +1327,6 @@ class ProveedorAdd extends Proveedor
                 $this->sustraendo->ViewValue = null;
             }
 
-            // tipo_ret_iva
-            $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->CurrentValue;
-
-            // tipo_ret_islr_concepto
-            $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->CurrentValue;
-
-            // tipo_ret_islr
-            $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->CurrentValue;
-            $this->tipo_ret_islr->ViewValue = FormatNumber($this->tipo_ret_islr->ViewValue, $this->tipo_ret_islr->formatPattern());
-
-            // tipo_ret_mun
-            $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->CurrentValue;
-
             // tipo_impmun
             $curVal = strval($this->tipo_impmun->CurrentValue);
             if ($curVal != "") {
@@ -1266,11 +1385,20 @@ class ProveedorAdd extends Proveedor
             // email2
             $this->email2->HrefValue = "";
 
+            // tipo_ret_iva
+            $this->tipo_ret_iva->HrefValue = "";
+
+            // tipo_ret_islr_concepto
+            $this->tipo_ret_islr_concepto->HrefValue = "";
+
+            // tipo_ret_islr
+            $this->tipo_ret_islr->HrefValue = "";
+
+            // tipo_ret_mun
+            $this->tipo_ret_mun->HrefValue = "";
+
             // cta_bco
             $this->cta_bco->HrefValue = "";
-
-            // activo
-            $this->activo->HrefValue = "";
         } elseif ($this->RowType == RowType::ADD) {
             // ci_rif
             $this->ci_rif->setupEditAttributes();
@@ -1355,6 +1483,128 @@ class ProveedorAdd extends Proveedor
             $this->email2->EditValue = HtmlEncode($this->email2->CurrentValue);
             $this->email2->PlaceHolder = RemoveHtml($this->email2->caption());
 
+            // tipo_ret_iva
+            $this->tipo_ret_iva->setupEditAttributes();
+            $curVal = trim(strval($this->tipo_ret_iva->CurrentValue));
+            if ($curVal != "") {
+                $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->lookupCacheOption($curVal);
+            } else {
+                $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->Lookup !== null && is_array($this->tipo_ret_iva->lookupOptions()) && count($this->tipo_ret_iva->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->tipo_ret_iva->ViewValue !== null) { // Load from cache
+                $this->tipo_ret_iva->EditValue = array_values($this->tipo_ret_iva->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->tipo_ret_iva->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $this->tipo_ret_iva->CurrentValue, $this->tipo_ret_iva->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                }
+                $lookupFilter = $this->tipo_ret_iva->getSelectFilter($this); // PHP
+                $sqlWrk = $this->tipo_ret_iva->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                $this->tipo_ret_iva->EditValue = $arwrk;
+            }
+            $this->tipo_ret_iva->PlaceHolder = RemoveHtml($this->tipo_ret_iva->caption());
+
+            // tipo_ret_islr_concepto
+            $curVal = trim(strval($this->tipo_ret_islr_concepto->CurrentValue));
+            if ($curVal != "") {
+                $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->lookupCacheOption($curVal);
+            } else {
+                $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->Lookup !== null && is_array($this->tipo_ret_islr_concepto->lookupOptions()) && count($this->tipo_ret_islr_concepto->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->tipo_ret_islr_concepto->ViewValue !== null) { // Load from cache
+                $this->tipo_ret_islr_concepto->EditValue = array_values($this->tipo_ret_islr_concepto->lookupOptions());
+                if ($this->tipo_ret_islr_concepto->ViewValue == "") {
+                    $this->tipo_ret_islr_concepto->ViewValue = $Language->phrase("PleaseSelect");
+                }
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->tipo_ret_islr_concepto->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $this->tipo_ret_islr_concepto->CurrentValue, $this->tipo_ret_islr_concepto->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                }
+                $lookupFilter = $this->tipo_ret_islr_concepto->getSelectFilter($this); // PHP
+                $sqlWrk = $this->tipo_ret_islr_concepto->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->tipo_ret_islr_concepto->Lookup->renderViewRow($rswrk[0]);
+                    $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->displayValue($arwrk);
+                } else {
+                    $this->tipo_ret_islr_concepto->ViewValue = $Language->phrase("PleaseSelect");
+                }
+                $arwrk = $rswrk;
+                $this->tipo_ret_islr_concepto->EditValue = $arwrk;
+            }
+            $this->tipo_ret_islr_concepto->PlaceHolder = RemoveHtml($this->tipo_ret_islr_concepto->caption());
+
+            // tipo_ret_islr
+            $this->tipo_ret_islr->setupEditAttributes();
+            $curVal = trim(strval($this->tipo_ret_islr->CurrentValue));
+            if ($curVal != "") {
+                $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->lookupCacheOption($curVal);
+            } else {
+                $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->Lookup !== null && is_array($this->tipo_ret_islr->lookupOptions()) && count($this->tipo_ret_islr->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->tipo_ret_islr->ViewValue !== null) { // Load from cache
+                $this->tipo_ret_islr->EditValue = array_values($this->tipo_ret_islr->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->tipo_ret_islr->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $this->tipo_ret_islr->CurrentValue, $this->tipo_ret_islr->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                }
+                $sqlWrk = $this->tipo_ret_islr->Lookup->getSql(true, $filterWrk, '', $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                foreach ($arwrk as &$row) {
+                    $row = $this->tipo_ret_islr->Lookup->renderViewRow($row);
+                }
+                $this->tipo_ret_islr->EditValue = $arwrk;
+            }
+            $this->tipo_ret_islr->PlaceHolder = RemoveHtml($this->tipo_ret_islr->caption());
+
+            // tipo_ret_mun
+            $this->tipo_ret_mun->setupEditAttributes();
+            $curVal = trim(strval($this->tipo_ret_mun->CurrentValue));
+            if ($curVal != "") {
+                $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->lookupCacheOption($curVal);
+            } else {
+                $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->Lookup !== null && is_array($this->tipo_ret_mun->lookupOptions()) && count($this->tipo_ret_mun->lookupOptions()) > 0 ? $curVal : null;
+            }
+            if ($this->tipo_ret_mun->ViewValue !== null) { // Load from cache
+                $this->tipo_ret_mun->EditValue = array_values($this->tipo_ret_mun->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->tipo_ret_mun->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $this->tipo_ret_mun->CurrentValue, $this->tipo_ret_mun->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                }
+                $lookupFilter = $this->tipo_ret_mun->getSelectFilter($this); // PHP
+                $sqlWrk = $this->tipo_ret_mun->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                $this->tipo_ret_mun->EditValue = $arwrk;
+            }
+            $this->tipo_ret_mun->PlaceHolder = RemoveHtml($this->tipo_ret_mun->caption());
+
             // cta_bco
             $this->cta_bco->setupEditAttributes();
             if (!$this->cta_bco->Raw) {
@@ -1362,11 +1612,6 @@ class ProveedorAdd extends Proveedor
             }
             $this->cta_bco->EditValue = HtmlEncode($this->cta_bco->CurrentValue);
             $this->cta_bco->PlaceHolder = RemoveHtml($this->cta_bco->caption());
-
-            // activo
-            $this->activo->setupEditAttributes();
-            $this->activo->EditValue = $this->activo->options(true);
-            $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
             // Add refer script
 
@@ -1394,11 +1639,20 @@ class ProveedorAdd extends Proveedor
             // email2
             $this->email2->HrefValue = "";
 
+            // tipo_ret_iva
+            $this->tipo_ret_iva->HrefValue = "";
+
+            // tipo_ret_islr_concepto
+            $this->tipo_ret_islr_concepto->HrefValue = "";
+
+            // tipo_ret_islr
+            $this->tipo_ret_islr->HrefValue = "";
+
+            // tipo_ret_mun
+            $this->tipo_ret_mun->HrefValue = "";
+
             // cta_bco
             $this->cta_bco->HrefValue = "";
-
-            // activo
-            $this->activo->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1408,6 +1662,187 @@ class ProveedorAdd extends Proveedor
         if ($this->RowType != RowType::AGGREGATEINIT) {
             $this->rowRendered();
         }
+    }
+
+    // Render add option
+    public function renderAddOpt($row)
+    {
+        global $Security, $Language, $CurrentLanguage;
+
+        // Set up CurrentValue
+        $this->ci_rif->CurrentValue = $row["ci_rif"] ?? null;
+        $this->nombre->CurrentValue = $row["nombre"] ?? null;
+        $this->ciudad->CurrentValue = $row["ciudad"] ?? null;
+        $this->direccion->CurrentValue = $row["direccion"] ?? null;
+        $this->telefono1->CurrentValue = $row["telefono1"] ?? null;
+        $this->telefono2->CurrentValue = $row["telefono2"] ?? null;
+        $this->email1->CurrentValue = $row["email1"] ?? null;
+        $this->email2->CurrentValue = $row["email2"] ?? null;
+        $this->tipo_ret_iva->CurrentValue = $row["tipo_ret_iva"] ?? null;
+        $this->tipo_ret_islr_concepto->CurrentValue = $row["tipo_ret_islr_concepto"] ?? null;
+        $this->tipo_ret_islr->CurrentValue = $row["tipo_ret_islr"] ?? null;
+        $this->tipo_ret_mun->CurrentValue = $row["tipo_ret_mun"] ?? null;
+        $this->cta_bco->CurrentValue = $row["cta_bco"] ?? null;
+
+        // ci_rif
+        $this->ci_rif->ViewValue = $this->ci_rif->CurrentValue;
+
+        // nombre
+        $this->nombre->ViewValue = $this->nombre->CurrentValue;
+
+        // ciudad
+        $this->ciudad->ViewValue = $this->ciudad->CurrentValue;
+        $curVal = strval($this->ciudad->CurrentValue);
+        if ($curVal != "") {
+            $this->ciudad->ViewValue = $this->ciudad->lookupCacheOption($curVal);
+            if ($this->ciudad->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->ciudad->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->ciudad->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                $lookupFilter = $this->ciudad->getSelectFilter($this); // PHP
+                $sqlWrk = $this->ciudad->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->ciudad->Lookup->renderViewRow($rswrk[0]);
+                    $this->ciudad->ViewValue = $this->ciudad->displayValue($arwrk);
+                } else {
+                    $this->ciudad->ViewValue = $this->ciudad->CurrentValue;
+                }
+            }
+        } else {
+            $this->ciudad->ViewValue = null;
+        }
+
+        // direccion
+        $this->direccion->ViewValue = $this->direccion->CurrentValue;
+
+        // telefono1
+        $this->telefono1->ViewValue = $this->telefono1->CurrentValue;
+
+        // telefono2
+        $this->telefono2->ViewValue = $this->telefono2->CurrentValue;
+
+        // email1
+        $this->email1->ViewValue = $this->email1->CurrentValue;
+
+        // email2
+        $this->email2->ViewValue = $this->email2->CurrentValue;
+
+        // tipo_ret_iva
+        $curVal = strval($this->tipo_ret_iva->CurrentValue);
+        if ($curVal != "") {
+            $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->lookupCacheOption($curVal);
+            if ($this->tipo_ret_iva->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->tipo_ret_iva->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_ret_iva->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                $lookupFilter = $this->tipo_ret_iva->getSelectFilter($this); // PHP
+                $sqlWrk = $this->tipo_ret_iva->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->tipo_ret_iva->Lookup->renderViewRow($rswrk[0]);
+                    $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->displayValue($arwrk);
+                } else {
+                    $this->tipo_ret_iva->ViewValue = $this->tipo_ret_iva->CurrentValue;
+                }
+            }
+        } else {
+            $this->tipo_ret_iva->ViewValue = null;
+        }
+
+        // tipo_ret_islr_concepto
+        $curVal = strval($this->tipo_ret_islr_concepto->CurrentValue);
+        if ($curVal != "") {
+            $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->lookupCacheOption($curVal);
+            if ($this->tipo_ret_islr_concepto->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->tipo_ret_islr_concepto->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_ret_islr_concepto->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                $lookupFilter = $this->tipo_ret_islr_concepto->getSelectFilter($this); // PHP
+                $sqlWrk = $this->tipo_ret_islr_concepto->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->tipo_ret_islr_concepto->Lookup->renderViewRow($rswrk[0]);
+                    $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->displayValue($arwrk);
+                } else {
+                    $this->tipo_ret_islr_concepto->ViewValue = $this->tipo_ret_islr_concepto->CurrentValue;
+                }
+            }
+        } else {
+            $this->tipo_ret_islr_concepto->ViewValue = null;
+        }
+
+        // tipo_ret_islr
+        $curVal = strval($this->tipo_ret_islr->CurrentValue);
+        if ($curVal != "") {
+            $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->lookupCacheOption($curVal);
+            if ($this->tipo_ret_islr->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->tipo_ret_islr->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->tipo_ret_islr->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $sqlWrk = $this->tipo_ret_islr->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->tipo_ret_islr->Lookup->renderViewRow($rswrk[0]);
+                    $this->tipo_ret_islr->ViewValue = $this->tipo_ret_islr->displayValue($arwrk);
+                } else {
+                    $this->tipo_ret_islr->ViewValue = FormatNumber($this->tipo_ret_islr->CurrentValue, $this->tipo_ret_islr->formatPattern());
+                }
+            }
+        } else {
+            $this->tipo_ret_islr->ViewValue = null;
+        }
+
+        // tipo_ret_mun
+        $curVal = strval($this->tipo_ret_mun->CurrentValue);
+        if ($curVal != "") {
+            $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->lookupCacheOption($curVal);
+            if ($this->tipo_ret_mun->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->tipo_ret_mun->Lookup->getTable()->Fields["campo_codigo"]->searchExpression(), "=", $curVal, $this->tipo_ret_mun->Lookup->getTable()->Fields["campo_codigo"]->searchDataType(), "");
+                $lookupFilter = $this->tipo_ret_mun->getSelectFilter($this); // PHP
+                $sqlWrk = $this->tipo_ret_mun->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->tipo_ret_mun->Lookup->renderViewRow($rswrk[0]);
+                    $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->displayValue($arwrk);
+                } else {
+                    $this->tipo_ret_mun->ViewValue = $this->tipo_ret_mun->CurrentValue;
+                }
+            }
+        } else {
+            $this->tipo_ret_mun->ViewValue = null;
+        }
+
+        // cta_bco
+        $this->cta_bco->ViewValue = $this->cta_bco->CurrentValue;
+
+        // Set up $row
+        $row["ci_rif"] = $this->ci_rif->ViewValue;
+        $row["nombre"] = $this->nombre->ViewValue;
+        $row["ciudad"] = $this->ciudad->ViewValue;
+        $row["direccion"] = $this->direccion->ViewValue;
+        $row["telefono1"] = $this->telefono1->ViewValue;
+        $row["telefono2"] = $this->telefono2->ViewValue;
+        $row["email1"] = $this->email1->ViewValue;
+        $row["email2"] = $this->email2->ViewValue;
+        $row["tipo_ret_iva"] = $this->tipo_ret_iva->ViewValue;
+        $row["tipo_ret_islr_concepto"] = $this->tipo_ret_islr_concepto->ViewValue;
+        $row["tipo_ret_islr"] = $this->tipo_ret_islr->ViewValue;
+        $row["tipo_ret_mun"] = $this->tipo_ret_mun->ViewValue;
+        $row["cta_bco"] = $this->cta_bco->ViewValue;
+        return $row;
     }
 
     // Validate form
@@ -1466,14 +1901,29 @@ class ProveedorAdd extends Proveedor
             if (!CheckEmail($this->email2->FormValue)) {
                 $this->email2->addErrorMessage($this->email2->getErrorMessage(false));
             }
+            if ($this->tipo_ret_iva->Visible && $this->tipo_ret_iva->Required) {
+                if (!$this->tipo_ret_iva->IsDetailKey && EmptyValue($this->tipo_ret_iva->FormValue)) {
+                    $this->tipo_ret_iva->addErrorMessage(str_replace("%s", $this->tipo_ret_iva->caption(), $this->tipo_ret_iva->RequiredErrorMessage));
+                }
+            }
+            if ($this->tipo_ret_islr_concepto->Visible && $this->tipo_ret_islr_concepto->Required) {
+                if (!$this->tipo_ret_islr_concepto->IsDetailKey && EmptyValue($this->tipo_ret_islr_concepto->FormValue)) {
+                    $this->tipo_ret_islr_concepto->addErrorMessage(str_replace("%s", $this->tipo_ret_islr_concepto->caption(), $this->tipo_ret_islr_concepto->RequiredErrorMessage));
+                }
+            }
+            if ($this->tipo_ret_islr->Visible && $this->tipo_ret_islr->Required) {
+                if (!$this->tipo_ret_islr->IsDetailKey && EmptyValue($this->tipo_ret_islr->FormValue)) {
+                    $this->tipo_ret_islr->addErrorMessage(str_replace("%s", $this->tipo_ret_islr->caption(), $this->tipo_ret_islr->RequiredErrorMessage));
+                }
+            }
+            if ($this->tipo_ret_mun->Visible && $this->tipo_ret_mun->Required) {
+                if (!$this->tipo_ret_mun->IsDetailKey && EmptyValue($this->tipo_ret_mun->FormValue)) {
+                    $this->tipo_ret_mun->addErrorMessage(str_replace("%s", $this->tipo_ret_mun->caption(), $this->tipo_ret_mun->RequiredErrorMessage));
+                }
+            }
             if ($this->cta_bco->Visible && $this->cta_bco->Required) {
                 if (!$this->cta_bco->IsDetailKey && EmptyValue($this->cta_bco->FormValue)) {
                     $this->cta_bco->addErrorMessage(str_replace("%s", $this->cta_bco->caption(), $this->cta_bco->RequiredErrorMessage));
-                }
-            }
-            if ($this->activo->Visible && $this->activo->Required) {
-                if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
-                    $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
                 }
             }
 
@@ -1591,6 +2041,9 @@ class ProveedorAdd extends Proveedor
         // Write JSON response
         if (IsJsonResponse() && $addRow) {
             $row = $this->getRecordsFromRecordset([$rsnew], true);
+            if (Post("addopt") == "1") { // Render for add option response
+                $row = $this->renderAddOpt($row);
+            }
             $table = $this->TableVar;
             WriteJson(["success" => true, "action" => Config("API_ADD_ACTION"), $table => $row]);
         }
@@ -1631,11 +2084,20 @@ class ProveedorAdd extends Proveedor
         // email2
         $this->email2->setDbValueDef($rsnew, $this->email2->CurrentValue, false);
 
+        // tipo_ret_iva
+        $this->tipo_ret_iva->setDbValueDef($rsnew, $this->tipo_ret_iva->CurrentValue, false);
+
+        // tipo_ret_islr_concepto
+        $this->tipo_ret_islr_concepto->setDbValueDef($rsnew, $this->tipo_ret_islr_concepto->CurrentValue, false);
+
+        // tipo_ret_islr
+        $this->tipo_ret_islr->setDbValueDef($rsnew, $this->tipo_ret_islr->CurrentValue, false);
+
+        // tipo_ret_mun
+        $this->tipo_ret_mun->setDbValueDef($rsnew, $this->tipo_ret_mun->CurrentValue, false);
+
         // cta_bco
         $this->cta_bco->setDbValueDef($rsnew, $this->cta_bco->CurrentValue, false);
-
-        // activo
-        $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, strval($this->activo->CurrentValue) == "");
         return $rsnew;
     }
 
@@ -1669,11 +2131,20 @@ class ProveedorAdd extends Proveedor
         if (isset($row['email2'])) { // email2
             $this->email2->setFormValue($row['email2']);
         }
+        if (isset($row['tipo_ret_iva'])) { // tipo_ret_iva
+            $this->tipo_ret_iva->setFormValue($row['tipo_ret_iva']);
+        }
+        if (isset($row['tipo_ret_islr_concepto'])) { // tipo_ret_islr_concepto
+            $this->tipo_ret_islr_concepto->setFormValue($row['tipo_ret_islr_concepto']);
+        }
+        if (isset($row['tipo_ret_islr'])) { // tipo_ret_islr
+            $this->tipo_ret_islr->setFormValue($row['tipo_ret_islr']);
+        }
+        if (isset($row['tipo_ret_mun'])) { // tipo_ret_mun
+            $this->tipo_ret_mun->setFormValue($row['tipo_ret_mun']);
+        }
         if (isset($row['cta_bco'])) { // cta_bco
             $this->cta_bco->setFormValue($row['cta_bco']);
-        }
-        if (isset($row['activo'])) { // activo
-            $this->activo->setFormValue($row['activo']);
         }
     }
 
@@ -1763,6 +2234,17 @@ class ProveedorAdd extends Proveedor
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_cuenta_gasto":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_tipo_ret_iva":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_tipo_ret_islr_concepto":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
+                case "x_tipo_ret_islr":
+                    break;
+                case "x_tipo_ret_mun":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x_tipo_iva":

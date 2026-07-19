@@ -312,6 +312,7 @@ return [
     "crear_nota_entrega_automatica_wait" => \DI\create(CrearNotaEntregaAutomaticaWait::class),
     "documento_consecutivo" => \DI\create(DocumentoConsecutivo::class),
     "view_audittrail_seniat" => \DI\create(ViewAudittrailSeniat::class),
+    "crear_nota_recepcion_automatica_wait" => \DI\create(CrearNotaRecepcionAutomaticaWait::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

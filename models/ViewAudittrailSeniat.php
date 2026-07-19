@@ -204,6 +204,7 @@ class ViewAudittrailSeniat extends DbTable
             'TEXT' // Edit Tag
         );
         $this->user->InputTextType = "text";
+        $this->user->Lookup = new Lookup($this->user, 'usuario', false, 'username', ["username","nombre","",""], '', '', [], [], [], [], [], [], false, '`username`', '', "CONCAT(COALESCE(`username`, ''),'" . ValueSeparator(1, $this->user) . "',COALESCE(`nombre`,''))");
         $this->user->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['user'] = &$this->user;
 
@@ -1305,6 +1306,27 @@ class ViewAudittrailSeniat extends DbTable
 
         // user
         $this->user->ViewValue = $this->user->CurrentValue;
+        $curVal = strval($this->user->CurrentValue);
+        if ($curVal != "") {
+            $this->user->ViewValue = $this->user->lookupCacheOption($curVal);
+            if ($this->user->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->user->Lookup->getTable()->Fields["username"]->searchExpression(), "=", $curVal, $this->user->Lookup->getTable()->Fields["username"]->searchDataType(), "");
+                $sqlWrk = $this->user->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->user->Lookup->renderViewRow($rswrk[0]);
+                    $this->user->ViewValue = $this->user->displayValue($arwrk);
+                } else {
+                    $this->user->ViewValue = $this->user->CurrentValue;
+                }
+            }
+        } else {
+            $this->user->ViewValue = null;
+        }
 
         // action
         $this->_action->ViewValue = $this->_action->CurrentValue;

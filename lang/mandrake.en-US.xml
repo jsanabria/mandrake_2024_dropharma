@@ -1,7 +1,10 @@
-<ew-language date="2026/7/11" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/7/17" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1473">
+      <phrase id="menutext" value="Crear Nota Recepcion Automatica" />
+    </menu>
     <menu id="1469">
       <phrase id="menutext" value="Crear Nota de Entrega Automática" />
     </menu>
@@ -3977,15 +3980,6 @@
       <field id="cuenta_gasto">
         <phrase id="fldcaption" value="Cuenta Gasto" />
       </field>
-      <field id="tipo_iva">
-        <phrase id="fldcaption" value="% Retención IVA" />
-      </field>
-      <field id="tipo_islr">
-        <phrase id="fldcaption" value="% Retención ISLR" />
-      </field>
-      <field id="sustraendo">
-        <phrase id="fldcaption" value="Sustraendo" />
-      </field>
       <field id="tipo_ret_iva">
         <phrase id="fldcaption" value="% Retención IVA" />
       </field>
@@ -3997,6 +3991,15 @@
       </field>
       <field id="tipo_ret_mun">
         <phrase id="fldcaption" value="% Retención Imp. Muni." />
+      </field>
+      <field id="tipo_iva">
+        <phrase id="fldcaption" value="% Retención IVA" />
+      </field>
+      <field id="tipo_islr">
+        <phrase id="fldcaption" value="% Retención ISLR" />
+      </field>
+      <field id="sustraendo">
+        <phrase id="fldcaption" value="Sustraendo" />
       </field>
       <field id="tipo_impmun">
         <phrase id="fldcaption" value="% Retención Imp. Muni." />
@@ -8017,6 +8020,9 @@
       <field id="newvalue">
         <phrase id="fldcaption" value="Valor Actual" />
       </field>
+    </table>
+    <table id="crear_nota_recepcion_automatica_wait">
+      <phrase id="tblcaption" value="Crear Nota Recepcion Automatica" />
     </table>
   </project>
 </ew-language>
