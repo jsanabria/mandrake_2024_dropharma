@@ -550,6 +550,7 @@ class CompraAdd extends Compra
         $this->setupLookupOptions($this->proveedor);
         $this->setupLookupOptions($this->tipo_documento);
         $this->setupLookupOptions($this->aplica_retencion);
+        $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
@@ -828,7 +829,7 @@ class CompraAdd extends Compra
             if (IsApi() && $val === null) {
                 $this->alicuota->Visible = false; // Disable update for API request
             } else {
-                $this->alicuota->setFormValue($val, true, $validate);
+                $this->alicuota->setFormValue($val);
             }
         }
 
@@ -1194,8 +1195,28 @@ class CompraAdd extends Compra
             $this->monto_gravado->ViewValue = FormatNumber($this->monto_gravado->ViewValue, $this->monto_gravado->formatPattern());
 
             // alicuota
-            $this->alicuota->ViewValue = $this->alicuota->CurrentValue;
-            $this->alicuota->ViewValue = FormatNumber($this->alicuota->ViewValue, $this->alicuota->formatPattern());
+            $curVal = strval($this->alicuota->CurrentValue);
+            if ($curVal != "") {
+                $this->alicuota->ViewValue = $this->alicuota->lookupCacheOption($curVal);
+                if ($this->alicuota->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $curVal, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
+                    $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->alicuota->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->alicuota->Lookup->renderViewRow($rswrk[0]);
+                        $this->alicuota->ViewValue = $this->alicuota->displayValue($arwrk);
+                    } else {
+                        $this->alicuota->ViewValue = FormatNumber($this->alicuota->CurrentValue, $this->alicuota->formatPattern());
+                    }
+                }
+            } else {
+                $this->alicuota->ViewValue = null;
+            }
 
             // monto_iva
             $this->monto_iva->ViewValue = $this->monto_iva->CurrentValue;
@@ -1485,11 +1506,34 @@ class CompraAdd extends Compra
 
             // alicuota
             $this->alicuota->setupEditAttributes();
-            $this->alicuota->EditValue = $this->alicuota->CurrentValue;
-            $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
-            if (strval($this->alicuota->EditValue) != "" && is_numeric($this->alicuota->EditValue)) {
-                $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, null);
+            $curVal = trim(strval($this->alicuota->CurrentValue));
+            if ($curVal != "") {
+                $this->alicuota->ViewValue = $this->alicuota->lookupCacheOption($curVal);
+            } else {
+                $this->alicuota->ViewValue = $this->alicuota->Lookup !== null && is_array($this->alicuota->lookupOptions()) && count($this->alicuota->lookupOptions()) > 0 ? $curVal : null;
             }
+            if ($this->alicuota->ViewValue !== null) { // Load from cache
+                $this->alicuota->EditValue = array_values($this->alicuota->lookupOptions());
+            } else { // Lookup from database
+                if ($curVal == "") {
+                    $filterWrk = "0=1";
+                } else {
+                    $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $this->alicuota->CurrentValue, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
+                }
+                $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
+                $sqlWrk = $this->alicuota->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                $arwrk = $rswrk;
+                foreach ($arwrk as &$row) {
+                    $row = $this->alicuota->Lookup->renderViewRow($row);
+                }
+                $this->alicuota->EditValue = $arwrk;
+            }
+            $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
 
             // fecha_registro
             $this->fecha_registro->setupEditAttributes();
@@ -1659,9 +1703,6 @@ class CompraAdd extends Compra
                 if (!$this->alicuota->IsDetailKey && EmptyValue($this->alicuota->FormValue)) {
                     $this->alicuota->addErrorMessage(str_replace("%s", $this->alicuota->caption(), $this->alicuota->RequiredErrorMessage));
                 }
-            }
-            if (!CheckNumber($this->alicuota->FormValue)) {
-                $this->alicuota->addErrorMessage($this->alicuota->getErrorMessage(false));
             }
             if ($this->fecha_registro->Visible && $this->fecha_registro->Required) {
                 if (!$this->fecha_registro->IsDetailKey && EmptyValue($this->fecha_registro->FormValue)) {
@@ -1893,6 +1934,9 @@ class CompraAdd extends Compra
                 case "x_tipo_documento":
                     break;
                 case "x_aplica_retencion":
+                    break;
+                case "x_alicuota":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x__username":
                     break;

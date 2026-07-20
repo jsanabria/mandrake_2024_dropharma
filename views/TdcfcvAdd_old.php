@@ -113,6 +113,24 @@ $rowParametro111 = ExecuteRow("SELECT valor1 FROM parametro WHERE codigo = '111'
 if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
     $preguntarNE = true;
 }
+
+// Solo se ofrece la Nota de Recepción automática cuando la Nota de Crédito
+// contiene al menos un artículo que realmente maneja inventario.
+$tieneArticulosInventario = false;
+
+if (intval($pedido) > 0) {
+    $cantidadArticulosInventario = intval(ExecuteScalar("
+        SELECT COUNT(es.id)
+        FROM entradas_salidas AS es
+        INNER JOIN articulo AS a ON a.id = es.articulo
+        WHERE es.id_documento = " . intval($pedido) . "
+          AND es.tipo_documento = 'TDCFCV'
+          AND IFNULL(a.articulo_inventario, 'N') = 'S'
+          AND IFNULL(es.cantidad_articulo, 0) > 0
+    "));
+
+    $tieneArticulosInventario = ($cantidadArticulosInventario > 0);
+}
 ?>
 
 
@@ -1551,23 +1569,53 @@ loadjs.ready(["jquery"], function () {
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
 
-                    // Procede con el redireccionamiento final una vez decidido si se genera o no la Orden de Entrega.
-                    const continuarProceso = function (generarNE) {
+                    const tipoDocumentoFiscal = String(response.tipo_doc || "").toUpperCase();
+                    const tieneArticulosInventario = <?= $tieneArticulosInventario ? "true" : "false" ?>;
+
+                    // La decisión de inventario viaja separada para no mezclar
+                    // la Orden de Entrega (salida) con la Nota de Recepción (entrada).
+                    const continuarProceso = function (generarNE, generarNR) {
                         btn.prop("disabled", true)
                         .html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Procesando...');
 
                         window.location.href =
                             "TdcfcvProcess?pedido=" + i +
                             "&PorDesAct=" + PorDesAct +
-                            "&generar_ne=" + generarNE;
+                            "&generar_ne=" + generarNE +
+                            "&generar_nr=" + generarNR;
                     };
 
-                    if (idDocumentoPadre == 0 && preguntarNE) {
-                        // Cerramos el modal de confirmación fiscal y, apenas termine de ocultarse,
-                        // abrimos el modal para preguntar por la Orden de Entrega.
-                        const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
-                        const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
-                        const modalNE = new bootstrap.Modal(document.getElementById('modalConfirmarNE'));
+                    const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
+                    const modalFiscal = bootstrap.Modal.getInstance(modalFiscalEl);
+
+                    // NOTA DE CRÉDITO: los artículos de inventario deben regresar
+                    // mediante una Nota de Recepción automática.
+                    if (tipoDocumentoFiscal === "NC" && tieneArticulosInventario) {
+                        const modalNR = bootstrap.Modal.getOrCreateInstance(
+                            document.getElementById('modalConfirmarNR')
+                        );
+
+                        modalFiscalEl.addEventListener('hidden.bs.modal', function alOcultarFiscalNR() {
+                            modalFiscalEl.removeEventListener('hidden.bs.modal', alOcultarFiscalNR);
+                            modalNR.show();
+                        });
+
+                        modalFiscal.hide();
+
+                        $("#btnGenerarNRSi").off("click").on("click", function () {
+                            modalNR.hide();
+                            continuarProceso("N", "S");
+                        });
+
+                        return;
+                    }
+
+                    // FACTURA / NOTA DE DÉBITO: se conserva intacto el flujo
+                    // actual de Orden de Entrega, siempre que no provenga de otro documento.
+                    if (tipoDocumentoFiscal !== "NC" && idDocumentoPadre == 0 && preguntarNE) {
+                        const modalNE = bootstrap.Modal.getOrCreateInstance(
+                            document.getElementById('modalConfirmarNE')
+                        );
 
                         modalFiscalEl.addEventListener('hidden.bs.modal', function alHacerseInvisible() {
                             modalFiscalEl.removeEventListener('hidden.bs.modal', alHacerseInvisible);
@@ -1578,15 +1626,15 @@ loadjs.ready(["jquery"], function () {
 
                         $("#btnGenerarNESi").off("click").on("click", function () {
                             modalNE.hide();
-                            continuarProceso("S");
+                            continuarProceso("S", "N");
                         });
 
                         $("#btnGenerarNENo").off("click").on("click", function () {
                             modalNE.hide();
-                            continuarProceso("N");
+                            continuarProceso("N", "N");
                         });
                     } else {
-                        continuarProceso("N");
+                        continuarProceso("N", "N");
                     }
                 });                
             } else {
@@ -2140,6 +2188,34 @@ $impresoraFiscal = strtoupper(trim(
   </div>
 </div>
 
+<div class="modal fade" id="modalConfirmarNR" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarNRLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-success shadow-lg">
+      <div class="modal-header bg-success text-white py-2">
+        <h5 class="modal-title" id="modalConfirmarNRLabel">
+          <i class="fa-solid fa-box-open me-2"></i> Nota de Recepción
+        </h5>
+      </div>
+      <div class="modal-body bg-light text-dark text-center py-4">
+        <i class="fa-solid fa-warehouse text-success d-block mb-3" style="font-size: 2.5rem;"></i>
+        <p class="mb-2 fs-6">
+          Esta Nota de Crédito contiene artículos que manejan inventario.
+        </p>
+        <p class="mb-0 fs-6">
+          Se generará automáticamente una <strong>Nota de Recepción</strong>
+          para reincorporarlos al inventario.
+        </p>
+      </div>
+      <div class="modal-footer bg-white border-top-0 pt-0 justify-content-center gap-2">
+        <button type="button" id="btnGenerarNRSi" class="btn btn-sm btn-success px-4 fw-bold">
+          <i class="fa-solid fa-check me-1"></i>
+          Generar Nota de Recepción
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <style>
 #modalNuevoArticulo .form-label{
@@ -2342,5 +2418,4 @@ $impresoraFiscal = strtoupper(trim(
         </div>
     </div>
 </div>
-
 <?= GetDebugMessage() ?>

@@ -67,14 +67,15 @@ if ($row = mysqli_fetch_array($rs)) {
 }
 /////////////////////////////
 
-// NOTA: se agrega date_format(fecha, '%H:%i') AS hora para mostrar la hora debajo de la fecha
+// NOTA: se agrega date_format(fecha, '%H:%i:%s') AS hora para mostrar la hora (con segundos) debajo de la fecha
 $sql = "SELECT
 			id, date_format(fecha, '%d/%m/%Y') as fecha,
-			date_format(fecha, '%H:%i') AS hora,
+			date_format(fecha, '%H:%i:%s') AS hora,
 			date_format(fecha, '%Y/%m/%d') AS fech, cliente, nro_documento, nro_control, tipo_documento, estatus,
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito,
 			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado,
-			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota
+			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota,
+			IFNULL(username, '') AS username
 		FROM salidas where id = '$id_invoice';";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -83,6 +84,7 @@ $GLOBALS["invoice_id"] = $row["id"];
 $GLOBALS["cliente"] = $row["cliente"];
 $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["hora"] = $row["hora"];
+$GLOBALS["username"] = $row["username"];
 $GLOBALS["control"] = $row["nro_control"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
@@ -96,6 +98,21 @@ $GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["moneda"] = $row["moneda"];
 $GLOBALS["impreso"] = $row["impreso"];
 $GLOBALS["alicuota_dinamica"] = $row["igtf_alicuota"];
+
+// Si es una prefactura (sin número de documento asignado y estatus NUEVO), se muestra
+// un número de prefactura basado en el id interno y la fecha del día en curso.
+// NOTA: se usan variables "_display" separadas (no se sobreescribe nro_documento/fecha)
+// porque el resto del script usa $GLOBALS["nro_documento"] para decidir si marcar el
+// documento como impreso, buscar el doc_afe, etc. -esa lógica de negocio no debe cambiar-.
+if (trim($GLOBALS["nro_documento"] ?? "") == "" && $GLOBALS["estatus_doc"] == "NUEVO") {
+	$GLOBALS["nro_documento_display"] = "PREFACT-" . $GLOBALS["invoice_id"];
+	$GLOBALS["fecha_display"] = date("d/m/Y");
+	$GLOBALS["es_prefactura"] = true;
+} else {
+	$GLOBALS["nro_documento_display"] = $GLOBALS["nro_documento"];
+	$GLOBALS["fecha_display"] = $GLOBALS["fecha"];
+	$GLOBALS["es_prefactura"] = false;
+}
 
 if (trim($GLOBALS["nro_documento"] ?? "") != "") {
 	if ($row["impreso"] != "S") {
@@ -235,54 +252,56 @@ class PDF extends FPDF
 		$condicion_pago = (intval($GLOBALS["dias_credito"]) <= 0) ? "Contado" : ("Credito " . $GLOBALS["dias_credito"] . " dias");
 
 		$tdoc = ($GLOBALS["documento"] == "FC" ? "Nro. Factura: " : ($GLOBALS["documento"] == "NC" ? "Nro. Nota de Credito: " : ($GLOBALS["documento"] == "ND" ? "Nro. Nota de Debito: " : "N/A")));
+		if ($GLOBALS["es_prefactura"]) {
+			$tdoc = "Nro. Pre-Factura: ";
+		}
 
 		// ---------------------------------------------------------------
-		// BLOQUE SUPERIOR DERECHO: Nro. de documento, Fecha y Hora
+		// Nro. de documento (o Nro. de prefactura), solo, en su propia línea
 		// ---------------------------------------------------------------
-		$this->Ln(4);
+		$this->Ln(15);
 		$this->SetFont('Courier', 'B', 9);
 		$this->Cell(150, 4, "", 0, 0, 'L');
 		// rtrim() quita el espacio final de $tdoc (ej. "Nro. Factura: ") que descuadraba
 		// el alineado a la derecha frente a "Fecha:" y "Hora:"
 		$this->Cell(24, 4, rtrim($tdoc), 0, 0, 'R');
 		$this->SetFont('Courier', '', 9);
-		$this->Cell(20, 4, $GLOBALS["nro_documento"], 0, 1, 'L');
-
-		$this->SetFont('Courier', 'B', 9);
-		$this->Cell(150, 4, "", 0, 0, 'L');
-		$this->Cell(24, 4, "Fecha:", 0, 0, 'R');
-		$this->SetFont('Courier', '', 9);
-		$this->Cell(20, 4, $GLOBALS["fecha"], 0, 1, 'L');
-
-		$this->SetFont('Courier', 'B', 9);
-		$this->Cell(150, 4, "", 0, 0, 'L');
-		$this->Cell(24, 4, "Hora:", 0, 0, 'R');
-		$this->SetFont('Courier', '', 9);
-		$this->Cell(20, 4, $GLOBALS["hora"], 0, 1, 'L');
+		$this->Cell(20, 4, $GLOBALS["nro_documento_display"], 0, 1, 'L');
 
 		$this->Ln(1);
 
 		// ---------------------------------------------------------------
-		// BLOQUE IZQUIERDO: Cliente / Cuenta / Direccion
+		// CLIENTE (izquierda) alineado con Fecha (derecha), misma línea
 		// ---------------------------------------------------------------
 		$this->SetFont('Courier', 'B', 8);
 		$this->Cell(5, 4);
 		$this->Cell(25, 4, "CLIENTE:", 0, 0, 'L');
 		$this->SetFont('Courier', '', 8);
-		$this->Cell(160, 4, mb_convert_encoding(substr($razon_social, 0, 70), "UTF-8", mb_detect_encoding($razon_social)), 0, 1, 'L');
+		$this->Cell(120, 4, mb_convert_encoding(substr($razon_social, 0, 55), "UTF-8", mb_detect_encoding($razon_social)), 0, 0, 'L');
+		$this->SetFont('Courier', 'B', 9);
+		$this->Cell(24, 4, "Fecha:", 0, 0, 'R');
+		$this->SetFont('Courier', '', 9);
+		$this->Cell(20, 4, $GLOBALS["fecha_display"], 0, 1, 'L');
 
+		// ---------------------------------------------------------------
+		// CUENTA Nro (izquierda) alineado con Hora (derecha), misma línea
+		// ---------------------------------------------------------------
 		$this->SetFont('Courier', 'B', 8);
 		$this->Cell(5, 4);
 		$this->Cell(25, 4, "CUENTA Nro:", 0, 0, 'L');
 		$this->SetFont('Courier', '', 8);
-		$this->Cell(160, 4, $GLOBALS["cuenta_cliente"], 0, 1, 'L');
+		$this->Cell(120, 4, $GLOBALS["cuenta_cliente"], 0, 0, 'L');
+		$this->SetFont('Courier', 'B', 9);
+		$this->Cell(24, 4, "Hora:", 0, 0, 'R');
+		$this->SetFont('Courier', '', 9);
+		$this->Cell(20, 4, $GLOBALS["hora"], 0, 1, 'L');
 
 		$this->SetFont('Courier', 'B', 8);
 		$this->Cell(5, 4);
 		$this->Cell(25, 4, "DIRECCION:", 0, 0, 'L');
 		$this->SetFont('Courier', '', 8);
 		$direccion_completa = trim($direccion_cliente . ". " . $ciudad_cliente, ". ");
-		$this->Cell(180, 4, substr($direccion_completa, 0, 90), 0, 1, 'L');
+		$this->MultiCell(170, 3, substr($direccion_completa, 0, 150), 0, 'L');
 
 		$this->Ln(1);
 
@@ -388,6 +407,7 @@ class PDF extends FPDF
 		$dt = floatval($row["descuento2"]);  // salidas.descuento2 (DT) -> ahora se muestra solo en totales
 		$igtf_status = $row["igtf"];
 		$monto_igtf = floatval($row["monto_igtf"]);
+		$monto_base_igtf = floatval($row["monto_base_igtf"]);
 		$nota = mb_convert_encoding($row["nota"], "UTF-8", mb_detect_encoding($row["nota"]));
 		$nro_despacho = $row["nro_despacho"];
 		$alicuota_dinamica = $GLOBALS["alicuota_dinamica"];
@@ -448,53 +468,60 @@ class PDF extends FPDF
 			"Ley que establece el Impuesto al Valor Agregado y el 38 del Reglamento General de la Ley que establece el I.V.A.",
 			"UTF-8"
 		), 0, 'L');
+
+		// Usuario, debajo de la coletilla legal
+		$this->SetFont('Courier', 'B', 6);
+		$this->Cell(18, 3, "Usuario:", 0, 0, 'L');
+		$this->SetFont('Courier', '', 6);
+		$this->Cell(40, 3, $GLOBALS["username"], 0, 1, 'L');
+
 		$y_fin_coletilla = $this->GetY();
 		$this->SetY($y_totales);
 
 		// --- SUB-TOTAL EXENTO (en bruto, antes de DC/DT) ---
 		$this->SetFont('Courier', 'B', 8);
-		$this->Cell(143, 4, "SUB-TOTAL EXENTO:", 0, 0, 'R');
+		$this->Cell(155, 4, "SUB-TOTAL EXENTO:", 0, 0, 'R');
 		$this->SetFont('Courier', '', 8);
-		$this->Cell(33, 4, number_format($to_bs($exento_raw), 2, ",", "."), 0, 0, 'R');
+		$this->Cell(21, 4, number_format($to_bs($exento_raw), 2, ",", "."), 0, 0, 'R');
 		$this->Cell(22, 4, number_format($to_usd($exento_raw), 2, ",", "."), 0, 1, 'R');
 
 		// --- SUB-TOTAL GRAVADO (en bruto, antes de DC/DT) ---
 		$this->SetFont('Courier', 'B', 8);
-		$this->Cell(143, 4, "SUB-TOTAL GRAVADO:", 0, 0, 'R');
+		$this->Cell(155, 4, "SUB-TOTAL GRAVADO:", 0, 0, 'R');
 		$this->SetFont('Courier', '', 8);
-		$this->Cell(33, 4, number_format($to_bs($gravado_raw), 2, ",", "."), 0, 0, 'R');
+		$this->Cell(21, 4, number_format($to_bs($gravado_raw), 2, ",", "."), 0, 0, 'R');
 		$this->Cell(22, 4, number_format($to_usd($gravado_raw), 2, ",", "."), 0, 1, 'R');
 
 		// --- Descuento (DC) ---
 		if ($dc > 0) {
 			$this->SetFont('Courier', 'B', 8);
-			$this->Cell(143, 4, "Descuento " . number_format($dc, 2, ",", ".") . "%:", 0, 0, 'R');
+			$this->Cell(155, 4, "Descuento " . number_format($dc, 2, ",", ".") . "%:", 0, 0, 'R');
 			$this->SetFont('Courier', '', 8);
-			$this->Cell(33, 4, number_format($to_bs($monto_dc), 2, ",", "."), 0, 0, 'R');
+			$this->Cell(21, 4, number_format($to_bs($monto_dc), 2, ",", "."), 0, 0, 'R');
 			$this->Cell(22, 4, number_format($to_usd($monto_dc), 2, ",", "."), 0, 1, 'R');
 		}
 
 		// --- Descuento2 (DT) ---
 		if ($dt > 0) {
 			$this->SetFont('Courier', 'B', 8);
-			$this->Cell(143, 4, "Descuento2 " . number_format($dt, 2, ",", ".") . "%:", 0, 0, 'R');
+			$this->Cell(155, 4, "Descuento2 " . number_format($dt, 2, ",", ".") . "%:", 0, 0, 'R');
 			$this->SetFont('Courier', '', 8);
-			$this->Cell(33, 4, number_format($to_bs($monto_dt), 2, ",", "."), 0, 0, 'R');
+			$this->Cell(21, 4, number_format($to_bs($monto_dt), 2, ",", "."), 0, 0, 'R');
 			$this->Cell(22, 4, number_format($to_usd($monto_dt), 2, ",", "."), 0, 1, 'R');
 		}
 
 		// --- IVA sobre el gravado ya neto de DC y DT ---
 		$this->SetFont('Courier', 'B', 8);
-		$this->Cell(143, 4, "IVA " . number_format($xalicuota, 2, ",", ".") . "% SOBRE Bs. " . number_format($to_bs($gravado), 2, ",", ".") . ":", 0, 0, 'R');
+		$this->Cell(155, 4, "IVA " . number_format($xalicuota, 2, ",", ".") . "% SOBRE Bs. " . number_format($to_bs($gravado), 2, ",", ".") . ":", 0, 0, 'R');
 		$this->SetFont('Courier', '', 8);
-		$this->Cell(33, 4, number_format($to_bs($xIVA), 2, ",", "."), 0, 0, 'R');
+		$this->Cell(21, 4, number_format($to_bs($xIVA), 2, ",", "."), 0, 0, 'R');
 		$this->Cell(22, 4, number_format($to_usd($xIVA), 2, ",", "."), 0, 1, 'R');
 
 		// --- TOTAL ---
 		$this->SetFont('Courier', 'B', 9);
-		$this->Cell(143, 4, "TOTAL:", 0, 0, 'R');
+		$this->Cell(155, 4, "TOTAL:", 0, 0, 'R');
 		$this->SetFont('Courier', '', 9);
-		$this->Cell(33, 4, number_format($to_bs($xTotal), 2, ",", "."), 0, 0, 'R');
+		$this->Cell(21, 4, number_format($to_bs($xTotal), 2, ",", "."), 0, 0, 'R');
 		$this->Cell(22, 4, number_format($to_usd($xTotal), 2, ",", "."), 0, 1, 'R');
 
 		// 4. Alícuota de IGTF vigente (se usa como referencia cuando salidas.igtf = 'N')
@@ -518,31 +545,40 @@ class PDF extends FPDF
 		$total_bs = $to_bs($xTotal);
 
 		if ($igtf_status == "S") {
+			// IGTF realmente cobrado: se usan los montos reales guardados por el sistema.
 			$porcentaje_igtf = $alicuota_dinamica;
-			$igtf_bs = $monto_igtf; // ya está en Bs., no se convierte
-			$igtf_usd = ($tasa_dia > 0) ? $igtf_bs / $tasa_dia : 0;
-			$total_general_bs = $total_bs + $igtf_bs;
+			$base_igtf_mostrada = $monto_base_igtf; // salidas.monto_base_igtf, tal cual (ya en Bs.)
+			$igtf_bs = $monto_igtf;                 // salidas.monto_igtf, tal cual (ya en Bs.)
 		} else {
+			// Sin cobro real de IGTF: se calcula un monto de referencia sobre el TOTAL
+			// de la factura, con la alícuota vigente consultada en la tabla `alicuota`.
 			$porcentaje_igtf = $alicuota_igtf_defecto;
-			$igtf_bs = $total_bs * ($alicuota_igtf_defecto / 100); // referencia, calculada directamente en Bs.
-			$igtf_usd = ($tasa_dia > 0) ? $igtf_bs / $tasa_dia : 0;
-			$total_general_bs = $total_bs; // no se suma, es solo referencia
+			$base_igtf_mostrada = $total_bs;
+			$igtf_bs = $total_bs * ($alicuota_igtf_defecto / 100);
 		}
+		$igtf_usd = ($tasa_dia > 0) ? $igtf_bs / $tasa_dia : 0;
+
+		// El IGTF (real o de referencia) solo se suma al TOTAL GENERAL si la fila
+		// realmente se está mostrando (igtf='S', o MOSTRAR_IGTF_SIEMPRE=true). Si
+		// MOSTRAR_IGTF_SIEMPRE=false y salidas.igtf='N', ni se muestra ni se suma.
+		$mostrar_fila_igtf = ($igtf_status == "S" || $MOSTRAR_IGTF_SIEMPRE);
+
+		$total_general_bs = $total_bs + ($mostrar_fila_igtf ? $igtf_bs : 0);
 		$total_general_usd = ($tasa_dia > 0) ? $total_general_bs / $tasa_dia : 0;
 
-		if ($igtf_status == "S" || $MOSTRAR_IGTF_SIEMPRE) {
+		if ($mostrar_fila_igtf) {
 			$this->SetFont('Courier', 'B', 8);
-			$this->Cell(143, 4, "I.G.T.F. " . number_format($porcentaje_igtf, 2, ",", ".") . "% SOBRE Bs. " . number_format($total_bs, 2, ",", ".") . ":", 0, 0, 'R');
+			$this->Cell(155, 4, "I.G.T.F. " . number_format($porcentaje_igtf, 2, ",", ".") . "% SOBRE Bs. " . number_format($base_igtf_mostrada, 2, ",", ".") . ":", 0, 0, 'R');
 			$this->SetFont('Courier', '', 8);
-			$this->Cell(33, 4, number_format($igtf_bs, 2, ",", "."), 0, 0, 'R');
+			$this->Cell(21, 4, number_format($igtf_bs, 2, ",", "."), 0, 0, 'R');
 			$this->Cell(22, 4, number_format($igtf_usd, 2, ",", "."), 0, 1, 'R');
 		}
 
 		// --- TOTAL GENERAL ---
 		$this->SetFont('Courier', 'B', 9);
-		$this->Cell(143, 4, "TOTAL GENERAL:", 0, 0, 'R');
+		$this->Cell(155, 4, "TOTAL GENERAL:", 0, 0, 'R');
 		$this->SetFont('Courier', '', 9);
-		$this->Cell(33, 4, number_format($total_general_bs, 2, ",", "."), 0, 0, 'R');
+		$this->Cell(21, 4, number_format($total_general_bs, 2, ",", "."), 0, 0, 'R');
 		$this->Cell(22, 4, number_format($total_general_usd, 2, ",", "."), 0, 1, 'R');
 
 		// Continuar desde la posición más baja entre la coletilla (izquierda) y el bloque de totales (derecha)

@@ -32,7 +32,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["aplica_retencion", [fields.aplica_retencion.visible && fields.aplica_retencion.required ? ew.Validators.required(fields.aplica_retencion.caption) : null], fields.aplica_retencion.isInvalid],
             ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
             ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
-            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
+            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
             ["fecha_registro", [fields.fecha_registro.visible && fields.fecha_registro.required ? ew.Validators.required(fields.fecha_registro.caption) : null, ew.Validators.datetime(fields.fecha_registro.clientFormatPattern)], fields.fecha_registro.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
             ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null, ew.Validators.float], fields.tasa_dia.isInvalid]
@@ -57,6 +57,7 @@ loadjs.ready(["wrapper", "head"], function () {
             "proveedor": <?= $Page->proveedor->toClientList($Page) ?>,
             "tipo_documento": <?= $Page->tipo_documento->toClientList($Page) ?>,
             "aplica_retencion": <?= $Page->aplica_retencion->toClientList($Page) ?>,
+            "alicuota": <?= $Page->alicuota->toClientList($Page) ?>,
             "moneda": <?= $Page->moneda->toClientList($Page) ?>,
         })
         .build();
@@ -408,9 +409,44 @@ loadjs.ready("fcompraadd", function() {
         <label id="elh_compra_alicuota" for="x_alicuota" class="<?= $Page->LeftColumnClass ?>"><?= $Page->alicuota->caption() ?><?= $Page->alicuota->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->alicuota->cellAttributes() ?>>
 <span id="el_compra_alicuota">
-<input type="<?= $Page->alicuota->getInputTextType() ?>" name="x_alicuota" id="x_alicuota" data-table="compra" data-field="x_alicuota" value="<?= $Page->alicuota->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->alicuota->formatPattern()) ?>"<?= $Page->alicuota->editAttributes() ?> aria-describedby="x_alicuota_help">
-<?= $Page->alicuota->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
+    <select
+        id="x_alicuota"
+        name="x_alicuota"
+        class="form-select ew-select<?= $Page->alicuota->isInvalidClass() ?>"
+        <?php if (!$Page->alicuota->IsNativeSelect) { ?>
+        data-select2-id="fcompraadd_x_alicuota"
+        <?php } ?>
+        data-table="compra"
+        data-field="x_alicuota"
+        data-page="2"
+        data-value-separator="<?= $Page->alicuota->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>"
+        <?= $Page->alicuota->editAttributes() ?>>
+        <?= $Page->alicuota->selectOptionListHtml("x_alicuota") ?>
+    </select>
+    <?= $Page->alicuota->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
+<?= $Page->alicuota->Lookup->getParamTag($Page, "p_x_alicuota") ?>
+<?php if (!$Page->alicuota->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fcompraadd", function() {
+    var options = { name: "x_alicuota", selectId: "fcompraadd_x_alicuota" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fcompraadd.lists.alicuota?.lookupOptions.length) {
+        options.data = { id: "x_alicuota", form: "fcompraadd" };
+    } else {
+        options.ajax = { id: "x_alicuota", form: "fcompraadd", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.compra.fields.alicuota.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>

@@ -789,7 +789,6 @@ class ViewOutTdcpdv extends DbTable
         $this->dias_credito->addMethod("getSelectFilter", fn() => "`codigo` = '007'");
         $this->dias_credito->InputTextType = "text";
         $this->dias_credito->Raw = true;
-        $this->dias_credito->Required = true; // Required field
         $this->dias_credito->setSelectMultiple(false); // Select one
         $this->dias_credito->UsePleaseSelect = true; // Use PleaseSelect by default
         $this->dias_credito->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
@@ -1312,7 +1311,6 @@ class ViewOutTdcpdv extends DbTable
         );
         $this->asesor_asignado->addMethod("getSelectFilter", fn() => "IFNULl(asesor, 0) > 0");
         $this->asesor_asignado->InputTextType = "text";
-        $this->asesor_asignado->Required = true; // Required field
         $this->asesor_asignado->setSelectMultiple(false); // Select one
         $this->asesor_asignado->UsePleaseSelect = true; // Use PleaseSelect by default
         $this->asesor_asignado->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text

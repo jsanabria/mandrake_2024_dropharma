@@ -10,8 +10,9 @@ require_once "../vendor/autoload.php";
 // ===============================
 // CONFIGURACIÓN
 // ===============================
-$correoDestino = "jsanabria44@gmail.com"; // Cambiar
-$correoCopia = ""; // Opcional
+// $correoDestino = "jsanabria44@gmail.com"; // Cambiar
+$correoDestino = "sistemas@seniat.gob.ve"; // Cambiar
+$correoCopia = "jsanabria44@gmail.com"; // Opcional
 
 /*
 $correoCC = [

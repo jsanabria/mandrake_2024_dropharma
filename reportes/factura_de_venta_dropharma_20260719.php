@@ -42,12 +42,10 @@ if($row = mysqli_fetch_array($rs)) {
 
 $sql = "SELECT 
 			id, date_format(fecha, '%d/%m/%Y') as fecha, 
-			date_format(fecha, '%H:%i:%s') AS hora,
 			date_format(fecha, '%Y/%m/%d') AS fech, cliente, nro_documento, nro_control, tipo_documento, estatus, 
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito, 
 			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado, 
-			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota,
-			IFNULL(username, '') AS username
+			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota 
 		FROM salidas where id = '$id_invoice';"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -55,8 +53,6 @@ $GLOBALS["invoice"] = $row["nro_documento"];
 $GLOBALS["invoice_id"] = $row["id"];
 $GLOBALS["cliente"] = $row["cliente"];
 $GLOBALS["fecha"] = $row["fecha"];
-$GLOBALS["hora"] = $row["hora"];
-$GLOBALS["username"] = $row["username"];
 $GLOBALS["control"] = $row["nro_control"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
@@ -262,35 +258,11 @@ class PDF extends FPDF
 
 		$this->SetFont('Courier','',8);
 		$this->Ln();
-
-		// Fecha / Hora / Usuario, alineados en la misma columna del Nro. de documento
-		$this->SetFont('Courier','B',8);
-		$this->Cell(155, 3, "", 0, 0, 'L');
-		$this->Cell(30, 3, "Fecha: ", 0, 0, 'R');
-		$this->SetFont('Courier','',8);
-		$this->Cell(30, 3, $GLOBALS["fecha"], 0, 1, 'L');
-
-		$this->SetFont('Courier','B',8);
-		$this->Cell(155, 3, "", 0, 0, 'L');
-		$this->Cell(30, 3, "Hora: ", 0, 0, 'R');
-		$this->SetFont('Courier','',8);
-		$this->Cell(30, 3, $GLOBALS["hora"], 0, 1, 'L');
-
-		$this->SetFont('Courier','B',8);
-		$this->Cell(155, 3, "", 0, 0, 'L');
-		$this->Cell(30, 3, "Usuario: ", 0, 0, 'R');
-		$this->SetFont('Courier','',8);
-		$this->Cell(30, 3, $GLOBALS["username"], 0, 1, 'L');
 		
 
-		// Esta línea de continuación solo se imprime si el nombre realmente supera
-		// los 55 caracteres; si no, se omite para no dejar un renglón en blanco entre
-		// el bloque Fecha/Hora/Usuario y DIRECCION.
-		if (strlen($razon_social) > 55) {
-			$this->Cell(40, 3);
-			$this->Cell(110, 3, mb_convert_encoding(substr($razon_social, 55, strlen($razon_social)), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
-			$this->Ln();
-		}
+		$this->Cell(40, 3);
+		$this->Cell(110, 3, mb_convert_encoding(substr($razon_social, 55, strlen($razon_social)), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
+		$this->Ln();
 
 		$this->Cell(5, 4);
 		$this->SetFont('Courier','B',8);
@@ -298,6 +270,10 @@ class PDF extends FPDF
 		$this->SetFont('Courier','',8);
 		$direccion_cliente = "$direccion_cliente. $ciudad_cliente";
 		$this->Cell(120, 4, substr($direccion_cliente, 0, 60), '0', '0', 'L');
+		$this->SetFont('Courier','B',8);
+		$this->Cell(33, 4,'Fecha: ','0','0','R');
+		$this->SetFont('Courier','',8);
+		$this->Cell(30, 4, $GLOBALS["fecha"], 0, 0, 'L');
 
 		$this->Ln();		
 		$this->Cell(5, 5);

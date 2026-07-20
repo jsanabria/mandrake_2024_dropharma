@@ -28,22 +28,9 @@ $resPago = mysqli_query($link, $sqlPago);
 $row = mysqli_fetch_array($resPago);
 $fecha_pago = $row['fecha'];
 
-$sqlPagos = "SELECT
-                a.metodo_pago,
-                IFNULL(b.valor2, a.metodo_pago) AS metodo_descripcion,
-                a.referencia,
-                a.monto_bs,
-                a.moneda,
-                a.monto_moneda
-             FROM cobros_cliente_detalle AS a
-             LEFT JOIN parametro AS b
-                ON b.codigo = '009'
-               AND b.valor1 = a.metodo_pago
-             WHERE a.cobros_cliente IN (
-                 SELECT id
-                 FROM cobros_cliente
-                 WHERE id_documento = $id_compra
-             )";
+$sqlPagos = "SELECT metodo_pago, referencia, monto_bs, moneda, monto_moneda  
+             FROM cobros_cliente_detalle 
+             WHERE cobros_cliente IN (SELECT id FROM cobros_cliente WHERE id_documento = $id_compra)";
 $resPagos = mysqli_query($link, $sqlPagos);
 
 $total_pagos = 0;
@@ -113,18 +100,18 @@ $pdf->Ln(10);
 // Tabla de Detalle
 $pdf->SetFillColor(230, 230, 230);
 $pdf->SetFont('Arial', 'B', 9);
-$pdf->Cell(60, 7, "METODO", 1, 0, 'C', true);
+$pdf->Cell(40, 7, "METODO", 1, 0, 'C', true);
 $pdf->Cell(60, 7, "REFERENCIA", 1, 0, 'C', true);
-$pdf->Cell(35, 7, "MONTO DIVISA", 1, 0, 'C', true);
-$pdf->Cell(35, 7, "MONTO BS.", 1, 1, 'C', true);
+$pdf->Cell(45, 7, "MONTO DIVISA", 1, 0, 'C', true);
+$pdf->Cell(45, 7, "MONTO BS.", 1, 1, 'C', true);
 
 $pdf->SetFont('Arial', '', 9);
 foreach ($detalle_pagos as $p) {
     $es_igtf = ($p['metodo_pago'] == 'IG');
-    $pdf->Cell(60, 6, $es_igtf ? "IGTF 3%" : to_iso($p['metodo_descripcion']), 1, 0, 'L');
+    $pdf->Cell(40, 6, $es_igtf ? "IGTF 3%" : $p['metodo_pago'], 1, 0, 'L');
     $pdf->Cell(60, 6, $p['referencia'], 1, 0, 'L');
-    $pdf->Cell(35, 6, $p['moneda'] != 'Bs.' ? $p['moneda']." ".number_format($p['monto_moneda'], 2) : '-', 1, 0, 'R');
-    $pdf->Cell(35, 6, number_format($p['monto_bs'], 2, ',', '.'), 1, 1, 'R');
+    $pdf->Cell(45, 6, $p['moneda'] != 'Bs.' ? $p['moneda']." ".number_format($p['monto_moneda'], 2) : '-', 1, 0, 'R');
+    $pdf->Cell(45, 6, number_format($p['monto_bs'], 2, ',', '.'), 1, 1, 'R');
 }
 
 // Totales Finales

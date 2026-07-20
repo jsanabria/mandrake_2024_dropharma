@@ -70,16 +70,20 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 ?>
 
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+(function ($) {
+    var $ = window.jQuery;
+    
   function insertar(i) { 
-    var pedido = $("#pedido").value();
-    var proveedor = $("#codpro").value();
-    var cantidad = $("#x" + i + "_cantidad").value();
-    var articulo = $("#x" + i + "_articulo").value();
+    var pedido = $("#pedido").val();
+    var proveedor = $("#codpro").val();
+    var cantidad = $("#x" + i + "_cantidad").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var nota = $("#nota").val();
+    var lote = $("#x" + i + "_lote").val();
+    var vence = $("#x" + i + "_vence").val();
+    var almacen = $("#almacen").val();
     var username = '<?= CurrentUserName() ?>';
-    var nota = $("#nota").value();
-    var lote = $("#x" + i + "_lote").value();
-    var vence = $("#x" + i + "_vence").value();
-    var almacen = $("#almacen").value();
     // alert(pedido + " - " + proveedor + " - " + costoFull + " - " + descuento + " - " + costo + " - " + moneda + " - " + total + " - " + cantidad + " - " + username);
 
     // Using the core $.ajax() method
@@ -125,7 +129,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
         else {
           alert("Error: !!! " + json.mensaje + " !!!");
           document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
-          ("#x" + i + "_cantidad").value("");
+          $("#x" + i + "_cantidad").val("");
         }
     })
     // Code to run if the request fails; the raw request and status codes are passed to the function
@@ -142,10 +146,10 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function eliminar(i, id_item) {
-    var pedido = $("#pedido").value();
-    var articulo = $("#x" + i + "_articulo").value();
+    var pedido = $("#pedido").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var nota = $("#nota").val();
     var username = '<?= CurrentUserName() ?>';
-    var nota = $("#nota").value();
 
     // alert(pedido + " - " + proveedor + " - " + precio + " - " + descuento + " - " + precioFull + " - " + moneda + " - " + onhand + " - " + cantidad + " - " + username);
     // Using the core $.ajax() method
@@ -207,7 +211,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
     if(i > 0) {
       if(!confirm("Seguro que quiere vaciar la cesta de pedidos?")) return false;
 
-      var pedido = $("#pedido").value();
+      var pedido = $("#pedido").val();
       // Using the core $.ajax() method
       $.ajax({
         // The URL for the request
@@ -407,6 +411,15 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
       });
   }
 
+  // Exponer al scope global las funciones que se invocan desde atributos onclick="js:..."
+  window.insertar = insertar;
+  window.eliminar = eliminar;
+  window.vaciar = vaciar;
+  window.sendProccess = sendProccess;
+  window.abrirModalNuevoArticulo = abrirModalNuevoArticulo;
+  window.guardarNuevoArticulo = guardarNuevoArticulo;
+})(jQuery);
+});
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -537,6 +550,10 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 </div>
 
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+(function ($) {
+    var $ = window.jQuery;
+    
   $("#laboratorio").prop("disabled", true);
   $("#articulo").prop("disabled", true);
 
@@ -703,7 +720,16 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
       } 
   }
 
+  // Exponer al scope global las funciones que se invocan desde atributos onclick="js:..."
+  window.getCodigos3 = getCodigos3;
+  window.getCodigos = getCodigos;
+  window.getCodigos2 = getCodigos2;
+  window.limpiar = limpiar;
+  window.guardar_nota = guardar_nota;
+
   getCodigos3( <?= $pedido ?> )
+})(jQuery);
+});
 </script>
 
 <style>

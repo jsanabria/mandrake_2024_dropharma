@@ -41,7 +41,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["descripcion", [fields.descripcion.visible && fields.descripcion.required ? ew.Validators.required(fields.descripcion.caption) : null], fields.descripcion.isInvalid],
             ["monto_exento", [fields.monto_exento.visible && fields.monto_exento.required ? ew.Validators.required(fields.monto_exento.caption) : null, ew.Validators.float], fields.monto_exento.isInvalid],
             ["monto_gravado", [fields.monto_gravado.visible && fields.monto_gravado.required ? ew.Validators.required(fields.monto_gravado.caption) : null, ew.Validators.float], fields.monto_gravado.isInvalid],
-            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null, ew.Validators.float], fields.alicuota.isInvalid],
+            ["alicuota", [fields.alicuota.visible && fields.alicuota.required ? ew.Validators.required(fields.alicuota.caption) : null], fields.alicuota.isInvalid],
             ["ref_iva", [fields.ref_iva.visible && fields.ref_iva.required ? ew.Validators.required(fields.ref_iva.caption) : null], fields.ref_iva.isInvalid],
             ["ref_islr", [fields.ref_islr.visible && fields.ref_islr.required ? ew.Validators.required(fields.ref_islr.caption) : null], fields.ref_islr.isInvalid],
             ["ref_municipal", [fields.ref_municipal.visible && fields.ref_municipal.required ? ew.Validators.required(fields.ref_municipal.caption) : null], fields.ref_municipal.isInvalid],
@@ -67,6 +67,7 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
+            "alicuota": <?= $Page->alicuota->toClientList($Page) ?>,
             "anulado": <?= $Page->anulado->toClientList($Page) ?>,
         })
         .build();
@@ -324,9 +325,44 @@ loadjs.ready(["fcompraedit", "datetimepicker"], function () {
         <label id="elh_compra_alicuota" for="x_alicuota" class="<?= $Page->LeftColumnClass ?>"><?= $Page->alicuota->caption() ?><?= $Page->alicuota->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
         <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->alicuota->cellAttributes() ?>>
 <span id="el_compra_alicuota">
-<input type="<?= $Page->alicuota->getInputTextType() ?>" name="x_alicuota" id="x_alicuota" data-table="compra" data-field="x_alicuota" value="<?= $Page->alicuota->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->alicuota->formatPattern()) ?>"<?= $Page->alicuota->editAttributes() ?> aria-describedby="x_alicuota_help">
-<?= $Page->alicuota->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
+    <select
+        id="x_alicuota"
+        name="x_alicuota"
+        class="form-select ew-select<?= $Page->alicuota->isInvalidClass() ?>"
+        <?php if (!$Page->alicuota->IsNativeSelect) { ?>
+        data-select2-id="fcompraedit_x_alicuota"
+        <?php } ?>
+        data-table="compra"
+        data-field="x_alicuota"
+        data-page="2"
+        data-value-separator="<?= $Page->alicuota->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->alicuota->getPlaceHolder()) ?>"
+        <?= $Page->alicuota->editAttributes() ?>>
+        <?= $Page->alicuota->selectOptionListHtml("x_alicuota") ?>
+    </select>
+    <?= $Page->alicuota->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->alicuota->getErrorMessage() ?></div>
+<?= $Page->alicuota->Lookup->getParamTag($Page, "p_x_alicuota") ?>
+<?php if (!$Page->alicuota->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fcompraedit", function() {
+    var options = { name: "x_alicuota", selectId: "fcompraedit_x_alicuota" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fcompraedit.lists.alicuota?.lookupOptions.length) {
+        options.data = { id: "x_alicuota", form: "fcompraedit" };
+    } else {
+        options.ajax = { id: "x_alicuota", form: "fcompraedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.compra.fields.alicuota.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>

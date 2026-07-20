@@ -117,6 +117,19 @@ try {
         $conn->beginTransaction();
 
         try {
+            $proveedor = intval(ExecuteScalar("
+                SELECT valor1
+                FROM parametro
+                WHERE codigo = '054'
+                LIMIT 1
+            "));
+
+            if ($proveedor <= 0) {
+                throw new \Exception(
+                    "No está configurado un proveedor válido en el parámetro 054."
+                );
+            }
+
             ExecuteStatement("
                 INSERT INTO entradas
                     (
@@ -128,7 +141,7 @@ try {
                 VALUES
                     (
                         NULL, 'TDCNRP', '{$username}', NOW(),
-                        1, '{$nroRecepcion}', '" . AdjustSql($almacenDefecto) . "', 'PROCESADO',
+                        {$proveedor}, '{$nroRecepcion}', '" . AdjustSql($almacenDefecto) . "', 'PROCESADO',
                         {$pedido}, 'N', {$cliente},
                         '{$moneda}', '{$nota}', {$descuento}
                     )

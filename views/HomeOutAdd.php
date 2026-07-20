@@ -25,7 +25,7 @@ case 'TDCPDV':
 case 'TDCNET':
 	//$myform = "TdcnetAdd";
     $myform = "AjusteSalida?id=0&tipo_documento=TDCNET";
-	$linkform = '<a href="ViewSalidasList?crear=TDCNET" class="btn btn-primary">Crear Orden de Entrega desde Pedido de Venta o Factura</a>';
+	$linkform = '<a href="ViewSalidasList?crear=TDCNET" class="btn btn-primary">Crear Orden de Entrega desde Pedido de Venta</a>';
 	break;
 case 'TDCFCV':
 	$myform = "TdcfcvAdd";

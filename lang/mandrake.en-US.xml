@@ -1,4 +1,4 @@
-<ew-language date="2026/7/17" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/7/19" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
@@ -7976,16 +7976,16 @@
     <table id="documento_consecutivo">
       <phrase id="tblcaption" value="Consecutivo de Documentos" />
       <field id="tipo_documento">
-        <phrase id="fldcaption" value="tipo documento" />
+        <phrase id="fldcaption" value="Documento" />
       </field>
       <field id="serie">
-        <phrase id="fldcaption" value="serie" />
+        <phrase id="fldcaption" value="Serie" />
       </field>
       <field id="ultimo_numero">
-        <phrase id="fldcaption" value="ultimo numero" />
+        <phrase id="fldcaption" value="Ultimo Número" />
       </field>
       <field id="updated_at">
-        <phrase id="fldcaption" value="updated at" />
+        <phrase id="fldcaption" value="Updated at" />
       </field>
     </table>
     <table id="view_audittrail_seniat">

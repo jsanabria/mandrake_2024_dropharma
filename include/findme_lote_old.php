@@ -18,7 +18,6 @@ $response = [
 try {
     $codart = (int)($_REQUEST["id"] ?? 0);
     $id_documento = (int)($_REQUEST["id_documento"] ?? 0);
-    $codcli = (int)($_REQUEST["codcli"] ?? 0);
 
     if ($codart <= 0) {
         throw new Exception("Identificador de artículo no válido.");
@@ -113,134 +112,65 @@ try {
     $tarifa = 0;
     $mostrar_precio = "S";
 
-    $tipo_documento = "";
-
     if ($id_documento > 0) {
-        // Documento existente: obtener cliente, tarifa y tipo desde la cabecera.
+
         $stmt = $link->prepare("
-            SELECT a.tipo_documento, a.cliente, b.tarifa
+            SELECT a.tipo_documento, b.tarifa
             FROM salidas AS a
             JOIN cliente AS b ON b.id = a.cliente
             WHERE a.id = ?
-            LIMIT 1
         ");
-        if (!$stmt) {
-            throw new Exception("Error preparando consulta de tarifa del documento: " . $link->error);
-        }
-
         $stmt->bind_param("i", $id_documento);
         $stmt->execute();
         $rowDoc = $stmt->get_result()->fetch_assoc();
         $stmt->close();
 
         if ($rowDoc) {
-            $tipo_documento = (string)$rowDoc["tipo_documento"];
-            $codcli = (int)$rowDoc["cliente"];
-            $tarifa = (int)$rowDoc["tarifa"];
-        }
-    } elseif ($codcli > 0) {
-        // Documento nuevo: todavía no existe cabecera, consultar la tarifa directamente del cliente.
-        $stmt = $link->prepare("
-            SELECT tarifa
-            FROM cliente
-            WHERE id = ?
-            LIMIT 1
-        ");
-        if (!$stmt) {
-            throw new Exception("Error preparando consulta de tarifa del cliente: " . $link->error);
-        }
+            $tipo_documento = $rowDoc["tipo_documento"];
+            $tarifa = intval($rowDoc["tarifa"]);
 
-        $stmt->bind_param("i", $codcli);
-        $stmt->execute();
-        $rowCliente = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
+            $codParamPrecio = ($tipo_documento === "TDCNET") ? "051" : "052";
+            $resPrecio = $link->query("SELECT valor1 AS mostrar_precio FROM parametro WHERE codigo = '$codParamPrecio';");
+            if ($resPrecio && $rowPr = $resPrecio->fetch_assoc()) {
+                $mostrar_precio = $rowPr["mostrar_precio"];
+            }
 
-        if ($rowCliente) {
-            $tarifa = (int)$rowCliente["tarifa"];
-        }
+            $stmt = $link->prepare("
+                SELECT a.descuento, IFNULL(b.descuento, 0) AS descuento2
+                FROM articulo AS a
+                LEFT JOIN fabricante AS b ON b.Id = a.fabricante
+                WHERE a.id = ?
+            ");
+            $stmt->bind_param("i", $codart);
+            $stmt->execute();
+            $rowArtPrecio = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
 
-        // Para documentos nuevos, el tipo llega implícitamente desde la pantalla.
-        // AjusteSalida usa TDCNET o TDCASA; ambos consultan el parámetro correspondiente.
-        $tipo_documento = (string)($_REQUEST["tipo_documento"] ?? "TDCNET");
-    }
+            $descuento = floatval($rowArtPrecio["descuento"] ?? 0);
+            $descuento2 = floatval($rowArtPrecio["descuento2"] ?? 0);
 
-    if ($tarifa > 0) {
-        $codParamPrecio = ($tipo_documento === "TDCNET") ? "051" : "052";
+            $stmt = $link->prepare("
+                SELECT 
+                    a.precio AS precio_ful,
+                    ROUND(
+                        (
+                            (a.precio - (a.precio * (? / 100))) -
+                            ((a.precio - (a.precio * (? / 100))) * (? / 100))
+                        ), 2
+                    ) AS precio
+                FROM tarifa_articulo AS a
+                WHERE a.tarifa = ?
+                  AND a.articulo = ?
+            ");
+            $stmt->bind_param("ddiii", $descuento, $descuento, $descuento2, $tarifa, $codart);
+            $stmt->execute();
+            $rowPrecio = $stmt->get_result()->fetch_assoc();
+            $stmt->close();
 
-        $stmt = $link->prepare("
-            SELECT valor1 AS mostrar_precio
-            FROM parametro
-            WHERE codigo = ?
-            LIMIT 1
-        ");
-        if (!$stmt) {
-            throw new Exception("Error preparando parámetro de precio: " . $link->error);
-        }
-
-        $stmt->bind_param("s", $codParamPrecio);
-        $stmt->execute();
-        $rowPr = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        if ($rowPr) {
-            $mostrar_precio = (string)$rowPr["mostrar_precio"];
-        }
-
-        $stmt = $link->prepare("
-            SELECT
-                a.descuento,
-                IFNULL(b.descuento, 0) AS descuento2
-            FROM articulo AS a
-            LEFT JOIN fabricante AS b ON b.Id = a.fabricante
-            WHERE a.id = ?
-            LIMIT 1
-        ");
-        if (!$stmt) {
-            throw new Exception("Error preparando descuentos del artículo: " . $link->error);
-        }
-
-        $stmt->bind_param("i", $codart);
-        $stmt->execute();
-        $rowArtPrecio = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        $descuento = (float)($rowArtPrecio["descuento"] ?? 0);
-        $descuento2 = (float)($rowArtPrecio["descuento2"] ?? 0);
-
-        $stmt = $link->prepare("
-            SELECT
-                a.precio AS precio_ful,
-                ROUND(
-                    (
-                        (a.precio - (a.precio * (? / 100))) -
-                        ((a.precio - (a.precio * (? / 100))) * (? / 100))
-                    ),
-                    2
-                ) AS precio
-            FROM tarifa_articulo AS a
-            WHERE a.tarifa = ?
-              AND a.articulo = ?
-            LIMIT 1
-        ");
-        if (!$stmt) {
-            throw new Exception("Error preparando precio del artículo: " . $link->error);
-        }
-
-        $stmt->bind_param(
-            "dddii",
-            $descuento,
-            $descuento,
-            $descuento2,
-            $tarifa,
-            $codart
-        );
-        $stmt->execute();
-        $rowPrecio = $stmt->get_result()->fetch_assoc();
-        $stmt->close();
-
-        if ($mostrar_precio === "S" && $rowPrecio) {
-            $precio_unidad = (float)$rowPrecio["precio"];
-            $precio_ful = (float)$rowPrecio["precio_ful"];
+            if ($mostrar_precio === "S" && $rowPrecio) {
+                $precio_unidad = floatval($rowPrecio["precio"]);
+                $precio_ful = floatval($rowPrecio["precio_ful"]);
+            }
         }
     }
     ////////

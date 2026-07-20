@@ -394,7 +394,9 @@ if ($codcli > 0) {
         $.ajax({
             data: {
                 "id": id,
-                "id_documento": idDocumento
+                "id_documento": idDocumento,
+                "codcli": $("#codcli").val(),
+                "tipo_documento": $("#tipo_documento_actual").val()
             },
             url: "include/findme_lote.php",
             type: 'post',

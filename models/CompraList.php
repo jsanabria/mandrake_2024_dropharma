@@ -732,6 +732,7 @@ class CompraList extends Compra
         $this->setupLookupOptions($this->proveedor);
         $this->setupLookupOptions($this->tipo_documento);
         $this->setupLookupOptions($this->aplica_retencion);
+        $this->setupLookupOptions($this->alicuota);
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->comprobante);
         $this->setupLookupOptions($this->anulado);
@@ -3264,8 +3265,28 @@ class CompraList extends Compra
             $this->monto_gravado->ViewValue = FormatNumber($this->monto_gravado->ViewValue, $this->monto_gravado->formatPattern());
 
             // alicuota
-            $this->alicuota->ViewValue = $this->alicuota->CurrentValue;
-            $this->alicuota->ViewValue = FormatNumber($this->alicuota->ViewValue, $this->alicuota->formatPattern());
+            $curVal = strval($this->alicuota->CurrentValue);
+            if ($curVal != "") {
+                $this->alicuota->ViewValue = $this->alicuota->lookupCacheOption($curVal);
+                if ($this->alicuota->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $curVal, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
+                    $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->alicuota->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->alicuota->Lookup->renderViewRow($rswrk[0]);
+                        $this->alicuota->ViewValue = $this->alicuota->displayValue($arwrk);
+                    } else {
+                        $this->alicuota->ViewValue = FormatNumber($this->alicuota->CurrentValue, $this->alicuota->formatPattern());
+                    }
+                }
+            } else {
+                $this->alicuota->ViewValue = null;
+            }
 
             // monto_iva
             $this->monto_iva->ViewValue = $this->monto_iva->CurrentValue;
@@ -3876,6 +3897,9 @@ class CompraList extends Compra
                 case "x_tipo_documento":
                     break;
                 case "x_aplica_retencion":
+                    break;
+                case "x_alicuota":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
                 case "x__username":
                     break;

@@ -9,6 +9,9 @@ $TdcfcvAdd = &$Page;
 $Page->showMessage();
 ?>
 <?php
+$Page->showMessage();
+?>
+<?php
 $codcli = isset($_REQUEST["codcli"]) ? $_REQUEST["codcli"] : 0;
 $tipo_documento = $_REQUEST["tipo_documento"];
 
@@ -1533,8 +1536,89 @@ loadjs.ready(["jquery"], function () {
         }
     };
 
+    window.validarPreciosAntesDeProcesar = function () {
+        let preciosInvalidos = [];
+        let primeraFilaInvalida = null;
+
+        // Limpia cualquier marca de validación anterior.
+        $("#lista2 input[id$='_precioFull'], #lista2 input[id$='_precio']")
+            .removeClass("is-invalid");
+
+        $("#lista2 input[id$='_precioFull']").each(function () {
+            const $precioFull = $(this);
+            const idPrecioFull = $precioFull.attr("id") || "";
+            const match = idPrecioFull.match(/^x(\d+)_precioFull$/);
+
+            if (!match) {
+                return;
+            }
+
+            const fila = parseInt(match[1], 10);
+            const $precioFinal = $("#x" + fila + "_precio");
+
+            const precioFull = parseFloat(
+                String($precioFull.val() || "").replace(",", ".")
+            );
+
+            const precioFinal = parseFloat(
+                String($precioFinal.val() || "").replace(",", ".")
+            );
+
+            if (
+                !Number.isFinite(precioFull) ||
+                precioFull <= 0 ||
+                !Number.isFinite(precioFinal) ||
+                precioFinal <= 0
+            ) {
+                $precioFull.addClass("is-invalid");
+                $precioFinal.addClass("is-invalid");
+
+                const $fila = $precioFull.closest("tr");
+                const articulo = $.trim(
+                    $fila.find("td").eq(1).find("strong").first().text()
+                ) || ("Renglón " + fila);
+
+                preciosInvalidos.push(articulo);
+
+                if (primeraFilaInvalida === null) {
+                    primeraFilaInvalida = $precioFull;
+                }
+            }
+        });
+
+        if (preciosInvalidos.length > 0) {
+            const articulosUnicos = [...new Set(preciosInvalidos)];
+
+            alertMsg(
+                "No se puede procesar el documento. " +
+                "Todos los artículos deben tener un precio mayor a cero.\n\n" +
+                "Revise: " + articulosUnicos.join(", ")
+            );
+
+            if (primeraFilaInvalida) {
+                const $fila = primeraFilaInvalida.closest("tr");
+
+                $("html, body").animate({
+                    scrollTop: Math.max($fila.offset().top - 120, 0)
+                }, 250);
+
+                primeraFilaInvalida.focus();
+            }
+
+            return false;
+        }
+
+        return true;
+    };
+
     window.sendProccess = function (i) {
         if (i <= 0) return false;
+
+        // Antes de abrir los modales o reservar correlativos, valida
+        // que todos los renglones tengan precio full y precio final > 0.
+        if (!validarPreciosAntesDeProcesar()) {
+            return false;
+        }
 
         // Mostrar un spinner o deshabilitar temporalmente para evitar doble clic antes de cargar modal
         const PorDesAct = getVal("PorDesAct");

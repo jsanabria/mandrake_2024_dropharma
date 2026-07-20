@@ -2145,6 +2145,13 @@ class ViewSalidas extends DbTable
             case "TDCNET":
                 AddFilter($filter, "
                 (
+                    tipo_documento = 'TDCPDV'
+                    AND estatus = 'NUEVO'
+                )
+                ");
+                /*
+                AddFilter($filter, "
+                (
                     (
                         tipo_documento = 'TDCPDV'
                         AND estatus = 'NUEVO'
@@ -2158,6 +2165,7 @@ class ViewSalidas extends DbTable
                     )
                 )
                 ");
+                */
                 AddFilter($filter, "(tipo_documento <> 'TDCPDV' OR IFNULL(TRIM(cerrado), '') <> '')");
                 break;
             case "TDCFCV":

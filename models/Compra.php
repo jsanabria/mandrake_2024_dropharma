@@ -423,12 +423,18 @@ class Compra extends DbTable
             false, // Force selection
             false, // Is Virtual search
             'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
+            'SELECT' // Edit Tag
         );
+        $this->alicuota->addMethod("getSelectFilter", fn() => "`activo` = 'S' AND `codigo` <> 'IGT'");
         $this->alicuota->InputTextType = "text";
         $this->alicuota->Raw = true;
+        $this->alicuota->Required = true; // Required field
+        $this->alicuota->setSelectMultiple(false); // Select one
+        $this->alicuota->UsePleaseSelect = true; // Use PleaseSelect by default
+        $this->alicuota->PleaseSelectText = $Language->phrase("PleaseSelect"); // "PleaseSelect" text
+        $this->alicuota->Lookup = new Lookup($this->alicuota, 'alicuota', false, 'alicuota', ["nombre","alicuota","",""], '', '', [], [], [], [], [], [], false, '`alicuota`', '', "CONCAT(COALESCE(`nombre`, ''),'" . ValueSeparator(1, $this->alicuota) . "',COALESCE(`alicuota`,''))");
         $this->alicuota->DefaultErrorMessage = $Language->phrase("IncorrectFloat");
-        $this->alicuota->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
+        $this->alicuota->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['alicuota'] = &$this->alicuota;
 
         // monto_iva
@@ -2025,8 +2031,28 @@ class Compra extends DbTable
         $this->monto_gravado->ViewValue = FormatNumber($this->monto_gravado->ViewValue, $this->monto_gravado->formatPattern());
 
         // alicuota
-        $this->alicuota->ViewValue = $this->alicuota->CurrentValue;
-        $this->alicuota->ViewValue = FormatNumber($this->alicuota->ViewValue, $this->alicuota->formatPattern());
+        $curVal = strval($this->alicuota->CurrentValue);
+        if ($curVal != "") {
+            $this->alicuota->ViewValue = $this->alicuota->lookupCacheOption($curVal);
+            if ($this->alicuota->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $curVal, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
+                $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
+                $sqlWrk = $this->alicuota->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->alicuota->Lookup->renderViewRow($rswrk[0]);
+                    $this->alicuota->ViewValue = $this->alicuota->displayValue($arwrk);
+                } else {
+                    $this->alicuota->ViewValue = FormatNumber($this->alicuota->CurrentValue, $this->alicuota->formatPattern());
+                }
+            }
+        } else {
+            $this->alicuota->ViewValue = null;
+        }
 
         // monto_iva
         $this->monto_iva->ViewValue = $this->monto_iva->CurrentValue;
@@ -2434,11 +2460,7 @@ class Compra extends DbTable
 
         // alicuota
         $this->alicuota->setupEditAttributes();
-        $this->alicuota->EditValue = $this->alicuota->CurrentValue;
         $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
-        if (strval($this->alicuota->EditValue) != "" && is_numeric($this->alicuota->EditValue)) {
-            $this->alicuota->EditValue = FormatNumber($this->alicuota->EditValue, null);
-        }
 
         // monto_iva
         $this->monto_iva->setupEditAttributes();
