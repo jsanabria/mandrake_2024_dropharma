@@ -21,6 +21,9 @@ $nota = $_REQUEST["nota"];
 $lista_pedido = $_REQUEST["lista_pedido"]; 
 $dias_credito = intval($_REQUEST["dias_credito"]); 
 
+$lote = trim($_REQUEST["lote"] ?? ""); 
+$vence = $_REQUEST["vence"] ?? "1990-01-01"; 
+$vence = ($vence == "" ? "1990-01-01" : $vence);
 
 $sql = "SELECT valor1 AS ppal from parametro WHERE codigo = '002';";
 $result = mysqli_query($link, $sql);
@@ -131,12 +134,12 @@ $sql = "INSERT INTO entradas_salidas
 			(id, tipo_documento, id_documento, fabricante, articulo, 
 			almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, 
 			costo_unidad, costo, 
-			precio_unidad, precio, alicuota, descuento, descuento2, precio_unidad_sin_desc, newdata)
+			precio_unidad, precio, alicuota, descuento, descuento2, precio_unidad_sin_desc, newdata, lote, fecha_vencimiento)
 		VALUES 
 			(NULL, '$tipo_documento', $pedido, $fabricante, $articulo, 
 			'$almacen', $cantidad, '$unidad_medida', $cantidad_unidad_medida, $cantidad_movimiento, 
 			$costo_unidad, $costo, 
-			$precio, $total, $alicuota, $descuento, $descuento2, $precioFull, 'S');"; 
+			$precio, $total, $alicuota, $descuento, $descuento2, $precioFull, 'S', '$lote', '$vence');"; 
 // die(json_encode($sql, JSON_UNESCAPED_UNICODE));
 mysqli_query($link, $sql);
 

@@ -75,6 +75,9 @@ class PagosCompra extends AbstractEntity
     #[Column(name: "tasa_cambio", type: "decimal", nullable: true)]
     private ?string $tasaCambio;
 
+    #[Column(name: "tipo_documento", type: "string")]
+    private string $tipoDocumento;
+
     public function getId(): int
     {
         return $this->id;
@@ -237,6 +240,17 @@ class PagosCompra extends AbstractEntity
     public function setTasaCambio(?string $value): static
     {
         $this->tasaCambio = $value;
+        return $this;
+    }
+
+    public function getTipoDocumento(): string
+    {
+        return HtmlDecode($this->tipoDocumento);
+    }
+
+    public function setTipoDocumento(string $value): static
+    {
+        $this->tipoDocumento = RemoveXss($value);
         return $this;
     }
 }

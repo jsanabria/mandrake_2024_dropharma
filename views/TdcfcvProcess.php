@@ -169,7 +169,14 @@ if ($pedido <= 0) {
     die("Documento no válido.");
 }
 
-$sql = "SELECT documento, nro_documento, estatus FROM salidas WHERE id = $pedido LIMIT 1;";
+$sql = "SELECT
+            documento,
+            nro_documento,
+            estatus,
+            IFNULL(id_documento_padre, 0) AS id_documento_padre
+        FROM salidas
+        WHERE id = $pedido
+        LIMIT 1;";
 $row = ExecuteRow($sql);
 
 if (!$row) {
@@ -179,7 +186,56 @@ if (!$row) {
 $documento = strtoupper(trim($row["documento"] ?? ""));
 $nro_documento = $row["nro_documento"] ?? "";
 $estatus = $row["estatus"] ?? "";
+$id_documento_padre = intval($row["id_documento_padre"] ?? 0);
 $impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
+
+/*
+|--------------------------------------------------------------------------
+| Restaurar decisión de inventario dentro de TdcfcvProcess.php
+|--------------------------------------------------------------------------
+| Esta validación debe hacerse en el servidor, justo antes de procesar,
+| porque los artículos pueden haberse agregado por AJAX después de cargar
+| TdcfcvAdd.php.
+|
+| - NC con artículos de inventario: genera Nota de Recepción automática.
+| - FC/ND con artículos de inventario y sin documento padre: genera Orden
+|   de Entrega automática.
+|--------------------------------------------------------------------------
+*/
+$cantidad_articulos_inventario = intval(ExecuteScalar("
+    SELECT COUNT(es.id)
+    FROM entradas_salidas AS es
+    INNER JOIN articulo AS a
+        ON a.id = es.articulo
+    WHERE es.id_documento = {$pedido}
+      AND es.tipo_documento = 'TDCFCV'
+      AND UPPER(TRIM(IFNULL(a.articulo_inventario, 'N'))) = 'S'
+      AND IFNULL(es.cantidad_articulo, 0) > 0
+"));
+
+$tiene_articulos_inventario = ($cantidad_articulos_inventario > 0);
+
+if ($tiene_articulos_inventario) {
+    if ($documento == "NC") {
+        $generar_nr = "S";
+        $generar_ne = "N";
+    } elseif ($id_documento_padre == 0) {
+        $generar_ne = "S";
+        $generar_nr = "N";
+    }
+}
+
+// -----------------------------------------------------------------------
+// Condición de pago (Contado / Crédito) elegida en el modal de confirmación
+// de emisión. 'S' = Contado, 'N' = Crédito. Se valida y se persiste en
+// salidas.entregado ANTES de continuar con el resto del flujo (fiscal o
+// manual), ya que aplica a ambos casos por igual.
+// -----------------------------------------------------------------------
+$entregado_param = strtoupper(trim($_REQUEST["entregado"] ?? ""));
+if ($entregado_param !== "S" && $entregado_param !== "N") {
+    die("Debe indicar la condición de pago (Contado o Crédito) antes de procesar el documento.");
+}
+Execute("UPDATE salidas SET entregado = '{$entregado_param}' WHERE id = {$pedido} LIMIT 1");
 
 if(trim($nro_documento ?? "") == "") {
     if ($impresoraFiscal) {
@@ -247,6 +303,25 @@ if(trim($nro_documento ?? "") == "") {
     // El consecutivo del documento SIEMPRE es independiente
     $serie_doc = $documento . "_DOC";
 
+    // -------------------------------------------------------------------
+    // Factura de Contingencia: si viene marcada desde el modal, se usan
+    // las series FM_DOC / FM_CTRL en vez de las series normales del
+    // documento, y se exige un motivo de al menos tres palabras (se
+    // guardará más abajo en salidas.nota).
+    // -------------------------------------------------------------------
+    $esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
+    $notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
+
+    if ($esContingencia) {
+        $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
+        if (count($palabrasNota) < 3) {
+            die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
+        }
+
+        $serie_doc = "FM_DOC";
+        $serie_ctrl = "FM_CTRL";
+    }
+
     $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
     $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
 
@@ -272,7 +347,8 @@ if(trim($nro_documento ?? "") == "") {
                 nro_documento = '$factura', 
                 nro_control = '$facturaCTRL', 
                 estatus = '$estatus', 
-                username = '" . CurrentUserName() . "' 
+                username = '" . CurrentUserName() . "'"
+                . ($esContingencia ? ", nota = '" . TdcfcvSqlValue("Factura de Contingencia: " . $notaContingencia) . "'" : "") . "
             WHERE id = $pedido
             AND (nro_documento IS NULL OR nro_documento = '')";
     Execute($sql);

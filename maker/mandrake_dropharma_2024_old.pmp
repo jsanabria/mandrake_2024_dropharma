@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="reportcontroller=0,custom=0,custom|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=0,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=1,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=1,login|class=1,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
+<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="reportcontroller=0,custom=0,custom|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=1,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
   <Database DBID="DB" DBName="mandrake" DBType="MySQL" DBConnectionMethod="DIRECT" DBHost="localhost" DBPort="3306" DBUID="root" DBQuoteS="`" DBQuoteE="`" DBDBMSName="MySQL" DBDBMSVer="80030" MaxUploadSize="1000000" SecUserLevelFld="userlevelid" SecDefault="0,&quot;Default&quot;,0" SecUserProfileFld="profile" UseDynamicUserLevel="1" UserLevelTbl="userlevels" UserLevelIdFld="userlevelid" UserLevelNameFld="userlevelname" UserLevelPrivTbl="userlevelpermissions" UserLevelPrivTblNameFld="tablename" UserLevelPrivUserLevelFld="userlevelid" UserLevelPrivPrivFld="permission">
     <Table TblName="abono" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblIsMaster="1" TblCaption="Abonos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="nro_recibo" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Nro." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -37,13 +37,15 @@
     <Table TblName="ajustar_existencia_lotes.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Ajustar Existencia de Lotes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="ajuste_de_entrada_detalle_copia.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Ajuste de Entrada Detalle copia" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="ajuste_salida.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Salida de Inventario" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="alicuota" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblDelete="1" TblCaption="Tabla Impuestos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblFilter="&quot;`activo` = 'S'&quot;" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="alicuota" TblType="TABLE" TblGen="1" TblGenList="controller=1,info=1,entity=1,list=1,list|class=1,view=1,view|class=1" TblList="1" TblView="1" TblCaption="Tabla Impuestos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblFilter="&quot;`activo` = 'S' AND `venta` = 'S' AND codigo &lt;&gt; 'IGT'&quot;" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="codigo" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="3" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Código" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="6" FldTagMaxLength="3" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="nombre" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Nombre" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="alicuota" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="8" FldAttribute="36" FldValidate="FLOAT" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldOrderBy="2" FldOrder="ASC" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="activo" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Activo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldOrderBy="1" FldOrder="ASC" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="compra" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="compra" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="venta" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="venta" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="almacen" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblAddConfirm="1" TblCaption="Almacen" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
@@ -70,7 +72,7 @@
       <Field FldName="tasa_factura" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="tasa factura" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="anular_venta.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption=" Anular Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="articulo" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblDelete="1" TblCaption="Art&amp;iacute;culos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblDetailEditPaging="1" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblUseButtonsForLinks="1" TblPageCaptions="Descripción|Stock|Imagen">
+    <Table TblName="articulo" TblType="TABLE" TblGen="1" TblGenList="controller=1,info=1,entity=1,master=1,list=1,list|class=1,add=1,add|class=1,view=1,view|class=1,edit=1,edit|class=1,delete=1,delete|class=1" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblDelete="1" TblCaption="Art&amp;iacute;culos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblDetailEditPaging="1" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblUseButtonsForLinks="1" TblPageCaptions="Descripción|Stock|Imagen">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="foto" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="250" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Foto" FldViewTag="IMAGE" FldHtmlTag="FILE" FldTagSize="30" FldTagMaxLength="250" FldSelectType="Values" FldTagImgWidth="120" FldTagImgHeight="120" FldTagATarget="_blank" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FileNameFld="foto" FldHrefFld="foto" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="codigo" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Código" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -96,7 +98,7 @@
       <Field FldName="categoria_madre" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Categoria Madre" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Table" FldTagLnkTbl="articulo" FldTagLnkFld="categoria_madre" FldTagLnkDisplay="categoria_madre" FldTagLnkOrderBy="categoria_madre" FldTagLnkOrderType="ASC" FldTagLnkDistinct="1" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="sub_categoria" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Sub Categoria" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Table" FldTagLnkTbl="articulo" FldTagLnkFld="sub_categoria" FldTagLnkDisplay="sub_categoria" FldTagLnkOrderBy="sub_categoria" FldTagLnkOrderType="ASC" FldTagLnkDistinct="1" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="precio" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0.00" FldDbDefault="0.00" FldCaption="Precio" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="alicuota" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="3" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldDefault="&quot;0&quot;" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="3" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="codigo" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`activo` = 'S'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="alicuota" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="3" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldDefault="&quot;0&quot;" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="3" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="codigo" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`activo` = 'S' AND `venta` = 'S' AND codigo IN ('GEN')&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="articulo_inventario" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Articulo de Inventario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="indexado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Indexado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pies_cubico" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0.00" FldDbDefault="0.00" FldCaption="Pies Cubico" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -240,7 +242,7 @@
       <Field FldName="tasa_cambio" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="tasa cambio" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pivote2" FldType="129" FldTypeName="char" NativeDataType="254" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="pivote 2" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="cobros_cliente_detalle" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=1,list|class=1,view=0,view|class=0" TblList="1" TblView="1" TblCaption="Cobros Detalle" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="cobros_cliente_detalle" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,view=0,view|class=0" TblList="1" TblView="1" TblCaption="Cobros Detalle" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="cobros_cliente" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="cobros cliente" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="metodo_pago" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="10" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Tipo de Pago" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="10" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor2" FldTagLnkOrderBy="valor2" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '009'&quot;" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
@@ -284,7 +286,7 @@
       <Field FldName="logo" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="250" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Logo" FldViewTag="IMAGE" FldHtmlTag="FILE" FldTagSize="30" FldTagMaxLength="250" FldSelectType="Values" FldTagImgWidth="120" FldTagImgHeight="120" FldTagATarget="_blank" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FileNameFld="logo" FldHrefFld="logo" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="activo" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Activo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="compania_cuenta" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblIsDetail="1" TblDelete="1" TblCaption="Cuentas Bancos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="compania_cuenta" TblType="TABLE" TblGen="1" TblGenList="controller=1,info=1,entity=1,list=1,list|class=1,grid=1,grid|class=1,add=1,add|class=1,view=1,view|class=1,edit=1,edit|class=1,delete=1,delete|class=1,preview=1,preview|class=1" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblIsDetail="1" TblDelete="1" TblCaption="Cuentas Bancos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="banco" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Banco" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Table" FldTagLnkTbl="tabla" FldTagLnkFld="campo_codigo" FldTagLnkDisplay="campo_descripcion" FldTagLnkOrderBy="campo_descripcion" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`tabla` = 'BANCO'&quot;" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" FldSelectForceSelection="1" FldModalLookup="1" />
       <Field FldName="titular" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="80" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Titular" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="80" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -292,9 +294,9 @@
       <Field FldName="numero" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="40" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Número" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="40" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="mostrar" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Mostrar" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cuenta" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Cuenta" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="view_plancta" FldTagLnkFld="id" FldTagLnkDisplay="codigo" FldTagLnkDisp2="descripcion" FldTagLnkOrderBy="descripcion" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;codigo LIKE CONCAT((SELECT valor2 FROM parametro WHERE codigo = '018' and valor1 = 'Bancos'), '%')&#xD;&#xA;OR &#xD;&#xA;	codigo LIKE CONCAT((SELECT valor2 FROM parametro WHERE codigo = '018' and valor1 = 'Caja'), '%') OR codigo LIKE CONCAT((SELECT valor3 FROM parametro WHERE codigo = '018' and valor1 = 'Bancos'), '%') OR &#xD;&#xA;	codigo LIKE CONCAT((SELECT valor3 FROM parametro WHERE codigo = '018' and valor1 = 'Caja'), '%')&quot;" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
+      <Field FldName="pago_electronico" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldReq="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Pago Electronico" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="compania" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Compañía" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="compania" FldTagLnkFld="id" FldTagLnkDisplay="nombre" FldTagLnkDisp2="ci_rif" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="activo" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Activo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="compania" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="compania" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="pago_electronico" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldReq="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="pago electronico" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="compra" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblDelete="1" TblCaption="Compra Administrativas" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblMultiPageSearch="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblMultiPageType="Tabs" TblUseDropDownForExport="1" TblPageCaptions="Compra|Montos|Retenciones">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="Id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
@@ -308,7 +310,7 @@
       <Field FldName="aplica_retencion" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Aplica Retencion" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_exento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Exento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_gravado" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Gravado" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="alicuota" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="alicuota" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="alicuota" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderBy="alicuota" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldSelectFilter="&quot;`activo` = 'S' AND `compra` = 'S' AND `codigo` &lt;&gt; 'IGT'&quot;" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_iva" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto IVA" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_total" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Total" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_pagar" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto a Pagar" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -712,7 +714,7 @@
       <Field FldName="limite" FldType="4" FldTypeName="float" NativeDataType="4" FldSupport="1" FldSize="12" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="limite" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="condicion" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="15" FldReq="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="condicion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="15" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="listado_master.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Reportes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="listado_master.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Reportes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="listado_master_buscar.php" TblType="REPORT" TblGen="1" TblGenList="custom=0" TblList="1" TblCaption="Reportes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" IncludeFiles="0" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="listado_master_buscar_excel.php" TblType="REPORT" TblGen="1" TblGenList="custom=0" TblList="1" TblCaption="Reportes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" IncludeFiles="0" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="listado_master_general.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Reportes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -1059,7 +1061,7 @@
       <Field FldName="abono" FldType="21" FldTypeName="bigint" NativeDataType="508" FldSupport="1" FldSize="20" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="abono" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
     <Table TblName="registra_anticipos_clientes.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Anticipos" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="registrar_pagos_clientes.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Registrar Pagos de Clientes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="registrar_pagos_clientes.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Registrar Pagos de Clientes" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="reporte_seniat_ne" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblDelete="1" TblCaption="reporte seniat ne" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblCopy="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="periodo" FldType="129" FldTypeName="char" NativeDataType="254" FldSupport="1" FldSize="7" FldUniqueIdx="1" FldReq="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="periodo" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="7" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1234,8 +1236,8 @@
     <Table TblName="tdcasa_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnrp_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Recepción" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -1838,7 +1840,7 @@
       <Field FldName="genera_ne" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="genera ne" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="visita" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="visita" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_out_tdcfcv" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,view=1,view|class=1,edit=0,edit|class=0" TblList="1" TblView="1" TblEdit="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblCaption="Factura de Venta" TblUpdatable="1" TblSQL="select `salidas`.`id` AS `id`,`salidas`.`tipo_documento` AS `tipo_documento`,`salidas`.`username` AS `username`,`salidas`.`fecha` AS `fecha`,`salidas`.`cliente` AS `cliente`,`salidas`.`cliente_ci_rif` AS `cliente_ci_rif`,`salidas`.`cliente_nombre` AS `cliente_nombre`,`salidas`.`cliente_direccion` AS `cliente_direccion`,`salidas`.`cliente_telefono` AS `cliente_telefono`,`salidas`.`nro_documento` AS `nro_documento`,`salidas`.`nro_control` AS `nro_control`,`salidas`.`monto_total` AS `monto_total`,`salidas`.`alicuota_iva` AS `alicuota_iva`,`salidas`.`iva` AS `iva`,`salidas`.`total` AS `total`,`salidas`.`lista_pedido` AS `lista_pedido`,`salidas`.`nota` AS `nota`,`salidas`.`estatus` AS `estatus`,`salidas`.`id_documento_padre` AS `id_documento_padre`,`salidas`.`moneda` AS `moneda`,`salidas`.`asesor` AS `asesor`,`salidas`.`documento` AS `documento`,`salidas`.`tasa_dia` AS `tasa_dia`,`salidas`.`monto_usd` AS `monto_usd`,`salidas`.`dias_credito` AS `dias_credito`,`salidas`.`entregado` AS `entregado`,`salidas`.`fecha_entrega` AS `fecha_entrega`,`salidas`.`pagado` AS `pagado`,`salidas`.`bultos` AS `bultos`,`salidas`.`fecha_bultos` AS `fecha_bultos`,`salidas`.`user_bultos` AS `user_bultos`,`salidas`.`fecha_despacho` AS `fecha_despacho`,`salidas`.`user_despacho` AS `user_despacho`,`salidas`.`consignacion` AS `consignacion`,`salidas`.`unidades` AS `unidades`,`salidas`.`descuento` AS `descuento`,`salidas`.`descuento2` AS `descuento2`,`salidas`.`descuento3` AS `descuento3`,`salidas`.`monto_sin_descuento` AS `monto_sin_descuento`,`salidas`.`factura` AS `factura`,`salidas`.`ci_rif` AS `ci_rif`,`salidas`.`nombre` AS `nombre`,`salidas`.`direccion` AS `direccion`,`salidas`.`telefono` AS `telefono`,`salidas`.`email` AS `email`,`salidas`.`activo` AS `activo`,`salidas`.`comprobante` AS `comprobante`,`salidas`.`doc_afectado` AS `doc_afectado`,`salidas`.`nro_despacho` AS `nro_despacho`,`salidas`.`cerrado` AS `cerrado`,`salidas`.`asesor_asignado` AS `asesor_asignado`,`salidas`.`tasa_indexada` AS `tasa_indexada`,`salidas`.`id_documento_padre_nd` AS `id_documento_padre_nd`,`salidas`.`archivo_pedido` AS `archivo_pedido`,`salidas`.`checker` AS `checker`,`salidas`.`checker_date` AS `checker_date`,`salidas`.`packer` AS `packer`,`salidas`.`packer_date` AS `packer_date`,`salidas`.`fotos` AS `fotos`,`salidas`.`igtf` AS `igtf`,`salidas`.`igtf_alicuota` AS `igtf_alicuota`,`salidas`.`monto_base_igtf` AS `monto_base_igtf`,`salidas`.`monto_igtf` AS `monto_igtf`,`salidas`.`nacionalizacion` AS `nacionalizacion`,`salidas`.`arquitecto` AS `arquitecto`,`salidas`.`ganancia` AS `ganancia`,`salidas`.`intermediario` AS `intermediario`,`salidas`.`telefeno_intermediario` AS `telefeno_intermediario`,`salidas`.`email_intermediario` AS `email_intermediario`,`salidas`.`genera_ne` AS `genera_ne`,`salidas`.`visita` AS `visita`,`salidas`.`impreso` AS `impreso`,`salidas`.`doc_afe` AS `doc_afe` from `salidas` where (`salidas`.`tipo_documento` = 'TDCFCV')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblEditReturnPage="_VIEW" TblMultiPageEdit="1" TblMultiPageView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" TblPageCaptions="&quot;Datos Factura&quot;|&quot;Montos Factura&quot;|&quot;Datos Asesor&quot;|&quot;Datos Pago&quot;|&quot;Page 5&quot;">
+    <Table TblName="view_out_tdcfcv" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,master=1,list=1,list|class=1,view=1,view|class=1,edit=1,edit|class=1" TblList="1" TblView="1" TblEdit="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblCaption="Factura de Venta" TblUpdatable="1" TblSQL="select `salidas`.`id` AS `id`,`salidas`.`tipo_documento` AS `tipo_documento`,`salidas`.`username` AS `username`,`salidas`.`fecha` AS `fecha`,`salidas`.`cliente` AS `cliente`,`salidas`.`cliente_ci_rif` AS `cliente_ci_rif`,`salidas`.`cliente_nombre` AS `cliente_nombre`,`salidas`.`cliente_direccion` AS `cliente_direccion`,`salidas`.`cliente_telefono` AS `cliente_telefono`,`salidas`.`nro_documento` AS `nro_documento`,`salidas`.`nro_control` AS `nro_control`,`salidas`.`monto_total` AS `monto_total`,`salidas`.`alicuota_iva` AS `alicuota_iva`,`salidas`.`iva` AS `iva`,`salidas`.`total` AS `total`,`salidas`.`lista_pedido` AS `lista_pedido`,`salidas`.`nota` AS `nota`,`salidas`.`estatus` AS `estatus`,`salidas`.`id_documento_padre` AS `id_documento_padre`,`salidas`.`moneda` AS `moneda`,`salidas`.`asesor` AS `asesor`,`salidas`.`documento` AS `documento`,`salidas`.`tasa_dia` AS `tasa_dia`,`salidas`.`monto_usd` AS `monto_usd`,`salidas`.`dias_credito` AS `dias_credito`,`salidas`.`entregado` AS `entregado`,`salidas`.`fecha_entrega` AS `fecha_entrega`,`salidas`.`pagado` AS `pagado`,`salidas`.`bultos` AS `bultos`,`salidas`.`fecha_bultos` AS `fecha_bultos`,`salidas`.`user_bultos` AS `user_bultos`,`salidas`.`fecha_despacho` AS `fecha_despacho`,`salidas`.`user_despacho` AS `user_despacho`,`salidas`.`consignacion` AS `consignacion`,`salidas`.`unidades` AS `unidades`,`salidas`.`descuento` AS `descuento`,`salidas`.`descuento2` AS `descuento2`,`salidas`.`descuento3` AS `descuento3`,`salidas`.`monto_sin_descuento` AS `monto_sin_descuento`,`salidas`.`factura` AS `factura`,`salidas`.`ci_rif` AS `ci_rif`,`salidas`.`nombre` AS `nombre`,`salidas`.`direccion` AS `direccion`,`salidas`.`telefono` AS `telefono`,`salidas`.`email` AS `email`,`salidas`.`activo` AS `activo`,`salidas`.`comprobante` AS `comprobante`,`salidas`.`doc_afectado` AS `doc_afectado`,`salidas`.`nro_despacho` AS `nro_despacho`,`salidas`.`cerrado` AS `cerrado`,`salidas`.`asesor_asignado` AS `asesor_asignado`,`salidas`.`tasa_indexada` AS `tasa_indexada`,`salidas`.`id_documento_padre_nd` AS `id_documento_padre_nd`,`salidas`.`archivo_pedido` AS `archivo_pedido`,`salidas`.`checker` AS `checker`,`salidas`.`checker_date` AS `checker_date`,`salidas`.`packer` AS `packer`,`salidas`.`packer_date` AS `packer_date`,`salidas`.`fotos` AS `fotos`,`salidas`.`igtf` AS `igtf`,`salidas`.`igtf_alicuota` AS `igtf_alicuota`,`salidas`.`monto_base_igtf` AS `monto_base_igtf`,`salidas`.`monto_igtf` AS `monto_igtf`,`salidas`.`nacionalizacion` AS `nacionalizacion`,`salidas`.`arquitecto` AS `arquitecto`,`salidas`.`ganancia` AS `ganancia`,`salidas`.`intermediario` AS `intermediario`,`salidas`.`telefeno_intermediario` AS `telefeno_intermediario`,`salidas`.`email_intermediario` AS `email_intermediario`,`salidas`.`genera_ne` AS `genera_ne`,`salidas`.`visita` AS `visita`,`salidas`.`impreso` AS `impreso`,`salidas`.`doc_afe` AS `doc_afe` from `salidas` where (`salidas`.`tipo_documento` = 'TDCFCV')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblEditReturnPage="_VIEW" TblMultiPageEdit="1" TblMultiPageView="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" TblPageCaptions="&quot;Datos Factura&quot;|&quot;Montos Factura&quot;|&quot;Datos Asesor&quot;|&quot;Datos Pago&quot;|&quot;Page 5&quot;">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="Id/Prefact" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="documento" FldType="129" FldTypeName="char" NativeDataType="254" FldSupport="1" FldSize="2" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Tipo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="2" FldTagValues="&quot;FC&quot;,&quot;FACTURA&quot;|&quot;NC&quot;,&quot;NOTA DE CREDITO&quot;|&quot;ND&quot;,&quot;NOTA DE DEBITO&quot;" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1852,20 +1854,20 @@
       <Field FldName="iva" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="IVA" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="total" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Total" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="nota" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Notas" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagCols="35" FldTagRows="3" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="igtf" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="N" FldCaption="IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="monto_base_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto a Aplicar IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="igtf" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="N" FldCaption="IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="monto_base_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto a Aplicar IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_igtf" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto IGTF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="moneda" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Moneda" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="6" FldHtmlTagReadOnly="1" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '006'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="lista_pedido" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Lista Pedido" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Table" FldTagLnkTbl="tabla" FldTagLnkFld="campo_codigo" FldTagLnkDisplay="campo_descripcion" FldTagLnkOrderBy="campo_descripcion" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`tabla` = 'LISTA_PEDIDO'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="unidades" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Unidades" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="estatus" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="10" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Estatus" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="10" FldTagValues="&quot;NUEVO&quot;,&quot;NUEVO&quot;|&quot;PROCESADO&quot;,&quot;PROCESADO&quot;|&quot;ANULADO&quot;,&quot;ANULADO&quot;" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="estatus" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="10" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Estatus" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="10" FldTagValues="&quot;NUEVO&quot;,&quot;NUEVO&quot;|&quot;PROCESADO&quot;,&quot;PROCESADO&quot;|&quot;ANULADO&quot;,&quot;ANULADO&quot;" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="username" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Usuario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_documento_padre" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Doc. Origen" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="salidas" FldTagLnkFld="id" FldTagLnkDisplay="nro_documento" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="asesor" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Asesor/Cliente" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="tasa_dia" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Tasa del Día" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_usd" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto USD" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="dias_credito" FldType="16" FldTypeName="tinyint" NativeDataType="1" FldSupport="1" FldSize="4" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Crédito" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '007'&quot;" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldDropdownHeight="60" />
-      <Field FldName="entregado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Imp. Ambas Monedas" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="entregado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="N" FldCaption="Factura de Contado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha_entrega" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="40" FldAttribute="36" FldValidate="DATE" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha Entrega" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pagado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Pagado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldResizeQuality="75" />
       <Field FldName="impreso" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Impreso" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1988,7 +1990,7 @@
       <Field FldName="genera_ne" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="genera ne" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="visita" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="visita" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_out_tdcpdv" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,view=0,view|class=0,edit=0,edit|class=0" TblList="1" TblView="1" TblEdit="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblCaption="Pedido de Venta" TblUpdatable="1" TblSQL="select `salidas`.`id` AS `id`,`salidas`.`tipo_documento` AS `tipo_documento`,`salidas`.`username` AS `username`,`salidas`.`fecha` AS `fecha`,`salidas`.`cliente` AS `cliente`,`salidas`.`cliente_ci_rif` AS `cliente_ci_rif`,`salidas`.`cliente_nombre` AS `cliente_nombre`,`salidas`.`cliente_direccion` AS `cliente_direccion`,`salidas`.`cliente_telefono` AS `cliente_telefono`,`salidas`.`nro_documento` AS `nro_documento`,`salidas`.`nro_control` AS `nro_control`,`salidas`.`monto_total` AS `monto_total`,`salidas`.`alicuota_iva` AS `alicuota_iva`,`salidas`.`iva` AS `iva`,`salidas`.`total` AS `total`,`salidas`.`lista_pedido` AS `lista_pedido`,`salidas`.`nota` AS `nota`,`salidas`.`estatus` AS `estatus`,`salidas`.`id_documento_padre` AS `id_documento_padre`,`salidas`.`moneda` AS `moneda`,`salidas`.`asesor` AS `asesor`,`salidas`.`documento` AS `documento`,`salidas`.`tasa_dia` AS `tasa_dia`,`salidas`.`monto_usd` AS `monto_usd`,`salidas`.`dias_credito` AS `dias_credito`,`salidas`.`entregado` AS `entregado`,`salidas`.`fecha_entrega` AS `fecha_entrega`,`salidas`.`pagado` AS `pagado`,`salidas`.`bultos` AS `bultos`,`salidas`.`fecha_bultos` AS `fecha_bultos`,`salidas`.`user_bultos` AS `user_bultos`,`salidas`.`fecha_despacho` AS `fecha_despacho`,`salidas`.`user_despacho` AS `user_despacho`,`salidas`.`consignacion` AS `consignacion`,`salidas`.`unidades` AS `unidades`,`salidas`.`descuento` AS `descuento`,`salidas`.`descuento2` AS `descuento2`,`salidas`.`descuento3` AS `descuento3`,`salidas`.`monto_sin_descuento` AS `monto_sin_descuento`,`salidas`.`factura` AS `factura`,`salidas`.`ci_rif` AS `ci_rif`,`salidas`.`nombre` AS `nombre`,`salidas`.`direccion` AS `direccion`,`salidas`.`telefono` AS `telefono`,`salidas`.`email` AS `email`,`salidas`.`activo` AS `activo`,`salidas`.`comprobante` AS `comprobante`,`salidas`.`doc_afectado` AS `doc_afectado`,`salidas`.`nro_despacho` AS `nro_despacho`,`salidas`.`cerrado` AS `cerrado`,`salidas`.`asesor_asignado` AS `asesor_asignado`,`salidas`.`tasa_indexada` AS `tasa_indexada`,`salidas`.`id_documento_padre_nd` AS `id_documento_padre_nd`,`salidas`.`archivo_pedido` AS `archivo_pedido`,`salidas`.`checker` AS `checker`,`salidas`.`checker_date` AS `checker_date`,`salidas`.`packer` AS `packer`,`salidas`.`packer_date` AS `packer_date`,`salidas`.`fotos` AS `fotos`,`salidas`.`igtf` AS `igtf`,`salidas`.`igtf_alicuota` AS `igtf_alicuota`,`salidas`.`monto_base_igtf` AS `monto_base_igtf`,`salidas`.`monto_igtf` AS `monto_igtf`,`salidas`.`nacionalizacion` AS `nacionalizacion`,`salidas`.`arquitecto` AS `arquitecto`,`salidas`.`ganancia` AS `ganancia`,`salidas`.`intermediario` AS `intermediario`,`salidas`.`telefeno_intermediario` AS `telefeno_intermediario`,`salidas`.`email_intermediario` AS `email_intermediario`,`salidas`.`genera_ne` AS `genera_ne`,`salidas`.`visita` AS `visita`,`salidas`.`impreso` AS `impreso`,`salidas`.`doc_afe` AS `doc_afe` from `salidas` where (`salidas`.`tipo_documento` = 'TDCPDV')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblEditReturnPage="_VIEW" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_out_tdcpdv" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,view=0,view|class=0,edit=0,edit|class=0" TblList="1" TblView="1" TblEdit="1" TblAddReturnPage="_VIEW" TblIsMaster="1" TblCaption="Pedido de Venta" TblUpdatable="1" TblSQL="select `salidas`.`id` AS `id`,`salidas`.`tipo_documento` AS `tipo_documento`,`salidas`.`username` AS `username`,`salidas`.`fecha` AS `fecha`,`salidas`.`cliente` AS `cliente`,`salidas`.`cliente_ci_rif` AS `cliente_ci_rif`,`salidas`.`cliente_nombre` AS `cliente_nombre`,`salidas`.`cliente_direccion` AS `cliente_direccion`,`salidas`.`cliente_telefono` AS `cliente_telefono`,`salidas`.`nro_documento` AS `nro_documento`,`salidas`.`nro_control` AS `nro_control`,`salidas`.`monto_total` AS `monto_total`,`salidas`.`alicuota_iva` AS `alicuota_iva`,`salidas`.`iva` AS `iva`,`salidas`.`total` AS `total`,`salidas`.`lista_pedido` AS `lista_pedido`,`salidas`.`nota` AS `nota`,`salidas`.`estatus` AS `estatus`,`salidas`.`id_documento_padre` AS `id_documento_padre`,`salidas`.`moneda` AS `moneda`,`salidas`.`asesor` AS `asesor`,`salidas`.`documento` AS `documento`,`salidas`.`tasa_dia` AS `tasa_dia`,`salidas`.`monto_usd` AS `monto_usd`,`salidas`.`dias_credito` AS `dias_credito`,`salidas`.`entregado` AS `entregado`,`salidas`.`fecha_entrega` AS `fecha_entrega`,`salidas`.`pagado` AS `pagado`,`salidas`.`bultos` AS `bultos`,`salidas`.`fecha_bultos` AS `fecha_bultos`,`salidas`.`user_bultos` AS `user_bultos`,`salidas`.`fecha_despacho` AS `fecha_despacho`,`salidas`.`user_despacho` AS `user_despacho`,`salidas`.`consignacion` AS `consignacion`,`salidas`.`unidades` AS `unidades`,`salidas`.`descuento` AS `descuento`,`salidas`.`descuento2` AS `descuento2`,`salidas`.`descuento3` AS `descuento3`,`salidas`.`monto_sin_descuento` AS `monto_sin_descuento`,`salidas`.`factura` AS `factura`,`salidas`.`ci_rif` AS `ci_rif`,`salidas`.`nombre` AS `nombre`,`salidas`.`direccion` AS `direccion`,`salidas`.`telefono` AS `telefono`,`salidas`.`email` AS `email`,`salidas`.`activo` AS `activo`,`salidas`.`comprobante` AS `comprobante`,`salidas`.`doc_afectado` AS `doc_afectado`,`salidas`.`nro_despacho` AS `nro_despacho`,`salidas`.`cerrado` AS `cerrado`,`salidas`.`asesor_asignado` AS `asesor_asignado`,`salidas`.`tasa_indexada` AS `tasa_indexada`,`salidas`.`id_documento_padre_nd` AS `id_documento_padre_nd`,`salidas`.`archivo_pedido` AS `archivo_pedido`,`salidas`.`checker` AS `checker`,`salidas`.`checker_date` AS `checker_date`,`salidas`.`packer` AS `packer`,`salidas`.`packer_date` AS `packer_date`,`salidas`.`fotos` AS `fotos`,`salidas`.`igtf` AS `igtf`,`salidas`.`igtf_alicuota` AS `igtf_alicuota`,`salidas`.`monto_base_igtf` AS `monto_base_igtf`,`salidas`.`monto_igtf` AS `monto_igtf`,`salidas`.`nacionalizacion` AS `nacionalizacion`,`salidas`.`arquitecto` AS `arquitecto`,`salidas`.`ganancia` AS `ganancia`,`salidas`.`intermediario` AS `intermediario`,`salidas`.`telefeno_intermediario` AS `telefeno_intermediario`,`salidas`.`email_intermediario` AS `email_intermediario`,`salidas`.`genera_ne` AS `genera_ne`,`salidas`.`visita` AS `visita`,`salidas`.`impreso` AS `impreso`,`salidas`.`doc_afe` AS `doc_afe` from `salidas` where (`salidas`.`tipo_documento` = 'TDCPDV')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblDetailView="1" TblEditReturnPage="_VIEW" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="Id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="nro_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Nro Doc." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2013,7 +2015,7 @@
       <Field FldName="documento" FldType="129" FldTypeName="char" NativeDataType="254" FldSupport="1" FldSize="2" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Tipo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="2" FldTagValues="&quot;FC&quot;,&quot;FACTURA&quot;|&quot;NC&quot;,&quot;NOTA DE CREDITO&quot;|&quot;ND&quot;,&quot;NOTA DE DEBITO&quot;" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="tasa_dia" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Tasa del Día" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_usd" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="monto usd" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="dias_credito" FldType="16" FldTypeName="tinyint" NativeDataType="1" FldSupport="1" FldSize="4" FldAttribute="36" FldValidate="INTEGER" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Crédito" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '007'&quot;" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldDropdownHeight="60" />
+      <Field FldName="dias_credito" FldType="16" FldTypeName="tinyint" NativeDataType="1" FldSupport="1" FldSize="4" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Crédito" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="10" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="parametro" FldTagLnkFld="valor1" FldTagLnkDisplay="valor1" FldTagLnkOrderBy="valor1" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`codigo` = '007'&quot;" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldDropdownHeight="60" />
       <Field FldName="entregado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Entregado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha_entrega" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="40" FldAttribute="36" FldValidate="DATE" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha Entrega" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pagado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="Pagado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldItalic="1" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldResizeQuality="75" />
@@ -2034,7 +2036,7 @@
       <Field FldName="comprobante" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="comprobante" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="nro_despacho" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldAttribute="36" FldGenerate="1" FldExport="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Nro Despacho" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cerrado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="&quot;N&quot;" FldDbDefault="N" FldCaption="cerrado" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="asesor_asignado" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Asesor Asignado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagLnkOrderBy="nombre" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;IFNULl(asesor, 0) &gt; 0&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
+      <Field FldName="asesor_asignado" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Asesor Asignado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Table" FldTagLnkTbl="usuario" FldTagLnkFld="username" FldTagLnkDisplay="nombre" FldTagLnkOrderBy="nombre" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;IFNULl(asesor, 0) &gt; 0&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="tasa_indexada" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="22" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="tasa indexada" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="id_documento_padre_nd" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Nro N.E. no va" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagLnkTbl="salidas" FldTagLnkFld="id" FldTagLnkDisplay="nro_documento" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="archivo_pedido" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Carga Masiva" FldViewTag="FORMATTED TEXT" FldHtmlTag="FILE" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FileNameFld="archivo_pedido" FldHrefFld="archivo_pedido" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2092,7 +2094,7 @@
       <Field FldName="descripcion" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="100" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="descripcion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="100" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="activa" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="activa" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;S&quot;|&quot;N&quot;,&quot;N&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_salidas" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0" TblList="1" TblIsMaster="1" TblCaption="Documentos a Facturar / Entregar" TblUpdatable="1" TblSQL="select `a`.`id` AS `id`,`a`.`tipo_documento` AS `tipo_documento`,`b`.`descripcion` AS `nombre_documento`,`a`.`cliente` AS `cliente`,`c`.`nombre` AS `nombre_cliente`,`a`.`nro_documento` AS `nro_documento`,`a`.`fecha` AS `fecha`,`a`.`estatus` AS `estatus`,`a`.`username` AS `username`,`a`.`nota` AS `nota`,`a`.`consignacion` AS `consignacion`,ifnull(`a`.`nombre`,'') AS `cerrado`,`a`.`total` AS `total`,`a`.`tasa_dia` AS `tasa_dia`,`a`.`monto_usd` AS `monto_usd`,`a`.`unidades` AS `unidades`,`a`.`dias_credito` AS `dias_credito`,`a`.`asesor_asignado` AS `asesor_asignado`,`a`.`documento` AS `documento`,`a`.`id_documento_padre` AS `id_documento_padre` from ((`salidas` `a` join `tipo_documento` `b` on((`b`.`codigo` = `a`.`tipo_documento`))) join `cliente` `c` on((`c`.`id` = `a`.`cliente`))) where (0 = 0)" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="50" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblDetailEditPaging="1">
+    <Table TblName="view_salidas" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0" TblList="1" TblIsMaster="1" TblCaption="Documentos a Facturar / Entregar" TblUpdatable="1" TblSQL="select `a`.`id` AS `id`,`a`.`tipo_documento` AS `tipo_documento`,`b`.`descripcion` AS `nombre_documento`,`a`.`cliente` AS `cliente`,`c`.`nombre` AS `nombre_cliente`,`a`.`nro_documento` AS `nro_documento`,`a`.`fecha` AS `fecha`,`a`.`estatus` AS `estatus`,`a`.`username` AS `username`,`a`.`nota` AS `nota`,`a`.`consignacion` AS `consignacion`,ifnull(`a`.`nombre`,'') AS `cerrado`,`a`.`total` AS `total`,`a`.`tasa_dia` AS `tasa_dia`,`a`.`monto_usd` AS `monto_usd`,`a`.`unidades` AS `unidades`,`a`.`dias_credito` AS `dias_credito`,`a`.`asesor_asignado` AS `asesor_asignado`,`a`.`documento` AS `documento`,`a`.`id_documento_padre` AS `id_documento_padre` from ((`salidas` `a` join `tipo_documento` `b` on((`b`.`codigo` = `a`.`tipo_documento`))) join `cliente` `c` on((`c`.`id` = `a`.`cliente`))) where (0 = 0)" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="0" TblRecPerPage="50" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblExportExcel="1" TblExportCsv="1" TblExportType="ALL" TblSortType="1" TblPagerStyle="2" TblTopPageLink="1" TblListExport="1" TblLinkOnLeft="1" TblDetailViewPaging="1" TblDetailEditPaging="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="6" FldAttribute="36" FldGenerate="1" FldExport="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="6" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="nombre_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Tipo" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2208,13 +2210,13 @@
     <Table TblName="transferencia_almacen_multiple.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Transferencia Almacen Multiple" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="crear_nota_entrega_automatica.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota de Entrega Automática" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="crear_nota_entrega_automatica_wait.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota de Entrega Automatica" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="documento_consecutivo" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0" TblList="1" TblAdd="1" TblCaption="Consecutivo de Documentos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblCopy="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
-      <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="tipo documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="serie" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="serie" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="ultimo_numero" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="ultimo numero" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="updated_at" FldType="135" FldTypeName="datetime" NativeDataType="12" FldSupport="1" FldSize="19" FldAttribute="36" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="updated at" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+    <Table TblName="documento_consecutivo" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0" TblList="1" TblCaption="Consecutivo de Documentos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblFilter="&quot;`serie` IN ('DOC','FC_DOC','NC_DOC','ND_DOC','DC_CTRL','RETENCION')&quot;" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+      <Field FldName="tipo_documento" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="serie" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldReq="1" FldIsPrimaryKey="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Serie" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="ultimo_numero" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Ultimo Número" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="updated_at" FldType="135" FldTypeName="datetime" NativeDataType="12" FldSupport="1" FldSize="19" FldAttribute="36" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Updated at" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="111" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_audittrail_seniat" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,list=1,list|class=1,add=1,add|class=1,view=1,view|class=1" TblList="1" TblView="1" TblAdd="1" TblCaption="Trazas Seniat" TblUpdatable="1" TblSQL="select `audittrail`.`id` AS `id`,`audittrail`.`datetime` AS `datetime`,`audittrail`.`script` AS `script`,`audittrail`.`user` AS `user`,`audittrail`.`action` AS `action`,`audittrail`.`table` AS `table`,`audittrail`.`field` AS `field`,`audittrail`.`keyvalue` AS `keyvalue`,`audittrail`.`oldvalue` AS `oldvalue`,`audittrail`.`newvalue` AS `newvalue` from `audittrail` where (`audittrail`.`action` like 'SENIAT:%')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_audittrail_seniat" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblCaption="Trazas Seniat" TblUpdatable="1" TblSQL="select `audittrail`.`id` AS `id`,`audittrail`.`datetime` AS `datetime`,`audittrail`.`script` AS `script`,`audittrail`.`user` AS `user`,`audittrail`.`action` AS `action`,`audittrail`.`table` AS `table`,`audittrail`.`field` AS `field`,`audittrail`.`keyvalue` AS `keyvalue`,`audittrail`.`oldvalue` AS `oldvalue`,`audittrail`.`newvalue` AS `newvalue` from `audittrail` where (`audittrail`.`action` like 'SENIAT:%')" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="Id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="datetime" FldType="135" FldTypeName="datetime" NativeDataType="12" FldSupport="1" FldSize="76" FldReq="1" FldAttribute="4" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="BETWEEN" FldCaption="Fecha Hora" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="11" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="script" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="255" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Script" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="255" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2226,7 +2228,7 @@
       <Field FldName="oldvalue" FldType="201" FldTypeName="longtext" NativeDataType="751" FldSupport="1" FldSize="2147483647" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Valor Anterior" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagMaxLength="0" FldSelectType="Values" FldTagCols="35" FldTagRows="4" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="newvalue" FldType="201" FldTypeName="longtext" NativeDataType="751" FldSupport="1" FldSize="2147483647" FldAttribute="36" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Valor Actual" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagMaxLength="0" FldSelectType="Values" FldTagCols="35" FldTagRows="4" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="4" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="crear_nota_recepcion_automatica_wait.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota Recepcion Automatica" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="crear_nota_recepcion_automatica_wait.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota Recepcion Automatica" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
   </Database>
   <Extension Name="@phpmaker/captcha" Template="@phpmaker/captcha" XmlFile="captcha.xml" Enabled="0">
     <ExtProject>
@@ -5044,6 +5046,15 @@
         <ExtTable TblName="crear_nota_recepcion_automatica_wait.php">
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
+        <ExtTable TblName="alicuota">
+          <ExtField FldName="compra">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="venta">
+            <Properties><![CDATA[[{"Id":"Options","Type":"String","Value":""}]]]></Properties>
+          </ExtField>
+          <Properties><![CDATA[[]]]></Properties>
+        </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
       </ExtDatabase>
       <Properties><![CDATA[[{"Id":"InputGroup","Type":"Boolean","Value":"1"},{"Id":"Options","Type":"String","Value":""}]]]></Properties>
@@ -5905,6 +5916,15 @@
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <ExtTable TblName="crear_nota_recepcion_automatica_wait.php">
+          <Properties><![CDATA[[]]]></Properties>
+        </ExtTable>
+        <ExtTable TblName="alicuota">
+          <ExtField FldName="compra">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
+          <ExtField FldName="venta">
+            <Properties><![CDATA[[{"Id":"Raw","Type":"Boolean","Value":"0"}]]]></Properties>
+          </ExtField>
           <Properties><![CDATA[[]]]></Properties>
         </ExtTable>
         <Properties><![CDATA[[]]]></Properties>
@@ -14819,6 +14839,13 @@ loadjs.ready(["jquery"], function () {
         case "TDCNET":
             AddFilter($filter, "
             (
+                tipo_documento = 'TDCPDV'
+                AND estatus = 'NUEVO'
+            )
+            ");
+            /*
+            AddFilter($filter, "
+            (
                 (
                     tipo_documento = 'TDCPDV'
                     AND estatus = 'NUEVO'
@@ -14832,6 +14859,7 @@ loadjs.ready(["jquery"], function () {
                 )
             )
             ");
+            */
 
             AddFilter($filter, "(tipo_documento <> 'TDCPDV' OR IFNULL(TRIM(cerrado), '') <> '')");
             break;
@@ -19009,8 +19037,10 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
 
 <!-- Hojas de estilo y scripts de Select2 para mejorar la experiencia de búsqueda en desplegables -->
 <?php if (!$esReporteFiscal): ?>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link
+    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    rel="stylesheet"
+/>
 <?php endif; ?>
 
 <!-- Estilo personalizado para adaptar Select2 perfectamente al diseño nativo de Bootstrap 5 -->
@@ -19240,95 +19270,232 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
 </div>
 
 <script type="text/javascript">
-    <?php if (!$esReporteFiscal): ?>
-    $(document).ready(function() {
-        // Función asíncrona segura para inicializar Select2 únicamente cuando esté cargada la librería en jQuery
-        function inicializarSelect2Seguro() {
-            if (typeof $.fn.select2 !== 'undefined') {
-                if ($('.select2-enable').length > 0) {
-                    $('.select2-enable').select2({
-                        width: '100%',
-                        placeholder: function() {
-                            return $(this).find('option[value=""]').text() || 'Seleccione una opción';
-                        },
-                        allowClear: true
-                    });
-                }
-            } else {
-                // Si aún no está cargada, reintentamos en 50 milisegundos de forma transparente
-                setTimeout(inicializarSelect2Seguro, 50);
-            }
+(function () {
+
+    var esReporteFiscal = <?= $esReporteFiscal ? "true" : "false" ?>;
+    var select2Cargando = false;
+
+    /**
+     * Espera hasta que PHPMaker haya cargado jQuery.
+     */
+    function esperarJQueryListadoMaster(callback) {
+        if (
+            typeof window.jQuery !== "undefined" &&
+            typeof window.jQuery.fn !== "undefined"
+        ) {
+            callback(window.jQuery);
+            return;
         }
 
-        // Ejecutar inicialización protectora
-        inicializarSelect2Seguro();
-    });
-    <?php endif; ?>
+        setTimeout(function () {
+            esperarJQueryListadoMaster(callback);
+        }, 50);
+    }
 
-    function iniciarEventosListadoMaster() {
-        $("#buscar").off("click").on("click", function(){
-            var fecha_desde = $("#fecha_desde").val();
-            var fecha_hasta = $("#fecha_hasta").val();
-            var tipo        = $("#tipo").length ? $("#tipo").val() : "";
-            var articulo    = $("#articulo").length ? $("#articulo").val() : "";
-            var cliente     = $("#cliente").length ? $("#cliente").val() : "";
-            var asesor      = $("#asesor").length ? $("#asesor").val() : "";
-            var esReporteFiscal = <?= $esReporteFiscal ? "true" : "false" ?>;
+    /**
+     * Carga Select2 solamente después de que jQuery esté disponible.
+     */
+    function cargarSelect2ListadoMaster($, callback) {
 
-            if (!esReporteFiscal) {
-                if (fecha_desde == "" || fecha_hasta == "") {
-                    ew.alert("¡Por favor, elija un rango de fechas válido!");
-                    return false;
-                }
+        if (esReporteFiscal) {
+            callback();
+            return;
+        }
+
+        // Select2 ya está cargado.
+        if (typeof $.fn.select2 === "function") {
+            callback();
+            return;
+        }
+
+        // Evita insertar varias veces el mismo archivo.
+        if (select2Cargando) {
+            setTimeout(function () {
+                cargarSelect2ListadoMaster($, callback);
+            }, 50);
+
+            return;
+        }
+
+        select2Cargando = true;
+
+        var script = document.createElement("script");
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js";
+
+        script.onload = function () {
+            select2Cargando = false;
+            callback();
+        };
+
+        script.onerror = function () {
+            select2Cargando = false;
+
+            console.error(
+                "No fue posible cargar la librería Select2."
+            );
+
+            // El reporte continuará funcionando sin Select2.
+            callback();
+        };
+
+        document.head.appendChild(script);
+    }
+
+    /**
+     * Inicializa todos los select marcados para utilizar Select2.
+     */
+    function inicializarSelect2ListadoMaster($) {
+
+        if (
+            esReporteFiscal ||
+            typeof $.fn.select2 !== "function"
+        ) {
+            return;
+        }
+
+        $(".select2-enable").each(function () {
+
+            var $select = $(this);
+
+            // Evita inicializar dos veces el mismo elemento.
+            if ($select.hasClass("select2-hidden-accessible")) {
+                return;
             }
 
-            $.ajax({
-                url : esReporteFiscal ? "reportes/factura_fiscal_reportes.php" : "<?php echo $url; ?>",
-                type: "GET",
-                data : {
-                    id: '<?php echo $id; ?>', 
-                    documento: '<?php echo $id; ?>',
-                    fecha_desde: fecha_desde, 
-                    fecha_hasta: fecha_hasta, 
-                    tipo: tipo, 
-                    articulo: articulo, 
-                    proveedor: 0, 
-                    cliente: cliente, 
-                    asesor: asesor
-                },
-                beforeSend: function(){
-                    // Renderizado de un Spinner elegante de Bootstrap en lugar de un texto plano
-                    $("#result").html(`
-                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border text-primary me-3" role="status"></div>
-                            <span class="fs-5 fw-semibold">Procesando y organizando el reporte...</span>
-                        </div>
-                    `);
-                }
-            })
-            .done(function(data) {
-                $("#result").html(data);
-            })
-            .fail(function(xhr, status, error) {
-                $("#result").html(`
-                    <div class="alert alert-danger d-flex align-items-center" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                        <div>Ocurrió un error inesperado al procesar los datos: <strong>${error}</strong></div>
-                    </div>
-                `);
+            var textoInicial =
+                $select.find('option[value=""]').first().text();
+
+            $select.select2({
+                width: "100%",
+                placeholder: textoInicial || "Seleccione una opción",
+                allowClear: true
             });
         });
     }
 
-    function esperarJQueryListadoMaster() {
-        if (typeof window.jQuery !== "undefined" && typeof window.$ !== "undefined") {
-            iniciarEventosListadoMaster();
-        } else {
-            setTimeout(esperarJQueryListadoMaster, 50);
-        }
+    /**
+     * Registra el evento del botón Consultar.
+     */
+    function iniciarEventosListadoMaster($) {
+
+        $("#buscar")
+            .off("click.listadoMaster")
+            .on("click.listadoMaster", function () {
+
+                var fecha_desde = $("#fecha_desde").val() || "";
+                var fecha_hasta = $("#fecha_hasta").val() || "";
+
+                var tipo = $("#tipo").length
+                    ? $("#tipo").val()
+                    : "";
+
+                var articulo = $("#articulo").length
+                    ? $("#articulo").val()
+                    : "";
+
+                var cliente = $("#cliente").length
+                    ? $("#cliente").val()
+                    : "";
+
+                var asesor = $("#asesor").length
+                    ? $("#asesor").val()
+                    : "";
+
+                if (!esReporteFiscal) {
+                    if (fecha_desde === "" || fecha_hasta === "") {
+
+                        if (
+                            typeof window.ew !== "undefined" &&
+                            typeof window.ew.alert === "function"
+                        ) {
+                            ew.alert(
+                                "¡Por favor, elija un rango de fechas válido!"
+                            );
+                        } else {
+                            alert(
+                                "¡Por favor, elija un rango de fechas válido!"
+                            );
+                        }
+
+                        return false;
+                    }
+                }
+
+                $.ajax({
+                    url: esReporteFiscal
+                        ? "reportes/factura_fiscal_reportes.php"
+                        : <?= json_encode($url) ?>,
+
+                    type: "GET",
+
+                    data: {
+                        id: <?= json_encode($id) ?>,
+                        documento: <?= json_encode($id) ?>,
+                        fecha_desde: fecha_desde,
+                        fecha_hasta: fecha_hasta,
+                        tipo: tipo,
+                        articulo: articulo,
+                        proveedor: 0,
+                        cliente: cliente,
+                        asesor: asesor
+                    },
+
+                    beforeSend: function () {
+                        $("#result").html(`
+                            <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
+                                <div class="spinner-border text-primary me-3"
+                                     role="status">
+                                </div>
+
+                                <span class="fs-5 fw-semibold">
+                                    Procesando y organizando el reporte...
+                                </span>
+                            </div>
+                        `);
+                    }
+                })
+                .done(function (data) {
+                    $("#result").html(data);
+                })
+                .fail(function (xhr, status, error) {
+
+                    var mensaje = error || status || "Error desconocido";
+
+                    $("#result").html(`
+                        <div class="alert alert-danger d-flex align-items-center"
+                             role="alert">
+
+                            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+
+                            <div>
+                                Ocurrió un error inesperado al procesar los datos:
+                                <strong></strong>
+                            </div>
+                        </div>
+                    `);
+
+                    $("#result strong").text(mensaje);
+                });
+
+                return false;
+            });
     }
 
-    esperarJQueryListadoMaster();
+    /**
+     * Punto único de inicio.
+     */
+    esperarJQueryListadoMaster(function ($) {
+
+        iniciarEventosListadoMaster($);
+
+        cargarSelect2ListadoMaster($, function () {
+            inicializarSelect2ListadoMaster($);
+        });
+    });
+
+})();
 </script>]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="listado_master_buscar.php"><![CDATA[<?php
 session_start();
@@ -22256,7 +22423,9 @@ if ($codcli > 0) {
         $.ajax({
             data: {
                 "id": id,
-                "id_documento": idDocumento
+                "id_documento": idDocumento,
+                "codcli": $("#codcli").val(),
+                "tipo_documento": $("#tipo_documento_actual").val()
             },
             url: "include/findme_lote.php",
             type: 'post',
@@ -36357,16 +36526,20 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 ?>
 
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+(function ($) {
+    var $ = window.jQuery;
+    
   function insertar(i) { 
-    var pedido = $("#pedido").value();
-    var proveedor = $("#codpro").value();
-    var cantidad = $("#x" + i + "_cantidad").value();
-    var articulo = $("#x" + i + "_articulo").value();
+    var pedido = $("#pedido").val();
+    var proveedor = $("#codpro").val();
+    var cantidad = $("#x" + i + "_cantidad").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var nota = $("#nota").val();
+    var lote = $("#x" + i + "_lote").val();
+    var vence = $("#x" + i + "_vence").val();
+    var almacen = $("#almacen").val();
     var username = '<?= CurrentUserName() ?>';
-    var nota = $("#nota").value();
-    var lote = $("#x" + i + "_lote").value();
-    var vence = $("#x" + i + "_vence").value();
-    var almacen = $("#almacen").value();
     // alert(pedido + " - " + proveedor + " - " + costoFull + " - " + descuento + " - " + costo + " - " + moneda + " - " + total + " - " + cantidad + " - " + username);
 
     // Using the core $.ajax() method
@@ -36412,7 +36585,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
         else {
           alert("Error: !!! " + json.mensaje + " !!!");
           document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
-          ("#x" + i + "_cantidad").value("");
+          $("#x" + i + "_cantidad").val("");
         }
     })
     // Code to run if the request fails; the raw request and status codes are passed to the function
@@ -36429,10 +36602,10 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function eliminar(i, id_item) {
-    var pedido = $("#pedido").value();
-    var articulo = $("#x" + i + "_articulo").value();
+    var pedido = $("#pedido").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var nota = $("#nota").val();
     var username = '<?= CurrentUserName() ?>';
-    var nota = $("#nota").value();
 
     // alert(pedido + " - " + proveedor + " - " + precio + " - " + descuento + " - " + precioFull + " - " + moneda + " - " + onhand + " - " + cantidad + " - " + username);
     // Using the core $.ajax() method
@@ -36494,7 +36667,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
     if(i > 0) {
       if(!confirm("Seguro que quiere vaciar la cesta de pedidos?")) return false;
 
-      var pedido = $("#pedido").value();
+      var pedido = $("#pedido").val();
       // Using the core $.ajax() method
       $.ajax({
         // The URL for the request
@@ -36694,6 +36867,15 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
       });
   }
 
+  // Exponer al scope global las funciones que se invocan desde atributos onclick="js:..."
+  window.insertar = insertar;
+  window.eliminar = eliminar;
+  window.vaciar = vaciar;
+  window.sendProccess = sendProccess;
+  window.abrirModalNuevoArticulo = abrirModalNuevoArticulo;
+  window.guardarNuevoArticulo = guardarNuevoArticulo;
+})(jQuery);
+});
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -36824,6 +37006,10 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 </div>
 
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+(function ($) {
+    var $ = window.jQuery;
+    
   $("#laboratorio").prop("disabled", true);
   $("#articulo").prop("disabled", true);
 
@@ -36990,7 +37176,16 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
       } 
   }
 
+  // Exponer al scope global las funciones que se invocan desde atributos onclick="js:..."
+  window.getCodigos3 = getCodigos3;
+  window.getCodigos = getCodigos;
+  window.getCodigos2 = getCodigos2;
+  window.limpiar = limpiar;
+  window.guardar_nota = guardar_nota;
+
   getCodigos3( <?= $pedido ?> )
+})(jQuery);
+});
 </script>
 
 <style>
@@ -37375,7 +37570,7 @@ if (intval($pedido) > 0) {
             <input type="range"
                    class="form-range"
                    min="<?= $PorDesMin ?>"
-                   max="99"
+                   max="80"
                    step="1"
                    id="rangoDescuentoCliente"
                    value="<?= intval($PorDesAct) ?>">
@@ -37405,7 +37600,7 @@ if (intval($pedido) > 0) {
             <input type="range"
                    class="form-range"
                    min="0"
-                   max="99"
+                   max="80"
                    step="1"
                    id="rangoTransferencista"
                    value="<?= intval($descTransferencista) ?>">
@@ -37810,8 +38005,8 @@ loadjs.ready(["jquery"], function () {
             return false;
         }
 
-        if ((id.indexOf("_descuento") >= 0 || id.indexOf("_descuento2") >= 0) && (valor < 0 || valor >= 100)) {
-            alertMsg("El descuento debe estar entre 0 y 99.");
+        if ((id.indexOf("_descuento") >= 0 || id.indexOf("_descuento2") >= 0) && (valor < 0 || valor > 80)) {
+            alertMsg("El descuento debe estar entre 0 y 80.");
             return false;
         }
 
@@ -38735,8 +38930,89 @@ loadjs.ready(["jquery"], function () {
         }
     };
 
+    window.validarPreciosAntesDeProcesar = function () {
+        let preciosInvalidos = [];
+        let primeraFilaInvalida = null;
+
+        // Limpia cualquier marca de validación anterior.
+        $("#lista2 input[id$='_precioFull'], #lista2 input[id$='_precio']")
+            .removeClass("is-invalid");
+
+        $("#lista2 input[id$='_precioFull']").each(function () {
+            const $precioFull = $(this);
+            const idPrecioFull = $precioFull.attr("id") || "";
+            const match = idPrecioFull.match(/^x(\d+)_precioFull$/);
+
+            if (!match) {
+                return;
+            }
+
+            const fila = parseInt(match[1], 10);
+            const $precioFinal = $("#x" + fila + "_precio");
+
+            const precioFull = parseFloat(
+                String($precioFull.val() || "").replace(",", ".")
+            );
+
+            const precioFinal = parseFloat(
+                String($precioFinal.val() || "").replace(",", ".")
+            );
+
+            if (
+                !Number.isFinite(precioFull) ||
+                precioFull <= 0 ||
+                !Number.isFinite(precioFinal) ||
+                precioFinal <= 0
+            ) {
+                $precioFull.addClass("is-invalid");
+                $precioFinal.addClass("is-invalid");
+
+                const $fila = $precioFull.closest("tr");
+                const articulo = $.trim(
+                    $fila.find("td").eq(1).find("strong").first().text()
+                ) || ("Renglón " + fila);
+
+                preciosInvalidos.push(articulo);
+
+                if (primeraFilaInvalida === null) {
+                    primeraFilaInvalida = $precioFull;
+                }
+            }
+        });
+
+        if (preciosInvalidos.length > 0) {
+            const articulosUnicos = [...new Set(preciosInvalidos)];
+
+            alertMsg(
+                "No se puede procesar el documento. " +
+                "Todos los artículos deben tener un precio mayor a cero.\n\n" +
+                "Revise: " + articulosUnicos.join(", ")
+            );
+
+            if (primeraFilaInvalida) {
+                const $fila = primeraFilaInvalida.closest("tr");
+
+                $("html, body").animate({
+                    scrollTop: Math.max($fila.offset().top - 120, 0)
+                }, 250);
+
+                primeraFilaInvalida.focus();
+            }
+
+            return false;
+        }
+
+        return true;
+    };
+
     window.sendProccess = function (i) {
         if (i <= 0) return false;
+
+        // Antes de abrir los modales o reservar correlativos, valida
+        // que todos los renglones tengan precio full y precio final > 0.
+        if (!validarPreciosAntesDeProcesar()) {
+            return false;
+        }
 
         // Mostrar un spinner o deshabilitar temporalmente para evitar doble clic antes de cargar modal
         const PorDesAct = getVal("PorDesAct");
@@ -38765,11 +39041,65 @@ loadjs.ready(["jquery"], function () {
                 const miModal = new bootstrap.Modal(document.getElementById('modalConfirmarFiscal'));
                 miModal.show();
 
+                // Cada vez que se abre el modal, se reinicia la condición de pago
+                // y el botón "Sí, Procesar" queda deshabilitado hasta que el
+                // usuario elija explícitamente Contado o Crédito.
+                $("#modal_tipo_pago").val("");
+                $("#btnConfirmarProcesar").prop("disabled", true);
+
+                $("#modal_tipo_pago").off("change").on("change", function () {
+                    $("#btnConfirmarProcesar").prop("disabled", $(this).val() === "");
+                });
+
+                // Reiniciar también el switch de Factura de Contingencia y su motivo.
+                $("#modal_contingencia").prop("checked", false);
+                $("#div_nota_contingencia").hide();
+                $("#modal_nota_contingencia").val("");
+
+                $("#modal_contingencia").off("change").on("change", function () {
+                    if ($(this).is(":checked")) {
+                        if (!confirm("¿Está seguro de registrar esta factura como Factura de Contingencia?")) {
+                            $(this).prop("checked", false);
+                            $("#div_nota_contingencia").slideUp(150);
+                            $("#modal_nota_contingencia").val("");
+                            return;
+                        }
+                        $("#div_nota_contingencia").slideDown(150);
+                        $("#modal_nota_contingencia").trigger("focus");
+                    } else {
+                        $("#div_nota_contingencia").slideUp(150);
+                        $("#modal_nota_contingencia").val("");
+                    }
+                });
+
                 // Desenlazar eventos anteriores del botón de confirmación para evitar ejecuciones múltiples
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
                     const btn = $(this);
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
+
+                    // 'S' = Contado, 'N' = Crédito. Viaja a TdcfcvProcess.php para
+                    // actualizar salidas.entregado.
+                    const tipoPago = $("#modal_tipo_pago").val();
+                    if (tipoPago !== "S" && tipoPago !== "N") {
+                        alertMsg("Debe indicar si la condición de pago es Contado o Crédito.");
+                        return;
+                    }
+
+                    // Factura de Contingencia: si está activada, exige un motivo
+                    // de al menos tres palabras. Viaja a TdcfcvProcess.php para
+                    // usar las series FM_DOC / FM_CTRL y guardar el motivo en salidas.nota.
+                    const esContingencia = $("#modal_contingencia").is(":checked");
+                    const notaContingencia = $("#modal_nota_contingencia").val().trim();
+
+                    if (esContingencia) {
+                        const palabrasNota = notaContingencia.split(/\s+/).filter(function (w) { return w.length > 0; });
+                        if (palabrasNota.length < 3) {
+                            alertMsg("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
+                            $("#modal_nota_contingencia").trigger("focus");
+                            return;
+                        }
+                    }
 
                     const tipoDocumentoFiscal = String(response.tipo_doc || "").toUpperCase();
                     const tieneArticulosInventario = <?= $tieneArticulosInventario ? "true" : "false" ?>;
@@ -38784,7 +39114,10 @@ loadjs.ready(["jquery"], function () {
                             "TdcfcvProcess?pedido=" + i +
                             "&PorDesAct=" + PorDesAct +
                             "&generar_ne=" + generarNE +
-                            "&generar_nr=" + generarNR;
+                            "&generar_nr=" + generarNR +
+                            "&entregado=" + tipoPago +
+                            "&contingencia=" + (esContingencia ? "S" : "N") +
+                            "&nota_contingencia=" + encodeURIComponent(notaContingencia);
                     };
 
                     const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
@@ -38814,7 +39147,7 @@ loadjs.ready(["jquery"], function () {
 
                     // FACTURA / NOTA DE DÉBITO: se conserva intacto el flujo
                     // actual de Orden de Entrega, siempre que no provenga de otro documento.
-                    if (tipoDocumentoFiscal !== "NC" && idDocumentoPadre == 0 && preguntarNE) {
+                    if (tipoDocumentoFiscal !== "NC" && idDocumentoPadre == 0 && preguntarNE && tieneArticulosInventario) {
                         const modalNE = bootstrap.Modal.getOrCreateInstance(
                             document.getElementById('modalConfirmarNE')
                         );
@@ -39315,6 +39648,35 @@ $impresoraFiscal = strtoupper(trim(
             </div>
           </div>
 
+          <div class="col-12">
+            <label class="form-label fw-bold text-secondary mb-1 small">Condición de Pago</label>
+            <div class="input-group input-group-sm" style="min-width: 0; flex-wrap: nowrap;">
+              <span class="input-group-text bg-white"><i class="fa-solid fa-money-check-dollar text-success"></i></span>
+              <select id="modal_tipo_pago" class="form-select">
+                <option value="" selected disabled>Seleccione...</option>
+                <option value="S">Contado</option>
+                <option value="N">Crédito</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-check form-switch ps-0">
+              <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" id="modal_contingencia" style="float: none;">
+              <label class="form-check-label fw-bold text-secondary small" for="modal_contingencia">
+                Factura de Contingencia
+              </label>
+            </div>
+          </div>
+
+          <div class="col-12" id="div_nota_contingencia" style="display: none;">
+            <label class="form-label fw-bold text-danger mb-1 small">Motivo de la Contingencia</label>
+            <textarea id="modal_nota_contingencia"
+                      class="form-control form-control-sm"
+                      rows="2"
+                      placeholder="Indique el motivo (mínimo tres palabras)..."></textarea>
+          </div>
+
           <?php if ($impresoraFiscal == "S") { ?>
               <div class="col-12">
                   <div class="alert alert-primary d-flex align-items-center mb-0 py-2 small" role="alert">
@@ -39342,7 +39704,7 @@ $impresoraFiscal = strtoupper(trim(
                 <i class="fa-solid fa-xmark me-1"></i>
                 Cancelar
             </button>
-
+            <!--
             <a id="btnVistaPrevia"
                 href="<?= $urlImprimir ?>"
                 target="_blank"
@@ -39350,10 +39712,11 @@ $impresoraFiscal = strtoupper(trim(
                     <i class="fa-solid fa-magnifying-glass me-1"></i>
                     Vista Previa
             </a>
-
+            -->
             <button type="button"
                     id="btnConfirmarProcesar"
-                    class="btn btn-sm btn-success px-4 fw-bold">
+                    class="btn btn-sm btn-success px-4 fw-bold"
+                    disabled>
                 <i class="fa-solid fa-check me-1"></i>
                 Sí, Procesar
             </button>
@@ -39619,7 +39982,8 @@ $impresoraFiscal = strtoupper(trim(
 
         </div>
     </div>
-</div>]]></CustomScript>
+</div>
+]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcfcv_process.php"><![CDATA[<?php
 
 function TdcfcvSqlValue($value)
@@ -39793,6 +40157,18 @@ $nro_documento = $row["nro_documento"] ?? "";
 $estatus = $row["estatus"] ?? "";
 $impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
 
+// -----------------------------------------------------------------------
+// Condición de pago (Contado / Crédito) elegida en el modal de confirmación
+// de emisión. 'S' = Contado, 'N' = Crédito. Se valida y se persiste en
+// salidas.entregado ANTES de continuar con el resto del flujo (fiscal o
+// manual), ya que aplica a ambos casos por igual.
+// -----------------------------------------------------------------------
+$entregado_param = strtoupper(trim($_REQUEST["entregado"] ?? ""));
+if ($entregado_param !== "S" && $entregado_param !== "N") {
+    die("Debe indicar la condición de pago (Contado o Crédito) antes de procesar el documento.");
+}
+Execute("UPDATE salidas SET entregado = '{$entregado_param}' WHERE id = {$pedido} LIMIT 1");
+
 if(trim($nro_documento ?? "") == "") {
     if ($impresoraFiscal) {
         // En modo impresora fiscal activa, NO reservamos consecutivos desde el sistema.
@@ -39859,6 +40235,25 @@ if(trim($nro_documento ?? "") == "") {
     // El consecutivo del documento SIEMPRE es independiente
     $serie_doc = $documento . "_DOC";
 
+    // -------------------------------------------------------------------
+    // Factura de Contingencia: si viene marcada desde el modal, se usan
+    // las series FM_DOC / FM_CTRL en vez de las series normales del
+    // documento, y se exige un motivo de al menos tres palabras (se
+    // guardará más abajo en salidas.nota).
+    // -------------------------------------------------------------------
+    $esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
+    $notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
+
+    if ($esContingencia) {
+        $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
+        if (count($palabrasNota) < 3) {
+            die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
+        }
+
+        $serie_doc = "FM_DOC";
+        $serie_ctrl = "FM_CTRL";
+    }
+
     $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
     $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
 
@@ -39884,7 +40279,8 @@ if(trim($nro_documento ?? "") == "") {
                 nro_documento = '$factura', 
                 nro_control = '$facturaCTRL', 
                 estatus = '$estatus', 
-                username = '" . CurrentUserName() . "' 
+                username = '" . CurrentUserName() . "'"
+                . ($esContingencia ? ", nota = '" . TdcfcvSqlValue("Factura de Contingencia: " . $notaContingencia) . "'" : "") . "
             WHERE id = $pedido
             AND (nro_documento IS NULL OR nro_documento = '')";
     Execute($sql);
@@ -39924,7 +40320,8 @@ if ($estatus == "PROCESADO") {
     die();
 
 }
-?>]]></CustomScript>
+?>
+]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcasa_add.php"><![CDATA[<?php
 echo "Hello World";
 ?>]]></CustomScript>
@@ -40133,7 +40530,7 @@ case 'TDCPDV':
 case 'TDCNET':
 	//$myform = "TdcnetAdd";
     $myform = "AjusteSalida?id=0&tipo_documento=TDCNET";
-	$linkform = '<a href="ViewSalidasList?crear=TDCNET" class="btn btn-primary">Crear Orden de Entrega desde Pedido de Venta o Factura</a>';
+	$linkform = '<a href="ViewSalidasList?crear=TDCNET" class="btn btn-primary">Crear Orden de Entrega desde Pedido de Venta</a>';
 	break;
 case 'TDCFCV':
 	$myform = "TdcfcvAdd";
@@ -40647,9 +41044,11 @@ function Page_DataRendering(&$header)
 {
     // Example:
     //$header = "your header";
-    $header = '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCFCV"><span class="fas fa-plus"></span> Nuevo Documento</a>';
-    $header .= '&nbsp;&nbsp;<a class="btn btn-outline-success" id="btnExportExcel" href="javascript:void(0);"><span class="fas fa-file-excel"></span> Descargar Excel</a>';
-    $header .= '<br><br>';
+    if (VerificaFuncion("050")) {
+        $header = '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCFCV"><span class="fas fa-plus"></span> Nuevo Documento</a>';
+        $header .= '&nbsp;&nbsp;<a class="btn btn-outline-success" id="btnExportExcel" href="javascript:void(0);"><span class="fas fa-file-excel"></span> Descargar Excel</a>';
+        $header .= '<br><br>';
+    }
 }]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="list" ScriptL1Key="view_out_tdcnet"><![CDATA[// Page Data Rendering event
 function Page_DataRendering(&$header)
@@ -41283,69 +41682,95 @@ function Row_Updating($rsold, &$rsnew)
     
     return true;
 }]]></CustomScript>
-  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="view" ScriptL1Key="view_out_tdcfcv"><![CDATA[function Page_DataRendering(&$header)
+  <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="view" ScriptL1Key="view_out_tdcfcv"><![CDATA[public function pageDataRendering(&$header)
 {
-    // Iniciamos el contenedor alineado con el espaciado estándar
-    $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
+    if (VerificaFuncion("050")) {
+        // Iniciamos el contenedor alineado con el espaciado estándar
+        $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
 
-    // 1. Botón Editar (Solo si es NUEVO)
-    if($this->estatus->CurrentValue == "NUEVO") {
-        $urlEditar = "../TdcfcvAdd?tipo_documento=TDCFCV&codcli=0&pedido=" . $this->id->CurrentValue;
-        $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $urlEditar . '"><span class="fas fa-edit"></span> Editar Documento</a>';
-    }
-
-    // 2. Botón Imprimir
-    $urlImprimir = "../reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCV";
-    $html .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $urlImprimir . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
-
-    // 3. Botón Copiar
-    if($this->estatus->CurrentValue == "PROCESADO") {
-        $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
-        
-        switch ($this->documento->CurrentValue) {
-            case "FC":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
-                break;
-            case "NC":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
-                break;
-            case "ND":
-                $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
-                break;
+        // 1. Botón Editar (Solo si es NUEVO)
+        if($this->estatus->CurrentValue == "NUEVO") {
+            $urlEditar = "../TdcfcvAdd?tipo_documento=TDCFCV&codcli=0&pedido=" . $this->id->CurrentValue;
+            $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $urlEditar . '"><span class="fas fa-edit"></span> Editar Documento</a>';
         }
-    }
 
-    // Lógica de Pagos y Comprobante
-    $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
-    $rowPago = ExecuteRow($sql);
-
-    if ($rowPago) {
-        // 4. Botón Ver Pagos
-        $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $rowPago["id"];
-        $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
-
-        // 5. Botón Imprimir Comprobante (Adaptado al estilo del grupo)
-        $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
-        $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
-
-        // 6. Botón Revertir (Si no está impreso y si tiene permiso)
-        // if ($this->impreso->CurrentValue == "N") {
-            if (VerificaFuncion('014')) {
-                $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
-            }
-        // }
-    } else {
-        // 7. Botón Registrar Pago
+        // 2. Botón Imprimir
         if ($this->estatus->CurrentValue == "PROCESADO") {
-            $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
-            $html .= '<a class="btn btn-outline-primary" href="' . $urlAddPago . '"><span class="fas fa-money-bill-wave"></span> Registrar Pago</a>';
+            $urlImprimir = "../reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+            $html .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $urlImprimir . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
         }
+
+        // 3. Botón Copiar
+        if($this->estatus->CurrentValue == "PROCESADO") {
+            $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
+            switch ($this->documento->CurrentValue) {
+                case "FC":
+                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
+                    break;
+                case "NC":
+                    // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                    break;
+                case "ND":
+                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                    break;
+            }
+        }
+
+        // Lógica de Pagos y Comprobante
+        $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
+        $rowPago = ExecuteRow($sql);
+        if ($rowPago) {
+            // 4. Botón Ver Pagos
+            $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $rowPago["id"];
+            $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
+
+            // 5. Botón Imprimir Comprobante (Adaptado al estilo del grupo)
+            $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+            $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
+
+            // 6. Botón Revertir (Si no está impreso y si tiene permiso)
+            // if ($this->impreso->CurrentValue == "N") {
+                if (VerificaFuncion('014')) {
+                    $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+                }
+            // }
+        } else {
+            // 7. Botón Registrar Pago
+            if ($this->estatus->CurrentValue == "PROCESADO") {
+                $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
+                $html .= '<a class="btn btn-success btn-pulse" href="' . $urlAddPago . '">
+                            <span class="fas fa-money-bill-wave"></span> Registrar Pago
+                        </a>';
+            }
+        }
+        $html .= '</div>'; // Cerramos el contenedor flex
+
+        $html .= '
+        <style>
+        @keyframes pulsePago {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(25,135,84,.6);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 0 15px rgba(25,135,84,.8);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(25,135,84,0);
+            }
+        }
+
+        .btn-pulse{
+            animation:pulsePago 1.4s infinite;
+            font-weight:bold;
+        }
+        </style>';
+
+        // Asignamos todo el bloque al header de PHPMaker
+        $header = $html;
     }
-
-    $html .= '</div>'; // Cerramos el contenedor flex
-
-    // Asignamos todo el bloque al header de PHPMaker
-    $header = $html;
 }]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="list" ScriptL1Key="view_out"><![CDATA[// Page Data Rendering event
 function Page_DataRendering(&$header)
@@ -42146,9 +42571,7 @@ function ListOptions_Rendered()
 function ListOptions_Rendered()
 {
     // Example:
-
     $fechaRaw = $this->fecha->CurrentValue ?? null; // Usar null coalescing
-
     if ($fechaRaw !== null && $fechaRaw !== "") {
         $timestamp = strtotime($fechaRaw);
         if ($timestamp !== false) {
@@ -42157,15 +42580,12 @@ function ListOptions_Rendered()
     } else {
         $hora = "--:--"; // Valor opcional si no hay fecha
     }
-
     $sql = "SELECT ABS(SUM(cantidad_movimiento)) AS cantidad FROM entradas_salidas WHERE id_documento = '" . $this->id->CurrentValue . "' AND tipo_documento = '" . $this->tipo_documento->CurrentValue . "';";
     $this->ListOptions["unidades"]->Body = '<a target="_blank" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <b>' . intval(ExecuteScalar($sql)) . ' Unidad(es) <br>' .  $hora .'</b></a>'; // intval(ExecuteScalar($sql));
-    
 
     ///
     $url = "reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=" . $this->tipo_documento->CurrentValue;
     // $this->ListOptions->Items["print"]->Body ='<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="Imprimir" data-placement="bottom"> <i class="fa-solid fa-print"></i> </a>';   
-
     if ($this->impreso->CurrentValue == "S") {
         $iconoPrint = '
             <span style="position: relative; display:inline-block;">
@@ -42178,16 +42598,14 @@ function ListOptions_Rendered()
         $iconoPrint = '<i class="fa-solid fa-print"></i>';
         $tituloPrint = "Imprimir";
     }
-
     $this->ListOptions->Items["print"]->Body =
         '<a target="_blank" href="' . $url . '" data-toggle="tooltip" title="' . $tituloPrint . '" data-placement="bottom">'
         . $iconoPrint .
         '</a>';
-
     if ($this->estatus->CurrentValue == "PROCESADO") {
         // Ocultamos el botón de Editar (edit)
         $this->ListOptions["edit"]->Visible = false;
-        
+
         // Ocultamos el botón de Copiar (copy) si lo deseas
         if (isset($this->ListOptions["copy"])) {
             $this->ListOptions["copy"]->Visible = false;
@@ -42199,12 +42617,16 @@ function ListOptions_Rendered()
         }
     }
 
+    // NUEVO: Mostrar u ocultar el botón 'print' según el estatus
+    if (isset($this->ListOptions["print"])) {
+        $this->ListOptions["print"]->Visible = ($this->estatus->CurrentValue == "PROCESADO");
+    }
+
     $this->fecha->Visible = false;
     $this->unidades->Visible = false;
     $this->asesor_asignado->Visible = false;
     $this->id->Visible = FALSE;
     $this->fecha_despacho->Visible = FALSE;
-
 
 }]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="ListOptions_Rendered" ScriptCtrlID="list" ScriptL1Key="view_out_tdcnet"><![CDATA[// ListOptions Rendered event
@@ -51448,9 +51870,9 @@ loadjs.ready(["jquery"], function () {
             console.log(xhr.responseText);
 
             $("#estadoNE").html(
-                '<div class="alert alert-danger text-start">' +
-                    '<h5><i class="fa fa-times-circle"></i> Error creando Orden de Entrega</h5>' +
-                    '<div>No se pudo completar el proceso automático.</div>' +
+                '<div class="alert alert-warning text-start">' +
+                    '<h5><i class="fa fa-times-circle"></i>Atento; Error creando Orden de Entrega</h5>' +
+                    '<div>No se pudo completar el proceso automático dado que no hubo art&iacute;culos de inventario.</div>' +
                 '</div>' +
                 '<button type="button" id="btnContinuarNE" class="btn btn-primary">' +
                     '<i class="fa fa-arrow-right"></i> Continuar' +
@@ -51733,6 +52155,19 @@ try {
         $conn->beginTransaction();
 
         try {
+            $proveedor = intval(ExecuteScalar("
+                SELECT valor1
+                FROM parametro
+                WHERE codigo = '054'
+                LIMIT 1
+            "));
+
+            if ($proveedor <= 0) {
+                throw new \Exception(
+                    "No está configurado un proveedor válido en el parámetro 054."
+                );
+            }
+
             ExecuteStatement("
                 INSERT INTO entradas
                     (
@@ -51744,7 +52179,7 @@ try {
                 VALUES
                     (
                         NULL, 'TDCNRP', '{$username}', NOW(),
-                        1, '{$nroRecepcion}', '" . AdjustSql($almacenDefecto) . "', 'PROCESADO',
+                        {$proveedor}, '{$nroRecepcion}', '" . AdjustSql($almacenDefecto) . "', 'PROCESADO',
                         {$pedido}, 'N', {$cliente},
                         '{$moneda}', '{$nota}', {$descuento}
                     )

@@ -1275,10 +1275,6 @@ class CompraView extends Compra
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
-            // tipo_documento
-            $this->tipo_documento->HrefValue = "";
-            $this->tipo_documento->TooltipValue = "";
-
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
             $this->doc_afectado->TooltipValue = "";
@@ -1597,36 +1593,202 @@ class CompraView extends Compra
     }
 
     // Page Data Rendering event
-    public function pageDataRendering(&$header) {
-    	// Example:
-    	//$header = "your header";
-        	$header = '<div id="result" class="container">';
-            if($this->comprobante->CurrentValue == "") {
-                if(VerificaFuncion('014')) {
-        			$header .= '<buttom class="btn btn-success" id="cmbContab" name="cmbContab">Generar Comprobante Contable</buttom>&nbsp&nbsp';
-                }
+    public function pageDataRendering(&$header)
+    {
+        $idCompra = intval($this->id->CurrentValue ?? 0);
+        $tipoDocumentoPago = "GASTOS";
+
+        // Obtenemos los valores de forma segura desde los campos de la tabla compra
+        $monedaVal  = isset($this->moneda) ? trim((string)$this->moneda->CurrentValue) : "Bs.";
+        $tasaVal    = isset($this->tasa_dia) ? floatval($this->tasa_dia->CurrentValue) : 1.0;
+        $totalVal   = isset($this->monto_total) ? floatval($this->monto_total->CurrentValue) : 0.0;
+        $anuladoVal = isset($this->anulado) ? trim((string)$this->anulado->CurrentValue) : "N";
+
+        // ---------------------------------------------------------
+        // INFORMACIÓN DEL MONTO DEL DOCUMENTO
+        // ---------------------------------------------------------
+        $montoPagarCalc = $totalVal;
+        if ($monedaVal !== "Bs.") {
+            $montoPagarCalc *= $tasaVal;
+        }
+        $totalDocumento = $totalVal;
+        if ($monedaVal !== "Bs.") {
+            $totalDocumento *= $tasaVal;
+        }
+        $montoDocumento = $montoPagarCalc > 0
+            ? $montoPagarCalc
+            : $totalDocumento;
+        $montoDocumento = round($montoDocumento, 2);
+
+        // ---------------------------------------------------------
+        // CONSULTAR TODOS LOS PAGOS REGISTRADOS PARA GASTOS
+        // ---------------------------------------------------------
+        $sql = "
+            SELECT
+                COUNT(*) AS cantidad_pagos,
+                MAX(id) AS ultimo_pago_id,
+                COALESCE(SUM(pago), 0) AS total_pagado
+            FROM pagos_compras
+            WHERE id_documento = " . $idCompra . "
+              AND tipo_documento = '" . AdjustSql($tipoDocumentoPago) . "'
+        ";
+        $resumenPago = ExecuteRow($sql);
+        $cantidadPagos = 0;
+        $ultimoPagoId  = 0;
+        $totalPagado   = 0;
+        if ($resumenPago) {
+            $cantidadPagos = intval($resumenPago["cantidad_pagos"] ?? 0);
+            $ultimoPagoId  = intval($resumenPago["ultimo_pago_id"] ?? 0);
+            $totalPagado   = floatval($resumenPago["total_pagado"] ?? 0);
+        }
+        $totalPagado = round($totalPagado, 2);
+        $saldoPendiente = round($montoDocumento - $totalPagado, 2);
+
+        // Evita mostrar pequeños residuos por redondeo.
+        if (abs($saldoPendiente) <= 0.01) {
+            $saldoPendiente = 0;
+        }
+
+        // Protección visual en caso de sobrepago.
+        if ($saldoPendiente < 0) {
+            $saldoPendiente = 0;
+        }
+        $header = '<div id="result" class="container">';
+
+        // ---------------------------------------------------------
+        // COMPROBANTE CONTABLE
+        // ---------------------------------------------------------
+        $comprobanteVal = isset($this->comprobante) ? trim((string)$this->comprobante->CurrentValue) : "";
+        if ($comprobanteVal === "" || $comprobanteVal === "0") {
+            if (VerificaFuncion('014')) {
+                $header .= '
+                    <button type="button"
+                            class="btn btn-success"
+                            id="cmbContab"
+                            name="cmbContab">
+                        Generar Comprobante Contable
+                    </button>&nbsp;&nbsp;
+                ';
             }
-            else {
-                $header = '<div class="alert alert-success" role="alert">
-                                Ya se le Gener&oacute; Comprobante Contable a este Documento
-                            </div>';
+        } else {
+            $header .= '
+                <div class="alert alert-success" role="alert">
+                    Ya se le generó comprobante contable a este documento.
+                </div>
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // BOTÓN VER PAGOS
+        // ---------------------------------------------------------
+        if ($cantidadPagos > 0 && $ultimoPagoId > 0) {
+            $urlVerPagos = "../PagosComprasList"
+                 . "?id_compra=" . $idCompra
+                 . "&origen=" . $tipoDocumentoPago;
+            $header .= '
+                <a class="btn btn-primary"
+                   href="' . HtmlEncode($urlVerPagos) . '">
+                    <span class="fas fa-eye"></span>
+                    Ver Pago(s)
+                </a>&nbsp;&nbsp;
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // REGISTRAR PAGO O REGISTRAR OTRO PAGO
+        // ---------------------------------------------------------
+        if (
+            $anuladoVal === "N"
+            && $saldoPendiente > 0.01
+        ) {
+            $urlRegistrar = "../RegistrarPagosProveedores"
+                 . "?id_compra=" . $idCompra
+                 . "&origen=GASTOS";
+            $textoBoton = $cantidadPagos > 0
+                ? "Registrar otro Pago"
+                : "Registrar Pago";
+            $header .= '
+                <a class="btn btn-success"
+                   href="' . HtmlEncode($urlRegistrar) . '">
+                    <span class="fas fa-dollar-sign"></span>
+                    ' . $textoBoton . '
+                </a>&nbsp;&nbsp;
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // BOTÓN REVERTIR PAGOS
+        // ---------------------------------------------------------
+        if (
+            $cantidadPagos > 0
+            && VerificaFuncion('014')
+        ) {
+            $header .= '
+                <button type="button"
+                        class="btn btn-danger"
+                        onclick="RevertirPagosCompras('
+                            . $idCompra
+                            . ', \'GASTOS\');">
+                    <span class="fas fa-undo"></span>
+                    Revertir Pago(s)
+                </button>&nbsp;&nbsp;
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // ESTADO DE CUENTAS POR PAGAR (GASTOS)
+        // ---------------------------------------------------------
+        if ($anuladoVal === "N") {
+            $montoDocumentoFormato = number_format(
+                $montoDocumento,
+                2,
+                ",",
+                "."
+            );
+            $totalPagadoFormato = number_format(
+                $totalPagado,
+                2,
+                ",",
+                "."
+            );
+            $saldoFormato = number_format(
+                $saldoPendiente,
+                2,
+                ",",
+                "."
+            );
+            $header .= '<div class="mt-3">';
+            if ($saldoPendiente <= 0.01 && $montoDocumento > 0) {
+                $header .= '
+                    <span class="badge bg-success fs-6">
+                        <span class="fas fa-check-circle"></span>
+                        PAGADA COMPLETAMENTE
+                    </span>
+                ';
+            } elseif ($cantidadPagos > 0) {
+                $header .= '
+                    <span class="badge bg-warning text-dark fs-6">
+                        <span class="fas fa-money-check-alt"></span>
+                        Monto: Bs. ' . $montoDocumentoFormato . '
+                        &nbsp;|&nbsp;
+                        Pagado: Bs. ' . $totalPagadoFormato . '
+                        &nbsp;|&nbsp;
+                        Saldo: Bs. ' . $saldoFormato . '
+                    </span>
+                ';
+            } else {
+                $header .= '
+                    <span class="badge bg-secondary fs-6">
+                        <span class="fas fa-exclamation-circle"></span>
+                        Sin pagos registrados
+                        &nbsp;|&nbsp;
+                        Saldo: Bs. ' . $saldoFormato . '
+                    </span>
+                ';
             }
-            $sql = "SELECT id FROM pagos_compras WHERE id_documento = " . $this->id->CurrentValue . ";";
-            if($row = ExecuteRow($sql)) {
-                // $url = "../PagosComprasDetalleList?showmaster=pagos_compras&fk_id=" . $row["id"] . "";
-                $url = "../PagosComprasDetalleList?showmaster=pagos_compras&fk_id=" . $row["id"] . "";
-                $header .= '<a class="btn btn-primary" href="' . $url . '">Ver Pago(s)</a>&nbsp&nbsp';
-                if(VerificaFuncion('014')) {
-                    $header .= '<a class="btn btn-danger" onclick="js: RevertirPagosCompras(' . $this->id->CurrentValue . '); ">Revertir Pago(s)</a>&nbsp&nbsp';
-                }
-            }
-            else {
-                if($this->anulado->CurrentValue == "N") {
-                    $url = "../PagosComprasAdd?showdetail=&id_compra=" . $this->id->CurrentValue;
-                    $header .= '<a class="btn btn-primary" href="' . $url . '">Registrar Pago</a>';
-                }
-            } 
             $header .= '</div>';
+        }
+        $header .= '</div>';
     }
 
     // Page Data Rendered event

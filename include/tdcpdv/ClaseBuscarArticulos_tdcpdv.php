@@ -110,7 +110,7 @@ class BuscarArticulos {
                 a.id, 
                 IFNULL(a.foto, '') AS foto, a.nombre_comercial, b.nombre AS fabricante, 
                 a.principio_activo, a.presentacion, c.precio AS precio_ful, 
-                CAST(a.cantidad_en_mano AS SIGNED) AS cantidad_en_mano, 
+                (CAST(a.cantidad_en_mano AS SIGNED) - ABS(CAST(a.cantidad_en_pedido AS SIGNED))) AS cantidad_en_mano, 
                 -- (CAST(a.cantidad_en_mano AS SIGNED)-CAST(a.cantidad_en_pedido AS SIGNED)) AS cantidad_en_mano, 
                 d.descripcion AS unidad_medida, 
                 a.descuento,

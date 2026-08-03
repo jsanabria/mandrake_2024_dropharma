@@ -82,6 +82,7 @@ if (strlen($txtNota) < 20) {
             $control1 = "x" . $i . "_Articulo";
             $control2 = "x" . $i . "_Cantidad";
             $control3 = "x" . $i . "_Costo";
+            $control4 = "x" . $i . "_IdMovimiento";
             
             if (isset($_POST[$control1])) {
                 $articulo     = intval($_POST[$control1]);
@@ -89,15 +90,75 @@ if (strlen($txtNota) < 20) {
                 $costo        = floatval($_POST[$control3]);
                 $costo_total  = $cantidad * $costo;
 
+                $id_movimiento_origen = isset($_POST[$control4])
+                    ? intval($_POST[$control4])
+                    : 0;
+
+                $lote = "";
+                $fecha_vencimiento = null;
+
+                if ($id_movimiento_origen > 0) {
+                    $sql_origen = "
+                        SELECT
+                            IFNULL(lote, '') AS lote,
+                            fecha_vencimiento
+                        FROM entradas_salidas
+                        WHERE id = $id_movimiento_origen
+                        AND id_documento = $id_old
+                        AND tipo_documento = 'TDCNET'
+                        AND articulo = $articulo
+                        LIMIT 1;
+                    ";
+
+                    if ($row_origen = ExecuteRow($sql_origen)) {
+                        $lote = trim($row_origen["lote"] ?? "");
+                        $fecha_vencimiento = $row_origen["fecha_vencimiento"] ?? "1990-01-01";
+                    }
+                }
+
+                $lote_sql = AdjustSql($lote);
+
+                $fecha_vencimiento_sql =
+                    !empty($fecha_vencimiento)
+                        ? "'" . AdjustSql($fecha_vencimiento) . "'"
+                        : "'1990-01-01'";
+
                 $sql = "INSERT INTO entradas_salidas
-                            (id, tipo_documento, id_documento, 
-                            fabricante, articulo, almacen, 
-                            cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, 
-                            cantidad_movimiento, costo_unidad, costo, check_ne)
-                        VALUES(NULL, 'TDCNRP', $newid,
-                            1, $articulo, '$almacen',
-                            $cantidad, 'UDM001', 1,
-                            $cantidad, $costo, $costo_total, 'S');";
+                            (
+                                id,
+                                tipo_documento,
+                                id_documento,
+                                fabricante,
+                                articulo,
+                                almacen,
+                                lote,
+                                fecha_vencimiento,
+                                cantidad_articulo,
+                                articulo_unidad_medida,
+                                cantidad_unidad_medida,
+                                cantidad_movimiento,
+                                costo_unidad,
+                                costo,
+                                check_ne
+                            )
+                        VALUES
+                            (
+                                NULL,
+                                'TDCNRP',
+                                $newid,
+                                1,
+                                $articulo,
+                                '" . AdjustSql($almacen) . "',
+                                '$lote_sql',
+                                $fecha_vencimiento_sql,
+                                $cantidad,
+                                'UDM001',
+                                1,
+                                $cantidad,
+                                $costo,
+                                $costo_total,
+                                'S'
+                            );";
                 Execute($sql);
 
                 $articulo_insertado_ok = true;

@@ -145,7 +145,7 @@ class PagosComprasList extends PagosCompras
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->setVisibility();
+        $this->id->Visible = false;
         $this->proveedor->setVisibility();
         $this->id_documento->setVisibility();
         $this->pivote->Visible = false;
@@ -160,6 +160,7 @@ class PagosComprasList extends PagosCompras
         $this->anexos->Visible = false;
         $this->pivote2->Visible = false;
         $this->tasa_cambio->Visible = false;
+        $this->tipo_documento->Visible = false;
     }
 
     // Constructor
@@ -200,7 +201,7 @@ class PagosComprasList extends PagosCompras
         $pageUrl = $this->pageUrl(false);
 
         // Initialize URLs
-        $this->AddUrl = "PagosComprasAdd";
+        $this->AddUrl = "PagosComprasAdd?" . Config("TABLE_SHOW_DETAIL") . "=";
         $this->InlineAddUrl = $pageUrl . "action=add";
         $this->GridAddUrl = $pageUrl . "action=gridadd";
         $this->GridEditUrl = $pageUrl . "action=gridedit";
@@ -705,7 +706,6 @@ class PagosComprasList extends PagosCompras
 
         // Set up lookup cache
         $this->setupLookupOptions($this->proveedor);
-        $this->setupLookupOptions($this->id_documento);
         $this->setupLookupOptions($this->_username);
         $this->setupLookupOptions($this->tipo_pago);
 
@@ -1065,6 +1065,7 @@ class PagosComprasList extends PagosCompras
         $filterList = Concat($filterList, $this->anexos->AdvancedSearch->toJson(), ","); // Field anexos
         $filterList = Concat($filterList, $this->pivote2->AdvancedSearch->toJson(), ","); // Field pivote2
         $filterList = Concat($filterList, $this->tasa_cambio->AdvancedSearch->toJson(), ","); // Field tasa_cambio
+        $filterList = Concat($filterList, $this->tipo_documento->AdvancedSearch->toJson(), ","); // Field tipo_documento
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1223,6 +1224,14 @@ class PagosComprasList extends PagosCompras
         $this->tasa_cambio->AdvancedSearch->SearchValue2 = @$filter["y_tasa_cambio"];
         $this->tasa_cambio->AdvancedSearch->SearchOperator2 = @$filter["w_tasa_cambio"];
         $this->tasa_cambio->AdvancedSearch->save();
+
+        // Field tipo_documento
+        $this->tipo_documento->AdvancedSearch->SearchValue = @$filter["x_tipo_documento"];
+        $this->tipo_documento->AdvancedSearch->SearchOperator = @$filter["z_tipo_documento"];
+        $this->tipo_documento->AdvancedSearch->SearchCondition = @$filter["v_tipo_documento"];
+        $this->tipo_documento->AdvancedSearch->SearchValue2 = @$filter["y_tipo_documento"];
+        $this->tipo_documento->AdvancedSearch->SearchOperator2 = @$filter["w_tipo_documento"];
+        $this->tipo_documento->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1270,6 +1279,7 @@ class PagosComprasList extends PagosCompras
         $searchFlds[] = &$this->tipo_pago;
         $searchFlds[] = &$this->anexos;
         $searchFlds[] = &$this->pivote2;
+        $searchFlds[] = &$this->tipo_documento;
         $searchKeyword = $default ? $this->BasicSearch->KeywordDefault : $this->BasicSearch->Keyword;
         $searchType = $default ? $this->BasicSearch->TypeDefault : $this->BasicSearch->Type;
 
@@ -1348,7 +1358,6 @@ class PagosComprasList extends PagosCompras
         if (Get("order") !== null) {
             $this->CurrentOrder = Get("order");
             $this->CurrentOrderType = Get("ordertype", "");
-            $this->updateSort($this->id); // id
             $this->updateSort($this->proveedor); // proveedor
             $this->updateSort($this->id_documento); // id_documento
             $this->updateSort($this->fecha); // fecha
@@ -1393,6 +1402,7 @@ class PagosComprasList extends PagosCompras
                 $this->anexos->setSort("");
                 $this->pivote2->setSort("");
                 $this->tasa_cambio->setSort("");
+                $this->tipo_documento->setSort("");
             }
 
             // Reset start position
@@ -1412,29 +1422,27 @@ class PagosComprasList extends PagosCompras
         $item->OnLeft = true;
         $item->Visible = false;
 
-        // "view"
-        $item = &$this->ListOptions->add("view");
+        // "detail_pagos_compras_detalle"
+        $item = &$this->ListOptions->add("detail_pagos_compras_detalle");
         $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canView();
+        $item->Visible = $Security->allowList(CurrentProjectID() . 'pagos_compras_detalle');
         $item->OnLeft = true;
+        $item->ShowInButtonGroup = false;
 
-        // "edit"
-        $item = &$this->ListOptions->add("edit");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canEdit();
-        $item->OnLeft = true;
+        // Multiple details
+        if ($this->ShowMultipleDetails) {
+            $item = &$this->ListOptions->add("details");
+            $item->CssClass = "text-nowrap";
+            $item->Visible = $this->ShowMultipleDetails && $this->ListOptions->detailVisible();
+            $item->OnLeft = true;
+            $item->ShowInButtonGroup = false;
+            $this->ListOptions->hideDetailItems();
+        }
 
-        // "copy"
-        $item = &$this->ListOptions->add("copy");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canAdd();
-        $item->OnLeft = true;
-
-        // "delete"
-        $item = &$this->ListOptions->add("delete");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canDelete();
-        $item->OnLeft = true;
+        // Set up detail pages
+        $pages = new SubPages();
+        $pages->add("pagos_compras_detalle");
+        $this->DetailPages = $pages;
 
         // List actions
         $item = &$this->ListOptions->add("listactions");
@@ -1458,7 +1466,7 @@ class PagosComprasList extends PagosCompras
         // Drop down button for ListOptions
         $this->ListOptions->UseDropDownButton = false;
         $this->ListOptions->DropDownButtonPhrase = $Language->phrase("ButtonListOptions");
-        $this->ListOptions->UseButtonGroup = true;
+        $this->ListOptions->UseButtonGroup = false;
         if ($this->ListOptions->UseButtonGroup && IsMobile()) {
             $this->ListOptions->UseDropDownButton = true;
         }
@@ -1494,61 +1502,7 @@ class PagosComprasList extends PagosCompras
         // Call ListOptions_Rendering event
         $this->listOptionsRendering();
         $pageUrl = $this->pageUrl(false);
-        if ($this->CurrentMode == "view") {
-            // "view"
-            $opt = $this->ListOptions["view"];
-            $viewcaption = HtmlTitle($Language->phrase("ViewLink"));
-            if ($Security->canView()) {
-                if ($this->ModalView && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-table=\"pagos_compras\" data-caption=\"" . $viewcaption . "\" data-ew-action=\"modal\" data-action=\"view\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\" data-btn=\"null\">" . $Language->phrase("ViewLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-caption=\"" . $viewcaption . "\" href=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\">" . $Language->phrase("ViewLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "edit"
-            $opt = $this->ListOptions["edit"];
-            $editcaption = HtmlTitle($Language->phrase("EditLink"));
-            if ($Security->canEdit()) {
-                if ($this->ModalEdit && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"pagos_compras\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("EditLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "copy"
-            $opt = $this->ListOptions["copy"];
-            $copycaption = HtmlTitle($Language->phrase("CopyLink"));
-            if ($Security->canAdd()) {
-                if ($this->ModalAdd && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-table=\"pagos_compras\" data-caption=\"" . $copycaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("CopyLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\">" . $Language->phrase("CopyLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "delete"
-            $opt = $this->ListOptions["delete"];
-            if ($Security->canDelete()) {
-                $deleteCaption = $Language->phrase("DeleteLink");
-                $deleteTitle = HtmlTitle($deleteCaption);
-                if ($this->UseAjaxActions) {
-                    $opt->Body = "<a class=\"ew-row-link ew-delete\" data-ew-action=\"inline\" data-action=\"delete\" title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" data-key= \"" . HtmlEncode($this->getKey(true)) . "\" data-url=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-delete\"" .
-                        ($this->InlineDelete ? " data-ew-action=\"inline-delete\"" : "") .
-                        " title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" href=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
+        if ($this->CurrentMode == "view") { // Check view mode
         } // End View mode
 
         // Set up list action buttons
@@ -1587,6 +1541,50 @@ class PagosComprasList extends PagosCompras
                 $opt->Body = $body;
             }
         }
+        $detailViewTblVar = "";
+        $detailCopyTblVar = "";
+        $detailEditTblVar = "";
+
+        // "detail_pagos_compras_detalle"
+        $opt = $this->ListOptions["detail_pagos_compras_detalle"];
+        if ($Security->allowList(CurrentProjectID() . 'pagos_compras_detalle')) {
+            $body = $Language->phrase("DetailLink") . $Language->tablePhrase("pagos_compras_detalle", "TblCaption");
+            $body = "<a class=\"btn btn-default ew-row-link ew-detail" . ($this->ListOptions->UseDropDownButton ? " dropdown-toggle" : "") . "\" data-action=\"list\" href=\"" . HtmlEncode("PagosComprasDetalleList?" . Config("TABLE_SHOW_MASTER") . "=pagos_compras&" . GetForeignKeyUrl("fk_id", $this->id->CurrentValue) . "") . "\">" . $body . "</a>";
+            $links = "";
+            $detailPage = Container("PagosComprasDetalleGrid");
+            if ($links != "") {
+                $body .= "<button type=\"button\" class=\"dropdown-toggle btn btn-default ew-detail\" data-bs-toggle=\"dropdown\"></button>";
+                $body .= "<ul class=\"dropdown-menu\">" . $links . "</ul>";
+            } else {
+                $body = preg_replace('/\b\s+dropdown-toggle\b/', "", $body);
+            }
+            $body = "<div class=\"btn-group btn-group-sm ew-btn-group\">" . $body . "</div>";
+            $opt->Body = $body;
+            if ($this->ShowMultipleDetails) {
+                $opt->Visible = false;
+            }
+        }
+        if ($this->ShowMultipleDetails) {
+            $body = "<div class=\"btn-group btn-group-sm ew-btn-group\">";
+            $links = "";
+            if ($detailViewTblVar != "") {
+                $links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-view\" data-action=\"view\" data-caption=\"" . HtmlEncode($Language->phrase("MasterDetailViewLink", true)) . "\" href=\"" . HtmlEncode($this->getViewUrl(Config("TABLE_SHOW_DETAIL") . "=" . $detailViewTblVar)) . "\">" . $Language->phrase("MasterDetailViewLink", null) . "</a></li>";
+            }
+            if ($detailEditTblVar != "") {
+                $links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-edit\" data-action=\"edit\" data-caption=\"" . HtmlEncode($Language->phrase("MasterDetailEditLink", true)) . "\" href=\"" . HtmlEncode($this->getEditUrl(Config("TABLE_SHOW_DETAIL") . "=" . $detailEditTblVar)) . "\">" . $Language->phrase("MasterDetailEditLink", null) . "</a></li>";
+            }
+            if ($detailCopyTblVar != "") {
+                $links .= "<li><a class=\"dropdown-item ew-row-link ew-detail-copy\" data-action=\"add\" data-caption=\"" . HtmlEncode($Language->phrase("MasterDetailCopyLink", true)) . "\" href=\"" . HtmlEncode($this->getCopyUrl(Config("TABLE_SHOW_DETAIL") . "=" . $detailCopyTblVar)) . "\">" . $Language->phrase("MasterDetailCopyLink", null) . "</a></li>";
+            }
+            if ($links != "") {
+                $body .= "<button type=\"button\" class=\"dropdown-toggle btn btn-default ew-master-detail\" title=\"" . HtmlEncode($Language->phrase("MultipleMasterDetails", true)) . "\" data-bs-toggle=\"dropdown\">" . $Language->phrase("MultipleMasterDetails") . "</button>";
+                $body .= "<ul class=\"dropdown-menu ew-dropdown-menu\">" . $links . "</ul>";
+            }
+            $body .= "</div>";
+            // Multiple details
+            $opt = $this->ListOptions["details"];
+            $opt->Body = $body;
+        }
 
         // "checkbox"
         $opt = $this->ListOptions["checkbox"];
@@ -1602,6 +1600,98 @@ class PagosComprasList extends PagosCompras
     {
         // Render list options (to be implemented by extensions)
         global $Security, $Language;
+
+        // Preview extension
+        $links = "";
+        $detailFilters = [];
+        $masterKeys = []; // Reset
+        $masterKeys["id"] = strval($this->id->DbValue);
+
+        // Column "detail_pagos_compras_detalle"
+        if ($this->DetailPages?->getItem("pagos_compras_detalle")?->Visible && $Security->allowList(CurrentProjectID() . 'pagos_compras_detalle')) {
+            $link = "";
+            $option = $this->ListOptions["detail_pagos_compras_detalle"];
+            $detailTbl = Container("pagos_compras_detalle");
+            $detailFilter = $detailTbl->getDetailFilter($this);
+            $detailTbl->setCurrentMasterTable($this->TableVar);
+            $detailFilter = $detailTbl->applyUserIDFilters($detailFilter);
+            $url = "PagosComprasDetallePreview?t=pagos_compras&f=" . Encrypt($detailFilter . "|" . implode("|", array_values($masterKeys)));
+            $btngrp = "<div data-table=\"pagos_compras_detalle\" data-url=\"" . $url . "\" class=\"ew-detail-btn-group d-none\">";
+            if ($Security->allowList(CurrentProjectID() . 'pagos_compras')) {
+                $label = $Language->tablePhrase("pagos_compras_detalle", "TblCaption");
+                $link = "<button class=\"nav-link\" data-bs-toggle=\"tab\" data-table=\"pagos_compras_detalle\" data-url=\"" . $url . "\" type=\"button\" role=\"tab\" aria-selected=\"false\">" . $label . "</button>";
+                $detaillnk = GetUrl("PagosComprasDetalleList?" . Config("TABLE_SHOW_MASTER") . "=pagos_compras");
+                foreach ($masterKeys as $key => $value) {
+                    $detaillnk .= "&" . GetForeignKeyUrl("fk_$key", $value);
+                }
+                $title = $Language->tablePhrase("pagos_compras_detalle", "TblCaption");
+                $caption = $Language->phrase("MasterDetailListLink");
+                $btngrp .= "<a href=\"#\" class=\"me-2\" title=\"" . $title . "\" data-ew-action=\"redirect\" data-url=\"" . HtmlEncode($detaillnk) . "\">" . $caption . "</a>";
+            }
+            $detailPageObj = Container("PagosComprasDetalleGrid");
+            if ($detailPageObj->DetailView && $Security->canView() && $Security->allowView(CurrentProjectID() . 'pagos_compras')) {
+                $caption = $Language->phrase("MasterDetailViewLink");
+                $viewurl = GetUrl($this->getViewUrl(Config("TABLE_SHOW_DETAIL") . "=pagos_compras_detalle"));
+                $btngrp .= "<a href=\"#\" class=\"me-2\" title=\"" . HtmlTitle($caption) . "\" data-ew-action=\"redirect\" data-url=\"" . HtmlEncode($viewurl) . "\">" . $caption . "</a>";
+            }
+            $btngrp .= "</div>";
+            if ($link != "") {
+                $link = "<li class=\"nav-item\">" . $btngrp . $link . "</li>";  // Note: Place $btngrp before $link
+                $links .= $link;
+                $option->Body .= "<div class=\"ew-preview d-none\">" . $link . "</div>";
+            }
+        }
+
+        // Add row attributes for expandable row
+        if ($this->RowType == RowType::VIEW) {
+            $this->RowAttrs["data-widget"] = "expandable-table";
+            $this->RowAttrs["aria-expanded"] = "false";
+        }
+
+        // Column "preview"
+        $option = $this->ListOptions["preview"];
+        if (!$option) { // Add preview column
+            $option = &$this->ListOptions->add("preview");
+            $option->OnLeft = true;
+            $checkboxPos = $this->ListOptions->itemPos("checkbox");
+            $pos = $checkboxPos === false
+                ? ($option->OnLeft ? 0 : -1)
+                : ($option->OnLeft ? $checkboxPos + 1 : $checkboxPos);
+            $option->moveTo($pos);
+            $option->Visible = !($this->isExport() || $this->isGridAdd() || $this->isGridEdit() || $this->isMultiEdit());
+            $option->ShowInDropDown = false;
+            $option->ShowInButtonGroup = false;
+        }
+        if ($option) {
+            $icon = "fa-solid fa-caret-right fa-fw"; // Right
+            if (property_exists($this, "MultiColumnLayout") && $this->MultiColumnLayout == "table") {
+                $option->CssStyle = "width: 1%;";
+                if (!$option->OnLeft) {
+                    $icon = preg_replace('/\\bright\\b/', "left", $icon);
+                }
+            }
+            if (IsRTL()) { // Reverse
+                if (preg_match('/\\bleft\\b/', $icon)) {
+                    $icon = preg_replace('/\\bleft\\b/', "right", $icon);
+                } elseif (preg_match('/\\bright\\b/', $icon)) {
+                    $icon = preg_replace('/\\bright\\b/', "left", $icon);
+                }
+            }
+            $option->Body = "<i role=\"button\" class=\"ew-preview-btn expandable-table-caret ew-icon " . $icon . "\"></i>" .
+                "<div class=\"ew-preview d-none\">" . $links . "</div>";
+            if ($option->Visible) {
+                $option->Visible = $links != "";
+            }
+        }
+
+        // Column "details" (Multiple details)
+        $option = $this->ListOptions["details"];
+        if ($option) {
+            $option->Body .= "<div class=\"ew-preview d-none\">" . $links . "</div>";
+            if ($option->Visible) {
+                $option->Visible = $links != "";
+            }
+        }
     }
 
     // Set up other options
@@ -1609,17 +1699,6 @@ class PagosComprasList extends PagosCompras
     {
         global $Language, $Security;
         $options = &$this->OtherOptions;
-        $option = $options["addedit"];
-
-        // Add
-        $item = &$option->add("add");
-        $addcaption = HtmlTitle($Language->phrase("AddLink"));
-        if ($this->ModalAdd && !IsMobile()) {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-table=\"pagos_compras\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("AddLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("AddLink") . "</a>";
-        }
-        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
         $option = $options["action"];
 
         // Show column list for column visibility
@@ -1628,7 +1707,6 @@ class PagosComprasList extends PagosCompras
             $item = &$option->addGroupOption();
             $item->Body = "";
             $item->Visible = $this->UseColumnVisibility;
-            $this->createColumnOption($option, "id");
             $this->createColumnOption($option, "proveedor");
             $this->createColumnOption($option, "id_documento");
             $this->createColumnOption($option, "fecha");
@@ -2082,6 +2160,7 @@ class PagosComprasList extends PagosCompras
         $this->anexos->setDbValue($row['anexos']);
         $this->pivote2->setDbValue($row['pivote2']);
         $this->tasa_cambio->setDbValue($row['tasa_cambio']);
+        $this->tipo_documento->setDbValue($row['tipo_documento']);
     }
 
     // Return a row with default values
@@ -2103,6 +2182,7 @@ class PagosComprasList extends PagosCompras
         $row['anexos'] = $this->anexos->DefaultValue;
         $row['pivote2'] = $this->pivote2->DefaultValue;
         $row['tasa_cambio'] = $this->tasa_cambio->DefaultValue;
+        $row['tipo_documento'] = $this->tipo_documento->DefaultValue;
         return $row;
     }
 
@@ -2173,6 +2253,8 @@ class PagosComprasList extends PagosCompras
 
         // tasa_cambio
 
+        // tipo_documento
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -2203,27 +2285,7 @@ class PagosComprasList extends PagosCompras
 
             // id_documento
             $this->id_documento->ViewValue = $this->id_documento->CurrentValue;
-            $curVal = strval($this->id_documento->CurrentValue);
-            if ($curVal != "") {
-                $this->id_documento->ViewValue = $this->id_documento->lookupCacheOption($curVal);
-                if ($this->id_documento->ViewValue === null) { // Lookup from database
-                    $filterWrk = SearchFilter($this->id_documento->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->id_documento->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                    $sqlWrk = $this->id_documento->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                    $conn = Conn();
-                    $config = $conn->getConfiguration();
-                    $config->setResultCache($this->Cache);
-                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                    $ari = count($rswrk);
-                    if ($ari > 0) { // Lookup values found
-                        $arwrk = $this->id_documento->Lookup->renderViewRow($rswrk[0]);
-                        $this->id_documento->ViewValue = $this->id_documento->displayValue($arwrk);
-                    } else {
-                        $this->id_documento->ViewValue = FormatNumber($this->id_documento->CurrentValue, $this->id_documento->formatPattern());
-                    }
-                }
-            } else {
-                $this->id_documento->ViewValue = null;
-            }
+            $this->id_documento->ViewValue = FormatNumber($this->id_documento->ViewValue, $this->id_documento->formatPattern());
 
             // pivote
             $this->pivote->ViewValue = $this->pivote->CurrentValue;
@@ -2307,9 +2369,8 @@ class PagosComprasList extends PagosCompras
             $this->tasa_cambio->ViewValue = $this->tasa_cambio->CurrentValue;
             $this->tasa_cambio->ViewValue = FormatNumber($this->tasa_cambio->ViewValue, $this->tasa_cambio->formatPattern());
 
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
+            // tipo_documento
+            $this->tipo_documento->ViewValue = $this->tipo_documento->CurrentValue;
 
             // proveedor
             $this->proveedor->HrefValue = "";
@@ -2583,8 +2644,6 @@ class PagosComprasList extends PagosCompras
             switch ($fld->FieldVar) {
                 case "x_proveedor":
                     break;
-                case "x_id_documento":
-                    break;
                 case "x__username":
                     break;
                 case "x_tipo_pago":
@@ -2832,10 +2891,10 @@ class PagosComprasList extends PagosCompras
     public function listOptionsLoad()
     {
         // Example:
-        //$opt = &$this->ListOptions->add("new");
-        //$opt->Header = "xxx";
-        //$opt->OnLeft = true; // Link on left
-        //$opt->moveTo(0); // Move to first column
+        $opt = &$this->ListOptions->add("documento");
+        $opt->Header = "Documento";
+        $opt->OnLeft = true; // Link on left
+        $opt->moveTo(0); // Move to first column
     }
 
     // ListOptions Rendering event
@@ -2849,8 +2908,38 @@ class PagosComprasList extends PagosCompras
     // ListOptions Rendered event
     public function listOptionsRendered()
     {
-        // Example:
-        //$this->ListOptions["new"]->Body = "xxx";
+        // Verificamos si la opción "documento" existe en la lista
+        if (isset($this->ListOptions["documento"])) {
+            $tipoDoc = $this->tipo_documento->CurrentValue;
+            $idReg = $this->id_documento->CurrentValue;
+            $infoDocumento = "";
+            if (!empty($idReg)) {
+                // Evaluamos el tipo de documento para decidir la consulta
+                if ($tipoDoc == 'TDCFCC') {
+                    $sql = "SELECT documento, nro_documento FROM entradas WHERE id = " . AdjustSql($idReg, $this->Dbid) . " AND tipo_documento = 'TDCFCC'";
+                    $row = ExecuteRow($sql);
+                    if ($row) {
+                        $infoDocumento = "TDCFCC - " . $row["documento"] . " Nro: " . $row["nro_documento"];
+                    }
+                } elseif ($tipoDoc == 'GASTOS' || $tipoDoc == 'GASTO') {
+                    $sql = "SELECT tipo_documento AS documento, documento AS nro_documento FROM compra WHERE id = " . AdjustSql($idReg, $this->Dbid);
+                    $row = ExecuteRow($sql);
+                    if ($row) {
+                        $infoDocumento = "GASTOS - " . $row["documento"] . " - " . $row["nro_documento"];
+                    }
+                } else {
+                    // De lo contrario (cualquier otro caso)
+                    $sql = "SELECT tipo_documento AS documento, documento AS nro_documento FROM compra WHERE id = " . AdjustSql($idReg, $this->Dbid);
+                    $row = ExecuteRow($sql);
+                    if ($row) {
+                        $infoDocumento = ($row["documento"] ? $row["documento"] : "Compra") . " - " . $row["nro_documento"];
+                    }
+                }
+            }
+
+            // Asignamos el resultado informativo al Body de la opción
+            $this->ListOptions["documento"]->Body = !empty($infoDocumento) ? $infoDocumento : "N/D";
+        }
     }
 
     // Row Custom Action event

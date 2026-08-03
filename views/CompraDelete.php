@@ -56,9 +56,6 @@ $Page->showMessage();
 <?php if ($Page->proveedor->Visible) { // proveedor ?>
         <th class="<?= $Page->proveedor->headerCellClass() ?>"><span id="elh_compra_proveedor" class="compra_proveedor"><?= $Page->proveedor->caption() ?></span></th>
 <?php } ?>
-<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
-        <th class="<?= $Page->tipo_documento->headerCellClass() ?>"><span id="elh_compra_tipo_documento" class="compra_tipo_documento"><?= $Page->tipo_documento->caption() ?></span></th>
-<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
         <th class="<?= $Page->documento->headerCellClass() ?>"><span id="elh_compra_documento" class="compra_documento"><?= $Page->documento->caption() ?></span></th>
 <?php } ?>
@@ -117,14 +114,6 @@ while ($Page->fetch()) {
 <span id="">
 <span<?= $Page->proveedor->viewAttributes() ?>>
 <?= $Page->proveedor->getViewValue() ?></span>
-</span>
-</td>
-<?php } ?>
-<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
-        <td<?= $Page->tipo_documento->cellAttributes() ?>>
-<span id="">
-<span<?= $Page->tipo_documento->viewAttributes() ?>>
-<?= $Page->tipo_documento->getViewValue() ?></span>
 </span>
 </td>
 <?php } ?>

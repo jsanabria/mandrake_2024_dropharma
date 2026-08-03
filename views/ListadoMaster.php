@@ -21,6 +21,7 @@ $titulos_reportes = [
     "tax_libro_venta"             => "LIBRO DE VENTAS",
     "aud_costo_vs_precio"         => "FACTURAS COSTOS VS PRECIO",
     "inv_kardex"                  => "KARDEX DE INVENTARIO",
+    "fin_resumen"                 => "RESUMEN FINANCIERO",
     "det_entradas_general"        => "ENTRADAS GENERALES POR ARTICULO DETALLADO",
     "det_pedidos_venta"           => "PEDIDOS DE VENTAS DETALLADO",
     "det_notas_entrega"           => "ORDENES DE ENTREGA DETALLADO",
@@ -59,8 +60,10 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
 
 <!-- Hojas de estilo y scripts de Select2 para mejorar la experiencia de búsqueda en desplegables -->
 <?php if (!$esReporteFiscal): ?>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link
+    href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+    rel="stylesheet"
+/>
 <?php endif; ?>
 
 <!-- Estilo personalizado para adaptar Select2 perfectamente al diseño nativo de Bootstrap 5 -->
@@ -132,11 +135,20 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                     <!-- Selector Dinámico Principal (Agregada clase select2-enable para Categorías, Laboratorios, etc.) -->
                     <?php if (!$esReporteFiscal): ?>
                     <div class="col-12 col-md-4">
-                        <label for="tipo" class="form-label text-muted fw-semibold small">Filtrar Almacen / Cliente / Fabricante /Art&iacute;culo:</label>
+                        <label for="tipo" class="form-label text-muted fw-semibold small">
+                            <?= $id == "fin_resumen"
+                                ? "Tipo de movimiento:"
+                                : "Filtrar Almacén / Cliente / Fabricante / Artículo:" ?>
+                        </label>
                         <select id="tipo" name="tipo" class="form-select fw-normal select2-enable">
                             <option value="">-- TODOS --</option>
                             <?php
-                            if (in_array($id, ["ims_clientes", "ims_articulos", "ims_facturas"])) {
+                            if ($id == "fin_resumen") {
+                                echo '<option value="COMPRAS">COMPRAS</option>';
+                                echo '<option value="VENTAS">VENTAS</option>';
+                                echo '<option value="GIROS">GIROS</option>';
+                            }
+                            elseif (in_array($id, ["ims_clientes", "ims_articulos", "ims_facturas"])) {
                                 $sql = "SELECT id, nombre FROM tarifa WHERE activo = 'S';";
                                 $rows = ExecuteRows($sql);
                                 foreach ($rows as $row) {
@@ -290,94 +302,231 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
 </div>
 
 <script type="text/javascript">
-    <?php if (!$esReporteFiscal): ?>
-    $(document).ready(function() {
-        // Función asíncrona segura para inicializar Select2 únicamente cuando esté cargada la librería en jQuery
-        function inicializarSelect2Seguro() {
-            if (typeof $.fn.select2 !== 'undefined') {
-                if ($('.select2-enable').length > 0) {
-                    $('.select2-enable').select2({
-                        width: '100%',
-                        placeholder: function() {
-                            return $(this).find('option[value=""]').text() || 'Seleccione una opción';
-                        },
-                        allowClear: true
-                    });
-                }
-            } else {
-                // Si aún no está cargada, reintentamos en 50 milisegundos de forma transparente
-                setTimeout(inicializarSelect2Seguro, 50);
-            }
+(function () {
+
+    var esReporteFiscal = <?= $esReporteFiscal ? "true" : "false" ?>;
+    var select2Cargando = false;
+
+    /**
+     * Espera hasta que PHPMaker haya cargado jQuery.
+     */
+    function esperarJQueryListadoMaster(callback) {
+        if (
+            typeof window.jQuery !== "undefined" &&
+            typeof window.jQuery.fn !== "undefined"
+        ) {
+            callback(window.jQuery);
+            return;
         }
 
-        // Ejecutar inicialización protectora
-        inicializarSelect2Seguro();
-    });
-    <?php endif; ?>
+        setTimeout(function () {
+            esperarJQueryListadoMaster(callback);
+        }, 50);
+    }
 
-    function iniciarEventosListadoMaster() {
-        $("#buscar").off("click").on("click", function(){
-            var fecha_desde = $("#fecha_desde").val();
-            var fecha_hasta = $("#fecha_hasta").val();
-            var tipo        = $("#tipo").length ? $("#tipo").val() : "";
-            var articulo    = $("#articulo").length ? $("#articulo").val() : "";
-            var cliente     = $("#cliente").length ? $("#cliente").val() : "";
-            var asesor      = $("#asesor").length ? $("#asesor").val() : "";
-            var esReporteFiscal = <?= $esReporteFiscal ? "true" : "false" ?>;
+    /**
+     * Carga Select2 solamente después de que jQuery esté disponible.
+     */
+    function cargarSelect2ListadoMaster($, callback) {
 
-            if (!esReporteFiscal) {
-                if (fecha_desde == "" || fecha_hasta == "") {
-                    ew.alert("¡Por favor, elija un rango de fechas válido!");
-                    return false;
-                }
+        if (esReporteFiscal) {
+            callback();
+            return;
+        }
+
+        // Select2 ya está cargado.
+        if (typeof $.fn.select2 === "function") {
+            callback();
+            return;
+        }
+
+        // Evita insertar varias veces el mismo archivo.
+        if (select2Cargando) {
+            setTimeout(function () {
+                cargarSelect2ListadoMaster($, callback);
+            }, 50);
+
+            return;
+        }
+
+        select2Cargando = true;
+
+        var script = document.createElement("script");
+
+        script.src =
+            "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js";
+
+        script.onload = function () {
+            select2Cargando = false;
+            callback();
+        };
+
+        script.onerror = function () {
+            select2Cargando = false;
+
+            console.error(
+                "No fue posible cargar la librería Select2."
+            );
+
+            // El reporte continuará funcionando sin Select2.
+            callback();
+        };
+
+        document.head.appendChild(script);
+    }
+
+    /**
+     * Inicializa todos los select marcados para utilizar Select2.
+     */
+    function inicializarSelect2ListadoMaster($) {
+
+        if (
+            esReporteFiscal ||
+            typeof $.fn.select2 !== "function"
+        ) {
+            return;
+        }
+
+        $(".select2-enable").each(function () {
+
+            var $select = $(this);
+
+            // Evita inicializar dos veces el mismo elemento.
+            if ($select.hasClass("select2-hidden-accessible")) {
+                return;
             }
 
-            $.ajax({
-                url : esReporteFiscal ? "reportes/factura_fiscal_reportes.php" : "<?php echo $url; ?>",
-                type: "GET",
-                data : {
-                    id: '<?php echo $id; ?>', 
-                    documento: '<?php echo $id; ?>',
-                    fecha_desde: fecha_desde, 
-                    fecha_hasta: fecha_hasta, 
-                    tipo: tipo, 
-                    articulo: articulo, 
-                    proveedor: 0, 
-                    cliente: cliente, 
-                    asesor: asesor
-                },
-                beforeSend: function(){
-                    // Renderizado de un Spinner elegante de Bootstrap en lugar de un texto plano
-                    $("#result").html(`
-                        <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
-                            <div class="spinner-border text-primary me-3" role="status"></div>
-                            <span class="fs-5 fw-semibold">Procesando y organizando el reporte...</span>
-                        </div>
-                    `);
-                }
-            })
-            .done(function(data) {
-                $("#result").html(data);
-            })
-            .fail(function(xhr, status, error) {
-                $("#result").html(`
-                    <div class="alert alert-danger d-flex align-items-center" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
-                        <div>Ocurrió un error inesperado al procesar los datos: <strong>${error}</strong></div>
-                    </div>
-                `);
+            var textoInicial =
+                $select.find('option[value=""]').first().text();
+
+            $select.select2({
+                width: "100%",
+                placeholder: textoInicial || "Seleccione una opción",
+                allowClear: true
             });
         });
     }
 
-    function esperarJQueryListadoMaster() {
-        if (typeof window.jQuery !== "undefined" && typeof window.$ !== "undefined") {
-            iniciarEventosListadoMaster();
-        } else {
-            setTimeout(esperarJQueryListadoMaster, 50);
-        }
+    /**
+     * Registra el evento del botón Consultar.
+     */
+    function iniciarEventosListadoMaster($) {
+
+        $("#buscar")
+            .off("click.listadoMaster")
+            .on("click.listadoMaster", function () {
+
+                var fecha_desde = $("#fecha_desde").val() || "";
+                var fecha_hasta = $("#fecha_hasta").val() || "";
+
+                var tipo = $("#tipo").length
+                    ? $("#tipo").val()
+                    : "";
+
+                var articulo = $("#articulo").length
+                    ? $("#articulo").val()
+                    : "";
+
+                var cliente = $("#cliente").length
+                    ? $("#cliente").val()
+                    : "";
+
+                var asesor = $("#asesor").length
+                    ? $("#asesor").val()
+                    : "";
+
+                if (!esReporteFiscal) {
+                    if (fecha_desde === "" || fecha_hasta === "") {
+
+                        if (
+                            typeof window.ew !== "undefined" &&
+                            typeof window.ew.alert === "function"
+                        ) {
+                            ew.alert(
+                                "¡Por favor, elija un rango de fechas válido!"
+                            );
+                        } else {
+                            alert(
+                                "¡Por favor, elija un rango de fechas válido!"
+                            );
+                        }
+
+                        return false;
+                    }
+                }
+
+                $.ajax({
+                    url: esReporteFiscal
+                        ? "reportes/factura_fiscal_reportes.php"
+                        : <?= json_encode($url) ?>,
+
+                    type: "GET",
+
+                    data: {
+                        id: <?= json_encode($id) ?>,
+                        documento: <?= json_encode($id) ?>,
+                        fecha_desde: fecha_desde,
+                        fecha_hasta: fecha_hasta,
+                        tipo: tipo,
+                        articulo: articulo,
+                        proveedor: 0,
+                        cliente: cliente,
+                        asesor: asesor
+                    },
+
+                    beforeSend: function () {
+                        $("#result").html(`
+                            <div class="d-flex align-items-center justify-content-center p-5 text-secondary">
+                                <div class="spinner-border text-primary me-3"
+                                     role="status">
+                                </div>
+
+                                <span class="fs-5 fw-semibold">
+                                    Procesando y organizando el reporte...
+                                </span>
+                            </div>
+                        `);
+                    }
+                })
+                .done(function (data) {
+                    $("#result").html(data);
+                })
+                .fail(function (xhr, status, error) {
+
+                    var mensaje = error || status || "Error desconocido";
+
+                    $("#result").html(`
+                        <div class="alert alert-danger d-flex align-items-center"
+                             role="alert">
+
+                            <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+
+                            <div>
+                                Ocurrió un error inesperado al procesar los datos:
+                                <strong></strong>
+                            </div>
+                        </div>
+                    `);
+
+                    $("#result strong").text(mensaje);
+                });
+
+                return false;
+            });
     }
 
-    esperarJQueryListadoMaster();
+    /**
+     * Punto único de inicio.
+     */
+    esperarJQueryListadoMaster(function ($) {
+
+        iniciarEventosListadoMaster($);
+
+        cargarSelect2ListadoMaster($, function () {
+            inicializarSelect2ListadoMaster($);
+        });
+    });
+
+})();
 </script>
 <?= GetDebugMessage() ?>

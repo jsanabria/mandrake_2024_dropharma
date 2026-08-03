@@ -117,9 +117,9 @@ loadjs.ready(["jquery"], function () {
             console.log(xhr.responseText);
 
             $("#estadoNE").html(
-                '<div class="alert alert-danger text-start">' +
-                    '<h5><i class="fa fa-times-circle"></i> Error creando Orden de Entrega</h5>' +
-                    '<div>No se pudo completar el proceso automático.</div>' +
+                '<div class="alert alert-warning text-start">' +
+                    '<h5><i class="fa fa-times-circle"></i>Atento; Error creando Orden de Entrega</h5>' +
+                    '<div>No se pudo completar el proceso automático dado que no hubo art&iacute;culos de inventario.</div>' +
                 '</div>' +
                 '<button type="button" id="btnContinuarNE" class="btn btn-primary">' +
                     '<i class="fa fa-arrow-right"></i> Continuar' +

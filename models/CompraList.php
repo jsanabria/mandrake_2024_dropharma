@@ -155,7 +155,7 @@ class CompraList extends Compra
     {
         $this->id->setVisibility();
         $this->proveedor->setVisibility();
-        $this->tipo_documento->setVisibility();
+        $this->tipo_documento->Visible = false;
         $this->doc_afectado->Visible = false;
         $this->documento->setVisibility();
         $this->nro_control->Visible = false;
@@ -1658,15 +1658,6 @@ class CompraList extends Compra
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->proveedor->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
-        // Field tipo_documento
-        $filter = $this->queryBuilderWhere("tipo_documento");
-        if (!$filter) {
-            $this->buildSearchSql($filter, $this->tipo_documento, false, false);
-        }
-        if ($filter != "") {
-            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->tipo_documento->caption() . "</span>" . $captionSuffix . $filter . "</div>";
-        }
-
         // Field documento
         $filter = $this->queryBuilderWhere("documento");
         if (!$filter) {
@@ -2028,7 +2019,6 @@ class CompraList extends Compra
             $this->CurrentOrderType = Get("ordertype", "");
             $this->updateSort($this->id); // id
             $this->updateSort($this->proveedor); // proveedor
-            $this->updateSort($this->tipo_documento); // tipo_documento
             $this->updateSort($this->documento); // documento
             $this->updateSort($this->fecha); // fecha
             $this->updateSort($this->monto_pagar); // monto_pagar
@@ -2311,7 +2301,6 @@ class CompraList extends Compra
             $item->Visible = $this->UseColumnVisibility;
             $this->createColumnOption($option, "id");
             $this->createColumnOption($option, "proveedor");
-            $this->createColumnOption($option, "tipo_documento");
             $this->createColumnOption($option, "documento");
             $this->createColumnOption($option, "fecha");
             $this->createColumnOption($option, "monto_pagar");
@@ -3439,10 +3428,6 @@ class CompraList extends Compra
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
-            // tipo_documento
-            $this->tipo_documento->HrefValue = "";
-            $this->tipo_documento->TooltipValue = "";
-
             // documento
             $this->documento->HrefValue = "";
             $this->documento->TooltipValue = "";
@@ -3530,11 +3515,6 @@ class CompraList extends Compra
                 $this->proveedor->EditValue = $arwrk;
             }
             $this->proveedor->PlaceHolder = RemoveHtml($this->proveedor->caption());
-
-            // tipo_documento
-            $this->tipo_documento->setupEditAttributes();
-            $this->tipo_documento->EditValue = $this->tipo_documento->options(true);
-            $this->tipo_documento->PlaceHolder = RemoveHtml($this->tipo_documento->caption());
 
             // documento
             $this->documento->setupEditAttributes();

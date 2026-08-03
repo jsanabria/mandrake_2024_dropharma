@@ -35,7 +35,7 @@ ew.PREVIEW_NAV_STYLE ??= "tabs"; // tabs/pills/underline
 ew.PREVIEW_MODAL_CLASS ??= "modal modal-fullscreen-sm-down";
 ew.PREVIEW_ROW ??= true;
 ew.PREVIEW_SINGLE_ROW ??= false;
-ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.js?v=24.16.0", "preview");
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=24.16.0", "preview");
 </script>
 <script>
 loadjs.ready("head", function () {
@@ -169,9 +169,6 @@ $Page->renderListOptions();
 // Render list options (header, left)
 $Page->ListOptions->render("header", "left");
 ?>
-<?php if ($Page->id->Visible) { // id ?>
-        <th data-name="id" class="<?= $Page->id->headerCellClass() ?>"><div id="elh_pagos_compras_id" class="pagos_compras_id"><?= $Page->renderFieldHeader($Page->id) ?></div></th>
-<?php } ?>
 <?php if ($Page->proveedor->Visible) { // proveedor ?>
         <th data-name="proveedor" class="<?= $Page->proveedor->headerCellClass() ?>"><div id="elh_pagos_compras_proveedor" class="pagos_compras_proveedor"><?= $Page->renderFieldHeader($Page->proveedor) ?></div></th>
 <?php } ?>
@@ -215,14 +212,6 @@ while ($Page->RecordCount < $Page->StopRecord || $Page->RowIndex === '$rowindex$
 // Render list options (body, left)
 $Page->ListOptions->render("body", "left", $Page->RowCount);
 ?>
-    <?php if ($Page->id->Visible) { // id ?>
-        <td data-name="id"<?= $Page->id->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_compras_id" class="el_pagos_compras_id">
-<span<?= $Page->id->viewAttributes() ?>>
-<?= $Page->id->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->proveedor->Visible) { // proveedor ?>
         <td data-name="proveedor"<?= $Page->proveedor->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_compras_proveedor" class="el_pagos_compras_proveedor">

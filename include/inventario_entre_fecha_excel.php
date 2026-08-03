@@ -29,7 +29,7 @@
     $sql = "SELECT 
                 art.id, art.codigo, art.codigo_de_barra, art.nombre AS laboratorio, 
                 'UNIDAD' AS unidad_medida, art.principio_activo, 
-                art.presentacion, art.nombre_comercial, 
+                art.presentacion, art.nombre_comercial, art.cantidad_en_pedido, 
                 IFNULL(ent.cantidad, 0) AS entradas, ABS(IFNULL(sal.cantidad,0)) AS salidas, 
                 (IFNULL(ent.cantidad, 0) - ABS(IFNULL(sal.cantidad,0))) AS existencia 
             FROM 
@@ -37,7 +37,7 @@
                     SELECT 
                         a.id, a.codigo, a.codigo_de_barra, b.nombre, 
                         'UNIDAD' AS unidad_medida, a.principio_activo, 
-                        a.presentacion, a.nombre_comercial 
+                        a.presentacion, a.nombre_comercial, a.cantidad_en_pedido  
                     FROM 
                         articulo AS a 
                         LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante  
@@ -57,7 +57,7 @@
                             c.codigo = a.almacen AND c.movimiento = 'S'
                     WHERE 
                         (
-                            (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
+                            -- (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
                             (a.tipo_documento IN ('$tipo_documento', 'TDCASA') AND b.estatus <> 'ANULADO') 
                         ) AND b.fecha < '$fecha_hasta 23:59:59' AND a.newdata = 'S' 
                         $where 
@@ -119,7 +119,7 @@
     header("Expires: 0");
 
     // 4. Imprimir la primera fila con los títulos de las columnas planos para Excel
-    echo "LABORATORIO\tARTICULO\tCODIGO\tCODIGO BARRA\tUNIDAD MEDIDA\tENTRADAS\tSALIDA\tEXISTENCIA\tCOSTO C/U\tPRECIO C/U\n";
+    echo "LABORATORIO\tARTICULO\tCODIGO\tCODIGO BARRA\tUNIDAD MEDIDA\tENTRADAS\tSALIDA\tEXISTENCIA\tPEDIDO\tCOSTO C/U\tPRECIO C/U\n";
 
     // 5. Volcado e impresión sanitizada de los registros
     foreach ($developer_records as $row) {
@@ -139,6 +139,7 @@
         $entradas   = $row["entradas"] ?? 0;
         $salidas    = $row["salidas"] ?? 0;
         $existencia = $row["existencia"] ?? 0;
+        $pedido     = $row["cantidad_en_pedido"] ?? 0;
         $costo      = $row["costo"] ?? 0;
         $precio     = $row["precio"] ?? 0;
 
@@ -149,7 +150,7 @@
         $codigo_de_barra = str_replace(array("\n", "\r", "\t", '"'), array(" ", " ", " ", "'"), $codigo_de_barra);
 
         // Imprimir fila formateada por delimitador de tabulaciones (\t)
-        echo "{$laboratorio}\t{$articulo}\t{$codigo}\t{$codigo_de_barra}\t{$unidad_medida}\t{$entradas}\t{$salidas}\t{$existencia}\t{$costo}\t{$precio}\n";
+        echo "{$laboratorio}\t{$articulo}\t{$codigo}\t{$codigo_de_barra}\t{$unidad_medida}\t{$entradas}\t{$salidas}\t{$existencia}\t{$pedido}\t{$costo}\t{$precio}\n";
     }
 
     exit();

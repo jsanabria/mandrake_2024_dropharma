@@ -28,8 +28,8 @@ loadjs.ready(["wrapper", "head"], function () {
             ["numero", [fields.numero.visible && fields.numero.required ? ew.Validators.required(fields.numero.caption) : null], fields.numero.isInvalid],
             ["mostrar", [fields.mostrar.visible && fields.mostrar.required ? ew.Validators.required(fields.mostrar.caption) : null], fields.mostrar.isInvalid],
             ["cuenta", [fields.cuenta.visible && fields.cuenta.required ? ew.Validators.required(fields.cuenta.caption) : null], fields.cuenta.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
-            ["pago_electronico", [fields.pago_electronico.visible && fields.pago_electronico.required ? ew.Validators.required(fields.pago_electronico.caption) : null], fields.pago_electronico.isInvalid]
+            ["pago_electronico", [fields.pago_electronico.visible && fields.pago_electronico.required ? ew.Validators.required(fields.pago_electronico.caption) : null], fields.pago_electronico.isInvalid],
+            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
         ])
 
         // Form_CustomValidate
@@ -49,8 +49,8 @@ loadjs.ready(["wrapper", "head"], function () {
             "tipo": <?= $Page->tipo->toClientList($Page) ?>,
             "mostrar": <?= $Page->mostrar->toClientList($Page) ?>,
             "cuenta": <?= $Page->cuenta->toClientList($Page) ?>,
-            "activo": <?= $Page->activo->toClientList($Page) ?>,
             "pago_electronico": <?= $Page->pago_electronico->toClientList($Page) ?>,
+            "activo": <?= $Page->activo->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -274,6 +274,37 @@ loadjs.ready("fcompania_cuentaadd", function() {
 </div></div>
     </div>
 <?php } ?>
+<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
+    <div id="r_pago_electronico"<?= $Page->pago_electronico->rowAttributes() ?>>
+        <label id="elh_compania_cuenta_pago_electronico" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pago_electronico->caption() ?><?= $Page->pago_electronico->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pago_electronico->cellAttributes() ?>>
+<span id="el_compania_cuenta_pago_electronico">
+<template id="tp_x_pago_electronico">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="compania_cuenta" data-field="x_pago_electronico" name="x_pago_electronico" id="x_pago_electronico"<?= $Page->pago_electronico->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x_pago_electronico" class="ew-item-list"></div>
+<selection-list hidden
+    id="x_pago_electronico"
+    name="x_pago_electronico"
+    value="<?= HtmlEncode($Page->pago_electronico->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x_pago_electronico"
+    data-target="dsl_x_pago_electronico"
+    data-repeatcolumn="5"
+    class="form-control<?= $Page->pago_electronico->isInvalidClass() ?>"
+    data-table="compania_cuenta"
+    data-field="x_pago_electronico"
+    data-value-separator="<?= $Page->pago_electronico->displayValueSeparatorAttribute() ?>"
+    <?= $Page->pago_electronico->editAttributes() ?>></selection-list>
+<?= $Page->pago_electronico->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->pago_electronico->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
 <?php if ($Page->activo->Visible) { // activo ?>
     <div id="r_activo"<?= $Page->activo->rowAttributes() ?>>
         <label id="elh_compania_cuenta_activo" for="x_activo" class="<?= $Page->LeftColumnClass ?>"><?= $Page->activo->caption() ?><?= $Page->activo->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -315,37 +346,6 @@ loadjs.ready("fcompania_cuentaadd", function() {
 });
 </script>
 <?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
-    <div id="r_pago_electronico"<?= $Page->pago_electronico->rowAttributes() ?>>
-        <label id="elh_compania_cuenta_pago_electronico" class="<?= $Page->LeftColumnClass ?>"><?= $Page->pago_electronico->caption() ?><?= $Page->pago_electronico->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->pago_electronico->cellAttributes() ?>>
-<span id="el_compania_cuenta_pago_electronico">
-<template id="tp_x_pago_electronico">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compania_cuenta" data-field="x_pago_electronico" name="x_pago_electronico" id="x_pago_electronico"<?= $Page->pago_electronico->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x_pago_electronico" class="ew-item-list"></div>
-<selection-list hidden
-    id="x_pago_electronico"
-    name="x_pago_electronico"
-    value="<?= HtmlEncode($Page->pago_electronico->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x_pago_electronico"
-    data-target="dsl_x_pago_electronico"
-    data-repeatcolumn="5"
-    class="form-control<?= $Page->pago_electronico->isInvalidClass() ?>"
-    data-table="compania_cuenta"
-    data-field="x_pago_electronico"
-    data-value-separator="<?= $Page->pago_electronico->displayValueSeparatorAttribute() ?>"
-    <?= $Page->pago_electronico->editAttributes() ?>></selection-list>
-<?= $Page->pago_electronico->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->pago_electronico->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

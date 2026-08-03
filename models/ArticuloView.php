@@ -1949,7 +1949,7 @@ class ArticuloView extends Articulo
                                 c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
-                                (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
+                                -- (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
                                 (a.tipo_documento IN ('$tipo_documento', 'TDCASA') AND b.estatus <> 'ANULADO') 
                             ) AND a.articulo = " . $this->id->CurrentValue . " AND a.newdata = 'S' 
                         UNION ALL SELECT 
@@ -2157,7 +2157,7 @@ class ArticuloView extends Articulo
                                 c.codigo = COALESCE(a.almacen, '$almacen_defecto') AND c.movimiento = 'S'
                         WHERE 
                             (
-                                (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
+                                -- (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
                                 (a.tipo_documento IN ('TDCNET', 'TDCASA') AND b.estatus <> 'ANULADO') 
                             ) AND a.articulo = " . $this->id->CurrentValue . " AND a.newdata = 'S' 
                     ) AS x 

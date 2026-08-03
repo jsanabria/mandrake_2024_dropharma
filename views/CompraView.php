@@ -50,25 +50,49 @@ loadjs.ready(["wrapper", "head"], function () {
 loadjs.ready("head", function () {
     // Client script
     // Write your table-specific client script here, no need to add script tags.
-    window.RevertirPagosCompras = function (id) {
-      if(confirm("Seguro de revertir este pago?")) {
-            var parametros = {
-                    "id" : id
-            };
-            $.ajax({
-                    data:  parametros,
-                    url:   '../include/revertir_compras.php',
-                    type:  'post',
-                    beforeSend: function () {
-                            // alert("Procesando, espere por favor...");
-                    },
-                    success:  function (response) {
-                            alert(response);
-                            location.reload();
-                    }
-            });
-      }
-    }
+    window.RevertirPagosCompras = function (id, tipoDocumento) {
+        id = parseInt(id, 10);
+        tipoDocumento = String(tipoDocumento || "").toUpperCase().trim();
+        if (!id || id <= 0) {
+            ew.alert("El ID del documento no es válido.");
+            return;
+        }
+        if (tipoDocumento === "GASTO") {
+            tipoDocumento = "GASTOS";
+        }
+        if (
+            tipoDocumento !== "TDCFCC" &&
+            tipoDocumento !== "GASTOS"
+        ) {
+            ew.alert("El tipo de documento no es válido.");
+            return;
+        }
+        if (!confirm("¿Seguro que desea revertir todos los pagos de este documento?")) {
+            return;
+        }
+        var parametros = {
+            id: id,
+            tipo_documento: tipoDocumento
+        };
+        $.ajax({
+            data: parametros,
+            url: "../include/revertir_pagos_compras.php",
+            type: "post",
+            beforeSend: function () {
+                // Opcional: bloquear el botón o mostrar indicador.
+            },
+            success: function (response) {
+                ew.alert(response);
+                location.reload();
+            },
+            error: function (xhr) {
+                var mensaje = xhr.responseText
+                    ? xhr.responseText
+                    : "No fue posible revertir los pagos.";
+                ew.alert(mensaje);
+            }
+        });
+    };
 });
 </script>
 <?php } ?>
@@ -110,17 +134,6 @@ loadjs.ready("head", function () {
 <span id="el_compra_proveedor" data-page="1">
 <span<?= $Page->proveedor->viewAttributes() ?>>
 <?= $Page->proveedor->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
-    <tr id="r_tipo_documento"<?= $Page->tipo_documento->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_tipo_documento"><?= $Page->tipo_documento->caption() ?></span></td>
-        <td data-name="tipo_documento"<?= $Page->tipo_documento->cellAttributes() ?>>
-<span id="el_compra_tipo_documento" data-page="1">
-<span<?= $Page->tipo_documento->viewAttributes() ?>>
-<?= $Page->tipo_documento->getViewValue() ?></span>
 </span>
 </td>
     </tr>

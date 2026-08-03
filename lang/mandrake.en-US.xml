@@ -1,7 +1,10 @@
-<ew-language date="2026/7/19" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/8/3" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1474">
+      <phrase id="menutext" value="Regitrar de Pagos a Proveedores" />
+    </menu>
     <menu id="1473">
       <phrase id="menutext" value="Crear Nota Recepcion Automatica" />
     </menu>
@@ -941,6 +944,20 @@
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="NO" />
       </field>
+      <field id="compra">
+        <phrase id="fldcaption" value="compra" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
+      <field id="venta">
+        <phrase id="fldcaption" value="venta" />
+        <phrase id="fldtagvalue1" value="S" />
+        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagvalue2" value="N" />
+        <phrase id="fldtagcaption2" value="N" />
+      </field>
     </table>
     <table id="almacen">
       <phrase id="tblcaption" value="Almacen" />
@@ -1703,22 +1720,22 @@
       <field id="cuenta">
         <phrase id="fldcaption" value="Cuenta" />
       </field>
-      <field id="activo">
-        <phrase id="fldcaption" value="Activo" />
+      <field id="pago_electronico">
+        <phrase id="fldcaption" value="Pago Electronico" />
         <phrase id="fldtagvalue1" value="S" />
         <phrase id="fldtagcaption1" value="SI" />
         <phrase id="fldtagvalue2" value="N" />
         <phrase id="fldtagcaption2" value="NO" />
       </field>
       <field id="compania">
-        <phrase id="fldcaption" value="compania" />
+        <phrase id="fldcaption" value="Compañía" />
       </field>
-      <field id="pago_electronico">
-        <phrase id="fldcaption" value="pago electronico" />
+      <field id="activo">
+        <phrase id="fldcaption" value="Activo" />
         <phrase id="fldtagvalue1" value="S" />
-        <phrase id="fldtagcaption1" value="S" />
+        <phrase id="fldtagcaption1" value="SI" />
         <phrase id="fldtagvalue2" value="N" />
-        <phrase id="fldtagcaption2" value="N" />
+        <phrase id="fldtagcaption2" value="NO" />
       </field>
     </table>
     <table id="compra">
@@ -3410,6 +3427,9 @@
       <field id="tasa_cambio">
         <phrase id="fldcaption" value="tasa cambio" />
       </field>
+      <field id="tipo_documento">
+        <phrase id="fldcaption" value="tipo documento" />
+      </field>
     </table>
     <table id="pagos_compras_detalle">
       <phrase id="tblcaption" value="Pagos Compras Detalle" />
@@ -3420,31 +3440,31 @@
         <phrase id="fldcaption" value="pagos compras" />
       </field>
       <field id="metodo_pago">
-        <phrase id="fldcaption" value="metodo pago" />
+        <phrase id="fldcaption" value="Método Pago" />
       </field>
       <field id="referencia">
-        <phrase id="fldcaption" value="referencia" />
+        <phrase id="fldcaption" value="Referencia" />
       </field>
       <field id="monto_moneda">
-        <phrase id="fldcaption" value="monto moneda" />
+        <phrase id="fldcaption" value="Monto Moneda" />
       </field>
       <field id="moneda">
-        <phrase id="fldcaption" value="moneda" />
+        <phrase id="fldcaption" value="Moneda" />
       </field>
       <field id="tasa_moneda">
-        <phrase id="fldcaption" value="tasa moneda" />
+        <phrase id="fldcaption" value="Tasa Moneda" />
       </field>
       <field id="monto_bs">
-        <phrase id="fldcaption" value="monto bs" />
+        <phrase id="fldcaption" value="Monto Bs." />
       </field>
       <field id="tasa_usd">
-        <phrase id="fldcaption" value="tasa usd" />
+        <phrase id="fldcaption" value="Tasa USD" />
       </field>
       <field id="monto_usd">
-        <phrase id="fldcaption" value="monto usd" />
+        <phrase id="fldcaption" value="Monto USD" />
       </field>
       <field id="banco">
-        <phrase id="fldcaption" value="banco" />
+        <phrase id="fldcaption" value="Banco" />
       </field>
     </table>
     <table id="pagos_proveedor">
@@ -6842,7 +6862,7 @@
         <phrase id="fldcaption" value="Días Crédito" />
       </field>
       <field id="entregado">
-        <phrase id="fldcaption" value="Imp. Ambas Monedas" />
+        <phrase id="fldcaption" value="Contado" />
         <phrase id="fldtagvalue1" value="S" />
         <phrase id="fldtagcaption1" value="SI" />
         <phrase id="fldtagvalue2" value="N" />
@@ -8023,6 +8043,9 @@
     </table>
     <table id="crear_nota_recepcion_automatica_wait">
       <phrase id="tblcaption" value="Crear Nota Recepcion Automatica" />
+    </table>
+    <table id="registrar_pagos_proveedores">
+      <phrase id="tblcaption" value="Regitrar de Pagos a Proveedores" />
     </table>
   </project>
 </ew-language>

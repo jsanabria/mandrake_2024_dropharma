@@ -61,6 +61,7 @@ class PagosCompras extends DbTable
     public $anexos;
     public $pivote2;
     public $tasa_cambio;
+    public $tipo_documento;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -129,6 +130,7 @@ class PagosCompras extends DbTable
         $this->id->Raw = true;
         $this->id->IsAutoIncrement = true; // Autoincrement field
         $this->id->IsPrimaryKey = true; // Primary key field
+        $this->id->IsForeignKey = true; // Foreign key field
         $this->id->Nullable = false; // NOT NULL field
         $this->id->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->id->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
@@ -186,7 +188,6 @@ class PagosCompras extends DbTable
         $this->id_documento->Raw = true;
         $this->id_documento->Nullable = false; // NOT NULL field
         $this->id_documento->Required = true; // Required field
-        $this->id_documento->Lookup = new Lookup($this->id_documento, 'compra', false, 'id', ["tipo_documento","documento","",""], '', '', [], [], [], [], [], [], false, '', '', "CONCAT(COALESCE(`tipo_documento`, ''),'" . ValueSeparator(1, $this->id_documento) . "',COALESCE(`documento`,''))");
         $this->id_documento->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
         $this->id_documento->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
         $this->Fields['id_documento'] = &$this->id_documento;
@@ -410,8 +411,8 @@ class PagosCompras extends DbTable
             'anexos', // Name
             '`anexos`', // Expression
             '`anexos`', // Basic search expression
-            200, // Type
-            65535, // Size
+            201, // Type
+            16777215, // Size
             -1, // Date/Time format
             false, // Is upload field
             '`anexos`', // Virtual expression
@@ -471,6 +472,30 @@ class PagosCompras extends DbTable
         $this->tasa_cambio->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN", "IS NULL", "IS NOT NULL"];
         $this->Fields['tasa_cambio'] = &$this->tasa_cambio;
 
+        // tipo_documento
+        $this->tipo_documento = new DbField(
+            $this, // Table
+            'x_tipo_documento', // Variable name
+            'tipo_documento', // Name
+            '`tipo_documento`', // Expression
+            '`tipo_documento`', // Basic search expression
+            200, // Type
+            6, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`tipo_documento`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->tipo_documento->InputTextType = "text";
+        $this->tipo_documento->Nullable = false; // NOT NULL field
+        $this->tipo_documento->Required = true; // Required field
+        $this->tipo_documento->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY"];
+        $this->Fields['tipo_documento'] = &$this->tipo_documento;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -527,6 +552,32 @@ class PagosCompras extends DbTable
             }
             $field->setSort($fldSort);
         }
+    }
+
+    // Current detail table name
+    public function getCurrentDetailTable()
+    {
+        return Session(PROJECT_NAME . "_" . $this->TableVar . "_" . Config("TABLE_DETAIL_TABLE")) ?? "";
+    }
+
+    public function setCurrentDetailTable($v)
+    {
+        $_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . Config("TABLE_DETAIL_TABLE")] = $v;
+    }
+
+    // Get detail url
+    public function getDetailUrl()
+    {
+        // Detail url
+        $detailUrl = "";
+        if ($this->getCurrentDetailTable() == "pagos_compras_detalle") {
+            $detailUrl = Container("pagos_compras_detalle")->getListUrl() . "?" . Config("TABLE_SHOW_MASTER") . "=" . $this->TableVar;
+            $detailUrl .= "&" . GetForeignKeyUrl("fk_id", $this->id->CurrentValue);
+        }
+        if ($detailUrl == "") {
+            $detailUrl = "PagosComprasList";
+        }
+        return $detailUrl;
     }
 
     // Render X Axis for chart
@@ -1004,6 +1055,7 @@ class PagosCompras extends DbTable
         $this->anexos->DbValue = $row['anexos'];
         $this->pivote2->DbValue = $row['pivote2'];
         $this->tasa_cambio->DbValue = $row['tasa_cambio'];
+        $this->tipo_documento->DbValue = $row['tipo_documento'];
     }
 
     // Delete uploaded files
@@ -1160,7 +1212,11 @@ class PagosCompras extends DbTable
     // Edit URL
     public function getEditUrl($parm = "")
     {
-        $url = $this->keyUrl("PagosComprasEdit", $parm);
+        if ($parm != "") {
+            $url = $this->keyUrl("PagosComprasEdit", $parm);
+        } else {
+            $url = $this->keyUrl("PagosComprasEdit", Config("TABLE_SHOW_DETAIL") . "=");
+        }
         return $this->addMasterUrl($url);
     }
 
@@ -1174,7 +1230,11 @@ class PagosCompras extends DbTable
     // Copy URL
     public function getCopyUrl($parm = "")
     {
-        $url = $this->keyUrl("PagosComprasAdd", $parm);
+        if ($parm != "") {
+            $url = $this->keyUrl("PagosComprasAdd", $parm);
+        } else {
+            $url = $this->keyUrl("PagosComprasAdd", Config("TABLE_SHOW_DETAIL") . "=");
+        }
         return $this->addMasterUrl($url);
     }
 
@@ -1371,6 +1431,7 @@ class PagosCompras extends DbTable
         $this->anexos->setDbValue($row['anexos']);
         $this->pivote2->setDbValue($row['pivote2']);
         $this->tasa_cambio->setDbValue($row['tasa_cambio']);
+        $this->tipo_documento->setDbValue($row['tipo_documento']);
     }
 
     // Render list content
@@ -1431,6 +1492,8 @@ class PagosCompras extends DbTable
 
         // tasa_cambio
 
+        // tipo_documento
+
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
 
@@ -1459,27 +1522,7 @@ class PagosCompras extends DbTable
 
         // id_documento
         $this->id_documento->ViewValue = $this->id_documento->CurrentValue;
-        $curVal = strval($this->id_documento->CurrentValue);
-        if ($curVal != "") {
-            $this->id_documento->ViewValue = $this->id_documento->lookupCacheOption($curVal);
-            if ($this->id_documento->ViewValue === null) { // Lookup from database
-                $filterWrk = SearchFilter($this->id_documento->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->id_documento->Lookup->getTable()->Fields["id"]->searchDataType(), "");
-                $sqlWrk = $this->id_documento->Lookup->getSql(false, $filterWrk, '', $this, true, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                if ($ari > 0) { // Lookup values found
-                    $arwrk = $this->id_documento->Lookup->renderViewRow($rswrk[0]);
-                    $this->id_documento->ViewValue = $this->id_documento->displayValue($arwrk);
-                } else {
-                    $this->id_documento->ViewValue = FormatNumber($this->id_documento->CurrentValue, $this->id_documento->formatPattern());
-                }
-            }
-        } else {
-            $this->id_documento->ViewValue = null;
-        }
+        $this->id_documento->ViewValue = FormatNumber($this->id_documento->ViewValue, $this->id_documento->formatPattern());
 
         // pivote
         $this->pivote->ViewValue = $this->pivote->CurrentValue;
@@ -1563,6 +1606,9 @@ class PagosCompras extends DbTable
         $this->tasa_cambio->ViewValue = $this->tasa_cambio->CurrentValue;
         $this->tasa_cambio->ViewValue = FormatNumber($this->tasa_cambio->ViewValue, $this->tasa_cambio->formatPattern());
 
+        // tipo_documento
+        $this->tipo_documento->ViewValue = $this->tipo_documento->CurrentValue;
+
         // id
         $this->id->HrefValue = "";
         $this->id->TooltipValue = "";
@@ -1623,6 +1669,10 @@ class PagosCompras extends DbTable
         $this->tasa_cambio->HrefValue = "";
         $this->tasa_cambio->TooltipValue = "";
 
+        // tipo_documento
+        $this->tipo_documento->HrefValue = "";
+        $this->tipo_documento->TooltipValue = "";
+
         // Call Row Rendered event
         $this->rowRendered();
 
@@ -1650,6 +1700,9 @@ class PagosCompras extends DbTable
         $this->id_documento->setupEditAttributes();
         $this->id_documento->EditValue = $this->id_documento->CurrentValue;
         $this->id_documento->PlaceHolder = RemoveHtml($this->id_documento->caption());
+        if (strval($this->id_documento->EditValue) != "" && is_numeric($this->id_documento->EditValue)) {
+            $this->id_documento->EditValue = FormatNumber($this->id_documento->EditValue, null);
+        }
 
         // pivote
         $this->pivote->setupEditAttributes();
@@ -1734,6 +1787,14 @@ class PagosCompras extends DbTable
             $this->tasa_cambio->EditValue = FormatNumber($this->tasa_cambio->EditValue, null);
         }
 
+        // tipo_documento
+        $this->tipo_documento->setupEditAttributes();
+        if (!$this->tipo_documento->Raw) {
+            $this->tipo_documento->CurrentValue = HtmlDecode($this->tipo_documento->CurrentValue);
+        }
+        $this->tipo_documento->EditValue = $this->tipo_documento->CurrentValue;
+        $this->tipo_documento->PlaceHolder = RemoveHtml($this->tipo_documento->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1763,7 +1824,6 @@ class PagosCompras extends DbTable
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
                     $doc->exportCaption($this->proveedor);
-                    $doc->exportCaption($this->id_documento);
                     $doc->exportCaption($this->fecha);
                     $doc->exportCaption($this->moneda);
                     $doc->exportCaption($this->pago);
@@ -1772,6 +1832,7 @@ class PagosCompras extends DbTable
                     $doc->exportCaption($this->_username);
                     $doc->exportCaption($this->comprobante);
                     $doc->exportCaption($this->anexos);
+                    $doc->exportCaption($this->tipo_documento);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->proveedor);
@@ -1788,6 +1849,7 @@ class PagosCompras extends DbTable
                     $doc->exportCaption($this->anexos);
                     $doc->exportCaption($this->pivote2);
                     $doc->exportCaption($this->tasa_cambio);
+                    $doc->exportCaption($this->tipo_documento);
                 }
                 $doc->endExportRow();
             }
@@ -1815,7 +1877,6 @@ class PagosCompras extends DbTable
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
                         $doc->exportField($this->proveedor);
-                        $doc->exportField($this->id_documento);
                         $doc->exportField($this->fecha);
                         $doc->exportField($this->moneda);
                         $doc->exportField($this->pago);
@@ -1824,6 +1885,7 @@ class PagosCompras extends DbTable
                         $doc->exportField($this->_username);
                         $doc->exportField($this->comprobante);
                         $doc->exportField($this->anexos);
+                        $doc->exportField($this->tipo_documento);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->proveedor);
@@ -1840,6 +1902,7 @@ class PagosCompras extends DbTable
                         $doc->exportField($this->anexos);
                         $doc->exportField($this->pivote2);
                         $doc->exportField($this->tasa_cambio);
+                        $doc->exportField($this->tipo_documento);
                     }
                     $doc->endExportRow($rowCnt);
                 }
@@ -1875,7 +1938,19 @@ class PagosCompras extends DbTable
     // Recordset Selecting event
     public function recordsetSelecting(&$filter)
     {
-        // Enter your code here
+        // Capturamos los parámetros de la URL de forma segura
+        $idCompra = Param("id_compra");
+        $origen = trim(Param("origen") ?? "");
+
+        // Aplicamos el filtro para id_documento si viene definido en la URL
+        if (!empty($idCompra)) {
+            AddFilter($filter, "id_documento = " . AdjustSql($idCompra, $this->Dbid));
+        }
+
+        // Aplicamos el filtro para tipo_documento si viene definido en la URL
+        if (!empty($origen)) {
+            AddFilter($filter, "tipo_documento = '" . AdjustSql($origen, $this->Dbid) . "'");
+        }
     }
 
     // Recordset Selected event

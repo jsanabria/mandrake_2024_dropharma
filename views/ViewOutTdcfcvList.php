@@ -35,7 +35,7 @@ ew.PREVIEW_NAV_STYLE ??= "tabs"; // tabs/pills/underline
 ew.PREVIEW_MODAL_CLASS ??= "modal modal-fullscreen-sm-down";
 ew.PREVIEW_ROW ??= true;
 ew.PREVIEW_SINGLE_ROW ??= false;
-ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.js?v=24.16.0", "preview");
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=24.16.0", "preview");
 </script>
 <script>
 loadjs.ready("head", function () {
@@ -90,6 +90,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["fecha", [ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["y_fecha", [ew.Validators.between], false],
             ["cliente", [], fields.cliente.isInvalid],
+            ["entregado", [], fields.entregado.isInvalid],
             ["pagado", [], fields.pagado.isInvalid],
             ["fecha_despacho", [ew.Validators.datetime(fields.fecha_despacho.clientFormatPattern)], fields.fecha_despacho.isInvalid],
             ["y_fecha_despacho", [ew.Validators.between], false]
@@ -129,6 +130,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setLists({
             "documento": <?= $Page->documento->toClientList($Page) ?>,
             "cliente": <?= $Page->cliente->toClientList($Page) ?>,
+            "entregado": <?= $Page->entregado->toClientList($Page) ?>,
             "pagado": <?= $Page->pagado->toClientList($Page) ?>,
         })
 
@@ -386,6 +388,61 @@ loadjs.ready("fview_out_tdcfcvsrch", function() {
         </div><!-- /.ew-search-field -->
     </div><!-- /.col-sm-auto -->
 <?php } ?>
+<?php if ($Page->entregado->Visible) { // entregado ?>
+<?php
+if (!$Page->entregado->UseFilter) {
+    $Page->SearchColumnCount++;
+}
+?>
+    <div id="xs_entregado" class="col-sm-auto d-sm-flex align-items-start mb-3 px-0 pe-sm-2<?= $Page->entregado->UseFilter ? " ew-filter-field" : "" ?>">
+        <div class="d-flex my-1 my-sm-0">
+            <label for="x_entregado" class="ew-search-caption ew-label"><?= $Page->entregado->caption() ?></label>
+            <div class="ew-search-operator">
+<?= $Language->phrase("=") ?>
+<input type="hidden" name="z_entregado" id="z_entregado" value="=">
+</div>
+        </div>
+        <div id="el_view_out_tdcfcv_entregado" class="ew-search-field">
+    <select
+        id="x_entregado"
+        name="x_entregado"
+        class="form-select ew-select<?= $Page->entregado->isInvalidClass() ?>"
+        <?php if (!$Page->entregado->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcfcvsrch_x_entregado"
+        <?php } ?>
+        data-table="view_out_tdcfcv"
+        data-field="x_entregado"
+        data-value-separator="<?= $Page->entregado->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->entregado->getPlaceHolder()) ?>"
+        <?= $Page->entregado->editAttributes() ?>>
+        <?= $Page->entregado->selectOptionListHtml("x_entregado") ?>
+    </select>
+    <div class="invalid-feedback"><?= $Page->entregado->getErrorMessage(false) ?></div>
+<?php if (!$Page->entregado->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcfcvsrch", function() {
+    var options = { name: "x_entregado", selectId: "fview_out_tdcfcvsrch_x_entregado" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcfcvsrch.lists.entregado?.lookupOptions.length) {
+        options.data = { id: "x_entregado", form: "fview_out_tdcfcvsrch" };
+    } else {
+        options.ajax = { id: "x_entregado", form: "fview_out_tdcfcvsrch", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.entregado.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</div>
+        <div class="d-flex my-1 my-sm-0">
+        </div><!-- /.ew-search-field -->
+    </div><!-- /.col-sm-auto -->
+<?php } ?>
 <?php if ($Page->pagado->Visible) { // pagado ?>
 <?php
 if (!$Page->pagado->UseFilter) {
@@ -634,6 +691,9 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->id_documento_padre->Visible) { // id_documento_padre ?>
         <th data-name="id_documento_padre" class="<?= $Page->id_documento_padre->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_id_documento_padre" class="view_out_tdcfcv_id_documento_padre"><?= $Page->renderFieldHeader($Page->id_documento_padre) ?></div></th>
 <?php } ?>
+<?php if ($Page->entregado->Visible) { // entregado ?>
+        <th data-name="entregado" class="<?= $Page->entregado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_entregado" class="view_out_tdcfcv_entregado"><?= $Page->renderFieldHeader($Page->entregado) ?></div></th>
+<?php } ?>
 <?php if ($Page->pagado->Visible) { // pagado ?>
         <th data-name="pagado" class="<?= $Page->pagado->headerCellClass() ?>"><div id="elh_view_out_tdcfcv_pagado" class="view_out_tdcfcv_pagado"><?= $Page->renderFieldHeader($Page->pagado) ?></div></th>
 <?php } ?>
@@ -767,6 +827,14 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_id_documento_padre" class="el_view_out_tdcfcv_id_documento_padre">
 <span<?= $Page->id_documento_padre->viewAttributes() ?>>
 <?= $Page->id_documento_padre->getViewValue() ?></span>
+</span>
+</td>
+    <?php } ?>
+    <?php if ($Page->entregado->Visible) { // entregado ?>
+        <td data-name="entregado"<?= $Page->entregado->cellAttributes() ?>>
+<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_view_out_tdcfcv_entregado" class="el_view_out_tdcfcv_entregado">
+<span<?= $Page->entregado->viewAttributes() ?>>
+<?= $Page->entregado->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

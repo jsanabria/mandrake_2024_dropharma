@@ -145,8 +145,8 @@ class PagosComprasDetalleList extends PagosComprasDetalle
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->setVisibility();
-        $this->pagos_compras->setVisibility();
+        $this->id->Visible = false;
+        $this->pagos_compras->Visible = false;
         $this->metodo_pago->setVisibility();
         $this->referencia->setVisibility();
         $this->monto_moneda->setVisibility();
@@ -696,8 +696,14 @@ class PagosComprasDetalleList extends PagosComprasDetalle
             $this->InlineDelete = true;
         }
 
+        // Set up master detail parameters
+        $this->setupMasterParms();
+
         // Setup other options
         $this->setupOtherOptions();
+
+        // Set up lookup cache
+        $this->setupLookupOptions($this->metodo_pago);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -832,8 +838,28 @@ class PagosComprasDetalleList extends PagosComprasDetalle
         if (!$Security->canList()) {
             $this->Filter = "(0=1)"; // Filter all records
         }
+
+        // Restore master/detail filter from session
+        $this->DbMasterFilter = $this->getMasterFilterFromSession(); // Restore master filter from session
+        $this->DbDetailFilter = $this->getDetailFilterFromSession(); // Restore detail filter from session
         AddFilter($this->Filter, $this->DbDetailFilter);
         AddFilter($this->Filter, $this->SearchWhere);
+
+        // Load master record
+        if ($this->CurrentMode != "add" && $this->DbMasterFilter != "" && $this->getCurrentMasterTable() == "pagos_compras") {
+            $masterTbl = Container("pagos_compras");
+            $rsmaster = $masterTbl->loadRs($this->DbMasterFilter)->fetchAssociative();
+            $this->MasterRecordExists = $rsmaster !== false;
+            if (!$this->MasterRecordExists) {
+                $this->setFailureMessage($Language->phrase("NoRecord")); // Set no record found
+                $this->terminate("PagosComprasList"); // Return to master page
+                return;
+            } else {
+                $masterTbl->loadListRowValues($rsmaster);
+                $masterTbl->RowType = RowType::MASTER; // Master row
+                $masterTbl->renderListRow();
+            }
+        }
 
         // Set up filter
         if ($this->Command == "json") {
@@ -1297,8 +1323,6 @@ class PagosComprasDetalleList extends PagosComprasDetalle
         if (Get("order") !== null) {
             $this->CurrentOrder = Get("order");
             $this->CurrentOrderType = Get("ordertype", "");
-            $this->updateSort($this->id); // id
-            $this->updateSort($this->pagos_compras); // pagos_compras
             $this->updateSort($this->metodo_pago); // metodo_pago
             $this->updateSort($this->referencia); // referencia
             $this->updateSort($this->monto_moneda); // monto_moneda
@@ -1326,6 +1350,14 @@ class PagosComprasDetalleList extends PagosComprasDetalle
             // Reset search criteria
             if ($this->Command == "reset" || $this->Command == "resetall") {
                 $this->resetSearchParms();
+            }
+
+            // Reset master/detail keys
+            if ($this->Command == "resetall") {
+                $this->setCurrentMasterTable(""); // Clear master table
+                $this->DbMasterFilter = "";
+                $this->DbDetailFilter = "";
+                        $this->pagos_compras->setSessionValue("");
             }
 
             // Reset (clear) sorting order
@@ -1362,30 +1394,6 @@ class PagosComprasDetalleList extends PagosComprasDetalle
         $item->OnLeft = true;
         $item->Visible = false;
 
-        // "view"
-        $item = &$this->ListOptions->add("view");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canView();
-        $item->OnLeft = true;
-
-        // "edit"
-        $item = &$this->ListOptions->add("edit");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canEdit();
-        $item->OnLeft = true;
-
-        // "copy"
-        $item = &$this->ListOptions->add("copy");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canAdd();
-        $item->OnLeft = true;
-
-        // "delete"
-        $item = &$this->ListOptions->add("delete");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canDelete();
-        $item->OnLeft = true;
-
         // List actions
         $item = &$this->ListOptions->add("listactions");
         $item->CssClass = "text-nowrap";
@@ -1408,7 +1416,7 @@ class PagosComprasDetalleList extends PagosComprasDetalle
         // Drop down button for ListOptions
         $this->ListOptions->UseDropDownButton = false;
         $this->ListOptions->DropDownButtonPhrase = $Language->phrase("ButtonListOptions");
-        $this->ListOptions->UseButtonGroup = true;
+        $this->ListOptions->UseButtonGroup = false;
         if ($this->ListOptions->UseButtonGroup && IsMobile()) {
             $this->ListOptions->UseDropDownButton = true;
         }
@@ -1444,61 +1452,7 @@ class PagosComprasDetalleList extends PagosComprasDetalle
         // Call ListOptions_Rendering event
         $this->listOptionsRendering();
         $pageUrl = $this->pageUrl(false);
-        if ($this->CurrentMode == "view") {
-            // "view"
-            $opt = $this->ListOptions["view"];
-            $viewcaption = HtmlTitle($Language->phrase("ViewLink"));
-            if ($Security->canView()) {
-                if ($this->ModalView && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-table=\"pagos_compras_detalle\" data-caption=\"" . $viewcaption . "\" data-ew-action=\"modal\" data-action=\"view\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\" data-btn=\"null\">" . $Language->phrase("ViewLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-view\" title=\"" . $viewcaption . "\" data-caption=\"" . $viewcaption . "\" href=\"" . HtmlEncode(GetUrl($this->ViewUrl)) . "\">" . $Language->phrase("ViewLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "edit"
-            $opt = $this->ListOptions["edit"];
-            $editcaption = HtmlTitle($Language->phrase("EditLink"));
-            if ($Security->canEdit()) {
-                if ($this->ModalEdit && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"pagos_compras_detalle\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("EditLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "copy"
-            $opt = $this->ListOptions["copy"];
-            $copycaption = HtmlTitle($Language->phrase("CopyLink"));
-            if ($Security->canAdd()) {
-                if ($this->ModalAdd && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-table=\"pagos_compras_detalle\" data-caption=\"" . $copycaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("CopyLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\">" . $Language->phrase("CopyLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "delete"
-            $opt = $this->ListOptions["delete"];
-            if ($Security->canDelete()) {
-                $deleteCaption = $Language->phrase("DeleteLink");
-                $deleteTitle = HtmlTitle($deleteCaption);
-                if ($this->UseAjaxActions) {
-                    $opt->Body = "<a class=\"ew-row-link ew-delete\" data-ew-action=\"inline\" data-action=\"delete\" title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" data-key= \"" . HtmlEncode($this->getKey(true)) . "\" data-url=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-delete\"" .
-                        ($this->InlineDelete ? " data-ew-action=\"inline-delete\"" : "") .
-                        " title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" href=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
+        if ($this->CurrentMode == "view") { // Check view mode
         } // End View mode
 
         // Set up list action buttons
@@ -1559,17 +1513,6 @@ class PagosComprasDetalleList extends PagosComprasDetalle
     {
         global $Language, $Security;
         $options = &$this->OtherOptions;
-        $option = $options["addedit"];
-
-        // Add
-        $item = &$option->add("add");
-        $addcaption = HtmlTitle($Language->phrase("AddLink"));
-        if ($this->ModalAdd && !IsMobile()) {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-table=\"pagos_compras_detalle\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("AddLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("AddLink") . "</a>";
-        }
-        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
         $option = $options["action"];
 
         // Show column list for column visibility
@@ -1578,8 +1521,6 @@ class PagosComprasDetalleList extends PagosComprasDetalle
             $item = &$option->addGroupOption();
             $item->Body = "";
             $item->Visible = $this->UseColumnVisibility;
-            $this->createColumnOption($option, "id");
-            $this->createColumnOption($option, "pagos_compras");
             $this->createColumnOption($option, "metodo_pago");
             $this->createColumnOption($option, "referencia");
             $this->createColumnOption($option, "monto_moneda");
@@ -2123,6 +2064,28 @@ class PagosComprasDetalleList extends PagosComprasDetalle
 
             // metodo_pago
             $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+            $curVal = strval($this->metodo_pago->CurrentValue);
+            if ($curVal != "") {
+                $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
+                if ($this->metodo_pago->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
+                    } else {
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+                    }
+                }
+            } else {
+                $this->metodo_pago->ViewValue = null;
+            }
 
             // referencia
             $this->referencia->ViewValue = $this->referencia->CurrentValue;
@@ -2153,14 +2116,6 @@ class PagosComprasDetalleList extends PagosComprasDetalle
             // banco
             $this->banco->ViewValue = $this->banco->CurrentValue;
             $this->banco->ViewValue = FormatNumber($this->banco->ViewValue, $this->banco->formatPattern());
-
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
-
-            // pagos_compras
-            $this->pagos_compras->HrefValue = "";
-            $this->pagos_compras->TooltipValue = "";
 
             // metodo_pago
             $this->metodo_pago->HrefValue = "";
@@ -2406,6 +2361,23 @@ class PagosComprasDetalleList extends PagosComprasDetalle
         // Call Page Exporting server event
         $doc->ExportCustom = !$this->pageExporting($doc);
 
+        // Export master record
+        if (Config("EXPORT_MASTER_RECORD") && $this->DbMasterFilter != "" && $this->getCurrentMasterTable() == "pagos_compras") {
+            $pagos_compras = new PagosComprasList();
+            $rsmaster = $pagos_compras->loadRs($this->DbMasterFilter); // Load master record
+            if ($rsmaster) {
+                $exportStyle = $doc->Style;
+                $doc->setStyle("v"); // Change to vertical
+                if (!$this->isExport("csv") || Config("EXPORT_MASTER_RECORD_FOR_CSV")) {
+                    $doc->setTable($pagos_compras);
+                    $pagos_compras->exportDocument($doc, $rsmaster);
+                    $doc->exportEmptyRow();
+                    $doc->setTable($this);
+                }
+                $doc->setStyle($exportStyle); // Restore
+            }
+        }
+
         // Page header
         $header = $this->PageHeader;
         $this->pageDataRendering($header);
@@ -2423,6 +2395,90 @@ class PagosComprasDetalleList extends PagosComprasDetalle
 
         // Call Page Exported server event
         $this->pageExported($doc);
+    }
+
+    // Set up master/detail based on QueryString
+    protected function setupMasterParms()
+    {
+        $validMaster = false;
+        $foreignKeys = [];
+        // Get the keys for master table
+        if (($master = Get(Config("TABLE_SHOW_MASTER"), Get(Config("TABLE_MASTER")))) !== null) {
+            $masterTblVar = $master;
+            if ($masterTblVar == "") {
+                $validMaster = true;
+                $this->DbMasterFilter = "";
+                $this->DbDetailFilter = "";
+            }
+            if ($masterTblVar == "pagos_compras") {
+                $validMaster = true;
+                $masterTbl = Container("pagos_compras");
+                if (($parm = Get("fk_id", Get("pagos_compras"))) !== null) {
+                    $masterTbl->id->setQueryStringValue($parm);
+                    $this->pagos_compras->QueryStringValue = $masterTbl->id->QueryStringValue; // DO NOT change, master/detail key data type can be different
+                    $this->pagos_compras->setSessionValue($this->pagos_compras->QueryStringValue);
+                    $foreignKeys["pagos_compras"] = $this->pagos_compras->QueryStringValue;
+                    if (!is_numeric($masterTbl->id->QueryStringValue)) {
+                        $validMaster = false;
+                    }
+                } else {
+                    $validMaster = false;
+                }
+            }
+        } elseif (($master = Post(Config("TABLE_SHOW_MASTER"), Post(Config("TABLE_MASTER")))) !== null) {
+            $masterTblVar = $master;
+            if ($masterTblVar == "") {
+                    $validMaster = true;
+                    $this->DbMasterFilter = "";
+                    $this->DbDetailFilter = "";
+            }
+            if ($masterTblVar == "pagos_compras") {
+                $validMaster = true;
+                $masterTbl = Container("pagos_compras");
+                if (($parm = Post("fk_id", Post("pagos_compras"))) !== null) {
+                    $masterTbl->id->setFormValue($parm);
+                    $this->pagos_compras->FormValue = $masterTbl->id->FormValue;
+                    $this->pagos_compras->setSessionValue($this->pagos_compras->FormValue);
+                    $foreignKeys["pagos_compras"] = $this->pagos_compras->FormValue;
+                    if (!is_numeric($masterTbl->id->FormValue)) {
+                        $validMaster = false;
+                    }
+                } else {
+                    $validMaster = false;
+                }
+            }
+        }
+        if ($validMaster) {
+            // Save current master table
+            $this->setCurrentMasterTable($masterTblVar);
+
+            // Update URL
+            $this->AddUrl = $this->addMasterUrl($this->AddUrl);
+            $this->InlineAddUrl = $this->addMasterUrl($this->InlineAddUrl);
+            $this->GridAddUrl = $this->addMasterUrl($this->GridAddUrl);
+            $this->GridEditUrl = $this->addMasterUrl($this->GridEditUrl);
+            $this->MultiEditUrl = $this->addMasterUrl($this->MultiEditUrl);
+
+            // Set up Breadcrumb
+            if (!$this->isExport()) {
+                $this->setupBreadcrumb(); // Set up breadcrumb again for the master table
+            }
+
+            // Reset start record counter (new master key)
+            if (!$this->isAddOrEdit() && !$this->isGridUpdate()) {
+                $this->StartRecord = 1;
+                $this->setStartRecordNumber($this->StartRecord);
+            }
+
+            // Clear previous master key from Session
+            if ($masterTblVar != "pagos_compras") {
+                if (!array_key_exists("pagos_compras", $foreignKeys)) { // Not current foreign key
+                    $this->pagos_compras->setSessionValue("");
+                }
+            }
+        }
+        $this->DbMasterFilter = $this->getMasterFilterFromSession(); // Get master filter from session
+        $this->DbDetailFilter = $this->getDetailFilterFromSession(); // Get detail filter from session
     }
 
     // Set up Breadcrumb
@@ -2448,6 +2504,9 @@ class PagosComprasDetalleList extends PagosComprasDetalle
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
+                case "x_metodo_pago":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
                 default:
                     $lookupFilter = "";
                     break;

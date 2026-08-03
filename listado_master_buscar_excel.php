@@ -67,6 +67,9 @@ switch($id) {
     case "inv_kardex":
         include("include/kardex_de_inventario_excel.php");
         break;
+    case "fin_resumen":
+        include("include/financiero_resumen_excel.php");
+        break;
     case "inv_entre_fechas":
         include("include/inventario_entre_fecha_excel.php");
         break;

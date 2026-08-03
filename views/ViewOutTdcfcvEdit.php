@@ -41,10 +41,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["iva", [fields.iva.visible && fields.iva.required ? ew.Validators.required(fields.iva.caption) : null], fields.iva.isInvalid],
             ["total", [fields.total.visible && fields.total.required ? ew.Validators.required(fields.total.caption) : null], fields.total.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
-            ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
-            ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
-            ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
             ["entregado", [fields.entregado.visible && fields.entregado.required ? ew.Validators.required(fields.entregado.caption) : null], fields.entregado.isInvalid],
             ["nro_despacho", [fields.nro_despacho.visible && fields.nro_despacho.required ? ew.Validators.required(fields.nro_despacho.caption) : null], fields.nro_despacho.isInvalid],
@@ -67,7 +64,6 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
-            "igtf": <?= $Page->igtf->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
             "entregado": <?= $Page->entregado->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
@@ -176,18 +172,6 @@ loadjs.ready("head", function () {
 </div></div>
     </div>
 <?php } ?>
-<?php if ($Page->estatus->Visible) { // estatus ?>
-    <div id="r_estatus"<?= $Page->estatus->rowAttributes() ?>>
-        <label id="elh_view_out_tdcfcv_estatus" for="x_estatus" class="<?= $Page->LeftColumnClass ?>"><?= $Page->estatus->caption() ?><?= $Page->estatus->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->estatus->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_estatus">
-<span<?= $Page->estatus->viewAttributes() ?>>
-<span class="form-control-plaintext"><?= $Page->estatus->getDisplayValue($Page->estatus->EditValue) ?></span></span>
-<input type="hidden" data-table="view_out_tdcfcv" data-field="x_estatus" data-hidden="1" data-page="1" name="x_estatus" id="x_estatus" value="<?= HtmlEncode($Page->estatus->CurrentValue) ?>">
-</span>
-</div></div>
-    </div>
-<?php } ?>
 <?php if ($Page->entregado->Visible) { // entregado ?>
     <div id="r_entregado"<?= $Page->entregado->rowAttributes() ?>>
         <label id="elh_view_out_tdcfcv_entregado" for="x_entregado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->entregado->caption() ?><?= $Page->entregado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -282,64 +266,6 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
 <span<?= $Page->total->viewAttributes() ?>>
 <input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->total->getDisplayValue($Page->total->EditValue))) ?>"></span>
 <input type="hidden" data-table="view_out_tdcfcv" data-field="x_total" data-hidden="1" data-page="2" name="x_total" id="x_total" value="<?= HtmlEncode($Page->total->CurrentValue) ?>">
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->igtf->Visible) { // igtf ?>
-    <div id="r_igtf"<?= $Page->igtf->rowAttributes() ?>>
-        <label id="elh_view_out_tdcfcv_igtf" for="x_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->igtf->caption() ?><?= $Page->igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->igtf->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_igtf">
-    <select
-        id="x_igtf"
-        name="x_igtf"
-        class="form-select ew-select<?= $Page->igtf->isInvalidClass() ?>"
-        <?php if (!$Page->igtf->IsNativeSelect) { ?>
-        data-select2-id="fview_out_tdcfcvedit_x_igtf"
-        <?php } ?>
-        data-table="view_out_tdcfcv"
-        data-field="x_igtf"
-        data-page="2"
-        data-value-separator="<?= $Page->igtf->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->igtf->getPlaceHolder()) ?>"
-        <?= $Page->igtf->editAttributes() ?>>
-        <?= $Page->igtf->selectOptionListHtml("x_igtf") ?>
-    </select>
-    <?= $Page->igtf->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->igtf->getErrorMessage() ?></div>
-<?php if (!$Page->igtf->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fview_out_tdcfcvedit", function() {
-    var options = { name: "x_igtf", selectId: "fview_out_tdcfcvedit_x_igtf" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fview_out_tdcfcvedit.lists.igtf?.lookupOptions.length) {
-        options.data = { id: "x_igtf", form: "fview_out_tdcfcvedit" };
-    } else {
-        options.ajax = { id: "x_igtf", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.igtf.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
-    <div id="r_monto_base_igtf"<?= $Page->monto_base_igtf->rowAttributes() ?>>
-        <label id="elh_view_out_tdcfcv_monto_base_igtf" for="x_monto_base_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_base_igtf->caption() ?><?= $Page->monto_base_igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_base_igtf->cellAttributes() ?>>
-<span id="el_view_out_tdcfcv_monto_base_igtf">
-<input type="<?= $Page->monto_base_igtf->getInputTextType() ?>" name="x_monto_base_igtf" id="x_monto_base_igtf" data-table="view_out_tdcfcv" data-field="x_monto_base_igtf" value="<?= $Page->monto_base_igtf->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_base_igtf->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_base_igtf->formatPattern()) ?>"<?= $Page->monto_base_igtf->editAttributes() ?> aria-describedby="x_monto_base_igtf_help">
-<?= $Page->monto_base_igtf->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->monto_base_igtf->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

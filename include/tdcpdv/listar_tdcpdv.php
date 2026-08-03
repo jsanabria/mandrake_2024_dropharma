@@ -62,7 +62,7 @@ $sql = "SELECT
           a.id, z.id AS id_item, 
           a.foto, a.nombre_comercial, b.nombre AS fabricante, 
           a.principio_activo, a.presentacion, z.precio_unidad_sin_desc AS precio_ful, 
-          z.cantidad_articulo AS cantidad, a.cantidad_en_mano, 
+          z.cantidad_articulo AS cantidad, (CAST(a.cantidad_en_mano AS SIGNED) - ABS(CAST(a.cantidad_en_pedido AS SIGNED))) AS cantidad_en_mano, 
           z.descuento,
           IFNULL(z.descuento2, 0) AS descuento2,
           z.precio_unidad AS precio,

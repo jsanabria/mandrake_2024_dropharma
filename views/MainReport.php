@@ -64,6 +64,12 @@ $Page->showMessage();
                         KARDEX DE INVENTARIO
                     </label>
                 </div>
+                <div class="radio">
+                    <label for="fin_resumen">
+                        <input type="radio" id="fin_resumen" name="id" value="fin_resumen">
+                        REPORTE FINANCIERO
+                    </label>
+                </div>
             </div>
             <hr>
 

@@ -8,7 +8,6 @@ $TdcpdcAdd = &$Page;
 <?php
 $Page->showMessage();
 ?>
-
 <?php
 $codpro = $_REQUEST["codpro"];
 $tipo_documento = $_REQUEST["tipo_documento"];
@@ -49,486 +48,6 @@ $PorDesMin = 0;
 $PorDesMax = 100;
 $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0));
 ?>
-
-<script type="text/javascript">
-  function insertar(i) { 
-    var pedido = $("#pedido").value();
-    var proveedor = $("#codpro").value();
-    var costoFull = $("#x" + i + "_costoFull").value();
-    var descuento = $("#x" + i + "_descuento").value();
-    var costo = $("#x" + i + "_costo").value();
-    var moneda = $("#moneda").value();
-    var total = $("#x" + i + "_total").value();
-    var cantidad = $("#x" + i + "_cantidad").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var tasa_usd = $("#tasa_usd").value();
-    var username = '<?= CurrentUserName() ?>';
-    var descuentoG = $("#PorDesAct").value();
-    var nota = $("#nota").value();
-    var consignacion = $("#consignacion").value();
-    // alert(pedido + " - " + proveedor + " - " + costoFull + " - " + descuento + " - " + costo + " - " + moneda + " - " + total + " - " + cantidad + " - " + username);
-
-    // Using the core $.ajax() method
-    document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    $.ajax({
-      // The URL for the request
-      url: "include/tdcpdc/insertar_linea_pedido_tdcpdc.php",
-      // The data to send tdcpdc/(will be converted to a query string)
-      data: { 
-              pedido: pedido, 
-              proveedor: proveedor, 
-              costoFull: costoFull, 
-              descuento: descuento, 
-              costo: costo, 
-              moneda: moneda, 
-              total: total, 
-              cantidad: cantidad, 
-              articulo: articulo, 
-              tasa_usd: tasa_usd, 
-              username: username, 
-              descuentoG: descuentoG,
-              nota: nota,
-              consignacion: consignacion, 
-            },
-      // Whether this is a POST or GET request
-      type: "POST",
-      // The type of data we expect back
-      dataType : "json",
-    })
-    // Code to run if the request succeeds (is done); The response is passed to the function
-    .done(function( json ) {
-        // alert(json);
-        json = jQuery.parseJSON(json);
-
-        if(json.estatus == 1) {
-          // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
-
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcpdcList\');"><i class="fa-solid fa-list"></i> Pedidos </button>');
-          $("#pedido").val(json.pedido);
-          $("#xReglones").html(json.renglones);
-          $("#xUnidades").html(json.unidades);
-          $("#xTotalBs").html(formatter.format(json.total));
-          $("#xTotalUSD").html(formatter.format(json.total_usd));
-          /*
-          if(json.total == json.monto_sin_descuento) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          }
-          else {
-            $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
-          }
-          */
-          $("#x" + i + "_cantidad").prop('disabled', true);
-          $("#x" + i + "_costoFull").prop('disabled', true);
-          $("#x" + i + "_descuento").prop('disabled', true);
-
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ', ' + json.id_item + ')"></i>';
-        } 
-        else {
-          alert("Error: !!! " + json.mensaje + " !!!");
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
-          ("#x" + i + "_cantidad").value("");
-        }
-    })
-    // Code to run if the request fails; the raw request and status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
-      console.log( "Error: " + errorThrown );
-      console.log( "Status: " + status );
-      console.dir( xhr );
-    })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    });  
-  }
-
-  function eliminar(i, id_item) {
-    var pedido = $("#pedido").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
-    var username = '<?= CurrentUserName() ?>';
-    var descuento = $("#PorDesAct").value();
-    var nota = $("#nota").value();
-
-    // alert(pedido + " - " + proveedor + " - " + precio + " - " + descuento + " - " + precioFull + " - " + moneda + " - " + onhand + " - " + cantidad + " - " + username);
-    // Using the core $.ajax() method
-    document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    $.ajax({
-      // The URL for the request
-      url: "include/tdcpdc/eliminar_linea_pedido_tdcpdc.php",
-      // The data to send (will be converted to a query string)
-      data: { 
-              pedido: pedido, 
-              articulo: articulo, 
-              moneda: moneda, 
-              tasa_usd: tasa_usd, 
-              username: username, 
-              descuento: descuento,
-              id_item: id_item, 
-              nota: nota, 
-            },
-      // Whether this is a POST or GET request
-      type: "POST",
-      // The type of data we expect back
-      dataType : "json",
-    })
-    // Code to run if the request succeeds (is done); The response is passed to the function
-    .done(function( json ) {
-        // console.log( json );
-        json = jQuery.parseJSON(json);
-        // alert(json.pedido + " -- " + json.mensaje);
-
-        if(json.estatus == 1) {
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
-
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcpdcList\');"><i class="fa-solid fa-list"></i> Pedidos </button>');
-          $("#pedido").val(json.pedido);
-          $("#xReglones").html(json.renglones);
-          $("#xUnidades").html(json.unidades);
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          /*
-          if(json.total == json.monto_sin_descuento) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          }
-          else {
-            $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
-          }
-          */
-          // $("#x" + i + "_cantidad").val("0");
-          // myCalc(i);
-          $("#x" + i + "_cantidad").prop('disabled', false);
-          $("#x" + i + "_costoFull").prop('disabled', false);
-          $("#x" + i + "_descuento").prop('disabled', false);
-        } 
-        else {
-          alert("Error: !!! " + json.mensaje + " !!!");
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
-        }
-    })
-    // Code to run if the request fails; the raw request and status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
-      console.log( "Error: " + errorThrown );
-      console.log( "Status: " + status );
-      console.dir( xhr );
-    })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    });  
-  }
-
-  function vaciar(i) {
-    var username = '<?= CurrentUserName() ?>';
-    if(i > 0) {
-      if(!confirm("Seguro que quiere vaciar la cesta de pedidos?")) return false;
-
-      var pedido = $("#pedido").value();
-      // Using the core $.ajax() method
-      $.ajax({
-        // The URL for the request
-        url: "include/tdcpdc/vaciar_tdcpdc.php",
-        // The data to send (will be converted to a query string)
-        data: { 
-                pedido: pedido, 
-                username: username 
-              },
-        // Whether this is a POST or GET request
-        type: "POST",
-        // The type of data we expect back
-        dataType : "json",
-      })
-      // Code to run if the request succeeds (is done); The response is passed to the function
-      .done(function( json ) {
-          json = jQuery.parseJSON(json);
-          // alert(json.pedido + " -- " + json.mensaje);
-
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: 0 (0000000)</button> <button type="button" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcpdcList\');"><i class="fa-solid fa-list"></i> Pedidos </button>');
-          $("#pedido").val(0);
-          $("#xReglones").html(0);
-          $("#xUnidades").html(0);
-          $("#xTotalBs").html(0.00);
-          $("#xTotalUSD").html(0.00);
-
-          $("#consignacion").prop('disabled', false);
-          $("#consignacion").prop("selectedIndex", 0);
-      })
-      // Code to run if the request fails; the raw request and status codes are passed to the function
-      .fail(function( xhr, status, errorThrown ) {
-        alert( "Sorry, there was a problem!" );
-        console.log( "Error: " + errorThrown );
-        console.log( "Status: " + status );
-        console.dir( xhr );
-      })
-      // Code to run regardless of success or failure;
-      .always(function( xhr, status ) {
-          document.getElementById("lista2").innerHTML = ""
-          document.getElementById("articulo").value = "";
-      });  
-    }
-  }
-
-  function listar_pedido(i) {
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
-
-    $.ajax({
-      // The URL for the request
-      url: "include/tdcpdc/listar_tdcpdc_totales.php",
-      // The data to send (will be converted to a query string)
-      data: { 
-              pedido: i 
-            },
-      // Whether this is a POST or GET request
-      type: "POST",
-      // The type of data we expect back
-      dataType : "json",
-    })
-    // Code to run if the request succeeds (is done); The response is passed to the function
-    .done(function( json ) {
-        // alert(json);
-        // $("#xReglones").html(json);
-        json = jQuery.parseJSON(json);
-        // alert(json.pedido + " -- " + json.mensaje);
-
-        if(json.estatus == 1) {
-          $("#nroPedido").html('<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> <button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> <button type="button" onclick="js:sendProccess(' + json.pedido + ')" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-microchip"></i> Procesar Documento </button> <button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcpdcList\');"><i class="fa-solid fa-list"></i> Pedidos </button>');
-          $("#pedido").val(json.pedido);
-          $("#xReglones").html(json.renglones);
-          $("#xUnidades").html(json.unidades);
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          /*
-          if(json.total == json.monto_sin_descuento) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          }
-          else {
-            $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
-          }
-          */
-          
-          PorDesAct = json.descuento;
-          $("#PorDesAct").val(PorDesAct);
-          $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-          // $("#x" + i + "_cantidad").val("");
-        } 
-        else {
-          alert("Error: !!! " + json.mensaje + " !!!");
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
-        }
-    })
-    // Code to run if the request fails; the raw request and status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
-      console.log( "Error: " + errorThrown );
-      console.log( "Status: " + status );
-      console.dir( xhr );
-    })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    });  
-  }
-
-  const formatter = new Intl.NumberFormat('es-PE', {
-    style: 'decimal',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-
-
-  function buscarItem2(i, j) {
-    var pedido = <?= $pedido ?>;
-    $("#pagina").val(i);
-
-    switch(j) {
-    case 0:
-      getCodigos2();
-      break;
-    case 1:
-      getCodigos3(pedido);
-      break;
-    }
-  }
-
-  function sendProccess(i) {
-    var PorDesAct = $("#PorDesAct").value();
-    window.location.href = "TdcpdcProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
-  }
-
-  function ProgLess() {
-    var i = $("#pedido").value();
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
-
-    if(i == 0) return false;
-
-    if(PorDesAct>PorDesMin && PorDesAct<=PorDesMax) {
-      PorDesAct -= 1;
-      $("#PorDesAct").val(PorDesAct);
-      $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-      RefreshDescuento(i, PorDesAct);
-    }
-  }
-
-  function ProgPlus() {
-    var i = $("#pedido").value();
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
-
-    if(i == 0) return false;
-
-    if(PorDesAct>=PorDesMin && PorDesAct<PorDesMax) {
-      PorDesAct += 1;
-      $("#PorDesAct").val(PorDesAct);
-      $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-      RefreshDescuento(i, PorDesAct);
-    }
-  }
-
-  function DiasCred() {
-    var i = $("#pedido").value();
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
-
-    if(i == 0) return false;
-    RefreshDescuento(i, PorDesAct);
-  }
-
-  function RefreshDescuento(i, j) {
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
-    var username = '<?= CurrentUserName() ?>';
-   
-
-    $.ajax({
-      // The URL for the request
-      url: "include/tdcpdc/descuento_tdcpdc_totales.php",
-      // The data to send (will be converted to a query string)
-      data: { 
-              pedido: i, 
-              descuentoG: j, 
-              moneda: moneda, 
-              tasa_usd: tasa_usd, 
-              username: username, 
-            },
-      // Whether this is a POST or GET request
-      type: "POST",
-      // The type of data we expect back
-      dataType : "json",
-    })
-    // Code to run if the request succeeds (is done); The response is passed to the function
-    .done(function( json ) {
-        // alert(json);
-        // $("#xReglones").html(json);
-        json = jQuery.parseJSON(json);
-        // alert(json.pedido + " -- " + json.mensaje);
-
-        if(json.estatus == 1) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          /*
-          if(json.total == json.monto_sin_descuento) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          }
-          else {
-            $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
-          }
-          */
-        } 
-        else {
-          alert("Error: !!! " + json.mensaje + " !!!");
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
-        }
-    })
-    // Code to run if the request fails; the raw request and status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
-      console.log( "Error: " + errorThrown );
-      console.log( "Status: " + status );
-      console.dir( xhr );
-    })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    });  
-  }
-
-  function RefreshMonedaTasa() {
-    var i = $("#pedido").value();
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
-    var username = '<?= CurrentUserName() ?>';
-
-    if(i == 0) return false;
-
-    $.ajax({
-      // The URL for the request
-      url: "include/tdcpdc/moneda_tdcpdc_totales.php",
-      // The data to send (will be converted to a query string)
-      data: { 
-              pedido: i, 
-              moneda: moneda, 
-              tasa_usd: tasa_usd, 
-              username: username, 
-            },
-      // Whether this is a POST or GET request
-      type: "POST",
-      // The type of data we expect back
-      dataType : "json",
-    })
-    // Code to run if the request succeeds (is done); The response is passed to the function
-    .done(function( json ) {
-        // alert(json);
-        // $("#xReglones").html(json);
-        json = jQuery.parseJSON(json);
-        // alert(json.pedido + " -- " + json.mensaje);
-
-        if(json.estatus == 1) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-         /*
-          if(json.total == json.monto_sin_descuento) {
-            $("#xTotalBs").html(formatter.format(json.total));
-            $("#xTotalUSD").html(formatter.format(json.total_usd));
-          }
-          else {
-            $("#xTotalBs").html(formatter.format(json.total) + "<br><del>" + formatter.format(json.monto_sin_descuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(json.total_usd) + "<br><del>" + formatter.format(json.total_usd_sin_descuento) + "</del>");
-          }
-          */
-        } 
-        else {
-          alert("Error: !!! " + json.mensaje + " !!!");
-          document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
-        }
-    })
-    // Code to run if the request fails; the raw request and status codes are passed to the function
-    .fail(function( xhr, status, errorThrown ) {
-      alert( "Sorry, there was a problem!" );
-      console.log( "Error: " + errorThrown );
-      console.log( "Status: " + status );
-      console.dir( xhr );
-    })
-    // Code to run regardless of success or failure;
-    .always(function( xhr, status ) {
-        // document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
-    });  
-  }
-
-</script>
 
 <div class="container border border-primary border-top rounded p-3">
   <div class="row">
@@ -709,214 +228,571 @@ $PorDesAct = intval((isset($_REQUEST["PorDesAct"]) ? $_REQUEST["PorDesAct"] : 0)
 </div>
 
 <script type="text/javascript">
-  $("#laboratorio").prop("disabled", true);
-  $("#articulo").prop("disabled", true);
+loadjs.ready(["jquery"], function () {
+    const $ = jQuery;
 
-  document.getElementById("laboratorio").addEventListener("keyup", getCodigos)
-  document.getElementById("laboratorio").addEventListener("click", getCodigos)
-  document.getElementById("articulo").addEventListener("keyup", getCodigos2)
-  document.getElementById("consignacion").addEventListener("change", limpiar)
+    const formatter = new Intl.NumberFormat('es-PE', {
+        style: 'decimal',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
 
-  document.getElementById("nota").addEventListener("change", guardar_nota)
+    function htmlBotonesPedido(json, incluirProcesar) {
+        var html = '<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: ' + json.pedido + ' (' + json.nro_documento + ')</button> ' +
+          '<button type="button" onclick="js:vaciar(' + json.pedido + ')" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> ' +
+          '<button type="button" onclick="js:getCodigos3(' + json.pedido + ')" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-cart-shopping"></i> Listar la Cesta <i class="fa-solid fa-exclamation"></i></button> ';
+        if (incluirProcesar) {
+          html += '<button type="button" onclick="js:sendProccess(' + json.pedido + ')" class="btn btn-outline-success btn-sm"><i class="fa-solid fa-microchip"></i> Procesar Documento </button> ';
+        }
+        html += '<button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcpdcList\');"><i class="fa-solid fa-list"></i> Pedidos </button>';
+        return html;
+    }
 
-  function getCodigos() {
-      let inputCP = document.getElementById("laboratorio").value
-      let lista = document.getElementById("lista")
-      let inputCP3 = document.getElementById("username").value
-      document.getElementById("codlab").value = ""
+    window.insertar = function (i) {
+        var pedido = $("#pedido").val();
+        var proveedor = $("#codpro").val();
+        var costoFull = $("#x" + i + "_costoFull").val();
+        var descuento = $("#x" + i + "_descuento").val();
+        var costo = $("#x" + i + "_costo").val();
+        var moneda = $("#moneda").val();
+        var total = $("#x" + i + "_total").val();
+        var cantidad = $("#x" + i + "_cantidad").val();
+        var articulo = $("#x" + i + "_articulo").val();
+        var tasa_usd = $("#tasa_usd").val();
+        var username = '<?= CurrentUserName() ?>';
+        var descuentoG = $("#PorDesAct").val();
+        var nota = $("#nota").val();
+        var consignacion = $("#consignacion").val();
 
-      if (inputCP.length >= 0) {
-          let url = "include/buscar_laboratorios.php"
-          let formData = new FormData()
-          formData.append("fabricante", inputCP)
-          formData.append("username", inputCP3)
+        document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
 
-          fetch(url, {
-              method: "POST",
-              body: formData,
-              mode: "cors" //Default cors, no-cors, same-origin
-          }).then(response => response.json()) 
-              .then(data => {
-                  lista.style.display = 'block'
-                  lista.innerHTML = data
-              })
-              .catch(err => console.log(err))
-      } else {
-          lista.style.display = 'none'
-      }
-  }
+        $.ajax({
+            url: "include/tdcpdc/insertar_linea_pedido_tdcpdc.php",
+            data: {
+                pedido: pedido,
+                proveedor: proveedor,
+                costoFull: costoFull,
+                descuento: descuento,
+                costo: costo,
+                moneda: moneda,
+                total: total,
+                cantidad: cantidad,
+                articulo: articulo,
+                tasa_usd: tasa_usd,
+                username: username,
+                descuentoG: descuentoG,
+                nota: nota,
+                consignacion: consignacion
+            },
+            type: "POST",
+            dataType: "json"
+        })
+        .done(function (json) {
+            json = jQuery.parseJSON(json);
 
-  function mostrar(cp) {
-      lista.style.display = 'none'
-      // alert("CP: " + cp)
+            if (json.estatus == 1) {
+                $("#nroPedido").html(htmlBotonesPedido(json, false));
+                $("#pedido").val(json.pedido);
+                $("#xReglones").html(json.renglones);
+                $("#xUnidades").html(json.unidades);
+                $("#xTotalBs").html(formatter.format(json.total));
+                $("#xTotalUSD").html(formatter.format(json.total_usd));
 
-      document.getElementById("lista2").innerHTML = ""
-      document.getElementById("articulo").value = "";
+                $("#x" + i + "_cantidad").prop('disabled', true);
+                $("#x" + i + "_costoFull").prop('disabled', true);
+                $("#x" + i + "_descuento").prop('disabled', true);
 
-      let url = "include/buscar_laboratorio_codigo_nombre.php"
-      let formData = new FormData()
-      formData.append("fabricante", cp)
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ', ' + json.id_item + ')"></i>';
+            } else {
+                alert("Error: !!! " + json.mensaje + " !!!");
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
+                $("#x" + i + "_cantidad").val("");
+            }
+        })
+        .fail(function (xhr, status, errorThrown) {
+            alert("Sorry, there was a problem!");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        });
+    };
 
-      fetch(url, {
-          method: "POST",
-          body: formData,
-          mode: "cors" //Default cors, no-cors, same-origin
-      }).then(response => response.json()) 
-          .then(data => { 
-              datos = data.split("|")
-              document.getElementById("codlab").value = datos[0]
-              document.getElementById("laboratorio").value = datos[1]
-              getCodigos2()
-          })
-        .catch(err => console.log(err))
-  }
+    window.eliminar = function (i, id_item) {
+        var pedido = $("#pedido").val();
+        var articulo = $("#x" + i + "_articulo").val();
+        var moneda = $("#moneda").val();
+        var tasa_usd = $("#tasa_usd").val();
+        var username = '<?= CurrentUserName() ?>';
+        var descuento = $("#PorDesAct").val();
+        var nota = $("#nota").val();
 
-  function getCodigos2() {
-      document.getElementById("lista").style.display = 'none'
+        document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-spinner"></i>';
 
-      let inputCP = document.getElementById("consignacion").value
-      let inputCP2 = document.getElementById("codlab").value
-      let inputCP3 = document.getElementById("articulo").value
-      let lista = document.getElementById("lista2")
-      let inputCP4 = document.getElementById("codpro").value
-      let inputCP6 = document.getElementById("pedido").value
-      let inputCP7 = document.getElementById("username").value
-      let inputCP8 = document.getElementById("tipo_documento").value
-      let inputCP9 = document.getElementById("PorDesAct").value
+        $.ajax({
+            url: "include/tdcpdc/eliminar_linea_pedido_tdcpdc.php",
+            data: {
+                pedido: pedido,
+                articulo: articulo,
+                moneda: moneda,
+                tasa_usd: tasa_usd,
+                username: username,
+                descuento: descuento,
+                id_item: id_item,
+                nota: nota
+            },
+            type: "POST",
+            dataType: "json"
+        })
+        .done(function (json) {
+            json = jQuery.parseJSON(json);
 
-      document.getElementById("lista2").innerHTML = ""
+            if (json.estatus == 1) {
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
 
-      if (inputCP3.length >= 0) {
+                $("#nroPedido").html(htmlBotonesPedido(json, false));
+                $("#pedido").val(json.pedido);
+                $("#xReglones").html(json.renglones);
+                $("#xUnidades").html(json.unidades);
+                $("#xTotalBs").html(formatter.format(json.total));
+                $("#xTotalUSD").html(formatter.format(json.total_usd));
 
-          let url = "include/tdcpdc/buscar_articulos_tdcpdc.php"
-          let formData = new FormData()
-          formData.append("consignacion", inputCP)
-          formData.append("fabricante", inputCP2)
-          formData.append("articulo", inputCP3)
-          formData.append("proveedor", inputCP4)
-          formData.append("pedido", inputCP6)
-          formData.append("username", inputCP7)
-          formData.append("tipo_documento", inputCP8)
-          formData.append("descuentoG", inputCP9)
+                $("#x" + i + "_cantidad").prop('disabled', false);
+                $("#x" + i + "_costoFull").prop('disabled', false);
+                $("#x" + i + "_descuento").prop('disabled', false);
+            } else {
+                alert("Error: !!! " + json.mensaje + " !!!");
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
+            }
+        })
+        .fail(function (xhr, status, errorThrown) {
+            alert("Sorry, there was a problem!");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        });
+    };
 
-          fetch(url, {
-              method: "POST",
-              body: formData,
-              mode: "cors" //Default cors, no-cors, same-origin
-          }).then(response => response.json()) 
-              .then(data => {
-                 // alert(inputCP4 + " | " + data)
-                  lista.style.display = 'block'
-                  lista.innerHTML = data
-              })
-              .catch(err => console.log(err))
-      } else {
-          lista.style.display = 'none'
-      }
-  }
+    window.vaciar = function (i) {
+        var username = '<?= CurrentUserName() ?>';
+        if (i > 0) {
+            if (!confirm("Seguro que quiere vaciar la cesta de pedidos?")) return false;
 
-  function getCodigos3(i) { 
-      if(i != 0) {
+            var pedido = $("#pedido").val();
+
+            $.ajax({
+                url: "include/tdcpdc/vaciar_tdcpdc.php",
+                data: {
+                    pedido: pedido,
+                    username: username
+                },
+                type: "POST",
+                dataType: "json"
+            })
+            .done(function (json) {
+                json = jQuery.parseJSON(json);
+
+                $("#nroPedido").html(
+                  '<button type="button" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-hashtag"></i> Pedido Nro.: 0 (0000000)</button> ' +
+                  '<button type="button" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i> Vaciar Toda la Cesta <i class="fa-solid fa-exclamation"></i></button> ' +
+                  '<button type="button" class="btn btn-outline-primary btn-sm" onclick="js: window.location.replace(\'ViewInTdcpdcList\');"><i class="fa-solid fa-list"></i> Pedidos </button>'
+                );
+                $("#pedido").val(0);
+                $("#xReglones").html(0);
+                $("#xUnidades").html(0);
+                $("#xTotalBs").html(0.00);
+                $("#xTotalUSD").html(0.00);
+
+                $("#consignacion").prop('disabled', false);
+                $("#consignacion").prop("selectedIndex", 0);
+            })
+            .fail(function (xhr, status, errorThrown) {
+                alert("Sorry, there was a problem!");
+                console.log("Error: " + errorThrown);
+                console.log("Status: " + status);
+                console.dir(xhr);
+            })
+            .always(function (xhr, status) {
+                document.getElementById("lista2").innerHTML = "";
+                document.getElementById("articulo").value = "";
+            });
+        }
+    };
+
+    window.listar_pedido = function (i) {
+        var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+        var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+        var PorDesAct = parseInt($("#PorDesAct").val(), 10);
+
+        $.ajax({
+            url: "include/tdcpdc/listar_tdcpdc_totales.php",
+            data: {
+                pedido: i
+            },
+            type: "POST",
+            dataType: "json"
+        })
+        .done(function (json) {
+            json = jQuery.parseJSON(json);
+
+            if (json.estatus == 1) {
+                $("#nroPedido").html(htmlBotonesPedido(json, true));
+                $("#pedido").val(json.pedido);
+                $("#xReglones").html(json.renglones);
+                $("#xUnidades").html(json.unidades);
+                $("#xTotalBs").html(formatter.format(json.total));
+                $("#xTotalUSD").html(formatter.format(json.total_usd));
+
+                PorDesAct = json.descuento;
+                $("#PorDesAct").val(PorDesAct);
+                $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
+            } else {
+                alert("Error: !!! " + json.mensaje + " !!!");
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
+            }
+        })
+        .fail(function (xhr, status, errorThrown) {
+            alert("Sorry, there was a problem!");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        });
+    };
+
+    window.buscarItem2 = function (i, j) {
+        var pedido = <?= $pedido ?>;
+        $("#pagina").val(i);
+
+        switch (j) {
+            case 0:
+                getCodigos2();
+                break;
+            case 1:
+                getCodigos3(pedido);
+                break;
+        }
+    };
+
+    window.sendProccess = function (i) {
+        var PorDesAct = $("#PorDesAct").val();
+        window.location.href = "TdcpdcProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
+    };
+
+    window.ProgLess = function () {
+        var i = $("#pedido").val();
+        var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+        var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+        var PorDesAct = parseInt($("#PorDesAct").val(), 10);
+
+        if (i == 0) return false;
+
+        if (PorDesAct > PorDesMin && PorDesAct <= PorDesMax) {
+            PorDesAct -= 1;
+            $("#PorDesAct").val(PorDesAct);
+            $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
+            RefreshDescuento(i, PorDesAct);
+        }
+    };
+
+    window.ProgPlus = function () {
+        var i = $("#pedido").val();
+        var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+        var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+        var PorDesAct = parseInt($("#PorDesAct").val(), 10);
+
+        if (i == 0) return false;
+
+        if (PorDesAct >= PorDesMin && PorDesAct < PorDesMax) {
+            PorDesAct += 1;
+            $("#PorDesAct").val(PorDesAct);
+            $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
+            RefreshDescuento(i, PorDesAct);
+        }
+    };
+
+    window.DiasCred = function () {
+        var i = $("#pedido").val();
+        var PorDesAct = parseInt($("#PorDesAct").val(), 10);
+
+        if (i == 0) return false;
+        RefreshDescuento(i, PorDesAct);
+    };
+
+    window.RefreshDescuento = function (i, j) {
+        var moneda = $("#moneda").val();
+        var tasa_usd = $("#tasa_usd").val();
+        var username = '<?= CurrentUserName() ?>';
+
+        $.ajax({
+            url: "include/tdcpdc/descuento_tdcpdc_totales.php",
+            data: {
+                pedido: i,
+                descuentoG: j,
+                moneda: moneda,
+                tasa_usd: tasa_usd,
+                username: username
+            },
+            type: "POST",
+            dataType: "json"
+        })
+        .done(function (json) {
+            json = jQuery.parseJSON(json);
+
+            if (json.estatus == 1) {
+                $("#xTotalBs").html(formatter.format(json.total));
+                $("#xTotalUSD").html(formatter.format(json.total_usd));
+            } else {
+                alert("Error: !!! " + json.mensaje + " !!!");
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
+            }
+        })
+        .fail(function (xhr, status, errorThrown) {
+            alert("Sorry, there was a problem!");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        });
+    };
+
+    window.RefreshMonedaTasa = function () {
+        var i = $("#pedido").val();
+        var moneda = $("#moneda").val();
+        var tasa_usd = $("#tasa_usd").val();
+        var username = '<?= CurrentUserName() ?>';
+
+        if (i == 0) return false;
+
+        $.ajax({
+            url: "include/tdcpdc/moneda_tdcpdc_totales.php",
+            data: {
+                pedido: i,
+                moneda: moneda,
+                tasa_usd: tasa_usd,
+                username: username
+            },
+            type: "POST",
+            dataType: "json"
+        })
+        .done(function (json) {
+            json = jQuery.parseJSON(json);
+
+            if (json.estatus == 1) {
+                $("#xTotalBs").html(formatter.format(json.total));
+                $("#xTotalUSD").html(formatter.format(json.total_usd));
+            } else {
+                alert("Error: !!! " + json.mensaje + " !!!");
+                document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-trash" onclick="js:eliminar(' + i + ')"></i>';
+            }
+        })
+        .fail(function (xhr, status, errorThrown) {
+            alert("Sorry, there was a problem!");
+            console.log("Error: " + errorThrown);
+            console.log("Status: " + status);
+            console.dir(xhr);
+        });
+    };
+
+    window.getCodigos = function () {
+        let inputCP = document.getElementById("laboratorio").value;
+        let lista = document.getElementById("lista");
+        let inputCP3 = document.getElementById("username").value;
+        document.getElementById("codlab").value = "";
+
+        if (inputCP.length >= 0) {
+            let url = "include/buscar_laboratorios.php";
+            let formData = new FormData();
+            formData.append("fabricante", inputCP);
+            formData.append("username", inputCP3);
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors"
+            }).then(response => response.json())
+                .then(data => {
+                    lista.style.display = 'block';
+                    lista.innerHTML = data;
+                })
+                .catch(err => console.log(err));
+        } else {
+            lista.style.display = 'none';
+        }
+    };
+
+    window.mostrar = function (cp) {
+        document.getElementById("lista").style.display = 'none';
+
+        document.getElementById("lista2").innerHTML = "";
+        document.getElementById("articulo").value = "";
+
+        let url = "include/buscar_laboratorio_codigo_nombre.php";
+        let formData = new FormData();
+        formData.append("fabricante", cp);
+
+        fetch(url, {
+            method: "POST",
+            body: formData,
+            mode: "cors"
+        }).then(response => response.json())
+            .then(data => {
+                let datos = data.split("|");
+                document.getElementById("codlab").value = datos[0];
+                document.getElementById("laboratorio").value = datos[1];
+                getCodigos2();
+            })
+            .catch(err => console.log(err));
+    };
+
+    window.getCodigos2 = function () {
+        document.getElementById("lista").style.display = 'none';
+
+        let inputCP = document.getElementById("consignacion").value;
+        let inputCP2 = document.getElementById("codlab").value;
+        let inputCP3 = document.getElementById("articulo").value;
+        let lista = document.getElementById("lista2");
+        let inputCP4 = document.getElementById("codpro").value;
+        let inputCP6 = document.getElementById("pedido").value;
+        let inputCP7 = document.getElementById("username").value;
+        let inputCP8 = document.getElementById("tipo_documento").value;
+        let inputCP9 = document.getElementById("PorDesAct").value;
+
+        document.getElementById("lista2").innerHTML = "";
+
+        if (inputCP3.length >= 0) {
+            let url = "include/tdcpdc/buscar_articulos_tdcpdc.php";
+            let formData = new FormData();
+            formData.append("consignacion", inputCP);
+            formData.append("fabricante", inputCP2);
+            formData.append("articulo", inputCP3);
+            formData.append("proveedor", inputCP4);
+            formData.append("pedido", inputCP6);
+            formData.append("username", inputCP7);
+            formData.append("tipo_documento", inputCP8);
+            formData.append("descuentoG", inputCP9);
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors"
+            }).then(response => response.json())
+                .then(data => {
+                    lista.style.display = 'block';
+                    lista.innerHTML = data;
+                })
+                .catch(err => console.log(err));
+        } else {
+            lista.style.display = 'none';
+        }
+    };
+
+    window.getCodigos3 = function (i) {
+        if (i != 0) {
+            $("#laboratorio").prop("disabled", false);
+            $("#articulo").prop("disabled", false);
+            $("#consignacion").prop("disabled", true);
+        } else {
+            if ($("#consignacion").val() != "") {
+                $("#laboratorio").prop("disabled", false);
+                $("#articulo").prop("disabled", false);
+                $("#consignacion").prop("disabled", true);
+            }
+        }
+
+        let inputCP = i;
+        let lista = document.getElementById("lista2");
+        document.getElementById("lista2").innerHTML = "";
+
+        if (inputCP > 0) {
+            let url = "include/tdcpdc/listar_tdcpdc.php";
+            let formData = new FormData();
+            formData.append("pedido", inputCP);
+
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors"
+            }).then(response => response.json())
+                .then(data => {
+                    lista.style.display = 'block';
+                    lista.innerHTML = data;
+                    listar_pedido(i);
+                })
+                .catch(err => console.log(err));
+        } else {
+            lista.style.display = 'none';
+        }
+    };
+
+    window.limpiar = function () {
+        document.getElementById("codlab").value = "";
+        document.getElementById("laboratorio").value = "";
+        document.getElementById("articulo").value = "";
+        getCodigos2();
+
         $("#laboratorio").prop("disabled", false);
         $("#articulo").prop("disabled", false);
         $("#consignacion").prop("disabled", true);
-      } 
-      else {
-        if($("#consignacion").val() != "") {
-          $("#laboratorio").prop("disabled", false);
-          $("#articulo").prop("disabled", false);
-          $("#consignacion").prop("disabled", true);
-        } 
-      }
+    };
 
-      let inputCP = i
-      let lista = document.getElementById("lista2")
-      document.getElementById("lista2").innerHTML = ""
+    window.guardar_nota = function () {
+        let inputCP = document.getElementById("pedido").value;
+        let inputCP2 = document.getElementById("nota").value;
+        if (inputCP > 0) {
+            let url = "include/tdcpdc/guardar_nota.php";
+            let formData = new FormData();
+            formData.append("pedido", inputCP);
+            formData.append("nota", inputCP2);
 
-      if (inputCP > 0) {
-          let url = "include/tdcpdc/listar_tdcpdc.php"
-          let formData = new FormData()
-          formData.append("pedido", inputCP)
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                mode: "cors"
+            }).then(response => response.json())
+                .then(data => {
+                    alert(data);
+                })
+                .catch(err => console.log(err));
+        }
+    };
 
-          fetch(url, {
-              method: "POST",
-              body: formData,
-              mode: "cors" //Default cors, no-cors, same-origin
-          }).then(response => response.json()) 
-              .then(data => {
-                  // alert(inputCP + " | " + data)
-                  lista.style.display = 'block'
-                  lista.innerHTML = data
-                  listar_pedido(i)
-              })
-              .catch(err => console.log(err))
-      } else {
-          lista.style.display = 'none'
-      }
-  }
+    window.myCalc = function (i) {
+        var cantidad = parseInt($("#x" + i + "_cantidad").val());
+        var costoFull = $("#x" + i + "_costoFull").val();
+        var descuento = $("#x" + i + "_descuento").val();
+        var costo = 0;
+        var total = 0;
 
+        costo = redondearDecimales(costoFull - (costoFull * (descuento / 100)), 2);
+        total = redondearDecimales(cantidad * costo, 2);
 
-  function limpiar() {
-    document.getElementById("codlab").value = ""
-    document.getElementById("laboratorio").value = ""
-    document.getElementById("articulo").value = ""
-    // document.getElementById("lista2").innerHTML = ""
-    getCodigos2()
+        $("#x" + i + "_cantidad").val(cantidad);
+        $("#x" + i + "_costoFull").val(costoFull);
+        $("#x" + i + "_descuento").val(descuento);
 
-    $("#laboratorio").prop("disabled", false);
-    $("#articulo").prop("disabled", false);
-    $("#consignacion").prop("disabled", true);
-  }
+        $("#x" + i + "_costo").val(costo);
+        $("#x" + i + "_total").val(total);
+    };
 
-  function guardar_nota() {
-      let inputCP = document.getElementById("pedido").value
-      let inputCP2 = document.getElementById("nota").value
-      if (inputCP > 0) {
-          let url = "include/tdcpdc/guardar_nota.php"
-          let formData = new FormData()
-          formData.append("pedido", inputCP)
-          formData.append("nota", inputCP2)
+    window.redondearDecimales = function (numero, decimales) {
+        let numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}');
+        if (numeroRegexp.test(numero)) {
+            return Number(numero.toFixed(decimales));
+        } else {
+            return Number(numero.toFixed(decimales)) === 0 ? 0 : numero;
+        }
+    };
 
-          fetch(url, {
-              method: "POST",
-              body: formData,
-              mode: "cors" //Default cors, no-cors, same-origin
-          }).then(response => response.json()) 
-              .then(data => {
-                alert(data)
-              })
-              .catch(err => console.log(err))
-      } 
-  }
+    $("#laboratorio").prop("disabled", true);
+    $("#articulo").prop("disabled", true);
 
-  function myCalc(i) {
-    var cantidad = parseInt($("#x" + i + "_cantidad").val());
-    var costoFull = $("#x" + i + "_costoFull").val();
-    var descuento = $("#x" + i + "_descuento").val();
-    var costo = 0;
-    var total = 0;
+    document.getElementById("laboratorio").addEventListener("keyup", getCodigos);
+    document.getElementById("laboratorio").addEventListener("click", getCodigos);
+    document.getElementById("articulo").addEventListener("keyup", getCodigos2);
+    document.getElementById("consignacion").addEventListener("change", limpiar);
 
-    costo = redondearDecimales(costoFull - (costoFull*(descuento/100)), 2);
-    total = redondearDecimales(cantidad*costo, 2);
+    document.getElementById("nota").addEventListener("change", guardar_nota);
 
-    $("#x" + i + "_cantidad").val(cantidad);
-    $("#x" + i + "_costoFull").val(costoFull);
-    $("#x" + i + "_descuento").val(descuento);
-
-    $("#x" + i + "_costo").val(costo);
-    $("#x" + i + "_total").val(total);
-  }
-
-  function redondearDecimales(numero, decimales) {
-      numeroRegexp = new RegExp('\\d\\.(\\d){' + decimales + ',}'); // Expresion regular para numeros con un cierto numero de decimales o mas
-      if (numeroRegexp.test(numero)) { // Ya que el numero tiene el numero de decimales requeridos o mas, se realiza el redondeo
-          return Number(numero.toFixed(decimales));
-      } else {
-          return Number(numero.toFixed(decimales)) === 0 ? 0 : numero; // En valores muy bajos, se comprueba si el numero es 0 (con el redondeo deseado), si no lo es se devuelve el numero otra vez.
-      }
-  }
-
-  getCodigos3( <?= $pedido ?> )
+    getCodigos3(<?= $pedido ?>);
+});
 </script>
 
 <?= GetDebugMessage() ?>

@@ -159,6 +159,8 @@ class AlicuotaList extends Alicuota
         $this->alicuota->setVisibility();
         $this->fecha->setVisibility();
         $this->activo->Visible = false;
+        $this->compra->Visible = false;
+        $this->venta->Visible = false;
     }
 
     // Constructor
@@ -704,6 +706,8 @@ class AlicuotaList extends Alicuota
 
         // Set up lookup cache
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->compra);
+        $this->setupLookupOptions($this->venta);
 
         // Update form name to avoid conflict
         if ($this->IsModal) {
@@ -1059,6 +1063,8 @@ class AlicuotaList extends Alicuota
         $filterList = Concat($filterList, $this->alicuota->AdvancedSearch->toJson(), ","); // Field alicuota
         $filterList = Concat($filterList, $this->fecha->AdvancedSearch->toJson(), ","); // Field fecha
         $filterList = Concat($filterList, $this->activo->AdvancedSearch->toJson(), ","); // Field activo
+        $filterList = Concat($filterList, $this->compra->AdvancedSearch->toJson(), ","); // Field compra
+        $filterList = Concat($filterList, $this->venta->AdvancedSearch->toJson(), ","); // Field venta
         if ($this->BasicSearch->Keyword != "") {
             $wrk = "\"" . Config("TABLE_BASIC_SEARCH") . "\":\"" . JsEncode($this->BasicSearch->Keyword) . "\",\"" . Config("TABLE_BASIC_SEARCH_TYPE") . "\":\"" . JsEncode($this->BasicSearch->Type) . "\"";
             $filterList = Concat($filterList, $wrk, ",");
@@ -1145,6 +1151,22 @@ class AlicuotaList extends Alicuota
         $this->activo->AdvancedSearch->SearchValue2 = @$filter["y_activo"];
         $this->activo->AdvancedSearch->SearchOperator2 = @$filter["w_activo"];
         $this->activo->AdvancedSearch->save();
+
+        // Field compra
+        $this->compra->AdvancedSearch->SearchValue = @$filter["x_compra"];
+        $this->compra->AdvancedSearch->SearchOperator = @$filter["z_compra"];
+        $this->compra->AdvancedSearch->SearchCondition = @$filter["v_compra"];
+        $this->compra->AdvancedSearch->SearchValue2 = @$filter["y_compra"];
+        $this->compra->AdvancedSearch->SearchOperator2 = @$filter["w_compra"];
+        $this->compra->AdvancedSearch->save();
+
+        // Field venta
+        $this->venta->AdvancedSearch->SearchValue = @$filter["x_venta"];
+        $this->venta->AdvancedSearch->SearchOperator = @$filter["z_venta"];
+        $this->venta->AdvancedSearch->SearchCondition = @$filter["v_venta"];
+        $this->venta->AdvancedSearch->SearchValue2 = @$filter["y_venta"];
+        $this->venta->AdvancedSearch->SearchOperator2 = @$filter["w_venta"];
+        $this->venta->AdvancedSearch->save();
         $this->BasicSearch->setKeyword(@$filter[Config("TABLE_BASIC_SEARCH")]);
         $this->BasicSearch->setType(@$filter[Config("TABLE_BASIC_SEARCH_TYPE")]);
     }
@@ -1298,6 +1320,8 @@ class AlicuotaList extends Alicuota
                 $this->alicuota->setSort("");
                 $this->fecha->setSort("");
                 $this->activo->setSort("");
+                $this->compra->setSort("");
+                $this->venta->setSort("");
             }
 
             // Reset start position
@@ -1321,18 +1345,6 @@ class AlicuotaList extends Alicuota
         $item = &$this->ListOptions->add("view");
         $item->CssClass = "text-nowrap";
         $item->Visible = $Security->canView();
-        $item->OnLeft = true;
-
-        // "edit"
-        $item = &$this->ListOptions->add("edit");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canEdit();
-        $item->OnLeft = true;
-
-        // "delete"
-        $item = &$this->ListOptions->add("delete");
-        $item->CssClass = "text-nowrap";
-        $item->Visible = $Security->canDelete();
         $item->OnLeft = true;
 
         // List actions
@@ -1406,35 +1418,6 @@ class AlicuotaList extends Alicuota
             } else {
                 $opt->Body = "";
             }
-
-            // "edit"
-            $opt = $this->ListOptions["edit"];
-            $editcaption = HtmlTitle($Language->phrase("EditLink"));
-            if ($Security->canEdit()) {
-                if ($this->ModalEdit && !IsMobile()) {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"alicuota\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("EditLink") . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
-
-            // "delete"
-            $opt = $this->ListOptions["delete"];
-            if ($Security->canDelete()) {
-                $deleteCaption = $Language->phrase("DeleteLink");
-                $deleteTitle = HtmlTitle($deleteCaption);
-                if ($this->UseAjaxActions) {
-                    $opt->Body = "<a class=\"ew-row-link ew-delete\" data-ew-action=\"inline\" data-action=\"delete\" title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" data-key= \"" . HtmlEncode($this->getKey(true)) . "\" data-url=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
-                } else {
-                    $opt->Body = "<a class=\"ew-row-link ew-delete\"" .
-                        ($this->InlineDelete ? " data-ew-action=\"inline-delete\"" : "") .
-                        " title=\"" . $deleteTitle . "\" data-caption=\"" . $deleteTitle . "\" href=\"" . HtmlEncode(GetUrl($this->DeleteUrl)) . "\">" . $deleteCaption . "</a>";
-                }
-            } else {
-                $opt->Body = "";
-            }
         } // End View mode
 
         // Set up list action buttons
@@ -1495,17 +1478,6 @@ class AlicuotaList extends Alicuota
     {
         global $Language, $Security;
         $options = &$this->OtherOptions;
-        $option = $options["addedit"];
-
-        // Add
-        $item = &$option->add("add");
-        $addcaption = HtmlTitle($Language->phrase("AddLink"));
-        if ($this->ModalAdd && !IsMobile()) {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-table=\"alicuota\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-action=\"add\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("AddLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-add-edit ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("AddLink") . "</a>";
-        }
-        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
         $option = $options["action"];
 
         // Show column list for column visibility
@@ -1957,6 +1929,8 @@ class AlicuotaList extends Alicuota
         $this->alicuota->setDbValue($row['alicuota']);
         $this->fecha->setDbValue($row['fecha']);
         $this->activo->setDbValue($row['activo']);
+        $this->compra->setDbValue($row['compra']);
+        $this->venta->setDbValue($row['venta']);
     }
 
     // Return a row with default values
@@ -1969,6 +1943,8 @@ class AlicuotaList extends Alicuota
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['fecha'] = $this->fecha->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
+        $row['compra'] = $this->compra->DefaultValue;
+        $row['venta'] = $this->venta->DefaultValue;
         return $row;
     }
 
@@ -2021,6 +1997,10 @@ class AlicuotaList extends Alicuota
 
         // activo
 
+        // compra
+
+        // venta
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -2045,6 +2025,20 @@ class AlicuotaList extends Alicuota
                 $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
             } else {
                 $this->activo->ViewValue = null;
+            }
+
+            // compra
+            if (strval($this->compra->CurrentValue) != "") {
+                $this->compra->ViewValue = $this->compra->optionCaption($this->compra->CurrentValue);
+            } else {
+                $this->compra->ViewValue = null;
+            }
+
+            // venta
+            if (strval($this->venta->CurrentValue) != "") {
+                $this->venta->ViewValue = $this->venta->optionCaption($this->venta->CurrentValue);
+            } else {
+                $this->venta->ViewValue = null;
             }
 
             // codigo
@@ -2314,6 +2308,10 @@ class AlicuotaList extends Alicuota
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
                 case "x_activo":
+                    break;
+                case "x_compra":
+                    break;
+                case "x_venta":
                     break;
                 default:
                     $lookupFilter = "";

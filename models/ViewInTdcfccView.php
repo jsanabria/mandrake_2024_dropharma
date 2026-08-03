@@ -1653,17 +1653,225 @@ class ViewInTdcfccView extends ViewInTdcfcc
     // Page Data Rendering event
     public function pageDataRendering(&$header)
     {
-        // Example:
-        if($this->estatus->CurrentValue == "NUEVO") {
-            $header = "../TdcfccAdd?tipo_documento=TDCFCC&codpro=0C&pedido=" . $this->id->CurrentValue;
-            $header = '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $header . '"><span class="fas fa-edit"></span> Editar Documento</a>';
-            $header .= ' ';
+        $idEntrada = intval($this->id->CurrentValue);
+        $estatus   = strtoupper(trim((string)$this->estatus->CurrentValue));
+
+        // Tipo de documento usado en pagos_compras.
+        $tipoDocumentoPago = "TDCFCC";
+
+        // ---------------------------------------------------------
+        // BOTÓN EDITAR DOCUMENTO
+        // ---------------------------------------------------------
+        if ($estatus === "NUEVO") {
+            $url = "../TdcfccAdd"
+                . "?tipo_documento=TDCFCC"
+                . "&codpro=0C"
+                . "&pedido=" . $idEntrada;
+            $header = '
+                <a class="btn btn-outline-primary"
+                   id="btnNuevo"
+                   href="' . $url . '">
+                    <span class="fas fa-edit"></span>
+                    Editar Documento
+                </a>&nbsp;
+            ';
         }
-        $url = "../reportes/factura_de_compra.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCC";
-        $header .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $url . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
-        $header .= ' ';
-        $url = "../FacturaDeCompraCopiarComo?id=" . $this->id->CurrentValue;
-        $header .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $url . '"><span class="fas fa-copy"></span> Copiar Documento</a><br><br>';
+
+        // ---------------------------------------------------------
+        // BOTÓN IMPRIMIR DOCUMENTO
+        // ---------------------------------------------------------
+        $url = "../reportes/factura_de_compra.php"
+             . "?id=" . $idEntrada
+             . "&tipo=TDCFCC";
+        $header .= '
+            <a class="btn btn-outline-primary"
+               target="_blank"
+               href="' . $url . '">
+                <span class="fas fa-print"></span>
+                Imprimir Documento
+            </a>&nbsp;
+        ';
+
+        // ---------------------------------------------------------
+        // BOTÓN COPIAR DOCUMENTO
+        // ---------------------------------------------------------
+        $url = "../FacturaDeCompraCopiarComo?id=" . $idEntrada;
+        $header .= '
+            <a class="btn btn-outline-primary"
+               href="' . $url . '">
+                <span class="fas fa-copy"></span>
+                Copiar Documento
+            </a>&nbsp;
+        ';
+
+        // ---------------------------------------------------------
+        // INFORMACIÓN DEL MONTO DEL DOCUMENTO
+        // ---------------------------------------------------------
+        $montoPagar = floatval($this->total->CurrentValue);
+        if ($this->moneda->CurrentValue !== "Bs.") {
+            $montoPagar *= floatval($this->tasa_dia->CurrentValue);
+        }
+
+        // Asignación correcta en base a la moneda del documento
+        $totalDocumento = floatval($this->total->CurrentValue);
+        if ($this->moneda->CurrentValue !== "Bs.") {
+            $totalDocumento *= floatval($this->tasa_dia->CurrentValue);
+        }
+
+        // Se utiliza monto_pagar cuando sea mayor que cero.
+        // En caso contrario, se toma total.
+        $montoDocumento = $montoPagar > 0
+            ? $montoPagar
+            : $totalDocumento;
+        $montoDocumento = round($montoDocumento, 2);
+
+        // ---------------------------------------------------------
+        // CONSULTAR TODOS LOS PAGOS REGISTRADOS
+        // ---------------------------------------------------------
+        $sql = "
+            SELECT
+                COUNT(*) AS cantidad_pagos,
+                MAX(id) AS ultimo_pago_id,
+                COALESCE(SUM(pago), 0) AS total_pagado
+            FROM pagos_compras
+            WHERE id_documento = " . $idEntrada . "
+              AND tipo_documento = '" . AdjustSql($tipoDocumentoPago) . "'
+        ";
+        $resumenPago = ExecuteRow($sql);
+        $cantidadPagos = 0;
+        $ultimoPagoId  = 0;
+        $totalPagado   = 0;
+        if ($resumenPago) {
+            $cantidadPagos = intval($resumenPago["cantidad_pagos"] ?? 0);
+            $ultimoPagoId  = intval($resumenPago["ultimo_pago_id"] ?? 0);
+            $totalPagado   = floatval($resumenPago["total_pagado"] ?? 0);
+        }
+        $totalPagado = round($totalPagado, 2);
+        $saldoPendiente = round($montoDocumento - $totalPagado, 2);
+
+        // Evita mostrar pequeños residuos por redondeo.
+        if (abs($saldoPendiente) <= 0.01) {
+            $saldoPendiente = 0;
+        }
+
+        // Protección visual en caso de datos antiguos con sobrepago.
+        if ($saldoPendiente < 0) {
+            $saldoPendiente = 0;
+        }
+
+        // ---------------------------------------------------------
+        // BOTÓN VER PAGOS
+        // ---------------------------------------------------------
+        if ($cantidadPagos > 0 && $ultimoPagoId > 0) {
+            $url = "../PagosComprasList"
+                 . "?id_compra=" . $idEntrada
+                 . "&origen=" . $tipoDocumentoPago;
+            $header .= '
+                <a class="btn btn-primary"
+                   href="' . $url . '">
+                    <span class="fas fa-eye"></span>
+                    Ver Pago(s)
+                </a>&nbsp;
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // REGISTRAR PAGO O REGISTRAR OTRO PAGO
+        // ---------------------------------------------------------
+        // Solo se permiten pagos para documentos procesados.
+        // El botón continúa disponible mientras exista saldo.
+        if (
+            $estatus === "PROCESADO"
+            && $saldoPendiente > 0.01
+        ) {
+            $url = "../RegistrarPagosProveedores"
+                 . "?id_compra=" . $idEntrada
+                 . "&origen=TDCFCC";
+            $textoBoton = $cantidadPagos > 0
+                ? "Registrar otro Pago"
+                : "Registrar Pago";
+            $header .= '
+                <a class="btn btn-success"
+                   href="' . $url . '">
+                    <span class="fas fa-dollar-sign"></span>
+                    ' . $textoBoton . '
+                </a>&nbsp;
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // BOTÓN REVERTIR PAGOS
+        // ---------------------------------------------------------
+        if (
+            $cantidadPagos > 0
+            && VerificaFuncion("014")
+        ) {
+            $header .= '
+                <button type="button"
+                        class="btn btn-danger"
+                        onclick="RevertirPagosCompras('
+                            . $idEntrada
+                            . ', \'TDCFCC\');">
+                    <span class="fas fa-undo"></span>
+                    Revertir Pago(s)
+                </button>&nbsp;
+            ';
+        }
+
+        // ---------------------------------------------------------
+        // ESTADO DE CUENTAS POR PAGAR
+        // ---------------------------------------------------------
+        if ($estatus === "PROCESADO") {
+            $montoDocumentoFormato = number_format(
+                $montoDocumento,
+                2,
+                ",",
+                "."
+            );
+            $totalPagadoFormato = number_format(
+                $totalPagado,
+                2,
+                ",",
+                "."
+            );
+            $saldoFormato = number_format(
+                $saldoPendiente,
+                2,
+                ",",
+                "."
+            );
+            $header .= '<div class="mt-3">';
+            if ($saldoPendiente <= 0.01 && $montoDocumento > 0) {
+                $header .= '
+                    <span class="badge bg-success fs-6">
+                        <span class="fas fa-check-circle"></span>
+                        PAGADA COMPLETAMENTE
+                    </span>
+                ';
+            } elseif ($cantidadPagos > 0) {
+                $header .= '
+                    <span class="badge bg-warning text-dark fs-6">
+                        <span class="fas fa-money-check-alt"></span>
+                        Monto: Bs. ' . $montoDocumentoFormato . '
+                        &nbsp;|&nbsp;
+                        Pagado: Bs. ' . $totalPagadoFormato . '
+                        &nbsp;|&nbsp;
+                        Saldo: Bs. ' . $saldoFormato . '
+                    </span>
+                ';
+            } else {
+                $header .= '
+                    <span class="badge bg-secondary fs-6">
+                        <span class="fas fa-exclamation-circle"></span>
+                        Sin pagos registrados
+                        &nbsp;|&nbsp;
+                        Saldo: Bs. ' . $saldoFormato . '
+                    </span>
+                ';
+            }
+            $header .= '</div>';
+        }
+        $header .= "<br><br>";
     }
 
     // Page Data Rendered event

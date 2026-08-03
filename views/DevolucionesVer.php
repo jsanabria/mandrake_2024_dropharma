@@ -131,6 +131,10 @@ if ($id == "") {
                                     <td class="text-center">
                                         <div class="form-check d-inline-block">
                                             <input class="form-check-input check-articulo" type="checkbox" name="x<?php echo $i; ?>_Articulo" id="x<?php echo $i; ?>_Articulo" value="<?php echo $value["articulo"]; ?>" <?= $disabled ?>>
+                                            <input type="hidden"
+                                                name="x<?php echo $i; ?>_IdMovimiento"
+                                                id="x<?php echo $i; ?>_IdMovimiento"
+                                                value="<?php echo intval($value["id"]); ?>">
                                         </div>
                                     </td>
                                     <td>

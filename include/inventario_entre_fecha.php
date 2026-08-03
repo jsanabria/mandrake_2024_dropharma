@@ -48,6 +48,7 @@
                     <th scope="col" style="width: 8%;" class="text-end">Entradas</th>
                     <th scope="col" style="width: 8%;" class="text-end">Salidas</th>
                     <th scope="col" style="width: 8%;" class="text-end">Exist.</th>
+                    <th scope="col" style="width: 8%;" class="text-end">Pedido</th>
                     <th scope="col" style="width: 4%;" class="text-end text-nowrap">Costo U.</th>
                     <th scope="col" style="width: 4%;" class="text-end text-nowrap">Precio U.</th>
                 </tr>
@@ -59,7 +60,7 @@ HTML;
     $sql_inv = "SELECT 
                     art.id, art.codigo, art.codigo_de_barra, art.nombre AS laboratorio, 
                     'UNIDAD' AS unidad_medida, art.principio_activo, 
-                    art.presentacion, art.nombre_comercial, 
+                    art.presentacion, art.nombre_comercial, art.cantidad_en_pedido, 
                     IFNULL(ent.cantidad, 0) AS entradas, ABS(IFNULL(sal.cantidad,0)) AS salidas, 
                     (IFNULL(ent.cantidad, 0) - ABS(IFNULL(sal.cantidad,0))) AS existencia 
                 FROM 
@@ -67,7 +68,7 @@ HTML;
                         SELECT 
                             a.id, a.codigo, a.codigo_de_barra, b.nombre, 
                             'UNIDAD' AS unidad_medida, a.principio_activo, 
-                            a.presentacion, a.nombre_comercial 
+                            a.presentacion, a.nombre_comercial, a.cantidad_en_pedido 
                         FROM 
                             articulo AS a 
                             LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante  
@@ -87,7 +88,7 @@ HTML;
                                 c.codigo = a.almacen AND c.movimiento = 'S'
                         WHERE 
                             (
-                                (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
+                                -- (a.tipo_documento IN ('TDCPDV') AND b.estatus = 'NUEVO') OR 
                                 (a.tipo_documento IN ('$tipo_documento', 'TDCASA') AND b.estatus <> 'ANULADO') 
                             ) AND b.fecha < '$fecha_hasta 23:59:59' AND a.newdata = 'S' 
                             $where 
@@ -138,6 +139,7 @@ HTML;
         $entradas   = floatval($row["entradas"] ?? 0);
         $salidas    = floatval($row["salidas"] ?? 0);
         $existencia = floatval($row["existencia"] ?? 0);
+        $pedido = floatval($row["cantidad_en_pedido"] ?? 0);
 
         // Subconsulta para costo y precio del artículo actual (Escapado con intval)
         $sql_art = "SELECT ultimo_costo, precio FROM articulo WHERE id = " . intval($idArt);
@@ -155,6 +157,7 @@ HTML;
         $entradas_form   = number_format($entradas, 2, '.', ',');
         $salidas_form    = number_format($salidas, 2, '.', ',');
         $existencia_form = number_format($existencia, 2, '.', ',');
+        $pedido_form = number_format($pedido, 2, '.', ',');
         $costo_form      = number_format($costo, 2, ',', '.');
         $precio_form     = number_format($precio, 2, ',', '.');
 
@@ -173,6 +176,7 @@ HTML;
             <td class="text-end font-monospace">{$entradas_form}</td>
             <td class="text-end font-monospace">{$salidas_form}</td>
             <td class="text-end font-monospace fw-semibold text-dark">{$existencia_form}</td>
+            <td class="text-end font-monospace">{$pedido_form}</td>
             <td class="text-end font-monospace">{$costo_form}</td>
             <td class="text-end font-monospace text-primary">{$precio_form}</td>
         </tr>
@@ -185,7 +189,7 @@ HTML;
     $total_items = number_format($cnt, 0, "", ".");
     $out .= <<<HTML
             <tr class="position-sticky bottom-0 table-light evaluation-footer z-2 shadow-sm" style="border-top: 2px solid #dee2e6;">
-                <th colspan="10" class="text-end py-3 pe-4 text-secondary">
+                <th colspan="11" class="text-end py-3 pe-4 text-secondary">
                     Total Ítems: <span class="text-dark">{$total_items}</span>
                 </th>
             </tr>

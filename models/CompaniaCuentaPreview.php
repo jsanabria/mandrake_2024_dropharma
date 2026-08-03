@@ -136,9 +136,9 @@ class CompaniaCuentaPreview extends CompaniaCuenta
         $this->numero->setVisibility();
         $this->mostrar->setVisibility();
         $this->cuenta->setVisibility();
-        $this->activo->setVisibility();
-        $this->compania->Visible = false;
         $this->pago_electronico->setVisibility();
+        $this->compania->Visible = false;
+        $this->activo->setVisibility();
     }
 
     // Constructor
@@ -444,8 +444,9 @@ class CompaniaCuentaPreview extends CompaniaCuenta
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
-        $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->pago_electronico);
+        $this->setupLookupOptions($this->compania);
+        $this->setupLookupOptions($this->activo);
 
         // Load filter
         $masterKeys = explode("|", Decrypt(Get("f", "")));
@@ -532,9 +533,9 @@ class CompaniaCuentaPreview extends CompaniaCuenta
             $this->numero->setSort("");
             $this->mostrar->setSort("");
             $this->cuenta->setSort("");
-            $this->activo->setSort("");
-            $this->compania->setSort("");
             $this->pago_electronico->setSort("");
+            $this->compania->setSort("");
+            $this->activo->setSort("");
 
             // Save sort to session
             $this->setSessionOrderBy("");
@@ -559,8 +560,8 @@ class CompaniaCuentaPreview extends CompaniaCuenta
             $this->updateSort($this->numero); // numero
             $this->updateSort($this->mostrar); // mostrar
             $this->updateSort($this->cuenta); // cuenta
-            $this->updateSort($this->activo); // activo
             $this->updateSort($this->pago_electronico); // pago_electronico
+            $this->updateSort($this->activo); // activo
         }
 
         // Update field sort
@@ -782,9 +783,11 @@ class CompaniaCuentaPreview extends CompaniaCuenta
                 case "x_cuenta":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
-                case "x_activo":
-                    break;
                 case "x_pago_electronico":
+                    break;
+                case "x_compania":
+                    break;
+                case "x_activo":
                     break;
                 default:
                     $lookupFilter = "";

@@ -8,7 +8,7 @@ $cantidad = intval($_REQUEST["cantidad"]);
 $articulo = intval($_REQUEST["articulo"]); 
 $username = $_REQUEST["username"]; 
 $nota = $_REQUEST["nota"]; 
-$lote = $_REQUEST["lote"]; 
+$lote = trim($_REQUEST["lote"] ?? ""); 
 $vence = $_REQUEST["vence"]; 
 $vence = ($vence == "" ? "1990-01-01" : $vence);
 

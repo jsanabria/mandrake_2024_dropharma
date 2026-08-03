@@ -212,7 +212,7 @@ try {
         $conn->executeStatement("
             INSERT INTO salidas
                 (id, tipo_documento, username, fecha, cliente, nota, estatus, moneda, consignacion,
-                 descuento, descuento2, descuento3, documento, doc_afectado, doc_afe, igtf_alicuota, fecha_despacho)
+                 descuento, descuento2, descuento3, documento, doc_afectado, doc_afe, igtf_alicuota, fecha_despacho, entregado)
             VALUES
                 (NULL, '{$tipo_documento}', '{$usernameSql}', NULL, {$cliente}, '{$notaSql}', 'NUEVO', '{$monedaSql}', 'N',
                  {$descuentoG}, {$descTransferencista}, {$descFabricante}, '{$consignacionSql}', '{$docAfectadoSql}', {$doc_afectado_id},
@@ -222,7 +222,7 @@ try {
                         WHERE codigo = 'IGT'
                           AND activo = 'S'
                         LIMIT 1
-                    ), NOW())
+                    ), NOW(), 'S')
         ");
 
         $pedido = intval($conn->lastInsertId());

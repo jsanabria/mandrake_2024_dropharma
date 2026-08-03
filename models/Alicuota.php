@@ -60,6 +60,8 @@ class Alicuota extends DbTable
     public $alicuota;
     public $fecha;
     public $activo;
+    public $compra;
+    public $venta;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -257,6 +259,58 @@ class Alicuota extends DbTable
         $this->activo->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['activo'] = &$this->activo;
 
+        // compra
+        $this->compra = new DbField(
+            $this, // Table
+            'x_compra', // Variable name
+            'compra', // Name
+            '`compra`', // Expression
+            '`compra`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`compra`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->compra->addMethod("getDefault", fn() => "S");
+        $this->compra->InputTextType = "text";
+        $this->compra->Raw = true;
+        $this->compra->Lookup = new Lookup($this->compra, 'alicuota', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->compra->OptionCount = 2;
+        $this->compra->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['compra'] = &$this->compra;
+
+        // venta
+        $this->venta = new DbField(
+            $this, // Table
+            'x_venta', // Variable name
+            'venta', // Name
+            '`venta`', // Expression
+            '`venta`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`venta`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->venta->addMethod("getDefault", fn() => "S");
+        $this->venta->InputTextType = "text";
+        $this->venta->Raw = true;
+        $this->venta->Lookup = new Lookup($this->venta, 'alicuota', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->venta->OptionCount = 2;
+        $this->venta->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
+        $this->Fields['venta'] = &$this->venta;
+
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
         $this->CacheProfile = new \Doctrine\DBAL\Cache\QueryCacheProfile(0, $this->TableVar);
@@ -380,7 +434,7 @@ class Alicuota extends DbTable
     public function getSqlWhere()
     {
         $where = ($this->SqlWhere != "") ? $this->SqlWhere : "";
-        $this->DefaultFilter = "`activo` = 'S'";
+        $this->DefaultFilter = "`activo` = 'S' AND `venta` = 'S' AND codigo <> 'IGT'";
         AddFilter($where, $this->DefaultFilter);
         return $where;
     }
@@ -795,6 +849,8 @@ class Alicuota extends DbTable
         $this->alicuota->DbValue = $row['alicuota'];
         $this->fecha->DbValue = $row['fecha'];
         $this->activo->DbValue = $row['activo'];
+        $this->compra->DbValue = $row['compra'];
+        $this->venta->DbValue = $row['venta'];
     }
 
     // Delete uploaded files
@@ -1153,6 +1209,8 @@ class Alicuota extends DbTable
         $this->alicuota->setDbValue($row['alicuota']);
         $this->fecha->setDbValue($row['fecha']);
         $this->activo->setDbValue($row['activo']);
+        $this->compra->setDbValue($row['compra']);
+        $this->venta->setDbValue($row['venta']);
     }
 
     // Render list content
@@ -1195,6 +1253,10 @@ class Alicuota extends DbTable
 
         // activo
 
+        // compra
+
+        // venta
+
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
 
@@ -1217,6 +1279,20 @@ class Alicuota extends DbTable
             $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
         } else {
             $this->activo->ViewValue = null;
+        }
+
+        // compra
+        if (strval($this->compra->CurrentValue) != "") {
+            $this->compra->ViewValue = $this->compra->optionCaption($this->compra->CurrentValue);
+        } else {
+            $this->compra->ViewValue = null;
+        }
+
+        // venta
+        if (strval($this->venta->CurrentValue) != "") {
+            $this->venta->ViewValue = $this->venta->optionCaption($this->venta->CurrentValue);
+        } else {
+            $this->venta->ViewValue = null;
         }
 
         // id
@@ -1242,6 +1318,14 @@ class Alicuota extends DbTable
         // activo
         $this->activo->HrefValue = "";
         $this->activo->TooltipValue = "";
+
+        // compra
+        $this->compra->HrefValue = "";
+        $this->compra->TooltipValue = "";
+
+        // venta
+        $this->venta->HrefValue = "";
+        $this->venta->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1296,6 +1380,14 @@ class Alicuota extends DbTable
         $this->activo->EditValue = $this->activo->options(true);
         $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
+        // compra
+        $this->compra->EditValue = $this->compra->options(false);
+        $this->compra->PlaceHolder = RemoveHtml($this->compra->caption());
+
+        // venta
+        $this->venta->EditValue = $this->venta->options(false);
+        $this->venta->PlaceHolder = RemoveHtml($this->venta->caption());
+
         // Call Row Rendered event
         $this->rowRendered();
     }
@@ -1335,6 +1427,8 @@ class Alicuota extends DbTable
                     $doc->exportCaption($this->alicuota);
                     $doc->exportCaption($this->fecha);
                     $doc->exportCaption($this->activo);
+                    $doc->exportCaption($this->compra);
+                    $doc->exportCaption($this->venta);
                 }
                 $doc->endExportRow();
             }
@@ -1372,6 +1466,8 @@ class Alicuota extends DbTable
                         $doc->exportField($this->alicuota);
                         $doc->exportField($this->fecha);
                         $doc->exportField($this->activo);
+                        $doc->exportField($this->compra);
+                        $doc->exportField($this->venta);
                     }
                     $doc->endExportRow($rowCnt);
                 }

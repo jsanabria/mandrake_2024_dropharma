@@ -179,7 +179,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         $this->tasa_dia->Visible = false;
         $this->monto_usd->Visible = false;
         $this->dias_credito->Visible = false;
-        $this->entregado->Visible = false;
+        $this->entregado->setVisibility();
         $this->fecha_entrega->Visible = false;
         $this->pagado->setVisibility();
         $this->impreso->setVisibility();
@@ -2293,6 +2293,15 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->id_documento_padre->caption() . "</span>" . $captionSuffix . $filter . "</div>";
         }
 
+        // Field entregado
+        $filter = $this->queryBuilderWhere("entregado");
+        if (!$filter) {
+            $this->buildSearchSql($filter, $this->entregado, false, false);
+        }
+        if ($filter != "") {
+            $filterList .= "<div><span class=\"" . $captionClass . "\">" . $this->entregado->caption() . "</span>" . $captionSuffix . $filter . "</div>";
+        }
+
         // Field pagado
         $filter = $this->queryBuilderWhere("pagado");
         if (!$filter) {
@@ -2852,6 +2861,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->updateSort($this->unidades); // unidades
             $this->updateSort($this->_username); // username
             $this->updateSort($this->id_documento_padre); // id_documento_padre
+            $this->updateSort($this->entregado); // entregado
             $this->updateSort($this->pagado); // pagado
             $this->updateSort($this->impreso); // impreso
             $this->updateSort($this->fecha_despacho); // fecha_despacho
@@ -3330,6 +3340,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->createColumnOption($option, "unidades");
             $this->createColumnOption($option, "username");
             $this->createColumnOption($option, "id_documento_padre");
+            $this->createColumnOption($option, "entregado");
             $this->createColumnOption($option, "pagado");
             $this->createColumnOption($option, "impreso");
             $this->createColumnOption($option, "fecha_despacho");
@@ -5257,6 +5268,10 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->id_documento_padre->HrefValue = "";
             $this->id_documento_padre->TooltipValue = "";
 
+            // entregado
+            $this->entregado->HrefValue = "";
+            $this->entregado->TooltipValue = "";
+
             // pagado
             $this->pagado->HrefValue = "";
             $this->pagado->TooltipValue = "";
@@ -5372,6 +5387,11 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             $this->id_documento_padre->setupEditAttributes();
             $this->id_documento_padre->EditValue = $this->id_documento_padre->AdvancedSearch->SearchValue;
             $this->id_documento_padre->PlaceHolder = RemoveHtml($this->id_documento_padre->caption());
+
+            // entregado
+            $this->entregado->setupEditAttributes();
+            $this->entregado->EditValue = $this->entregado->options(true);
+            $this->entregado->PlaceHolder = RemoveHtml($this->entregado->caption());
 
             // pagado
             $this->pagado->setupEditAttributes();
@@ -6105,9 +6125,11 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
     {
         // Example:
         //$header = "your header";
-        $header = '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCFCV"><span class="fas fa-plus"></span> Nuevo Documento</a>';
-        $header .= '&nbsp;&nbsp;<a class="btn btn-outline-success" id="btnExportExcel" href="javascript:void(0);"><span class="fas fa-file-excel"></span> Descargar Excel</a>';
-        $header .= '<br><br>';
+        if (VerificaFuncion("050")) {
+            $header = '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCFCV"><span class="fas fa-plus"></span> Nuevo Documento</a>';
+            $header .= '&nbsp;&nbsp;<a class="btn btn-outline-success" id="btnExportExcel" href="javascript:void(0);"><span class="fas fa-file-excel"></span> Descargar Excel</a>';
+            $header .= '<br><br>';
+        }
     }
 
     // Page Data Rendered event
@@ -6202,6 +6224,11 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
             if (isset($this->ListOptions["delete"])) {
                 $this->ListOptions["delete"]->Visible = false;
             }
+        }
+
+        // NUEVO: Mostrar u ocultar el botón 'print' según el estatus
+        if (isset($this->ListOptions["print"])) {
+            $this->ListOptions["print"]->Visible = ($this->estatus->CurrentValue == "PROCESADO");
         }
         $this->fecha->Visible = false;
         $this->unidades->Visible = false;

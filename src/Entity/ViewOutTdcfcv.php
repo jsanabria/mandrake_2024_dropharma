@@ -252,7 +252,7 @@ class ViewOutTdcfcv extends AbstractEntity
     public function __construct()
     {
         $this->igtf = N;
-        $this->entregado = "N";
+        $this->entregado = "S";
         $this->pagado = "N";
         $this->impreso = "N";
         $this->bultos = 0;

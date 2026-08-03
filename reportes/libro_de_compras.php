@@ -272,7 +272,7 @@ $sql = "SELECT
 			LEFT OUTER JOIN proveedor AS b ON b.id = a.proveedor 
 		WHERE 
 			a.fecha_registro BETWEEN '$xfecha 00:00:00' AND '$yfecha 23:59:59' 
-		ORDER BY fecfac, ref_iva;";
+		ORDER BY fecfac, nro_documento;";
 $rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 
 $items = 0;

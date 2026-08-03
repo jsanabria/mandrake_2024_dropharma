@@ -270,9 +270,6 @@ $Page->ListOptions->render("header", "left");
 <?php if ($Page->proveedor->Visible) { // proveedor ?>
         <th data-name="proveedor" class="<?= $Page->proveedor->headerCellClass() ?>"><div id="elh_compra_proveedor" class="compra_proveedor"><?= $Page->renderFieldHeader($Page->proveedor) ?></div></th>
 <?php } ?>
-<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
-        <th data-name="tipo_documento" class="<?= $Page->tipo_documento->headerCellClass() ?>"><div id="elh_compra_tipo_documento" class="compra_tipo_documento"><?= $Page->renderFieldHeader($Page->tipo_documento) ?></div></th>
-<?php } ?>
 <?php if ($Page->documento->Visible) { // documento ?>
         <th data-name="documento" class="<?= $Page->documento->headerCellClass() ?>"><div id="elh_compra_documento" class="compra_documento"><?= $Page->renderFieldHeader($Page->documento) ?></div></th>
 <?php } ?>
@@ -338,14 +335,6 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_proveedor" class="el_compra_proveedor">
 <span<?= $Page->proveedor->viewAttributes() ?>>
 <?= $Page->proveedor->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
-        <td data-name="tipo_documento"<?= $Page->tipo_documento->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_compra_tipo_documento" class="el_compra_tipo_documento">
-<span<?= $Page->tipo_documento->viewAttributes() ?>>
-<?= $Page->tipo_documento->getViewValue() ?></span>
 </span>
 </td>
     <?php } ?>

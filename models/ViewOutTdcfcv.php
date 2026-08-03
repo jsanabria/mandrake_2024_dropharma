@@ -844,7 +844,7 @@ class ViewOutTdcfcv extends DbTable
             'FORMATTED TEXT', // View Tag
             'SELECT' // Edit Tag
         );
-        $this->entregado->addMethod("getDefault", fn() => "N");
+        $this->entregado->addMethod("getDefault", fn() => "S");
         $this->entregado->InputTextType = "text";
         $this->entregado->Raw = true;
         $this->entregado->Required = true; // Required field

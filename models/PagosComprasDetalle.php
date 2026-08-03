@@ -150,6 +150,7 @@ class PagosComprasDetalle extends DbTable
         );
         $this->pagos_compras->InputTextType = "text";
         $this->pagos_compras->Raw = true;
+        $this->pagos_compras->IsForeignKey = true; // Foreign key field
         $this->pagos_compras->Nullable = false; // NOT NULL field
         $this->pagos_compras->Required = true; // Required field
         $this->pagos_compras->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
@@ -174,7 +175,9 @@ class PagosComprasDetalle extends DbTable
             'FORMATTED TEXT', // View Tag
             'TEXT' // Edit Tag
         );
+        $this->metodo_pago->addMethod("getSelectFilter", fn() => "`codigo` = '009'");
         $this->metodo_pago->InputTextType = "text";
+        $this->metodo_pago->Lookup = new Lookup($this->metodo_pago, 'parametro', false, 'valor1', ["valor2","","",""], '', '', [], [], [], [], [], [], false, '', '', "`valor2`");
         $this->metodo_pago->SearchOperators = ["=", "<>", "IN", "NOT IN", "STARTS WITH", "NOT STARTS WITH", "LIKE", "NOT LIKE", "ENDS WITH", "NOT ENDS WITH", "IS EMPTY", "IS NOT EMPTY", "IS NULL", "IS NOT NULL"];
         $this->Fields['metodo_pago'] = &$this->metodo_pago;
 
@@ -422,6 +425,88 @@ class PagosComprasDetalle extends DbTable
             }
             $field->setSort($fldSort);
         }
+    }
+
+    // Current master table name
+    public function getCurrentMasterTable()
+    {
+        return Session(PROJECT_NAME . "_" . $this->TableVar . "_" . Config("TABLE_MASTER_TABLE"));
+    }
+
+    public function setCurrentMasterTable($v)
+    {
+        $_SESSION[PROJECT_NAME . "_" . $this->TableVar . "_" . Config("TABLE_MASTER_TABLE")] = $v;
+    }
+
+    // Get master WHERE clause from session values
+    public function getMasterFilterFromSession()
+    {
+        // Master filter
+        $masterFilter = "";
+        if ($this->getCurrentMasterTable() == "pagos_compras") {
+            $masterTable = Container("pagos_compras");
+            if ($this->pagos_compras->getSessionValue() != "") {
+                $masterFilter .= "" . GetKeyFilter($masterTable->id, $this->pagos_compras->getSessionValue(), $masterTable->id->DataType, $masterTable->Dbid);
+            } else {
+                return "";
+            }
+        }
+        return $masterFilter;
+    }
+
+    // Get detail WHERE clause from session values
+    public function getDetailFilterFromSession()
+    {
+        // Detail filter
+        $detailFilter = "";
+        if ($this->getCurrentMasterTable() == "pagos_compras") {
+            $masterTable = Container("pagos_compras");
+            if ($this->pagos_compras->getSessionValue() != "") {
+                $detailFilter .= "" . GetKeyFilter($this->pagos_compras, $this->pagos_compras->getSessionValue(), $masterTable->id->DataType, $this->Dbid);
+            } else {
+                return "";
+            }
+        }
+        return $detailFilter;
+    }
+
+    /**
+     * Get master filter
+     *
+     * @param object $masterTable Master Table
+     * @param array $keys Detail Keys
+     * @return mixed NULL is returned if all keys are empty, Empty string is returned if some keys are empty and is required
+     */
+    public function getMasterFilter($masterTable, $keys)
+    {
+        $validKeys = true;
+        switch ($masterTable->TableVar) {
+            case "pagos_compras":
+                $key = $keys["pagos_compras"] ?? "";
+                if (EmptyValue($key)) {
+                    if ($masterTable->id->Required) { // Required field and empty value
+                        return ""; // Return empty filter
+                    }
+                    $validKeys = false;
+                } elseif (!$validKeys) { // Already has empty key
+                    return ""; // Return empty filter
+                }
+                if ($validKeys) {
+                    return GetKeyFilter($masterTable->id, $keys["pagos_compras"], $this->pagos_compras->DataType, $this->Dbid);
+                }
+                break;
+        }
+        return null; // All null values and no required fields
+    }
+
+    // Get detail filter
+    public function getDetailFilter($masterTable)
+    {
+        switch ($masterTable->TableVar) {
+            case "pagos_compras":
+                return GetKeyFilter($this->pagos_compras, $masterTable->id->DbValue, $masterTable->id->DataType, $masterTable->Dbid);
+        }
+        return "";
     }
 
     // Render X Axis for chart
@@ -1089,6 +1174,10 @@ class PagosComprasDetalle extends DbTable
     // Add master url
     public function addMasterUrl($url)
     {
+        if ($this->getCurrentMasterTable() == "pagos_compras" && !ContainsString($url, Config("TABLE_SHOW_MASTER") . "=")) {
+            $url .= (ContainsString($url, "?") ? "&" : "?") . Config("TABLE_SHOW_MASTER") . "=" . $this->getCurrentMasterTable();
+            $url .= "&" . GetForeignKeyUrl("fk_id", $this->pagos_compras->getSessionValue()); // Use Session Value
+        }
         return $url;
     }
 
@@ -1319,6 +1408,28 @@ class PagosComprasDetalle extends DbTable
 
         // metodo_pago
         $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+        $curVal = strval($this->metodo_pago->CurrentValue);
+        if ($curVal != "") {
+            $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
+            if ($this->metodo_pago->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                    $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
+                } else {
+                    $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+                }
+            }
+        } else {
+            $this->metodo_pago->ViewValue = null;
+        }
 
         // referencia
         $this->referencia->ViewValue = $this->referencia->CurrentValue;
@@ -1415,10 +1526,16 @@ class PagosComprasDetalle extends DbTable
 
         // pagos_compras
         $this->pagos_compras->setupEditAttributes();
-        $this->pagos_compras->EditValue = $this->pagos_compras->CurrentValue;
-        $this->pagos_compras->PlaceHolder = RemoveHtml($this->pagos_compras->caption());
-        if (strval($this->pagos_compras->EditValue) != "" && is_numeric($this->pagos_compras->EditValue)) {
-            $this->pagos_compras->EditValue = FormatNumber($this->pagos_compras->EditValue, null);
+        if ($this->pagos_compras->getSessionValue() != "") {
+            $this->pagos_compras->CurrentValue = GetForeignKeyValue($this->pagos_compras->getSessionValue());
+            $this->pagos_compras->ViewValue = $this->pagos_compras->CurrentValue;
+            $this->pagos_compras->ViewValue = FormatNumber($this->pagos_compras->ViewValue, $this->pagos_compras->formatPattern());
+        } else {
+            $this->pagos_compras->EditValue = $this->pagos_compras->CurrentValue;
+            $this->pagos_compras->PlaceHolder = RemoveHtml($this->pagos_compras->caption());
+            if (strval($this->pagos_compras->EditValue) != "" && is_numeric($this->pagos_compras->EditValue)) {
+                $this->pagos_compras->EditValue = FormatNumber($this->pagos_compras->EditValue, null);
+            }
         }
 
         // metodo_pago
@@ -1521,8 +1638,6 @@ class PagosComprasDetalle extends DbTable
             if ($doc->Horizontal) { // Horizontal format, write header
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
-                    $doc->exportCaption($this->id);
-                    $doc->exportCaption($this->pagos_compras);
                     $doc->exportCaption($this->metodo_pago);
                     $doc->exportCaption($this->referencia);
                     $doc->exportCaption($this->monto_moneda);
@@ -1570,8 +1685,6 @@ class PagosComprasDetalle extends DbTable
                 if (!$doc->ExportCustom) {
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
-                        $doc->exportField($this->id);
-                        $doc->exportField($this->pagos_compras);
                         $doc->exportField($this->metodo_pago);
                         $doc->exportField($this->referencia);
                         $doc->exportField($this->monto_moneda);

@@ -321,7 +321,7 @@ class DocumentoConsecutivo extends DbTable
     public function getSqlWhere()
     {
         $where = ($this->SqlWhere != "") ? $this->SqlWhere : "";
-        $this->DefaultFilter = "`serie` IN ('DOC','FC_DOC','NC_DOC','ND_DOC','DC_CTRL','RETENCION')";
+        $this->DefaultFilter = "`serie` IN ('DOC','FC_DOC','NC_DOC','ND_DOC','DC_CTRL','RETENCION','FM_DOC','FM_CTRL')";
         AddFilter($where, $this->DefaultFilter);
         return $where;
     }

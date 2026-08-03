@@ -65,6 +65,9 @@ switch($id) {
     case "inv_kardex":
         include("include/kardex_de_inventario.php");
         break;
+    case "fin_resumen":
+        include("include/financiero_resumen.php");
+        break;
     case "inv_entre_fechas":
         include("include/inventario_entre_fecha.php");
         break;
@@ -107,10 +110,13 @@ $query_params = http_build_query([
     'asesor'  => trim($asesor)
 ]);
 
+$url_excel = "listado_master_buscar_excel.php?" . $query_params;
+
+
 // Botón estilizado para la sección superior de la respuesta AJAX con icono moderno
 $boton_excel = '
 <div class="mb-3 text-end">
-    <button type="button" class="btn btn-success shadow-sm px-4" onclick="window.location.href=\'listado_master_buscar_excel.php?' . htmlspecialchars($query_params) . '\'">
+    <button type="button" class="btn btn-success shadow-sm px-4" onclick="window.location.href=\'' . htmlspecialchars($url_excel, ENT_QUOTES, 'UTF-8') . '\'">
         <i class="bi bi-file-earmark-excel me-1"></i> Exportar datos (TXT / XLS)
     </button>
 </div>';

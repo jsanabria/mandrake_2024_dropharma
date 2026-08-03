@@ -235,7 +235,7 @@ $sql = "SELECT
 			a.tipo_documento = 'TDCFCV' AND 
 			a.fecha BETWEEN '$xfecha 00:00:00' AND '$yfecha 23:59:59' AND SUBSTRING(LTRIM(IFNULL(a.nro_documento, '')), 1, 7) <> 'PREFACT' 
 			AND a.id <> 1245 
-		ORDER BY a.nro_documento;"; 
+		ORDER BY a.fecha, a.nro_control;"; 
 $rs = mysqli_query($link, $sql) or die(mysqli_error($link));
 
 $items = 0;
@@ -307,7 +307,7 @@ while($row = mysqli_fetch_array($rs))
 			FROM 
 				cobros_cliente AS a 
 				JOIN cobros_cliente_detalle AS b ON b.cobros_cliente = a.id 
-			WHERE a.id_documento = " . $row["id"] . " AND b.metodo_pago = 'RI';";	
+			WHERE a.id_documento = " . $row["id"] . " AND b.metodo_pago IN ('RI', 'RJ');";	
 	$rs3 = mysqli_query($link, $sql) or die(mysqli_error($link));
 	$row2 = mysqli_fetch_array($rs3);
 	

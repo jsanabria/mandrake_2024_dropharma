@@ -75,7 +75,7 @@ $sql = "SELECT
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito,
 			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado,
 			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota,
-			IFNULL(username, '') AS username
+			IFNULL(username, '') AS username, IFNULL(entregado, '') AS entregado
 		FROM salidas where id = '$id_invoice';";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -96,8 +96,37 @@ $GLOBALS["fec_venc"] = $row["fec_venc"];
 $GLOBALS["doc_afectado"] = $row["doc_afectado"];
 $GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["moneda"] = $row["moneda"];
+$GLOBALS["entregado"] = $row["entregado"];
 $GLOBALS["impreso"] = $row["impreso"];
 $GLOBALS["alicuota_dinamica"] = $row["igtf_alicuota"];
+
+// -----------------------------------------------------------------------
+// Validación: una factura de contado (salidas.entregado = 'S') debe tener
+// al menos un método de pago registrado en cobros_cliente_detalle antes de
+// poder emitirse/imprimirse. Si no tiene ninguno, se detiene la generación
+// del PDF y se muestra un mensaje al usuario.
+// -----------------------------------------------------------------------
+if ($GLOBALS["entregado"] == "S") {
+	$sql_chk = "SELECT COUNT(*) AS total
+				FROM cobros_cliente_detalle
+				WHERE cobros_cliente IN (
+					SELECT id FROM cobros_cliente WHERE id_documento = '$id_invoice'
+				);";
+	$rs_chk = mysqli_query($link, $sql_chk);
+	$row_chk = mysqli_fetch_array($rs_chk);
+
+	if (($GLOBALS["documento"] === 'FC' OR $GLOBALS["documento"] === 'ND') AND (int)($row_chk["total"] ?? 0) === 0) {
+		header('Content-Type: text/html; charset=UTF-8');
+		echo '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>
+				<div style="font-family: Arial, sans-serif; max-width: 480px; margin: 80px auto; padding: 20px 30px;
+							border: 1px solid #e0a800; background: #fff3cd; color: #856404; border-radius: 6px; text-align: center;">
+					<h3 style="margin-top:0;">No se puede emitir la factura</h3>
+					<p>La factura de contado debe indicar m&eacute;todos de pago antes de emitirse.</p>
+				</div>
+			  </body></html>';
+		exit;
+	}
+}
 
 // Si es una prefactura (sin número de documento asignado y estatus NUEVO), se muestra
 // un número de prefactura basado en el id interno y la fecha del día en curso.
@@ -190,9 +219,11 @@ class PDF extends FPDF
 	// Cabecera de página
 	function Header()
 	{
+		/*
 		if ($GLOBALS["impreso"] == "S") {
 			$this->MarcaDeAgua();
 		}
+		*/
 
 		// Consulto datos de la compañía
 		require("../include/connect2.php");
@@ -249,7 +280,8 @@ class PDF extends FPDF
 		require("../include/desconnect.php");
 
 		// Condición de pago derivada de dias_credito (0 = Contado)
-		$condicion_pago = (intval($GLOBALS["dias_credito"]) <= 0) ? "Contado" : ("Credito " . $GLOBALS["dias_credito"] . " dias");
+		// $condicion_pago = (intval($GLOBALS["dias_credito"]) <= 0) ? "Contado" : ("Credito " . $GLOBALS["dias_credito"] . " dias");
+		$condicion_pago = (intval($GLOBALS["entregado"]) == "S") ? "Contado" : "Credito" . ((intval($GLOBALS["dias_credito"]) > 0) ? " dias " . $GLOBALS["dias_credito"] : "");
 
 		$tdoc = ($GLOBALS["documento"] == "FC" ? "Nro. Factura: " : ($GLOBALS["documento"] == "NC" ? "Nro. Nota de Credito: " : ($GLOBALS["documento"] == "ND" ? "Nro. Nota de Debito: " : "N/A")));
 		if ($GLOBALS["es_prefactura"]) {
@@ -319,16 +351,18 @@ class PDF extends FPDF
 		$this->SetFont('Courier', '', 8);
 		$this->Cell(35, 4, str_replace("-", "", $rif ?? ""), 0, 0, 'L');
 
-		$this->SetFont('Courier', 'B', 8);
+		$this->SetFont('Courier', 'BI', 8);
 		$this->Cell(40, 4, "CONDICIONES DE PAGO:", 0, 0, 'L');
-		$this->SetFont('Courier', '', 8);
 		$this->Cell(25, 4, $condicion_pago, 0, 1, 'L');
+		$this->SetFont('Courier', '', 8);
 
 		$this->Ln(1);
+		/*
 		if ($GLOBALS["impreso"] == "S") {
 			$this->SetFont('Courier', 'B', 7);
 			$this->Cell(0, 4, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 0, 1, 'C');
 		}
+		*/
 
 		// ---------------------------------------------------------------
 		// Documento afectado (Notas de Credito / Debito), igual que en la versión completa
@@ -475,6 +509,68 @@ class PDF extends FPDF
 		$this->SetFont('Courier', '', 6);
 		$this->Cell(40, 3, $GLOBALS["username"], 0, 1, 'L');
 
+		// ---------------------------------------------------------------
+		// MÉTODOS DE PAGO (mismo origen de datos que comprobante_pago.php)
+		// Se imprime debajo de "Usuario:" y antes de la nota de IGTF/Tasa BCV.
+		// Para que quepa en la impresión a media carta, se concatenan todos
+		// los pagos en un solo texto (separados por " / ") dentro de un
+		// MultiCell, en vez de una tabla con una fila por pago.
+		// ---------------------------------------------------------------
+		$sql = "SELECT
+					a.metodo_pago,
+					IFNULL(b.valor2, a.metodo_pago) AS metodo_descripcion,
+					a.referencia,
+					a.monto_bs,
+					a.moneda,
+					a.monto_moneda, a.banco, d.campo_descripcion AS banco_descripcion
+				FROM cobros_cliente_detalle AS a
+				LEFT JOIN parametro AS b
+					ON b.codigo = '009'
+				   AND b.valor1 = a.metodo_pago
+				LEFT OUTER JOIN compania_cuenta AS c ON c.id = a.banco
+				LEFT OUTER JOIN tabla AS d ON d.campo_codigo = c.banco AND d.tabla = 'BANCO'
+				WHERE a.cobros_cliente IN (
+					SELECT id FROM cobros_cliente WHERE id_documento = '$id_invoice'
+				) AND a.metodo_pago <> 'IG';";
+		$rs_pagos = mysqli_query($link, $sql);
+
+		$partes_pago = [];
+		while ($row_pago = mysqli_fetch_array($rs_pagos)) {
+			$es_igtf = ($row_pago['metodo_pago'] == 'IG');
+
+			$metodo_txt = $es_igtf
+				? "IGTF 3%"
+				: mb_convert_encoding($row_pago['metodo_descripcion'], "UTF-8", mb_detect_encoding($row_pago['metodo_descripcion']));
+
+			$parte = $metodo_txt;
+
+			// Banco (si aplica al método de pago, ej. Transferencia / Pago Movil)
+			$banco_txt = trim($row_pago['banco_descripcion'] ?? '');
+			if ($banco_txt != '') {
+				$parte .= ' ' . mb_convert_encoding($banco_txt, "UTF-8", mb_detect_encoding($banco_txt));
+			}
+
+			// Referencia (si aplica, ej. Transferencia / Pago Movil, no en Efectivo)
+			$ref_txt = trim($row_pago['referencia'] ?? '');
+			if ($ref_txt != '') {
+				$parte .= ' #' . $ref_txt;
+			}
+
+			// Monto: en la moneda original del pago si no es Bs., si no en Bs.
+			if ($row_pago['moneda'] != 'Bs.') {
+				$parte .= ' ' . $row_pago['moneda'] . ' ' . number_format($row_pago['monto_moneda'], 2, ",", ".");
+			} else {
+				$parte .= ' Bs. ' . number_format($row_pago['monto_bs'], 2, ",", ".");
+			}
+
+			$partes_pago[] = $parte;
+		}
+
+		if (count($partes_pago) > 0) {
+			$this->SetFont('Courier', 'BI', 6);
+			$this->MultiCell(100, 3, mb_convert_encoding("Pagos: " . implode(' / ', $partes_pago), "UTF-8"), 0, 'L');
+		}
+
 		$y_fin_coletilla = $this->GetY();
 		$this->SetY($y_totales);
 
@@ -486,11 +582,14 @@ class PDF extends FPDF
 		$this->SetX($margen_izq_original - 3);
 
 		// --- SUB-TOTAL EXENTO (en bruto, antes de DC/DT) ---
-		$this->SetFont('Courier', 'B', 8);
-		$this->Cell(155, 4, "SUB-TOTAL EXENTO:", 0, 0, 'R');
-		$this->SetFont('Courier', '', 8);
-		$this->Cell(21, 4, number_format($to_bs($exento_raw), 2, ",", "."), 0, 0, 'R');
-		$this->Cell(22, 4, number_format($to_usd($exento_raw), 2, ",", "."), 0, 1, 'R');
+		// Solo se muestra esta línea si realmente hay monto exento (> 0)
+		if ($exento_raw > 0) {
+			$this->SetFont('Courier', 'B', 8);
+			$this->Cell(155, 4, "SUB-TOTAL EXENTO:", 0, 0, 'R');
+			$this->SetFont('Courier', '', 8);
+			$this->Cell(21, 4, number_format($to_bs($exento_raw), 2, ",", "."), 0, 0, 'R');
+			$this->Cell(22, 4, number_format($to_usd($exento_raw), 2, ",", "."), 0, 1, 'R');
+		}
 
 		// --- SUB-TOTAL GRAVADO (en bruto, antes de DC/DT) ---
 		$this->SetFont('Courier', 'B', 8);
@@ -569,6 +668,18 @@ class PDF extends FPDF
 		// realmente se está mostrando (igtf='S', o MOSTRAR_IGTF_SIEMPRE=true). Si
 		// MOSTRAR_IGTF_SIEMPRE=false y salidas.igtf='N', ni se muestra ni se suma.
 		$mostrar_fila_igtf = ($igtf_status == "S" || $MOSTRAR_IGTF_SIEMPRE);
+		// Si el documento ya fue entregado (salidas.entregado='S') y está en Bs.,
+		// normalmente se ocultan IGTF y Total General. Sin embargo, si la factura
+		// realmente tiene IGTF (salidas.igtf='S'), la línea del IGTF debe mostrarse.
+		$ocultar_igtf_total_general = (
+		    $GLOBALS["entregado"] == "S" &&
+		    $GLOBALS["moneda"] == "Bs." &&
+		    $igtf_status != "S"
+		);
+
+		if ($ocultar_igtf_total_general) {
+		    $mostrar_fila_igtf = false;
+		}
 
 		$total_general_bs = $total_bs + ($mostrar_fila_igtf ? $igtf_bs : 0);
 		$total_general_usd = ($tasa_dia > 0) ? $total_general_bs / $tasa_dia : 0;
@@ -582,11 +693,13 @@ class PDF extends FPDF
 		}
 
 		// --- TOTAL GENERAL ---
-		$this->SetFont('Courier', 'B', 8);
-		$this->Cell(155, 4, "TOTAL GENERAL:", 0, 0, 'R');
-		$this->SetFont('Courier', '', 8);
-		$this->Cell(21, 4, number_format($total_general_bs, 2, ",", "."), 0, 0, 'R');
-		$this->Cell(22, 4, number_format($total_general_usd, 2, ",", "."), 0, 1, 'R');
+		if (!$ocultar_igtf_total_general) {
+			$this->SetFont('Courier', 'B', 8);
+			$this->Cell(155, 4, "TOTAL GENERAL:", 0, 0, 'R');
+			$this->SetFont('Courier', '', 8);
+			$this->Cell(21, 4, number_format($total_general_bs, 2, ",", "."), 0, 0, 'R');
+			$this->Cell(22, 4, number_format($total_general_usd, 2, ",", "."), 0, 1, 'R');
+		}
 
 		// Se restaura el margen izquierdo original (el resto del pie sigue con el margen normal)
 		$this->SetLeftMargin($margen_izq_original);

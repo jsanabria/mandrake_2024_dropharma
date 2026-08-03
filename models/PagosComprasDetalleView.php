@@ -538,6 +538,9 @@ class PagosComprasDetalleView extends PagosComprasDetalle
             $this->InlineDelete = true;
         }
 
+        // Set up lookup cache
+        $this->setupLookupOptions($this->metodo_pago);
+
         // Check modal
         if ($this->IsModal) {
             $SkipHeaderFooter = true;
@@ -547,6 +550,9 @@ class PagosComprasDetalleView extends PagosComprasDetalle
         $loadCurrentRecord = false;
         $returnUrl = "";
         $matchRecord = false;
+
+        // Set up master/detail parameters
+        $this->setupMasterParms();
         if (Get(Config("TABLE_START_REC")) !== null || Get(Config("TABLE_PAGE_NUMBER")) !== null) {
             $loadCurrentRecord = true;
         }
@@ -699,45 +705,6 @@ class PagosComprasDetalleView extends PagosComprasDetalle
         */
         $options = &$this->OtherOptions;
         $option = $options["action"];
-
-        // Add
-        $item = &$option->add("add");
-        $addcaption = HtmlTitle($Language->phrase("ViewPageAddLink"));
-        if ($this->IsModal) {
-            $item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
-        }
-        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
-
-        // Edit
-        $item = &$option->add("edit");
-        $editcaption = HtmlTitle($Language->phrase("ViewPageEditLink"));
-        if ($this->IsModal) {
-            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-        }
-        $item->Visible = $this->EditUrl != "" && $Security->canEdit();
-
-        // Copy
-        $item = &$option->add("copy");
-        $copycaption = HtmlTitle($Language->phrase("ViewPageCopyLink"));
-        if ($this->IsModal) {
-            $item->Body = "<a class=\"ew-action ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\" data-btn=\"AddBtn\">" . $Language->phrase("ViewPageCopyLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-action ew-copy\" title=\"" . $copycaption . "\" data-caption=\"" . $copycaption . "\" href=\"" . HtmlEncode(GetUrl($this->CopyUrl)) . "\">" . $Language->phrase("ViewPageCopyLink") . "</a>";
-        }
-        $item->Visible = $this->CopyUrl != "" && $Security->canAdd();
-
-        // Delete
-        $item = &$option->add("delete");
-        $url = GetUrl($this->DeleteUrl);
-        $item->Body = "<a class=\"ew-action ew-delete\"" .
-            ($this->InlineDelete || $this->IsModal ? " data-ew-action=\"inline-delete\"" : "") .
-            " title=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) .
-            "\" href=\"" . HtmlEncode($url) . "\">" . $Language->phrase("ViewPageDeleteLink") . "</a>";
-        $item->Visible = $this->DeleteUrl != "" && $Security->canDelete();
 
         // Set up action default
         $option = $options["action"];
@@ -924,6 +891,28 @@ class PagosComprasDetalleView extends PagosComprasDetalle
 
             // metodo_pago
             $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+            $curVal = strval($this->metodo_pago->CurrentValue);
+            if ($curVal != "") {
+                $this->metodo_pago->ViewValue = $this->metodo_pago->lookupCacheOption($curVal);
+                if ($this->metodo_pago->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchExpression(), "=", $curVal, $this->metodo_pago->Lookup->getTable()->Fields["valor1"]->searchDataType(), "");
+                    $lookupFilter = $this->metodo_pago->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->metodo_pago->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->metodo_pago->Lookup->renderViewRow($rswrk[0]);
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->displayValue($arwrk);
+                    } else {
+                        $this->metodo_pago->ViewValue = $this->metodo_pago->CurrentValue;
+                    }
+                }
+            } else {
+                $this->metodo_pago->ViewValue = null;
+            }
 
             // referencia
             $this->referencia->ViewValue = $this->referencia->CurrentValue;
@@ -954,14 +943,6 @@ class PagosComprasDetalleView extends PagosComprasDetalle
             // banco
             $this->banco->ViewValue = $this->banco->CurrentValue;
             $this->banco->ViewValue = FormatNumber($this->banco->ViewValue, $this->banco->formatPattern());
-
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
-
-            // pagos_compras
-            $this->pagos_compras->HrefValue = "";
-            $this->pagos_compras->TooltipValue = "";
 
             // metodo_pago
             $this->metodo_pago->HrefValue = "";
@@ -1006,6 +987,79 @@ class PagosComprasDetalleView extends PagosComprasDetalle
         }
     }
 
+    // Set up master/detail based on QueryString
+    protected function setupMasterParms()
+    {
+        $validMaster = false;
+        $foreignKeys = [];
+        // Get the keys for master table
+        if (($master = Get(Config("TABLE_SHOW_MASTER"), Get(Config("TABLE_MASTER")))) !== null) {
+            $masterTblVar = $master;
+            if ($masterTblVar == "") {
+                $validMaster = true;
+                $this->DbMasterFilter = "";
+                $this->DbDetailFilter = "";
+            }
+            if ($masterTblVar == "pagos_compras") {
+                $validMaster = true;
+                $masterTbl = Container("pagos_compras");
+                if (($parm = Get("fk_id", Get("pagos_compras"))) !== null) {
+                    $masterTbl->id->setQueryStringValue($parm);
+                    $this->pagos_compras->QueryStringValue = $masterTbl->id->QueryStringValue; // DO NOT change, master/detail key data type can be different
+                    $this->pagos_compras->setSessionValue($this->pagos_compras->QueryStringValue);
+                    $foreignKeys["pagos_compras"] = $this->pagos_compras->QueryStringValue;
+                    if (!is_numeric($masterTbl->id->QueryStringValue)) {
+                        $validMaster = false;
+                    }
+                } else {
+                    $validMaster = false;
+                }
+            }
+        } elseif (($master = Post(Config("TABLE_SHOW_MASTER"), Post(Config("TABLE_MASTER")))) !== null) {
+            $masterTblVar = $master;
+            if ($masterTblVar == "") {
+                    $validMaster = true;
+                    $this->DbMasterFilter = "";
+                    $this->DbDetailFilter = "";
+            }
+            if ($masterTblVar == "pagos_compras") {
+                $validMaster = true;
+                $masterTbl = Container("pagos_compras");
+                if (($parm = Post("fk_id", Post("pagos_compras"))) !== null) {
+                    $masterTbl->id->setFormValue($parm);
+                    $this->pagos_compras->FormValue = $masterTbl->id->FormValue;
+                    $this->pagos_compras->setSessionValue($this->pagos_compras->FormValue);
+                    $foreignKeys["pagos_compras"] = $this->pagos_compras->FormValue;
+                    if (!is_numeric($masterTbl->id->FormValue)) {
+                        $validMaster = false;
+                    }
+                } else {
+                    $validMaster = false;
+                }
+            }
+        }
+        if ($validMaster) {
+            // Save current master table
+            $this->setCurrentMasterTable($masterTblVar);
+            $this->setSessionWhere($this->getDetailFilterFromSession());
+
+            // Reset start record counter (new master key)
+            if (!$this->isAddOrEdit() && !$this->isGridUpdate()) {
+                $this->StartRecord = 1;
+                $this->setStartRecordNumber($this->StartRecord);
+            }
+
+            // Clear previous master key from Session
+            if ($masterTblVar != "pagos_compras") {
+                if (!array_key_exists("pagos_compras", $foreignKeys)) { // Not current foreign key
+                    $this->pagos_compras->setSessionValue("");
+                }
+            }
+        }
+        $this->DbMasterFilter = $this->getMasterFilterFromSession(); // Get master filter from session
+        $this->DbDetailFilter = $this->getDetailFilterFromSession(); // Get detail filter from session
+    }
+
     // Set up Breadcrumb
     protected function setupBreadcrumb()
     {
@@ -1030,6 +1084,9 @@ class PagosComprasDetalleView extends PagosComprasDetalle
 
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
+                case "x_metodo_pago":
+                    $lookupFilter = $fld->getSelectFilter(); // PHP
+                    break;
                 default:
                     $lookupFilter = "";
                     break;

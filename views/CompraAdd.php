@@ -23,7 +23,6 @@ loadjs.ready(["wrapper", "head"], function () {
         // Add fields
         .setFields([
             ["proveedor", [fields.proveedor.visible && fields.proveedor.required ? ew.Validators.required(fields.proveedor.caption) : null], fields.proveedor.isInvalid],
-            ["tipo_documento", [fields.tipo_documento.visible && fields.tipo_documento.required ? ew.Validators.required(fields.tipo_documento.caption) : null], fields.tipo_documento.isInvalid],
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
             ["documento", [fields.documento.visible && fields.documento.required ? ew.Validators.required(fields.documento.caption) : null], fields.documento.isInvalid],
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
@@ -55,7 +54,6 @@ loadjs.ready(["wrapper", "head"], function () {
         // Dynamic selection lists
         .setLists({
             "proveedor": <?= $Page->proveedor->toClientList($Page) ?>,
-            "tipo_documento": <?= $Page->tipo_documento->toClientList($Page) ?>,
             "aplica_retencion": <?= $Page->aplica_retencion->toClientList($Page) ?>,
             "alicuota": <?= $Page->alicuota->toClientList($Page) ?>,
             "moneda": <?= $Page->moneda->toClientList($Page) ?>,
@@ -137,52 +135,6 @@ loadjs.ready("fcompraadd", function() {
     ew.createModalLookup(options);
 });
 </script>
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
-    <div id="r_tipo_documento"<?= $Page->tipo_documento->rowAttributes() ?>>
-        <label id="elh_compra_tipo_documento" for="x_tipo_documento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_documento->caption() ?><?= $Page->tipo_documento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_documento->cellAttributes() ?>>
-<span id="el_compra_tipo_documento">
-    <select
-        id="x_tipo_documento"
-        name="x_tipo_documento"
-        class="form-select ew-select<?= $Page->tipo_documento->isInvalidClass() ?>"
-        <?php if (!$Page->tipo_documento->IsNativeSelect) { ?>
-        data-select2-id="fcompraadd_x_tipo_documento"
-        <?php } ?>
-        data-table="compra"
-        data-field="x_tipo_documento"
-        data-page="1"
-        data-value-separator="<?= $Page->tipo_documento->displayValueSeparatorAttribute() ?>"
-        data-placeholder="<?= HtmlEncode($Page->tipo_documento->getPlaceHolder()) ?>"
-        <?= $Page->tipo_documento->editAttributes() ?>>
-        <?= $Page->tipo_documento->selectOptionListHtml("x_tipo_documento") ?>
-    </select>
-    <?= $Page->tipo_documento->getCustomMessage() ?>
-    <div class="invalid-feedback"><?= $Page->tipo_documento->getErrorMessage() ?></div>
-<?php if (!$Page->tipo_documento->IsNativeSelect) { ?>
-<script>
-loadjs.ready("fcompraadd", function() {
-    var options = { name: "x_tipo_documento", selectId: "fcompraadd_x_tipo_documento" },
-        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
-    if (!el)
-        return;
-    options.closeOnSelect = !options.multiple;
-    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
-    if (fcompraadd.lists.tipo_documento?.lookupOptions.length) {
-        options.data = { id: "x_tipo_documento", form: "fcompraadd" };
-    } else {
-        options.ajax = { id: "x_tipo_documento", form: "fcompraadd", limit: ew.LOOKUP_PAGE_SIZE };
-    }
-    options.minimumResultsForSearch = Infinity;
-    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.compra.fields.tipo_documento.selectOptions);
-    ew.createSelect(options);
-});
-</script>
-<?php } ?>
 </span>
 </div></div>
     </div>

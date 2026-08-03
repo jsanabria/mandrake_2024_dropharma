@@ -51,22 +51,22 @@ class CompaniaCuenta extends AbstractEntity
     #[Column(type: "integer")]
     private int $cuenta;
 
-    #[Column(type: "string", nullable: true)]
-    private ?string $activo;
+    #[Column(name: "pago_electronico", type: "string")]
+    private string $pagoElectronico;
 
     #[Column(type: "integer")]
     private int $compania;
 
-    #[Column(name: "pago_electronico", type: "string")]
-    private string $pagoElectronico;
+    #[Column(type: "string", nullable: true)]
+    private ?string $activo;
 
     public function __construct()
     {
         $this->mostrar = "S";
         $this->cuenta = 0;
-        $this->activo = "S";
-        $this->compania = 0;
         $this->pagoElectronico = "S";
+        $this->compania = 0;
+        $this->activo = "S";
     }
 
     public function getId(): int
@@ -149,17 +149,17 @@ class CompaniaCuenta extends AbstractEntity
         return $this;
     }
 
-    public function getActivo(): ?string
+    public function getPagoElectronico(): string
     {
-        return $this->activo;
+        return $this->pagoElectronico;
     }
 
-    public function setActivo(?string $value): static
+    public function setPagoElectronico(string $value): static
     {
         if (!in_array($value, ["S", "N"])) {
-            throw new \InvalidArgumentException("Invalid 'activo' value");
+            throw new \InvalidArgumentException("Invalid 'pago_electronico' value");
         }
-        $this->activo = $value;
+        $this->pagoElectronico = $value;
         return $this;
     }
 
@@ -174,17 +174,17 @@ class CompaniaCuenta extends AbstractEntity
         return $this;
     }
 
-    public function getPagoElectronico(): string
+    public function getActivo(): ?string
     {
-        return $this->pagoElectronico;
+        return $this->activo;
     }
 
-    public function setPagoElectronico(string $value): static
+    public function setActivo(?string $value): static
     {
         if (!in_array($value, ["S", "N"])) {
-            throw new \InvalidArgumentException("Invalid 'pago_electronico' value");
+            throw new \InvalidArgumentException("Invalid 'activo' value");
         }
-        $this->pagoElectronico = $value;
+        $this->activo = $value;
         return $this;
     }
 }

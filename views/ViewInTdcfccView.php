@@ -45,7 +45,51 @@ loadjs.ready(["wrapper", "head"], function () {
 </script>
 <script>
 loadjs.ready("head", function () {
+    // Client script
     // Write your table-specific client script here, no need to add script tags.
+    window.RevertirPagosCompras = function (id, tipoDocumento) {
+        id = parseInt(id, 10);
+        tipoDocumento = String(tipoDocumento || "").toUpperCase().trim();
+        if (!id || id <= 0) {
+            ew.alert("El ID del documento no es válido.");
+            return;
+        }
+        if (tipoDocumento === "GASTO") {
+            tipoDocumento = "GASTOS";
+        }
+        if (
+            tipoDocumento !== "TDCFCC" &&
+            tipoDocumento !== "GASTOS"
+        ) {
+            ew.alert("El tipo de documento no es válido.");
+            return;
+        }
+        if (!confirm("¿Seguro que desea revertir todos los pagos de este documento?")) {
+            return;
+        }
+        var parametros = {
+            id: id,
+            tipo_documento: tipoDocumento
+        };
+        $.ajax({
+            data: parametros,
+            url: "../include/revertir_pagos_compras.php",
+            type: "post",
+            beforeSend: function () {
+                // Opcional: bloquear el botón o mostrar indicador.
+            },
+            success: function (response) {
+                ew.alert(response);
+                location.reload();
+            },
+            error: function (xhr) {
+                var mensaje = xhr.responseText
+                    ? xhr.responseText
+                    : "No fue posible revertir los pagos.";
+                ew.alert(mensaje);
+            }
+        });
+    };
 });
 </script>
 <?php } ?>

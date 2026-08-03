@@ -157,7 +157,7 @@ try {
 
             foreach ($detalles as $detalle) {
                 $articulo = intval($detalle["articulo"] ?? 0);
-                $lote = intval($detalle["lote"] ?? "");
+                $lote = $detalle["lote"] ?? "";
                 $fecha_vencimiento = $detalle["fecha_vencimiento"];
                 $fabricante = intval($detalle["fabricante"] ?? 1);
                 $cantidad = floatval($detalle["cantidad"] ?? 0);

@@ -20,7 +20,7 @@ $username = $_REQUEST["username"];
 $descuentoG = intval($_REQUEST["descuentoG"]); 
 $nota = $_REQUEST["nota"]; 
 $consignacion = intval($_REQUEST["consignacion"]); 
-$lote = $_REQUEST["lote"]; 
+$lote = trim($_REQUEST["lote"] ?? ""); 
 $vence = $_REQUEST["vence"]; 
 $vence = ($vence == "" ? "1990-01-01" : $vence);
 

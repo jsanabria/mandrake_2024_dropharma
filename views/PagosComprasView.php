@@ -67,17 +67,6 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->id_documento->Visible) { // id_documento ?>
-    <tr id="r_id_documento"<?= $Page->id_documento->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_compras_id_documento"><?= $Page->id_documento->caption() ?></span></td>
-        <td data-name="id_documento"<?= $Page->id_documento->cellAttributes() ?>>
-<span id="el_pagos_compras_id_documento">
-<span<?= $Page->id_documento->viewAttributes() ?>>
-<?= $Page->id_documento->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 <?php if ($Page->fecha->Visible) { // fecha ?>
     <tr id="r_fecha"<?= $Page->fecha->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_compras_fecha"><?= $Page->fecha->caption() ?></span></td>
@@ -166,7 +155,26 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
+    <tr id="r_tipo_documento"<?= $Page->tipo_documento->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_compras_tipo_documento"><?= $Page->tipo_documento->caption() ?></span></td>
+        <td data-name="tipo_documento"<?= $Page->tipo_documento->cellAttributes() ?>>
+<span id="el_pagos_compras_tipo_documento">
+<span<?= $Page->tipo_documento->viewAttributes() ?>>
+<?= $Page->tipo_documento->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 </table>
+<?php
+    if (in_array("pagos_compras_detalle", explode(",", $Page->getCurrentDetailTable())) && $pagos_compras_detalle->DetailView) {
+?>
+<?php if ($Page->getCurrentDetailTable() != "") { ?>
+<h4 class="ew-detail-caption"><?= $Language->tablePhrase("pagos_compras_detalle", "TblCaption") ?></h4>
+<?php } ?>
+<?php include_once "PagosComprasDetalleGrid.php" ?>
+<?php } ?>
 </form>
 <?php if (!$Page->IsModal) { ?>
 <?php if (!$Page->isExport()) { ?>

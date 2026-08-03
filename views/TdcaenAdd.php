@@ -70,10 +70,9 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 ?>
 
 <script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function () {
-(function ($) {
-    var $ = window.jQuery;
-    
+loadjs.ready(["jquery"], function () {
+    const $ = jQuery;
+
   function insertar(i) { 
     var pedido = $("#pedido").val();
     var proveedor = $("#codpro").val();
@@ -418,7 +417,6 @@ document.addEventListener("DOMContentLoaded", function () {
   window.sendProccess = sendProccess;
   window.abrirModalNuevoArticulo = abrirModalNuevoArticulo;
   window.guardarNuevoArticulo = guardarNuevoArticulo;
-})(jQuery);
 });
 </script>
 
@@ -550,10 +548,9 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 
 <script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function () {
-(function ($) {
-    var $ = window.jQuery;
-    
+loadjs.ready(["jquery"], function () {
+    const $ = jQuery;
+
   $("#laboratorio").prop("disabled", true);
   $("#articulo").prop("disabled", true);
 
@@ -728,7 +725,6 @@ document.addEventListener("DOMContentLoaded", function () {
   window.guardar_nota = guardar_nota;
 
   getCodigos3( <?= $pedido ?> )
-})(jQuery);
 });
 </script>
 

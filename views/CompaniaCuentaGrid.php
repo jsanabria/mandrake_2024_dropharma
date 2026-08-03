@@ -29,15 +29,15 @@ loadjs.ready(["wrapper", "head"], function () {
             ["numero", [fields.numero.visible && fields.numero.required ? ew.Validators.required(fields.numero.caption) : null], fields.numero.isInvalid],
             ["mostrar", [fields.mostrar.visible && fields.mostrar.required ? ew.Validators.required(fields.mostrar.caption) : null], fields.mostrar.isInvalid],
             ["cuenta", [fields.cuenta.visible && fields.cuenta.required ? ew.Validators.required(fields.cuenta.caption) : null], fields.cuenta.isInvalid],
-            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid],
-            ["pago_electronico", [fields.pago_electronico.visible && fields.pago_electronico.required ? ew.Validators.required(fields.pago_electronico.caption) : null], fields.pago_electronico.isInvalid]
+            ["pago_electronico", [fields.pago_electronico.visible && fields.pago_electronico.required ? ew.Validators.required(fields.pago_electronico.caption) : null], fields.pago_electronico.isInvalid],
+            ["activo", [fields.activo.visible && fields.activo.required ? ew.Validators.required(fields.activo.caption) : null], fields.activo.isInvalid]
         ])
 
         // Check empty row
         .setEmptyRow(
             function (rowIndex) {
                 let fobj = this.getForm(),
-                    fields = [["banco",false],["titular",false],["tipo",false],["numero",false],["mostrar",false],["cuenta",false],["activo",false],["pago_electronico",false]];
+                    fields = [["banco",false],["titular",false],["tipo",false],["numero",false],["mostrar",false],["cuenta",false],["pago_electronico",false],["activo",false]];
                 if (fields.some(field => ew.valueChanged(fobj, rowIndex, ...field)))
                     return false;
                 return true;
@@ -61,8 +61,8 @@ loadjs.ready(["wrapper", "head"], function () {
             "tipo": <?= $Grid->tipo->toClientList($Grid) ?>,
             "mostrar": <?= $Grid->mostrar->toClientList($Grid) ?>,
             "cuenta": <?= $Grid->cuenta->toClientList($Grid) ?>,
-            "activo": <?= $Grid->activo->toClientList($Grid) ?>,
             "pago_electronico": <?= $Grid->pago_electronico->toClientList($Grid) ?>,
+            "activo": <?= $Grid->activo->toClientList($Grid) ?>,
         })
         .build();
     window[form.id] = form;
@@ -115,11 +115,11 @@ $Grid->ListOptions->render("header", "left");
 <?php if ($Grid->cuenta->Visible) { // cuenta ?>
         <th data-name="cuenta" class="<?= $Grid->cuenta->headerCellClass() ?>"><div id="elh_compania_cuenta_cuenta" class="compania_cuenta_cuenta"><?= $Grid->renderFieldHeader($Grid->cuenta) ?></div></th>
 <?php } ?>
-<?php if ($Grid->activo->Visible) { // activo ?>
-        <th data-name="activo" class="<?= $Grid->activo->headerCellClass() ?>"><div id="elh_compania_cuenta_activo" class="compania_cuenta_activo"><?= $Grid->renderFieldHeader($Grid->activo) ?></div></th>
-<?php } ?>
 <?php if ($Grid->pago_electronico->Visible) { // pago_electronico ?>
         <th data-name="pago_electronico" class="<?= $Grid->pago_electronico->headerCellClass() ?>"><div id="elh_compania_cuenta_pago_electronico" class="compania_cuenta_pago_electronico"><?= $Grid->renderFieldHeader($Grid->pago_electronico) ?></div></th>
+<?php } ?>
+<?php if ($Grid->activo->Visible) { // activo ?>
+        <th data-name="activo" class="<?= $Grid->activo->headerCellClass() ?>"><div id="elh_compania_cuenta_activo" class="compania_cuenta_activo"><?= $Grid->renderFieldHeader($Grid->activo) ?></div></th>
 <?php } ?>
 <?php
 // Render list options (header, right)
@@ -555,6 +555,71 @@ loadjs.ready("fcompania_cuentagrid", function() {
 <?php } ?>
 </td>
     <?php } ?>
+    <?php if ($Grid->pago_electronico->Visible) { // pago_electronico ?>
+        <td data-name="pago_electronico"<?= $Grid->pago_electronico->cellAttributes() ?>>
+<?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_compania_cuenta_pago_electronico" class="el_compania_cuenta_pago_electronico">
+<template id="tp_x<?= $Grid->RowIndex ?>_pago_electronico">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="compania_cuenta" data-field="x_pago_electronico" name="x<?= $Grid->RowIndex ?>_pago_electronico" id="x<?= $Grid->RowIndex ?>_pago_electronico"<?= $Grid->pago_electronico->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x<?= $Grid->RowIndex ?>_pago_electronico" class="ew-item-list"></div>
+<selection-list hidden
+    id="x<?= $Grid->RowIndex ?>_pago_electronico"
+    name="x<?= $Grid->RowIndex ?>_pago_electronico"
+    value="<?= HtmlEncode($Grid->pago_electronico->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x<?= $Grid->RowIndex ?>_pago_electronico"
+    data-target="dsl_x<?= $Grid->RowIndex ?>_pago_electronico"
+    data-repeatcolumn="5"
+    class="form-control<?= $Grid->pago_electronico->isInvalidClass() ?>"
+    data-table="compania_cuenta"
+    data-field="x_pago_electronico"
+    data-value-separator="<?= $Grid->pago_electronico->displayValueSeparatorAttribute() ?>"
+    <?= $Grid->pago_electronico->editAttributes() ?>></selection-list>
+<div class="invalid-feedback"><?= $Grid->pago_electronico->getErrorMessage() ?></div>
+</span>
+<input type="hidden" data-table="compania_cuenta" data-field="x_pago_electronico" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_pago_electronico" id="o<?= $Grid->RowIndex ?>_pago_electronico" value="<?= HtmlEncode($Grid->pago_electronico->OldValue) ?>">
+<?php } ?>
+<?php if ($Grid->RowType == RowType::EDIT) { // Edit record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_compania_cuenta_pago_electronico" class="el_compania_cuenta_pago_electronico">
+<template id="tp_x<?= $Grid->RowIndex ?>_pago_electronico">
+    <div class="form-check">
+        <input type="radio" class="form-check-input" data-table="compania_cuenta" data-field="x_pago_electronico" name="x<?= $Grid->RowIndex ?>_pago_electronico" id="x<?= $Grid->RowIndex ?>_pago_electronico"<?= $Grid->pago_electronico->editAttributes() ?>>
+        <label class="form-check-label"></label>
+    </div>
+</template>
+<div id="dsl_x<?= $Grid->RowIndex ?>_pago_electronico" class="ew-item-list"></div>
+<selection-list hidden
+    id="x<?= $Grid->RowIndex ?>_pago_electronico"
+    name="x<?= $Grid->RowIndex ?>_pago_electronico"
+    value="<?= HtmlEncode($Grid->pago_electronico->CurrentValue) ?>"
+    data-type="select-one"
+    data-template="tp_x<?= $Grid->RowIndex ?>_pago_electronico"
+    data-target="dsl_x<?= $Grid->RowIndex ?>_pago_electronico"
+    data-repeatcolumn="5"
+    class="form-control<?= $Grid->pago_electronico->isInvalidClass() ?>"
+    data-table="compania_cuenta"
+    data-field="x_pago_electronico"
+    data-value-separator="<?= $Grid->pago_electronico->displayValueSeparatorAttribute() ?>"
+    <?= $Grid->pago_electronico->editAttributes() ?>></selection-list>
+<div class="invalid-feedback"><?= $Grid->pago_electronico->getErrorMessage() ?></div>
+</span>
+<?php } ?>
+<?php if ($Grid->RowType == RowType::VIEW) { // View record ?>
+<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_compania_cuenta_pago_electronico" class="el_compania_cuenta_pago_electronico">
+<span<?= $Grid->pago_electronico->viewAttributes() ?>>
+<?= $Grid->pago_electronico->getViewValue() ?></span>
+</span>
+<?php if ($Grid->isConfirm()) { ?>
+<input type="hidden" data-table="compania_cuenta" data-field="x_pago_electronico" data-hidden="1" name="fcompania_cuentagrid$x<?= $Grid->RowIndex ?>_pago_electronico" id="fcompania_cuentagrid$x<?= $Grid->RowIndex ?>_pago_electronico" value="<?= HtmlEncode($Grid->pago_electronico->FormValue) ?>">
+<input type="hidden" data-table="compania_cuenta" data-field="x_pago_electronico" data-hidden="1" data-old name="fcompania_cuentagrid$o<?= $Grid->RowIndex ?>_pago_electronico" id="fcompania_cuentagrid$o<?= $Grid->RowIndex ?>_pago_electronico" value="<?= HtmlEncode($Grid->pago_electronico->OldValue) ?>">
+<?php } ?>
+<?php } ?>
+</td>
+    <?php } ?>
     <?php if ($Grid->activo->Visible) { // activo ?>
         <td data-name="activo"<?= $Grid->activo->cellAttributes() ?>>
 <?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
@@ -644,71 +709,6 @@ loadjs.ready("fcompania_cuentagrid", function() {
 <?php if ($Grid->isConfirm()) { ?>
 <input type="hidden" data-table="compania_cuenta" data-field="x_activo" data-hidden="1" name="fcompania_cuentagrid$x<?= $Grid->RowIndex ?>_activo" id="fcompania_cuentagrid$x<?= $Grid->RowIndex ?>_activo" value="<?= HtmlEncode($Grid->activo->FormValue) ?>">
 <input type="hidden" data-table="compania_cuenta" data-field="x_activo" data-hidden="1" data-old name="fcompania_cuentagrid$o<?= $Grid->RowIndex ?>_activo" id="fcompania_cuentagrid$o<?= $Grid->RowIndex ?>_activo" value="<?= HtmlEncode($Grid->activo->OldValue) ?>">
-<?php } ?>
-<?php } ?>
-</td>
-    <?php } ?>
-    <?php if ($Grid->pago_electronico->Visible) { // pago_electronico ?>
-        <td data-name="pago_electronico"<?= $Grid->pago_electronico->cellAttributes() ?>>
-<?php if ($Grid->RowType == RowType::ADD) { // Add record ?>
-<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_compania_cuenta_pago_electronico" class="el_compania_cuenta_pago_electronico">
-<template id="tp_x<?= $Grid->RowIndex ?>_pago_electronico">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compania_cuenta" data-field="x_pago_electronico" name="x<?= $Grid->RowIndex ?>_pago_electronico" id="x<?= $Grid->RowIndex ?>_pago_electronico"<?= $Grid->pago_electronico->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x<?= $Grid->RowIndex ?>_pago_electronico" class="ew-item-list"></div>
-<selection-list hidden
-    id="x<?= $Grid->RowIndex ?>_pago_electronico"
-    name="x<?= $Grid->RowIndex ?>_pago_electronico"
-    value="<?= HtmlEncode($Grid->pago_electronico->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x<?= $Grid->RowIndex ?>_pago_electronico"
-    data-target="dsl_x<?= $Grid->RowIndex ?>_pago_electronico"
-    data-repeatcolumn="5"
-    class="form-control<?= $Grid->pago_electronico->isInvalidClass() ?>"
-    data-table="compania_cuenta"
-    data-field="x_pago_electronico"
-    data-value-separator="<?= $Grid->pago_electronico->displayValueSeparatorAttribute() ?>"
-    <?= $Grid->pago_electronico->editAttributes() ?>></selection-list>
-<div class="invalid-feedback"><?= $Grid->pago_electronico->getErrorMessage() ?></div>
-</span>
-<input type="hidden" data-table="compania_cuenta" data-field="x_pago_electronico" data-hidden="1" data-old name="o<?= $Grid->RowIndex ?>_pago_electronico" id="o<?= $Grid->RowIndex ?>_pago_electronico" value="<?= HtmlEncode($Grid->pago_electronico->OldValue) ?>">
-<?php } ?>
-<?php if ($Grid->RowType == RowType::EDIT) { // Edit record ?>
-<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_compania_cuenta_pago_electronico" class="el_compania_cuenta_pago_electronico">
-<template id="tp_x<?= $Grid->RowIndex ?>_pago_electronico">
-    <div class="form-check">
-        <input type="radio" class="form-check-input" data-table="compania_cuenta" data-field="x_pago_electronico" name="x<?= $Grid->RowIndex ?>_pago_electronico" id="x<?= $Grid->RowIndex ?>_pago_electronico"<?= $Grid->pago_electronico->editAttributes() ?>>
-        <label class="form-check-label"></label>
-    </div>
-</template>
-<div id="dsl_x<?= $Grid->RowIndex ?>_pago_electronico" class="ew-item-list"></div>
-<selection-list hidden
-    id="x<?= $Grid->RowIndex ?>_pago_electronico"
-    name="x<?= $Grid->RowIndex ?>_pago_electronico"
-    value="<?= HtmlEncode($Grid->pago_electronico->CurrentValue) ?>"
-    data-type="select-one"
-    data-template="tp_x<?= $Grid->RowIndex ?>_pago_electronico"
-    data-target="dsl_x<?= $Grid->RowIndex ?>_pago_electronico"
-    data-repeatcolumn="5"
-    class="form-control<?= $Grid->pago_electronico->isInvalidClass() ?>"
-    data-table="compania_cuenta"
-    data-field="x_pago_electronico"
-    data-value-separator="<?= $Grid->pago_electronico->displayValueSeparatorAttribute() ?>"
-    <?= $Grid->pago_electronico->editAttributes() ?>></selection-list>
-<div class="invalid-feedback"><?= $Grid->pago_electronico->getErrorMessage() ?></div>
-</span>
-<?php } ?>
-<?php if ($Grid->RowType == RowType::VIEW) { // View record ?>
-<span id="el<?= $Grid->RowIndex == '$rowindex$' ? '$rowindex$' : $Grid->RowCount ?>_compania_cuenta_pago_electronico" class="el_compania_cuenta_pago_electronico">
-<span<?= $Grid->pago_electronico->viewAttributes() ?>>
-<?= $Grid->pago_electronico->getViewValue() ?></span>
-</span>
-<?php if ($Grid->isConfirm()) { ?>
-<input type="hidden" data-table="compania_cuenta" data-field="x_pago_electronico" data-hidden="1" name="fcompania_cuentagrid$x<?= $Grid->RowIndex ?>_pago_electronico" id="fcompania_cuentagrid$x<?= $Grid->RowIndex ?>_pago_electronico" value="<?= HtmlEncode($Grid->pago_electronico->FormValue) ?>">
-<input type="hidden" data-table="compania_cuenta" data-field="x_pago_electronico" data-hidden="1" data-old name="fcompania_cuentagrid$o<?= $Grid->RowIndex ?>_pago_electronico" id="fcompania_cuentagrid$o<?= $Grid->RowIndex ?>_pago_electronico" value="<?= HtmlEncode($Grid->pago_electronico->OldValue) ?>">
 <?php } ?>
 <?php } ?>
 </td>

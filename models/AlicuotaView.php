@@ -153,6 +153,8 @@ class AlicuotaView extends Alicuota
         $this->alicuota->setVisibility();
         $this->fecha->setVisibility();
         $this->activo->setVisibility();
+        $this->compra->setVisibility();
+        $this->venta->setVisibility();
     }
 
     // Constructor
@@ -543,6 +545,8 @@ class AlicuotaView extends Alicuota
 
         // Set up lookup cache
         $this->setupLookupOptions($this->activo);
+        $this->setupLookupOptions($this->compra);
+        $this->setupLookupOptions($this->venta);
 
         // Check modal
         if ($this->IsModal) {
@@ -706,35 +710,6 @@ class AlicuotaView extends Alicuota
         $options = &$this->OtherOptions;
         $option = $options["action"];
 
-        // Add
-        $item = &$option->add("add");
-        $addcaption = HtmlTitle($Language->phrase("ViewPageAddLink"));
-        if ($this->IsModal) {
-            $item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-action ew-add\" title=\"" . $addcaption . "\" data-caption=\"" . $addcaption . "\" href=\"" . HtmlEncode(GetUrl($this->AddUrl)) . "\">" . $Language->phrase("ViewPageAddLink") . "</a>";
-        }
-        $item->Visible = $this->AddUrl != "" && $Security->canAdd();
-
-        // Edit
-        $item = &$option->add("edit");
-        $editcaption = HtmlTitle($Language->phrase("ViewPageEditLink"));
-        if ($this->IsModal) {
-            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-        } else {
-            $item->Body = "<a class=\"ew-action ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("ViewPageEditLink") . "</a>";
-        }
-        $item->Visible = $this->EditUrl != "" && $Security->canEdit();
-
-        // Delete
-        $item = &$option->add("delete");
-        $url = GetUrl($this->DeleteUrl);
-        $item->Body = "<a class=\"ew-action ew-delete\"" .
-            ($this->InlineDelete || $this->IsModal ? " data-ew-action=\"inline-delete\"" : "") .
-            " title=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) . "\" data-caption=\"" . HtmlTitle($Language->phrase("ViewPageDeleteLink")) .
-            "\" href=\"" . HtmlEncode($url) . "\">" . $Language->phrase("ViewPageDeleteLink") . "</a>";
-        $item->Visible = $this->DeleteUrl != "" && $Security->canDelete();
-
         // Set up action default
         $option = $options["action"];
         $option->DropDownButtonPhrase = $Language->phrase("ButtonActions");
@@ -847,6 +822,8 @@ class AlicuotaView extends Alicuota
         $this->alicuota->setDbValue($row['alicuota']);
         $this->fecha->setDbValue($row['fecha']);
         $this->activo->setDbValue($row['activo']);
+        $this->compra->setDbValue($row['compra']);
+        $this->venta->setDbValue($row['venta']);
     }
 
     // Return a row with default values
@@ -859,6 +836,8 @@ class AlicuotaView extends Alicuota
         $row['alicuota'] = $this->alicuota->DefaultValue;
         $row['fecha'] = $this->fecha->DefaultValue;
         $row['activo'] = $this->activo->DefaultValue;
+        $row['compra'] = $this->compra->DefaultValue;
+        $row['venta'] = $this->venta->DefaultValue;
         return $row;
     }
 
@@ -892,6 +871,10 @@ class AlicuotaView extends Alicuota
 
         // activo
 
+        // compra
+
+        // venta
+
         // View row
         if ($this->RowType == RowType::VIEW) {
             // id
@@ -916,6 +899,20 @@ class AlicuotaView extends Alicuota
                 $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
             } else {
                 $this->activo->ViewValue = null;
+            }
+
+            // compra
+            if (strval($this->compra->CurrentValue) != "") {
+                $this->compra->ViewValue = $this->compra->optionCaption($this->compra->CurrentValue);
+            } else {
+                $this->compra->ViewValue = null;
+            }
+
+            // venta
+            if (strval($this->venta->CurrentValue) != "") {
+                $this->venta->ViewValue = $this->venta->optionCaption($this->venta->CurrentValue);
+            } else {
+                $this->venta->ViewValue = null;
             }
 
             // codigo
@@ -966,6 +963,10 @@ class AlicuotaView extends Alicuota
             // Set up lookup SQL and connection
             switch ($fld->FieldVar) {
                 case "x_activo":
+                    break;
+                case "x_compra":
+                    break;
+                case "x_venta":
                     break;
                 default:
                     $lookupFilter = "";

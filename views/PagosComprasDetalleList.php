@@ -35,7 +35,7 @@ ew.PREVIEW_NAV_STYLE ??= "tabs"; // tabs/pills/underline
 ew.PREVIEW_MODAL_CLASS ??= "modal modal-fullscreen-sm-down";
 ew.PREVIEW_ROW ??= true;
 ew.PREVIEW_SINGLE_ROW ??= false;
-ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.js?v=24.16.0", "preview");
+ew.PREVIEW || ew.ready("head", ew.PATH_BASE + "js/preview.min.js?v=24.16.0", "preview");
 </script>
 <script>
 loadjs.ready("head", function () {
@@ -58,6 +58,15 @@ loadjs.ready("head", function () {
 <?php $Page->FilterOptions->render("body") ?>
 <?php } ?>
 </div>
+<?php } ?>
+<?php if (!$Page->isExport() || Config("EXPORT_MASTER_RECORD") && $Page->isExport("print")) { ?>
+<?php
+if ($Page->DbMasterFilter != "" && $Page->getCurrentMasterTable() == "pagos_compras") {
+    if ($Page->MasterRecordExists) {
+        include_once "views/PagosComprasMaster.php";
+    }
+}
+?>
 <?php } ?>
 <?php if (!$Page->IsModal) { ?>
 <form name="fpagos_compras_detallesrch" id="fpagos_compras_detallesrch" class="ew-form ew-ext-search-form" action="<?= CurrentPageUrl(false) ?>" autocomplete="off">
@@ -154,6 +163,10 @@ $Page->showMessage();
 <?php if ($Page->IsModal) { ?>
 <input type="hidden" name="modal" value="1">
 <?php } ?>
+<?php if ($Page->getCurrentMasterTable() == "pagos_compras" && $Page->CurrentAction) { ?>
+<input type="hidden" name="<?= Config("TABLE_SHOW_MASTER") ?>" value="pagos_compras">
+<input type="hidden" name="fk_id" value="<?= HtmlEncode($Page->pagos_compras->getSessionValue()) ?>">
+<?php } ?>
 <div id="gmp_pagos_compras_detalle" class="card-body ew-grid-middle-panel <?= $Page->TableContainerClass ?>" style="<?= $Page->TableContainerStyle ?>">
 <?php if ($Page->TotalRecords > 0 || $Page->isGridEdit() || $Page->isMultiEdit()) { ?>
 <table id="tbl_pagos_compras_detallelist" class="<?= $Page->TableClass ?>"><!-- .ew-table -->
@@ -169,12 +182,6 @@ $Page->renderListOptions();
 // Render list options (header, left)
 $Page->ListOptions->render("header", "left");
 ?>
-<?php if ($Page->id->Visible) { // id ?>
-        <th data-name="id" class="<?= $Page->id->headerCellClass() ?>"><div id="elh_pagos_compras_detalle_id" class="pagos_compras_detalle_id"><?= $Page->renderFieldHeader($Page->id) ?></div></th>
-<?php } ?>
-<?php if ($Page->pagos_compras->Visible) { // pagos_compras ?>
-        <th data-name="pagos_compras" class="<?= $Page->pagos_compras->headerCellClass() ?>"><div id="elh_pagos_compras_detalle_pagos_compras" class="pagos_compras_detalle_pagos_compras"><?= $Page->renderFieldHeader($Page->pagos_compras) ?></div></th>
-<?php } ?>
 <?php if ($Page->metodo_pago->Visible) { // metodo_pago ?>
         <th data-name="metodo_pago" class="<?= $Page->metodo_pago->headerCellClass() ?>"><div id="elh_pagos_compras_detalle_metodo_pago" class="pagos_compras_detalle_metodo_pago"><?= $Page->renderFieldHeader($Page->metodo_pago) ?></div></th>
 <?php } ?>
@@ -230,22 +237,6 @@ while ($Page->RecordCount < $Page->StopRecord || $Page->RowIndex === '$rowindex$
 // Render list options (body, left)
 $Page->ListOptions->render("body", "left", $Page->RowCount);
 ?>
-    <?php if ($Page->id->Visible) { // id ?>
-        <td data-name="id"<?= $Page->id->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_compras_detalle_id" class="el_pagos_compras_detalle_id">
-<span<?= $Page->id->viewAttributes() ?>>
-<?= $Page->id->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
-    <?php if ($Page->pagos_compras->Visible) { // pagos_compras ?>
-        <td data-name="pagos_compras"<?= $Page->pagos_compras->cellAttributes() ?>>
-<span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_compras_detalle_pagos_compras" class="el_pagos_compras_detalle_pagos_compras">
-<span<?= $Page->pagos_compras->viewAttributes() ?>>
-<?= $Page->pagos_compras->getViewValue() ?></span>
-</span>
-</td>
-    <?php } ?>
     <?php if ($Page->metodo_pago->Visible) { // metodo_pago ?>
         <td data-name="metodo_pago"<?= $Page->metodo_pago->cellAttributes() ?>>
 <span id="el<?= $Page->RowIndex == '$rowindex$' ? '$rowindex$' : $Page->RowCount ?>_pagos_compras_detalle_metodo_pago" class="el_pagos_compras_detalle_metodo_pago">

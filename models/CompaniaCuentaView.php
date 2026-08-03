@@ -154,9 +154,9 @@ class CompaniaCuentaView extends CompaniaCuenta
         $this->numero->setVisibility();
         $this->mostrar->setVisibility();
         $this->cuenta->setVisibility();
-        $this->activo->setVisibility();
-        $this->compania->setVisibility();
         $this->pago_electronico->setVisibility();
+        $this->compania->setVisibility();
+        $this->activo->setVisibility();
     }
 
     // Constructor
@@ -550,8 +550,9 @@ class CompaniaCuentaView extends CompaniaCuenta
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
-        $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->pago_electronico);
+        $this->setupLookupOptions($this->compania);
+        $this->setupLookupOptions($this->activo);
 
         // Check modal
         if ($this->IsModal) {
@@ -860,9 +861,9 @@ class CompaniaCuentaView extends CompaniaCuenta
         $this->numero->setDbValue($row['numero']);
         $this->mostrar->setDbValue($row['mostrar']);
         $this->cuenta->setDbValue($row['cuenta']);
-        $this->activo->setDbValue($row['activo']);
-        $this->compania->setDbValue($row['compania']);
         $this->pago_electronico->setDbValue($row['pago_electronico']);
+        $this->compania->setDbValue($row['compania']);
+        $this->activo->setDbValue($row['activo']);
     }
 
     // Return a row with default values
@@ -876,9 +877,9 @@ class CompaniaCuentaView extends CompaniaCuenta
         $row['numero'] = $this->numero->DefaultValue;
         $row['mostrar'] = $this->mostrar->DefaultValue;
         $row['cuenta'] = $this->cuenta->DefaultValue;
-        $row['activo'] = $this->activo->DefaultValue;
-        $row['compania'] = $this->compania->DefaultValue;
         $row['pago_electronico'] = $this->pago_electronico->DefaultValue;
+        $row['compania'] = $this->compania->DefaultValue;
+        $row['activo'] = $this->activo->DefaultValue;
         return $row;
     }
 
@@ -914,11 +915,11 @@ class CompaniaCuentaView extends CompaniaCuenta
 
         // cuenta
 
-        // activo
+        // pago_electronico
 
         // compania
 
-        // pago_electronico
+        // activo
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -994,21 +995,42 @@ class CompaniaCuentaView extends CompaniaCuenta
                 $this->cuenta->ViewValue = null;
             }
 
-            // activo
-            if (strval($this->activo->CurrentValue) != "") {
-                $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
-            } else {
-                $this->activo->ViewValue = null;
-            }
-
-            // compania
-            $this->compania->ViewValue = $this->compania->CurrentValue;
-
             // pago_electronico
             if (strval($this->pago_electronico->CurrentValue) != "") {
                 $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
             } else {
                 $this->pago_electronico->ViewValue = null;
+            }
+
+            // compania
+            $this->compania->ViewValue = $this->compania->CurrentValue;
+            $curVal = strval($this->compania->CurrentValue);
+            if ($curVal != "") {
+                $this->compania->ViewValue = $this->compania->lookupCacheOption($curVal);
+                if ($this->compania->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->compania->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->compania->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->compania->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->compania->Lookup->renderViewRow($rswrk[0]);
+                        $this->compania->ViewValue = $this->compania->displayValue($arwrk);
+                    } else {
+                        $this->compania->ViewValue = $this->compania->CurrentValue;
+                    }
+                }
+            } else {
+                $this->compania->ViewValue = null;
+            }
+
+            // activo
+            if (strval($this->activo->CurrentValue) != "") {
+                $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
+            } else {
+                $this->activo->ViewValue = null;
             }
 
             // id
@@ -1039,17 +1061,17 @@ class CompaniaCuentaView extends CompaniaCuenta
             $this->cuenta->HrefValue = "";
             $this->cuenta->TooltipValue = "";
 
-            // activo
-            $this->activo->HrefValue = "";
-            $this->activo->TooltipValue = "";
+            // pago_electronico
+            $this->pago_electronico->HrefValue = "";
+            $this->pago_electronico->TooltipValue = "";
 
             // compania
             $this->compania->HrefValue = "";
             $this->compania->TooltipValue = "";
 
-            // pago_electronico
-            $this->pago_electronico->HrefValue = "";
-            $this->pago_electronico->TooltipValue = "";
+            // activo
+            $this->activo->HrefValue = "";
+            $this->activo->TooltipValue = "";
         }
 
         // Call Row Rendered event
@@ -1165,9 +1187,11 @@ class CompaniaCuentaView extends CompaniaCuenta
                 case "x_cuenta":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
-                case "x_activo":
-                    break;
                 case "x_pago_electronico":
+                    break;
+                case "x_compania":
+                    break;
+                case "x_activo":
                     break;
                 default:
                     $lookupFilter = "";

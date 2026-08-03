@@ -133,13 +133,13 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->activo->Visible) { // activo ?>
-    <tr id="r_activo"<?= $Page->activo->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compania_cuenta_activo"><?= $Page->activo->caption() ?></span></td>
-        <td data-name="activo"<?= $Page->activo->cellAttributes() ?>>
-<span id="el_compania_cuenta_activo">
-<span<?= $Page->activo->viewAttributes() ?>>
-<?= $Page->activo->getViewValue() ?></span>
+<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
+    <tr id="r_pago_electronico"<?= $Page->pago_electronico->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compania_cuenta_pago_electronico"><?= $Page->pago_electronico->caption() ?></span></td>
+        <td data-name="pago_electronico"<?= $Page->pago_electronico->cellAttributes() ?>>
+<span id="el_compania_cuenta_pago_electronico">
+<span<?= $Page->pago_electronico->viewAttributes() ?>>
+<?= $Page->pago_electronico->getViewValue() ?></span>
 </span>
 </td>
     </tr>
@@ -155,13 +155,13 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
-    <tr id="r_pago_electronico"<?= $Page->pago_electronico->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compania_cuenta_pago_electronico"><?= $Page->pago_electronico->caption() ?></span></td>
-        <td data-name="pago_electronico"<?= $Page->pago_electronico->cellAttributes() ?>>
-<span id="el_compania_cuenta_pago_electronico">
-<span<?= $Page->pago_electronico->viewAttributes() ?>>
-<?= $Page->pago_electronico->getViewValue() ?></span>
+<?php if ($Page->activo->Visible) { // activo ?>
+    <tr id="r_activo"<?= $Page->activo->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compania_cuenta_activo"><?= $Page->activo->caption() ?></span></td>
+        <td data-name="activo"<?= $Page->activo->cellAttributes() ?>>
+<span id="el_compania_cuenta_activo">
+<span<?= $Page->activo->viewAttributes() ?>>
+<?= $Page->activo->getViewValue() ?></span>
 </span>
 </td>
     </tr>

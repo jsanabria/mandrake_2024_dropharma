@@ -2177,64 +2177,91 @@ class ViewOutTdcfcvView extends ViewOutTdcfcv
 
     public function pageDataRendering(&$header)
     {
-        // Iniciamos el contenedor alineado con el espaciado estándar
-        $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
+        if (VerificaFuncion("050")) {
+            // Iniciamos el contenedor alineado con el espaciado estándar
+            $html = '<div class="d-flex flex-wrap gap-2 mb-3">';
 
-        // 1. Botón Editar (Solo si es NUEVO)
-        if($this->estatus->CurrentValue == "NUEVO") {
-            $urlEditar = "../TdcfcvAdd?tipo_documento=TDCFCV&codcli=0&pedido=" . $this->id->CurrentValue;
-            $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $urlEditar . '"><span class="fas fa-edit"></span> Editar Documento</a>';
-        }
-
-        // 2. Botón Imprimir
-        $urlImprimir = "../reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCV";
-        $html .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $urlImprimir . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
-
-        // 3. Botón Copiar
-        if($this->estatus->CurrentValue == "PROCESADO") {
-            $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
-            switch ($this->documento->CurrentValue) {
-                case "FC":
-                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
-                    break;
-                case "NC":
-                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
-                    break;
-                case "ND":
-                    $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
-                    break;
+            // 1. Botón Editar (Solo si es NUEVO)
+            if($this->estatus->CurrentValue == "NUEVO") {
+                $urlEditar = "../TdcfcvAdd?tipo_documento=TDCFCV&codcli=0&pedido=" . $this->id->CurrentValue;
+                $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="' . $urlEditar . '"><span class="fas fa-edit"></span> Editar Documento</a>';
             }
-        }
 
-        // Lógica de Pagos y Comprobante
-        $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
-        $rowPago = ExecuteRow($sql);
-        if ($rowPago) {
-            // 4. Botón Ver Pagos
-            $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $rowPago["id"];
-            $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
-
-            // 5. Botón Imprimir Comprobante (Adaptado al estilo del grupo)
-            $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
-            $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
-
-            // 6. Botón Revertir (Si no está impreso y si tiene permiso)
-            // if ($this->impreso->CurrentValue == "N") {
-                if (VerificaFuncion('014')) {
-                    $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
-                }
-            // }
-        } else {
-            // 7. Botón Registrar Pago
+            // 2. Botón Imprimir
             if ($this->estatus->CurrentValue == "PROCESADO") {
-                $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
-                $html .= '<a class="btn btn-outline-primary" href="' . $urlAddPago . '"><span class="fas fa-money-bill-wave"></span> Registrar Pago</a>';
+                $urlImprimir = "../reportes/factura_de_venta.php?id=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+                $html .= '<a class="btn btn-outline-primary" id="btnImprimir" href="' . $urlImprimir . '" target="_blank"><span class="fas fa-print"></span> Imprimir Documento</a>';
             }
-        }
-        $html .= '</div>'; // Cerramos el contenedor flex
 
-        // Asignamos todo el bloque al header de PHPMaker
-        $header = $html;
+            // 3. Botón Copiar
+            if($this->estatus->CurrentValue == "PROCESADO") {
+                $urlCopiar = "../FacturaDeVentaCopiarComo?id=" . $this->id->CurrentValue;
+                switch ($this->documento->CurrentValue) {
+                    case "FC":
+                        $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC/ND</a>';
+                        break;
+                    case "NC":
+                        // $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear ND</a>';
+                        break;
+                    case "ND":
+                        $html .= '<a class="btn btn-outline-primary" id="btnCopiar" href="' . $urlCopiar . '"><span class="fas fa-copy"></span> Crear NC</a>';
+                        break;
+                }
+            }
+
+            // Lógica de Pagos y Comprobante
+            $sql = "SELECT id FROM cobros_cliente WHERE id_documento = " . $this->id->CurrentValue . ";";
+            $rowPago = ExecuteRow($sql);
+            if ($rowPago) {
+                // 4. Botón Ver Pagos
+                $urlVerPagos = "../CobrosClienteDetalleList?showmaster=cobros_cliente&fk_id=" . $rowPago["id"];
+                $html .= '<a class="btn btn-outline-primary" href="' . $urlVerPagos . '"><span class="fas fa-eye"></span> Ver Pago(s)</a>';
+
+                // 5. Botón Imprimir Comprobante (Adaptado al estilo del grupo)
+                $urlComprobante = "../reportes/comprobante_pago.php?id_compra=" . $this->id->CurrentValue . "&tipo=TDCFCV";
+                $html .= '<a class="btn btn-outline-danger" href="' . $urlComprobante . '" target="_blank"><span class="fas fa-file-pdf"></span> Imprimir Comprobante</a>';
+
+                // 6. Botón Revertir (Si no está impreso y si tiene permiso)
+                // if ($this->impreso->CurrentValue == "N") {
+                    if (VerificaFuncion('014')) {
+                        $html .= '<a class="btn btn-outline-danger" onclick="js: RevertirPagos(' . $this->id->CurrentValue . ', \'' . CurrentUserName() . '\');" style="cursor:pointer;"><span class="fas fa-undo"></span> Revertir Pago(s)</a>';
+                    }
+                // }
+            } else {
+                // 7. Botón Registrar Pago
+                if ($this->estatus->CurrentValue == "PROCESADO") {
+                    $urlAddPago = "../RegistrarPagosClientes?id_compra=" . $this->id->CurrentValue;
+                    $html .= '<a class="btn btn-success btn-pulse" href="' . $urlAddPago . '">
+                                <span class="fas fa-money-bill-wave"></span> Registrar Pago
+                            </a>';
+                }
+            }
+            $html .= '</div>'; // Cerramos el contenedor flex
+            $html .= '
+            <style>
+            @keyframes pulsePago {
+                0% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 rgba(25,135,84,.6);
+                }
+                50% {
+                    transform: scale(1.08);
+                    box-shadow: 0 0 15px rgba(25,135,84,.8);
+                }
+                100% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 rgba(25,135,84,0);
+                }
+            }
+            .btn-pulse{
+                animation:pulsePago 1.4s infinite;
+                font-weight:bold;
+            }
+            </style>';
+
+            // Asignamos todo el bloque al header de PHPMaker
+            $header = $html;
+        }
     }
 
     // Page Data Rendered event

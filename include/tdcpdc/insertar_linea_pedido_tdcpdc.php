@@ -17,6 +17,10 @@ $descuentoG = intval($_REQUEST["descuentoG"]);
 $nota = $_REQUEST["nota"]; 
 $consignacion = intval($_REQUEST["consignacion"]); 
 
+$lote = trim($_REQUEST["lote"] ?? ""); 
+$vence = $_REQUEST["vence"] ?? "1990-01-01"; 
+$vence = ($vence == "" ? "1990-01-01" : $vence);
+
 $tipo_documento = "TDCPDC";
 
 $estatus = "NUEVO";
@@ -111,11 +115,11 @@ else {
 $sql = "INSERT INTO entradas_salidas
 			(id, tipo_documento, id_documento, fabricante, articulo, 
 			almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, 
-			costo_unidad, costo, alicuota, descuento, precio_unidad_sin_desc, check_ne, newdata)
+			costo_unidad, costo, alicuota, descuento, precio_unidad_sin_desc, check_ne, newdata, lote, fecha_vencimiento)
 		VALUES 
 			(NULL, '$tipo_documento', $pedido, $fabricante, $articulo, 
 			'$almacen', $cantidad, '$unidad_medida', $cantidad_unidad_medida, $cantidad_movimiento, 
-			$costo, $total, $alicuota, $descuento, $costoFull, 'N', 'S');";
+			$costo, $total, $alicuota, $descuento, $costoFull, 'N', 'S', '$lote', '$vence');";
 mysqli_query($link, $sql);
 $sql = "SELECT LAST_INSERT_ID() AS id_item;";
 $result = mysqli_query($link, $sql);

@@ -61,9 +61,9 @@ class CompaniaCuenta extends DbTable
     public $numero;
     public $mostrar;
     public $cuenta;
-    public $activo;
-    public $compania;
     public $pago_electronico;
+    public $compania;
+    public $activo;
 
     // Page ID
     public $PageID = ""; // To be overridden by subclass
@@ -299,6 +299,61 @@ OR
         $this->cuenta->SearchOperators = ["=", "<>", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
         $this->Fields['cuenta'] = &$this->cuenta;
 
+        // pago_electronico
+        $this->pago_electronico = new DbField(
+            $this, // Table
+            'x_pago_electronico', // Variable name
+            'pago_electronico', // Name
+            '`pago_electronico`', // Expression
+            '`pago_electronico`', // Basic search expression
+            200, // Type
+            1, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`pago_electronico`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'RADIO' // Edit Tag
+        );
+        $this->pago_electronico->addMethod("getDefault", fn() => "S");
+        $this->pago_electronico->InputTextType = "text";
+        $this->pago_electronico->Raw = true;
+        $this->pago_electronico->Nullable = false; // NOT NULL field
+        $this->pago_electronico->Lookup = new Lookup($this->pago_electronico, 'compania_cuenta', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
+        $this->pago_electronico->OptionCount = 2;
+        $this->pago_electronico->SearchOperators = ["=", "<>"];
+        $this->Fields['pago_electronico'] = &$this->pago_electronico;
+
+        // compania
+        $this->compania = new DbField(
+            $this, // Table
+            'x_compania', // Variable name
+            'compania', // Name
+            '`compania`', // Expression
+            '`compania`', // Basic search expression
+            19, // Type
+            11, // Size
+            -1, // Date/Time format
+            false, // Is upload field
+            '`compania`', // Virtual expression
+            false, // Is virtual
+            false, // Force selection
+            false, // Is Virtual search
+            'FORMATTED TEXT', // View Tag
+            'TEXT' // Edit Tag
+        );
+        $this->compania->addMethod("getDefault", fn() => 0);
+        $this->compania->InputTextType = "text";
+        $this->compania->Raw = true;
+        $this->compania->IsForeignKey = true; // Foreign key field
+        $this->compania->Nullable = false; // NOT NULL field
+        $this->compania->Lookup = new Lookup($this->compania, 'compania', false, 'id', ["nombre","ci_rif","",""], '', '', [], [], [], [], [], [], false, '', '', "CONCAT(COALESCE(`nombre`, ''),'" . ValueSeparator(1, $this->compania) . "',COALESCE(`ci_rif`,''))");
+        $this->compania->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
+        $this->compania->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
+        $this->Fields['compania'] = &$this->compania;
+
         // activo
         $this->activo = new DbField(
             $this, // Table
@@ -327,60 +382,6 @@ OR
         $this->activo->OptionCount = 2;
         $this->activo->SearchOperators = ["=", "<>", "IS NULL", "IS NOT NULL"];
         $this->Fields['activo'] = &$this->activo;
-
-        // compania
-        $this->compania = new DbField(
-            $this, // Table
-            'x_compania', // Variable name
-            'compania', // Name
-            '`compania`', // Expression
-            '`compania`', // Basic search expression
-            19, // Type
-            11, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`compania`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'TEXT' // Edit Tag
-        );
-        $this->compania->addMethod("getDefault", fn() => 0);
-        $this->compania->InputTextType = "text";
-        $this->compania->Raw = true;
-        $this->compania->IsForeignKey = true; // Foreign key field
-        $this->compania->Nullable = false; // NOT NULL field
-        $this->compania->DefaultErrorMessage = $Language->phrase("IncorrectInteger");
-        $this->compania->SearchOperators = ["=", "<>", "IN", "NOT IN", "<", "<=", ">", ">=", "BETWEEN", "NOT BETWEEN"];
-        $this->Fields['compania'] = &$this->compania;
-
-        // pago_electronico
-        $this->pago_electronico = new DbField(
-            $this, // Table
-            'x_pago_electronico', // Variable name
-            'pago_electronico', // Name
-            '`pago_electronico`', // Expression
-            '`pago_electronico`', // Basic search expression
-            200, // Type
-            1, // Size
-            -1, // Date/Time format
-            false, // Is upload field
-            '`pago_electronico`', // Virtual expression
-            false, // Is virtual
-            false, // Force selection
-            false, // Is Virtual search
-            'FORMATTED TEXT', // View Tag
-            'RADIO' // Edit Tag
-        );
-        $this->pago_electronico->addMethod("getDefault", fn() => "S");
-        $this->pago_electronico->InputTextType = "text";
-        $this->pago_electronico->Raw = true;
-        $this->pago_electronico->Nullable = false; // NOT NULL field
-        $this->pago_electronico->Lookup = new Lookup($this->pago_electronico, 'compania_cuenta', false, '', ["","","",""], '', '', [], [], [], [], [], [], false, '', '', "");
-        $this->pago_electronico->OptionCount = 2;
-        $this->pago_electronico->SearchOperators = ["=", "<>"];
-        $this->Fields['pago_electronico'] = &$this->pago_electronico;
 
         // Add Doctrine Cache
         $this->Cache = new \Symfony\Component\Cache\Adapter\ArrayAdapter();
@@ -1003,9 +1004,9 @@ OR
         $this->numero->DbValue = $row['numero'];
         $this->mostrar->DbValue = $row['mostrar'];
         $this->cuenta->DbValue = $row['cuenta'];
-        $this->activo->DbValue = $row['activo'];
-        $this->compania->DbValue = $row['compania'];
         $this->pago_electronico->DbValue = $row['pago_electronico'];
+        $this->compania->DbValue = $row['compania'];
+        $this->activo->DbValue = $row['activo'];
     }
 
     // Delete uploaded files
@@ -1369,9 +1370,9 @@ OR
         $this->numero->setDbValue($row['numero']);
         $this->mostrar->setDbValue($row['mostrar']);
         $this->cuenta->setDbValue($row['cuenta']);
-        $this->activo->setDbValue($row['activo']);
-        $this->compania->setDbValue($row['compania']);
         $this->pago_electronico->setDbValue($row['pago_electronico']);
+        $this->compania->setDbValue($row['compania']);
+        $this->activo->setDbValue($row['activo']);
     }
 
     // Render list content
@@ -1416,11 +1417,11 @@ OR
 
         // cuenta
 
-        // activo
+        // pago_electronico
 
         // compania
 
-        // pago_electronico
+        // activo
 
         // id
         $this->id->ViewValue = $this->id->CurrentValue;
@@ -1494,21 +1495,42 @@ OR
             $this->cuenta->ViewValue = null;
         }
 
-        // activo
-        if (strval($this->activo->CurrentValue) != "") {
-            $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
-        } else {
-            $this->activo->ViewValue = null;
-        }
-
-        // compania
-        $this->compania->ViewValue = $this->compania->CurrentValue;
-
         // pago_electronico
         if (strval($this->pago_electronico->CurrentValue) != "") {
             $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
         } else {
             $this->pago_electronico->ViewValue = null;
+        }
+
+        // compania
+        $this->compania->ViewValue = $this->compania->CurrentValue;
+        $curVal = strval($this->compania->CurrentValue);
+        if ($curVal != "") {
+            $this->compania->ViewValue = $this->compania->lookupCacheOption($curVal);
+            if ($this->compania->ViewValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->compania->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->compania->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                $sqlWrk = $this->compania->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->compania->Lookup->renderViewRow($rswrk[0]);
+                    $this->compania->ViewValue = $this->compania->displayValue($arwrk);
+                } else {
+                    $this->compania->ViewValue = $this->compania->CurrentValue;
+                }
+            }
+        } else {
+            $this->compania->ViewValue = null;
+        }
+
+        // activo
+        if (strval($this->activo->CurrentValue) != "") {
+            $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
+        } else {
+            $this->activo->ViewValue = null;
         }
 
         // id
@@ -1539,17 +1561,17 @@ OR
         $this->cuenta->HrefValue = "";
         $this->cuenta->TooltipValue = "";
 
-        // activo
-        $this->activo->HrefValue = "";
-        $this->activo->TooltipValue = "";
+        // pago_electronico
+        $this->pago_electronico->HrefValue = "";
+        $this->pago_electronico->TooltipValue = "";
 
         // compania
         $this->compania->HrefValue = "";
         $this->compania->TooltipValue = "";
 
-        // pago_electronico
-        $this->pago_electronico->HrefValue = "";
-        $this->pago_electronico->TooltipValue = "";
+        // activo
+        $this->activo->HrefValue = "";
+        $this->activo->TooltipValue = "";
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1608,27 +1630,45 @@ OR
         $this->cuenta->setupEditAttributes();
         $this->cuenta->PlaceHolder = RemoveHtml($this->cuenta->caption());
 
-        // activo
-        $this->activo->setupEditAttributes();
-        $this->activo->EditValue = $this->activo->options(true);
-        $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
+        // pago_electronico
+        $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+        $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
 
         // compania
         $this->compania->setupEditAttributes();
         if ($this->compania->getSessionValue() != "") {
             $this->compania->CurrentValue = GetForeignKeyValue($this->compania->getSessionValue());
             $this->compania->ViewValue = $this->compania->CurrentValue;
+            $curVal = strval($this->compania->CurrentValue);
+            if ($curVal != "") {
+                $this->compania->ViewValue = $this->compania->lookupCacheOption($curVal);
+                if ($this->compania->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->compania->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->compania->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->compania->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->compania->Lookup->renderViewRow($rswrk[0]);
+                        $this->compania->ViewValue = $this->compania->displayValue($arwrk);
+                    } else {
+                        $this->compania->ViewValue = $this->compania->CurrentValue;
+                    }
+                }
+            } else {
+                $this->compania->ViewValue = null;
+            }
         } else {
             $this->compania->EditValue = $this->compania->CurrentValue;
             $this->compania->PlaceHolder = RemoveHtml($this->compania->caption());
-            if (strval($this->compania->EditValue) != "" && is_numeric($this->compania->EditValue)) {
-                $this->compania->EditValue = $this->compania->EditValue;
-            }
         }
 
-        // pago_electronico
-        $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
-        $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
+        // activo
+        $this->activo->setupEditAttributes();
+        $this->activo->EditValue = $this->activo->options(true);
+        $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
 
         // Call Row Rendered event
         $this->rowRendered();
@@ -1665,9 +1705,9 @@ OR
                     $doc->exportCaption($this->numero);
                     $doc->exportCaption($this->mostrar);
                     $doc->exportCaption($this->cuenta);
-                    $doc->exportCaption($this->activo);
-                    $doc->exportCaption($this->compania);
                     $doc->exportCaption($this->pago_electronico);
+                    $doc->exportCaption($this->compania);
+                    $doc->exportCaption($this->activo);
                 } else {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->banco);
@@ -1676,9 +1716,9 @@ OR
                     $doc->exportCaption($this->numero);
                     $doc->exportCaption($this->mostrar);
                     $doc->exportCaption($this->cuenta);
-                    $doc->exportCaption($this->activo);
-                    $doc->exportCaption($this->compania);
                     $doc->exportCaption($this->pago_electronico);
+                    $doc->exportCaption($this->compania);
+                    $doc->exportCaption($this->activo);
                 }
                 $doc->endExportRow();
             }
@@ -1712,9 +1752,9 @@ OR
                         $doc->exportField($this->numero);
                         $doc->exportField($this->mostrar);
                         $doc->exportField($this->cuenta);
-                        $doc->exportField($this->activo);
-                        $doc->exportField($this->compania);
                         $doc->exportField($this->pago_electronico);
+                        $doc->exportField($this->compania);
+                        $doc->exportField($this->activo);
                     } else {
                         $doc->exportField($this->id);
                         $doc->exportField($this->banco);
@@ -1723,9 +1763,9 @@ OR
                         $doc->exportField($this->numero);
                         $doc->exportField($this->mostrar);
                         $doc->exportField($this->cuenta);
-                        $doc->exportField($this->activo);
-                        $doc->exportField($this->compania);
                         $doc->exportField($this->pago_electronico);
+                        $doc->exportField($this->compania);
+                        $doc->exportField($this->activo);
                     }
                     $doc->endExportRow($rowCnt);
                 }

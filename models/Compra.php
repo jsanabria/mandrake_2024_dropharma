@@ -425,7 +425,7 @@ class Compra extends DbTable
             'FORMATTED TEXT', // View Tag
             'SELECT' // Edit Tag
         );
-        $this->alicuota->addMethod("getSelectFilter", fn() => "`activo` = 'S' AND `codigo` <> 'IGT'");
+        $this->alicuota->addMethod("getSelectFilter", fn() => "`activo` = 'S' AND `compra` = 'S' AND `codigo` <> 'IGT'");
         $this->alicuota->InputTextType = "text";
         $this->alicuota->Raw = true;
         $this->alicuota->Required = true; // Required field
@@ -2659,7 +2659,6 @@ class Compra extends DbTable
                 if ($exportPageType == "view") {
                     $doc->exportCaption($this->id);
                     $doc->exportCaption($this->proveedor);
-                    $doc->exportCaption($this->tipo_documento);
                     $doc->exportCaption($this->doc_afectado);
                     $doc->exportCaption($this->documento);
                     $doc->exportCaption($this->nro_control);
@@ -2750,7 +2749,6 @@ class Compra extends DbTable
                     if ($exportPageType == "view") {
                         $doc->exportField($this->id);
                         $doc->exportField($this->proveedor);
-                        $doc->exportField($this->tipo_documento);
                         $doc->exportField($this->doc_afectado);
                         $doc->exportField($this->documento);
                         $doc->exportField($this->nro_control);

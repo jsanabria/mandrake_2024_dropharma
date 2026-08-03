@@ -136,9 +136,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->numero->setVisibility();
         $this->mostrar->setVisibility();
         $this->cuenta->setVisibility();
-        $this->activo->setVisibility();
-        $this->compania->Visible = false;
         $this->pago_electronico->setVisibility();
+        $this->compania->Visible = false;
+        $this->activo->setVisibility();
     }
 
     // Constructor
@@ -531,8 +531,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->setupLookupOptions($this->tipo);
         $this->setupLookupOptions($this->mostrar);
         $this->setupLookupOptions($this->cuenta);
-        $this->setupLookupOptions($this->activo);
         $this->setupLookupOptions($this->pago_electronico);
+        $this->setupLookupOptions($this->compania);
+        $this->setupLookupOptions($this->activo);
 
         // Check modal
         if ($this->IsModal) {
@@ -840,16 +841,6 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             }
         }
 
-        // Check field name 'activo' first before field var 'x_activo'
-        $val = $CurrentForm->hasValue("activo") ? $CurrentForm->getValue("activo") : $CurrentForm->getValue("x_activo");
-        if (!$this->activo->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->activo->Visible = false; // Disable update for API request
-            } else {
-                $this->activo->setFormValue($val);
-            }
-        }
-
         // Check field name 'pago_electronico' first before field var 'x_pago_electronico'
         $val = $CurrentForm->hasValue("pago_electronico") ? $CurrentForm->getValue("pago_electronico") : $CurrentForm->getValue("x_pago_electronico");
         if (!$this->pago_electronico->IsDetailKey) {
@@ -857,6 +848,16 @@ class CompaniaCuentaEdit extends CompaniaCuenta
                 $this->pago_electronico->Visible = false; // Disable update for API request
             } else {
                 $this->pago_electronico->setFormValue($val);
+            }
+        }
+
+        // Check field name 'activo' first before field var 'x_activo'
+        $val = $CurrentForm->hasValue("activo") ? $CurrentForm->getValue("activo") : $CurrentForm->getValue("x_activo");
+        if (!$this->activo->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->activo->Visible = false; // Disable update for API request
+            } else {
+                $this->activo->setFormValue($val);
             }
         }
 
@@ -878,8 +879,8 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->numero->CurrentValue = $this->numero->FormValue;
         $this->mostrar->CurrentValue = $this->mostrar->FormValue;
         $this->cuenta->CurrentValue = $this->cuenta->FormValue;
-        $this->activo->CurrentValue = $this->activo->FormValue;
         $this->pago_electronico->CurrentValue = $this->pago_electronico->FormValue;
+        $this->activo->CurrentValue = $this->activo->FormValue;
     }
 
     /**
@@ -982,9 +983,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $this->numero->setDbValue($row['numero']);
         $this->mostrar->setDbValue($row['mostrar']);
         $this->cuenta->setDbValue($row['cuenta']);
-        $this->activo->setDbValue($row['activo']);
-        $this->compania->setDbValue($row['compania']);
         $this->pago_electronico->setDbValue($row['pago_electronico']);
+        $this->compania->setDbValue($row['compania']);
+        $this->activo->setDbValue($row['activo']);
     }
 
     // Return a row with default values
@@ -998,9 +999,9 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         $row['numero'] = $this->numero->DefaultValue;
         $row['mostrar'] = $this->mostrar->DefaultValue;
         $row['cuenta'] = $this->cuenta->DefaultValue;
-        $row['activo'] = $this->activo->DefaultValue;
-        $row['compania'] = $this->compania->DefaultValue;
         $row['pago_electronico'] = $this->pago_electronico->DefaultValue;
+        $row['compania'] = $this->compania->DefaultValue;
+        $row['activo'] = $this->activo->DefaultValue;
         return $row;
     }
 
@@ -1056,14 +1057,14 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         // cuenta
         $this->cuenta->RowCssClass = "row";
 
-        // activo
-        $this->activo->RowCssClass = "row";
+        // pago_electronico
+        $this->pago_electronico->RowCssClass = "row";
 
         // compania
         $this->compania->RowCssClass = "row";
 
-        // pago_electronico
-        $this->pago_electronico->RowCssClass = "row";
+        // activo
+        $this->activo->RowCssClass = "row";
 
         // View row
         if ($this->RowType == RowType::VIEW) {
@@ -1139,21 +1140,42 @@ class CompaniaCuentaEdit extends CompaniaCuenta
                 $this->cuenta->ViewValue = null;
             }
 
-            // activo
-            if (strval($this->activo->CurrentValue) != "") {
-                $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
-            } else {
-                $this->activo->ViewValue = null;
-            }
-
-            // compania
-            $this->compania->ViewValue = $this->compania->CurrentValue;
-
             // pago_electronico
             if (strval($this->pago_electronico->CurrentValue) != "") {
                 $this->pago_electronico->ViewValue = $this->pago_electronico->optionCaption($this->pago_electronico->CurrentValue);
             } else {
                 $this->pago_electronico->ViewValue = null;
+            }
+
+            // compania
+            $this->compania->ViewValue = $this->compania->CurrentValue;
+            $curVal = strval($this->compania->CurrentValue);
+            if ($curVal != "") {
+                $this->compania->ViewValue = $this->compania->lookupCacheOption($curVal);
+                if ($this->compania->ViewValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->compania->Lookup->getTable()->Fields["id"]->searchExpression(), "=", $curVal, $this->compania->Lookup->getTable()->Fields["id"]->searchDataType(), "");
+                    $sqlWrk = $this->compania->Lookup->getSql(false, $filterWrk, '', $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->compania->Lookup->renderViewRow($rswrk[0]);
+                        $this->compania->ViewValue = $this->compania->displayValue($arwrk);
+                    } else {
+                        $this->compania->ViewValue = $this->compania->CurrentValue;
+                    }
+                }
+            } else {
+                $this->compania->ViewValue = null;
+            }
+
+            // activo
+            if (strval($this->activo->CurrentValue) != "") {
+                $this->activo->ViewValue = $this->activo->optionCaption($this->activo->CurrentValue);
+            } else {
+                $this->activo->ViewValue = null;
             }
 
             // banco
@@ -1174,11 +1196,11 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             // cuenta
             $this->cuenta->HrefValue = "";
 
-            // activo
-            $this->activo->HrefValue = "";
-
             // pago_electronico
             $this->pago_electronico->HrefValue = "";
+
+            // activo
+            $this->activo->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
             // banco
             $this->banco->setupEditAttributes();
@@ -1272,14 +1294,14 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             }
             $this->cuenta->PlaceHolder = RemoveHtml($this->cuenta->caption());
 
+            // pago_electronico
+            $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
+            $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
+
             // activo
             $this->activo->setupEditAttributes();
             $this->activo->EditValue = $this->activo->options(true);
             $this->activo->PlaceHolder = RemoveHtml($this->activo->caption());
-
-            // pago_electronico
-            $this->pago_electronico->EditValue = $this->pago_electronico->options(false);
-            $this->pago_electronico->PlaceHolder = RemoveHtml($this->pago_electronico->caption());
 
             // Edit refer script
 
@@ -1301,11 +1323,11 @@ class CompaniaCuentaEdit extends CompaniaCuenta
             // cuenta
             $this->cuenta->HrefValue = "";
 
-            // activo
-            $this->activo->HrefValue = "";
-
             // pago_electronico
             $this->pago_electronico->HrefValue = "";
+
+            // activo
+            $this->activo->HrefValue = "";
         }
         if ($this->RowType == RowType::ADD || $this->RowType == RowType::EDIT || $this->RowType == RowType::SEARCH) { // Add/Edit/Search row
             $this->setupFieldTitles();
@@ -1357,14 +1379,14 @@ class CompaniaCuentaEdit extends CompaniaCuenta
                     $this->cuenta->addErrorMessage(str_replace("%s", $this->cuenta->caption(), $this->cuenta->RequiredErrorMessage));
                 }
             }
-            if ($this->activo->Visible && $this->activo->Required) {
-                if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
-                    $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
-                }
-            }
             if ($this->pago_electronico->Visible && $this->pago_electronico->Required) {
                 if ($this->pago_electronico->FormValue == "") {
                     $this->pago_electronico->addErrorMessage(str_replace("%s", $this->pago_electronico->caption(), $this->pago_electronico->RequiredErrorMessage));
+                }
+            }
+            if ($this->activo->Visible && $this->activo->Required) {
+                if (!$this->activo->IsDetailKey && EmptyValue($this->activo->FormValue)) {
+                    $this->activo->addErrorMessage(str_replace("%s", $this->activo->caption(), $this->activo->RequiredErrorMessage));
                 }
             }
 
@@ -1492,11 +1514,11 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         // cuenta
         $this->cuenta->setDbValueDef($rsnew, $this->cuenta->CurrentValue, $this->cuenta->ReadOnly);
 
-        // activo
-        $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, $this->activo->ReadOnly);
-
         // pago_electronico
         $this->pago_electronico->setDbValueDef($rsnew, $this->pago_electronico->CurrentValue, $this->pago_electronico->ReadOnly);
+
+        // activo
+        $this->activo->setDbValueDef($rsnew, $this->activo->CurrentValue, $this->activo->ReadOnly);
         return $rsnew;
     }
 
@@ -1524,11 +1546,11 @@ class CompaniaCuentaEdit extends CompaniaCuenta
         if (isset($row['cuenta'])) { // cuenta
             $this->cuenta->CurrentValue = $row['cuenta'];
         }
-        if (isset($row['activo'])) { // activo
-            $this->activo->CurrentValue = $row['activo'];
-        }
         if (isset($row['pago_electronico'])) { // pago_electronico
             $this->pago_electronico->CurrentValue = $row['pago_electronico'];
+        }
+        if (isset($row['activo'])) { // activo
+            $this->activo->CurrentValue = $row['activo'];
         }
     }
 
@@ -1639,9 +1661,11 @@ class CompaniaCuentaEdit extends CompaniaCuenta
                 case "x_cuenta":
                     $lookupFilter = $fld->getSelectFilter(); // PHP
                     break;
-                case "x_activo":
-                    break;
                 case "x_pago_electronico":
+                    break;
+                case "x_compania":
+                    break;
+                case "x_activo":
                     break;
                 default:
                     $lookupFilter = "";

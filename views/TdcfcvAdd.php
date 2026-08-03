@@ -9,9 +9,6 @@ $TdcfcvAdd = &$Page;
 $Page->showMessage();
 ?>
 <?php
-$Page->showMessage();
-?>
-<?php
 $codcli = isset($_REQUEST["codcli"]) ? $_REQUEST["codcli"] : 0;
 $tipo_documento = $_REQUEST["tipo_documento"];
 
@@ -37,9 +34,10 @@ $nro_documento = "";
 $descTransferencista = 0.00;
 $descFabricante = 0.00;
 $id_documento_padre = 0;
+$doc_afe = 0;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre FROM salidas WHERE id = $pedido;";
+    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre, IFNULL(doc_afe, 0) AS doc_afe FROM salidas WHERE id = $pedido;";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -52,6 +50,7 @@ if(isset($_REQUEST["pedido"])) {
       $descTransferencista = floatval($row["descuento2"]);
       $descFabricante = floatval($row["descuento3"]);
       $id_documento_padre = intval($row["id_documento_padre"]);
+      $doc_afe = $row["doc_afe"];
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -176,7 +175,7 @@ if (intval($pedido) > 0) {
             <input type="range"
                    class="form-range"
                    min="<?= $PorDesMin ?>"
-                   max="99"
+                   max="80"
                    step="1"
                    id="rangoDescuentoCliente"
                    value="<?= intval($PorDesAct) ?>">
@@ -206,7 +205,7 @@ if (intval($pedido) > 0) {
             <input type="range"
                    class="form-range"
                    min="0"
-                   max="99"
+                   max="80"
                    step="1"
                    id="rangoTransferencista"
                    value="<?= intval($descTransferencista) ?>">
@@ -414,6 +413,39 @@ if (intval($pedido) > 0) {
   </div>
 </div>
 
+<?php
+$condicionPago = "";
+
+// Si es una Nota de Crédito, buscar la factura origen
+if ($consignacion == "NC" && trim($doc_afectado) != "") {
+    /*
+    $sql = "
+        SELECT entregado
+        FROM salidas
+        WHERE tipo_documento = 'TDCFCV'
+          AND documento = 'FC'
+          AND nro_documento = '" . AdjustSql($doc_afectado) . "'
+        LIMIT 1;
+    ";
+    */
+    $sql = "
+        SELECT entregado
+        FROM salidas
+        WHERE id = $doc_afe
+        LIMIT 1;
+    ";
+
+    $condicionPago = ExecuteScalar($sql);
+
+    // Normalizar por seguridad
+    $condicionPago = strtoupper(trim($condicionPago));
+
+    if ($condicionPago != "S" && $condicionPago != "N") {
+        $condicionPago = "";
+    }
+}
+?>
+
 <script type="text/javascript">
 loadjs.ready(["jquery"], function () {
     const $ = jQuery;
@@ -611,8 +643,8 @@ loadjs.ready(["jquery"], function () {
             return false;
         }
 
-        if ((id.indexOf("_descuento") >= 0 || id.indexOf("_descuento2") >= 0) && (valor < 0 || valor >= 100)) {
-            alertMsg("El descuento debe estar entre 0 y 99.");
+        if ((id.indexOf("_descuento") >= 0 || id.indexOf("_descuento2") >= 0) && (valor < 0 || valor > 80)) {
+            alertMsg("El descuento debe estar entre 0 y 80.");
             return false;
         }
 
@@ -1647,11 +1679,80 @@ loadjs.ready(["jquery"], function () {
                 const miModal = new bootstrap.Modal(document.getElementById('modalConfirmarFiscal'));
                 miModal.show();
 
+                // Cada vez que se abre el modal, se reinicia la condición de pago
+                // y el botón "Sí, Procesar" queda deshabilitado hasta que el
+                // usuario elija explícitamente Contado o Crédito.
+                const condicionPago = "<?= $condicionPago ?>";
+
+                $("#modal_tipo_pago").val(condicionPago);
+
+                // Si viene preseleccionado se habilita el botón,
+                // de lo contrario el usuario debe escogerlo.
+                $("#btnConfirmarProcesar").prop(
+                    "disabled",
+                    condicionPago === ""
+                );
+
+                $("#modal_tipo_pago").off("change").on("change", function () {
+                    $("#btnConfirmarProcesar").prop(
+                        "disabled",
+                        $(this).val() === ""
+                    );
+                });
+
+                $("#modal_tipo_pago").off("change").on("change", function () {
+                    $("#btnConfirmarProcesar").prop("disabled", $(this).val() === "");
+                });
+
+                // Reiniciar también el switch de Factura de Contingencia y su motivo.
+                $("#modal_contingencia").prop("checked", false);
+                $("#div_nota_contingencia").hide();
+                $("#modal_nota_contingencia").val("");
+
+                $("#modal_contingencia").off("change").on("change", function () {
+                    if ($(this).is(":checked")) {
+                        if (!confirm("¿Está seguro de registrar esta factura como Factura de Contingencia?")) {
+                            $(this).prop("checked", false);
+                            $("#div_nota_contingencia").slideUp(150);
+                            $("#modal_nota_contingencia").val("");
+                            return;
+                        }
+                        $("#div_nota_contingencia").slideDown(150);
+                        $("#modal_nota_contingencia").trigger("focus");
+                    } else {
+                        $("#div_nota_contingencia").slideUp(150);
+                        $("#modal_nota_contingencia").val("");
+                    }
+                });
+
                 // Desenlazar eventos anteriores del botón de confirmación para evitar ejecuciones múltiples
                 $("#btnConfirmarProcesar").off("click").on("click", function() {
                     const btn = $(this);
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
+
+                    // 'S' = Contado, 'N' = Crédito. Viaja a TdcfcvProcess.php para
+                    // actualizar salidas.entregado.
+                    const tipoPago = $("#modal_tipo_pago").val();
+                    if (tipoPago !== "S" && tipoPago !== "N") {
+                        alertMsg("Debe indicar si la condición de pago es Contado o Crédito.");
+                        return;
+                    }
+
+                    // Factura de Contingencia: si está activada, exige un motivo
+                    // de al menos tres palabras. Viaja a TdcfcvProcess.php para
+                    // usar las series FM_DOC / FM_CTRL y guardar el motivo en salidas.nota.
+                    const esContingencia = $("#modal_contingencia").is(":checked");
+                    const notaContingencia = $("#modal_nota_contingencia").val().trim();
+
+                    if (esContingencia) {
+                        const palabrasNota = notaContingencia.split(/\s+/).filter(function (w) { return w.length > 0; });
+                        if (palabrasNota.length < 3) {
+                            alertMsg("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
+                            $("#modal_nota_contingencia").trigger("focus");
+                            return;
+                        }
+                    }
 
                     const tipoDocumentoFiscal = String(response.tipo_doc || "").toUpperCase();
                     const tieneArticulosInventario = <?= $tieneArticulosInventario ? "true" : "false" ?>;
@@ -1666,7 +1767,10 @@ loadjs.ready(["jquery"], function () {
                             "TdcfcvProcess?pedido=" + i +
                             "&PorDesAct=" + PorDesAct +
                             "&generar_ne=" + generarNE +
-                            "&generar_nr=" + generarNR;
+                            "&generar_nr=" + generarNR +
+                            "&entregado=" + tipoPago +
+                            "&contingencia=" + (esContingencia ? "S" : "N") +
+                            "&nota_contingencia=" + encodeURIComponent(notaContingencia);
                     };
 
                     const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
@@ -1696,7 +1800,7 @@ loadjs.ready(["jquery"], function () {
 
                     // FACTURA / NOTA DE DÉBITO: se conserva intacto el flujo
                     // actual de Orden de Entrega, siempre que no provenga de otro documento.
-                    if (tipoDocumentoFiscal !== "NC" && idDocumentoPadre == 0 && preguntarNE) {
+                    if (tipoDocumentoFiscal !== "NC" && idDocumentoPadre == 0 && preguntarNE && tieneArticulosInventario) {
                         const modalNE = bootstrap.Modal.getOrCreateInstance(
                             document.getElementById('modalConfirmarNE')
                         );
@@ -2197,6 +2301,35 @@ $impresoraFiscal = strtoupper(trim(
             </div>
           </div>
 
+          <div class="col-12">
+            <label class="form-label fw-bold text-secondary mb-1 small">Condición de Pago</label>
+            <div class="input-group input-group-sm" style="min-width: 0; flex-wrap: nowrap;">
+              <span class="input-group-text bg-white"><i class="fa-solid fa-money-check-dollar text-success"></i></span>
+              <select id="modal_tipo_pago" class="form-select">
+                <option value="" selected disabled>Seleccione...</option>
+                <option value="S">Contado</option>
+                <option value="N">Crédito</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-check form-switch ps-0">
+              <input class="form-check-input ms-0 me-2" type="checkbox" role="switch" id="modal_contingencia" style="float: none;">
+              <label class="form-check-label fw-bold text-secondary small" for="modal_contingencia">
+                Factura de Contingencia
+              </label>
+            </div>
+          </div>
+
+          <div class="col-12" id="div_nota_contingencia" style="display: none;">
+            <label class="form-label fw-bold text-danger mb-1 small">Motivo de la Contingencia</label>
+            <textarea id="modal_nota_contingencia"
+                      class="form-control form-control-sm"
+                      rows="2"
+                      placeholder="Indique el motivo (mínimo tres palabras)..."></textarea>
+          </div>
+
           <?php if ($impresoraFiscal == "S") { ?>
               <div class="col-12">
                   <div class="alert alert-primary d-flex align-items-center mb-0 py-2 small" role="alert">
@@ -2224,7 +2357,7 @@ $impresoraFiscal = strtoupper(trim(
                 <i class="fa-solid fa-xmark me-1"></i>
                 Cancelar
             </button>
-
+            <!--
             <a id="btnVistaPrevia"
                 href="<?= $urlImprimir ?>"
                 target="_blank"
@@ -2232,10 +2365,11 @@ $impresoraFiscal = strtoupper(trim(
                     <i class="fa-solid fa-magnifying-glass me-1"></i>
                     Vista Previa
             </a>
-
+            -->
             <button type="button"
                     id="btnConfirmarProcesar"
-                    class="btn btn-sm btn-success px-4 fw-bold">
+                    class="btn btn-sm btn-success px-4 fw-bold"
+                    disabled>
                 <i class="fa-solid fa-check me-1"></i>
                 Sí, Procesar
             </button>
@@ -2502,4 +2636,5 @@ $impresoraFiscal = strtoupper(trim(
         </div>
     </div>
 </div>
+
 <?= GetDebugMessage() ?>

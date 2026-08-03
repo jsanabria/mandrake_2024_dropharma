@@ -56,28 +56,6 @@ loadjs.ready("head", function () {
 <input type="hidden" name="t" value="pagos_compras_detalle">
 <input type="hidden" name="modal" value="<?= (int)$Page->IsModal ?>">
 <table class="<?= $Page->TableClass ?>">
-<?php if ($Page->id->Visible) { // id ?>
-    <tr id="r_id"<?= $Page->id->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_compras_detalle_id"><?= $Page->id->caption() ?></span></td>
-        <td data-name="id"<?= $Page->id->cellAttributes() ?>>
-<span id="el_pagos_compras_detalle_id">
-<span<?= $Page->id->viewAttributes() ?>>
-<?= $Page->id->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
-<?php if ($Page->pagos_compras->Visible) { // pagos_compras ?>
-    <tr id="r_pagos_compras"<?= $Page->pagos_compras->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_compras_detalle_pagos_compras"><?= $Page->pagos_compras->caption() ?></span></td>
-        <td data-name="pagos_compras"<?= $Page->pagos_compras->cellAttributes() ?>>
-<span id="el_pagos_compras_detalle_pagos_compras">
-<span<?= $Page->pagos_compras->viewAttributes() ?>>
-<?= $Page->pagos_compras->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 <?php if ($Page->metodo_pago->Visible) { // metodo_pago ?>
     <tr id="r_metodo_pago"<?= $Page->metodo_pago->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_pagos_compras_detalle_metodo_pago"><?= $Page->metodo_pago->caption() ?></span></td>

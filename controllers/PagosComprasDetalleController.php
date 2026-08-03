@@ -22,31 +22,10 @@ class PagosComprasDetalleController extends ControllerBase
         return $this->runPage($request, $response, $args, "PagosComprasDetalleList");
     }
 
-    // add
-    #[Map(["GET","POST","OPTIONS"], "/PagosComprasDetalleAdd[/{id}]", [PermissionMiddleware::class], "add.pagos_compras_detalle")]
-    public function add(Request $request, Response $response, array $args): Response
+    // preview
+    #[Map(["GET","OPTIONS"], "/PagosComprasDetallePreview", [PermissionMiddleware::class], "preview.pagos_compras_detalle")]
+    public function preview(Request $request, Response $response, array $args): Response
     {
-        return $this->runPage($request, $response, $args, "PagosComprasDetalleAdd");
-    }
-
-    // view
-    #[Map(["GET","POST","OPTIONS"], "/PagosComprasDetalleView[/{id}]", [PermissionMiddleware::class], "view.pagos_compras_detalle")]
-    public function view(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "PagosComprasDetalleView");
-    }
-
-    // edit
-    #[Map(["GET","POST","OPTIONS"], "/PagosComprasDetalleEdit[/{id}]", [PermissionMiddleware::class], "edit.pagos_compras_detalle")]
-    public function edit(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "PagosComprasDetalleEdit");
-    }
-
-    // delete
-    #[Map(["GET","POST","OPTIONS"], "/PagosComprasDetalleDelete[/{id}]", [PermissionMiddleware::class], "delete.pagos_compras_detalle")]
-    public function delete(Request $request, Response $response, array $args): Response
-    {
-        return $this->runPage($request, $response, $args, "PagosComprasDetalleDelete");
+        return $this->runPage($request, $response, $args, "PagosComprasDetallePreview", null, false);
     }
 }

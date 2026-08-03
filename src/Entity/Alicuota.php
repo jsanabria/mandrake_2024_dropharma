@@ -48,9 +48,17 @@ class Alicuota extends AbstractEntity
     #[Column(type: "string", nullable: true)]
     private ?string $activo;
 
+    #[Column(type: "string", nullable: true)]
+    private ?string $compra;
+
+    #[Column(type: "string", nullable: true)]
+    private ?string $venta;
+
     public function __construct()
     {
         $this->activo = "S";
+        $this->compra = "S";
+        $this->venta = "S";
     }
 
     public function getId(): int
@@ -119,6 +127,34 @@ class Alicuota extends AbstractEntity
             throw new \InvalidArgumentException("Invalid 'activo' value");
         }
         $this->activo = $value;
+        return $this;
+    }
+
+    public function getCompra(): ?string
+    {
+        return $this->compra;
+    }
+
+    public function setCompra(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'compra' value");
+        }
+        $this->compra = $value;
+        return $this;
+    }
+
+    public function getVenta(): ?string
+    {
+        return $this->venta;
+    }
+
+    public function setVenta(?string $value): static
+    {
+        if (!in_array($value, ["S", "N"])) {
+            throw new \InvalidArgumentException("Invalid 'venta' value");
+        }
+        $this->venta = $value;
         return $this;
     }
 }

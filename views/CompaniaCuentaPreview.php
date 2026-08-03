@@ -111,18 +111,6 @@ $Page->ListOptions->render("header", "left");
         </th>
     <?php } ?>
 <?php } ?>
-<?php if ($Page->activo->Visible) { // activo ?>
-    <?php if (!$Page->activo->Sortable || !$Page->sortUrl($Page->activo)) { ?>
-        <th class="<?= $Page->activo->headerCellClass() ?>"><?= $Page->activo->caption() ?></th>
-    <?php } else { ?>
-        <th class="<?= $Page->activo->headerCellClass() ?>"><div role="button" data-table="compania_cuenta" data-sort="<?= HtmlEncode($Page->activo->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->activo->getNextSort() ?>">
-            <div class="ew-table-header-btn">
-                <span class="ew-table-header-caption"><?= $Page->activo->caption() ?></span>
-                <span class="ew-table-header-sort"><?= $Page->activo->getSortIcon() ?></span>
-            </div>
-        </th>
-    <?php } ?>
-<?php } ?>
 <?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
     <?php if (!$Page->pago_electronico->Sortable || !$Page->sortUrl($Page->pago_electronico)) { ?>
         <th class="<?= $Page->pago_electronico->headerCellClass() ?>"><?= $Page->pago_electronico->caption() ?></th>
@@ -131,6 +119,18 @@ $Page->ListOptions->render("header", "left");
             <div class="ew-table-header-btn">
                 <span class="ew-table-header-caption"><?= $Page->pago_electronico->caption() ?></span>
                 <span class="ew-table-header-sort"><?= $Page->pago_electronico->getSortIcon() ?></span>
+            </div>
+        </th>
+    <?php } ?>
+<?php } ?>
+<?php if ($Page->activo->Visible) { // activo ?>
+    <?php if (!$Page->activo->Sortable || !$Page->sortUrl($Page->activo)) { ?>
+        <th class="<?= $Page->activo->headerCellClass() ?>"><?= $Page->activo->caption() ?></th>
+    <?php } else { ?>
+        <th class="<?= $Page->activo->headerCellClass() ?>"><div role="button" data-table="compania_cuenta" data-sort="<?= HtmlEncode($Page->activo->Name) ?>" data-sort-type="1" data-sort-order="<?= $Page->activo->getNextSort() ?>">
+            <div class="ew-table-header-btn">
+                <span class="ew-table-header-caption"><?= $Page->activo->caption() ?></span>
+                <span class="ew-table-header-sort"><?= $Page->activo->getSortIcon() ?></span>
             </div>
         </th>
     <?php } ?>
@@ -217,18 +217,18 @@ $Page->ListOptions->render("body", "left", $Page->RowCount);
 <?= $Page->cuenta->getViewValue() ?></span>
 </td>
 <?php } ?>
-<?php if ($Page->activo->Visible) { // activo ?>
-        <!-- activo -->
-        <td<?= $Page->activo->cellAttributes() ?>>
-<span<?= $Page->activo->viewAttributes() ?>>
-<?= $Page->activo->getViewValue() ?></span>
-</td>
-<?php } ?>
 <?php if ($Page->pago_electronico->Visible) { // pago_electronico ?>
         <!-- pago_electronico -->
         <td<?= $Page->pago_electronico->cellAttributes() ?>>
 <span<?= $Page->pago_electronico->viewAttributes() ?>>
 <?= $Page->pago_electronico->getViewValue() ?></span>
+</td>
+<?php } ?>
+<?php if ($Page->activo->Visible) { // activo ?>
+        <!-- activo -->
+        <td<?= $Page->activo->cellAttributes() ?>>
+<span<?= $Page->activo->viewAttributes() ?>>
+<?= $Page->activo->getViewValue() ?></span>
 </td>
 <?php } ?>
 <?php

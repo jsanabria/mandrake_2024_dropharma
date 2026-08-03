@@ -1679,15 +1679,35 @@ class ProveedorView extends Proveedor
 
     // Page Data Rendering event
     public function pageDataRendering(&$header) {
-    	// Example:
-    	$sql = "SELECT IFNULL(tipo_acceso, '') AS tipo_acceso FROM userlevels WHERE userlevelid = '" . CurrentUserLevel() . "';";
-    	$grupo = trim(ExecuteScalar($sql));
-    	if($grupo == "PROVEEDOR") {
-    		$sql = "SELECT proveedor FROM usuario WHERE username = '" . CurrentUserName() . "';";
-    		$proveedor = trim(ExecuteScalar($sql));
+        // Example:
+        $sql = "SELECT IFNULL(tipo_acceso, '') AS tipo_acceso FROM userlevels WHERE userlevelid = '" . CurrentUserLevel() . "';";
+        $grupo = trim(ExecuteScalar($sql));
+        if($grupo == "PROVEEDOR") {
+            $sql = "SELECT proveedor FROM usuario WHERE username = '" . CurrentUserName() . "';";
+            $proveedor = trim(ExecuteScalar($sql));
 
     		// $header = '<a href="ventas_por_laboratorio.php" class="btn btn-primary">Reporte Venta por Laboratorios Asociados al Proveedor</a>';
-    	}
+        }
+
+        // 1. Botón HTML con el ID y valor dinámico
+        $header = '<button id="btn_ari" class="btn btn-primary" onclick="imprimir_ari(' . $this->id->CurrentValue . ')">Imprimir ARI</button>';
+
+        // 2. Script JavaScript inyectado para que la función esté disponible en la página
+        $header .= '<script>
+        loadjs.ready("head", function () {
+            window.imprimir_ari = function(e) {
+                var o = prompt("Coloque el año para el que desea el ARI (Ej: 2024)");
+                if (null !== o) {
+                    if (/^[0-9]{4}$/.test(o)) {
+                        var r = confirm("¿Desea descargar el reporte en formato Excel?") ? "&excel=S" : "";
+                        window.open("../reportes/proveedor_ari.php?id=" + e + "&anho=" + o + r);
+                    } else {
+                        alert("Por favor, introduzca un año válido de 4 dígitos.");
+                    }
+                }
+            };
+        });
+        </script>';
     }
 
     // Page Data Rendered event
