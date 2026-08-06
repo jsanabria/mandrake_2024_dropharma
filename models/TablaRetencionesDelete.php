@@ -121,7 +121,7 @@ class TablaRetencionesDelete extends TablaRetenciones
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->setVisibility();
+        $this->id->Visible = false;
         $this->codigo->setVisibility();
         $this->tipo->setVisibility();
         $this->base_imponible->setVisibility();
@@ -676,10 +676,6 @@ class TablaRetencionesDelete extends TablaRetenciones
             } else {
                 $this->activo->ViewValue = null;
             }
-
-            // id
-            $this->id->HrefValue = "";
-            $this->id->TooltipValue = "";
 
             // codigo
             $this->codigo->HrefValue = "";

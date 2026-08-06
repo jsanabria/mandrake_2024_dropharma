@@ -1387,7 +1387,6 @@ class TablaRetenciones extends DbTable
             if ($doc->Horizontal) { // Horizontal format, write header
                 $doc->beginExportRow();
                 if ($exportPageType == "view") {
-                    $doc->exportCaption($this->id);
                     $doc->exportCaption($this->codigo);
                     $doc->exportCaption($this->tipo);
                     $doc->exportCaption($this->base_imponible);
@@ -1430,7 +1429,6 @@ class TablaRetenciones extends DbTable
                 if (!$doc->ExportCustom) {
                     $doc->beginExportRow($rowCnt); // Allow CSS styles if enabled
                     if ($exportPageType == "view") {
-                        $doc->exportField($this->id);
                         $doc->exportField($this->codigo);
                         $doc->exportField($this->tipo);
                         $doc->exportField($this->base_imponible);

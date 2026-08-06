@@ -131,7 +131,7 @@ class CompraEdit extends Compra
     {
         $this->id->setVisibility();
         $this->proveedor->setVisibility();
-        $this->tipo_documento->Visible = false;
+        $this->tipo_documento->setVisibility();
         $this->doc_afectado->setVisibility();
         $this->documento->setVisibility();
         $this->nro_control->setVisibility();
@@ -527,6 +527,7 @@ class CompraEdit extends Compra
         $this->CurrentAction = Param("action"); // Set up current action
         $this->setVisibility();
         $this->proveedor->Required = false;
+        $this->tipo_documento->Required = false;
         $this->documento->Required = false;
         $this->moneda->Required = false;
         $this->tasa_dia->Required = false;
@@ -826,6 +827,16 @@ class CompraEdit extends Compra
             }
         }
 
+        // Check field name 'tipo_documento' first before field var 'x_tipo_documento'
+        $val = $CurrentForm->hasValue("tipo_documento") ? $CurrentForm->getValue("tipo_documento") : $CurrentForm->getValue("x_tipo_documento");
+        if (!$this->tipo_documento->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tipo_documento->Visible = false; // Disable update for API request
+            } else {
+                $this->tipo_documento->setFormValue($val);
+            }
+        }
+
         // Check field name 'doc_afectado' first before field var 'x_doc_afectado'
         $val = $CurrentForm->hasValue("doc_afectado") ? $CurrentForm->getValue("doc_afectado") : $CurrentForm->getValue("x_doc_afectado");
         if (!$this->doc_afectado->IsDetailKey) {
@@ -985,6 +996,7 @@ class CompraEdit extends Compra
         global $CurrentForm;
         $this->id->CurrentValue = $this->id->FormValue;
         $this->proveedor->CurrentValue = $this->proveedor->FormValue;
+        $this->tipo_documento->CurrentValue = $this->tipo_documento->FormValue;
         $this->doc_afectado->CurrentValue = $this->doc_afectado->FormValue;
         $this->documento->CurrentValue = $this->documento->FormValue;
         $this->nro_control->CurrentValue = $this->nro_control->FormValue;
@@ -1537,6 +1549,10 @@ class CompraEdit extends Compra
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
+            // tipo_documento
+            $this->tipo_documento->HrefValue = "";
+            $this->tipo_documento->TooltipValue = "";
+
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
             $this->doc_afectado->TooltipValue = "";
@@ -1637,6 +1653,14 @@ class CompraEdit extends Compra
                 }
             } else {
                 $this->proveedor->EditValue = null;
+            }
+
+            // tipo_documento
+            $this->tipo_documento->setupEditAttributes();
+            if (strval($this->tipo_documento->CurrentValue) != "") {
+                $this->tipo_documento->EditValue = $this->tipo_documento->optionCaption($this->tipo_documento->CurrentValue);
+            } else {
+                $this->tipo_documento->EditValue = null;
             }
 
             // doc_afectado
@@ -1780,6 +1804,10 @@ class CompraEdit extends Compra
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
+            // tipo_documento
+            $this->tipo_documento->HrefValue = "";
+            $this->tipo_documento->TooltipValue = "";
+
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
             $this->doc_afectado->TooltipValue = "";
@@ -1882,6 +1910,11 @@ class CompraEdit extends Compra
             if ($this->proveedor->Visible && $this->proveedor->Required) {
                 if (!$this->proveedor->IsDetailKey && EmptyValue($this->proveedor->FormValue)) {
                     $this->proveedor->addErrorMessage(str_replace("%s", $this->proveedor->caption(), $this->proveedor->RequiredErrorMessage));
+                }
+            }
+            if ($this->tipo_documento->Visible && $this->tipo_documento->Required) {
+                if (!$this->tipo_documento->IsDetailKey && EmptyValue($this->tipo_documento->FormValue)) {
+                    $this->tipo_documento->addErrorMessage(str_replace("%s", $this->tipo_documento->caption(), $this->tipo_documento->RequiredErrorMessage));
                 }
             }
             if ($this->doc_afectado->Visible && $this->doc_afectado->Required) {

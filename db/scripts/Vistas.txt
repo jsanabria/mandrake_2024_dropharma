@@ -579,3 +579,844 @@ DROP VIEW IF EXISTS view_audittrail_seniat;
 CREATE VIEW view_audittrail_seniat AS 
 SELECT * FROM audittrail WHERE ACTION LIKE 'SENIAT:%';
 
+
+
+DROP VIEW IF EXISTS view_cuentas_por_pagar;
+
+CREATE VIEW view_cuentas_por_pagar AS
+SELECT
+    base.id,
+    base.proveedor,
+    base.proveedor_rif,
+    base.proveedor_nombre,
+
+    base.tipo_documento,
+    base.documento,
+    base.nro_control,
+    base.fecha,
+    base.fecha_registro,
+    base.descripcion,
+    base.doc_afectado,
+    base.anulado,
+    base.pagado,
+
+    base.moneda,
+    base.tasa_dia,
+
+    base.signo_documento,
+
+    /* Monto sin signo */
+    base.monto_documento_moneda,
+    base.monto_documento_bs,
+    base.monto_documento_usd,
+
+    /* Monto con efecto fiscal */
+    ROUND(
+        base.monto_documento_bs * base.signo_documento,
+        2
+    ) AS monto_aplicado_bs,
+
+    ROUND(
+        base.monto_documento_usd * base.signo_documento,
+        2
+    ) AS monto_aplicado_usd,
+
+    /* Pagos */
+    IFNULL(base.total_pagado_bs, 0) AS total_pagado_bs,
+    IFNULL(base.total_pagado_usd, 0) AS total_pagado_usd,
+    IFNULL(base.cantidad_pagos, 0) AS cantidad_pagos,
+    base.fecha_ultimo_pago,
+
+    /* Saldos */
+    ROUND(
+        (base.monto_documento_bs * base.signo_documento)
+        - IFNULL(base.total_pagado_bs, 0),
+        2
+    ) AS saldo_bs,
+
+    ROUND(
+        (base.monto_documento_usd * base.signo_documento)
+        - IFNULL(base.total_pagado_usd, 0),
+        2
+    ) AS saldo_usd,
+
+    CASE
+        WHEN base.anulado = 'S'
+            THEN 'ANULADO'
+
+        WHEN base.tipo_documento = 'NC'
+            THEN 'NOTA DE CRÉDITO'
+
+        WHEN ROUND(
+            (base.monto_documento_bs * base.signo_documento)
+            - IFNULL(base.total_pagado_bs, 0),
+            2
+        ) <= 0.01
+            THEN 'PAGADO'
+
+        WHEN IFNULL(base.total_pagado_bs, 0) > 0
+            THEN 'PAGO PARCIAL'
+
+        ELSE 'PENDIENTE'
+    END AS estado_cuenta,
+
+    DATEDIFF(
+        CURDATE(),
+        base.fecha
+    ) AS dias_transcurridos,
+
+    CASE
+        WHEN base.tipo_documento = 'NC'
+            THEN 'NOTA DE CRÉDITO'
+
+        WHEN DATEDIFF(CURDATE(), base.fecha) <= 0
+            THEN 'NO VENCIDO'
+
+        WHEN DATEDIFF(CURDATE(), base.fecha)
+             BETWEEN 1 AND 30
+            THEN '1-30 DÍAS'
+
+        WHEN DATEDIFF(CURDATE(), base.fecha)
+             BETWEEN 31 AND 60
+            THEN '31-60 DÍAS'
+
+        WHEN DATEDIFF(CURDATE(), base.fecha)
+             BETWEEN 61 AND 90
+            THEN '61-90 DÍAS'
+
+        ELSE 'MÁS DE 90 DÍAS'
+    END AS antiguedad
+
+FROM
+(
+    SELECT
+        c.id,
+        c.proveedor,
+
+        p.ci_rif AS proveedor_rif,
+        p.nombre AS proveedor_nombre,
+
+        c.tipo_documento,
+        c.documento,
+        c.nro_control,
+        c.fecha,
+        c.fecha_registro,
+        c.descripcion,
+        c.doc_afectado,
+        c.anulado,
+        c.pagado,
+
+        c.moneda,
+
+        IFNULL(
+            NULLIF(c.tasa_dia, 0),
+            1
+        ) AS tasa_dia,
+
+        CASE
+            WHEN c.tipo_documento = 'NC'
+                THEN -1
+            ELSE 1
+        END AS signo_documento,
+
+        /*
+        |------------------------------------------------------
+        | Monto en moneda original
+        |------------------------------------------------------
+        */
+        CASE
+            WHEN IFNULL(c.monto_pagar, 0) > 0
+                THEN c.monto_pagar
+            ELSE IFNULL(c.monto_total, 0)
+        END AS monto_documento_moneda,
+
+        /*
+        |------------------------------------------------------
+        | Monto convertido a bolívares
+        |------------------------------------------------------
+        */
+        CASE
+            WHEN UPPER(LEFT(TRIM(c.moneda), 3)) = 'BS.'
+                THEN
+                    CASE
+                        WHEN IFNULL(c.monto_pagar, 0) > 0
+                            THEN c.monto_pagar
+                        ELSE IFNULL(c.monto_total, 0)
+                    END
+            ELSE
+                (
+                    CASE
+                        WHEN IFNULL(c.monto_pagar, 0) > 0
+                            THEN c.monto_pagar
+                        ELSE IFNULL(c.monto_total, 0)
+                    END
+                )
+                *
+                IFNULL(
+                    NULLIF(c.tasa_dia, 0),
+                    1
+                )
+        END AS monto_documento_bs,
+
+        /*
+        |------------------------------------------------------
+        | Monto convertido a USD
+        |------------------------------------------------------
+        */
+        CASE
+            WHEN UPPER(LEFT(TRIM(c.moneda), 3)) = 'BS.'
+                THEN
+                    (
+                        CASE
+                            WHEN IFNULL(c.monto_pagar, 0) > 0
+                                THEN c.monto_pagar
+                            ELSE IFNULL(c.monto_total, 0)
+                        END
+                    )
+                    /
+                    NULLIF(c.tasa_dia, 0)
+            ELSE
+                CASE
+                    WHEN IFNULL(c.monto_pagar, 0) > 0
+                        THEN c.monto_pagar
+                    ELSE IFNULL(c.monto_total, 0)
+                END
+        END AS monto_documento_usd,
+
+        pagos.total_pagado_bs,
+        pagos.total_pagado_usd,
+        pagos.cantidad_pagos,
+        pagos.fecha_ultimo_pago
+
+    FROM compra AS c
+
+    LEFT JOIN proveedor AS p
+        ON p.id = c.proveedor
+
+    LEFT JOIN
+    (
+        SELECT
+            pago_documento.id_documento,
+
+            ROUND(
+                SUM(pago_documento.pagado_bs),
+                2
+            ) AS total_pagado_bs,
+
+            ROUND(
+                SUM(pago_documento.pagado_usd),
+                2
+            ) AS total_pagado_usd,
+
+            COUNT(*) AS cantidad_pagos,
+
+            MAX(pago_documento.fecha) AS fecha_ultimo_pago
+
+        FROM
+        (
+            SELECT
+                pc.id,
+                pc.id_documento,
+                pc.fecha,
+
+                /*
+                |----------------------------------------------
+                | Pago en Bs.
+                |----------------------------------------------
+                */
+                CASE
+                    WHEN COUNT(pcd.id) > 0
+                        THEN SUM(IFNULL(pcd.monto_bs, 0))
+
+                    WHEN UPPER(LEFT(TRIM(pc.moneda), 3)) = 'BS.'
+                        THEN IFNULL(pc.pago, 0)
+
+                    ELSE
+                        IFNULL(pc.pago, 0)
+                        *
+                        IFNULL(
+                            NULLIF(pc.tasa_cambio, 0),
+                            1
+                        )
+                END AS pagado_bs,
+
+                /*
+                |----------------------------------------------
+                | Pago equivalente en USD
+                |----------------------------------------------
+                */
+                CASE
+                    WHEN COUNT(pcd.id) > 0
+                        THEN SUM(
+                            CASE
+                                WHEN IFNULL(pcd.monto_usd, 0) > 0
+                                    THEN pcd.monto_usd
+
+                                WHEN IFNULL(pcd.monto_bs, 0) > 0
+                                     AND IFNULL(pcd.tasa_usd, 0) > 0
+                                    THEN pcd.monto_bs / pcd.tasa_usd
+
+                                WHEN UPPER(
+                                    LEFT(
+                                        TRIM(pcd.moneda),
+                                        3
+                                    )
+                                ) <> 'BS.'
+                                    THEN IFNULL(pcd.monto_moneda, 0)
+
+                                ELSE 0
+                            END
+                        )
+
+                    WHEN UPPER(LEFT(TRIM(pc.moneda), 3)) = 'BS.'
+                         AND IFNULL(pc.tasa_cambio, 0) > 0
+                        THEN pc.pago / pc.tasa_cambio
+
+                    ELSE IFNULL(pc.pago, 0)
+                END AS pagado_usd
+
+            FROM pagos_compras AS pc
+
+            LEFT JOIN pagos_compras_detalle AS pcd
+                ON pcd.pagos_compras = pc.id
+
+            /*
+            | Ajustar este valor al que realmente uses:
+            | GASTO, GASTOS o COMPRA.
+            */
+            WHERE pc.tipo_documento IN (
+                'GASTO',
+                'GASTOS'
+            )
+
+            GROUP BY
+                pc.id,
+                pc.id_documento,
+                pc.fecha,
+                pc.pago,
+                pc.moneda,
+                pc.tasa_cambio
+        ) AS pago_documento
+
+        GROUP BY pago_documento.id_documento
+    ) AS pagos
+        ON pagos.id_documento = c.id
+
+    WHERE c.tipo_documento IN (
+        'FC',
+        'NC',
+        'ND',
+        'RC'
+    )
+) AS base;
+
+
+
+DROP VIEW IF EXISTS view_cuentas_por_cobrar;
+
+CREATE VIEW view_cuentas_por_cobrar AS
+SELECT
+    base.id,
+    base.cliente,
+    base.cliente_rif,
+    base.cliente_nombre,
+
+    base.tipo_documento_fiscal,
+    base.nro_documento,
+    base.nro_control,
+    base.fecha,
+    base.fecha_documento,
+    base.fecha_vencimiento,
+
+    base.moneda,
+    base.tasa_dia,
+    base.dias_credito,
+    base.entregado,
+    base.pagado,
+    base.doc_afectado,
+    base.doc_afe,
+
+    base.igtf,
+    base.monto_igtf_bs,
+
+    base.signo_documento,
+
+    /* Monto sin signo */
+    base.monto_documento_moneda,
+    base.monto_documento_bs,
+    base.monto_documento_usd,
+
+    /* Monto con efecto fiscal */
+    ROUND(
+        base.monto_documento_bs * base.signo_documento,
+        2
+    ) AS monto_aplicado_bs,
+
+    ROUND(
+        base.monto_documento_usd * base.signo_documento,
+        2
+    ) AS monto_aplicado_usd,
+
+    /* Cobros */
+    IFNULL(base.total_cobrado_bs, 0) AS total_cobrado_bs,
+    IFNULL(base.total_cobrado_usd, 0) AS total_cobrado_usd,
+    IFNULL(base.cantidad_cobros, 0) AS cantidad_cobros,
+    base.fecha_ultimo_cobro,
+
+    /* Saldos */
+    ROUND(
+        (base.monto_documento_bs * base.signo_documento)
+        - IFNULL(base.total_cobrado_bs, 0),
+        2
+    ) AS saldo_bs,
+
+    ROUND(
+        (base.monto_documento_usd * base.signo_documento)
+        - IFNULL(base.total_cobrado_usd, 0),
+        2
+    ) AS saldo_usd,
+
+    CASE
+        WHEN base.tipo_documento_fiscal = 'NC'
+            THEN 'NOTA DE CRÉDITO'
+
+        WHEN ROUND(
+            (base.monto_documento_bs * base.signo_documento)
+            - IFNULL(base.total_cobrado_bs, 0),
+            2
+        ) <= 0.01
+            THEN 'COBRADO'
+
+        WHEN IFNULL(base.total_cobrado_bs, 0) > 0
+            THEN 'COBRO PARCIAL'
+
+        ELSE 'PENDIENTE'
+    END AS estado_cuenta,
+
+    DATEDIFF(
+        CURDATE(),
+        base.fecha_vencimiento
+    ) AS dias_vencido,
+
+    CASE
+        WHEN base.tipo_documento_fiscal = 'NC'
+            THEN 'NOTA DE CRÉDITO'
+
+        WHEN CURDATE() <= base.fecha_vencimiento
+            THEN 'NO VENCIDO'
+
+        WHEN DATEDIFF(
+            CURDATE(),
+            base.fecha_vencimiento
+        ) BETWEEN 1 AND 30
+            THEN '1-30 DÍAS'
+
+        WHEN DATEDIFF(
+            CURDATE(),
+            base.fecha_vencimiento
+        ) BETWEEN 31 AND 60
+            THEN '31-60 DÍAS'
+
+        WHEN DATEDIFF(
+            CURDATE(),
+            base.fecha_vencimiento
+        ) BETWEEN 61 AND 90
+            THEN '61-90 DÍAS'
+
+        ELSE 'MÁS DE 90 DÍAS'
+    END AS antiguedad
+
+FROM
+(
+    SELECT
+        s.id,
+        s.cliente,
+
+        COALESCE(
+            NULLIF(s.cliente_ci_rif, ''),
+            cl.ci_rif
+        ) AS cliente_rif,
+
+        COALESCE(
+            NULLIF(s.cliente_nombre, ''),
+            cl.nombre
+        ) AS cliente_nombre,
+
+        s.documento AS tipo_documento_fiscal,
+        s.nro_documento,
+        s.nro_control,
+        s.fecha,
+        DATE(s.fecha) AS fecha_documento,
+
+        DATE_ADD(
+            DATE(s.fecha),
+            INTERVAL IFNULL(s.dias_credito, 0) DAY
+        ) AS fecha_vencimiento,
+
+        s.moneda,
+
+        IFNULL(
+            NULLIF(s.tasa_dia, 0),
+            1
+        ) AS tasa_dia,
+
+        IFNULL(s.dias_credito, 0) AS dias_credito,
+        s.entregado,
+        s.pagado,
+        s.doc_afectado,
+        s.doc_afe,
+
+        s.igtf,
+
+        CASE
+            WHEN s.igtf = 'S'
+                THEN IFNULL(s.monto_igtf, 0)
+            ELSE 0
+        END AS monto_igtf_bs,
+
+        CASE
+            WHEN s.documento = 'NC'
+                THEN -1
+            ELSE 1
+        END AS signo_documento,
+
+        /*
+        |------------------------------------------------------
+        | Monto en moneda original
+        |------------------------------------------------------
+        | Si la factura está en divisas, el monto_igtf debe
+        | convertirse de Bs. a la moneda del documento.
+        */
+        CASE
+            WHEN UPPER(LEFT(TRIM(s.moneda), 3)) = 'BS.'
+                THEN
+                    IFNULL(s.total, 0)
+                    +
+                    CASE
+                        WHEN s.igtf = 'S'
+                            THEN IFNULL(s.monto_igtf, 0)
+                        ELSE 0
+                    END
+            ELSE
+                IFNULL(s.total, 0)
+                +
+                CASE
+                    WHEN s.igtf = 'S'
+                         AND IFNULL(s.tasa_dia, 0) > 0
+                        THEN s.monto_igtf / s.tasa_dia
+                    ELSE 0
+                END
+        END AS monto_documento_moneda,
+
+        /*
+        |------------------------------------------------------
+        | Monto expresado en Bs.
+        |------------------------------------------------------
+        */
+        CASE
+            WHEN UPPER(LEFT(TRIM(s.moneda), 3)) = 'BS.'
+                THEN
+                    IFNULL(s.total, 0)
+                    +
+                    CASE
+                        WHEN s.igtf = 'S'
+                            THEN IFNULL(s.monto_igtf, 0)
+                        ELSE 0
+                    END
+            ELSE
+                (
+                    IFNULL(s.total, 0)
+                    *
+                    IFNULL(
+                        NULLIF(s.tasa_dia, 0),
+                        1
+                    )
+                )
+                +
+                CASE
+                    WHEN s.igtf = 'S'
+                        THEN IFNULL(s.monto_igtf, 0)
+                    ELSE 0
+                END
+        END AS monto_documento_bs,
+
+        /*
+        |------------------------------------------------------
+        | Monto equivalente en USD
+        |------------------------------------------------------
+        */
+        CASE
+            WHEN UPPER(LEFT(TRIM(s.moneda), 3)) = 'BS.'
+                 AND IFNULL(s.tasa_dia, 0) > 0
+                THEN
+                    (
+                        IFNULL(s.total, 0)
+                        +
+                        CASE
+                            WHEN s.igtf = 'S'
+                                THEN IFNULL(s.monto_igtf, 0)
+                            ELSE 0
+                        END
+                    )
+                    / s.tasa_dia
+            ELSE
+                IFNULL(s.total, 0)
+                +
+                CASE
+                    WHEN s.igtf = 'S'
+                         AND IFNULL(s.tasa_dia, 0) > 0
+                        THEN s.monto_igtf / s.tasa_dia
+                    ELSE 0
+                END
+        END AS monto_documento_usd,
+
+        cobros.total_cobrado_bs,
+        cobros.total_cobrado_usd,
+        cobros.cantidad_cobros,
+        cobros.fecha_ultimo_cobro
+
+    FROM salidas AS s
+
+    LEFT JOIN cliente AS cl
+        ON cl.id = s.cliente
+
+    LEFT JOIN
+    (
+        SELECT
+            cobro_documento.id_documento,
+
+            ROUND(
+                SUM(cobro_documento.cobrado_bs),
+                2
+            ) AS total_cobrado_bs,
+
+            ROUND(
+                SUM(cobro_documento.cobrado_usd),
+                2
+            ) AS total_cobrado_usd,
+
+            COUNT(*) AS cantidad_cobros,
+
+            MAX(cobro_documento.fecha) AS fecha_ultimo_cobro
+
+        FROM
+        (
+            SELECT
+                cc.id,
+                cc.id_documento,
+                cc.fecha,
+
+                /*
+                |----------------------------------------------
+                | Cobro en Bs.
+                |----------------------------------------------
+                */
+                CASE
+                    WHEN COUNT(ccd.id) > 0
+                        THEN SUM(IFNULL(ccd.monto_bs, 0))
+
+                    WHEN UPPER(LEFT(TRIM(cc.moneda), 3)) = 'BS.'
+                        THEN IFNULL(cc.pago, 0)
+
+                    ELSE
+                        IFNULL(cc.pago, 0)
+                        *
+                        IFNULL(
+                            NULLIF(cc.tasa_cambio, 0),
+                            1
+                        )
+                END AS cobrado_bs,
+
+                /*
+                |----------------------------------------------
+                | Cobro equivalente en USD
+                |----------------------------------------------
+                */
+                CASE
+                    WHEN COUNT(ccd.id) > 0
+                        THEN SUM(
+                            CASE
+                                WHEN IFNULL(ccd.monto_usd, 0) > 0
+                                    THEN ccd.monto_usd
+
+                                WHEN IFNULL(ccd.monto_bs, 0) > 0
+                                     AND IFNULL(ccd.tasa_usd, 0) > 0
+                                    THEN ccd.monto_bs / ccd.tasa_usd
+
+                                WHEN UPPER(
+                                    LEFT(
+                                        TRIM(ccd.moneda),
+                                        3
+                                    )
+                                ) <> 'BS.'
+                                    THEN IFNULL(ccd.monto_moneda, 0)
+
+                                ELSE 0
+                            END
+                        )
+
+                    WHEN UPPER(LEFT(TRIM(cc.moneda), 3)) = 'BS.'
+                         AND IFNULL(cc.tasa_cambio, 0) > 0
+                        THEN cc.pago / cc.tasa_cambio
+
+                    ELSE IFNULL(cc.pago, 0)
+                END AS cobrado_usd
+
+            FROM cobros_cliente AS cc
+
+            LEFT JOIN cobros_cliente_detalle AS ccd
+                ON ccd.cobros_cliente = cc.id
+
+            GROUP BY
+                cc.id,
+                cc.id_documento,
+                cc.fecha,
+                cc.pago,
+                cc.moneda,
+                cc.tasa_cambio
+        ) AS cobro_documento
+
+        GROUP BY cobro_documento.id_documento
+    ) AS cobros
+        ON cobros.id_documento = s.id
+
+    WHERE s.tipo_documento = 'TDCFCV'
+      AND s.estatus = 'PROCESADO'
+      AND s.documento IN (
+          'FC',
+          'NC',
+          'ND',
+          'RC'
+      )
+) AS base;
+
+
+DROP VIEW IF EXISTS view_cuentas_por_pagar_resumen;
+
+CREATE VIEW view_cuentas_por_pagar_resumen AS
+SELECT
+    proveedor,
+    proveedor_rif,
+    proveedor_nombre,
+
+    COUNT(*) AS cantidad_documentos,
+
+    SUM(
+        CASE
+            WHEN estado_cuenta = 'PENDIENTE'
+                THEN 1
+            ELSE 0
+        END
+    ) AS documentos_pendientes,
+
+    SUM(
+        CASE
+            WHEN estado_cuenta = 'PAGO PARCIAL'
+                THEN 1
+            ELSE 0
+        END
+    ) AS documentos_parciales,
+
+    ROUND(
+        SUM(monto_aplicado_bs),
+        2
+    ) AS monto_documentos_bs,
+
+    ROUND(
+        SUM(monto_aplicado_usd),
+        2
+    ) AS monto_documentos_usd,
+
+    ROUND(
+        SUM(total_pagado_bs),
+        2
+    ) AS total_pagado_bs,
+
+    ROUND(
+        SUM(total_pagado_usd),
+        2
+    ) AS total_pagado_usd,
+
+    ROUND(
+        SUM(saldo_bs),
+        2
+    ) AS saldo_bs,
+
+    ROUND(
+        SUM(saldo_usd),
+        2
+    ) AS saldo_usd
+
+FROM view_cuentas_por_pagar
+
+WHERE anulado = 'N'
+
+GROUP BY
+    proveedor,
+    proveedor_rif,
+    proveedor_nombre;
+	
+	
+DROP VIEW IF EXISTS view_cuentas_por_cobrar_resumen;
+
+CREATE VIEW view_cuentas_por_cobrar_resumen AS
+SELECT
+    cliente,
+    cliente_rif,
+    cliente_nombre,
+
+    COUNT(*) AS cantidad_documentos,
+
+    SUM(
+        CASE
+            WHEN estado_cuenta = 'PENDIENTE'
+                THEN 1
+            ELSE 0
+        END
+    ) AS documentos_pendientes,
+
+    SUM(
+        CASE
+            WHEN estado_cuenta = 'COBRO PARCIAL'
+                THEN 1
+            ELSE 0
+        END
+    ) AS documentos_parciales,
+
+    ROUND(
+        SUM(monto_aplicado_bs),
+        2
+    ) AS monto_documentos_bs,
+
+    ROUND(
+        SUM(monto_aplicado_usd),
+        2
+    ) AS monto_documentos_usd,
+
+    ROUND(
+        SUM(total_cobrado_bs),
+        2
+    ) AS total_cobrado_bs,
+
+    ROUND(
+        SUM(total_cobrado_usd),
+        2
+    ) AS total_cobrado_usd,
+
+    ROUND(
+        SUM(saldo_bs),
+        2
+    ) AS saldo_bs,
+
+    ROUND(
+        SUM(saldo_usd),
+        2
+    ) AS saldo_usd
+
+FROM view_cuentas_por_cobrar
+
+GROUP BY
+    cliente,
+    cliente_rif,
+    cliente_nombre;
+

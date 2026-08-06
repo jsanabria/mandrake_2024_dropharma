@@ -35,7 +35,6 @@ loadjs.ready(["wrapper", "head"], function () {
             ["nro_documento", [fields.nro_documento.visible && fields.nro_documento.required ? ew.Validators.required(fields.nro_documento.caption) : null], fields.nro_documento.isInvalid],
             ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null, ew.Validators.datetime(fields.fecha.clientFormatPattern)], fields.fecha.isInvalid],
             ["proveedor", [fields.proveedor.visible && fields.proveedor.required ? ew.Validators.required(fields.proveedor.caption) : null], fields.proveedor.isInvalid],
-            ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
             ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["consignacion", [fields.consignacion.visible && fields.consignacion.required ? ew.Validators.required(fields.consignacion.caption) : null], fields.consignacion.isInvalid]
@@ -153,18 +152,6 @@ loadjs.ready(["fview_in_tdcfccedit", "datetimepicker"], function () {
 <span<?= $Page->proveedor->viewAttributes() ?>>
 <span class="form-control-plaintext"><?= $Page->proveedor->getDisplayValue($Page->proveedor->EditValue) ?></span></span>
 <input type="hidden" data-table="view_in_tdcfcc" data-field="x_proveedor" data-hidden="1" name="x_proveedor" id="x_proveedor" value="<?= HtmlEncode($Page->proveedor->CurrentValue) ?>">
-</span>
-</div></div>
-    </div>
-<?php } ?>
-<?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
-    <div id="r_doc_afectado"<?= $Page->doc_afectado->rowAttributes() ?>>
-        <label id="elh_view_in_tdcfcc_doc_afectado" for="x_doc_afectado" class="<?= $Page->LeftColumnClass ?>"><?= $Page->doc_afectado->caption() ?><?= $Page->doc_afectado->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
-        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->doc_afectado->cellAttributes() ?>>
-<span id="el_view_in_tdcfcc_doc_afectado">
-<input type="<?= $Page->doc_afectado->getInputTextType() ?>" name="x_doc_afectado" id="x_doc_afectado" data-table="view_in_tdcfcc" data-field="x_doc_afectado" value="<?= $Page->doc_afectado->EditValue ?>" size="30" maxlength="20" placeholder="<?= HtmlEncode($Page->doc_afectado->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->doc_afectado->formatPattern()) ?>"<?= $Page->doc_afectado->editAttributes() ?> aria-describedby="x_doc_afectado_help">
-<?= $Page->doc_afectado->getCustomMessage() ?>
-<div class="invalid-feedback"><?= $Page->doc_afectado->getErrorMessage() ?></div>
 </span>
 </div></div>
     </div>

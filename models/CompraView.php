@@ -1275,6 +1275,10 @@ class CompraView extends Compra
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
+            // tipo_documento
+            $this->tipo_documento->HrefValue = "";
+            $this->tipo_documento->TooltipValue = "";
+
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
             $this->doc_afectado->TooltipValue = "";

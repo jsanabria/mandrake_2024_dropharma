@@ -1877,36 +1877,41 @@ class ArticuloView extends Articulo
 
         /* Costo promerdio */
         $sql = "SELECT 
-                a.id, 
-                a.codigo, 
-                a.nombre_comercial, 
-                a.principio_activo, 
-                a.presentacion, 
-                b.nombre AS fabricante, 
-                a.codigo_de_barra, 
-                a.cantidad_en_mano, 
-                (SELECT precio_unidad_sin_desc 
-                FROM entradas_salidas 
-                WHERE tipo_documento = 'TDCNRP' AND articulo = a.id AND check_ne = 'S' AND IFNULL(precio_unidad_sin_desc, 0) > 0 
-                ORDER BY id DESC LIMIT 1, 1) AS costo_anterior, 
-                (SELECT precio_unidad_sin_desc 
-                FROM entradas_salidas 
-                WHERE tipo_documento = 'TDCNRP' AND articulo = a.id AND check_ne = 'S' AND IFNULL(precio_unidad_sin_desc, 0) > 0 
-                ORDER BY id DESC LIMIT 0, 1) AS ultimo_costo, 
-                a.ultimo_costo AS ponderado  
-            FROM 
-                articulo AS a 
-                JOIN fabricante AS b ON b.Id = a.fabricante 
-            WHERE a.id = " . $this->id->CurrentValue . " ORDER BY b.nombre, a.principio_activo;";
+                    a.id, 
+                    a.codigo, 
+                    a.nombre_comercial, 
+                    a.principio_activo, 
+                    a.presentacion, 
+                    b.nombre AS fabricante, 
+                    a.codigo_de_barra, 
+                    a.cantidad_en_mano, 
+                    (SELECT es.precio_unidad_sin_desc 
+                    FROM entradas_salidas AS es
+                    JOIN entradas AS e ON es.id_documento = e.id AND es.tipo_documento = e.tipo_documento
+                    WHERE es.tipo_documento = 'TDCNRP' AND es.articulo = a.id AND es.check_ne = 'S' AND e.fecha >= '2025-01-01' AND IFNULL(es.precio_unidad_sin_desc, 0) > 0 
+                    ORDER BY es.id DESC LIMIT 1, 1) AS costo_anterior, 
+                    (SELECT es.precio_unidad_sin_desc 
+                    FROM entradas_salidas AS es
+                    JOIN entradas AS e ON es.id_documento = e.id AND es.tipo_documento = e.tipo_documento
+                    WHERE es.tipo_documento = 'TDCNRP' AND es.articulo = a.id AND es.check_ne = 'S' AND e.fecha >= '2025-01-01' AND IFNULL(es.precio_unidad_sin_desc, 0) > 0 
+                    ORDER BY es.id DESC LIMIT 0, 1) AS ultimo_costo, 
+                    a.ultimo_costo AS ponderado  
+                FROM 
+                    articulo AS a 
+                    JOIN fabricante AS b ON b.Id = a.fabricante 
+                WHERE a.id = " . $this->id->CurrentValue . " ORDER BY b.nombre, a.principio_activo;";
         if($row = ExecuteRow($sql)) {
             $costo_anterior = isset($row['costo_anterior']) ? (float)$row['costo_anterior'] : 0.0;
             $costo_ultimo = isset($row['ultimo_costo']) ? (float)$row['ultimo_costo'] : 0.0;
-            $costo_anterior = $costo_anterior<=0 ? $costo_ultimo : $costo_anterior;
-            // $precio_promedio = ($costo_anterior+$costo_ultimo)/2;
+
+            // Si no hay costo anterior registrado, tomamos el último costo como referencia
+            $costo_anterior = $costo_anterior <= 0 ? $costo_ultimo : $costo_anterior;
+
+            // El promedio ponderado (guardado en la tabla articulo tras correr la función)
             $precio_promedio = isset($row['ponderado']) ? (float)$row['ponderado'] : 0.0;
-            $sql = "SELECT precio FROM tarifa_articulo WHERE tarifa = 2 AND articulo = " . $this->id->CurrentValue . " LIMIT 0, 1;";
-            $row = ExecuteRow($sql);
-            $precio = isset($row['precio']) ? (float)$row['precio'] : 0.0;
+            $sqlPrecio = "SELECT precio FROM tarifa_articulo WHERE tarifa = 2 AND articulo = " . $this->id->CurrentValue . " LIMIT 0, 1;";
+            $rowPrecio = ExecuteRow($sqlPrecio);
+            $precio = isset($rowPrecio['precio']) ? (float)$rowPrecio['precio'] : 0.0;
             $header .= '<h4><b>Costos:</b> <small>Anterior ' . number_format($costo_anterior, 2, '.', '') . ' Actual ' . number_format($costo_ultimo, 2, '.', '') . ' Promedio Ponderado ' . number_format($precio_promedio, 2, '.', '') . '</small> Precio ' . number_format($precio, 2, '.', '') . '</h4>';
         }
     }

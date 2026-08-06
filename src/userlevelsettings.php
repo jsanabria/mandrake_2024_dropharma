@@ -519,7 +519,17 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_audittrail_seniat","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_audittrail_seniat","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}crear_nota_recepcion_automatica_wait.php","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}crear_nota_recepcion_automatica_wait.php","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}crear_nota_recepcion_automatica_wait.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}registrar_pagos_proveedores.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}registrar_pagos_proveedores.php","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_cobrar","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_cobrar","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_cobrar_resumen","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_cobrar_resumen","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar_resumen","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar_resumen","0","0"]];
 
 /**
  * Tables
@@ -688,7 +698,7 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["subir_tarifa_guardar.php","subir_tarifa_guardar","Subir Tarifas de Artículos",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","SubirTarifaGuardar"],
     ["SyncItem.php","SyncItem","Agregar Articulos Nuevos Activos a la Tarifa",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","SyncItem"],
     ["tabla","tabla","Tablas",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TablaList"],
-    ["tabla_retenciones","tabla_retenciones","tabla retenciones",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TablaRetencionesList"],
+    ["tabla_retenciones","tabla_retenciones","Tabla Retenciones",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TablaRetencionesList"],
     ["tarifa","tarifa","Tarifa",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TarifaList"],
     ["tarifa_anterior","tarifa_anterior","Tarifa Anterior",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TarifaAnteriorList"],
     ["tarifa_art","tarifa_art","tarifa art",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TarifaArtList"],
@@ -780,4 +790,9 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["crear_nota_entrega_automatica_wait.php","crear_nota_entrega_automatica_wait","Crear Nota de Entrega Automatica",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CrearNotaEntregaAutomaticaWait"],
     ["documento_consecutivo","documento_consecutivo","Consecutivo de Documentos",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","DocumentoConsecutivoList"],
     ["view_audittrail_seniat","view_audittrail_seniat","Trazas Seniat",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewAudittrailSeniatList"],
-    ["crear_nota_recepcion_automatica_wait.php","crear_nota_recepcion_automatica_wait","Crear Nota Recepcion Automatica",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CrearNotaRecepcionAutomaticaWait"]];
+    ["crear_nota_recepcion_automatica_wait.php","crear_nota_recepcion_automatica_wait","Crear Nota Recepcion Automatica",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","CrearNotaRecepcionAutomaticaWait"],
+    ["registrar_pagos_proveedores.php","registrar_pagos_proveedores","Regitrar de Pagos a Proveedores",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","RegistrarPagosProveedores"],
+    ["view_cuentas_por_cobrar","view_cuentas_por_cobrar","Cuentas por Cobrar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorCobrarList"],
+    ["view_cuentas_por_cobrar_resumen","view_cuentas_por_cobrar_resumen","Cuentas por Cobrar Resumen",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorCobrarResumenList"],
+    ["view_cuentas_por_pagar","view_cuentas_por_pagar","Cuentas por Pagar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorPagarList"],
+    ["view_cuentas_por_pagar_resumen","view_cuentas_por_pagar_resumen","Cuentas por Pagar Resumen",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorPagarResumenList"]];

@@ -33,6 +33,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setFields([
             ["id", [fields.id.visible && fields.id.required ? ew.Validators.required(fields.id.caption) : null], fields.id.isInvalid],
             ["proveedor", [fields.proveedor.visible && fields.proveedor.required ? ew.Validators.required(fields.proveedor.caption) : null], fields.proveedor.isInvalid],
+            ["tipo_documento", [fields.tipo_documento.visible && fields.tipo_documento.required ? ew.Validators.required(fields.tipo_documento.caption) : null], fields.tipo_documento.isInvalid],
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
             ["documento", [fields.documento.visible && fields.documento.required ? ew.Validators.required(fields.documento.caption) : null], fields.documento.isInvalid],
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
@@ -121,6 +122,18 @@ loadjs.ready("head", function () {
 <span<?= $Page->proveedor->viewAttributes() ?>>
 <span class="form-control-plaintext"><?= $Page->proveedor->getDisplayValue($Page->proveedor->EditValue) ?></span></span>
 <input type="hidden" data-table="compra" data-field="x_proveedor" data-hidden="1" data-page="1" name="x_proveedor" id="x_proveedor" value="<?= HtmlEncode($Page->proveedor->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
+    <div id="r_tipo_documento"<?= $Page->tipo_documento->rowAttributes() ?>>
+        <label id="elh_compra_tipo_documento" for="x_tipo_documento" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tipo_documento->caption() ?><?= $Page->tipo_documento->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tipo_documento->cellAttributes() ?>>
+<span id="el_compra_tipo_documento">
+<span<?= $Page->tipo_documento->viewAttributes() ?>>
+<span class="form-control-plaintext"><?= $Page->tipo_documento->getDisplayValue($Page->tipo_documento->EditValue) ?></span></span>
+<input type="hidden" data-table="compra" data-field="x_tipo_documento" data-hidden="1" data-page="1" name="x_tipo_documento" id="x_tipo_documento" value="<?= HtmlEncode($Page->tipo_documento->CurrentValue) ?>">
 </span>
 </div></div>
     </div>

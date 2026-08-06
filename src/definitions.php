@@ -313,6 +313,11 @@ return [
     "documento_consecutivo" => \DI\create(DocumentoConsecutivo::class),
     "view_audittrail_seniat" => \DI\create(ViewAudittrailSeniat::class),
     "crear_nota_recepcion_automatica_wait" => \DI\create(CrearNotaRecepcionAutomaticaWait::class),
+    "registrar_pagos_proveedores" => \DI\create(RegistrarPagosProveedores::class),
+    "view_cuentas_por_cobrar" => \DI\create(ViewCuentasPorCobrar::class),
+    "view_cuentas_por_cobrar_resumen" => \DI\create(ViewCuentasPorCobrarResumen::class),
+    "view_cuentas_por_pagar" => \DI\create(ViewCuentasPorPagar::class),
+    "view_cuentas_por_pagar_resumen" => \DI\create(ViewCuentasPorPagarResumen::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

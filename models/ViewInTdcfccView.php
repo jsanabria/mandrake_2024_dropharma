@@ -1418,10 +1418,6 @@ class ViewInTdcfccView extends ViewInTdcfcc
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
-            // doc_afectado
-            $this->doc_afectado->HrefValue = "";
-            $this->doc_afectado->TooltipValue = "";
-
             // monto_total
             $this->monto_total->HrefValue = "";
             $this->monto_total->TooltipValue = "";
@@ -1704,6 +1700,38 @@ class ViewInTdcfccView extends ViewInTdcfcc
             </a>&nbsp;
         ';
 
+    /*
+    |--------------------------------------------------------------------------
+    | REGLA DE NEGOCIO - COMPRAS DE INVENTARIO TDCFCC
+    |--------------------------------------------------------------------------
+    | Autor : Junior Enrique Sanabria Rubio
+    | Fecha : 05/08/2026
+    |
+    | A partir de esta versión, el módulo TDCFCC se utiliza exclusivamente para
+    | registrar artículos, cantidades, costos y movimientos de inventario.
+    |
+    | Todo el control administrativo y tributario de la factura se centraliza en
+    | el módulo de Compras Administrativas, incluyendo:
+    |
+    |   - Libro de Compras.
+    |   - Retenciones de IVA.
+    |   - Retenciones de ISLR.
+    |   - Retenciones Municipales.
+    |   - Comprobantes y consecutivos de retención.
+    |   - Cuentas por pagar.
+    |   - Registro y reverso de pagos al proveedor.
+    |
+    | Cuando una factura corresponda a mercancía de inventario, debe registrarse
+    | también en Compras Administrativas para efectos fiscales, administrativos
+    | y financieros. En TDCFCC se registra únicamente el detalle requerido para
+    | actualizar existencias y costos.
+    |
+    | Por esta razón, la lógica de pagos se conserva comentada en esta vista para
+    | referencia futura, pero no debe ejecutarse ni mostrarse al usuario.
+    |--------------------------------------------------------------------------
+    */
+
+    /*
         // ---------------------------------------------------------
         // INFORMACIÓN DEL MONTO DEL DOCUMENTO
         // ---------------------------------------------------------
@@ -1872,6 +1900,7 @@ class ViewInTdcfccView extends ViewInTdcfcc
             $header .= '</div>';
         }
         $header .= "<br><br>";
+    */
     }
 
     // Page Data Rendered event

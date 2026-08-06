@@ -181,18 +181,6 @@ $nro_documento = $row["nro_documento"] ?? "";
 $estatus = $row["estatus"] ?? "";
 $impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
 
-// -----------------------------------------------------------------------
-// Condición de pago (Contado / Crédito) elegida en el modal de confirmación
-// de emisión. 'S' = Contado, 'N' = Crédito. Se valida y se persiste en
-// salidas.entregado ANTES de continuar con el resto del flujo (fiscal o
-// manual), ya que aplica a ambos casos por igual.
-// -----------------------------------------------------------------------
-$entregado_param = strtoupper(trim($_REQUEST["entregado"] ?? ""));
-if ($entregado_param !== "S" && $entregado_param !== "N") {
-    die("Debe indicar la condición de pago (Contado o Crédito) antes de procesar el documento.");
-}
-Execute("UPDATE salidas SET entregado = '{$entregado_param}' WHERE id = {$pedido} LIMIT 1");
-
 if(trim($nro_documento ?? "") == "") {
     if ($impresoraFiscal) {
         // En modo impresora fiscal activa, NO reservamos consecutivos desde el sistema.
@@ -259,25 +247,6 @@ if(trim($nro_documento ?? "") == "") {
     // El consecutivo del documento SIEMPRE es independiente
     $serie_doc = $documento . "_DOC";
 
-    // -------------------------------------------------------------------
-    // Factura de Contingencia: si viene marcada desde el modal, se usan
-    // las series FM_DOC / FM_CTRL en vez de las series normales del
-    // documento, y se exige un motivo de al menos tres palabras (se
-    // guardará más abajo en salidas.nota).
-    // -------------------------------------------------------------------
-    $esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
-    $notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
-
-    if ($esContingencia) {
-        $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
-        if (count($palabrasNota) < 3) {
-            die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
-        }
-
-        $serie_doc = "FM_DOC";
-        $serie_ctrl = "FM_CTRL";
-    }
-
     $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
     $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
 
@@ -303,8 +272,7 @@ if(trim($nro_documento ?? "") == "") {
                 nro_documento = '$factura', 
                 nro_control = '$facturaCTRL', 
                 estatus = '$estatus', 
-                username = '" . CurrentUserName() . "'"
-                . ($esContingencia ? ", nota = '" . TdcfcvSqlValue("Factura de Contingencia: " . $notaContingencia) . "'" : "") . "
+                username = '" . CurrentUserName() . "' 
             WHERE id = $pedido
             AND (nro_documento IS NULL OR nro_documento = '')";
     Execute($sql);
@@ -345,5 +313,4 @@ if ($estatus == "PROCESADO") {
 
 }
 ?>
-
 <?= GetDebugMessage() ?>

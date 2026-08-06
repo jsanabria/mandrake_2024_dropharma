@@ -121,7 +121,7 @@ class TablaRetencionesEdit extends TablaRetenciones
     // Set field visibility
     public function setVisibility()
     {
-        $this->id->setVisibility();
+        $this->id->Visible = false;
         $this->codigo->setVisibility();
         $this->tipo->setVisibility();
         $this->base_imponible->setVisibility();
@@ -762,12 +762,6 @@ class TablaRetencionesEdit extends TablaRetenciones
         global $CurrentForm;
         $validate = !Config("SERVER_VALIDATE");
 
-        // Check field name 'id' first before field var 'x_id'
-        $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
-        if (!$this->id->IsDetailKey) {
-            $this->id->setFormValue($val);
-        }
-
         // Check field name 'codigo' first before field var 'x_codigo'
         $val = $CurrentForm->hasValue("codigo") ? $CurrentForm->getValue("codigo") : $CurrentForm->getValue("x_codigo");
         if (!$this->codigo->IsDetailKey) {
@@ -836,6 +830,12 @@ class TablaRetencionesEdit extends TablaRetenciones
             } else {
                 $this->activo->setFormValue($val);
             }
+        }
+
+        // Check field name 'id' first before field var 'x_id'
+        $val = $CurrentForm->hasValue("id") ? $CurrentForm->getValue("id") : $CurrentForm->getValue("x_id");
+        if (!$this->id->IsDetailKey) {
+            $this->id->setFormValue($val);
         }
     }
 
@@ -1060,9 +1060,6 @@ class TablaRetencionesEdit extends TablaRetenciones
                 $this->activo->ViewValue = null;
             }
 
-            // id
-            $this->id->HrefValue = "";
-
             // codigo
             $this->codigo->HrefValue = "";
 
@@ -1084,10 +1081,6 @@ class TablaRetencionesEdit extends TablaRetenciones
             // activo
             $this->activo->HrefValue = "";
         } elseif ($this->RowType == RowType::EDIT) {
-            // id
-            $this->id->setupEditAttributes();
-            $this->id->EditValue = $this->id->CurrentValue;
-
             // codigo
             $this->codigo->setupEditAttributes();
             if (!$this->codigo->Raw) {
@@ -1142,9 +1135,6 @@ class TablaRetencionesEdit extends TablaRetenciones
 
             // Edit refer script
 
-            // id
-            $this->id->HrefValue = "";
-
             // codigo
             $this->codigo->HrefValue = "";
 
@@ -1186,11 +1176,6 @@ class TablaRetencionesEdit extends TablaRetenciones
             return true;
         }
         $validateForm = true;
-            if ($this->id->Visible && $this->id->Required) {
-                if (!$this->id->IsDetailKey && EmptyValue($this->id->FormValue)) {
-                    $this->id->addErrorMessage(str_replace("%s", $this->id->caption(), $this->id->RequiredErrorMessage));
-                }
-            }
             if ($this->codigo->Visible && $this->codigo->Required) {
                 if (!$this->codigo->IsDetailKey && EmptyValue($this->codigo->FormValue)) {
                     $this->codigo->addErrorMessage(str_replace("%s", $this->codigo->caption(), $this->codigo->RequiredErrorMessage));

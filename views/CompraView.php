@@ -138,6 +138,17 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
+<?php if ($Page->tipo_documento->Visible) { // tipo_documento ?>
+    <tr id="r_tipo_documento"<?= $Page->tipo_documento->rowAttributes() ?>>
+        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_tipo_documento"><?= $Page->tipo_documento->caption() ?></span></td>
+        <td data-name="tipo_documento"<?= $Page->tipo_documento->cellAttributes() ?>>
+<span id="el_compra_tipo_documento" data-page="1">
+<span<?= $Page->tipo_documento->viewAttributes() ?>>
+<?= $Page->tipo_documento->getViewValue() ?></span>
+</span>
+</td>
+    </tr>
+<?php } ?>
 <?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
     <tr id="r_doc_afectado"<?= $Page->doc_afectado->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_compra_doc_afectado"><?= $Page->doc_afectado->caption() ?></span></td>

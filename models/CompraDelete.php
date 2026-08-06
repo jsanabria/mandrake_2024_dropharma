@@ -131,7 +131,7 @@ class CompraDelete extends Compra
     {
         $this->id->setVisibility();
         $this->proveedor->setVisibility();
-        $this->tipo_documento->Visible = false;
+        $this->tipo_documento->setVisibility();
         $this->doc_afectado->Visible = false;
         $this->documento->setVisibility();
         $this->nro_control->Visible = false;
@@ -1019,6 +1019,10 @@ class CompraDelete extends Compra
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
+
+            // tipo_documento
+            $this->tipo_documento->HrefValue = "";
+            $this->tipo_documento->TooltipValue = "";
 
             // documento
             $this->documento->HrefValue = "";

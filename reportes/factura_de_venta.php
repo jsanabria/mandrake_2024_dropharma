@@ -39,6 +39,95 @@ require("../include/connect2.php");
 
 $id_invoice = isset($_REQUEST["id"]) ? $_REQUEST["id"] : "0";
 
+/**
+ * Convierte cualquier texto de la base de datos al formato que requieren
+ * las fuentes internas de FPDF: Windows-1252.
+ */
+function TextoFpdf($texto)
+{
+    $texto = html_entity_decode(
+        (string)$texto,
+        ENT_QUOTES | ENT_HTML5,
+        "UTF-8"
+    );
+
+    $codificacion = mb_detect_encoding(
+        $texto,
+        ["UTF-8", "Windows-1252", "ISO-8859-1"],
+        true
+    );
+
+    if ($codificacion && $codificacion !== "UTF-8") {
+        $texto = mb_convert_encoding(
+            $texto,
+            "UTF-8",
+            $codificacion
+        );
+    }
+
+    return mb_convert_encoding(
+        $texto,
+        "Windows-1252",
+        "UTF-8"
+    );
+}
+
+/**
+ * Divide un texto por palabras sin cortar letras ni caracteres especiales.
+ *
+ * Devuelve:
+ * [0] Primera línea
+ * [1] Texto restante
+ */
+function DividirTextoPorPalabras($texto, $maxCaracteres = 55)
+{
+    $texto = trim(
+        preg_replace('/\s+/u', ' ', (string)$texto)
+    );
+
+    if (mb_strlen($texto, "UTF-8") <= $maxCaracteres) {
+        return [$texto, ""];
+    }
+
+    $trozoInicial = mb_substr(
+        $texto,
+        0,
+        $maxCaracteres,
+        "UTF-8"
+    );
+
+    $ultimaPosicionEspacio = mb_strrpos(
+        $trozoInicial,
+        " ",
+        0,
+        "UTF-8"
+    );
+
+    // Si no hay espacios, no queda otra opción que cortar por longitud.
+    if ($ultimaPosicionEspacio === false) {
+        $ultimaPosicionEspacio = $maxCaracteres;
+    }
+
+    $primeraLinea = trim(
+        mb_substr(
+            $texto,
+            0,
+            $ultimaPosicionEspacio,
+            "UTF-8"
+        )
+    );
+
+    $textoRestante = trim(
+        mb_substr(
+            $texto,
+            $ultimaPosicionEspacio,
+            null,
+            "UTF-8"
+        )
+    );
+
+    return [$primeraLinea, $textoRestante];
+}
 
 $sql = "SELECT valor1 AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
 $rs = mysqli_query($link, $sql);
@@ -269,7 +358,11 @@ class PDF extends FPDF
 		$row = mysqli_fetch_array($rs);
 
 		$rif = $row["ci_rif"];
-		$razon_social = html_entity_decode($row["nombre"] ?? "");
+		$razon_social = html_entity_decode(
+		    $row["nombre"] ?? "",
+		    ENT_QUOTES | ENT_HTML5,
+		    "UTF-8"
+		);
 		$direccion_cliente = $row["direccion"];
 		$ciudad_cliente = $row["ciudad"];
 		$telf = $row["telf"];
@@ -309,7 +402,21 @@ class PDF extends FPDF
 		$this->Cell(5, 4);
 		$this->Cell(25, 4, "CLIENTE:", 0, 0, 'L');
 		$this->SetFont('Courier', '', 8);
-		$this->Cell(120, 4, mb_convert_encoding(substr($razon_social, 0, 55), "UTF-8", mb_detect_encoding($razon_social)), 0, 0, 'L');
+		$razonSocialCorta = mb_substr(
+		    $razon_social,
+		    0,
+		    55,
+		    "UTF-8"
+		);
+
+		$this->Cell(
+		    120,
+		    4,
+		    TextoFpdf($razonSocialCorta),
+		    0,
+		    0,
+		    'L'
+		);
 		$this->SetFont('Courier', 'B', 9);
 		$this->Cell(24, 4, "Fecha:", 0, 0, 'R');
 		$this->SetFont('Courier', '', 9);
@@ -332,8 +439,25 @@ class PDF extends FPDF
 		$this->Cell(5, 4);
 		$this->Cell(25, 4, "DIRECCION:", 0, 0, 'L');
 		$this->SetFont('Courier', '', 8);
-		$direccion_completa = trim($direccion_cliente . ". " . $ciudad_cliente, ". ");
-		$this->MultiCell(170, 3, substr($direccion_completa, 0, 150), 0, 'L');
+		$direccion_completa = trim(
+		    $direccion_cliente . ". " . $ciudad_cliente,
+		    ". "
+		);
+
+		$direccion_completa = mb_substr(
+		    $direccion_completa,
+		    0,
+		    150,
+		    "UTF-8"
+		);
+
+		$this->MultiCell(
+		    170,
+		    3,
+		    TextoFpdf($direccion_completa),
+		    0,
+		    'L'
+		);
 
 		$this->Ln(1);
 
@@ -495,13 +619,18 @@ class PDF extends FPDF
 		// ---------------------------------------------------------------
 		$y_totales = $this->GetY();
 		$this->SetFont('Courier', '', 5);
-		$this->MultiCell(100, 3, mb_convert_encoding(
-			"Este documento se expresa en Dólares Americanos con su equivalente en Bolívares al tipo de cambio corriente " .
-			"del mercado a la fecha de su emisión, según lo establecido en el artículo 13 numeral 14 de la Providencia " .
-			"Administrativa SNAT/2011/0071, el artículo 128 de la Ley del Banco Central de Venezuela, el artículo 25 de la " .
-			"Ley que establece el Impuesto al Valor Agregado y el 38 del Reglamento General de la Ley que establece el I.V.A.",
-			"UTF-8"
-		), 0, 'L');
+		$this->MultiCell(
+		    100,
+		    3,
+		    TextoFpdf(
+		        "Este documento se expresa en Dólares Americanos con su equivalente en Bolívares al tipo de cambio corriente " .
+				"del mercado a la fecha de su emisión, según lo establecido en el artículo 13 numeral 14 de la Providencia " .
+				"Administrativa SNAT/2011/0071, el artículo 128 de la Ley del Banco Central de Venezuela, el artículo 25 de la " .
+				"Ley que establece el Impuesto al Valor Agregado y el 38 del Reglamento General de la Ley que establece el I.V.A."
+		    ),
+		    0,
+		    'L'
+		);
 
 		// Usuario, debajo de la coletilla legal
 		$this->SetFont('Courier', 'B', 6);
@@ -568,7 +697,15 @@ class PDF extends FPDF
 
 		if (count($partes_pago) > 0) {
 			$this->SetFont('Courier', 'BI', 6);
-			$this->MultiCell(100, 3, mb_convert_encoding("Pagos: " . implode(' / ', $partes_pago), "UTF-8"), 0, 'L');
+			$this->MultiCell(
+			    100,
+			    3,
+			    TextoFpdf(
+			        "Pagos: " . implode(' / ', $partes_pago)
+			    ),
+			    0,
+			    'L'
+			);
 		}
 
 		$y_fin_coletilla = $this->GetY();
@@ -772,6 +909,12 @@ while ($row = mysqli_fetch_array($rs)) {
 
 	$articuloCompleto = trim($row["articulo"]) . $printE;
 
+	list($articuloLinea1, $articuloResto) =
+    DividirTextoPorPalabras(
+        $articuloCompleto,
+        55
+    );
+
 	// precio_unidad ya viene neto de DP y DL (según lo indicado), se usa tal cual
 	$precio_unit_db = floatval($row["precio_unidad"]);
 	$cantidad = intval($row["cantidad"]);
@@ -794,17 +937,32 @@ while ($row = mysqli_fetch_array($rs)) {
 
 	$pdf->Cell(5, 3);
 	$pdf->Cell(10, 3, number_format($cantidad, 0, "", ""), 0, 0, 'C');
-	$pdf->Cell(85, 3, substr($articuloCompleto, 0, 55), 0, 0, 'L');
+	$pdf->Cell(
+	    85,
+	    3,
+	    TextoFpdf($articuloLinea1),
+	    0,
+	    0,
+	    'L'
+	);
 	$pdf->Cell(28, 3, number_format($val_precio, 2, ",", "."), 0, 0, 'R');
 	$pdf->Cell(15, 3, number_format($row["alicuota"], 2, ",", "."), 0, 0, 'R');
 	$pdf->Cell(33, 3, number_format($val_total_bs, 2, ",", "."), 0, 0, 'R');
 	$pdf->Cell(22, 3, number_format($val_total_usd, 2, ",", "."), 0, 0, 'R');
 
-	if (strlen($articuloCompleto) > 55) {
-		$pdf->Ln();
-		$pdf->Cell(15, 3);
-		$pdf->MultiCell(160, 3, substr($articuloCompleto, 55), 0, 'L');
-		$sw = true;
+	if ($articuloResto !== "") {
+	    $pdf->Ln();
+	    $pdf->Cell(15, 3);
+
+	    $pdf->MultiCell(
+	        160,
+	        3,
+	        TextoFpdf($articuloResto),
+	        0,
+	        'L'
+	    );
+
+	    $sw = true;
 	}
 
 	if ($sw == false) $pdf->Ln();

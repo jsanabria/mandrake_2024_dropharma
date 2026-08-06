@@ -3067,7 +3067,6 @@ class ViewInTdcfcc extends DbTable
                     $doc->exportCaption($this->nro_documento);
                     $doc->exportCaption($this->fecha);
                     $doc->exportCaption($this->proveedor);
-                    $doc->exportCaption($this->doc_afectado);
                     $doc->exportCaption($this->monto_total);
                     $doc->exportCaption($this->alicuota_iva);
                     $doc->exportCaption($this->iva);
@@ -3151,7 +3150,6 @@ class ViewInTdcfcc extends DbTable
                         $doc->exportField($this->nro_documento);
                         $doc->exportField($this->fecha);
                         $doc->exportField($this->proveedor);
-                        $doc->exportField($this->doc_afectado);
                         $doc->exportField($this->monto_total);
                         $doc->exportField($this->alicuota_iva);
                         $doc->exportField($this->iva);

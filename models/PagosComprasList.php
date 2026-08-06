@@ -560,7 +560,7 @@ class PagosComprasList extends PagosCompras
     public $StopRecord;
     public $TotalRecords = 0;
     public $RecordRange = 10;
-    public $PageSizes = ""; // Page sizes (comma separated)
+    public $PageSizes = "10,20,50,-1"; // Page sizes (comma separated)
     public $DefaultSearchWhere = ""; // Default search WHERE clause
     public $SearchWhere = ""; // Search WHERE clause
     public $SearchPanelClass = "ew-search-panel collapse"; // Search Panel class

@@ -131,7 +131,7 @@ class CompraAdd extends Compra
     {
         $this->id->Visible = false;
         $this->proveedor->setVisibility();
-        $this->tipo_documento->Visible = false;
+        $this->tipo_documento->setVisibility();
         $this->doc_afectado->setVisibility();
         $this->documento->setVisibility();
         $this->nro_control->setVisibility();
@@ -732,6 +732,16 @@ class CompraAdd extends Compra
             }
         }
 
+        // Check field name 'tipo_documento' first before field var 'x_tipo_documento'
+        $val = $CurrentForm->hasValue("tipo_documento") ? $CurrentForm->getValue("tipo_documento") : $CurrentForm->getValue("x_tipo_documento");
+        if (!$this->tipo_documento->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tipo_documento->Visible = false; // Disable update for API request
+            } else {
+                $this->tipo_documento->setFormValue($val);
+            }
+        }
+
         // Check field name 'doc_afectado' first before field var 'x_doc_afectado'
         $val = $CurrentForm->hasValue("doc_afectado") ? $CurrentForm->getValue("doc_afectado") : $CurrentForm->getValue("x_doc_afectado");
         if (!$this->doc_afectado->IsDetailKey) {
@@ -863,6 +873,7 @@ class CompraAdd extends Compra
     {
         global $CurrentForm;
         $this->proveedor->CurrentValue = $this->proveedor->FormValue;
+        $this->tipo_documento->CurrentValue = $this->tipo_documento->FormValue;
         $this->doc_afectado->CurrentValue = $this->doc_afectado->FormValue;
         $this->documento->CurrentValue = $this->documento->FormValue;
         $this->nro_control->CurrentValue = $this->nro_control->FormValue;
@@ -1354,6 +1365,10 @@ class CompraAdd extends Compra
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
+            // tipo_documento
+            $this->tipo_documento->HrefValue = "";
+            $this->tipo_documento->TooltipValue = "";
+
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
             $this->doc_afectado->TooltipValue = "";
@@ -1429,6 +1444,11 @@ class CompraAdd extends Compra
                 $this->proveedor->EditValue = $arwrk;
             }
             $this->proveedor->PlaceHolder = RemoveHtml($this->proveedor->caption());
+
+            // tipo_documento
+            $this->tipo_documento->setupEditAttributes();
+            $this->tipo_documento->EditValue = $this->tipo_documento->options(true);
+            $this->tipo_documento->PlaceHolder = RemoveHtml($this->tipo_documento->caption());
 
             // doc_afectado
             $this->doc_afectado->setupEditAttributes();
@@ -1561,6 +1581,9 @@ class CompraAdd extends Compra
             // proveedor
             $this->proveedor->HrefValue = "";
 
+            // tipo_documento
+            $this->tipo_documento->HrefValue = "";
+
             // doc_afectado
             $this->doc_afectado->HrefValue = "";
 
@@ -1620,6 +1643,11 @@ class CompraAdd extends Compra
             if ($this->proveedor->Visible && $this->proveedor->Required) {
                 if (!$this->proveedor->IsDetailKey && EmptyValue($this->proveedor->FormValue)) {
                     $this->proveedor->addErrorMessage(str_replace("%s", $this->proveedor->caption(), $this->proveedor->RequiredErrorMessage));
+                }
+            }
+            if ($this->tipo_documento->Visible && $this->tipo_documento->Required) {
+                if (!$this->tipo_documento->IsDetailKey && EmptyValue($this->tipo_documento->FormValue)) {
+                    $this->tipo_documento->addErrorMessage(str_replace("%s", $this->tipo_documento->caption(), $this->tipo_documento->RequiredErrorMessage));
                 }
             }
             if ($this->doc_afectado->Visible && $this->doc_afectado->Required) {
@@ -1771,6 +1799,9 @@ class CompraAdd extends Compra
         // proveedor
         $this->proveedor->setDbValueDef($rsnew, $this->proveedor->CurrentValue, false);
 
+        // tipo_documento
+        $this->tipo_documento->setDbValueDef($rsnew, $this->tipo_documento->CurrentValue, false);
+
         // doc_afectado
         $this->doc_afectado->setDbValueDef($rsnew, $this->doc_afectado->CurrentValue, false);
 
@@ -1817,6 +1848,9 @@ class CompraAdd extends Compra
     {
         if (isset($row['proveedor'])) { // proveedor
             $this->proveedor->setFormValue($row['proveedor']);
+        }
+        if (isset($row['tipo_documento'])) { // tipo_documento
+            $this->tipo_documento->setFormValue($row['tipo_documento']);
         }
         if (isset($row['doc_afectado'])) { // doc_afectado
             $this->doc_afectado->setFormValue($row['doc_afectado']);

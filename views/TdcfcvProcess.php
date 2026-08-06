@@ -235,7 +235,27 @@ $entregado_param = strtoupper(trim($_REQUEST["entregado"] ?? ""));
 if ($entregado_param !== "S" && $entregado_param !== "N") {
     die("Debe indicar la condición de pago (Contado o Crédito) antes de procesar el documento.");
 }
-Execute("UPDATE salidas SET entregado = '{$entregado_param}' WHERE id = {$pedido} LIMIT 1");
+
+$dias_credito_param = max(
+    0,
+    intval($_REQUEST["dias_credito"] ?? 0)
+);
+
+// Para Factura, si la condicón de pago es contado los días de crédito se igualan a 0.
+if ($documento == "FC") {
+    $dias_credito_param = (
+        $entregado_param == "S"
+    ) ? 0 : $dias_credito_param;
+}
+
+Execute("
+    UPDATE salidas
+    SET
+        dias_credito = {$dias_credito_param},
+        entregado = '{$entregado_param}'
+    WHERE id = {$pedido}
+    LIMIT 1
+");
 
 if(trim($nro_documento ?? "") == "") {
     if ($impresoraFiscal) {

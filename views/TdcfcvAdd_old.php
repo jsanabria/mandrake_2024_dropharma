@@ -34,9 +34,10 @@ $nro_documento = "";
 $descTransferencista = 0.00;
 $descFabricante = 0.00;
 $id_documento_padre = 0;
+$doc_afe = 0;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre FROM salidas WHERE id = $pedido;";
+    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre, IFNULL(doc_afe, 0) AS doc_afe FROM salidas WHERE id = $pedido;";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -49,6 +50,7 @@ if(isset($_REQUEST["pedido"])) {
       $descTransferencista = floatval($row["descuento2"]);
       $descFabricante = floatval($row["descuento3"]);
       $id_documento_padre = intval($row["id_documento_padre"]);
+      $doc_afe = $row["doc_afe"];
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -410,6 +412,39 @@ if (intval($pedido) > 0) {
       <textarea cols="35" rows="3" placeholder="Observaciones" class="form-control form-control-sm" id="nota" onchange="js:guardar_nota();"><?= $nota ?></textarea>
   </div>
 </div>
+
+<?php
+$condicionPago = "";
+
+// Si es una Nota de Crédito, buscar la factura origen
+if ($consignacion == "NC" && trim($doc_afectado) != "") {
+    /*
+    $sql = "
+        SELECT entregado
+        FROM salidas
+        WHERE tipo_documento = 'TDCFCV'
+          AND documento = 'FC'
+          AND nro_documento = '" . AdjustSql($doc_afectado) . "'
+        LIMIT 1;
+    ";
+    */
+    $sql = "
+        SELECT entregado
+        FROM salidas
+        WHERE id = $doc_afe
+        LIMIT 1;
+    ";
+
+    $condicionPago = ExecuteScalar($sql);
+
+    // Normalizar por seguridad
+    $condicionPago = strtoupper(trim($condicionPago));
+
+    if ($condicionPago != "S" && $condicionPago != "N") {
+        $condicionPago = "";
+    }
+}
+?>
 
 <script type="text/javascript">
 loadjs.ready(["jquery"], function () {
@@ -1647,8 +1682,23 @@ loadjs.ready(["jquery"], function () {
                 // Cada vez que se abre el modal, se reinicia la condición de pago
                 // y el botón "Sí, Procesar" queda deshabilitado hasta que el
                 // usuario elija explícitamente Contado o Crédito.
-                $("#modal_tipo_pago").val("");
-                $("#btnConfirmarProcesar").prop("disabled", true);
+                const condicionPago = "<?= $condicionPago ?>";
+
+                $("#modal_tipo_pago").val(condicionPago);
+
+                // Si viene preseleccionado se habilita el botón,
+                // de lo contrario el usuario debe escogerlo.
+                $("#btnConfirmarProcesar").prop(
+                    "disabled",
+                    condicionPago === ""
+                );
+
+                $("#modal_tipo_pago").off("change").on("change", function () {
+                    $("#btnConfirmarProcesar").prop(
+                        "disabled",
+                        $(this).val() === ""
+                    );
+                });
 
                 $("#modal_tipo_pago").off("change").on("change", function () {
                     $("#btnConfirmarProcesar").prop("disabled", $(this).val() === "");

@@ -508,68 +508,6 @@ function CuadraComprobante($comprobante) {
 	if($debe == $haber and $debe != 0 and $haber != 0) return TRUE;
 	else return FALSE;
 }
-function CalcularRetenciones($id_documento, $tipo_documento) {
-	$sql = "SELECT agente_retencion FROM compania WHERE id = 1;";
-	$aplica_retencion = ExecuteScalar($sql);
-	$sql = "SELECT
-				proveedor, alicuota_iva, iva, total,
-				IFNULL(aplica_retencion, '$aplica_retencion') AS aplica_retencion 
-			FROM entradas
-			WHERE tipo_documento = '$tipo_documento' AND id = $id_documento;";
-	$row = ExecuteRow($sql);
-	$proveedor = $row["proveedor"];
-	$alicuota = floatval($row["alicuota_iva"]);
-	$monto_iva = floatval($row["iva"]);
-	$monto_total = floatval($row["total"]);
-	$monto_pagar = 0.00;
-	$aplica_retencion = $row["aplica_retencion"];
-	$sql = "SELECT
-				SUM(costo) AS precio, 
-				SUM(IF(IFNULL(alicuota,0)=0, costo, 0)) AS exento, 
-				SUM(IF(IFNULL(alicuota,0)=0, 0, costo)) AS gravado 
-			FROM entradas_salidas
-			WHERE
-				tipo_documento = '$tipo_documento' AND 
-				id_documento = '$id_documento';";
-	$row = ExecuteRow($sql);
-	$monto_exento = floatval($row["exento"]);
-	$monto_gravado = floatval($row["gravado"]);
-	if($aplica_retencion == "S") {
-		$sql = "SELECT ci_rif AS rif, tipo_iva, tipo_islr, sustraendo, tipo_impmun FROM proveedor WHERE id = $proveedor;";
-		$row = ExecuteRow($sql);
-		$retIVA = floatval($row["tipo_iva"]);
-		$retISLR = floatval($row["tipo_islr"]);
-		$sustraendo = floatval($row["sustraendo"]);
-		$retMuni = floatval($row["tipo_impmun"]);
-		$rif = trim($row["rif"]);
-		$MretIVA = $monto_iva * ($retIVA/100);
-		$MretSLR = (($monto_gravado) * ($retISLR/100)) - $sustraendo;
-		$MretMUNI = $monto_gravado * ($retMuni/100);
-		if($MretSLR < 0) $MretSLR = 0;
-		if($MretMUNI < 0) $MretMUNI = 0;
-		$monto_pagar = $monto_total - ($MretIVA+$MretSLR+$MretMUNI);
-	}
-	else {
-		$MretIVA = 0;
-		$MretSLR = 0;
-		$MretMUNI = 0;
-		$retIVA = 0;
-		$retISLR = 0;
-		$sustraendo = 0;
-		$retMuni = 0;
-		$monto_pagar = $monto_total;
-	}
-	$sql = "UPDATE entradas 
-			SET
-				ret_iva=$MretIVA, ret_islr=$MretSLR, monto_pagar=$monto_pagar,
-				tipo_iva = '$retIVA', tipo_islr = '$retISLR',
-				sustraendo = $sustraendo,
-				ret_municipal=$MretMUNI, tipo_municipal='$retMuni' 
-			WHERE
-				tipo_documento = '$tipo_documento' AND 
-				id = '$id_documento';";
-	Execute($sql);
-}
 
 /**** Clase para crear comprobante contable desde PhpMaker ****/
 class CrearComprobante {
@@ -1786,6 +1724,315 @@ function FormatearConsecutivo($numero, $prefijo = "", $pad = 7) {
     return trim($prefijo) . str_pad(intval($numero), intval($pad), "0", STR_PAD_LEFT);
 }
 */
+function CalcularRetencionesProveedor(
+    $proveedor,
+    $tipoDocumentoFiscal,
+    $aplicaRetencion,
+    $alicuota,
+    $montoExento,
+    $montoGravado
+) {
+    $proveedor = intval($proveedor);
+    $tipoDocumentoFiscal = strtoupper(trim((string)$tipoDocumentoFiscal));
+    $aplicaRetencion = strtoupper(trim((string)$aplicaRetencion));
+    $alicuota = floatval($alicuota);
+    $montoExento = floatval($montoExento);
+    $montoGravado = floatval($montoGravado);
+    $montoIva = round(
+        $montoGravado * ($alicuota / 100),
+        2
+    );
+    $montoTotal = round(
+        $montoExento + $montoGravado + $montoIva,
+        2
+    );
+    $retIVA = 0.00;
+    $retISLR = 0.00;
+    $retMunicipal = 0.00;
+    $sustraendo = 0.00;
+    $montoRetIVA = 0.00;
+    $montoRetISLR = 0.00;
+    $montoRetMunicipal = 0.00;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Solo se retiene cuando:
+    | - aplica_retencion = S
+    | - no es Nota de Crédito
+    |--------------------------------------------------------------------------
+    */
+    $debeRetener = (
+        $aplicaRetencion === "S" &&
+        $tipoDocumentoFiscal !== "NC"
+    );
+    if ($debeRetener && $proveedor > 0) {
+        $sql = "
+            SELECT
+                IFNULL(a.ci_rif, '') AS rif,
+                IFNULL((
+                    SELECT t.campo_descripcion
+                    FROM tabla AS t
+                    WHERE t.campo_codigo = a.tipo_ret_iva
+                    LIMIT 1
+                ), 0) AS tipo_iva,
+                IFNULL((
+                    SELECT tr.tarifa
+                    FROM tabla_retenciones AS tr
+                    WHERE tr.id = a.tipo_ret_islr
+                    LIMIT 1
+                ), 0) AS tipo_islr,
+                IFNULL((
+                    SELECT tr.sustraendo
+                    FROM tabla_retenciones AS tr
+                    WHERE tr.id = a.tipo_ret_islr
+                    LIMIT 1
+                ), 0) AS sustraendo,
+                IFNULL((
+                    SELECT t.campo_descripcion
+                    FROM tabla AS t
+                    WHERE t.campo_codigo = a.tipo_ret_mun
+                    LIMIT 1
+                ), 0) AS tipo_municipal
+            FROM proveedor AS a
+            WHERE a.id = {$proveedor}
+            LIMIT 1
+        ";
+        $row = ExecuteRow($sql);
+        if ($row) {
+            $retIVA = floatval($row["tipo_iva"] ?? 0);
+            $retISLR = floatval($row["tipo_islr"] ?? 0);
+            $sustraendo = floatval($row["sustraendo"] ?? 0);
+            $retMunicipal = floatval($row["tipo_municipal"] ?? 0);
+        }
+        $montoRetIVA = round(
+            $montoIva * ($retIVA / 100),
+            2
+        );
+        $montoRetISLR = round(
+            ($montoGravado * ($retISLR / 100)) -
+            $sustraendo,
+            2
+        );
+        $montoRetMunicipal = round(
+            $montoGravado * ($retMunicipal / 100),
+            2
+        );
+
+        // Nunca guardar retenciones negativas.
+        $montoRetIVA = max(0, $montoRetIVA);
+        $montoRetISLR = max(0, $montoRetISLR);
+        $montoRetMunicipal = max(0, $montoRetMunicipal);
+    } else {
+        $aplicaRetencion = "N";
+    }
+    $totalRetenido = round(
+        $montoRetIVA +
+        $montoRetISLR +
+        $montoRetMunicipal,
+        2
+    );
+    $montoPagar = round(
+        $montoTotal - $totalRetenido,
+        2
+    );
+    return [
+        "aplica_retencion" => $aplicaRetencion,
+        "monto_exento" => $montoExento,
+        "monto_gravado" => $montoGravado,
+        "alicuota" => $alicuota,
+        "monto_iva" => $montoIva,
+        "monto_total" => $montoTotal,
+        "monto_pagar" => $montoPagar,
+        "ret_iva" => $montoRetIVA,
+        "ret_islr" => $montoRetISLR,
+        "ret_municipal" => $montoRetMunicipal,
+        "tipo_iva" => $retIVA,
+        "tipo_islr" => $retISLR,
+        "tipo_municipal" => $retMunicipal,
+        "sustraendo" => $sustraendo
+    ];
+}
+
+function CalcularRetencionesCompraInventario($idDocumento)
+{
+    $idDocumento = intval($idDocumento);
+    if ($idDocumento <= 0) {
+        return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cabecera
+    |--------------------------------------------------------------------------
+    */
+    $sql = "
+        SELECT
+            id,
+            proveedor,
+            documento,
+            moneda,
+            tasa_dia,
+            IFNULL(aplica_retencion, 'N') AS aplica_retencion,
+            IFNULL(ret_iva, 0) AS ret_iva,
+            IFNULL(ref_iva, '') AS ref_iva,
+            IFNULL(ret_islr, 0) AS ret_islr,
+            IFNULL(ref_islr, '') AS ref_islr,
+            IFNULL(ret_municipal, 0) AS ret_municipal,
+            IFNULL(ref_municipal, '') AS ref_municipal
+        FROM entradas
+        WHERE id = {$idDocumento}
+          AND tipo_documento = 'TDCFCC'
+        LIMIT 1
+    ";
+    $cabecera = ExecuteRow($sql);
+    if (!$cabecera) {
+        return false;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bases de la factura
+    |--------------------------------------------------------------------------
+    | entradas_salidas.costo ya representa el total de cada línea.
+    |--------------------------------------------------------------------------
+    */
+    $sql = "
+        SELECT
+            SUM(
+                CASE
+                    WHEN IFNULL(alicuota, 0) = 0
+                    THEN IFNULL(costo, 0)
+                    ELSE 0
+                END
+            ) AS monto_exento,
+            SUM(
+                CASE
+                    WHEN IFNULL(alicuota, 0) <> 0
+                    THEN IFNULL(costo, 0)
+                    ELSE 0
+                END
+            ) AS monto_gravado,
+            MAX(IFNULL(alicuota, 0)) AS alicuota
+        FROM entradas_salidas
+        WHERE id_documento = {$idDocumento}
+          AND tipo_documento = 'TDCFCC'
+    ";
+    $detalle = ExecuteRow($sql);
+    $montoExento = floatval(
+        $detalle["monto_exento"] ?? 0
+    );
+    $montoGravado = floatval(
+        $detalle["monto_gravado"] ?? 0
+    );
+    $alicuota = floatval(
+        $detalle["alicuota"] ?? 0
+    );
+    $tipoDocumentoFiscal = strtoupper(trim(
+        $cabecera["documento"] ?? ""
+    ));
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cálculo común
+    |--------------------------------------------------------------------------
+    */
+    $resultado = CalcularRetencionesProveedor(
+        intval($cabecera["proveedor"]),
+        $tipoDocumentoFiscal,
+        $cabecera["aplica_retencion"] ?? "N",
+        $alicuota,
+        $montoExento,
+        $montoGravado
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Buscar referencia existente
+    |--------------------------------------------------------------------------
+    */
+    $referencia = "";
+    if (trim($cabecera["ref_iva"] ?? "") !== "") {
+        $referencia = trim($cabecera["ref_iva"]);
+    } elseif (trim($cabecera["ref_islr"] ?? "") !== "") {
+        $referencia = trim($cabecera["ref_islr"]);
+    } elseif (trim($cabecera["ref_municipal"] ?? "") !== "") {
+        $referencia = trim($cabecera["ref_municipal"]);
+    }
+    $tieneRetencion = (
+        $resultado["ret_iva"] > 0 ||
+        $resultado["ret_islr"] > 0 ||
+        $resultado["ret_municipal"] > 0
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Generar consecutivo
+    |--------------------------------------------------------------------------
+    */
+    if ($tieneRetencion && $referencia === "") {
+        $referencia = ObtenerConsecutivoRetencion(
+            "RETENCION"
+        );
+    }
+    $refIvaSql = (
+        $resultado["ret_iva"] > 0 &&
+        $referencia !== ""
+    )
+        ? "'" . AdjustSql($referencia) . "'"
+        : "NULL";
+    $refIslrSql = (
+        $resultado["ret_islr"] > 0 &&
+        $referencia !== ""
+    )
+        ? "'" . AdjustSql($referencia) . "'"
+        : "NULL";
+    $refMunicipalSql = (
+        $resultado["ret_municipal"] > 0 &&
+        $referencia !== ""
+    )
+        ? "'" . AdjustSql($referencia) . "'"
+        : "NULL";
+
+    /*
+    |--------------------------------------------------------------------------
+    | Actualizar entradas
+    |--------------------------------------------------------------------------
+    */
+    $subtotal = $resultado["monto_exento"] + $resultado["monto_gravado"];
+    $sql = "
+        UPDATE entradas
+        SET
+            aplica_retencion = '" .
+                AdjustSql($resultado["aplica_retencion"]) . "',
+            -- monto_exento = {$resultado["monto_exento"]},
+            -- monto_gravado = {$resultado["monto_gravado"]},
+            -- alicuota_iva = {$resultado["alicuota"]},
+            iva = {$resultado["monto_iva"]},
+            monto_total = " . $subtotal . ",
+            total = {$resultado["monto_total"]},
+            monto_pagar = {$resultado["monto_pagar"]},
+            ret_iva = {$resultado["ret_iva"]},
+            ref_iva = {$refIvaSql},
+            ret_islr = {$resultado["ret_islr"]},
+            ref_islr = {$refIslrSql},
+            ret_municipal = {$resultado["ret_municipal"]},
+            ref_municipal = {$refMunicipalSql},
+            tipo_iva = '" .
+                AdjustSql(strval($resultado["tipo_iva"])) . "',
+            tipo_islr = '" .
+                AdjustSql(strval($resultado["tipo_islr"])) . "',
+            tipo_municipal = '" .
+                AdjustSql(strval($resultado["tipo_municipal"])) . "',
+            sustraendo = {$resultado["sustraendo"]},
+            username = '" .
+                AdjustSql(CurrentUserName()) . "'
+        WHERE id = {$idDocumento}
+          AND tipo_documento = 'TDCFCC'
+        LIMIT 1
+    ";
+    Execute($sql);
+    return $resultado;
+}
 
 // Add listeners
 AddListener(DatabaseConnectingEvent::NAME, fn(DatabaseConnectingEvent $event) => Database_Connecting($event));

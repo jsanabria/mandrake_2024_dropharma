@@ -20,6 +20,10 @@ $lote = trim($_REQUEST["lote"] ?? "");
 $vence = $_REQUEST["vence"]; 
 $vence = ($vence == "" ? "1990-01-01" : $vence);
 
+$aplica_retencion = (
+    strtoupper(trim($_POST["aplica_retencion"] ?? "N")) === "S"
+) ? "S" : "N";
+
 $tipo_documento = "TDCFCC";
 
 $tasa_usd = ($tasa_usd == 0 ? 1 : $tasa_usd);
@@ -85,10 +89,10 @@ if($pedido == 0) {
 
 	$sql = "INSERT INTO entradas 
 				(id, tipo_documento, username, fecha, proveedor, nro_documento, almacen, 
-				nota, estatus, moneda, documento, descuento, consignacion) 
+				nota, estatus, moneda, documento, descuento, consignacion, aplica_retencion) 
 			VALUES 
 				(NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "', $proveedor, '$nro_documento', '$almacen', 
-				'$nota', '$estatus', '$moneda', '$consignacion', $descuentoG, 'N');";
+				'$nota', '$estatus', '$moneda', '$consignacion', $descuentoG, 'N', '$aplica_retencion');";
 	mysqli_query($link, $sql);
 
 	$sql = "SELECT LAST_INSERT_ID() AS pedido;";
@@ -189,7 +193,7 @@ $sql = "UPDATE entradas
 	      iva = $iva,
 	      total = $total, 
 	      tasa_dia = $tasa_usd, 
-	      monto_usd = $total_usd, tasa_dia = $tasa_usd, moneda = '$moneda' 
+	      monto_usd = $total_usd, tasa_dia = $tasa_usd, moneda = '$moneda', aplica_retencion = '$aplica_retencion' 
 		  -- monto_sin_descuento = $monto_sin_descuento, 
 	    WHERE id = '$pedido'";
 mysqli_query($link, $sql);
@@ -200,6 +204,7 @@ $sql = "UPDATE
 			JOIN (SELECT 
 						id_documento, tipo_documento, ABS(SUM(cantidad_movimiento)) AS cantidad 
 					FROM 
+	
 						entradas_salidas 
 					WHERE tipo_documento = '$tipo_documento' AND id_documento = $pedido 
 					GROUP BY id_documento, tipo_documento) AS b ON b.id_documento = a.id AND b.tipo_documento = a.tipo_documento 

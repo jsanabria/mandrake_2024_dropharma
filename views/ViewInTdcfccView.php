@@ -144,17 +144,6 @@ loadjs.ready("head", function () {
 </td>
     </tr>
 <?php } ?>
-<?php if ($Page->doc_afectado->Visible) { // doc_afectado ?>
-    <tr id="r_doc_afectado"<?= $Page->doc_afectado->rowAttributes() ?>>
-        <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_in_tdcfcc_doc_afectado"><?= $Page->doc_afectado->caption() ?></span></td>
-        <td data-name="doc_afectado"<?= $Page->doc_afectado->cellAttributes() ?>>
-<span id="el_view_in_tdcfcc_doc_afectado">
-<span<?= $Page->doc_afectado->viewAttributes() ?>>
-<?= $Page->doc_afectado->getViewValue() ?></span>
-</span>
-</td>
-    </tr>
-<?php } ?>
 <?php if ($Page->monto_total->Visible) { // monto_total ?>
     <tr id="r_monto_total"<?= $Page->monto_total->rowAttributes() ?>>
         <td class="<?= $Page->TableLeftColumnClass ?>"><span id="elh_view_in_tdcfcc_monto_total"><?= $Page->monto_total->caption() ?></span></td>

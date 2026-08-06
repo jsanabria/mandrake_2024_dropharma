@@ -137,7 +137,7 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
         $this->nro_control->Visible = false;
         $this->fecha_libro_compra->Visible = false;
         $this->proveedor->setVisibility();
-        $this->doc_afectado->setVisibility();
+        $this->doc_afectado->Visible = false;
         $this->almacen->Visible = false;
         $this->monto_total->Visible = false;
         $this->alicuota_iva->Visible = false;
@@ -863,16 +863,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
             }
         }
 
-        // Check field name 'doc_afectado' first before field var 'x_doc_afectado'
-        $val = $CurrentForm->hasValue("doc_afectado") ? $CurrentForm->getValue("doc_afectado") : $CurrentForm->getValue("x_doc_afectado");
-        if (!$this->doc_afectado->IsDetailKey) {
-            if (IsApi() && $val === null) {
-                $this->doc_afectado->Visible = false; // Disable update for API request
-            } else {
-                $this->doc_afectado->setFormValue($val);
-            }
-        }
-
         // Check field name 'nota' first before field var 'x_nota'
         $val = $CurrentForm->hasValue("nota") ? $CurrentForm->getValue("nota") : $CurrentForm->getValue("x_nota");
         if (!$this->nota->IsDetailKey) {
@@ -920,7 +910,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
         $this->fecha->CurrentValue = $this->fecha->FormValue;
         $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
         $this->proveedor->CurrentValue = $this->proveedor->FormValue;
-        $this->doc_afectado->CurrentValue = $this->doc_afectado->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
         $this->estatus->CurrentValue = $this->estatus->FormValue;
         $this->consignacion->CurrentValue = $this->consignacion->FormValue;
@@ -1542,9 +1531,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
 
-            // doc_afectado
-            $this->doc_afectado->HrefValue = "";
-
             // nota
             $this->nota->HrefValue = "";
 
@@ -1599,14 +1585,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
                 $this->proveedor->EditValue = null;
             }
 
-            // doc_afectado
-            $this->doc_afectado->setupEditAttributes();
-            if (!$this->doc_afectado->Raw) {
-                $this->doc_afectado->CurrentValue = HtmlDecode($this->doc_afectado->CurrentValue);
-            }
-            $this->doc_afectado->EditValue = HtmlEncode($this->doc_afectado->CurrentValue);
-            $this->doc_afectado->PlaceHolder = RemoveHtml($this->doc_afectado->caption());
-
             // nota
             $this->nota->setupEditAttributes();
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
@@ -1636,9 +1614,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
             // proveedor
             $this->proveedor->HrefValue = "";
             $this->proveedor->TooltipValue = "";
-
-            // doc_afectado
-            $this->doc_afectado->HrefValue = "";
 
             // nota
             $this->nota->HrefValue = "";
@@ -1690,11 +1665,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
             if ($this->proveedor->Visible && $this->proveedor->Required) {
                 if (!$this->proveedor->IsDetailKey && EmptyValue($this->proveedor->FormValue)) {
                     $this->proveedor->addErrorMessage(str_replace("%s", $this->proveedor->caption(), $this->proveedor->RequiredErrorMessage));
-                }
-            }
-            if ($this->doc_afectado->Visible && $this->doc_afectado->Required) {
-                if (!$this->doc_afectado->IsDetailKey && EmptyValue($this->doc_afectado->FormValue)) {
-                    $this->doc_afectado->addErrorMessage(str_replace("%s", $this->doc_afectado->caption(), $this->doc_afectado->RequiredErrorMessage));
                 }
             }
             if ($this->nota->Visible && $this->nota->Required) {
@@ -1846,9 +1816,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
         // fecha
         $this->fecha->setDbValueDef($rsnew, UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern()), $this->fecha->ReadOnly);
 
-        // doc_afectado
-        $this->doc_afectado->setDbValueDef($rsnew, $this->doc_afectado->CurrentValue, $this->doc_afectado->ReadOnly);
-
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
@@ -1871,9 +1838,6 @@ class ViewInTdcfccEdit extends ViewInTdcfcc
         }
         if (isset($row['fecha'])) { // fecha
             $this->fecha->CurrentValue = $row['fecha'];
-        }
-        if (isset($row['doc_afectado'])) { // doc_afectado
-            $this->doc_afectado->CurrentValue = $row['doc_afectado'];
         }
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];

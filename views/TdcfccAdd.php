@@ -23,9 +23,75 @@ $tasa = floatval($row["tasa"]);
 $pedido = 0;
 $consignacion = "";
 $nota = "";
+
+// Valor predeterminado según la configuración de la compañía.
+$aplica_retencion = strtoupper(trim(
+    ExecuteScalar("
+        SELECT IFNULL(agente_retencion, 'N')
+        FROM compania
+        WHERE id = 1
+        LIMIT 1
+    ") ?? "N"
+));
+
+/*
+|--------------------------------------------------------------------------
+| REGLA DE NEGOCIO - MANDRAKE
+|--------------------------------------------------------------------------
+| Autor : Junior Enrique Sanabria Rubio
+| Fecha : 05/08/2026
+|
+| A partir de esta versión, todo el control tributario de las compras se
+| centraliza en el módulo de Compras Administrativas (tabla compra).
+|
+| Esto incluye:
+|   • Libro de Compras.
+|   • Retenciones de IVA.
+|   • Retenciones de ISLR.
+|   • Retenciones Municipales.
+|   • Generación de comprobantes de retención.
+|   • Consecutivos de comprobantes.
+|   • Cálculo del monto a pagar al proveedor.
+|
+| El módulo TDCFCC (Compras de Inventario) tendrá únicamente la finalidad
+| de registrar el detalle de los artículos adquiridos para:
+|
+|   • Actualizar existencias.
+|   • Registrar costos.
+|   • Calcular costo promedio.
+|   • Mantener el historial del inventario.
+|
+| Cuando una compra corresponda a inventario, la factura deberá registrarse
+| primero en Compras Administrativas para cumplir con las obligaciones
+| fiscales y posteriormente podrá registrarse en Compras de Inventario para
+| efectos exclusivos del control de costos.
+|
+| En consecuencia, este módulo NO genera retenciones ni comprobantes de
+| retención, aun cuando técnicamente existe la lógica para hacerlo.
+| Esta decisión evita duplicar el control tributario entre dos módulos y
+| garantiza que toda la información fiscal provenga de una única fuente.
+|--------------------------------------------------------------------------
+*/
+
+// if ($aplica_retencion !== "S") {
+    $aplica_retencion = "N";
+// }
+
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT proveedor, tipo_documento, nota, tasa_dia, moneda, documento FROM entradas WHERE id = $pedido;";
+    $sql = "
+        SELECT
+            proveedor,
+            tipo_documento,
+            nota,
+            tasa_dia,
+            moneda,
+            documento,
+            IFNULL(aplica_retencion, 'N') AS aplica_retencion
+        FROM entradas
+        WHERE id = " . intval($pedido) . "
+        LIMIT 1;
+    ";
     if($row = ExecuteRow($sql)) {
       $codpro = $row["proveedor"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -33,6 +99,9 @@ if(isset($_REQUEST["pedido"])) {
       $tasa = floatval($row["tasa_dia"]);
       $moneda = $row["moneda"]; 
       $consignacion = $row["documento"]; 
+      $aplica_retencion = (
+            strtoupper(trim($row["aplica_retencion"] ?? "N")) === "S"
+        ) ? "S" : "N";
     } 
     else {
       header("Location: ViewInTdcfccList");
@@ -84,23 +153,29 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 ?>
 
 <script type="text/javascript">
+loadjs.ready(["jquery"], function () {
+    const $ = jQuery;
+
   function insertar(i) { 
-    var pedido = $("#pedido").value();
-    var proveedor = $("#codpro").value();
-    var costoFull = $("#x" + i + "_costoFull").value();
-    var descuento = $("#x" + i + "_descuento").value();
-    var costo = $("#x" + i + "_costo").value();
-    var moneda = $("#moneda").value();
-    var total = $("#x" + i + "_total").value();
-    var cantidad = $("#x" + i + "_cantidad").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var pedido = $("#pedido").val();
+    var proveedor = $("#codpro").val();
+    var costoFull = $("#x" + i + "_costoFull").val();
+    var descuento = $("#x" + i + "_descuento").val();
+    var costo = $("#x" + i + "_costo").val();
+    var moneda = $("#moneda").val();
+    var total = $("#x" + i + "_total").val();
+    var cantidad = $("#x" + i + "_cantidad").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
-    var descuentoG = $("#PorDesAct").value();
-    var nota = $("#nota").value();
-    var consignacion = $("#consignacion").value();
-    var lote = $("#x" + i + "_lote").value();
-    var vence = $("#x" + i + "_vence").value();
+    var descuentoG = $("#PorDesAct").val();
+    var nota = $("#nota").val();
+    var consignacion = $("#consignacion").val();
+    var lote = $("#x" + i + "_lote").val();
+    var vence = $("#x" + i + "_vence").val();
+    var aplica_retencion = $("#aplica_retencion").is(":checked")
+    ? "S"
+    : "N";
     // alert(pedido + " - " + proveedor + " - " + costoFull + " - " + descuento + " - " + costo + " - " + moneda + " - " + total + " - " + cantidad + " - " + username);
 
     // Using the core $.ajax() method
@@ -126,6 +201,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
               consignacion: consignacion, 
               lote: lote, 
               vence: vence, 
+              aplica_retencion: aplica_retencion,
             },
       // Whether this is a POST or GET request
       type: "POST",
@@ -167,7 +243,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
         else {
           alert("Error: !!! " + json.mensaje + " !!!");
           document.getElementById("x" + i + "_boton").innerHTML = '<i class="fa-solid fa-cart-shopping" onclick="js:insertar(' + i + ')"></i>';
-          ("#x" + i + "_cantidad").value("");
+          $("#x" + i + "_cantidad").val("");
         }
     })
     // Code to run if the request fails; the raw request and status codes are passed to the function
@@ -184,13 +260,13 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function eliminar(i, id_item) {
-    var pedido = $("#pedido").value();
-    var articulo = $("#x" + i + "_articulo").value();
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var pedido = $("#pedido").val();
+    var articulo = $("#x" + i + "_articulo").val();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
-    var descuento = $("#PorDesAct").value();
-    var nota = $("#nota").value();
+    var descuento = $("#PorDesAct").val();
+    var nota = $("#nota").val();
 
     // alert(pedido + " - " + proveedor + " - " + precio + " - " + descuento + " - " + precioFull + " - " + moneda + " - " + onhand + " - " + cantidad + " - " + username);
     // Using the core $.ajax() method
@@ -274,7 +350,7 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 
       // if(confirm("Vaciar la cabecera del documento?")) borrarCabecera = 'S';
 
-      var pedido = $("#pedido").value();
+      var pedido = $("#pedido").val();
       // Using the core $.ajax() method
       $.ajax({
         // The URL for the request
@@ -323,9 +399,9 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function listar_pedido(i) {
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+    var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     $.ajax({
       // The URL for the request
@@ -364,10 +440,11 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
           }
           */
           
-          PorDesAct = json.descuento;
+          PorDesAct = parseInt(json.descuento || 0, 10);
+
           $("#PorDesAct").val(PorDesAct);
-          $("#xProgress").html('<div class="progress"><div class="progress-bar" role="progressbar" style="width: ' + PorDesAct + '%" aria-valuenow="' + PorDesAct + '" aria-valuemin="' + PorDesMin + '" aria-valuemax="' + PorDesMax + '">' + PorDesAct + '%</div></div>');
-          // $("#x" + i + "_cantidad").val("");
+          $("#rangoDescuentoProveedor").val(PorDesAct);
+          $("#lblDescuentoProveedor").text(PorDesAct + "%");
         } 
         else {
           alert("Error: !!! " + json.mensaje + " !!!");
@@ -409,15 +486,15 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function sendProccess(i) {
-    var PorDesAct = $("#PorDesAct").value();
+    var PorDesAct = $("#PorDesAct").val();
     window.location.href = "TdcfccProcess?pedido=" + i + "&PorDesAct=" + PorDesAct;
   }
 
   function ProgLess() {
-    var i = $("#pedido").value();
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var i = $("#pedido").val();
+    var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+    var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     if(i == 0) return false;
 
@@ -430,10 +507,10 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function ProgPlus() {
-    var i = $("#pedido").value();
-    var PorDesMin = parseInt($("#PorDesMin").value(), 10);
-    var PorDesMax = parseInt($("#PorDesMax").value(), 10);
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var i = $("#pedido").val();
+    var PorDesMin = parseInt($("#PorDesMin").val(), 10);
+    var PorDesMax = parseInt($("#PorDesMax").val(), 10);
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     if(i == 0) return false;
 
@@ -446,16 +523,16 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function DiasCred() {
-    var i = $("#pedido").value();
-    var PorDesAct = parseInt($("#PorDesAct").value(), 10);
+    var i = $("#pedido").val();
+    var PorDesAct = parseInt($("#PorDesAct").val(), 10);
 
     if(i == 0) return false;
     RefreshDescuento(i, PorDesAct);
   }
 
   function RefreshDescuento(i, j) {
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
    
 
@@ -515,9 +592,9 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function RefreshMonedaTasa() {
-    var i = $("#pedido").value();
-    var moneda = $("#moneda").value();
-    var tasa_usd = $("#tasa_usd").value();
+    var i = $("#pedido").val();
+    var moneda = $("#moneda").val();
+    var tasa_usd = $("#tasa_usd").val();
     var username = '<?= CurrentUserName() ?>';
 
     if(i == 0) return false;
@@ -665,6 +742,20 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
       });
   }
 
+  // Exponer al scope global las funciones que se invocan desde atributos onclick="js:..." u onclick/onchange directos
+  window.insertar = insertar;
+  window.eliminar = eliminar;
+  window.vaciar = vaciar;
+  window.listar_pedido = listar_pedido;
+  window.sendProccess = sendProccess;
+  window.ProgLess = ProgLess;
+  window.ProgPlus = ProgPlus;
+  window.DiasCred = DiasCred;
+  window.RefreshDescuento = RefreshDescuento;
+  window.RefreshMonedaTasa = RefreshMonedaTasa;
+  window.abrirModalNuevoArticulo = abrirModalNuevoArticulo;
+  window.guardarNuevoArticulo = guardarNuevoArticulo;
+});
 </script>
 
 <div class="container border border-primary border-top rounded p-3">
@@ -693,37 +784,101 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   <input type="hidden" id="PorDesMax" name="PorDesMax" value="<?= $PorDesMax ?>">
   <input type="hidden" id="PorDesAct" name="PorDesAct" value="<?= $PorDesAct ?>">
 
-<div class="row">
-  <div class="col-sm-2" style="text-align: right">
-    <strong>Descuento proveedor</strong>
-  </div>  
-  <div class="col-sm-1" style="text-align: right; vertical-align: middle;">
-    <span><a onclick="js:ProgLess();"><i class="fa-solid fa-minus"></i></a></span>
-  </div>
-  <div class="col-sm-4" id="xProgress">
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" style="width: <?= $PorDesAct ?>%" aria-valuenow="<?= $PorDesAct ?>" aria-valuemin="<?= $PorDesMin ?>" aria-valuemax="<?= $PorDesMax ?>"><?= intval($PorDesAct) ?>%</div>
+<div class="row g-3 align-items-end">
+
+    <!-- Descuento proveedor -->
+    <div class="col-12 col-md-6">
+        <div class="border rounded p-2 bg-light h-100">
+            <label for="rangoDescuentoProveedor"
+                   class="form-label small fw-bold mb-1">
+                Descuento proveedor:
+                <span id="lblDescuentoProveedor"
+                      class="text-primary">
+                    <?= intval($PorDesAct) ?>%
+                </span>
+            </label>
+
+            <input type="range"
+                   class="form-range"
+                   min="<?= intval($PorDesMin) ?>"
+                   max="80"
+                   step="1"
+                   id="rangoDescuentoProveedor"
+                   value="<?= intval($PorDesAct) ?>">
+        </div>
     </div>
-  </div>
-  <div class="col-sm-1" style="text-align: left; vertical-align: middle;">
-    <span><a onclick="js:ProgPlus();"><i class="fa-solid fa-plus"></i></a></span>
-  </div>
 
-  <div class="col-sm-2">
-      <select id="moneda" name="moneda" class="form-select form-select-sm" onchange="js:RefreshMonedaTasa()">
-        <?php
-        $sql = "SELECT SUBSTRING(valor1, 1, 3) AS moneda FROM parametro WHERE codigo = '006';";
-        $rows = ExecuteRows($sql);
-        foreach ($rows as $key => $value) {
-          echo '<option value="' . $value["moneda"] . '"' . ($value["moneda"]==$moneda ? ' selected="selected"' : '') . '>' . $value["moneda"] . '</option>';
-        }
-        ?>
-      </select>
-  </div>
+    <!-- Aplicar retención -->
+    <div class="col-12 col-md-2">
+        <div class="border rounded p-2 bg-light h-100 d-flex align-items-center">
+            <div class="form-check form-switch mb-0">
+                <input class="form-check-input"
+                       type="checkbox"
+                       role="switch"
+                       id="aplica_retencion"
+                       disabled
+                       name="aplica_retencion"
+                       value="S"
+                       <?= ($aplica_retencion === "S") ? "checked" : "" ?>>
 
-  <div class="col-sm-2">
-    Tasa B.C.V.:<input name="tasa_usd" id="tasa_usd" type="number" class="form-control" value="<?= $tasa ?>" style="width: 90px;" onkeyup="js:RefreshMonedaTasa()" />
-  </div>
+                <label class="form-check-label fw-bold"
+                       for="aplica_retencion">
+                    Aplicar Retención
+                </label>
+            </div>
+        </div>
+        <small class="text-muted">
+        Las retenciones se gestionan únicamente desde Compras Administrativas.
+        </small>
+    </div>
+
+    <!-- Moneda -->
+    <div class="col-6 col-md-2">
+        <label for="moneda"
+               class="form-label small fw-bold mb-1">
+            Moneda
+        </label>
+
+        <select id="moneda"
+                name="moneda"
+                class="form-select form-select-sm"
+                onchange="js:RefreshMonedaTasa()">
+            <?php
+            $rows = ExecuteRows("
+                SELECT SUBSTRING(valor1, 1, 3) AS moneda
+                FROM parametro
+                WHERE codigo = '006'
+            ");
+
+            foreach ($rows as $value) {
+                echo '<option value="' .
+                    HtmlEncode($value["moneda"]) . '"' .
+                    ($value["moneda"] == $moneda
+                        ? ' selected="selected"'
+                        : '') .
+                    '>' .
+                    HtmlEncode($value["moneda"]) .
+                    '</option>';
+            }
+            ?>
+        </select>
+    </div>
+
+    <!-- Tasa BCV -->
+    <div class="col-6 col-md-2">
+        <label for="tasa_usd"
+               class="form-label small fw-bold mb-1">
+            Tasa B.C.V.
+        </label>
+
+        <input name="tasa_usd"
+               id="tasa_usd"
+               type="number"
+               class="form-control form-control-sm text-end"
+               value="<?= $tasa ?>"
+               onkeyup="js:RefreshMonedaTasa()">
+    </div>
+
 </div>
 
 <hr class="border border-primary" />
@@ -873,6 +1028,9 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 </div>
 
 <script type="text/javascript">
+loadjs.ready(["jquery"], function () {
+    const $ = jQuery;
+
   $("#laboratorio").prop("disabled", true);
   $("#articulo").prop("disabled", true);
 
@@ -1009,13 +1167,19 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
               body: formData,
               mode: "cors" //Default cors, no-cors, same-origin
           }).then(response => response.json()) 
-              .then(data => {
-                  // alert(inputCP + " | " + data)
-                  lista.style.display = 'block'
-                  lista.innerHTML = data
-                  listar_pedido(i)
-              })
-              .catch(err => console.log(err))
+            .then(data => {
+                lista.style.display = "block";
+                lista.innerHTML = data;
+
+                if (typeof window.listar_pedido === "function") {
+                    window.listar_pedido(i);
+                } else {
+                    console.error(
+                        "La función listar_pedido no está disponible."
+                    );
+                }
+            })
+            .catch(err => console.log(err))
       } else {
           lista.style.display = 'none'
       }
@@ -1083,19 +1247,101 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
   }
 
   function iniciarTdcfccAdd() {
-      if (typeof window.jQuery === "undefined") {
-          setTimeout(iniciarTdcfccAdd, 100);
-          return;
-      }
-
       getCodigos3(<?= intval($pedido) ?>);
   }
 
-  if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", iniciarTdcfccAdd);
-  } else {
-      iniciarTdcfccAdd();
-  }  
+    $(document).on("input", "#rangoDescuentoProveedor", function () {
+        $("#lblDescuentoProveedor").text($(this).val() + "%");
+    });
+
+    $(document).on("change", "#rangoDescuentoProveedor", function () {
+        const pedido = parseInt($("#pedido").val() || 0, 10);
+        const descuento = parseInt($(this).val() || 0, 10);
+
+        $("#PorDesAct").val(descuento);
+        $("#lblDescuentoProveedor").text(descuento + "%");
+
+        if (pedido <= 0) {
+            return;
+        }
+
+        window.RefreshDescuento(pedido, descuento);
+    });
+
+    $(document).on("change", "#aplica_retencion", function () {
+        const pedido = parseInt($("#pedido").val() || 0, 10);
+        const aplicaRetencion = $(this).is(":checked") ? "S" : "N";
+        const $checkbox = $(this);
+
+        /*
+        * Si todavía no existe la cabecera, el valor viajará cuando se agregue
+        * el primer artículo. No hay registro de entradas que actualizar aún.
+        */
+        if (pedido <= 0) {
+            return;
+        }
+
+        $checkbox.prop("disabled", true);
+
+        $.ajax({
+            url: "include/tdcfcc/actualizar_aplica_retencion.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+                pedido: pedido,
+                aplica_retencion: aplicaRetencion
+            }
+        })
+        .done(function (response) {
+            if (typeof response === "string") {
+                response = JSON.parse(response);
+            }
+
+            if (response.estatus != 1) {
+                $checkbox.prop(
+                    "checked",
+                    aplicaRetencion !== "S"
+                );
+
+                if (typeof ew !== "undefined" && ew.alert) {
+                    ew.alert(
+                        response.mensaje ||
+                        "No se pudo actualizar la retención."
+                    );
+                }
+            }
+        })
+        .fail(function (xhr) {
+            console.log(xhr.responseText);
+
+            // Revertir el cambio visual si falla la actualización.
+            $checkbox.prop(
+                "checked",
+                aplicaRetencion !== "S"
+            );
+
+            if (typeof ew !== "undefined" && ew.alert) {
+                ew.alert(
+                    "Error actualizando la condición de retención."
+                );
+            }
+        })
+        .always(function () {
+            $checkbox.prop("disabled", false);
+        });
+    });
+
+  // Exponer al scope global las funciones que se invocan desde atributos onclick="js:..." o addEventListener
+  window.getCodigos3 = getCodigos3;
+  window.getCodigos = getCodigos;
+  window.getCodigos2 = getCodigos2;
+  window.mostrar = mostrar;
+  window.limpiar = limpiar;
+  window.guardar_nota = guardar_nota;
+  window.myCalc = myCalc;
+
+  iniciarTdcfccAdd();
+});
 </script>
 
 <style>
@@ -1299,4 +1545,5 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
         </div>
     </div>
 </div>
+
 <?= GetDebugMessage() ?>

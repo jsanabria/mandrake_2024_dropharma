@@ -35,9 +35,28 @@ $descTransferencista = 0.00;
 $descFabricante = 0.00;
 $id_documento_padre = 0;
 $doc_afe = 0;
+$dias_credito = 0;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre, IFNULL(doc_afe, 0) AS doc_afe FROM salidas WHERE id = $pedido;";
+    $sql = "
+        SELECT
+            cliente,
+            tipo_documento,
+            nota,
+            tasa_dia,
+            moneda,
+            documento,
+            IFNULL(doc_afectado, '') AS doc_afectado,
+            nro_documento,
+            IFNULL(descuento2, 0) AS descuento2,
+            IFNULL(descuento3, 0) AS descuento3,
+            IFNULL(id_documento_padre, 0) AS id_documento_padre,
+            IFNULL(doc_afe, 0) AS doc_afe,
+            IFNULL(dias_credito, 0) AS dias_credito
+        FROM salidas
+        WHERE id = " . intval($pedido) . "
+        LIMIT 1;
+    ";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -51,6 +70,7 @@ if(isset($_REQUEST["pedido"])) {
       $descFabricante = floatval($row["descuento3"]);
       $id_documento_padre = intval($row["id_documento_padre"]);
       $doc_afe = $row["doc_afe"];
+      $dias_credito = intval($row["dias_credito"]);
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -165,7 +185,7 @@ if (intval($pedido) > 0) {
 
 <div class="row g-3 align-items-end">
 
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
         <div class="border rounded p-2 bg-light h-100">
             <label for="rangoDescuentoCliente" class="form-label small fw-bold mb-1">
                 Descuento cliente:
@@ -173,7 +193,7 @@ if (intval($pedido) > 0) {
             </label>
 
             <input type="range"
-                   class="form-range"
+                   class="form-range w-95"
                    min="<?= $PorDesMin ?>"
                    max="80"
                    step="1"
@@ -182,7 +202,7 @@ if (intval($pedido) > 0) {
         </div>
     </div>
 
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
         <div class="border rounded p-2 bg-light h-100">
             <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
 
@@ -203,13 +223,44 @@ if (intval($pedido) > 0) {
                    value="<?= $descTransferencista ?>">
 
             <input type="range"
-                   class="form-range"
+                   class="form-range w-95"
                    min="0"
                    max="80"
                    step="1"
                    id="rangoTransferencista"
                    value="<?= intval($descTransferencista) ?>">
         </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <label for="dias_credito"
+            class="form-label small fw-bold mb-1">
+            Días de crédito
+        </label>
+
+        <select id="dias_credito"
+                name="dias_credito"
+                class="form-select form-select-sm">
+            <?php
+            $rowsDiasCredito = ExecuteRows("
+                SELECT valor1 AS dias
+                FROM parametro
+                WHERE codigo = '007'
+                ORDER BY CAST(valor1 AS UNSIGNED)
+            ");
+
+            foreach ($rowsDiasCredito as $rowDias) {
+                $dias = intval($rowDias["dias"]);
+                $selected = ($dias === intval($dias_credito))
+                    ? ' selected="selected"'
+                    : '';
+
+                echo '<option value="' . $dias . '"' . $selected . '>'
+                    . $dias . ($dias == 1 ? ' día' : ' días')
+                    . '</option>';
+            }
+            ?>
+        </select>
     </div>
 
     <div class="col-6 col-md-2">
@@ -416,31 +467,27 @@ if (intval($pedido) > 0) {
 <?php
 $condicionPago = "";
 
-// Si es una Nota de Crédito, buscar la factura origen
-if ($consignacion == "NC" && trim($doc_afectado) != "") {
-    /*
+// Para Nota de Crédito se conserva la condición de pago
+// que tenía la factura afectada.
+if (
+    $consignacion == "NC" &&
+    intval($doc_afe) > 0
+) {
     $sql = "
         SELECT entregado
         FROM salidas
-        WHERE tipo_documento = 'TDCFCV'
-          AND documento = 'FC'
-          AND nro_documento = '" . AdjustSql($doc_afectado) . "'
-        LIMIT 1;
-    ";
-    */
-    $sql = "
-        SELECT entregado
-        FROM salidas
-        WHERE id = $doc_afe
+        WHERE id = " . intval($doc_afe) . "
         LIMIT 1;
     ";
 
-    $condicionPago = ExecuteScalar($sql);
+    $condicionPago = strtoupper(trim(
+        ExecuteScalar($sql) ?? ""
+    ));
 
-    // Normalizar por seguridad
-    $condicionPago = strtoupper(trim($condicionPago));
-
-    if ($condicionPago != "S" && $condicionPago != "N") {
+    if (
+        $condicionPago != "S" &&
+        $condicionPago != "N"
+    ) {
         $condicionPago = "";
     }
 }
@@ -1682,12 +1729,46 @@ loadjs.ready(["jquery"], function () {
                 // Cada vez que se abre el modal, se reinicia la condición de pago
                 // y el botón "Sí, Procesar" queda deshabilitado hasta que el
                 // usuario elija explícitamente Contado o Crédito.
-                const condicionPago = "<?= $condicionPago ?>";
+                let condicionPago = "<?= $condicionPago ?>";
+
+                const tipoDocumentoFiscal = String(
+                    response.tipo_doc || ""
+                ).toUpperCase();
+
+                if (tipoDocumentoFiscal === "FC") {
+                    const diasCreditoSeleccionados = parseInt(
+                        $("#dias_credito").val() || 0,
+                        10
+                    );
+
+                    condicionPago = (
+                        diasCreditoSeleccionados > 0
+                    ) ? "N" : "S";
+                }
+
+                $("#dias_credito").off("change.condicionPago").on(
+                    "change.condicionPago",
+                    function () {
+                        if (tipoDocumentoFiscal !== "FC") {
+                            return;
+                        }
+
+                        const diasCreditoSeleccionados = parseInt(
+                            $(this).val() || 0,
+                            10
+                        );
+
+                        const nuevaCondicionPago = (
+                            diasCreditoSeleccionados > 0
+                        ) ? "N" : "S";
+
+                        $("#modal_tipo_pago").val(nuevaCondicionPago);
+                        $("#btnConfirmarProcesar").prop("disabled", false);
+                    }
+                );                
 
                 $("#modal_tipo_pago").val(condicionPago);
 
-                // Si viene preseleccionado se habilita el botón,
-                // de lo contrario el usuario debe escogerlo.
                 $("#btnConfirmarProcesar").prop(
                     "disabled",
                     condicionPago === ""
@@ -1731,6 +1812,11 @@ loadjs.ready(["jquery"], function () {
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
 
+                    const diasCredito = parseInt(
+                        getVal("dias_credito") || 0,
+                        10
+                    );
+
                     // 'S' = Contado, 'N' = Crédito. Viaja a TdcfcvProcess.php para
                     // actualizar salidas.entregado.
                     const tipoPago = $("#modal_tipo_pago").val();
@@ -1768,6 +1854,7 @@ loadjs.ready(["jquery"], function () {
                             "&PorDesAct=" + PorDesAct +
                             "&generar_ne=" + generarNE +
                             "&generar_nr=" + generarNR +
+                            "&dias_credito=" + diasCredito +
                             "&entregado=" + tipoPago +
                             "&contingencia=" + (esContingencia ? "S" : "N") +
                             "&nota_contingencia=" + encodeURIComponent(notaContingencia);
@@ -2490,6 +2577,10 @@ $impresoraFiscal = strtoupper(trim(
 #modalNuevoArticulo .nuevo-articulo-campo input,
 #modalNuevoArticulo .nuevo-articulo-campo select {
     width: 100%;
+}
+
+.w-95{
+    width:90% !important;
 }
 </style>
 
