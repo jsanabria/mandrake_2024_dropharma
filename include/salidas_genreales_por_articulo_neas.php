@@ -54,6 +54,7 @@ HTML;
                 AND a.estatus IN ('NUEVO', 'PROCESADO') 
                 AND b.newdata = 'S' 
                 AND a.fecha BETWEEN '$fecha_desde 00:00:00' AND '$fecha_hasta 23:59:59'
+                AND IFNULL(a.documento, '') <> 'TR'
                 $where 
             GROUP BY d.id, d.codigo, d.nombre_comercial, d.principio_activo, d.presentacion, c.nombre 
             ORDER BY cantidad_movimiento DESC"; 

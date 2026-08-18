@@ -788,7 +788,7 @@ class Articulo extends DbTable
             'FORMATTED TEXT', // View Tag
             'SELECT' // Edit Tag
         );
-        $this->alicuota->addMethod("getSelectFilter", fn() => "`activo` = 'S' AND `venta` = 'S' AND codigo IN ('GEN')");
+        $this->alicuota->addMethod("getSelectFilter", fn() => "`activo` = 'S' AND `venta` = 'S' AND `codigo` <> 'IGT'");
         $this->alicuota->addMethod("getDefault", fn() => "0");
         $this->alicuota->InputTextType = "text";
         $this->alicuota->Required = true; // Required field

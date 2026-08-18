@@ -421,7 +421,7 @@ $sql = "SELECT
 			a.costo_unidad, 
 			a.costo, 
 			a.lote, date_format(a.fecha_vencimiento, '%d/%m/%Y') AS fecha_vencimiento, 
-			a.precio_unidad, a.precio, b.codigo_ims, IFNULL(b.nombre_comercial, '') AS nombre_comercial 
+			a.precio_unidad, a.precio, b.codigo_ims, IFNULL(b.nombre_comercial, '') AS nombre_comercial, check_ne   
 		FROM 
 			entradas_salidas AS a 
 			LEFT OUTER JOIN articulo AS b ON b.id = a.articulo 
@@ -444,26 +444,31 @@ while($row = mysqli_fetch_array($rs))
 		$pdf->Cell(15, 4, round($row["cantidad"], 0), 0, 0, 'C');
 		$pdf->Cell(25, 4, number_format($row["precio_unidad"], 2, ",", "."), 0, 0, 'R');
 		$pdf->Cell(25, 4, number_format($row["precio"], 2, ",", "."), 0, 0, 'R');
+		$pdf->SetFont('Arial', 'B', 8);
+	    $pdf->Cell(5, 4, ($row["check_ne"]=="S" ? "x" : ""), 0, 0, 'C');
+	    $pdf->SetFont('Arial', '', 8);
 		if(strlen($desart) >= 60) {
 			$pdf->Ln();
 			$pdf->Cell(30, 4);
 			$pdf->MultiCell(100, 4, substr($desart, 60, strlen($desart)), 0, 'L');
 		}
-		else $pdf->Ln();
 	} 
 	else {
 		$pdf->Cell(10, 4);
 		$pdf->Cell(40, 4, substr($row["codigo"], 0, 20), 0, 0, 'L');
 		$pdf->Cell(135, 4, substr($desart, 0, 70), 0, 0, 'L');
 		$pdf->Cell(15, 4, round($row["cantidad"], 0), 0, 0, 'C');
+		$pdf->SetFont('Arial', 'B', 8);
+	    $pdf->Cell(5, 4, ($row["check_ne"]=="S" ? "x" : ""), 0, 0, 'C');
+	    $pdf->SetFont('Arial', '', 8);
 		if(strlen($desart) >= 70) {
 			$pdf->Ln();
 			$pdf->Cell(50, 4);
 			$pdf->MultiCell(100, 4, substr($desart, 70, strlen($desart)), 0, 'L');
 		}
-		else $pdf->Ln();
 	}
 	$items++;
+	$pdf->Ln();
 }
 
 $sql = "SELECT id, saldo FROM recarga WHERE cliente = " . $GLOBALS["cliente"] . " ORDER BY id DESC LIMIT 0, 1;";

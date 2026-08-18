@@ -37,7 +37,9 @@ SELECT
     IFNULL((
         SELECT SUM(x.cantidad_movimiento)
         FROM (
-            SELECT es.cantidad_movimiento
+            SELECT
+                es.articulo,
+                es.cantidad_movimiento
             FROM entradas_salidas AS es
             JOIN entradas AS e
                 ON e.tipo_documento = es.tipo_documento
@@ -46,16 +48,20 @@ SELECT
                 ON al.codigo = es.almacen
                AND al.movimiento = 'S'
             WHERE (
-                    (es.tipo_documento = 'TDCAEN' AND e.estatus <> 'ANULADO')
+                    (es.tipo_documento = 'TDCAEN'
+                     AND e.estatus <> 'ANULADO')
                     OR
-                    (es.tipo_documento = 'TDCNRP' AND es.check_ne = 'S' AND e.estatus <> 'ANULADO')
+                    (es.tipo_documento = 'TDCNRP'
+                     AND es.check_ne = 'S'
+                     AND e.estatus <> 'ANULADO')
                   )
-              AND es.articulo = a.id
               AND es.newdata = 'S'
 
             UNION ALL
 
-            SELECT es.cantidad_movimiento
+            SELECT
+                es.articulo,
+                es.cantidad_movimiento
             FROM entradas_salidas AS es
             JOIN salidas AS s
                 ON s.tipo_documento = es.tipo_documento
@@ -64,18 +70,21 @@ SELECT
                 ON al.codigo = es.almacen
                AND al.movimiento = 'S'
             WHERE (
-                    (es.tipo_documento = 'TDCPDV' AND s.estatus = 'NUEVO')
+                    (es.tipo_documento = 'TDCPDV'
+                     AND s.estatus = 'NUEVO')
                     OR
-                    (es.tipo_documento IN ('$tipo_documento_sql', 'TDCASA') AND s.estatus <> 'ANULADO')
+                    (es.tipo_documento IN ('$tipo_documento_sql', 'TDCASA')
+                     AND s.estatus <> 'ANULADO')
                   )
-              AND es.articulo = a.id
               AND es.newdata = 'S'
         ) AS x
+        WHERE x.articulo = a.id
     ), 0) AS existencia
 
 FROM articulo AS a
 JOIN fabricante AS b
     ON b.Id = a.fabricante
+
 WHERE
        a.codigo LIKE '%$articulo_sql%'
     OR a.codigo_ims LIKE '%$articulo_sql%'
@@ -83,10 +92,12 @@ WHERE
     OR a.nombre_comercial LIKE '%$articulo_sql%'
     OR a.principio_activo LIKE '%$articulo_sql%'
     OR a.presentacion LIKE '%$articulo_sql%'
-ORDER BY 
+
+ORDER BY
     a.principio_activo,
     a.nombre_comercial,
     a.presentacion
+
 LIMIT 100;
 ";
 

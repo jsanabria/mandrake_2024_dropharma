@@ -3,10 +3,10 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-/*** CONFIGURACIÓN ***/
-$ftp_server = "ftp.icompras360.net";
-$ftp_user_name = "icompras360_411939188"; 
-$ftp_user_pass = "411939188$.*";   
+/*** CONFIGURACION ***/
+$ftp_server = 'ftp.icompras360.net';
+$ftp_user_name = 'icompras360_411939188'; 
+$ftp_user_pass = '411939188$.*';  
 
 // Rutas Locales
 $local_path_entradas = "/home2/dropharm/dropharmadm/ftpexportar2/entradas/";
@@ -14,14 +14,36 @@ $local_path_salidas  = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
 
 // Rutas Remotas (iCompras)
 $remote_path_entrada = "/entrada/";
-$remote_path_salida  = "salida/";
+$remote_path_salida  = "/salida/";
 
 // Conexión
-$conn_id = ftp_ssl_connect($ftp_server, 21, 90) or die("No se pudo conectar al servidor FTP.");
-$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass) or die("Credenciales incorrectas.");
+$conn_id = ftp_ssl_connect($ftp_server, 21, 90)
+    or die("No se pudo conectar al servidor FTP.");
 
-// ACTIVAR MODO PASIVO (Esto solucionó el error 115)
+$login_result = ftp_login(
+    $conn_id,
+    $ftp_user_name,
+    $ftp_user_pass
+) or die("Credenciales incorrectas.");
+
+// IMPORTANTE: configurar antes de ftp_pasv()
+if (defined('FTP_USEPASVADDRESS')) {
+    ftp_set_option(
+        $conn_id,
+        FTP_USEPASVADDRESS,
+        false
+    );
+}
+
+// Activar modo pasivo
 ftp_pasv($conn_id, true);
+
+// Timeout
+ftp_set_option(
+    $conn_id,
+    FTP_TIMEOUT_SEC,
+    120
+);
 
 echo "--- Inicio de Proceso FTP ---\n";
 
@@ -46,36 +68,55 @@ foreach ($archivos_a_subir as $archivo) {
 echo "-------------------------------\n";
 
 /** 2. DESCARGA Y LIMPIEZA DE SALIDAS **/
-$contents = ftp_nlist($conn_id, $remote_path_salida);
+$contents = @ftp_nlist($conn_id, $remote_path_salida);
 
-if (is_array($contents)) {
+if ($contents === false) {
+
+    echo "ERROR: No fue posible listar la carpeta remota: "
+       . $remote_path_salida . "\n";
+
+} elseif (count($contents) === 0) {
+
+    echo "No hay archivos pendientes en la carpeta de salida.\n";
+
+} else {
+
     foreach ($contents as $remote_file) {
-        // Limpiamos el nombre para el destino local
+
         $file_name = basename($remote_file);
-        
-        if ($file_name != '.' && $file_name != '..') {
-            $dest_local_file = $local_path_salidas . $file_name;
-            
-            // Intentar descargar
-            if (@ftp_get($conn_id, $dest_local_file, $remote_file, FTP_BINARY)) {
-                echo "DESCARGADO: $file_name\n";
-                
-                // Borrar del servidor solo si se descargó correctamente
-                if (@ftp_delete($conn_id, $remote_file)) {
-                    echo "BORRADO REMOTO: $file_name\n";
-                } else {
-                    echo "ERROR AL BORRAR: $file_name\n";
-                }
+
+        if ($file_name === '.' || $file_name === '..') {
+            continue;
+        }
+
+        $dest_local_file = $local_path_salidas . $file_name;
+
+        if (@ftp_get(
+            $conn_id,
+            $dest_local_file,
+            $remote_file,
+            FTP_BINARY
+        )) {
+
+            echo "DESCARGADO: $file_name\n";
+
+            if (@ftp_delete($conn_id, $remote_file)) {
+
+                echo "BORRADO REMOTO: $file_name\n";
+
             } else {
-                echo "ERROR AL DESCARGAR: $file_name\n";
+
+                echo "ERROR AL BORRAR REMOTO: $file_name\n";
             }
+
+        } else {
+
+            echo "ERROR AL DESCARGAR: $file_name\n";
         }
     }
-} else {
-    echo "No hay archivos pendientes en la carpeta de salida.\n";
 }
 
-// Cerrar conexión de forma silenciosa
+// Cerrar conexion de forma silenciosa
 @ftp_close($conn_id);
 echo "--- Proceso Finalizado ---\n";
 ?>

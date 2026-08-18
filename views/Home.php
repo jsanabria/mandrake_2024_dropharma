@@ -118,7 +118,14 @@ $db = ExecuteScalar("SELECT DATABASE();");
 $fechaMysql = ExecuteScalar("SELECT date_format(now(), '%d/%m/%Y %H:%i:%s') AS fecha;");
 
 // Revisar archivos pendientes antes de emitir HTML para que la redirección funcione.
-if ($bloquea == "NO") {
+// Revisar archivos pendientes de FTP
+$ftpPendiente = false;
+$total_archivos = 0;
+
+if (
+    $bloquea == "NO" &&
+    trim($_COOKIE["strcon"] ?? '') === "dropharm_mandrake"
+) {
     $ruta_pedidos = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
     $ruta_salidas = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
 
@@ -126,17 +133,19 @@ if ($bloquea == "NO") {
         if (!is_dir($path)) {
             return 0;
         }
+
         $files = scandir($path);
-        return count(array_diff($files, ['.', '..']));
+
+        return count(
+            array_diff($files, ['.', '..'])
+        );
     };
 
-    $total_archivos = 0;
     $total_archivos += $contarArchivos($ruta_pedidos);
     $total_archivos += $contarArchivos($ruta_salidas);
 
-    if ($total_archivos > 0 && isset($levelid) && $levelid == -1) {
-        header("Location: FtpSubirPedidos");
-        exit();
+    if ($total_archivos > 0) {
+        $ftpPendiente = true;
     }
 }
 ?>
@@ -401,17 +410,136 @@ if ($bloquea == "NO") {
     </div>
 </div>
 
+<?php if ($ftpPendiente) { ?>
+
+<div class="modal fade"
+     id="modalFtpPendiente"
+     tabindex="-1"
+     aria-labelledby="modalFtpPendienteLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-warning-subtle">
+                <h5 class="modal-title fw-bold" id="modalFtpPendienteLabel">
+                    <i class="fa-solid fa-cloud-arrow-up me-2"></i>
+                    Archivos FTP pendientes
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar">
+                </button>
+            </div>
+
+            <div class="modal-body p-4">
+
+                <div class="d-flex gap-3 align-items-start">
+
+                    <div class="fs-2 text-warning">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+
+                    <div>
+                        <h6 class="fw-bold mb-2">
+                            Hay archivos pendientes por procesar.
+                        </h6>
+
+                        <p class="mb-2">
+                            Se encontraron
+                            <strong><?= intval($total_archivos) ?></strong>
+                            archivo<?= $total_archivos == 1 ? '' : 's' ?>
+                            pendiente<?= $total_archivos == 1 ? '' : 's' ?>
+                            de procesamiento FTP.
+                        </p>
+
+                        <div class="text-muted small">
+                            Puede procesarlos ahora o continuar revisando
+                            la página principal.
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark me-1"></i>
+                    Cancelar
+                </button>
+
+                <a href="FtpSubirPedidos"
+                   class="btn btn-primary">
+                    <i class="fa-solid fa-play me-1"></i>
+                    Procesar FTP
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php } ?>
+
 <script>
+
+    <?php if ($ftpPendiente) { ?>
+
+        setTimeout(function () {
+
+            const modalElement = document.getElementById("modalFtpPendiente");
+
+            if (!modalElement) {
+                console.log("No se encontró modalFtpPendiente");
+                return;
+            }
+
+            if (typeof bootstrap === "undefined") {
+                console.log("Bootstrap no está disponible");
+                return;
+            }
+
+            const modalFtp = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalFtp.show();
+
+        }, 500);
+
+    <?php } ?>
+
+
     function print_to(tarifa) {
+
         var username = "<?= CurrentUserName() ?>";
+
         if (confirm("Desea Enviar a Excel?")) {
-            var url = "print_tarifa.php?username=" + username + "&codcliente=&tarifa=" + tarifa;
+
+            var url =
+                "print_tarifa.php?username=" +
+                username +
+                "&codcliente=&tarifa=" +
+                tarifa;
+
             window.open(url, '_blank');
+
         } else {
-            var url = "reportes/listado_articulos_por_tarifa.php?username=" + username + "&codcliente=&tarifa=" + tarifa;
+
+            var url =
+                "reportes/listado_articulos_por_tarifa.php?username=" +
+                username +
+                "&codcliente=&tarifa=" +
+                tarifa;
+
             window.open(url, '_blank');
         }
     }
+
 </script>
 
 <?= GetDebugMessage() ?>

@@ -31,7 +31,8 @@ $titulos_reportes = [
     "sal_laboratorio"             => "SALIDAS GENERALES POR FABRICANTE (FACTURAS + AJUSTE SALIDAS)",
     "sal_articulo"                => "SALIDAS GENERALES POR ARTICULO (FACTURAS + AJUSTE SALIDAS)",
     "vta_cliente"                 => "VENTAS POR CLIENTE (FACTURAS SIN IVA Y CANTIDAD DE UNIDADES)",
-    "sal_articulo_detallado"      => "SALIDAS GENERALES POR ARTICULO DETALLADO",
+    "sal_articulo_detallado"      => "SALIDAS GENERALES POR ARTICULO DETALLADO (FACTURAS)",
+    "sal_articulo_detallado_neas" => "SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS + AJUSTE SALIDAS)",
     "cng_cliente"                 => "CONSIGNACIONES POR CLIENTE",
     "cng_facturas"                => "FACTURAS POR CONSIGNACION",
     "cli_compras_recientes"       => "CLIENTES CON COMPRAS RECIENTES",
@@ -167,7 +168,7 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                                     echo '<option value="' . $row["id"] . '">' . $row["nombre"] . '</option>';
                                 }
                             }
-                            elseif (in_array($id, ["vta_articulo", "sal_articulo", "sal_articulo_detallado", "det_entradas_general", "det_notas_entrega", "det_pedidos_venta", "vta_articulo_utilidad", "sal_articulo_neas"])) {
+                            elseif (in_array($id, ["vta_articulo", "sal_articulo", "sal_articulo_detallado", "sal_articulo_detallado_neas", "det_entradas_general", "det_notas_entrega", "det_pedidos_venta", "vta_articulo_utilidad", "sal_articulo_neas"])) {
                                 $sql = "SELECT 
                                             a.id, 
                                             CONCAT(IFNULL(a.nombre_comercial, ''), ' ', IFNULL(a.principio_activo, ''), ' ', IFNULL(a.presentacion, ''), ' - ', IFNULL(a.codigo, '')) AS nombre 

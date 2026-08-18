@@ -53,6 +53,9 @@ switch($id) {
     case "sal_articulo_detallado":
         include("include/salidas_genreales_por_articulo_detallado.php");
         break;
+    case "sal_articulo_detallado_neas":
+        include("include/salidas_genreales_por_articulo_detallado_neas.php");
+        break;
     case "cli_compras_recientes":
         include("include/clientes_con_compras_recientes.php");
         break;

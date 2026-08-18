@@ -37,7 +37,7 @@ try {
                 articulo AS a 
                 JOIN fabricante AS b ON b.Id = a.fabricante 
             WHERE 
-                a.codigo = ? 
+                a.codigo LIKE ? 
                 OR a.codigo_de_barra = ? 
                 OR a.principio_activo LIKE ? 
                 OR a.nombre_comercial LIKE ? 
@@ -48,7 +48,7 @@ try {
         throw new Exception("Error al preparar la consulta de artículos: " . $link->error);
     }
 
-    $stmt->bind_param("ssss", $findme, $findme, $likeFindme, $likeFindme);
+    $stmt->bind_param("ssss", $likeFindme, $findme, $likeFindme, $likeFindme);
     $stmt->execute();
     $result = $stmt->get_result();
 

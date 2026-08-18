@@ -2445,22 +2445,37 @@ class Compra extends DbTable
         // monto_exento
         $this->monto_exento->setupEditAttributes();
         $this->monto_exento->EditValue = $this->monto_exento->CurrentValue;
-        $this->monto_exento->PlaceHolder = RemoveHtml($this->monto_exento->caption());
-        if (strval($this->monto_exento->EditValue) != "" && is_numeric($this->monto_exento->EditValue)) {
-            $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, null);
-        }
+        $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, $this->monto_exento->formatPattern());
 
         // monto_gravado
         $this->monto_gravado->setupEditAttributes();
         $this->monto_gravado->EditValue = $this->monto_gravado->CurrentValue;
-        $this->monto_gravado->PlaceHolder = RemoveHtml($this->monto_gravado->caption());
-        if (strval($this->monto_gravado->EditValue) != "" && is_numeric($this->monto_gravado->EditValue)) {
-            $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, null);
-        }
+        $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, $this->monto_gravado->formatPattern());
 
         // alicuota
         $this->alicuota->setupEditAttributes();
-        $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
+        $curVal = strval($this->alicuota->CurrentValue);
+        if ($curVal != "") {
+            $this->alicuota->EditValue = $this->alicuota->lookupCacheOption($curVal);
+            if ($this->alicuota->EditValue === null) { // Lookup from database
+                $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $curVal, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
+                $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
+                $sqlWrk = $this->alicuota->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                $conn = Conn();
+                $config = $conn->getConfiguration();
+                $config->setResultCache($this->Cache);
+                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                $ari = count($rswrk);
+                if ($ari > 0) { // Lookup values found
+                    $arwrk = $this->alicuota->Lookup->renderViewRow($rswrk[0]);
+                    $this->alicuota->EditValue = $this->alicuota->displayValue($arwrk);
+                } else {
+                    $this->alicuota->EditValue = FormatNumber($this->alicuota->CurrentValue, $this->alicuota->formatPattern());
+                }
+            }
+        } else {
+            $this->alicuota->EditValue = null;
+        }
 
         // monto_iva
         $this->monto_iva->setupEditAttributes();
@@ -2486,11 +2501,7 @@ class Compra extends DbTable
 
         // ref_iva
         $this->ref_iva->setupEditAttributes();
-        if (!$this->ref_iva->Raw) {
-            $this->ref_iva->CurrentValue = HtmlDecode($this->ref_iva->CurrentValue);
-        }
         $this->ref_iva->EditValue = $this->ref_iva->CurrentValue;
-        $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
 
         // ret_islr
         $this->ret_islr->setupEditAttributes();
@@ -2500,11 +2511,7 @@ class Compra extends DbTable
 
         // ref_islr
         $this->ref_islr->setupEditAttributes();
-        if (!$this->ref_islr->Raw) {
-            $this->ref_islr->CurrentValue = HtmlDecode($this->ref_islr->CurrentValue);
-        }
         $this->ref_islr->EditValue = $this->ref_islr->CurrentValue;
-        $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
 
         // ret_municipal
         $this->ret_municipal->setupEditAttributes();
@@ -3209,152 +3216,6 @@ class Compra extends DbTable
                 return false;
             }
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validación de modificación de referencias
-        |--------------------------------------------------------------------------
-        */
-        if (
-            trim($rsold["ref_iva"] ?? "") != "" &&
-            trim($rsold["ref_iva"] ?? "") != trim($rsnew["ref_iva"] ?? "")
-        ) {
-            if (!VerificaFuncion("016")) {
-                $this->CancelMessage =
-                    "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de IVA; verifique.";
-                return false;
-            }
-        }
-        if (
-            trim($rsold["ref_islr"] ?? "") != "" &&
-            trim($rsold["ref_islr"] ?? "") != trim($rsnew["ref_islr"] ?? "")
-        ) {
-            if (!VerificaFuncion("017")) {
-                $this->CancelMessage =
-                    "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de ISLR; verifique.";
-                return false;
-            }
-        }
-        if (
-            trim($rsold["ref_municipal"] ?? "") != "" &&
-            trim($rsold["ref_municipal"] ?? "") != trim($rsnew["ref_municipal"] ?? "")
-        ) {
-            if (!VerificaFuncion("018")) {
-                $this->CancelMessage =
-                    "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de Impuesto Municipal; verifique.";
-                return false;
-            }
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Recibo de caja
-        |--------------------------------------------------------------------------
-        | No lleva IVA ni retenciones.
-        |--------------------------------------------------------------------------
-        */
-        if ($tipo_documento == "RC") {
-            $rsnew["alicuota"] = 0.00;
-            $rsnew["aplica_retencion"] = "N";
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Validación de montos
-        |--------------------------------------------------------------------------
-        */
-        $montoExento = floatval(
-            $rsnew["monto_exento"]
-            ?? $rsold["monto_exento"]
-            ?? 0
-        );
-        $montoGravado = floatval(
-            $rsnew["monto_gravado"]
-            ?? $rsold["monto_gravado"]
-            ?? 0
-        );
-        if ($montoExento <= 0 && $montoGravado <= 0) {
-            $this->setFailureMessage(
-                "El documento debe tener al menos un monto exento o gravado mayor a cero."
-            );
-            return false;
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Completar valores no enviados por PHPMaker
-        |--------------------------------------------------------------------------
-        | En Row_Updating, $rsnew puede contener solamente los campos modificados.
-        | Por eso completamos con $rsold antes de calcular.
-        |--------------------------------------------------------------------------
-        */
-        $camposNecesarios = [
-            "proveedor",
-            "tipo_documento",
-            "aplica_retencion",
-            "alicuota",
-            "monto_exento",
-            "monto_gravado"
-        ];
-        foreach ($camposNecesarios as $campo) {
-            if (
-                !array_key_exists($campo, $rsnew) ||
-                $rsnew[$campo] === null ||
-                $rsnew[$campo] === ""
-            ) {
-                $rsnew[$campo] = $rsold[$campo] ?? "";
-            }
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Guardar referencias actuales
-        |--------------------------------------------------------------------------
-        | AplicarRetencionesRsNew() recalcula montos, pero en actualización no
-        | debe reservar un nuevo consecutivo.
-        |--------------------------------------------------------------------------
-        */
-        $refIvaActual = $rsnew["ref_iva"]
-            ?? $rsold["ref_iva"]
-            ?? null;
-        $refIslrActual = $rsnew["ref_islr"]
-            ?? $rsold["ref_islr"]
-            ?? null;
-        $refMunicipalActual = $rsnew["ref_municipal"]
-            ?? $rsold["ref_municipal"]
-            ?? null;
-
-        /*
-        |--------------------------------------------------------------------------
-        | Cálculo centralizado
-        |--------------------------------------------------------------------------
-        */
-        $resultado = AplicarRetencionesRsNew(
-            $rsnew,
-            false
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Conservar o limpiar referencias
-        |--------------------------------------------------------------------------
-        */
-        if ($resultado["ret_iva"] > 0) {
-            $rsnew["ref_iva"] = $refIvaActual;
-        } else {
-            $rsnew["ref_iva"] = null;
-        }
-        if ($resultado["ret_islr"] > 0) {
-            $rsnew["ref_islr"] = $refIslrActual;
-        } else {
-            $rsnew["ref_islr"] = null;
-        }
-        if ($resultado["ret_municipal"] > 0) {
-            $rsnew["ref_municipal"] = $refMunicipalActual;
-        } else {
-            $rsnew["ref_municipal"] = null;
-        }
-        $rsnew["username"] = CurrentUserName();
         return true;
     }
 

@@ -12,3 +12,7 @@ ALTER TABLE `entradas_salidas`
 ALTER TABLE `pedidos_detalles_online`
 	ADD COLUMN `descuento2` DECIMAL(6,2) NULL DEFAULT NULL AFTER `descuento`;
 
+BAGUETTE BREAD
+
+
+ORDEN DE ENTREGA #0047272

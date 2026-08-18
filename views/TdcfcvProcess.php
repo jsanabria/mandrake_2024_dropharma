@@ -10,6 +10,20 @@ $Page->showMessage();
 ?>
 <?php
 
+/*****************************************************************************
+ * TdcfcvProcess - Integración TFHKA Fase 3
+ *
+ * Objetivo:
+ * - Mantener intactos los flujos LIBRE e IMPRESORA.
+ * - Formalizar CONTINGENCIA como modalidad con prioridad.
+ * - Incorporar parámetro 116 para FACTURACIÓN DIGITAL TFHKA.
+ * - Bloquear 112=S + 116=S.
+ * - Integrar DIGITAL con include/tfhka/ en ambiente DEMO.
+ * - Reservar solo nro_documento Mandrake antes del envío.
+ * - Tomar nro_control exclusivamente de TFHKA.
+ * - Marcar PROCESADO solo con respuesta de negocio 200.
+ *****************************************************************************/
+
 function TdcfcvSqlValue($value)
 {
     return str_replace("'", "''", (string)$value);
@@ -70,24 +84,138 @@ function CongelarSnapshotFiscalTdcfcv($pedido)
      * - Cada UPDATE es simple sobre entradas_salidas por id, sin JOIN.
      * - Solo rellena campos vacios; nunca pisa datos ya congelados.
      *****************************************************************************/
-    $sql = "SELECT
-                e.id,
-                IFNULL(a.codigo, '') AS articulo_codigo,
+    /*****************************************************************************
+    * Configuración de la descripción congelada del artículo
+    *
+    * Parámetro 115:
+    * A = Nombre comercial + Principio activo + Presentación + Fabricante
+    * B = Nombre comercial + Presentación + Fabricante
+    * C = Principio activo + Presentación + Fabricante
+    * D = Solo Nombre comercial + Fabricante
+    * E = Solo Principio activo + Fabricante
+    *
+    * Si no existe el parámetro 115, se crea B como opción default.
+    *****************************************************************************/
+
+    // Crear parámetro por defecto si todavía no existe
+    ExecuteStatement("
+        INSERT INTO parametro
+            (codigo, descripcion, valor1, valor2)
+        SELECT
+            '115',
+            'Para el detalle del articulo en factura',
+            'B',
+            'A = Nombre comercial + Principio activo + Presentación, B = Nombre comercial + Presentación; C = Principio activo + Presentación; D = Solo Nombre comercial; E = Solo Principio activo'
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM parametro
+            WHERE codigo = '115'
+            AND valor1 = 'B'
+        );
+    ");
+
+    // Obtener configuración por defecto
+    $opcionDescripcionArticulo = strtoupper(trim(
+        ExecuteScalar("
+            SELECT valor1
+            FROM parametro
+            WHERE codigo = '115' 
+            LIMIT 1
+        ") ?? "B"
+    ));
+
+    // Si por alguna razón el valor no es válido, usar B
+    if (!in_array($opcionDescripcionArticulo, ["A", "B", "C", "D", "E"], true)) {
+        $opcionDescripcionArticulo = "B";
+    }
+
+    // Construir expresión SQL según configuración
+    switch ($opcionDescripcionArticulo) {
+
+        // Nombre comercial + Principio activo + Presentación + Fabricante
+        case "A":
+            $descripcionArticuloSql = "
                 LTRIM(RTRIM(CONCAT(
                     IFNULL(a.nombre_comercial, ''),
                     ' ',
                     IFNULL(a.principio_activo, ''),
                     ' ',
                     IFNULL(a.presentacion, '')
-                ))) AS articulo_descripcion
+                )))
+            ";
+            break;
+
+        // Nombre comercial + Presentación + Fabricante
+        case "B":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                )))
+            ";
+            break;
+
+        // Principio activo + Presentación + Fabricante
+        case "C":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.principio_activo, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                )))
+            ";
+            break;
+
+        // Solo nombre comercial + Fabricante
+        case "D":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, '')
+                )))
+            ";
+            break;
+
+        // Solo principio activo + Fabricante
+        case "E":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.principio_activo, '')
+                )))
+            ";
+            break;
+
+        // Seguridad adicional:
+        // Nombre comercial + Presentación + Fabricante
+        default:
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                )))
+            ";
+            break;
+    }
+
+    $sql = "SELECT
+                e.id,
+                IFNULL(a.codigo, '') AS articulo_codigo,
+                {$descripcionArticuloSql} AS articulo_descripcion
             FROM entradas_salidas AS e
-            LEFT JOIN articulo AS a ON a.id = e.articulo
+            LEFT JOIN articulo AS a
+                ON a.id = e.articulo
+            LEFT JOIN fabricante AS f
+                ON f.id = a.fabricante
             WHERE e.id_documento = {$pedido}
-              AND e.tipo_documento = 'TDCFCV'
-              AND (
-                    e.articulo_codigo IS NULL OR e.articulo_codigo = ''
-                 OR e.articulo_descripcion IS NULL OR e.articulo_descripcion = ''
-              )";
+            AND e.tipo_documento = 'TDCFCV'
+            AND (
+                    e.articulo_codigo IS NULL
+                    OR e.articulo_codigo = ''
+                    OR e.articulo_descripcion IS NULL
+                    OR e.articulo_descripcion = ''
+            )";
+
     $rows = ExecuteRows($sql);
 
     if ($rows) {
@@ -129,6 +257,54 @@ function ParametroImpresoraFiscalActivaTdcfcv()
     return strtoupper(trim(
         ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
     ) ?? "") == "S";
+}
+
+
+function ParametroFacturacionDigitalActivaTdcfcv()
+{
+    ExecuteStatement("
+        INSERT INTO parametro (codigo, descripcion, valor1)
+        SELECT '116', 'USA FACTURACION DIGITAL TFHKA', 'N'
+        FROM DUAL
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM parametro
+            WHERE codigo = '116'
+        )
+    ");
+
+    return strtoupper(trim(
+        ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '116'")
+    ) ?? "") == "S";
+}
+
+function ObtenerModoEmisionFiscalTdcfcv($esContingencia = false)
+{
+    // La contingencia tiene prioridad sobre cualquier modalidad automática.
+    if ($esContingencia) {
+        return "CONTINGENCIA";
+    }
+
+    $impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
+    $facturacionDigital = ParametroFacturacionDigitalActivaTdcfcv();
+
+    // No permitimos dos mecanismos fiscales activos simultáneamente.
+    if ($impresoraFiscal && $facturacionDigital) {
+        die(
+            "Configuración fiscal inválida: no pueden estar activas simultáneamente " .
+            "la impresora fiscal (parámetro 112) y la facturación digital TFHKA (parámetro 116)."
+        );
+    }
+
+    if ($facturacionDigital) {
+        return "DIGITAL";
+    }
+
+    if ($impresoraFiscal) {
+        return "IMPRESORA";
+    }
+
+    return "LIBRE";
 }
 
 function NombreDocumentoFiscalTdcfcv($documento)
@@ -187,7 +363,32 @@ $documento = strtoupper(trim($row["documento"] ?? ""));
 $nro_documento = $row["nro_documento"] ?? "";
 $estatus = $row["estatus"] ?? "";
 $id_documento_padre = intval($row["id_documento_padre"] ?? 0);
-$impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
+
+// -----------------------------------------------------------------------
+// Modalidad de emisión fiscal
+// -----------------------------------------------------------------------
+// 112 = S / 116 = N  -> IMPRESORA
+// 112 = N / 116 = S  -> DIGITAL
+// 112 = N / 116 = N  -> LIBRE
+// contingencia = S   -> CONTINGENCIA (prioridad)
+// 112 = S / 116 = S  -> configuración inválida
+//
+// Aunque TdcfcvAdd.php envíe "modo_emision", la decisión se vuelve a
+// validar aquí en servidor usando los parámetros del sistema.
+// -----------------------------------------------------------------------
+$esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
+$notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
+
+if ($esContingencia) {
+    $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
+
+    if (count($palabrasNota) < 3) {
+        die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
+    }
+}
+
+$modoEmisionSolicitado = strtoupper(trim($_REQUEST["modo_emision"] ?? ""));
+$modoEmisionFiscal = ObtenerModoEmisionFiscalTdcfcv($esContingencia);
 
 /*
 |--------------------------------------------------------------------------
@@ -257,14 +458,23 @@ Execute("
     LIMIT 1
 ");
 
-if(trim($nro_documento ?? "") == "") {
-    if ($impresoraFiscal) {
-        // En modo impresora fiscal activa, NO reservamos consecutivos desde el sistema.
-        // La impresora fiscal emitirá el documento y factura_fiscal.php actualizará
-        // salidas.nro_documento, salidas.nro_control, estatus e impreso con la respuesta real.
-        CongelarSnapshotFiscalTdcfcv($pedido);
+if (trim($nro_documento ?? "") == "") {
 
+    // La fotografía fiscal se congela antes de delegar en cualquier mecanismo
+    // de emisión para garantizar que todos trabajen con los mismos datos.
+    CongelarSnapshotFiscalTdcfcv($pedido);
+
+    // -------------------------------------------------------------------
+    // IMPRESORA FISCAL
+    // -------------------------------------------------------------------
+    if ($modoEmisionFiscal == "IMPRESORA") {
+
+        // En modo impresora fiscal NO reservamos consecutivos desde Mandrake.
+        // La impresora fiscal emitirá el documento y factura_fiscal.php
+        // actualizará salidas.nro_documento, salidas.nro_control, estatus e
+        // impreso con la respuesta real de FiscalPrinterV2.
         $usernameFiscal = urlencode(CurrentUserName());
+
         header(
             "Location: reportes/factura_fiscal.php?id={$pedido}" .
             "&username={$usernameFiscal}" .
@@ -275,22 +485,97 @@ if(trim($nro_documento ?? "") == "") {
         die();
     }
 
-    switch($documento) {
-    case "FC":
-        $docu = "003";
-        break;
+    // -------------------------------------------------------------------
+    // FACTURACIÓN DIGITAL TFHKA
+    // -------------------------------------------------------------------
+    if ($modoEmisionFiscal == "DIGITAL") {
 
-    case "NC":
-        $docu = "010";
-        break;
+        require_once dirname(__DIR__) . "/include/tfhka/TFHKA.php";
 
-    case "ND":
-        $docu = "011";
-        break;
+        $resultadoTFHKA = TFHKA_EmitirDocumento($pedido);
+
+        if (empty($resultadoTFHKA["ok"])) {
+            $codigoTFHKA = $resultadoTFHKA["codigo"] ?? "ERROR";
+            $mensajeTFHKA = $resultadoTFHKA["mensaje"] ?? "Error no especificado.";
+
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'PENDIENTE'
+                WHERE id = {$pedido}
+                LIMIT 1
+            ");
+
+            die(
+                "TFHKA - Documento pendiente de emisión digital. " .
+                "Código: " . htmlspecialchars((string)$codigoTFHKA) . ". " .
+                htmlspecialchars((string)$mensajeTFHKA)
+            );
+        }
+
+        $factura = (string)($resultadoTFHKA["numero_documento"] ?? "");
+        $facturaCTRL = (string)($resultadoTFHKA["numero_control"] ?? "");
+
+        if ($factura == "" || $facturaCTRL == "") {
+            die("TFHKA respondió exitosamente, pero faltan número de documento o número de control.");
+        }
+
+        ExecuteStatement("
+            UPDATE salidas
+            SET nro_documento = '" . TdcfcvSqlValue($factura) . "',
+                nro_control = '" . TdcfcvSqlValue($facturaCTRL) . "',
+                estatus = 'PROCESADO',
+                username = '" . TdcfcvSqlValue(CurrentUserName()) . "'
+            WHERE id = {$pedido}
+            LIMIT 1
+        ");
+
+        if ($id_documento_padre > 0) {
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'PROCESADO'
+                WHERE id = {$id_documento_padre}
+            ");
+        }
+
+        $estatus = "PROCESADO";
+
+        RegistrarAuditoriaEmisionTdcfcv(
+            $pedido,
+            $documento,
+            $factura,
+            $facturaCTRL,
+            "TFHKA"
+        );
+    }
+
+    if ($modoEmisionFiscal != "DIGITAL") {
+
+    // -------------------------------------------------------------------
+    // FORMATO LIBRE / CONTINGENCIA
+    // -------------------------------------------------------------------
+    // Ambos conservan el mecanismo actual de correlativos Mandrake.
+    // CONTINGENCIA únicamente cambia las series a FM_DOC / FM_CTRL.
+    switch ($documento) {
+        case "FC":
+            $docu = "003";
+            break;
+
+        case "NC":
+            $docu = "010";
+            break;
+
+        case "ND":
+            $docu = "011";
+            break;
+
+        default:
+            die("Tipo de documento fiscal no soportado.");
     }
 
     // ¿El número de control es único para FC, NC y ND?
-    $controlUnificado = (ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '035'") == "S");
+    $controlUnificado = (
+        ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '035'") == "S"
+    );
 
     if ($controlUnificado) {
 
@@ -302,83 +587,110 @@ if(trim($nro_documento ?? "") == "") {
 
     } else {
 
-        switch($documento) {
-        case "FC":
-            $crtl = "030";
-            break;
+        switch ($documento) {
+            case "FC":
+                $crtl = "030";
+                break;
 
-        case "NC":
-            $crtl = "031";
-            break;
+            case "NC":
+                $crtl = "031";
+                break;
 
-        case "ND":
-            $crtl = "032";
-            break;
+            case "ND":
+                $crtl = "032";
+                break;
         }
 
         // Cada documento mantiene su propia serie
         $serie_ctrl = $documento . "_CTRL";
     }
 
-    // El consecutivo del documento SIEMPRE es independiente
+    // El consecutivo del documento SIEMPRE es independiente.
     $serie_doc = $documento . "_DOC";
 
-    // -------------------------------------------------------------------
-    // Factura de Contingencia: si viene marcada desde el modal, se usan
-    // las series FM_DOC / FM_CTRL en vez de las series normales del
-    // documento, y se exige un motivo de al menos tres palabras (se
-    // guardará más abajo en salidas.nota).
-    // -------------------------------------------------------------------
-    $esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
-    $notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
-
-    if ($esContingencia) {
-        $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
-        if (count($palabrasNota) < 3) {
-            die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
-        }
-
+    if ($modoEmisionFiscal == "CONTINGENCIA") {
         $serie_doc = "FM_DOC";
         $serie_ctrl = "FM_CTRL";
     }
 
-    $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
-    $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
+    $numeroDoc  = intval(
+        ReservarConsecutivoDocumento("TDCFCV", $serie_doc)
+    );
 
-    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
+    $numeroCtrl = intval(
+        ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl)
+    );
+
+    $sql = "SELECT valor2, valor3
+            FROM parametro
+            WHERE codigo = '$docu';";
     $row = ExecuteRow($sql);
+
     $prefijo = trim($row["valor2"] ?? "");
-    $padeo   = intval($row["valor3"]);
-    $factura = $prefijo . str_pad($numeroDoc, $padeo, "0", STR_PAD_LEFT);
+    $padeo = intval($row["valor3"] ?? 0);
 
-    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
+    $factura = $prefijo . str_pad(
+        $numeroDoc,
+        $padeo,
+        "0",
+        STR_PAD_LEFT
+    );
+
+    $sql = "SELECT valor2, valor3
+            FROM parametro
+            WHERE codigo = '$crtl';";
     $row = ExecuteRow($sql);
-    $prefijo      = trim($row["valor2"] ?? "");
-    $padeo        = intval($row["valor3"]);
-    $facturaCTRL  = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
 
-    // $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
-    // $faltan_datos = ExecuteScalar($sql);
-    // if($faltan_datos == "N") $estatus = "PROCESADO";
+    $prefijo = trim($row["valor2"] ?? "");
+    $padeo = intval($row["valor3"] ?? 0);
+
+    $facturaCTRL = $prefijo . str_pad(
+        $numeroCtrl,
+        $padeo,
+        "0",
+        STR_PAD_LEFT
+    );
+
     $estatus = "PROCESADO";
 
-    $sql = "UPDATE salidas 
-            SET fecha = '" . date("Y-m-d H:i:s") . "', 
-                nro_documento = '$factura', 
-                nro_control = '$facturaCTRL', 
-                estatus = '$estatus', 
-                username = '" . CurrentUserName() . "'"
-                . ($esContingencia ? ", nota = '" . TdcfcvSqlValue("Factura de Contingencia: " . $notaContingencia) . "'" : "") . "
+    $sql = "UPDATE salidas
+            SET fecha = '" . date("Y-m-d H:i:s") . "',
+                nro_documento = '$factura',
+                nro_control = '$facturaCTRL',
+                estatus = '$estatus',
+                username = '" . TdcfcvSqlValue(CurrentUserName()) . "'"
+                . ($modoEmisionFiscal == "CONTINGENCIA"
+                    ? ", nota = '" . TdcfcvSqlValue(
+                        "Factura de Contingencia: " . $notaContingencia
+                    ) . "'"
+                    : ""
+                ) . "
             WHERE id = $pedido
-            AND (nro_documento IS NULL OR nro_documento = '')";
+              AND (nro_documento IS NULL OR nro_documento = '')";
     Execute($sql);
-    
-    // Congela la foto fiscal del cliente y de los articulos al momento de emitir.
-    CongelarSnapshotFiscalTdcfcv($pedido);
 
-    // Registro de auditoría de emisión de documento no fiscal/manual.
-    RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $facturaCTRL, "SISTEMA");
-} 
+    // Se procesa el Documento Origen después de que la emisión local quedó
+    // formalmente procesada.
+    if ($id_documento_padre > 0) {
+        $sql = "UPDATE salidas
+                SET estatus = 'PROCESADO'
+                WHERE id = $id_documento_padre";
+        Execute($sql);
+    }
+
+    $origenAuditoria = (
+        $modoEmisionFiscal == "CONTINGENCIA"
+    ) ? "CONTINGENCIA" : "SISTEMA";
+
+    RegistrarAuditoriaEmisionTdcfcv(
+        $pedido,
+        $documento,
+        $factura,
+        $facturaCTRL,
+        $origenAuditoria
+    );
+    }
+}
 else {
     $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
     $faltan_datos = ExecuteScalar($sql);

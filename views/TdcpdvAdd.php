@@ -760,7 +760,7 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
             <input type="range"
                    class="form-range"
                    min="<?= $PorDesMin ?>"
-                   max="99"
+                   max="80"
                    step="1"
                    id="rangoDescuentoCliente"
                    value="<?= intval($PorDesAct) ?>">
@@ -782,7 +782,7 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
             <input type="range"
                    class="form-range"
                    min="0"
-                   max="99"
+                   max="0"
                    step="1"
                    id="rangoTransferencista"
                    value="<?= intval($descTransferencista) ?>">

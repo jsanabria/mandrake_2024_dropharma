@@ -6,6 +6,35 @@ require("../include/connect2.php");
 
 $id_invoice = isset($_REQUEST["id"])?$_REQUEST["id"]:"0";
 
+function TextoFpdf($texto)
+{
+    $texto = html_entity_decode(
+        (string)$texto,
+        ENT_QUOTES | ENT_HTML5,
+        "UTF-8"
+    );
+
+    $codificacion = mb_detect_encoding(
+        $texto,
+        ["UTF-8", "Windows-1252", "ISO-8859-1"],
+        true
+    );
+
+    if ($codificacion && $codificacion !== "UTF-8") {
+        $texto = mb_convert_encoding(
+            $texto,
+            "UTF-8",
+            $codificacion
+        );
+    }
+
+    return mb_convert_encoding(
+        $texto,
+        "Windows-1252",
+        "UTF-8"
+    );
+}
+
 
 $sql = "SELECT valor1 AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
 $rs = mysqli_query($link, $sql);
@@ -47,7 +76,7 @@ $sql = "SELECT
 			asesor, documento, monto_usd, IFNULL(tasa_dia, 0) AS tasa_dia, asesor_asignado, dias_credito, 
 			date_format(DATE_ADD(fecha,INTERVAL IFNULL(dias_credito, 0) DAY), '%d/%m/%y') AS fec_venc, doc_afectado, 
 			descuento, descuento2, moneda, impreso, IFNULL(doc_afe, 0) AS doc_afe, IFNULL(igtf_alicuota, 0) AS igtf_alicuota,
-			IFNULL(username, '') AS username
+			IFNULL(username, '') AS username, IFNULL(entregado, 'S') AS contado 
 		FROM salidas where id = '$id_invoice';"; 
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -70,6 +99,35 @@ $GLOBALS["doc_afe"] = $row["doc_afe"];
 $GLOBALS["moneda"] = $row["moneda"];
 $GLOBALS["impreso"] = $row["impreso"];
 $GLOBALS["alicuota_dinamica"] = $row["igtf_alicuota"];
+$GLOBALS["contado"] = $row["contado"];
+
+// -----------------------------------------------------------------------
+// Validación: una factura de contado (salidas.entregado = 'S') debe tener
+// al menos un método de pago registrado en cobros_cliente_detalle antes de
+// poder emitirse/imprimirse. Si no tiene ninguno, se detiene la generación
+// del PDF y se muestra un mensaje al usuario.
+// -----------------------------------------------------------------------
+if ($GLOBALS["contado"] == "S") {
+	$sql_chk = "SELECT COUNT(*) AS total
+				FROM cobros_cliente_detalle
+				WHERE cobros_cliente IN (
+					SELECT id FROM cobros_cliente WHERE id_documento = '$id_invoice'
+				);";
+	$rs_chk = mysqli_query($link, $sql_chk);
+	$row_chk = mysqli_fetch_array($rs_chk);
+
+	if (($GLOBALS["documento"] === 'FC' OR $GLOBALS["documento"] === 'ND') AND (int)($row_chk["total"] ?? 0) === 0) {
+		header('Content-Type: text/html; charset=UTF-8');
+		echo '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>
+				<div style="font-family: Arial, sans-serif; max-width: 480px; margin: 80px auto; padding: 20px 30px;
+							border: 1px solid #e0a800; background: #fff3cd; color: #856404; border-radius: 6px; text-align: center;">
+					<h3 style="margin-top:0;">No se puede emitir la factura</h3>
+					<p>La factura de contado debe indicar m&eacute;todos de pago antes de emitirse.</p>
+				</div>
+			  </body></html>';
+		exit;
+	}
+}
 
 if(trim($GLOBALS["nro_documento"] ?? "") != "") {
 	if ($row["impreso"] != "S") {
@@ -160,7 +218,8 @@ class PDF extends FPDF
 	// Cabecera de p?gina
 	function Header()
 	{
-		if ($GLOBALS["impreso"] == "S") {
+		// f ($GLOBALS["impreso"] == "S") {
+		if (1 == 0) {
 		    $this->MarcaDeAgua();
 		}
 
@@ -253,7 +312,7 @@ class PDF extends FPDF
 		$this->SetFont('Courier','B',8);
 		$this->Cell(30, 3,"RAZON SOCIAL: ",'0','0','L');
 		$this->SetFont('Courier','',8);
-		$this->Cell(120, 3, mb_convert_encoding(substr($razon_social, 0, 55), "UTF-8", mb_detect_encoding($razon_social)),'0','0','L');
+		$this->Cell(120, 3, mb_convert_encoding(substr($razon_social, 0, 55), "UTF-8", TextoFpdf(mb_detect_encoding($razon_social))),'0','0','L');
 		$this->SetFont('Courier','B',8);
 		$tdoc = ($GLOBALS["documento"]=="FC" ? "Nro. Factura: " : ($GLOBALS["documento"]=="NC" ? "Nro. Nota de Cr?dito: " : ($GLOBALS["documento"]=="ND" ? "Nro. Nota de D?bito: ":"N/A")));
 		$this->Cell(30, 3, $tdoc,'0','0','R');
@@ -325,12 +384,19 @@ class PDF extends FPDF
 		$this->Cell(30,4,$GLOBALS["asesor"],'0','0','L');
 
 		$this->SetFont('Courier','B',8);
-		$this->Cell(24,4,'Dias Cred:','0','0','L');
-		$this->SetFont('Courier','',8);
-		$this->Cell(5,4,$GLOBALS["dias_credito"] . " " . $GLOBALS["fec_venc"],'0','0','L');
+		if($GLOBALS["contado"] == "S") {
+			$this->Cell(24,4,'Contado','0','0','L');
+			$this->SetFont('Courier','',8);
+		}
+		else {
+			$this->Cell(24,4,'Dias Cred:','0','0','L');
+			$this->SetFont('Courier','',8);
+			$this->Cell(5,4,$GLOBALS["dias_credito"] . " " . $GLOBALS["fec_venc"],'0','0','L');
+		}
 
 		$this->Ln(2);
-		if ($GLOBALS["impreso"] == "S") {
+		// if ($GLOBALS["impreso"] == "S") {
+		if (1 == 0) {
 		    $this->SetFont('Courier','B',8);
 		    $this->Cell(0, 4, mb_convert_encoding("SIN DERECHO A CRÉDITO FISCAL", "ISO-8859-1"), 0, 1, 'C');
 		} else $this->Ln(2);
@@ -437,6 +503,14 @@ class PDF extends FPDF
 	    $monto_total_bs_db = floatval($row["total"]);
 	    $nota = mb_convert_encoding($row["nota"], "UTF-8", mb_detect_encoding($row["nota"]));
 	    $nro_despacho = $row["nro_despacho"];
+	    $id_documento_padre = $row["id_documento_padre"] ?? 0;
+
+	    $sql = "SELECT nro_documento FROM salidas WHERE id = $id_documento_padre;"; 
+	    $nro_documento_padre = "";
+	    if($rs = mysqli_query($link, $sql)) {
+	    	$row_padre = mysqli_fetch_array($rs);
+	    	$nro_documento_padre = $row_padre["nro_documento"];
+	    }
 
 	    // 2. Totales de artículos
 	    $sql = "SELECT SUM(IF(IFNULL(alicuota, 0) = 0, precio_unidad, 0) * cantidad_articulo) AS exento,  
@@ -464,9 +538,77 @@ $this->Cell(0, 3, 'DP: Descuento Producto   DL: Descuento Laboratorio   DC: Desc
         else 
             $this->Ln(225 - $this->GetY());
 
+//////
+$sql = "SELECT
+			a.metodo_pago,
+			IFNULL(b.valor2, a.metodo_pago) AS metodo_descripcion,
+			a.referencia,
+			a.monto_bs,
+			a.moneda,
+			a.monto_moneda, a.banco, d.campo_descripcion AS banco_descripcion
+		FROM cobros_cliente_detalle AS a
+		LEFT JOIN parametro AS b
+			ON b.codigo = '009'
+		   AND b.valor1 = a.metodo_pago
+		LEFT OUTER JOIN compania_cuenta AS c ON c.id = a.banco
+		LEFT OUTER JOIN tabla AS d ON d.campo_codigo = c.banco AND d.tabla = 'BANCO'
+		WHERE a.cobros_cliente IN (
+			SELECT id FROM cobros_cliente WHERE id_documento = '$id_invoice'
+		) AND a.metodo_pago <> 'IG';";
+$rs_pagos = mysqli_query($link, $sql);
+
+$partes_pago = [];
+while ($row_pago = mysqli_fetch_array($rs_pagos)) {
+	$es_igtf = ($row_pago['metodo_pago'] == 'IG');
+
+	$metodo_txt = $es_igtf
+		? "IGTF 3%"
+		: mb_convert_encoding($row_pago['metodo_descripcion'], "UTF-8", mb_detect_encoding($row_pago['metodo_descripcion']));
+
+	$parte = $metodo_txt;
+
+	// Banco (si aplica al método de pago, ej. Transferencia / Pago Movil)
+	$banco_txt = trim($row_pago['banco_descripcion'] ?? '');
+	if ($banco_txt != '') {
+		$parte .= ' ' . mb_convert_encoding($banco_txt, "UTF-8", mb_detect_encoding($banco_txt));
+	}
+
+	// Referencia (si aplica, ej. Transferencia / Pago Movil, no en Efectivo)
+	$ref_txt = trim($row_pago['referencia'] ?? '');
+	if ($ref_txt != '') {
+		$parte .= ' #' . $ref_txt;
+	}
+
+	// Monto: en la moneda original del pago si no es Bs., si no en Bs.
+	if ($row_pago['moneda'] != 'Bs.') {
+		$parte .= ' ' . $row_pago['moneda'] . ' ' . number_format($row_pago['monto_moneda'], 2, ",", ".");
+	} else {
+		$parte .= ' Bs. ' . number_format($row_pago['monto_bs'], 2, ",", ".");
+	}
+
+	$partes_pago[] = $parte;
+}
+
+if (count($partes_pago) > 0) {
+	$this->SetFont('Courier', 'BI', 6);
+	$this->Cell(
+	    100,
+	    3,
+	    TextoFpdf(
+	        "Pagos: " . implode(' / ', $partes_pago)
+	    ),
+	    0,
+	    0,
+	    'L'
+	);
+}  
+else {
+	$this->Cell(100, 3, "", 0, 0, 'L');
+}      
+//////
 	    // --- SUB-TOTAL ---
 	    $this->SetFont('Courier','B',8);
-	    $this->Cell(149, 4, "SUB-TOTAL:", 0, 0, 'R');
+	    $this->Cell(49, 4, "SUB-TOTAL:", 0, 0, 'R');
 	    $val_subtotal = $exento + $gravado;
 	    // $sub_bs = ($moneda != 'Bs.') ? $val_subtotal * $tasa_dia : ($GLOBALS["moneda_default"] != "Bs." ? $val_subtotal * $tasa_dia : $val_subtotal);
 	    $sub_bs = ($moneda != 'Bs.') ? $val_subtotal * $tasa_dia : $val_subtotal;
@@ -511,10 +653,15 @@ else {
     $monto_total_referencia = $xTotal + $monto_referencia_igtf;
     
     $this->Cell(5, 4);
-	if($moneda != "Bs.") {
-        $this->Cell(60, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: $moneda " . number_format($monto_total_referencia, 2, ",", "."), 0, 0, 'L');
-    } else {
-        $this->Cell(60, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: USD " . number_format($monto_total_referencia / $tasa_dia, 2, ",", "."), 0, 0, 'L');
+    if($GLOBALS["contado"] === "S") {
+    	$this->Cell(60, 4, "", 0, 0, 'L');
+    } 
+    else {
+		if($moneda != "Bs.") {
+	        $this->Cell(60, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: $moneda " . number_format($monto_total_referencia, 2, ",", "."), 0, 0, 'L');
+	    } else {
+	        $this->Cell(60, 4, "I.G.T.F. ".number_format($alicuota_dinamica, 0)."%: USD " . number_format($monto_total_referencia / $tasa_dia, 2, ",", "."), 0, 0, 'L');
+	    }
     }
 
 }
@@ -605,7 +752,7 @@ else {
 	    // --- UNIDADES Y NOTA DE INDEXACIÓN (CUADRO ROJO INFERIOR) ---
 	    $this->SetFont('Courier','B',8);
 	    $this->Cell(30, 4, "Unidades: " . intval($row["unidades"]), 0, 0, 'C');
-	    $this->Cell(71, 4, strtoupper($nota), 0, 0, 'R');
+	    $this->Cell(71, 4, strtoupper($nota . (trim($nro_documento_padre) != "" ? " #O.E: " . $nro_documento_padre : "")), 0, 0, 'R');
 	    if(trim($nro_despacho) != "") { $this->Cell(90, 4, "Nro. Despacho: " . $nro_despacho, 0, 0, 'C'); } 
 	    $this->Ln(4);
 	    
@@ -631,7 +778,7 @@ if ($GLOBALS["estatus_doc"] == "PROCESADO") {
 	$select_descripcion_articulo = "IFNULL(a.articulo_descripcion, '') AS articulo";
 } else {
 	$select_codigo_articulo = "IFNULL(b.codigo, '') AS codigo";
-	$select_descripcion_articulo = "LTRIM(RTRIM(CONCAT(IFNULL(b.nombre_comercial, ''), ' ', IFNULL(b.principio_activo, ''), ' ', IFNULL(b.presentacion, '')))) AS articulo";
+	$select_descripcion_articulo = "LTRIM(RTRIM(CONCAT(IFNULL(b.nombre_comercial, ''), ' ', IFNULL(b.presentacion, ''), ' ', IFNULL(c.nombre, '')))) AS articulo";
 }
 
 $sql = "SELECT 
@@ -662,7 +809,7 @@ while($row = mysqli_fetch_array($rs))
 	$pdf->SetFont('Courier', '', 7);
 	// $pdf->Cell(5, 3);
 
-	$articuloCompleto = trim($row["articulo"]) . $printE;
+	$articuloCompleto = TextoFpdf(trim($row["articulo"])) . $printE;
 
 	$pdf->Cell(5, 3);
 	$pdf->Cell(45, 3, substr($articuloCompleto, 0, 30), 0, 0, 'L');

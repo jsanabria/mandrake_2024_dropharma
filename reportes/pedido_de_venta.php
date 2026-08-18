@@ -8,7 +8,7 @@ $id = isset($_REQUEST["id"])?$_REQUEST["id"]:"0";
 
 $sql = "SELECT 
 			id, date_format(fecha, '%d/%m/%Y') as fecha, cliente, nro_documento, tipo_documento, estatus, 
-			asesor  
+			asesor, descuento, descuento2, moneda, IFNULL(tasa_dia, 0) AS tasa_dia  
 		FROM salidas where id = '$id'";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
@@ -18,6 +18,20 @@ $GLOBALS["fecha"] = $row["fecha"];
 $GLOBALS["tipo_documento"] = $row["tipo_documento"];
 $GLOBALS["nro_documento"] = $row["nro_documento"];
 $GLOBALS["estatus"] = $row["estatus"];
+
+// Descuentos a nivel de documento (comercial / DC y DT) y datos de moneda para expresar todo en USD
+$descuento_comercial = floatval($row["descuento"]);
+$descuento_comercial2 = floatval($row["descuento2"]);
+$moneda = $row["moneda"];
+$tasa_dia = floatval($row["tasa_dia"]);
+
+// Si el documento está en Bs. y no tiene tasa registrada, se toma la última tasa USD disponible
+if ($moneda == 'Bs.' && $tasa_dia == 0) {
+	$sql_tasa = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0,1;";
+	$rs_tasa = mysqli_query($link, $sql_tasa);
+	$row_tasa = mysqli_fetch_array($rs_tasa);
+	$tasa_dia = floatval($row_tasa["tasa"]);
+}
 
 $sql = "SELECT a.nombre  
 		FROM 
@@ -185,16 +199,19 @@ class PDF extends FPDF
 		require("../include/desconnect.php");
 		$this->Ln(6);
 
+		$this->SetFont('Arial','B',7);
 		$this->Cell(10, 6);
-		$this->Cell(20, 6, "LAB", 1, 0, 'L');
-		$this->Cell(80, 6, "ARTICULO", 1, 0, 'L');
-		//$this->Cell(20, 6, "MED./CAN.", 1, 0, 'L');
-		$this->Cell(10, 6, "CAN.", 1, 0, 'R');
-		$this->Cell(15, 6, "IVA %", 1, 0, 'R');
-		$this->Cell(25, 6, "PRECIO", 1, 0, 'R');
-		$this->Cell(10, 6, "DS1%", 1, 0, 'R');
-		$this->Cell(10, 6, "DS2%", 1, 0, 'R');
-		$this->Cell(20, 6, "TOTAL", 1, 0, 'R');
+		$this->Cell(15, 6, "LAB", 1, 0, 'L');
+		$this->Cell(65, 6, "ARTICULO", 1, 0, 'L');
+		$this->Cell(8, 6, "CAN.", 1, 0, 'R');
+		$this->Cell(10, 6, "IVA %", 1, 0, 'R');
+		$this->Cell(18, 6, "PRECIO FULL", 1, 0, 'R');
+		$this->Cell(8, 6, "DP%", 1, 0, 'R');
+		$this->Cell(8, 6, "DL%", 1, 0, 'R');
+		$this->Cell(8, 6, "DC%", 1, 0, 'R');
+		$this->Cell(8, 6, "DT%", 1, 0, 'R');
+		$this->Cell(18, 6, "PRECIO NETO", 1, 0, 'R');
+		$this->Cell(18, 6, "TOTAL USD", 1, 0, 'R');
 		$this->Ln(6);
 
 		// LLAMAR A LA MARCA DE AGUA AL EMPEZAR EL HEADER
@@ -218,6 +235,8 @@ class PDF extends FPDF
 		/*$this->Ln();
 		$this->Cell(130, 6, "CANTIDAD ARTICULOS: "  . number_format($cnt, 0, "", ","), 0, 0, 'R');
 		$this->Cell(70, 6, "TOTAL ITEMS: "  . $items, 0, 0, 'R');*/
+		$this->Cell(15, 3);
+		$this->Cell(0, 3, 'DP: Descuento Producto   DL: Descuento Laboratorio   DC: Descuento Comercial   DT: Descuento Transferencista', 0, 1, 'L');
 		$asociado = "";
 
 		require("../include/connect2.php");
@@ -227,13 +246,37 @@ class PDF extends FPDF
 					a.monto_total, 
 					a.total, 
 					a.id_documento_padre, 
-					descuento, descuento2, monto_sin_descuento    
+					descuento, descuento2, monto_sin_descuento, 
+					moneda, IFNULL(tasa_dia, 0) AS tasa_dia    
 				FROM salidas a where a.id = '$id';"; 
 		$rs = mysqli_query($link, $sql);
 		$row = mysqli_fetch_array($rs);
 		$descuento = $row["descuento"]; 
 		$descuento2 = $row["descuento2"]; 
 		$monto_sin_descuento = $row["monto_sin_descuento"];
+
+		// Moneda/tasa del documento para expresar el resumen final en USD
+		$moneda_doc = $row["moneda"];
+		$tasa_doc = floatval($row["tasa_dia"]);
+
+		if ($moneda_doc == 'Bs.' && $tasa_doc == 0) {
+			$sql_tasa = "SELECT tasa FROM tasa_usd WHERE moneda = 'USD' ORDER BY id DESC LIMIT 0,1;";
+			$rs_tasa = mysqli_query($link, $sql_tasa);
+			$row_tasa = mysqli_fetch_array($rs_tasa);
+			$tasa_doc = floatval($row_tasa["tasa"]);
+		}
+
+		// Convierte un monto a USD según la moneda/tasa del documento
+		$toUsd = function($monto) use ($moneda_doc, $tasa_doc) {
+			$monto = floatval($monto);
+			if ($moneda_doc != 'Bs.') return $monto;
+			return ($tasa_doc > 0) ? $monto / $tasa_doc : 0;
+		};
+
+		$monto_sin_descuento_usd = $toUsd($monto_sin_descuento);
+		$monto_total_usd = $toUsd($row["monto_total"]);
+		$iva_usd = $toUsd($row["iva"]);
+		$total_usd = $toUsd($row["total"]);
 
 		$sql2 = "SELECT b.descripcion, a.nro_documento 
 				FROM salidas AS a JOIN tipo_documento AS b ON b.codigo = a.tipo_documento 
@@ -252,26 +295,20 @@ class PDF extends FPDF
 		$this->SetFont('Arial','',8);
 		$this->Cell(10, 6);
 		$this->Cell(80, 6, "CANTIDAD ARTICULOS: "  . number_format($cnt, 0, "", ","), 1, 0, 'R');
-		$this->Cell(70, 6, "(TOTAL ITEMS: "  . $items . ") SUB-TOTAL:", 1, 0, 'R');
-		$this->Cell(40, 6, number_format($monto_sin_descuento, 2, ".", ","), 1, 0, 'R');
-		$this->Ln(6);
-		$this->Cell(10, 6);
-		$this->Cell(80, 6, "DESCUENTO 1: "  . number_format($descuento, 2, ".", ",") . "%", 1, 0, 'R');
-		$this->Cell(70, 6, "DESCUENTO 2: "  . number_format($descuento2, 2, ".", ",") . "%", 1, 0, 'R');
-		$this->Cell(40, 6, number_format($row["monto_total"], 2, ".", ","), 1, 0, 'R');
+		$this->Cell(70, 6, "(TOTAL ITEMS: "  . $items . ") SUB-TOTAL USD:", 1, 0, 'R');
+		$this->Cell(40, 6, number_format($monto_total_usd, 2, ".", ","), 1, 0, 'R');
 		$this->Ln(6);
 		$this->Cell(10, 6);
 		if(floatval($row["alicuota_iva"]) > 0) {
-			$this->Cell(70, 6, "% IVA:", 0, 0, 'R');
+			$this->Cell(110, 6, "% IVA:", 0, 0, 'R');
 			$this->Cell(40, 6, number_format($row["alicuota_iva"], 0, ".", ","), 1, 0, 'L');
-			$this->Cell(40,6, number_format($row["monto_total"], 2, ".", ","), 1, 0, 'R');
 		}
-		else $this->Cell(150,6, "IVA:", 1, 0, 'R');
-		$this->Cell(40, 6, number_format($row["iva"], 2, ".", ","), 1, 0, 'R');
+		else $this->Cell(150,6, "IVA USD:", 1, 0, 'R');
+		$this->Cell(40, 6, number_format($iva_usd, 2, ".", ","), 1, 0, 'R');
 		$this->Ln(6);
 		$this->Cell(10, 6);
-		$this->Cell(150, 6, $asociado . ' TOTAL:', 1, 0, 'R');
-		$this->Cell(40, 6, number_format($row["total"], 2, ".", ","), 1, 0, 'R');
+		$this->Cell(150, 6, $asociado . ' TOTAL USD:', 1, 0, 'R');
+		$this->Cell(40, 6, number_format($total_usd, 2, ".", ","), 1, 0, 'R');
 		
 		require("../include/desconnect.php");
 	}
@@ -296,7 +333,7 @@ $sql = "SELECT
 			(SELECT alicuota FROM alicuota WHERE codigo = b.alicuota AND activo = 'S') alicuota, 
 			a.descuento,
 			IFNULL(a.descuento2, 0) AS descuento2,
-			a.precio_unidad_sin_desc AS precio_unidad,
+			a.precio_unidad,
 			a.precio
 		FROM 
 			entradas_salidas AS a 
@@ -311,25 +348,64 @@ $items = 0;
 $cnt = 0;
 while($row = mysqli_fetch_array($rs))
 {
-	$pdf->SetFont('Arial', '', 8);
+	$pdf->SetFont('Arial', '', 7);
 	$pdf->Cell(10, 4);
-	$pdf->Cell(20, 4, substr($row["codigo"], 0, 10), 0, 0, 'L');
-	if(strlen($row["articulo"]) < 47) 
-		$pdf->Cell(80, 4, trim($row["articulo"]), 0, 0, 'L');
+	$pdf->Cell(15, 4, substr($row["codigo"], 0, 8), 0, 0, 'L');
+	if(strlen($row["articulo"]) < 38) 
+		$pdf->Cell(65, 4, trim($row["articulo"]), 0, 0, 'L');
 	else 
-		$pdf->Cell(80, 4, trim(substr($row["articulo"], 0, 47)), 0, 0, 'L');
-	$pdf->Cell(10, 4, number_format($row["cantidad"], 0, "", ""), 0, 0, 'R');
-	//$pdf->Cell(20, 4, substr($row["unidad_medida"], 0, 3) . " " . $row["cantidad"], 0, 0, 'L');
-	$pdf->Cell(15, 4, number_format($row["alicuota"], 2, ".", ","), 0, 0, 'R');
-	$pdf->Cell(25, 4, number_format($row["precio_unidad"], 2, ".", ","), 0, 0, 'R');
-	$pdf->Cell(10, 4, floatval($row["descuento"]) > 0 ? number_format($row["descuento"], 2, ",", ".") : "", 0, 0, 'R');
-	$pdf->Cell(10, 4, floatval($row["descuento2"]) > 0 ? number_format($row["descuento2"], 2, ",", ".") : "", 0, 0, 'R');
-	$pdf->Cell(20, 4, number_format($row["precio"], 2, ".", ","), 0, 0, 'R');
+		$pdf->Cell(65, 4, trim(substr($row["articulo"], 0, 38)), 0, 0, 'L');
+	$pdf->Cell(8, 4, number_format($row["cantidad"], 0, "", ""), 0, 0, 'R');
+	$pdf->Cell(10, 4, number_format($row["alicuota"], 2, ".", ","), 0, 0, 'R');
 
-	if(strlen($row["articulo"]) >= 47) {
+	// --- Descuentos: DP y DL vienen del detalle (entradas_salidas), DC y DT del documento (salidas) ---
+	$dp = floatval($row["descuento"]);       // DP: descuento producto (entradas_salidas.descuento)
+	$dl = floatval($row["descuento2"]);      // DL: descuento lote/línea (entradas_salidas.descuento2)
+	$dc = $descuento_comercial;              // DC: descuento comercial (salidas.descuento)
+	$dt = $descuento_comercial2;             // DT: descuento comercial 2 (salidas.descuento2)
+
+	// El precio guardado en a.precio_unidad ya viene neto de DP y DL, por lo que se "reconstruye"
+	// el precio full dividiendo entre los factores de esos descuentos (igual que en factura_de_venta_dropharma.php)
+	$factor_dp = 1 - ($dp / 100);
+	$factor_dl = 1 - ($dl / 100);
+
+	$precio_unit_db = floatval($row["precio_unidad"]);
+	$x_precio_full = $precio_unit_db;
+
+	if ($factor_dp > 0) $x_precio_full = $x_precio_full / $factor_dp;
+	if ($factor_dl > 0) $x_precio_full = $x_precio_full / $factor_dl;
+
+	// Todo se expresa en USD: si el documento está en Bs. se divide entre la tasa del día
+	$val_precio_full_usd = ($moneda != 'Bs.') ? $x_precio_full : (($tasa_dia > 0) ? $x_precio_full / $tasa_dia : 0);
+
+	$pdf->Cell(18, 4, number_format($val_precio_full_usd, 2, ".", ","), 0, 0, 'R');
+
+	$pdf->Cell(8, 4, $dp > 0 ? number_format($dp, 0, "", "") . "%" : "", 0, 0, 'R');
+	$pdf->Cell(8, 4, $dl > 0 ? number_format($dl, 0, "", "") . "%" : "", 0, 0, 'R');
+	$pdf->Cell(8, 4, $dc > 0 ? number_format($dc, 0, "", "") . "%" : "", 0, 0, 'R');
+	$pdf->Cell(8, 4, $dt > 0 ? number_format($dt, 0, "", "") . "%" : "", 0, 0, 'R');
+
+	// Precio neto: precio full con los 4 descuentos aplicados en cascada (DP, DL, DC, DT)
+	$precio_unitario_neto = $x_precio_full;
+	$precio_unitario_neto -= $precio_unitario_neto * $dp / 100;
+	$precio_unitario_neto -= $precio_unitario_neto * $dl / 100;
+	$precio_unitario_neto -= $precio_unitario_neto * $dc / 100;
+	$precio_unitario_neto -= $precio_unitario_neto * $dt / 100;
+
+	$val_neto_usd = ($moneda != 'Bs.') ? $precio_unitario_neto : (($tasa_dia > 0) ? $precio_unitario_neto / $tasa_dia : 0);
+
+	$pdf->Cell(18, 4, number_format($val_neto_usd, 2, ".", ","), 0, 0, 'R');
+
+	// Total de línea = precio neto x cantidad, en USD
+	$precio_linea_total = $precio_unitario_neto * intval($row["cantidad"]);
+	$val_total_usd = ($moneda != 'Bs.') ? $precio_linea_total : (($tasa_dia > 0) ? $precio_linea_total / $tasa_dia : 0);
+
+	$pdf->Cell(18, 4, number_format($val_total_usd, 2, ".", ","), 0, 0, 'R');
+
+	if(strlen($row["articulo"]) >= 38) {
 		$pdf->Ln();
-		$pdf->Cell(30, 4);
-		$pdf->MultiCell(80, 4, trim(substr($row["articulo"], 47, strlen($row["articulo"]))), 0, 'L');
+		$pdf->Cell(25, 4);
+		$pdf->MultiCell(65, 4, trim(substr($row["articulo"], 38, strlen($row["articulo"]))), 0, 'L');
 	}
 	else $pdf->Ln();
 

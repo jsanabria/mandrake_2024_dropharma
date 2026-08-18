@@ -137,7 +137,7 @@ class CompraEdit extends Compra
         $this->nro_control->setVisibility();
         $this->fecha->setVisibility();
         $this->descripcion->setVisibility();
-        $this->aplica_retencion->Visible = false;
+        $this->aplica_retencion->setVisibility();
         $this->monto_exento->setVisibility();
         $this->monto_gravado->setVisibility();
         $this->alicuota->setVisibility();
@@ -529,6 +529,8 @@ class CompraEdit extends Compra
         $this->proveedor->Required = false;
         $this->tipo_documento->Required = false;
         $this->documento->Required = false;
+        $this->aplica_retencion->Required = false;
+        $this->alicuota->Required = false;
         $this->moneda->Required = false;
         $this->tasa_dia->Required = false;
 
@@ -888,13 +890,23 @@ class CompraEdit extends Compra
             }
         }
 
+        // Check field name 'aplica_retencion' first before field var 'x_aplica_retencion'
+        $val = $CurrentForm->hasValue("aplica_retencion") ? $CurrentForm->getValue("aplica_retencion") : $CurrentForm->getValue("x_aplica_retencion");
+        if (!$this->aplica_retencion->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->aplica_retencion->Visible = false; // Disable update for API request
+            } else {
+                $this->aplica_retencion->setFormValue($val);
+            }
+        }
+
         // Check field name 'monto_exento' first before field var 'x_monto_exento'
         $val = $CurrentForm->hasValue("monto_exento") ? $CurrentForm->getValue("monto_exento") : $CurrentForm->getValue("x_monto_exento");
         if (!$this->monto_exento->IsDetailKey) {
             if (IsApi() && $val === null) {
                 $this->monto_exento->Visible = false; // Disable update for API request
             } else {
-                $this->monto_exento->setFormValue($val, true, $validate);
+                $this->monto_exento->setFormValue($val);
             }
         }
 
@@ -904,7 +916,7 @@ class CompraEdit extends Compra
             if (IsApi() && $val === null) {
                 $this->monto_gravado->Visible = false; // Disable update for API request
             } else {
-                $this->monto_gravado->setFormValue($val, true, $validate);
+                $this->monto_gravado->setFormValue($val);
             }
         }
 
@@ -1003,6 +1015,7 @@ class CompraEdit extends Compra
         $this->fecha->CurrentValue = $this->fecha->FormValue;
         $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
         $this->descripcion->CurrentValue = $this->descripcion->FormValue;
+        $this->aplica_retencion->CurrentValue = $this->aplica_retencion->FormValue;
         $this->monto_exento->CurrentValue = $this->monto_exento->FormValue;
         $this->monto_gravado->CurrentValue = $this->monto_gravado->FormValue;
         $this->alicuota->CurrentValue = $this->alicuota->FormValue;
@@ -1570,14 +1583,21 @@ class CompraEdit extends Compra
             // descripcion
             $this->descripcion->HrefValue = "";
 
+            // aplica_retencion
+            $this->aplica_retencion->HrefValue = "";
+            $this->aplica_retencion->TooltipValue = "";
+
             // monto_exento
             $this->monto_exento->HrefValue = "";
+            $this->monto_exento->TooltipValue = "";
 
             // monto_gravado
             $this->monto_gravado->HrefValue = "";
+            $this->monto_gravado->TooltipValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
+            $this->alicuota->TooltipValue = "";
 
             // ref_iva
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1589,6 +1609,7 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_iva->HrefValue = "";
             }
+            $this->ref_iva->TooltipValue = "";
 
             // ref_islr
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1600,6 +1621,7 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_islr->HrefValue = "";
             }
+            $this->ref_islr->TooltipValue = "";
 
             // ref_municipal
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1689,68 +1711,56 @@ class CompraEdit extends Compra
             $this->descripcion->EditValue = HtmlEncode($this->descripcion->CurrentValue);
             $this->descripcion->PlaceHolder = RemoveHtml($this->descripcion->caption());
 
+            // aplica_retencion
+            $this->aplica_retencion->setupEditAttributes();
+            if (strval($this->aplica_retencion->CurrentValue) != "") {
+                $this->aplica_retencion->EditValue = $this->aplica_retencion->optionCaption($this->aplica_retencion->CurrentValue);
+            } else {
+                $this->aplica_retencion->EditValue = null;
+            }
+
             // monto_exento
             $this->monto_exento->setupEditAttributes();
             $this->monto_exento->EditValue = $this->monto_exento->CurrentValue;
-            $this->monto_exento->PlaceHolder = RemoveHtml($this->monto_exento->caption());
-            if (strval($this->monto_exento->EditValue) != "" && is_numeric($this->monto_exento->EditValue)) {
-                $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, null);
-            }
+            $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, $this->monto_exento->formatPattern());
 
             // monto_gravado
             $this->monto_gravado->setupEditAttributes();
             $this->monto_gravado->EditValue = $this->monto_gravado->CurrentValue;
-            $this->monto_gravado->PlaceHolder = RemoveHtml($this->monto_gravado->caption());
-            if (strval($this->monto_gravado->EditValue) != "" && is_numeric($this->monto_gravado->EditValue)) {
-                $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, null);
-            }
+            $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, $this->monto_gravado->formatPattern());
 
             // alicuota
             $this->alicuota->setupEditAttributes();
-            $curVal = trim(strval($this->alicuota->CurrentValue));
+            $curVal = strval($this->alicuota->CurrentValue);
             if ($curVal != "") {
-                $this->alicuota->ViewValue = $this->alicuota->lookupCacheOption($curVal);
+                $this->alicuota->EditValue = $this->alicuota->lookupCacheOption($curVal);
+                if ($this->alicuota->EditValue === null) { // Lookup from database
+                    $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $curVal, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
+                    $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
+                    $sqlWrk = $this->alicuota->Lookup->getSql(false, $filterWrk, $lookupFilter, $this, true, true);
+                    $conn = Conn();
+                    $config = $conn->getConfiguration();
+                    $config->setResultCache($this->Cache);
+                    $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
+                    $ari = count($rswrk);
+                    if ($ari > 0) { // Lookup values found
+                        $arwrk = $this->alicuota->Lookup->renderViewRow($rswrk[0]);
+                        $this->alicuota->EditValue = $this->alicuota->displayValue($arwrk);
+                    } else {
+                        $this->alicuota->EditValue = FormatNumber($this->alicuota->CurrentValue, $this->alicuota->formatPattern());
+                    }
+                }
             } else {
-                $this->alicuota->ViewValue = $this->alicuota->Lookup !== null && is_array($this->alicuota->lookupOptions()) && count($this->alicuota->lookupOptions()) > 0 ? $curVal : null;
+                $this->alicuota->EditValue = null;
             }
-            if ($this->alicuota->ViewValue !== null) { // Load from cache
-                $this->alicuota->EditValue = array_values($this->alicuota->lookupOptions());
-            } else { // Lookup from database
-                if ($curVal == "") {
-                    $filterWrk = "0=1";
-                } else {
-                    $filterWrk = SearchFilter($this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchExpression(), "=", $this->alicuota->CurrentValue, $this->alicuota->Lookup->getTable()->Fields["alicuota"]->searchDataType(), "");
-                }
-                $lookupFilter = $this->alicuota->getSelectFilter($this); // PHP
-                $sqlWrk = $this->alicuota->Lookup->getSql(true, $filterWrk, $lookupFilter, $this, false, true);
-                $conn = Conn();
-                $config = $conn->getConfiguration();
-                $config->setResultCache($this->Cache);
-                $rswrk = $conn->executeCacheQuery($sqlWrk, [], [], $this->CacheProfile)->fetchAll();
-                $ari = count($rswrk);
-                $arwrk = $rswrk;
-                foreach ($arwrk as &$row) {
-                    $row = $this->alicuota->Lookup->renderViewRow($row);
-                }
-                $this->alicuota->EditValue = $arwrk;
-            }
-            $this->alicuota->PlaceHolder = RemoveHtml($this->alicuota->caption());
 
             // ref_iva
             $this->ref_iva->setupEditAttributes();
-            if (!$this->ref_iva->Raw) {
-                $this->ref_iva->CurrentValue = HtmlDecode($this->ref_iva->CurrentValue);
-            }
-            $this->ref_iva->EditValue = HtmlEncode($this->ref_iva->CurrentValue);
-            $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
+            $this->ref_iva->EditValue = $this->ref_iva->CurrentValue;
 
             // ref_islr
             $this->ref_islr->setupEditAttributes();
-            if (!$this->ref_islr->Raw) {
-                $this->ref_islr->CurrentValue = HtmlDecode($this->ref_islr->CurrentValue);
-            }
-            $this->ref_islr->EditValue = HtmlEncode($this->ref_islr->CurrentValue);
-            $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
+            $this->ref_islr->EditValue = $this->ref_islr->CurrentValue;
 
             // ref_municipal
             $this->ref_municipal->setupEditAttributes();
@@ -1825,14 +1835,21 @@ class CompraEdit extends Compra
             // descripcion
             $this->descripcion->HrefValue = "";
 
+            // aplica_retencion
+            $this->aplica_retencion->HrefValue = "";
+            $this->aplica_retencion->TooltipValue = "";
+
             // monto_exento
             $this->monto_exento->HrefValue = "";
+            $this->monto_exento->TooltipValue = "";
 
             // monto_gravado
             $this->monto_gravado->HrefValue = "";
+            $this->monto_gravado->TooltipValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
+            $this->alicuota->TooltipValue = "";
 
             // ref_iva
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1844,6 +1861,7 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_iva->HrefValue = "";
             }
+            $this->ref_iva->TooltipValue = "";
 
             // ref_islr
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1855,6 +1873,7 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_islr->HrefValue = "";
             }
+            $this->ref_islr->TooltipValue = "";
 
             // ref_municipal
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1945,21 +1964,20 @@ class CompraEdit extends Compra
                     $this->descripcion->addErrorMessage(str_replace("%s", $this->descripcion->caption(), $this->descripcion->RequiredErrorMessage));
                 }
             }
+            if ($this->aplica_retencion->Visible && $this->aplica_retencion->Required) {
+                if ($this->aplica_retencion->FormValue == "") {
+                    $this->aplica_retencion->addErrorMessage(str_replace("%s", $this->aplica_retencion->caption(), $this->aplica_retencion->RequiredErrorMessage));
+                }
+            }
             if ($this->monto_exento->Visible && $this->monto_exento->Required) {
                 if (!$this->monto_exento->IsDetailKey && EmptyValue($this->monto_exento->FormValue)) {
                     $this->monto_exento->addErrorMessage(str_replace("%s", $this->monto_exento->caption(), $this->monto_exento->RequiredErrorMessage));
                 }
             }
-            if (!CheckNumber($this->monto_exento->FormValue)) {
-                $this->monto_exento->addErrorMessage($this->monto_exento->getErrorMessage(false));
-            }
             if ($this->monto_gravado->Visible && $this->monto_gravado->Required) {
                 if (!$this->monto_gravado->IsDetailKey && EmptyValue($this->monto_gravado->FormValue)) {
                     $this->monto_gravado->addErrorMessage(str_replace("%s", $this->monto_gravado->caption(), $this->monto_gravado->RequiredErrorMessage));
                 }
-            }
-            if (!CheckNumber($this->monto_gravado->FormValue)) {
-                $this->monto_gravado->addErrorMessage($this->monto_gravado->getErrorMessage(false));
             }
             if ($this->alicuota->Visible && $this->alicuota->Required) {
                 if (!$this->alicuota->IsDetailKey && EmptyValue($this->alicuota->FormValue)) {
@@ -2102,21 +2120,6 @@ class CompraEdit extends Compra
         // descripcion
         $this->descripcion->setDbValueDef($rsnew, $this->descripcion->CurrentValue, $this->descripcion->ReadOnly);
 
-        // monto_exento
-        $this->monto_exento->setDbValueDef($rsnew, $this->monto_exento->CurrentValue, $this->monto_exento->ReadOnly);
-
-        // monto_gravado
-        $this->monto_gravado->setDbValueDef($rsnew, $this->monto_gravado->CurrentValue, $this->monto_gravado->ReadOnly);
-
-        // alicuota
-        $this->alicuota->setDbValueDef($rsnew, $this->alicuota->CurrentValue, $this->alicuota->ReadOnly);
-
-        // ref_iva
-        $this->ref_iva->setDbValueDef($rsnew, $this->ref_iva->CurrentValue, $this->ref_iva->ReadOnly);
-
-        // ref_islr
-        $this->ref_islr->setDbValueDef($rsnew, $this->ref_islr->CurrentValue, $this->ref_islr->ReadOnly);
-
         // fecha_registro
         $this->fecha_registro->setDbValueDef($rsnew, UnFormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern()), $this->fecha_registro->ReadOnly);
 
@@ -2139,21 +2142,6 @@ class CompraEdit extends Compra
         }
         if (isset($row['descripcion'])) { // descripcion
             $this->descripcion->CurrentValue = $row['descripcion'];
-        }
-        if (isset($row['monto_exento'])) { // monto_exento
-            $this->monto_exento->CurrentValue = $row['monto_exento'];
-        }
-        if (isset($row['monto_gravado'])) { // monto_gravado
-            $this->monto_gravado->CurrentValue = $row['monto_gravado'];
-        }
-        if (isset($row['alicuota'])) { // alicuota
-            $this->alicuota->CurrentValue = $row['alicuota'];
-        }
-        if (isset($row['ref_iva'])) { // ref_iva
-            $this->ref_iva->CurrentValue = $row['ref_iva'];
-        }
-        if (isset($row['ref_islr'])) { // ref_islr
-            $this->ref_islr->CurrentValue = $row['ref_islr'];
         }
         if (isset($row['fecha_registro'])) { // fecha_registro
             $this->fecha_registro->CurrentValue = $row['fecha_registro'];

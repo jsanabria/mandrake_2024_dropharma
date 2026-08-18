@@ -141,6 +141,15 @@ $total_usd_real = $esBs
     ? round(($total / $tasa_usd), 2)
     : round($total, 2);
 
+// Total final con IVA en ambas monedas
+$total_con_iva_mostrar = $esBs
+    ? round(($total / $tasa_usd), 2)
+    : round($total, 2);
+
+$total_usd_con_iva_mostrar = $esBs
+    ? round($total, 2)
+    : round(($total * $tasa_usd), 2);
+
 // Actualiza cabecera
 ExecuteStatement("
     UPDATE salidas
@@ -163,6 +172,10 @@ TdcfcvJsonOk([
     "renglones" => (string)$renglones,
     "unidades" => (string)$unidades,
     "total_usd" => (string)$total_usd_mostrar,
+
+    "total_con_iva" => (string)$total_con_iva_mostrar,
+    "total_usd_con_iva" => (string)$total_usd_con_iva_mostrar,
+
     "descuento" => (string)$descuento,
     "monto_sin_descuento" => (string)$monto_sin_descuento_mostrar,
     "total_usd_sin_descuento" => (string)$total_usd_sin_descuento,

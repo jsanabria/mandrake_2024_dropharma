@@ -10,7 +10,7 @@ $Page->showMessage();
 ?>
 <?php
 $id = isset($_GET["id"]) ? intval($_GET["id"]) : 0;
-$return = $_GET["return"] ?? "ViewOutTdcfcvView/" . $id . "?showdetail=";
+$return = "ViewOutTdcfcvView/" . $id . "?showdetail=";
 
 $idDocumentoPadre = 0;
 
@@ -59,10 +59,6 @@ loadjs.ready(["jquery"], function () {
                 '<i class="fa fa-arrow-right"></i> Continuar' +
             '</button>'
         );
-
-        $(document).on("click", "#btnContinuarNE", function () {
-            window.location.href = "ViewOutTdcfcvView/<?= intval($id) ?>?showdetail=";
-        });
 
         return;
 
@@ -128,9 +124,6 @@ loadjs.ready(["jquery"], function () {
         }
     });
 
-    $(document).on("click", "#btnContinuarNE", function () {
-        window.location.href = "<?= htmlspecialchars($return, ENT_QUOTES) ?>";
-    });
 });
 </script>
 <?= GetDebugMessage() ?>

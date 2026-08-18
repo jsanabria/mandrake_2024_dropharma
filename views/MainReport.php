@@ -143,7 +143,13 @@ $Page->showMessage();
                 <div class="radio">
                     <label for="rep_sal_det">
                         <input type="radio" id="rep_sal_det" name="id" value="sal_articulo_detallado">
-                        SALIDAS GENERALES POR ARTICULO DETALLADO
+                        SALIDAS GENERALES POR ARTICULO DETALLADO (FACTURAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_sal_det">
+                        <input type="radio" id="rep_sal_det_neas" name="id" value="sal_articulo_detallado_neas">
+                        SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS DE ENTREGA + AJSUTES DE SALIDA)
                     </label>
                 </div>
             </div>

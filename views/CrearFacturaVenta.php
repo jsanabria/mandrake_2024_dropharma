@@ -12,6 +12,43 @@ $Page->showMessage();
 
 $id = $_REQUEST["id"];
 
+// Validación: Verificar si la Orden de Entrega ya tiene registros hijos/factura en proceso
+$sqlCheck = "SELECT a.id FROM salidas AS a WHERE a.id_documento_padre = '$id';";
+if (ExecuteRow($sqlCheck)) {
+    $sqlInfo = "SELECT 
+                    a.nro_documento, b.nombre AS cliente  
+                FROM 
+                    salidas AS a 
+                    JOIN cliente AS b ON b.id = a.cliente 
+                WHERE a.id = '$id';";
+    $rowInfo = ExecuteRow($sqlInfo);
+
+    $nro_documento = $rowInfo["nro_documento"] ?? '';
+    $cliente       = $rowInfo["cliente"] ?? '';
+
+    ?>
+    <!-- Inyección de Bootstrap 5 para garantizar estilos antes de cortar ejecución -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <div class="container mt-5">
+        <div class="alert alert-warning shadow-sm p-4" role="alert">
+            <h5 class="alert-heading fw-bold">¡Atención!</h5>
+            <p class="mb-0 fs-6">
+                La Orden de Entrega <strong><?= htmlspecialchars($nro_documento) ?></strong> 
+                del cliente <strong><?= htmlspecialchars($cliente) ?></strong> 
+                ya está en factura en espera. ¡Verifique!
+            </p>
+        </div>
+        <div class="mt-3">
+            <a href="HomeOutAdd?tipo_documento=TDCFCV" class="btn btn-primary px-4">
+                Regresar
+            </a>
+        </div>
+    </div>
+    <?php
+    die();
+}
+
 /// Busco la moneda por defecto del sistema ///
 $sql = "SELECT valor1 AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
 $moneda = ExecuteScalar($sql);
@@ -136,8 +173,8 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 	}
 
 	//$sql = "UPDATE salidas SET estatus = 'PROCESADO', id_documento_padre = '$factura_id' WHERE id = '$id'";
-	$sql = "UPDATE salidas SET estatus = 'PROCESADO' WHERE id = '$id'";
-	Execute($sql);
+	// $sql = "UPDATE salidas SET estatus = 'PROCESADO' WHERE id = '$id'";
+	// Execute($sql);
 
 	///////////////////////////////////////////
 	/*** Indico que alicuota iva se coloca en el encabezado del documento ***/

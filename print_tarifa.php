@@ -80,28 +80,29 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
   <table class="table table-bordered" border="1" rules="all">
 	<thead>
 	  <tr>
-		<th colspan="11"><center><?php echo $cia; ?></center></th>
+		<th colspan="12"><center><?php echo $cia; ?></center></th>
 		<th colspan="4">Fecha: <?php echo date("d/m/Y"); ?></th>
 	  </tr>
 	  <tr>
-		<th colspan="11"></th>
+		<th colspan="12"></th>
 		<th colspan="4">Hora: <?php echo date("H:i:s"); ?></th>
 	  </tr>
 	  <tr class="well">
-		<th colspan="15"><strong><center><?php echo $titulo; ?></th>
+		<th colspan="16"><strong><center><?php echo $titulo; ?></th>
 	  </tr>
 	  <tr class="well">
 		<th>LABORATORIO</th>
-		<th>NOMBRE</th>
-		<th>MEDICAMENTO</th>
+		<th>NOMBRE CORMERCIAL</th>
+		<th>PRINCIPO ACTIVO</th>
 		<th>PRESENTACION</th>
 		<th>TIPO LISTA</th>
 		<th>COD BARRA</th>
 		<th>VENCIMIENTO</th>
 		<th>PRECIO</th>
-		<th>DESC1 %</th>
-        <th>DESC2 %</th>
-		<th>PRECIO</th>
+		<th>DESC ART. %</th>
+        <th>DESC FAB. %</th>
+        <th>DESC CLI. %</th>
+        <th>PRECIO FINAL</th>
 		<th>DISP</th>
 		<th>CANT</th>
 		<th>U.M.</th>
@@ -117,7 +118,19 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
 				a.foto, a.nombre_comercial, b.nombre AS fabricante, 
 				a.principio_activo, a.presentacion, c.precio AS precio, 
 				(a.cantidad_en_mano+a.cantidad_en_pedido)-a.cantidad_en_transito AS cantidad_en_mano, 
-				d.descripcion AS unidad_medida, a.descuento, a.codigo_de_barra, c.precio-(c.precio*(a.descuento/100)) AS precio_total, 
+				d.descripcion AS unidad_medida,
+                IFNULL(a.descuento, 0) AS descuento,
+                IFNULL(b.descuento, 0) AS descuento_fabricante,
+                a.codigo_de_barra,
+
+                (
+                    (c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100)))
+                    -
+                    (
+                        (c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100)))
+                        * (IFNULL(b.descuento, 0) / 100)
+                    )
+                ) AS precio_total,
 						(SELECT campo_descripcion FROM tabla WHERE tabla = 'LISTA_PEDIDO' AND campo_codigo = a.lista_pedido) AS lista_pedido, 
 						a.cantidad_en_mano   
 			  FROM 
@@ -186,8 +199,13 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
                 echo '<td>' .$FechaVencimiento . '</td>';
                 echo '<td>' . number_format($row["precio"], 2, ",", "") . '</td>';
                 echo '<td>' . number_format($row["descuento"], 2, ",", "") . '</td>';
+                echo '<td>' . number_format($row["descuento_fabricante"], 2, ",", "") . '</td>';
                 echo '<td>' . number_format($descuento, 2, ",", "") . '</td>';
-                echo '<td>' . number_format(floatval($row["precio_total"]) - (floatval($row["precio_total"])*($descuento/100)), 2, ",", "") . '</td>';
+
+                $precioFinal = floatval($row["precio_total"]);
+                $precioFinal = $precioFinal - ($precioFinal * ($descuento / 100));
+
+                echo '<td>' . number_format($precioFinal, 2, ",", "") . '</td>';
                 echo '<td>' . intval($onHand) . '</td>';
                 echo '<td></td>';
                 echo '<td>' . $row["unidad_medida"] . '</td>';
@@ -198,7 +216,7 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
 		}
 	?>
 	  <tr>
-		<th colspan="15">Total Art&iacute;culos: <?php echo $items; ?></th>
+		<th colspan="16">Total Art&iacute;culos: <?php echo $items; ?></th>
 	  </tr>
 	</tbody>
   </table>

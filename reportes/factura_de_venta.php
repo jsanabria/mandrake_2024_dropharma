@@ -374,7 +374,7 @@ class PDF extends FPDF
 
 		// Condición de pago derivada de dias_credito (0 = Contado)
 		// $condicion_pago = (intval($GLOBALS["dias_credito"]) <= 0) ? "Contado" : ("Credito " . $GLOBALS["dias_credito"] . " dias");
-		$condicion_pago = (intval($GLOBALS["entregado"]) == "S") ? "Contado" : "Credito" . ((intval($GLOBALS["dias_credito"]) > 0) ? " dias " . $GLOBALS["dias_credito"] : "");
+		$condicion_pago = ($GLOBALS["entregado"] == "S") ? "Contado" : "Credito" . ((intval($GLOBALS["dias_credito"]) > 1) ? " dias " . $GLOBALS["dias_credito"] : "");
 
 		$tdoc = ($GLOBALS["documento"] == "FC" ? "Nro. Factura: " : ($GLOBALS["documento"] == "NC" ? "Nro. Nota de Credito: " : ($GLOBALS["documento"] == "ND" ? "Nro. Nota de Debito: " : "N/A")));
 		if ($GLOBALS["es_prefactura"]) {

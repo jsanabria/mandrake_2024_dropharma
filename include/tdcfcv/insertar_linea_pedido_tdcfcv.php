@@ -72,10 +72,61 @@ if ($descFabricante == 100) {
     TdcfcvJsonError("El descuento fabricante no puede ser 100%.");
 }
 
+// Regla especial NC para artículos no inventariables
+// ---------------------------------------------------------
+// PARAMETRO 065
+// Permitir artículo NO inventariable especial en las NC
+// ---------------------------------------------------------
+$existeParametro065 = intval(ExecuteScalar("
+    SELECT COUNT(*)
+    FROM parametro
+    WHERE codigo = '065'
+"));
+
+if ($existeParametro065 == 0) {
+    ExecuteStatement("
+        INSERT INTO parametro
+            (codigo, descripcion, valor1)
+        VALUES
+            (
+                '065',
+                'NC ARTICULO NO INVENTARIO',
+                'N'
+            )
+    ");
+}
+
+$permite_articulo_no_inventario_nc =
+    strtoupper(trim((string) ExecuteScalar("
+        SELECT IFNULL(valor1, 'N')
+        FROM parametro
+        WHERE codigo = '065'
+        LIMIT 1
+    "))) === 'S';
+
+
+// Determinar si el artículo actual maneja inventario
+$articulo_inventario =
+    strtoupper(trim((string) ExecuteScalar("
+        SELECT IFNULL(articulo_inventario, 'N')
+        FROM articulo
+        WHERE id = {$articulo}
+        LIMIT 1
+    ")));
+
+$es_articulo_inventario = ($articulo_inventario === 'S');
+
+/**
+ * Si es NC, validar contra documento afectado.
+ */
 /**
  * Si es NC, validar contra documento afectado.
  */
 if ($consignacion == "NC") {
+
+    // ---------------------------------------------------------
+    // 1. Determinar documento origen
+    // ---------------------------------------------------------
     if ($pedido > 0) {
         $doc_afectado_id = intval(ExecuteScalar("
             SELECT IFNULL(doc_afe, 0)
@@ -90,43 +141,268 @@ if ($consignacion == "NC") {
     }
 
     if ($doc_afectado_id <= 0) {
-        TdcfcvJsonError("La Nota de Crédito debe afectar a un documento origen.");
+        TdcfcvJsonError(
+            "La Nota de Crédito debe afectar a un documento origen."
+        );
     }
 
-    $rowOrig = ExecuteRow("
-        SELECT
-            IFNULL(SUM(cantidad_articulo), 0) AS cantidad_articulo,
-            IFNULL(MIN(precio_unidad), 0) AS precio_unidad
-        FROM entradas_salidas
-        WHERE id_documento = {$doc_afectado_id}
-          AND articulo = {$articulo}
+
+    // ---------------------------------------------------------
+    // 2. Obtener monto base del documento origen
+    // ---------------------------------------------------------
+    $monto_base_origen = floatval(ExecuteScalar("
+        SELECT IFNULL(monto_total, 0)
+        FROM salidas
+        WHERE id = {$doc_afectado_id}
           AND tipo_documento = '{$tipo_documento}'
-    ");
-
-    $cant_original = floatval($rowOrig["cantidad_articulo"] ?? 0);
-    $precio_original = floatval($rowOrig["precio_unidad"] ?? 0);
-
-    if ($cant_original <= 0) {
-        TdcfcvJsonError("El artículo no existe en la factura afectada.");
-    }
-
-    if (abs($precio - $precio_original) > 0.01) {
-        TdcfcvJsonError("El precio unidad ({$precio}) no coincide con el de la factura original ({$precio_original}).");
-    }
-
-    $cant_acumulada_nc = floatval(ExecuteScalar("
-        SELECT IFNULL(SUM(es.cantidad_articulo), 0)
-        FROM entradas_salidas es
-        INNER JOIN salidas s ON es.id_documento = s.id
-        WHERE s.doc_afe = {$doc_afectado_id}
-          AND es.articulo = {$articulo}
-          AND s.documento = 'NC'
-          AND es.tipo_documento = '{$tipo_documento}'
+        LIMIT 1
     "));
 
-    if (($cant_acumulada_nc + $cantidad) > $cant_original) {
-        $disponible = $cant_original - $cant_acumulada_nc;
-        TdcfcvJsonError("Excede la cantidad disponible. Original: {$cant_original}, Ya devuelto: {$cant_acumulada_nc}, Disponible: {$disponible}");
+    if ($monto_base_origen <= 0) {
+        TdcfcvJsonError(
+            "No se pudo determinar el monto base del documento origen."
+        );
+    }
+
+
+    // ---------------------------------------------------------
+    // 3. NUEVA VALIDACIÓN DEL MONTO TOTAL ACUMULADO DE LA NC
+    //
+    // Se toma:
+    //     artículos ya cargados
+    //   + artículo que se está intentando agregar
+    //
+    // y se aplican los mismos descuentos globales que utiliza
+    // posteriormente el cálculo de salidas.monto_total.
+    // ---------------------------------------------------------
+
+    $monto_bruto_actual_nc = 0;
+
+    if ($pedido > 0) {
+        $monto_bruto_actual_nc = floatval(ExecuteScalar("
+            SELECT IFNULL(SUM(precio), 0)
+            FROM entradas_salidas
+            WHERE id_documento = {$pedido}
+              AND tipo_documento = '{$tipo_documento}'
+        "));
+    }
+
+    // $total es el precio/base de la nueva línea que se va a insertar
+    $monto_bruto_proyectado =
+        $monto_bruto_actual_nc +
+        floatval($total);
+
+
+    // Aplicar descuento general
+    $monto_base_proyectado =
+        $monto_bruto_proyectado -
+        (
+            $monto_bruto_proyectado *
+            ($descuentoG / 100)
+        );
+
+
+    // Aplicar descuento transferencista
+    $monto_base_proyectado =
+        $monto_base_proyectado -
+        (
+            $monto_base_proyectado *
+            ($descTransferencista / 100)
+        );
+
+
+    // Aplicar descuento fabricante
+    $monto_base_proyectado =
+        $monto_base_proyectado -
+        (
+            $monto_base_proyectado *
+            ($descFabricante / 100)
+        );
+
+
+    $monto_base_proyectado =
+        round($monto_base_proyectado, 2);
+
+    $monto_base_origen =
+        round($monto_base_origen, 2);
+
+
+    // ---------------------------------------------------------
+    // La totalidad de la NC no puede superar la base
+    // del documento origen.
+    // Esta validación incluye artículos inventariables
+    // y no inventariables.
+    // ---------------------------------------------------------
+    if ($monto_base_proyectado > $monto_base_origen) {
+
+        $disponible =
+            $monto_base_origen -
+            (
+                $monto_base_proyectado -
+                floatval($total)
+            );
+
+        TdcfcvJsonError(
+            "El monto acumulado de la Nota de Crédito (" .
+            number_format($monto_base_proyectado, 2, ',', '.') .
+            ") no puede ser mayor al monto base del documento origen (" .
+            number_format($monto_base_origen, 2, ',', '.') .
+            ")."
+        );
+    }
+
+
+    // ---------------------------------------------------------
+    // Determinar si el artículo existe en el documento origen
+    // ---------------------------------------------------------
+    $articulo_existe_en_origen = intval(ExecuteScalar("
+        SELECT COUNT(*)
+        FROM entradas_salidas
+        WHERE id_documento = {$doc_afectado_id}
+          AND tipo_documento = '{$tipo_documento}'
+          AND articulo = {$articulo}
+    ")) > 0;
+
+    // ---------------------------------------------------------
+    // 4. REGLA ESPECIAL PARAMETRO 065
+    //
+    // Si:
+    //     parametro 065 = S
+    //     Y artículo_inventario <> S
+    //
+    // permitir agregar UN SOLO artículo no inventariable,
+    // aunque no exista en la factura original.
+    // ---------------------------------------------------------
+    if (
+        $permite_articulo_no_inventario_nc &&
+        !$es_articulo_inventario &&
+        !$articulo_existe_en_origen
+    ) {
+        // -----------------------------------------------------
+        // Verificar si esta NC ya contiene un artículo
+        // NO inventariable adicional, es decir, uno que
+        // NO pertenecía al documento origen.
+        // -----------------------------------------------------
+        $cantidad_no_inventario_especial = 0;
+
+        if ($pedido > 0) {
+
+            $cantidad_no_inventario_especial = intval(ExecuteScalar("
+                SELECT COUNT(*)
+                FROM entradas_salidas es
+                INNER JOIN articulo a
+                    ON a.id = es.articulo
+                WHERE es.id_documento = {$pedido}
+                  AND es.tipo_documento = '{$tipo_documento}'
+                  AND IFNULL(a.articulo_inventario, 'N') <> 'S'
+
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM entradas_salidas eso
+                      WHERE eso.id_documento = {$doc_afectado_id}
+                        AND eso.tipo_documento = '{$tipo_documento}'
+                        AND eso.articulo = es.articulo
+                  )
+            "));
+        }
+
+        if ($cantidad_no_inventario_especial > 0) {
+
+            TdcfcvJsonError(
+                "La Nota de Crédito solamente permite un artículo no inventariable adicional."
+            );
+        }
+
+
+        // -----------------------------------------------------
+        // NO se valida:
+        //
+        // - que exista en la factura origen
+        // - precio original
+        // - cantidad original
+        //
+        // porque ésta es precisamente la excepción autorizada
+        // por el parámetro 065.
+        //
+        // El monto ya fue validado arriba considerando TODA
+        // la Nota de Crédito.
+        // -----------------------------------------------------
+
+    } else {
+
+        // ---------------------------------------------------------
+        // 5. VALIDACIÓN NORMAL ACTUAL
+        //
+        // Los artículos inventariables continúan funcionando
+        // exactamente como hasta ahora.
+        //
+        // También los no inventariables continúan con esta lógica
+        // cuando parámetro 065 <> S.
+        // ---------------------------------------------------------
+
+        $rowOrig = ExecuteRow("
+            SELECT
+                IFNULL(SUM(cantidad_articulo), 0) AS cantidad_articulo,
+                IFNULL(MIN(precio_unidad), 0) AS precio_unidad
+            FROM entradas_salidas
+            WHERE id_documento = {$doc_afectado_id}
+              AND articulo = {$articulo}
+              AND tipo_documento = '{$tipo_documento}'
+        ");
+
+        $cant_original =
+            floatval($rowOrig["cantidad_articulo"] ?? 0);
+
+        $precio_original =
+            floatval($rowOrig["precio_unidad"] ?? 0);
+
+
+        // Debe existir en la factura afectada
+        if ($cant_original <= 0) {
+
+            TdcfcvJsonError(
+                "El artículo no existe en la factura afectada."
+            );
+        }
+
+
+        // Debe conservar el precio de la factura original
+        if (abs($precio - $precio_original) > 0.01) {
+
+            TdcfcvJsonError(
+                "El precio unidad ({$precio}) no coincide con el de la factura original ({$precio_original})."
+            );
+        }
+
+
+        // -----------------------------------------------------
+        // Cantidades devueltas previamente
+        // -----------------------------------------------------
+        $cant_acumulada_nc = floatval(ExecuteScalar("
+            SELECT IFNULL(SUM(es.cantidad_articulo), 0)
+            FROM entradas_salidas es
+            INNER JOIN salidas s
+                ON es.id_documento = s.id
+            WHERE s.doc_afe = {$doc_afectado_id}
+              AND es.articulo = {$articulo}
+              AND s.documento = 'NC'
+              AND es.tipo_documento = '{$tipo_documento}'
+        "));
+
+
+        if (($cant_acumulada_nc + $cantidad) > $cant_original) {
+
+            $disponible =
+                $cant_original -
+                $cant_acumulada_nc;
+
+            TdcfcvJsonError(
+                "Excede la cantidad disponible. " .
+                "Original: {$cant_original}, " .
+                "Ya devuelto: {$cant_acumulada_nc}, " .
+                "Disponible: {$disponible}"
+            );
+        }
     }
 }
 

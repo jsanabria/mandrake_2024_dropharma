@@ -9,295 +9,217 @@ $FtpSubirPedidos = &$Page;
 $Page->showMessage();
 ?>
 <?php
-//if(trim($_COOKIE["strcon"]) != "mandrake") {
-if(trim($_COOKIE["strcon"]) != "dropharm_mandrake") {
-	header("Location: Home");
-	die();
+
+// 1. Verificación de seguridad y bloqueos
+if (trim($_COOKIE["strcon"] ?? '') !== "dropharm_mandrake") {
+    header("Location: Home");
+    die();
 }
 
 $sql = "SELECT valor1 FROM parametro WHERE codigo = '013';";
 $bloquea = ExecuteScalar($sql);
-if($bloquea == "SI") { 
-	header("Location: Home");
-	die();
+if ($bloquea === "SI") { 
+    header("Location: Home");
+    die();
 } 
 
+// 2. Parámetros globales
 $sql = "SELECT valor1 AS almacen FROM parametro WHERE codigo = '002';";
 $row = ExecuteRow($sql);
-$almacen = $row["almacen"];
-
+$almacen = $row["almacen"] ?? '';
 $tipo_documento = "TDCPDV";
-$username = "FTP";
-$lista_pedido = "PED000";
 
-// $path = "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/";
-$path = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
-// $path = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos\\";
+/**
+ * Función modular para procesar lotes de pedidos FTP
+ */
+function procesarArchivosFTP(
+    string $path, 
+    string $pathOld, 
+    string $prefix, 
+    string $delimiter, 
+    string $username, 
+    string $tipoDocumento
+): int {
+    $cnt = 0;
+    $arrFiles = is_dir($path) ? scandir($path) : [];
 
-$arrFiles = scandir($path);
-$cnt = 0;
-foreach ($arrFiles as $key => $value) { 
-	if($value != "." and $value != "..") { 
-		if(substr($value, 0, 6) == "PEDIDO") { 
-			$sql = "SELECT factura FROM ftp_fact_pedi_procesado WHERE pedido = '$value';";
-			if(!$row = ExecuteRow($sql)) {
-				$myfile = str_replace("PEDIDO", "", $value);
-				$myfile = str_replace(".txt", "", strtolower($myfile));
-				$arrDatos = explode("_", $myfile);
-				$cliente = $arrDatos[0];
-				$pedido = $arrDatos[1];
+    foreach ($arrFiles as $archivo) { 
+        if ($archivo === '.' || $archivo === '..') {
+            continue;
+        }
 
-                $xSql = "SELECT IFNULL(descuento, 0) AS descuento FROM cliente WHERE id = $cliente;";
-                $xDescuento = floatval(ExecuteScalar($xSql));
+        if (str_starts_with($archivo, $prefix)) { 
+            $sql = "SELECT factura FROM ftp_fact_pedi_procesado WHERE pedido = '$archivo';";
+            
+            if (!ExecuteRow($sql)) {
+                // Extracción de datos del nombre de archivo
+                $nombreBase = pathinfo($archivo, PATHINFO_FILENAME);
 
-				$nota = "CREADO VIA FTP DESDE ARCHVO $value Nro Pedido $pedido";
-				$pedido = $value;
+                if ($prefix === "PEDIDO") {
 
-				$fp = fopen("$path$value", "r");
-				$arrx = [];
-				$lspd = "";
-				$lista = [];
-				while (!feof($fp)){ 
-				    $linea = fgets($fp);
-				    if(trim($linea) != "") { 
-				    	$arry = [];
-					    $detalle = explode(";", $linea);
-					    $articulo = $detalle[3];
-					    $sql = "SELECT codigo, lista_pedido FROM articulo WHERE id = $articulo;";
-					    $row = ExecuteRow($sql);
-					    $cod_articulo = $row["codigo"];
-					    $lista_pedido = $row["lista_pedido"];
-					    $nombre = $detalle[1];
-					    $cantidad = $detalle[2];
+                    // Estructura:
+                    // PEDIDO1893_9745.txt
+                    //
+                    // Resultado esperado:
+                    // cliente = 1893
+                    // pedido  = 9745
 
-   				    	$arry["articulo"] = $articulo;
-   				    	$arry["cod_articulo"] = $cod_articulo;
-   				    	$arry["lista_pedido"] = $lista_pedido;
-   				    	$arry["nombre"] = $nombre;
-   				    	$arry["cantidad"] = $cantidad;
-   				    	$arrx[] = $arry;
+                    $myfile = substr($nombreBase, strlen("PEDIDO"));
+                    $arrDatos = explode("_", $myfile);
 
-   				    	if($lspd != $lista_pedido) { 
-   				    		$sw = true;
-   				    		foreach ($lista as $key => $value) {
-   				    			if($value == $lista_pedido) $sw = false;
-   				    		}
-   				    		if($sw) $lista[] = $lista_pedido;
-   				    		$lspd = $lista_pedido;
-   				    	}
-				    }
-				} 
-				fclose($fp);
+                    $cliente = intval($arrDatos[0] ?? 0);
+                    $pedido  = intval($arrDatos[1] ?? 0);
 
-				foreach ($lista as $key => $value) { 
-					$sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipo_documento';";
-					$row = ExecuteRow($sql);
-					$consecutivo = intval($row["consecutivo"]) + 1; 
-					$nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
+                } else {
 
-					$sql = "INSERT INTO salidas
-								(id, tipo_documento, username, fecha,
-								cliente, nro_documento,
-								nota, estatus,
-								asesor, lista_pedido, asesor_asignado, moneda, descuento, nombre)
-							VALUES  
-								(NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "',
-								$cliente, '$nro_documento',
-								'$nota', 'NUEVO', 
-								'$username', '$value', '$username', 'USD', $xDescuento, '$username');";
-					Execute($sql);
+                    // Estructura:
+                    // PED-2436-297539-PR.txt
+                    //
+                    // Resultado esperado:
+                    // cliente = 2436
+                    // pedido  = 297539
 
-					// Obtengo el id de la nueva factura
-					$row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
-					$new_id = $row["id"];						
-					$insart = new PdvLineaGuardar();
-					foreach ($arrx as $key2 => $value2) {
-						if($value2["lista_pedido"] == $value) {
-	   				    	$articulo = $value2["articulo"];
-	   				    	$cod_articulo = $value2["cod_articulo"];
-	   				    	$lista_pedido = $value2["lista_pedido"];
-	   				    	$nombre = $value2["nombre"];
-	   				    	$cantidad = $value2["cantidad"];
+                    $myfile = substr($nombreBase, strlen("PED-"));
+                    $arrDatos = explode("-", $myfile);
 
-						    $sql = "SELECT 
-										b.activo, a.activo AS artact  
-									FROM 
-										articulo AS a 
-										JOIN fabricante AS b ON b.Id = a.fabricante 
-									WHERE 
-										a.codigo = '$cod_articulo';";
-							if($row101 = ExecuteRow($sql)) {
-								if($row101["activo"] == "S" and $row101["artact"] == "S") {
-									$insart->insertar_articulo($tipo_documento, $new_id, $cliente, $cod_articulo, $lista_pedido, $cantidad, 2);
-								}
-							}
-						}
-					}
-					$insart->ActualizarCabecera();
-					unset($insart);
-					$cnt++;
-				}
+                    $cliente = intval($arrDatos[0] ?? 0);
+                    $pedido  = intval($arrDatos[1] ?? 0);
+                }
 
-
-				$sql = "INSERT INTO ftp_fact_pedi_procesado	(id, factura, pedido, fecha_hora) VALUES (NULL, '', '" . $pedido . "', NOW())";
-				Execute($sql);
-
-				$path2 = "/home2/dropharm/dropharmadm/ftpexportar/pedidos_old/";
-				// $path2 = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos_old\\";
-				if (!file_exists($path2)) {
-					mkdir($path2, 0777, true);
-				}
-				$file = $path.$pedido;
-				$file2 = $path2.$pedido;
-				$moved = rename($file, $file2);
-			}
-		}
-	}
-}
-
-echo '<div class="alert alert-primary" role="alert">
-		  Proceso FTP culminado, total de pedidos generados ' . $cnt . '
-		</div>';
-
-///////////////////////////////////////
-///////////////////////////////////////
-///////////////////////////////////////
-
-// $path = "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/";
-$path = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
-
-// $path = "C:\\laragon\\www\\mandrake_2024_dropharma\\maker\\FullTech360\\salida\\";
-
-$arrFiles = scandir($path);
-$username = "FTP2";
-// var_dump($arrFiles);
-$cnt = 0;
-foreach ($arrFiles as $key => $value) { 
-	if($value != "." and $value != "..") { 
-		if(substr($value, 0, 3) == "PED") { 
-			$sql = "SELECT factura FROM ftp_fact_pedi_procesado WHERE pedido = '$value';"; 
-			if(!$row = ExecuteRow($sql)) {
-				$myfile = str_replace("PED", "", $value);
-				$myfile = str_replace(".txt", "", strtolower($myfile));
-				$arrDatos = explode("-", $myfile);
-				$cliente = $arrDatos[1];
-				$pedido = $arrDatos[2];
+                // Protección ante nombres de archivo incorrectos
+                if ($cliente <= 0 || $pedido <= 0) {
+                    continue;
+                }
 
                 $xSql = "SELECT IFNULL(descuento, 0) AS descuento FROM cliente WHERE id = $cliente;";
                 $xDescuento = floatval(ExecuteScalar($xSql));
 
-				$nota = "CREADO VIA FTP DESDE ARCHVO $value Nro Pedido $pedido"; 
-				$pedidoFile = $value;
+                $nota = "CREADO VIA FTP DESDE ARCHVO $archivo Nro Pedido $pedido";
+                $filePath = $path . $archivo;
 
-				$fp = fopen("$path$value", "r");
-				$arrx = [];
-				$lspd = "";
-				$lista = [];
-				while (!feof($fp)){ 
-				    $linea = fgets($fp);
-				    if(trim($linea) != "") { 
-				    	$arry = [];
-					    $detalle = explode("|", $linea);
-					    // var_dump($detalle);
-					    $articulo = $detalle[0];
-					    $sql = "SELECT codigo, lista_pedido FROM articulo WHERE id = $articulo;"; 
-					    $row = ExecuteRow($sql);
-					    $cod_articulo = $row["codigo"];
-					    $lista_pedido = $row["lista_pedido"];
-					    $nombre = $detalle[1];
-					    $cantidad = $detalle[2];
+                if (!file_exists($filePath)) {
+                    continue;
+                }
 
-   				    	$arry["articulo"] = $articulo;
-   				    	$arry["cod_articulo"] = $cod_articulo;
-   				    	$arry["lista_pedido"] = $lista_pedido;
-   				    	$arry["nombre"] = $nombre;
-   				    	$arry["cantidad"] = $cantidad;
-   				    	$arrx[] = $arry;
+                // Lectura del archivo de texto
+                $fp = fopen($filePath, "r");
+                $arrx = [];
+                $lista = [];
 
-   				    	if($lspd != $lista_pedido) { 
-   				    		$sw = true;
-   				    		foreach ($lista as $key => $value) {
-   				    			if($value == $lista_pedido) $sw = false;
-   				    		}
-   				    		if($sw) $lista[] = $lista_pedido;
-   				    		$lspd = $lista_pedido;
-   				    	}
-				    }
-				} 
-				fclose($fp);
+                while (!feof($fp)) { 
+                    $linea = fgets($fp);
+                    if (trim($linea) !== "") { 
+                        $detalle = explode($delimiter, $linea);
 
-				foreach ($lista as $key => $value) { 
-					$sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipo_documento';";
-					$row = ExecuteRow($sql);
-					$consecutivo = intval($row["consecutivo"]) + 1; 
-					$nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
+                        if ($prefix === "PEDIDO") {
+                            $articulo = $detalle[3] ?? null;
+                            $nombre   = $detalle[1] ?? null;
+                            $cantidad = $detalle[2] ?? null;
+                        } else {
+                            $articulo = $detalle[0] ?? null;
+                            $nombre   = $detalle[1] ?? null;
+                            $cantidad = $detalle[2] ?? null;
+                        }
 
-					$sql = "INSERT INTO salidas
-								(id, tipo_documento, username, fecha,
-								cliente, nro_documento,
-								nota, estatus,
-								asesor, lista_pedido, asesor_asignado, moneda, descuento, nombre)
-							VALUES  
-								(NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "',
-								$cliente, '$nro_documento',
-								'$nota', 'NUEVO', 
-								'$username', '$value', '$username', 'USD', $xDescuento, '$username');";
-					Execute($sql);
+                        $sql = "SELECT codigo, lista_pedido FROM articulo WHERE id = $articulo;";
+                        $row = ExecuteRow($sql);
+                        $cod_articulo = $row["codigo"] ?? '';
+                        $lista_pedido = $row["lista_pedido"] ?? '';
 
-					// Obtengo el id de la nueva factura
-					$row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
-					$new_id = $row["id"];						
-					$insart = new PdvLineaGuardar();
-					foreach ($arrx as $key2 => $value2) {
-						if($value2["lista_pedido"] == $value) {
-	   				    	$articulo = $value2["articulo"];
-	   				    	$cod_articulo = $value2["cod_articulo"];
-	   				    	$lista_pedido = $value2["lista_pedido"];
-	   				    	$nombre = $value2["nombre"];
-	   				    	$cantidad = $value2["cantidad"];
+                        $arrx[] = [
+                            "articulo"     => $articulo,
+                            "cod_articulo" => $cod_articulo,
+                            "lista_pedido" => $lista_pedido,
+                            "nombre"       => $nombre,
+                            "cantidad"     => $cantidad
+                        ];
 
-						    $sql = "SELECT 
-										b.activo, a.activo AS artact  
-									FROM 
-										articulo AS a 
-										JOIN fabricante AS b ON b.Id = a.fabricante 
-									WHERE 
-										a.codigo = '$cod_articulo';";
-							if($row101 = ExecuteRow($sql)) {
-								if($row101["activo"] == "S" and $row101["artact"] == "S") {
-									$insart->insertar_articulo($tipo_documento, $new_id, $cliente, $cod_articulo, $lista_pedido, $cantidad, 2);
-								}
-							}
-						}
-					}
-					$insart->ActualizarCabecera();
-					unset($insart);
-					$cnt++;
-				}
+                        if (!in_array($lista_pedido, $lista, true)) {
+                            $lista[] = $lista_pedido;
+                        }
+                    }
+                } 
+                fclose($fp);
 
+                // Inserción de cabecera y detalles por lista
+                foreach ($lista as $listaPedido) { 
+                    $sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipoDocumento';";
+                    $row = ExecuteRow($sql);
+                    $consecutivo = intval($row["consecutivo"] ?? 0) + 1; 
+                    $nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
 
-				$sql = "INSERT INTO ftp_fact_pedi_procesado	(id, factura, pedido, fecha_hora) VALUES (NULL, '', '" . $pedidoFile . "', NOW())";
-				Execute($sql);
-			}
+                    $fechaActual = date("Y-m-d H:i:s");
+                    $sql = "INSERT INTO salidas
+                                (id, tipo_documento, username, fecha, cliente, nro_documento, nota, estatus, asesor, lista_pedido, asesor_asignado, moneda, descuento, nombre)
+                            VALUES  
+                                (NULL, '$tipoDocumento', '$username', '$fechaActual', $cliente, '$nro_documento', '$nota', 'NUEVO', '$username', '$listaPedido', '$username', 'USD', $xDescuento, '$username');";
+                    Execute($sql);
 
-            // Borrar archivo
-            // $path2 = "/home4/drophqsc/dropharmadm.com/ftpexportar2/pedidos_old/";
-            $path2 = "/home2/dropharm/dropharmadm/ftpexportar2/pedidos_old/";
-            // $path2 = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos_old\\";
-            if (!file_exists($path2)) {
-                mkdir($path2, 0777, true);
+                    $row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
+                    $new_id = $row["id"];                       
+                    $insart = new PdvLineaGuardar();
+
+                    foreach ($arrx as $value2) {
+                        if ($value2["lista_pedido"] === $listaPedido) {
+                            $cod_articulo = $value2["cod_articulo"];
+                            $cantidad     = $value2["cantidad"];
+
+                            $sql = "SELECT b.activo, a.activo AS artact  
+                                    FROM articulo AS a 
+                                    JOIN fabricante AS b ON b.Id = a.fabricante 
+                                    WHERE a.codigo = '$cod_articulo';";
+
+                            if ($row101 = ExecuteRow($sql)) {
+                                if ($row101["activo"] === "S" && $row101["artact"] === "S") {
+                                    $insart->insertar_articulo($tipoDocumento, $new_id, $cliente, $cod_articulo, $listaPedido, $cantidad, 2);
+                                }
+                            }
+                        }
+                    }
+
+                    $insart->ActualizarCabecera();
+                    unset($insart);
+                    $cnt++;
+                }
+
+                // Registrar en log y mover archivo
+                $sql = "INSERT INTO ftp_fact_pedi_procesado (id, factura, pedido, fecha_hora) VALUES (NULL, '', '$archivo', NOW())";
+                Execute($sql);
+
+                if (!file_exists($pathOld)) {
+                    mkdir($pathOld, 0777, true);
+                }
+                rename($filePath, $pathOld . $archivo);
             }
-            $file = $path.$value;
-            $file2 = $path2.$value;
-            // die("$file, $file2");
-            $moved = rename($file, $file2);
-		}
-	}
+        }
+    }
+
+    return $cnt;
 }
 
+// -------------------------------------------------------------
+// Proceso FTP 1
+// -------------------------------------------------------------
+$path1     = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
+$path1_old = "/home2/dropharm/dropharmadm/ftpexportar/pedidos_old/";
+
+$cnt1 = procesarArchivosFTP($path1, $path1_old, "PEDIDO", ";", "FTP", $tipo_documento);
+
 echo '<div class="alert alert-primary" role="alert">
-		  Proceso FTP2 culminado, total de pedidos generados ' . $cnt . '
-		</div>';
+        Proceso FTP culminado, total de pedidos generados ' . $cnt1 . '
+      </div>';
+
+// -------------------------------------------------------------
+// Proceso FTP 2
+// -------------------------------------------------------------
+$path2     = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
+$path2_old = "/home2/dropharm/dropharmadm/ftpexportar2/pedidos_old/";
+
+$cnt2 = procesarArchivosFTP($path2, $path2_old, "PED", "|", "FTP2", $tipo_documento);
+
+echo '<div class="alert alert-primary" role="alert">
+        Proceso FTP2 culminado, total de pedidos generados ' . $cnt2 . '
+      </div>';
 
 ?>
 <?= GetDebugMessage() ?>

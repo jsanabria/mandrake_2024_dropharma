@@ -355,7 +355,7 @@ $sql = "SELECT
 			(SELECT alicuota FROM alicuota WHERE codigo = b.alicuota AND activo = 'S') alicuota, 
 			a.costo_unidad, 
 			a.costo, a.lote, date_format(a.fecha_vencimiento, '%d/%m/%Y') AS fecha_vencimiento, 
-			d.descripcion AS almacen  
+			d.descripcion AS almacen, check_ne   
 		FROM 
 			entradas_salidas AS a 
 			LEFT OUTER JOIN articulo AS b ON b.id = a.articulo 
@@ -415,6 +415,10 @@ while($row = mysqli_fetch_array($rs))
 	$pdf->SetFont('Arial','',8);
 	$pdf->Cell(10, 5, "", 1, 0, 'R');
 	$pdf->Cell(10, 5, "", 1, 0, 'R');
+
+	$pdf->SetFont('Arial', 'B', 8);
+    $pdf->Cell(5, 4, ($row["check_ne"]=="S" ? "x" : ""), 0, 0, 'C');
+    $pdf->SetFont('Arial', '', 8);
 
 	$pdf->Ln();
 

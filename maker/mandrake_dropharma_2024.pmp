@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="controller=1,info=1,entity=1,master=1,list=1,list|class=1,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=1,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=1,layout=1,menu=1,phpfn=0,userfn=1,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=1,apiroutes=1,routes=1,controllerbase=1,otherscontroller=1,apicontroller=1,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
+<Project Product="PHPMaker" Version="24.16.0" ProjID="{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}" ProjName="mandrake" DefaultLanguageFile="en-US" LanguageFiles="en-US" CodePage="65001" Cache="0" CharSet="utf-8" OutputNameType="Original" BodyTitle="Mandrake" BodyFont="Verdana" BodySize="0.875" ApplicationTheme="Professional" HeaderLogo="C:\Users\Junior\Pictures\Logo.png" FooterText="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" Template="C:\Users\Junior\AppData\Roaming\phpmaker2024\node_modules\@phpmaker\php2024" Destination="C:\laragon\www\mandrake_2024_dropharma\" SecType="Both" SecLoginID="admin" SecPasswd="dongato" SecTbl="usuario" SecLoginIDFld="username" SecPasswdFld="password" SecChangePwdPage="1" SmtpServer="localhost" SmtpServerPort="25" TestWebServer="1" DefaultDateFormat="5" DateSeparator="/" CGIPath="#!/usr/local/bin/php" StartPage="Home" UploadPath="carpetacarga/" UploadAllowedFileExt="gif,jpg,jpeg,bmp,png,doc,docx,xls,xlsx,pdf,zip,csv" CssStyles=".main-sidebar {&#xD;&#xA;background-color: #00203c;&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;.icon-cog {&#xD;&#xA;  color: blue;&#xD;&#xA;}&#xD;&#xA;" OtherGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,@ChangePassword.en-US.php=0,@english.en-US.xml=0,@languages.xml=0,@Notify.en-US.php=0,@OneTimePassword.en-US.php=0,@OneTimePasswordSms.en-US.php=0,@Register.en-US.php=0,@ResetPassword.en-US.php=0,@lang_mandrake.en-US.xml=0,composer.json=0,userpackagejson=0,src=0,colorbox=0,plugins=0,bootstrap=0,adminlte=0,css=0,@adminltescss=0,projcss=0,tabulatorcss=0,querybuilderscss=0,swagger=0,swaggeryaml=0,js=0,jquery=0,htaccess=0,webconfig=0,apihtaccess=0,constants=0,config=0,configdev=0,configprod=0,logindex=0,uploadindex=0,userlevelsettings=0,layout=0,menu=0,phpfn=0,userfn=0,userglobaljs=0,usereventjs=0,email=0,error=0,personal_data=0,personal_data|class=0,login=0,login|class=0,change_password=0,change_password|class=0,userpriv=0,userpriv|class=0,logout|class=0,apiindex=0,index=0,definitions=0,apiroutes=0,routes=0,controllerbase=0,otherscontroller=0,apicontroller=0,eweditor.js=0,ckeditorskin=0,previewjs=0,exportexcel=0,datetimepickerjs=0,datetimepickerscss=0" OtherExpanded="1" MD5Password="1" RecPerPage="20" ExportExcel="1" ExportCsv="1" ExportType="ALL" SortType="1" PagerStyle="2" TopPageLink="1" ListExport="1" LinkOnLeft="1" DetailViewPaging="1" DetailEditPaging="1" RepeatColumns="5" AppRootFolder="C:\laragon\www\mandrake_2024_dropharma\" RootRelativePath="." EmailComponent="PHP" LogPath="log/" FavIcon="C:\Users\Junior\Pictures\favicon.ico" LoginOption="AUTO" UseButtonsForLinks="1" UserProfileSessionTimeout="180" CheckLoginRetry="1" UserProfileRetryLockout="5" AuditTrailToDB="1" AuditTrailTable="audittrail" AuditTrailFieldDateTime="datetime" AuditTrailFieldScript="script" AuditTrailFieldUser="user" AuditTrailFieldAction="action" AuditTrailFieldTable="table" AuditTrailFieldField="field" AuditTrailFieldKeyValue="keyvalue" AuditTrailFieldOldValue="oldvalue" AuditTrailFieldNewValue="newvalue" BrandHref="Home">
   <Database DBID="DB" DBName="mandrake" DBType="MySQL" DBConnectionMethod="DIRECT" DBHost="localhost" DBPort="3306" DBUID="root" DBQuoteS="`" DBQuoteE="`" DBDBMSName="MySQL" DBDBMSVer="80030" MaxUploadSize="1000000" SecUserLevelFld="userlevelid" SecDefault="0,&quot;Default&quot;,0" SecUserProfileFld="profile" UseDynamicUserLevel="1" UserLevelTbl="userlevels" UserLevelIdFld="userlevelid" UserLevelNameFld="userlevelname" UserLevelPrivTbl="userlevelpermissions" UserLevelPrivTblNameFld="tablename" UserLevelPrivUserLevelFld="userlevelid" UserLevelPrivPrivFld="permission">
     <Table TblName="abono" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0" TblList="1" TblView="1" TblAdd="1" TblIsMaster="1" TblCaption="Abonos" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="nro_recibo" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Nro." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -98,7 +98,7 @@
       <Field FldName="categoria_madre" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Categoria Madre" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Table" FldTagLnkTbl="articulo" FldTagLnkFld="categoria_madre" FldTagLnkDisplay="categoria_madre" FldTagLnkOrderBy="categoria_madre" FldTagLnkOrderType="ASC" FldTagLnkDistinct="1" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="sub_categoria" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Sub Categoria" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Table" FldTagLnkTbl="articulo" FldTagLnkFld="sub_categoria" FldTagLnkDisplay="sub_categoria" FldTagLnkOrderBy="sub_categoria" FldTagLnkOrderType="ASC" FldTagLnkDistinct="1" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="precio" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0.00" FldDbDefault="0.00" FldCaption="Precio" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="alicuota" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="3" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldDefault="&quot;0&quot;" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="3" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="codigo" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`activo` = 'S' AND `venta` = 'S' AND codigo IN ('GEN')&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="alicuota" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="3" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldDefault="&quot;0&quot;" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="3" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="codigo" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderType="ASC" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectFilter="&quot;`activo` = 'S' AND `venta` = 'S' AND `codigo` &lt;&gt; 'IGT'&quot;" FldQuoteS="'" FldQuoteE="'" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="articulo_inventario" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Articulo de Inventario" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="indexado" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Indexado" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="pies_cubico" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldReq="1" FldAttribute="4" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0.00" FldDbDefault="0.00" FldCaption="Pies Cubico" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -298,7 +298,7 @@
       <Field FldName="compania" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldReq="1" FldAttribute="4" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldDefault="0" FldDbDefault="0" FldCaption="Compañía" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="compania" FldTagLnkFld="id" FldTagLnkDisplay="nombre" FldTagLnkDisp2="ci_rif" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="activo" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldDefault="&quot;S&quot;" FldDbDefault="S" FldCaption="Activo" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="compra" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblDelete="1" TblCaption="Compra Administrativas" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblMultiPageSearch="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblMultiPageType="Tabs" TblUseDropDownForExport="1" TblPageCaptions="Compra|Montos|Retenciones">
+    <Table TblName="compra" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,add=0,add|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblDelete="1" TblCaption="Compra Administrativas" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblMultiPageAdd="1" TblMultiPageEdit="1" TblMultiPageView="1" TblMultiPageSearch="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblMultiPageType="Tabs" TblUseDropDownForExport="1" TblPageCaptions="Compra|Montos|Retenciones">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldCaption="Id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="proveedor" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Proveedor" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Table" FldTagLnkTbl="proveedor" FldTagLnkFld="id" FldTagLnkDisplay="nombre" FldTagLnkOrderBy="nombre" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldSelectAllowAdd="1" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="tipo_documento" FldType="129" FldTypeName="char" NativeDataType="254" FldSupport="1" FldSize="2" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Documento" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="2" FldTagValues="&quot;FC&quot;,&quot;FACTURA&quot;|&quot;NC&quot;,&quot;NOTA CREDITO&quot;|&quot;ND&quot;,&quot;NOTA DEBITO&quot;|&quot;RC&quot;,&quot;RECIBO&quot;" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -307,17 +307,17 @@
       <Field FldName="nro_control" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="20" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Nro. Control" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="20" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="DATE" FldRequired="1" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="descripcion" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="150" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Descripcion" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXTAREA" FldTagSize="30" FldTagMaxLength="150" FldSelectType="Values" FldTagCols="30" FldTagRows="3" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="aplica_retencion" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Aplica Retencion" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="monto_exento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Exento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="monto_gravado" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Gravado" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="alicuota" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="alicuota" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderBy="alicuota" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldSelectFilter="&quot;`activo` = 'S' AND `compra` = 'S' AND `codigo` &lt;&gt; 'IGT'&quot;" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="aplica_retencion" FldType="200" FldTypeName="enum" NativeDataType="247" FldSupport="1" FldSize="1" FldAttribute="36" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="=" FldCaption="Aplica Retencion" FldViewTag="FORMATTED TEXT" FldHtmlTag="RADIO" FldTagSize="30" FldTagMaxLength="1" FldTagValues="&quot;S&quot;,&quot;SI&quot;|&quot;N&quot;,&quot;NO&quot;|" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="monto_exento" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Exento" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="monto_gravado" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Gravado" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="alicuota" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldRequired="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Alicuota" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Table" FldTagLnkTbl="alicuota" FldTagLnkFld="alicuota" FldTagLnkDisplay="nombre" FldTagLnkDisp2="alicuota" FldTagLnkOrderBy="alicuota" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldSelectFilter="&quot;`activo` = 'S' AND `compra` = 'S' AND `codigo` &lt;&gt; 'IGT'&quot;" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_iva" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto IVA" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_total" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto Total" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="monto_pagar" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Monto a Pagar" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="ret_iva" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Ret. IVA" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="ref_iva" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="LIKE" FldCaption="Ref# IVA" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagATarget="_blank" FldTagAPrefix="reportes/rptRetencion.php?Nretencion=" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldHrefFld="id" FldHrefFldOrig="1" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="ref_iva" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="LIKE" FldCaption="Ref# IVA" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagATarget="_blank" FldTagAPrefix="reportes/rptRetencion.php?Nretencion=" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldHrefFld="id" FldHrefFldOrig="1" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="ret_islr" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Ret. ISLR" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-1" FldUseParen="-1" FldGpDigits="-1" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
-      <Field FldName="ref_islr" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="LIKE" FldCaption="Ref# ISLR" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagATarget="_blank" FldTagAPrefix="reportes/rptRetencion2.php?Nretencion=" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldHrefFld="id" FldHrefFldOrig="1" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
+      <Field FldName="ref_islr" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="LIKE" FldCaption="Ref# ISLR" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagATarget="_blank" FldTagAPrefix="reportes/rptRetencion2.php?Nretencion=" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldHrefFld="id" FldHrefFldOrig="1" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="ret_municipal" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="16" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldExport="1" FldView="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Ret. Municipal" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="ref_municipal" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Ref# Municipal" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldHtmlTagReadOnly="1" FldSelectType="Values" FldTagATarget="_blank" FldTagAPrefix="../reportes/rptRetencion3.php?Nretencion=" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldHrefFld="id" FldHrefFldOrig="1" FldQuoteS="'" FldQuoteE="'" FldPageIndex="3" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha_registro" FldType="133" FldTypeName="date" NativeDataType="10" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="DATE" FldRequired="1" FldPopCalendar="1" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Fecha Libro Compra" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldDtFormat="7" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -665,7 +665,7 @@
       <Field FldName="pedido" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="50" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="pedido" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="50" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="fecha_hora" FldType="135" FldTypeName="datetime" NativeDataType="12" FldSupport="1" FldSize="19" FldAttribute="36" FldValidate="DATE" FldPopCalendar="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="fecha hora" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagMaxLength="19" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Date/Time" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="ftp_subir_pedidos.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="FTP Subir Pedidos" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="ftp_subir_pedidos.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="FTP Subir Pedidos" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="funciones" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,view=0,view|class=0" TblList="1" TblView="1" TblCaption="Funciones" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="codigo" FldType="129" FldTypeName="char" NativeDataType="254" FldSupport="1" FldSize="3" FldUniqueIdx="1" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Código" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="3" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -985,7 +985,7 @@
       <Field FldName="precio" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="18" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="precio" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="total" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="18" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="total" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="print_tarifa.php" TblType="REPORT" TblGen="1" TblGenList="custom=0" TblList="1" TblCaption="Imprimir Tarifa" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" IncludeFiles="0" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="print_tarifa.php" TblType="REPORT" TblGen="1" TblGenList="custom=1" TblList="1" TblCaption="Imprimir Tarifa" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" IncludeFiles="0" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="proveedor" TblType="TABLE" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0,add=0,add|class=0,addopt=0,addopt|class=0,view=0,view|class=0,edit=0,edit|class=0,delete=0,delete|class=0" TblList="1" TblView="1" TblEdit="1" TblAdd="1" TblAddReturnPage="_VIEW" TblAddOpt="1" TblIsMaster="1" TblDelete="1" TblCaption="Proveedores" TblUpdatable="1" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblAuditTrail="1" TblEditReturnPage="_VIEW" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="11" FldUniqueIdx="1" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldSearch="1" FldSrchOpr="=" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldOrderBy="1" FldOrder="DESC" FldResizeQuality="75" />
       <Field FldName="ci_rif" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldRequired="1" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="CI / RIF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -1235,8 +1235,8 @@
     <Table TblName="tdcaen_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Entrada" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcasa_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcasa_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Ajuste de Salida" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=1,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcc_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
+    <Table TblName="tdcfcc_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar Factura de Compra" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcv_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Factura de Venta" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcfcv_process.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Procesar factura de Ventas" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="tdcnet_add.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Nota de Entrega" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
@@ -2231,7 +2231,7 @@
     </Table>
     <Table TblName="crear_nota_recepcion_automatica_wait.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Crear Nota Recepcion Automatica" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
     <Table TblName="registrar_pagos_proveedores.php" TblType="REPORT" TblGen="1" TblGenList="reportcontroller=0,custom=0,custom|class=0" TblList="1" TblCaption="Regitrar de Pagos a Proveedores" TblSrchType="NONE" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblExpanded="1" TblLoaded="1" TblReportType="custom" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1" />
-    <Table TblName="view_cuentas_por_cobrar" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,list=1,list|class=1,grid=1,grid|class=1,view=1,view|class=1,preview=1,preview|class=1" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Cuentas por Cobrar" TblUpdatable="1" TblSQL="select `base`.`id` AS `id`,`base`.`cliente` AS `cliente`,`base`.`cliente_rif` AS `cliente_rif`,`base`.`cliente_nombre` AS `cliente_nombre`,`base`.`tipo_documento_fiscal` AS `tipo_documento_fiscal`,`base`.`nro_documento` AS `nro_documento`,`base`.`nro_control` AS `nro_control`,`base`.`fecha` AS `fecha`,`base`.`fecha_documento` AS `fecha_documento`,`base`.`fecha_vencimiento` AS `fecha_vencimiento`,`base`.`moneda` AS `moneda`,`base`.`tasa_dia` AS `tasa_dia`,`base`.`dias_credito` AS `dias_credito`,`base`.`entregado` AS `entregado`,`base`.`pagado` AS `pagado`,`base`.`doc_afectado` AS `doc_afectado`,`base`.`doc_afe` AS `doc_afe`,`base`.`igtf` AS `igtf`,`base`.`monto_igtf_bs` AS `monto_igtf_bs`,`base`.`signo_documento` AS `signo_documento`,`base`.`monto_documento_moneda` AS `monto_documento_moneda`,`base`.`monto_documento_bs` AS `monto_documento_bs`,`base`.`monto_documento_usd` AS `monto_documento_usd`,round((`base`.`monto_documento_bs` * `base`.`signo_documento`),2) AS `monto_aplicado_bs`,round((`base`.`monto_documento_usd` * `base`.`signo_documento`),2) AS `monto_aplicado_usd`,ifnull(`base`.`total_cobrado_bs`,0) AS `total_cobrado_bs`,ifnull(`base`.`total_cobrado_usd`,0) AS `total_cobrado_usd`,ifnull(`base`.`cantidad_cobros`,0) AS `cantidad_cobros`,`base`.`fecha_ultimo_cobro` AS `fecha_ultimo_cobro`,round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_cobrado_bs`,0)),2) AS `saldo_bs`,round(((`base`.`monto_documento_usd` * `base`.`signo_documento`) - ifnull(`base`.`total_cobrado_usd`,0)),2) AS `saldo_usd`,(case when (`base`.`tipo_documento_fiscal` = 'NC') then 'NOTA DE CRÉDITO' when (round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_cobrado_bs`,0)),2) &lt;= 0.01) then 'COBRADO' when (ifnull(`base`.`total_cobrado_bs`,0) &gt; 0) then 'COBRO PARCIAL' else 'PENDIENTE' end) AS `estado_cuenta`,(to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) AS `dias_vencido`,(case when (`base`.`tipo_documento_fiscal` = 'NC') then 'NOTA DE CRÉDITO' when (curdate() &lt;= `base`.`fecha_vencimiento`) then 'NO VENCIDO' when ((to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) between 1 and 30) then '1-30 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) between 31 and 60) then '31-60 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) between 61 and 90) then '61-90 DÍAS' else 'MÁS DE 90 DÍAS' end) AS `antiguedad` from (select `s`.`id` AS `id`,`s`.`cliente` AS `cliente`,coalesce(convert(nullif(`s`.`cliente_ci_rif`,'') using utf8mb4),`cl`.`ci_rif`) AS `cliente_rif`,coalesce(convert(nullif(`s`.`cliente_nombre`,'') using utf8mb4),`cl`.`nombre`) AS `cliente_nombre`,`s`.`documento` AS `tipo_documento_fiscal`,`s`.`nro_documento` AS `nro_documento`,`s`.`nro_control` AS `nro_control`,`s`.`fecha` AS `fecha`,cast(`s`.`fecha` as date) AS `fecha_documento`,(cast(`s`.`fecha` as date) + interval ifnull(`s`.`dias_credito`,0) day) AS `fecha_vencimiento`,`s`.`moneda` AS `moneda`,ifnull(nullif(`s`.`tasa_dia`,0),1) AS `tasa_dia`,ifnull(`s`.`dias_credito`,0) AS `dias_credito`,`s`.`entregado` AS `entregado`,`s`.`pagado` AS `pagado`,`s`.`doc_afectado` AS `doc_afectado`,`s`.`doc_afe` AS `doc_afe`,`s`.`igtf` AS `igtf`,(case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end) AS `monto_igtf_bs`,(case when (`s`.`documento` = 'NC') then -(1) else 1 end) AS `signo_documento`,(case when (upper(left(trim(`s`.`moneda`),3)) = 'BS.') then (ifnull(`s`.`total`,0) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) else (ifnull(`s`.`total`,0) + (case when ((`s`.`igtf` = 'S') and (ifnull(`s`.`tasa_dia`,0) &gt; 0)) then (`s`.`monto_igtf` / `s`.`tasa_dia`) else 0 end)) end) AS `monto_documento_moneda`,(case when (upper(left(trim(`s`.`moneda`),3)) = 'BS.') then (ifnull(`s`.`total`,0) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) else ((ifnull(`s`.`total`,0) * ifnull(nullif(`s`.`tasa_dia`,0),1)) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) end) AS `monto_documento_bs`,(case when ((upper(left(trim(`s`.`moneda`),3)) = 'BS.') and (ifnull(`s`.`tasa_dia`,0) &gt; 0)) then ((ifnull(`s`.`total`,0) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) / `s`.`tasa_dia`) else (ifnull(`s`.`total`,0) + (case when ((`s`.`igtf` = 'S') and (ifnull(`s`.`tasa_dia`,0) &gt; 0)) then (`s`.`monto_igtf` / `s`.`tasa_dia`) else 0 end)) end) AS `monto_documento_usd`,`cobros`.`total_cobrado_bs` AS `total_cobrado_bs`,`cobros`.`total_cobrado_usd` AS `total_cobrado_usd`,`cobros`.`cantidad_cobros` AS `cantidad_cobros`,`cobros`.`fecha_ultimo_cobro` AS `fecha_ultimo_cobro` from ((`salidas` `s` left join `cliente` `cl` on((`cl`.`id` = `s`.`cliente`))) left join (select `cobro_documento`.`id_documento` AS `id_documento`,round(sum(`cobro_documento`.`cobrado_bs`),2) AS `total_cobrado_bs`,round(sum(`cobro_documento`.`cobrado_usd`),2) AS `total_cobrado_usd`,count(0) AS `cantidad_cobros`,max(`cobro_documento`.`fecha`) AS `fecha_ultimo_cobro` from (select `cc`.`id` AS `id`,`cc`.`id_documento` AS `id_documento`,`cc`.`fecha` AS `fecha`,(case when (count(`ccd`.`id`) &gt; 0) then sum(ifnull(`ccd`.`monto_bs`,0)) when (upper(left(trim(`cc`.`moneda`),3)) = 'BS.') then ifnull(`cc`.`pago`,0) else (ifnull(`cc`.`pago`,0) * ifnull(nullif(`cc`.`tasa_cambio`,0),1)) end) AS `cobrado_bs`,(case when (count(`ccd`.`id`) &gt; 0) then sum((case when (ifnull(`ccd`.`monto_usd`,0) &gt; 0) then `ccd`.`monto_usd` when ((ifnull(`ccd`.`monto_bs`,0) &gt; 0) and (ifnull(`ccd`.`tasa_usd`,0) &gt; 0)) then (`ccd`.`monto_bs` / `ccd`.`tasa_usd`) when (upper(left(trim(`ccd`.`moneda`),3)) &lt;&gt; 'BS.') then ifnull(`ccd`.`monto_moneda`,0) else 0 end)) when ((upper(left(trim(`cc`.`moneda`),3)) = 'BS.') and (ifnull(`cc`.`tasa_cambio`,0) &gt; 0)) then (`cc`.`pago` / `cc`.`tasa_cambio`) else ifnull(`cc`.`pago`,0) end) AS `cobrado_usd` from (`cobros_cliente` `cc` left join `cobros_cliente_detalle` `ccd` on((`ccd`.`cobros_cliente` = `cc`.`id`))) group by `cc`.`id`,`cc`.`id_documento`,`cc`.`fecha`,`cc`.`pago`,`cc`.`moneda`,`cc`.`tasa_cambio`) `cobro_documento` group by `cobro_documento`.`id_documento`) `cobros` on((`cobros`.`id_documento` = `s`.`id`))) where ((`s`.`tipo_documento` = 'TDCFCV') and (`s`.`estatus` = 'PROCESADO') and (`s`.`documento` in ('FC','NC','ND','RC')))) `base`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_cuentas_por_cobrar" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,view=0,view|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Cuentas por Cobrar" TblUpdatable="1" TblSQL="select `base`.`id` AS `id`,`base`.`cliente` AS `cliente`,`base`.`cliente_rif` AS `cliente_rif`,`base`.`cliente_nombre` AS `cliente_nombre`,`base`.`tipo_documento_fiscal` AS `tipo_documento_fiscal`,`base`.`nro_documento` AS `nro_documento`,`base`.`nro_control` AS `nro_control`,`base`.`fecha` AS `fecha`,`base`.`fecha_documento` AS `fecha_documento`,`base`.`fecha_vencimiento` AS `fecha_vencimiento`,`base`.`moneda` AS `moneda`,`base`.`tasa_dia` AS `tasa_dia`,`base`.`dias_credito` AS `dias_credito`,`base`.`entregado` AS `entregado`,`base`.`pagado` AS `pagado`,`base`.`doc_afectado` AS `doc_afectado`,`base`.`doc_afe` AS `doc_afe`,`base`.`igtf` AS `igtf`,`base`.`monto_igtf_bs` AS `monto_igtf_bs`,`base`.`signo_documento` AS `signo_documento`,`base`.`monto_documento_moneda` AS `monto_documento_moneda`,`base`.`monto_documento_bs` AS `monto_documento_bs`,`base`.`monto_documento_usd` AS `monto_documento_usd`,round((`base`.`monto_documento_bs` * `base`.`signo_documento`),2) AS `monto_aplicado_bs`,round((`base`.`monto_documento_usd` * `base`.`signo_documento`),2) AS `monto_aplicado_usd`,ifnull(`base`.`total_cobrado_bs`,0) AS `total_cobrado_bs`,ifnull(`base`.`total_cobrado_usd`,0) AS `total_cobrado_usd`,ifnull(`base`.`cantidad_cobros`,0) AS `cantidad_cobros`,`base`.`fecha_ultimo_cobro` AS `fecha_ultimo_cobro`,round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_cobrado_bs`,0)),2) AS `saldo_bs`,round(((`base`.`monto_documento_usd` * `base`.`signo_documento`) - ifnull(`base`.`total_cobrado_usd`,0)),2) AS `saldo_usd`,(case when (`base`.`tipo_documento_fiscal` = 'NC') then 'NOTA DE CRÉDITO' when (round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_cobrado_bs`,0)),2) &lt;= 0.01) then 'COBRADO' when (ifnull(`base`.`total_cobrado_bs`,0) &gt; 0) then 'COBRO PARCIAL' else 'PENDIENTE' end) AS `estado_cuenta`,(to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) AS `dias_vencido`,(case when (`base`.`tipo_documento_fiscal` = 'NC') then 'NOTA DE CRÉDITO' when (curdate() &lt;= `base`.`fecha_vencimiento`) then 'NO VENCIDO' when ((to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) between 1 and 30) then '1-30 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) between 31 and 60) then '31-60 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha_vencimiento`)) between 61 and 90) then '61-90 DÍAS' else 'MÁS DE 90 DÍAS' end) AS `antiguedad` from (select `s`.`id` AS `id`,`s`.`cliente` AS `cliente`,coalesce(convert(nullif(`s`.`cliente_ci_rif`,'') using utf8mb4),`cl`.`ci_rif`) AS `cliente_rif`,coalesce(convert(nullif(`s`.`cliente_nombre`,'') using utf8mb4),`cl`.`nombre`) AS `cliente_nombre`,`s`.`documento` AS `tipo_documento_fiscal`,`s`.`nro_documento` AS `nro_documento`,`s`.`nro_control` AS `nro_control`,`s`.`fecha` AS `fecha`,cast(`s`.`fecha` as date) AS `fecha_documento`,(cast(`s`.`fecha` as date) + interval ifnull(`s`.`dias_credito`,0) day) AS `fecha_vencimiento`,`s`.`moneda` AS `moneda`,ifnull(nullif(`s`.`tasa_dia`,0),1) AS `tasa_dia`,ifnull(`s`.`dias_credito`,0) AS `dias_credito`,`s`.`entregado` AS `entregado`,`s`.`pagado` AS `pagado`,`s`.`doc_afectado` AS `doc_afectado`,`s`.`doc_afe` AS `doc_afe`,`s`.`igtf` AS `igtf`,(case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end) AS `monto_igtf_bs`,(case when (`s`.`documento` = 'NC') then -(1) else 1 end) AS `signo_documento`,(case when (upper(left(trim(`s`.`moneda`),3)) = 'BS.') then (ifnull(`s`.`total`,0) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) else (ifnull(`s`.`total`,0) + (case when ((`s`.`igtf` = 'S') and (ifnull(`s`.`tasa_dia`,0) &gt; 0)) then (`s`.`monto_igtf` / `s`.`tasa_dia`) else 0 end)) end) AS `monto_documento_moneda`,(case when (upper(left(trim(`s`.`moneda`),3)) = 'BS.') then (ifnull(`s`.`total`,0) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) else ((ifnull(`s`.`total`,0) * ifnull(nullif(`s`.`tasa_dia`,0),1)) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) end) AS `monto_documento_bs`,(case when ((upper(left(trim(`s`.`moneda`),3)) = 'BS.') and (ifnull(`s`.`tasa_dia`,0) &gt; 0)) then ((ifnull(`s`.`total`,0) + (case when (`s`.`igtf` = 'S') then ifnull(`s`.`monto_igtf`,0) else 0 end)) / `s`.`tasa_dia`) else (ifnull(`s`.`total`,0) + (case when ((`s`.`igtf` = 'S') and (ifnull(`s`.`tasa_dia`,0) &gt; 0)) then (`s`.`monto_igtf` / `s`.`tasa_dia`) else 0 end)) end) AS `monto_documento_usd`,`cobros`.`total_cobrado_bs` AS `total_cobrado_bs`,`cobros`.`total_cobrado_usd` AS `total_cobrado_usd`,`cobros`.`cantidad_cobros` AS `cantidad_cobros`,`cobros`.`fecha_ultimo_cobro` AS `fecha_ultimo_cobro` from ((`salidas` `s` left join `cliente` `cl` on((`cl`.`id` = `s`.`cliente`))) left join (select `cobro_documento`.`id_documento` AS `id_documento`,round(sum(`cobro_documento`.`cobrado_bs`),2) AS `total_cobrado_bs`,round(sum(`cobro_documento`.`cobrado_usd`),2) AS `total_cobrado_usd`,count(0) AS `cantidad_cobros`,max(`cobro_documento`.`fecha`) AS `fecha_ultimo_cobro` from (select `cc`.`id` AS `id`,`cc`.`id_documento` AS `id_documento`,`cc`.`fecha` AS `fecha`,(case when (count(`ccd`.`id`) &gt; 0) then sum(ifnull(`ccd`.`monto_bs`,0)) when (upper(left(trim(`cc`.`moneda`),3)) = 'BS.') then ifnull(`cc`.`pago`,0) else (ifnull(`cc`.`pago`,0) * ifnull(nullif(`cc`.`tasa_cambio`,0),1)) end) AS `cobrado_bs`,(case when (count(`ccd`.`id`) &gt; 0) then sum((case when (ifnull(`ccd`.`monto_usd`,0) &gt; 0) then `ccd`.`monto_usd` when ((ifnull(`ccd`.`monto_bs`,0) &gt; 0) and (ifnull(`ccd`.`tasa_usd`,0) &gt; 0)) then (`ccd`.`monto_bs` / `ccd`.`tasa_usd`) when (upper(left(trim(`ccd`.`moneda`),3)) &lt;&gt; 'BS.') then ifnull(`ccd`.`monto_moneda`,0) else 0 end)) when ((upper(left(trim(`cc`.`moneda`),3)) = 'BS.') and (ifnull(`cc`.`tasa_cambio`,0) &gt; 0)) then (`cc`.`pago` / `cc`.`tasa_cambio`) else ifnull(`cc`.`pago`,0) end) AS `cobrado_usd` from (`cobros_cliente` `cc` left join `cobros_cliente_detalle` `ccd` on((`ccd`.`cobros_cliente` = `cc`.`id`))) group by `cc`.`id`,`cc`.`id_documento`,`cc`.`fecha`,`cc`.`pago`,`cc`.`moneda`,`cc`.`tasa_cambio`) `cobro_documento` group by `cobro_documento`.`id_documento`) `cobros` on((`cobros`.`id_documento` = `s`.`id`))) where ((`s`.`tipo_documento` = 'TDCFCV') and (`s`.`estatus` = 'PROCESADO') and (`s`.`documento` in ('FC','NC','ND','RC')))) `base`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="cliente" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Cliente" FldViewTag="FORMATTED TEXT" FldHtmlTag="SELECT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="cliente" FldTagLnkFld="id" FldTagLnkDisplay="nombre" FldTagLnkDisp2="ci_rif" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="cliente_rif" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="RIF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2267,7 +2267,7 @@
       <Field FldName="dias_vencido" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="9" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Vencido" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="antiguedad" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="15" FldReq="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Antiguedad" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="15" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_cuentas_por_cobrar_resumen" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,master=1,list=1,list|class=1" TblList="1" TblIsMaster="1" TblCaption="Cuentas por Cobrar Resumen" TblUpdatable="1" TblSQL="select `view_cuentas_por_cobrar`.`cliente` AS `cliente`,`view_cuentas_por_cobrar`.`cliente_rif` AS `cliente_rif`,`view_cuentas_por_cobrar`.`cliente_nombre` AS `cliente_nombre`,count(0) AS `cantidad_documentos`,sum((case when (`view_cuentas_por_cobrar`.`estado_cuenta` = 'PENDIENTE') then 1 else 0 end)) AS `documentos_pendientes`,sum((case when (`view_cuentas_por_cobrar`.`estado_cuenta` = 'COBRO PARCIAL') then 1 else 0 end)) AS `documentos_parciales`,round(sum(`view_cuentas_por_cobrar`.`monto_aplicado_bs`),2) AS `monto_documentos_bs`,round(sum(`view_cuentas_por_cobrar`.`monto_aplicado_usd`),2) AS `monto_documentos_usd`,round(sum(`view_cuentas_por_cobrar`.`total_cobrado_bs`),2) AS `total_cobrado_bs`,round(sum(`view_cuentas_por_cobrar`.`total_cobrado_usd`),2) AS `total_cobrado_usd`,round(sum(`view_cuentas_por_cobrar`.`saldo_bs`),2) AS `saldo_bs`,round(sum(`view_cuentas_por_cobrar`.`saldo_usd`),2) AS `saldo_usd` from `view_cuentas_por_cobrar` group by `view_cuentas_por_cobrar`.`cliente`,`view_cuentas_por_cobrar`.`cliente_rif`,`view_cuentas_por_cobrar`.`cliente_nombre`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_cuentas_por_cobrar_resumen" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0" TblList="1" TblIsMaster="1" TblCaption="Cuentas por Cobrar Resumen" TblUpdatable="1" TblSQL="select `view_cuentas_por_cobrar`.`cliente` AS `cliente`,`view_cuentas_por_cobrar`.`cliente_rif` AS `cliente_rif`,`view_cuentas_por_cobrar`.`cliente_nombre` AS `cliente_nombre`,count(0) AS `cantidad_documentos`,sum((case when (`view_cuentas_por_cobrar`.`estado_cuenta` = 'PENDIENTE') then 1 else 0 end)) AS `documentos_pendientes`,sum((case when (`view_cuentas_por_cobrar`.`estado_cuenta` = 'COBRO PARCIAL') then 1 else 0 end)) AS `documentos_parciales`,round(sum(`view_cuentas_por_cobrar`.`monto_aplicado_bs`),2) AS `monto_documentos_bs`,round(sum(`view_cuentas_por_cobrar`.`monto_aplicado_usd`),2) AS `monto_documentos_usd`,round(sum(`view_cuentas_por_cobrar`.`total_cobrado_bs`),2) AS `total_cobrado_bs`,round(sum(`view_cuentas_por_cobrar`.`total_cobrado_usd`),2) AS `total_cobrado_usd`,round(sum(`view_cuentas_por_cobrar`.`saldo_bs`),2) AS `saldo_bs`,round(sum(`view_cuentas_por_cobrar`.`saldo_usd`),2) AS `saldo_usd` from `view_cuentas_por_cobrar` group by `view_cuentas_por_cobrar`.`cliente`,`view_cuentas_por_cobrar`.`cliente_rif`,`view_cuentas_por_cobrar`.`cliente_nombre`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="cliente" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="11" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Cliente" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cliente_rif" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="RIF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="cliente_nombre" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="80" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Cliente Nombre" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="80" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2281,7 +2281,7 @@
       <Field FldName="saldo_bs" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="67" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Saldo Bs." FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldAlign="right" FldFmtType="Number" FldFormat="#,##0.00" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="saldo_usd" FldType="131" FldTypeName="decimal" NativeDataType="246" FldSupport="1" FldSize="67" FldAttribute="36" FldValidate="FLOAT" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Saldo USD" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldBold="1" FldAlign="right" FldFmtType="Number" FldFormat="#,##0.00" FldNumDigits="2" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_cuentas_por_pagar" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,list=1,list|class=1,grid=1,grid|class=1,view=1,view|class=1,preview=1,preview|class=1" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Cuentas por Pagar" TblUpdatable="1" TblSQL="select `base`.`id` AS `id`,`base`.`proveedor` AS `proveedor`,`base`.`proveedor_rif` AS `proveedor_rif`,`base`.`proveedor_nombre` AS `proveedor_nombre`,`base`.`tipo_documento` AS `tipo_documento`,`base`.`documento` AS `documento`,`base`.`nro_control` AS `nro_control`,`base`.`fecha` AS `fecha`,`base`.`fecha_registro` AS `fecha_registro`,`base`.`descripcion` AS `descripcion`,`base`.`doc_afectado` AS `doc_afectado`,`base`.`anulado` AS `anulado`,`base`.`pagado` AS `pagado`,`base`.`moneda` AS `moneda`,`base`.`tasa_dia` AS `tasa_dia`,`base`.`signo_documento` AS `signo_documento`,`base`.`monto_documento_moneda` AS `monto_documento_moneda`,`base`.`monto_documento_bs` AS `monto_documento_bs`,`base`.`monto_documento_usd` AS `monto_documento_usd`,round((`base`.`monto_documento_bs` * `base`.`signo_documento`),2) AS `monto_aplicado_bs`,round((`base`.`monto_documento_usd` * `base`.`signo_documento`),2) AS `monto_aplicado_usd`,ifnull(`base`.`total_pagado_bs`,0) AS `total_pagado_bs`,ifnull(`base`.`total_pagado_usd`,0) AS `total_pagado_usd`,ifnull(`base`.`cantidad_pagos`,0) AS `cantidad_pagos`,`base`.`fecha_ultimo_pago` AS `fecha_ultimo_pago`,round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_pagado_bs`,0)),2) AS `saldo_bs`,round(((`base`.`monto_documento_usd` * `base`.`signo_documento`) - ifnull(`base`.`total_pagado_usd`,0)),2) AS `saldo_usd`,(case when (`base`.`anulado` = 'S') then 'ANULADO' when (`base`.`tipo_documento` = 'NC') then 'NOTA DE CRÉDITO' when (round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_pagado_bs`,0)),2) &lt;= 0.01) then 'PAGADO' when (ifnull(`base`.`total_pagado_bs`,0) &gt; 0) then 'PAGO PARCIAL' else 'PENDIENTE' end) AS `estado_cuenta`,(to_days(curdate()) - to_days(`base`.`fecha`)) AS `dias_transcurridos`,(case when (`base`.`tipo_documento` = 'NC') then 'NOTA DE CRÉDITO' when ((to_days(curdate()) - to_days(`base`.`fecha`)) &lt;= 0) then 'NO VENCIDO' when ((to_days(curdate()) - to_days(`base`.`fecha`)) between 1 and 30) then '1-30 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha`)) between 31 and 60) then '31-60 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha`)) between 61 and 90) then '61-90 DÍAS' else 'MÁS DE 90 DÍAS' end) AS `antiguedad` from (select `c`.`id` AS `id`,`c`.`proveedor` AS `proveedor`,`p`.`ci_rif` AS `proveedor_rif`,`p`.`nombre` AS `proveedor_nombre`,`c`.`tipo_documento` AS `tipo_documento`,`c`.`documento` AS `documento`,`c`.`nro_control` AS `nro_control`,`c`.`fecha` AS `fecha`,`c`.`fecha_registro` AS `fecha_registro`,`c`.`descripcion` AS `descripcion`,`c`.`doc_afectado` AS `doc_afectado`,`c`.`anulado` AS `anulado`,`c`.`pagado` AS `pagado`,`c`.`moneda` AS `moneda`,ifnull(nullif(`c`.`tasa_dia`,0),1) AS `tasa_dia`,(case when (`c`.`tipo_documento` = 'NC') then -(1) else 1 end) AS `signo_documento`,(case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) AS `monto_documento_moneda`,(case when (upper(left(trim(`c`.`moneda`),3)) = 'BS.') then (case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) else ((case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) * ifnull(nullif(`c`.`tasa_dia`,0),1)) end) AS `monto_documento_bs`,(case when (upper(left(trim(`c`.`moneda`),3)) = 'BS.') then ((case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) / nullif(`c`.`tasa_dia`,0)) else (case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) end) AS `monto_documento_usd`,`pagos`.`total_pagado_bs` AS `total_pagado_bs`,`pagos`.`total_pagado_usd` AS `total_pagado_usd`,`pagos`.`cantidad_pagos` AS `cantidad_pagos`,`pagos`.`fecha_ultimo_pago` AS `fecha_ultimo_pago` from ((`compra` `c` left join `proveedor` `p` on((`p`.`id` = `c`.`proveedor`))) left join (select `pago_documento`.`id_documento` AS `id_documento`,round(sum(`pago_documento`.`pagado_bs`),2) AS `total_pagado_bs`,round(sum(`pago_documento`.`pagado_usd`),2) AS `total_pagado_usd`,count(0) AS `cantidad_pagos`,max(`pago_documento`.`fecha`) AS `fecha_ultimo_pago` from (select `pc`.`id` AS `id`,`pc`.`id_documento` AS `id_documento`,`pc`.`fecha` AS `fecha`,(case when (count(`pcd`.`id`) &gt; 0) then sum(ifnull(`pcd`.`monto_bs`,0)) when (upper(left(trim(`pc`.`moneda`),3)) = 'BS.') then ifnull(`pc`.`pago`,0) else (ifnull(`pc`.`pago`,0) * ifnull(nullif(`pc`.`tasa_cambio`,0),1)) end) AS `pagado_bs`,(case when (count(`pcd`.`id`) &gt; 0) then sum((case when (ifnull(`pcd`.`monto_usd`,0) &gt; 0) then `pcd`.`monto_usd` when ((ifnull(`pcd`.`monto_bs`,0) &gt; 0) and (ifnull(`pcd`.`tasa_usd`,0) &gt; 0)) then (`pcd`.`monto_bs` / `pcd`.`tasa_usd`) when (upper(left(trim(`pcd`.`moneda`),3)) &lt;&gt; 'BS.') then ifnull(`pcd`.`monto_moneda`,0) else 0 end)) when ((upper(left(trim(`pc`.`moneda`),3)) = 'BS.') and (ifnull(`pc`.`tasa_cambio`,0) &gt; 0)) then (`pc`.`pago` / `pc`.`tasa_cambio`) else ifnull(`pc`.`pago`,0) end) AS `pagado_usd` from (`pagos_compras` `pc` left join `pagos_compras_detalle` `pcd` on((`pcd`.`pagos_compras` = `pc`.`id`))) where (`pc`.`tipo_documento` in ('GASTO','GASTOS')) group by `pc`.`id`,`pc`.`id_documento`,`pc`.`fecha`,`pc`.`pago`,`pc`.`moneda`,`pc`.`tasa_cambio`) `pago_documento` group by `pago_documento`.`id_documento`) `pagos` on((`pagos`.`id_documento` = `c`.`id`))) where (`c`.`tipo_documento` in ('FC','NC','ND','RC'))) `base`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_cuentas_por_pagar" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,list=0,list|class=0,grid=0,grid|class=0,view=0,view|class=0,preview=0,preview|class=0" TblList="1" TblView="1" TblIsDetail="1" TblCaption="Cuentas por Pagar" TblUpdatable="1" TblSQL="select `base`.`id` AS `id`,`base`.`proveedor` AS `proveedor`,`base`.`proveedor_rif` AS `proveedor_rif`,`base`.`proveedor_nombre` AS `proveedor_nombre`,`base`.`tipo_documento` AS `tipo_documento`,`base`.`documento` AS `documento`,`base`.`nro_control` AS `nro_control`,`base`.`fecha` AS `fecha`,`base`.`fecha_registro` AS `fecha_registro`,`base`.`descripcion` AS `descripcion`,`base`.`doc_afectado` AS `doc_afectado`,`base`.`anulado` AS `anulado`,`base`.`pagado` AS `pagado`,`base`.`moneda` AS `moneda`,`base`.`tasa_dia` AS `tasa_dia`,`base`.`signo_documento` AS `signo_documento`,`base`.`monto_documento_moneda` AS `monto_documento_moneda`,`base`.`monto_documento_bs` AS `monto_documento_bs`,`base`.`monto_documento_usd` AS `monto_documento_usd`,round((`base`.`monto_documento_bs` * `base`.`signo_documento`),2) AS `monto_aplicado_bs`,round((`base`.`monto_documento_usd` * `base`.`signo_documento`),2) AS `monto_aplicado_usd`,ifnull(`base`.`total_pagado_bs`,0) AS `total_pagado_bs`,ifnull(`base`.`total_pagado_usd`,0) AS `total_pagado_usd`,ifnull(`base`.`cantidad_pagos`,0) AS `cantidad_pagos`,`base`.`fecha_ultimo_pago` AS `fecha_ultimo_pago`,round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_pagado_bs`,0)),2) AS `saldo_bs`,round(((`base`.`monto_documento_usd` * `base`.`signo_documento`) - ifnull(`base`.`total_pagado_usd`,0)),2) AS `saldo_usd`,(case when (`base`.`anulado` = 'S') then 'ANULADO' when (`base`.`tipo_documento` = 'NC') then 'NOTA DE CRÉDITO' when (round(((`base`.`monto_documento_bs` * `base`.`signo_documento`) - ifnull(`base`.`total_pagado_bs`,0)),2) &lt;= 0.01) then 'PAGADO' when (ifnull(`base`.`total_pagado_bs`,0) &gt; 0) then 'PAGO PARCIAL' else 'PENDIENTE' end) AS `estado_cuenta`,(to_days(curdate()) - to_days(`base`.`fecha`)) AS `dias_transcurridos`,(case when (`base`.`tipo_documento` = 'NC') then 'NOTA DE CRÉDITO' when ((to_days(curdate()) - to_days(`base`.`fecha`)) &lt;= 0) then 'NO VENCIDO' when ((to_days(curdate()) - to_days(`base`.`fecha`)) between 1 and 30) then '1-30 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha`)) between 31 and 60) then '31-60 DÍAS' when ((to_days(curdate()) - to_days(`base`.`fecha`)) between 61 and 90) then '61-90 DÍAS' else 'MÁS DE 90 DÍAS' end) AS `antiguedad` from (select `c`.`id` AS `id`,`c`.`proveedor` AS `proveedor`,`p`.`ci_rif` AS `proveedor_rif`,`p`.`nombre` AS `proveedor_nombre`,`c`.`tipo_documento` AS `tipo_documento`,`c`.`documento` AS `documento`,`c`.`nro_control` AS `nro_control`,`c`.`fecha` AS `fecha`,`c`.`fecha_registro` AS `fecha_registro`,`c`.`descripcion` AS `descripcion`,`c`.`doc_afectado` AS `doc_afectado`,`c`.`anulado` AS `anulado`,`c`.`pagado` AS `pagado`,`c`.`moneda` AS `moneda`,ifnull(nullif(`c`.`tasa_dia`,0),1) AS `tasa_dia`,(case when (`c`.`tipo_documento` = 'NC') then -(1) else 1 end) AS `signo_documento`,(case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) AS `monto_documento_moneda`,(case when (upper(left(trim(`c`.`moneda`),3)) = 'BS.') then (case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) else ((case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) * ifnull(nullif(`c`.`tasa_dia`,0),1)) end) AS `monto_documento_bs`,(case when (upper(left(trim(`c`.`moneda`),3)) = 'BS.') then ((case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) / nullif(`c`.`tasa_dia`,0)) else (case when (ifnull(`c`.`monto_pagar`,0) &gt; 0) then `c`.`monto_pagar` else ifnull(`c`.`monto_total`,0) end) end) AS `monto_documento_usd`,`pagos`.`total_pagado_bs` AS `total_pagado_bs`,`pagos`.`total_pagado_usd` AS `total_pagado_usd`,`pagos`.`cantidad_pagos` AS `cantidad_pagos`,`pagos`.`fecha_ultimo_pago` AS `fecha_ultimo_pago` from ((`compra` `c` left join `proveedor` `p` on((`p`.`id` = `c`.`proveedor`))) left join (select `pago_documento`.`id_documento` AS `id_documento`,round(sum(`pago_documento`.`pagado_bs`),2) AS `total_pagado_bs`,round(sum(`pago_documento`.`pagado_usd`),2) AS `total_pagado_usd`,count(0) AS `cantidad_pagos`,max(`pago_documento`.`fecha`) AS `fecha_ultimo_pago` from (select `pc`.`id` AS `id`,`pc`.`id_documento` AS `id_documento`,`pc`.`fecha` AS `fecha`,(case when (count(`pcd`.`id`) &gt; 0) then sum(ifnull(`pcd`.`monto_bs`,0)) when (upper(left(trim(`pc`.`moneda`),3)) = 'BS.') then ifnull(`pc`.`pago`,0) else (ifnull(`pc`.`pago`,0) * ifnull(nullif(`pc`.`tasa_cambio`,0),1)) end) AS `pagado_bs`,(case when (count(`pcd`.`id`) &gt; 0) then sum((case when (ifnull(`pcd`.`monto_usd`,0) &gt; 0) then `pcd`.`monto_usd` when ((ifnull(`pcd`.`monto_bs`,0) &gt; 0) and (ifnull(`pcd`.`tasa_usd`,0) &gt; 0)) then (`pcd`.`monto_bs` / `pcd`.`tasa_usd`) when (upper(left(trim(`pcd`.`moneda`),3)) &lt;&gt; 'BS.') then ifnull(`pcd`.`monto_moneda`,0) else 0 end)) when ((upper(left(trim(`pc`.`moneda`),3)) = 'BS.') and (ifnull(`pc`.`tasa_cambio`,0) &gt; 0)) then (`pc`.`pago` / `pc`.`tasa_cambio`) else ifnull(`pc`.`pago`,0) end) AS `pagado_usd` from (`pagos_compras` `pc` left join `pagos_compras_detalle` `pcd` on((`pcd`.`pagos_compras` = `pc`.`id`))) where (`pc`.`tipo_documento` in ('GASTO','GASTOS')) group by `pc`.`id`,`pc`.`id_documento`,`pc`.`fecha`,`pc`.`pago`,`pc`.`moneda`,`pc`.`tasa_cambio`) `pago_documento` group by `pago_documento`.`id_documento`) `pagos` on((`pagos`.`id_documento` = `c`.`id`))) where (`c`.`tipo_documento` in ('FC','NC','ND','RC'))) `base`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="id" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldReq="1" FldIsPrimaryKey="1" FldAutoIncrement="1" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldEdit="1" FldSearch="1" FldSrchOpr="=" FldDbDefault="0" FldCaption="id" FldViewTag="FORMATTED TEXT" FldHtmlTag="NO" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldResizeQuality="75" />
       <Field FldName="proveedor" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldList="1" FldExport="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Proveedor" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Table" FldTagLnkTbl="proveedor" FldTagLnkFld="id" FldTagLnkDisplay="nombre" FldTagLnkDisp2="ci_rif" FldTagLnkOrderBy="nombre" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" FldModalLookup="1" />
       <Field FldName="proveedor_rif" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="RIF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -2313,7 +2313,7 @@
       <Field FldName="dias_transcurridos" FldType="3" FldTypeName="int" NativeDataType="3" FldSupport="1" FldSize="9" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Días Transcurridos" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="antiguedad" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="15" FldReq="1" FldAttribute="4" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Antiguedad" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="15" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
     </Table>
-    <Table TblName="view_cuentas_por_pagar_resumen" TblType="VIEW" TblGen="1" TblGenList="controller=1,info=1,entity=1,master=1,list=1,list|class=1" TblList="1" TblIsMaster="1" TblCaption="Cuentas por Pagar Resumen" TblUpdatable="1" TblSQL="select `view_cuentas_por_pagar`.`proveedor` AS `proveedor`,`view_cuentas_por_pagar`.`proveedor_rif` AS `proveedor_rif`,`view_cuentas_por_pagar`.`proveedor_nombre` AS `proveedor_nombre`,count(0) AS `cantidad_documentos`,sum((case when (`view_cuentas_por_pagar`.`estado_cuenta` = 'PENDIENTE') then 1 else 0 end)) AS `documentos_pendientes`,sum((case when (`view_cuentas_por_pagar`.`estado_cuenta` = 'PAGO PARCIAL') then 1 else 0 end)) AS `documentos_parciales`,round(sum(`view_cuentas_por_pagar`.`monto_aplicado_bs`),2) AS `monto_documentos_bs`,round(sum(`view_cuentas_por_pagar`.`monto_aplicado_usd`),2) AS `monto_documentos_usd`,round(sum(`view_cuentas_por_pagar`.`total_pagado_bs`),2) AS `total_pagado_bs`,round(sum(`view_cuentas_por_pagar`.`total_pagado_usd`),2) AS `total_pagado_usd`,round(sum(`view_cuentas_por_pagar`.`saldo_bs`),2) AS `saldo_bs`,round(sum(`view_cuentas_por_pagar`.`saldo_usd`),2) AS `saldo_usd` from `view_cuentas_por_pagar` where (`view_cuentas_por_pagar`.`anulado` = 'N') group by `view_cuentas_por_pagar`.`proveedor`,`view_cuentas_por_pagar`.`proveedor_rif`,`view_cuentas_por_pagar`.`proveedor_nombre`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
+    <Table TblName="view_cuentas_por_pagar_resumen" TblType="VIEW" TblGen="1" TblGenList="controller=0,info=0,entity=0,master=0,list=0,list|class=0" TblList="1" TblIsMaster="1" TblCaption="Cuentas por Pagar Resumen" TblUpdatable="1" TblSQL="select `view_cuentas_por_pagar`.`proveedor` AS `proveedor`,`view_cuentas_por_pagar`.`proveedor_rif` AS `proveedor_rif`,`view_cuentas_por_pagar`.`proveedor_nombre` AS `proveedor_nombre`,count(0) AS `cantidad_documentos`,sum((case when (`view_cuentas_por_pagar`.`estado_cuenta` = 'PENDIENTE') then 1 else 0 end)) AS `documentos_pendientes`,sum((case when (`view_cuentas_por_pagar`.`estado_cuenta` = 'PAGO PARCIAL') then 1 else 0 end)) AS `documentos_parciales`,round(sum(`view_cuentas_por_pagar`.`monto_aplicado_bs`),2) AS `monto_documentos_bs`,round(sum(`view_cuentas_por_pagar`.`monto_aplicado_usd`),2) AS `monto_documentos_usd`,round(sum(`view_cuentas_por_pagar`.`total_pagado_bs`),2) AS `total_pagado_bs`,round(sum(`view_cuentas_por_pagar`.`total_pagado_usd`),2) AS `total_pagado_usd`,round(sum(`view_cuentas_por_pagar`.`saldo_bs`),2) AS `saldo_bs`,round(sum(`view_cuentas_por_pagar`.`saldo_usd`),2) AS `saldo_usd` from `view_cuentas_por_pagar` where (`view_cuentas_por_pagar`.`anulado` = 'N') group by `view_cuentas_por_pagar`.`proveedor`,`view_cuentas_por_pagar`.`proveedor_rif`,`view_cuentas_por_pagar`.`proveedor_nombre`" TblSrchType="BASIC" TblBasicSearch="1" TblExtendedBasicSearch="1" TblSecurity="0,&quot;Default&quot;,0" TblLoaded="1" TblShowEmptyRows="0" TblUseGlobal="1" TblRecPerPage="20" TblRecPerPageList="10,20,50,ALL" TblGrpPerPage="3" TblGrpPerPageList="1,2,3,5,ALL" TblPagerStyle="2" TblUseButtonsForLinks="1" TblUseDropDownForAction="1" TblUseDropDownForListOptions="1" TblUseDropDownForExport="1">
       <Field FldName="proveedor" FldType="19" FldTypeName="int" NativeDataType="503" FldSupport="1" FldSize="10" FldAttribute="36" FldValidate="INTEGER" FldGenerate="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldSrchOpr="=" FldCaption="Proveedor" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="0" FldSelectType="Values" FldTagLnkTbl="proveedor" FldTagLnkFld="id" FldTagLnkDisplay="nombre" FldTagLnkOrderBy="nombre" FldTagAPrefix="None" FldFmtType="Number" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="proveedor_rif" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="30" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="RIF" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="30" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
       <Field FldName="proveedor_nombre" FldType="200" FldTypeName="varchar" NativeDataType="253" FldSupport="1" FldSize="80" FldAttribute="36" FldGenerate="1" FldList="1" FldExport="1" FldView="1" FldEdit="1" FldAdd="1" FldAddOpt="1" FldSearch="1" FldBasicSearch="1" FldExtendedBasicSearch="1" FldSrchOpr="LIKE" FldCaption="Proveedor Nombre" FldViewTag="FORMATTED TEXT" FldHtmlTag="TEXT" FldTagSize="30" FldTagMaxLength="80" FldSelectType="Values" FldTagAPrefix="None" FldIncLeadDigit="-2" FldUseParen="-2" FldGpDigits="-2" FldQuoteS="'" FldQuoteE="'" FldMultiUpdate="1" FldResizeQuality="75" />
@@ -13595,7 +13595,14 @@ $db = ExecuteScalar("SELECT DATABASE();");
 $fechaMysql = ExecuteScalar("SELECT date_format(now(), '%d/%m/%Y %H:%i:%s') AS fecha;");
 
 // Revisar archivos pendientes antes de emitir HTML para que la redirección funcione.
-if ($bloquea == "NO") {
+// Revisar archivos pendientes de FTP
+$ftpPendiente = false;
+$total_archivos = 0;
+
+if (
+    $bloquea == "NO" &&
+    trim($_COOKIE["strcon"] ?? '') === "dropharm_mandrake"
+) {
     $ruta_pedidos = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
     $ruta_salidas = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
 
@@ -13603,17 +13610,19 @@ if ($bloquea == "NO") {
         if (!is_dir($path)) {
             return 0;
         }
+
         $files = scandir($path);
-        return count(array_diff($files, ['.', '..']));
+
+        return count(
+            array_diff($files, ['.', '..'])
+        );
     };
 
-    $total_archivos = 0;
     $total_archivos += $contarArchivos($ruta_pedidos);
     $total_archivos += $contarArchivos($ruta_salidas);
 
-    if ($total_archivos > 0 && isset($levelid) && $levelid == -1) {
-        header("Location: FtpSubirPedidos");
-        exit();
+    if ($total_archivos > 0) {
+        $ftpPendiente = true;
     }
 }
 ?>
@@ -13878,17 +13887,136 @@ if ($bloquea == "NO") {
     </div>
 </div>
 
+<?php if ($ftpPendiente) { ?>
+
+<div class="modal fade"
+     id="modalFtpPendiente"
+     tabindex="-1"
+     aria-labelledby="modalFtpPendienteLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-warning-subtle">
+                <h5 class="modal-title fw-bold" id="modalFtpPendienteLabel">
+                    <i class="fa-solid fa-cloud-arrow-up me-2"></i>
+                    Archivos FTP pendientes
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar">
+                </button>
+            </div>
+
+            <div class="modal-body p-4">
+
+                <div class="d-flex gap-3 align-items-start">
+
+                    <div class="fs-2 text-warning">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+
+                    <div>
+                        <h6 class="fw-bold mb-2">
+                            Hay archivos pendientes por procesar.
+                        </h6>
+
+                        <p class="mb-2">
+                            Se encontraron
+                            <strong><?= intval($total_archivos) ?></strong>
+                            archivo<?= $total_archivos == 1 ? '' : 's' ?>
+                            pendiente<?= $total_archivos == 1 ? '' : 's' ?>
+                            de procesamiento FTP.
+                        </p>
+
+                        <div class="text-muted small">
+                            Puede procesarlos ahora o continuar revisando
+                            la página principal.
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    <i class="fa-solid fa-xmark me-1"></i>
+                    Cancelar
+                </button>
+
+                <a href="FtpSubirPedidos"
+                   class="btn btn-primary">
+                    <i class="fa-solid fa-play me-1"></i>
+                    Procesar FTP
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php } ?>
+
 <script>
+
+    <?php if ($ftpPendiente) { ?>
+
+        setTimeout(function () {
+
+            const modalElement = document.getElementById("modalFtpPendiente");
+
+            if (!modalElement) {
+                console.log("No se encontró modalFtpPendiente");
+                return;
+            }
+
+            if (typeof bootstrap === "undefined") {
+                console.log("Bootstrap no está disponible");
+                return;
+            }
+
+            const modalFtp = bootstrap.Modal.getOrCreateInstance(modalElement);
+            modalFtp.show();
+
+        }, 500);
+
+    <?php } ?>
+
+
     function print_to(tarifa) {
+
         var username = "<?= CurrentUserName() ?>";
+
         if (confirm("Desea Enviar a Excel?")) {
-            var url = "print_tarifa.php?username=" + username + "&codcliente=&tarifa=" + tarifa;
+
+            var url =
+                "print_tarifa.php?username=" +
+                username +
+                "&codcliente=&tarifa=" +
+                tarifa;
+
             window.open(url, '_blank');
+
         } else {
-            var url = "reportes/listado_articulos_por_tarifa.php?username=" + username + "&codcliente=&tarifa=" + tarifa;
+
+            var url =
+                "reportes/listado_articulos_por_tarifa.php?username=" +
+                username +
+                "&codcliente=&tarifa=" +
+                tarifa;
+
             window.open(url, '_blank');
         }
     }
+
 </script>
 ]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="add" ScriptL1Key="entradas"><![CDATA[// Page Data Rendering event
@@ -14295,6 +14423,43 @@ die();
 
 $id = $_REQUEST["id"];
 
+// Validación: Verificar si la Orden de Entrega ya tiene registros hijos/factura en proceso
+$sqlCheck = "SELECT a.id FROM salidas AS a WHERE a.id_documento_padre = '$id';";
+if (ExecuteRow($sqlCheck)) {
+    $sqlInfo = "SELECT 
+                    a.nro_documento, b.nombre AS cliente  
+                FROM 
+                    salidas AS a 
+                    JOIN cliente AS b ON b.id = a.cliente 
+                WHERE a.id = '$id';";
+    $rowInfo = ExecuteRow($sqlInfo);
+
+    $nro_documento = $rowInfo["nro_documento"] ?? '';
+    $cliente       = $rowInfo["cliente"] ?? '';
+
+    ?>
+    <!-- Inyección de Bootstrap 5 para garantizar estilos antes de cortar ejecución -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <div class="container mt-5">
+        <div class="alert alert-warning shadow-sm p-4" role="alert">
+            <h5 class="alert-heading fw-bold">¡Atención!</h5>
+            <p class="mb-0 fs-6">
+                La Orden de Entrega <strong><?= htmlspecialchars($nro_documento) ?></strong> 
+                del cliente <strong><?= htmlspecialchars($cliente) ?></strong> 
+                ya está en factura en espera. ¡Verifique!
+            </p>
+        </div>
+        <div class="mt-3">
+            <a href="HomeOutAdd?tipo_documento=TDCFCV" class="btn btn-primary px-4">
+                Regresar
+            </a>
+        </div>
+    </div>
+    <?php
+    die();
+}
+
 /// Busco la moneda por defecto del sistema ///
 $sql = "SELECT valor1 AS moneda FROM parametro WHERE codigo = '006' AND valor2 = 'default';";
 $moneda = ExecuteScalar($sql);
@@ -14419,8 +14584,8 @@ for($xy = 0; $xy < $cantidad; $xy++) {
 	}
 
 	//$sql = "UPDATE salidas SET estatus = 'PROCESADO', id_documento_padre = '$factura_id' WHERE id = '$id'";
-	$sql = "UPDATE salidas SET estatus = 'PROCESADO' WHERE id = '$id'";
-	Execute($sql);
+	// $sql = "UPDATE salidas SET estatus = 'PROCESADO' WHERE id = '$id'";
+	// Execute($sql);
 
 	///////////////////////////////////////////
 	/*** Indico que alicuota iva se coloca en el encabezado del documento ***/
@@ -19087,28 +19252,29 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
   <table class="table table-bordered" border="1" rules="all">
 	<thead>
 	  <tr>
-		<th colspan="11"><center><?php echo $cia; ?></center></th>
+		<th colspan="12"><center><?php echo $cia; ?></center></th>
 		<th colspan="4">Fecha: <?php echo date("d/m/Y"); ?></th>
 	  </tr>
 	  <tr>
-		<th colspan="11"></th>
+		<th colspan="12"></th>
 		<th colspan="4">Hora: <?php echo date("H:i:s"); ?></th>
 	  </tr>
 	  <tr class="well">
-		<th colspan="15"><strong><center><?php echo $titulo; ?></th>
+		<th colspan="16"><strong><center><?php echo $titulo; ?></th>
 	  </tr>
 	  <tr class="well">
 		<th>LABORATORIO</th>
-		<th>NOMBRE</th>
-		<th>MEDICAMENTO</th>
+		<th>NOMBRE CORMERCIAL</th>
+		<th>PRINCIPO ACTIVO</th>
 		<th>PRESENTACION</th>
 		<th>TIPO LISTA</th>
 		<th>COD BARRA</th>
 		<th>VENCIMIENTO</th>
 		<th>PRECIO</th>
-		<th>DESC1 %</th>
-        <th>DESC2 %</th>
-		<th>PRECIO</th>
+		<th>DESC ART. %</th>
+        <th>DESC FAB. %</th>
+        <th>DESC CLI. %</th>
+        <th>PRECIO FINAL</th>
 		<th>DISP</th>
 		<th>CANT</th>
 		<th>U.M.</th>
@@ -19124,7 +19290,19 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
 				a.foto, a.nombre_comercial, b.nombre AS fabricante, 
 				a.principio_activo, a.presentacion, c.precio AS precio, 
 				(a.cantidad_en_mano+a.cantidad_en_pedido)-a.cantidad_en_transito AS cantidad_en_mano, 
-				d.descripcion AS unidad_medida, a.descuento, a.codigo_de_barra, c.precio-(c.precio*(a.descuento/100)) AS precio_total, 
+				d.descripcion AS unidad_medida,
+                IFNULL(a.descuento, 0) AS descuento,
+                IFNULL(b.descuento, 0) AS descuento_fabricante,
+                a.codigo_de_barra,
+
+                (
+                    (c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100)))
+                    -
+                    (
+                        (c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100)))
+                        * (IFNULL(b.descuento, 0) / 100)
+                    )
+                ) AS precio_total,
 						(SELECT campo_descripcion FROM tabla WHERE tabla = 'LISTA_PEDIDO' AND campo_codigo = a.lista_pedido) AS lista_pedido, 
 						a.cantidad_en_mano   
 			  FROM 
@@ -19193,8 +19371,13 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
                 echo '<td>' .$FechaVencimiento . '</td>';
                 echo '<td>' . number_format($row["precio"], 2, ",", "") . '</td>';
                 echo '<td>' . number_format($row["descuento"], 2, ",", "") . '</td>';
+                echo '<td>' . number_format($row["descuento_fabricante"], 2, ",", "") . '</td>';
                 echo '<td>' . number_format($descuento, 2, ",", "") . '</td>';
-                echo '<td>' . number_format(floatval($row["precio_total"]) - (floatval($row["precio_total"])*($descuento/100)), 2, ",", "") . '</td>';
+
+                $precioFinal = floatval($row["precio_total"]);
+                $precioFinal = $precioFinal - ($precioFinal * ($descuento / 100));
+
+                echo '<td>' . number_format($precioFinal, 2, ",", "") . '</td>';
                 echo '<td>' . intval($onHand) . '</td>';
                 echo '<td></td>';
                 echo '<td>' . $row["unidad_medida"] . '</td>';
@@ -19205,7 +19388,7 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
 		}
 	?>
 	  <tr>
-		<th colspan="15">Total Art&iacute;culos: <?php echo $items; ?></th>
+		<th colspan="16">Total Art&iacute;culos: <?php echo $items; ?></th>
 	  </tr>
 	</tbody>
   </table>
@@ -19346,7 +19529,13 @@ if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
                 <div class="radio">
                     <label for="rep_sal_det">
                         <input type="radio" id="rep_sal_det" name="id" value="sal_articulo_detallado">
-                        SALIDAS GENERALES POR ARTICULO DETALLADO
+                        SALIDAS GENERALES POR ARTICULO DETALLADO (FACTURAS)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="rep_sal_det">
+                        <input type="radio" id="rep_sal_det_neas" name="id" value="sal_articulo_detallado_neas">
+                        SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS DE ENTREGA + AJSUTES DE SALIDA)
                     </label>
                 </div>
             </div>
@@ -19488,7 +19677,8 @@ $titulos_reportes = [
     "sal_laboratorio"             => "SALIDAS GENERALES POR FABRICANTE (FACTURAS + AJUSTE SALIDAS)",
     "sal_articulo"                => "SALIDAS GENERALES POR ARTICULO (FACTURAS + AJUSTE SALIDAS)",
     "vta_cliente"                 => "VENTAS POR CLIENTE (FACTURAS SIN IVA Y CANTIDAD DE UNIDADES)",
-    "sal_articulo_detallado"      => "SALIDAS GENERALES POR ARTICULO DETALLADO",
+    "sal_articulo_detallado"      => "SALIDAS GENERALES POR ARTICULO DETALLADO (FACTURAS)",
+    "sal_articulo_detallado_neas" => "SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS + AJUSTE SALIDAS)",
     "cng_cliente"                 => "CONSIGNACIONES POR CLIENTE",
     "cng_facturas"                => "FACTURAS POR CONSIGNACION",
     "cli_compras_recientes"       => "CLIENTES CON COMPRAS RECIENTES",
@@ -19624,7 +19814,7 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                                     echo '<option value="' . $row["id"] . '">' . $row["nombre"] . '</option>';
                                 }
                             }
-                            elseif (in_array($id, ["vta_articulo", "sal_articulo", "sal_articulo_detallado", "det_entradas_general", "det_notas_entrega", "det_pedidos_venta", "vta_articulo_utilidad", "sal_articulo_neas"])) {
+                            elseif (in_array($id, ["vta_articulo", "sal_articulo", "sal_articulo_detallado", "sal_articulo_detallado_neas", "det_entradas_general", "det_notas_entrega", "det_pedidos_venta", "vta_articulo_utilidad", "sal_articulo_neas"])) {
                                 $sql = "SELECT 
                                             a.id, 
                                             CONCAT(IFNULL(a.nombre_comercial, ''), ' ', IFNULL(a.principio_activo, ''), ' ', IFNULL(a.presentacion, ''), ' - ', IFNULL(a.codigo, '')) AS nombre 
@@ -20041,6 +20231,9 @@ switch($id) {
     case "sal_articulo_detallado":
         include("include/salidas_genreales_por_articulo_detallado.php");
         break;
+    case "sal_articulo_detallado_neas":
+        include("include/salidas_genreales_por_articulo_detallado_neas.php");
+        break;
     case "cli_compras_recientes":
         include("include/clientes_con_compras_recientes.php");
         break;
@@ -20170,6 +20363,9 @@ switch($id) {
         break;
     case "sal_articulo_detallado":
         include("include/salidas_genreales_por_articulo_detallado_excel.php");
+        break;
+    case "sal_articulo_detallado_neas":
+        include("include/salidas_genreales_por_articulo_detallado_neas_excel.php");
         break;
     case "cli_compras_recientes":
         include("include/clientes_con_compras_recientes_excel.php");
@@ -25457,165 +25653,6 @@ function Row_Updating($rsold, &$rsnew)
         }
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Validación de modificación de referencias
-    |--------------------------------------------------------------------------
-    */
-    if (
-        trim($rsold["ref_iva"] ?? "") != "" &&
-        trim($rsold["ref_iva"] ?? "") != trim($rsnew["ref_iva"] ?? "")
-    ) {
-        if (!VerificaFuncion("016")) {
-            $this->CancelMessage =
-                "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de IVA; verifique.";
-
-            return false;
-        }
-    }
-
-    if (
-        trim($rsold["ref_islr"] ?? "") != "" &&
-        trim($rsold["ref_islr"] ?? "") != trim($rsnew["ref_islr"] ?? "")
-    ) {
-        if (!VerificaFuncion("017")) {
-            $this->CancelMessage =
-                "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de ISLR; verifique.";
-
-            return false;
-        }
-    }
-
-    if (
-        trim($rsold["ref_municipal"] ?? "") != "" &&
-        trim($rsold["ref_municipal"] ?? "") != trim($rsnew["ref_municipal"] ?? "")
-    ) {
-        if (!VerificaFuncion("018")) {
-            $this->CancelMessage =
-                "No est&aacute; autorizado para cambiar n&uacute;mero de comprobante de Impuesto Municipal; verifique.";
-
-            return false;
-        }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Recibo de caja
-    |--------------------------------------------------------------------------
-    | No lleva IVA ni retenciones.
-    |--------------------------------------------------------------------------
-    */
-    if ($tipo_documento == "RC") {
-        $rsnew["alicuota"] = 0.00;
-        $rsnew["aplica_retencion"] = "N";
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Validación de montos
-    |--------------------------------------------------------------------------
-    */
-    $montoExento = floatval(
-        $rsnew["monto_exento"]
-        ?? $rsold["monto_exento"]
-        ?? 0
-    );
-
-    $montoGravado = floatval(
-        $rsnew["monto_gravado"]
-        ?? $rsold["monto_gravado"]
-        ?? 0
-    );
-
-    if ($montoExento <= 0 && $montoGravado <= 0) {
-        $this->setFailureMessage(
-            "El documento debe tener al menos un monto exento o gravado mayor a cero."
-        );
-
-        return false;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Completar valores no enviados por PHPMaker
-    |--------------------------------------------------------------------------
-    | En Row_Updating, $rsnew puede contener solamente los campos modificados.
-    | Por eso completamos con $rsold antes de calcular.
-    |--------------------------------------------------------------------------
-    */
-    $camposNecesarios = [
-        "proveedor",
-        "tipo_documento",
-        "aplica_retencion",
-        "alicuota",
-        "monto_exento",
-        "monto_gravado"
-    ];
-
-    foreach ($camposNecesarios as $campo) {
-        if (
-            !array_key_exists($campo, $rsnew) ||
-            $rsnew[$campo] === null ||
-            $rsnew[$campo] === ""
-        ) {
-            $rsnew[$campo] = $rsold[$campo] ?? "";
-        }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Guardar referencias actuales
-    |--------------------------------------------------------------------------
-    | AplicarRetencionesRsNew() recalcula montos, pero en actualización no
-    | debe reservar un nuevo consecutivo.
-    |--------------------------------------------------------------------------
-    */
-    $refIvaActual = $rsnew["ref_iva"]
-        ?? $rsold["ref_iva"]
-        ?? null;
-
-    $refIslrActual = $rsnew["ref_islr"]
-        ?? $rsold["ref_islr"]
-        ?? null;
-
-    $refMunicipalActual = $rsnew["ref_municipal"]
-        ?? $rsold["ref_municipal"]
-        ?? null;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cálculo centralizado
-    |--------------------------------------------------------------------------
-    */
-    $resultado = AplicarRetencionesRsNew(
-        $rsnew,
-        false
-    );
-
-    /*
-    |--------------------------------------------------------------------------
-    | Conservar o limpiar referencias
-    |--------------------------------------------------------------------------
-    */
-    if ($resultado["ret_iva"] > 0) {
-        $rsnew["ref_iva"] = $refIvaActual;
-    } else {
-        $rsnew["ref_iva"] = null;
-    }
-
-    if ($resultado["ret_islr"] > 0) {
-        $rsnew["ref_islr"] = $refIslrActual;
-    } else {
-        $rsnew["ref_islr"] = null;
-    }
-
-    if ($resultado["ret_municipal"] > 0) {
-        $rsnew["ref_municipal"] = $refMunicipalActual;
-    } else {
-        $rsnew["ref_municipal"] = null;
-    }
-
-    $rsnew["username"] = CurrentUserName();
 
     return true;
 }]]></CustomScript>
@@ -29198,7 +29235,9 @@ SELECT
     IFNULL((
         SELECT SUM(x.cantidad_movimiento)
         FROM (
-            SELECT es.cantidad_movimiento
+            SELECT
+                es.articulo,
+                es.cantidad_movimiento
             FROM entradas_salidas AS es
             JOIN entradas AS e
                 ON e.tipo_documento = es.tipo_documento
@@ -29207,16 +29246,20 @@ SELECT
                 ON al.codigo = es.almacen
                AND al.movimiento = 'S'
             WHERE (
-                    (es.tipo_documento = 'TDCAEN' AND e.estatus <> 'ANULADO')
+                    (es.tipo_documento = 'TDCAEN'
+                     AND e.estatus <> 'ANULADO')
                     OR
-                    (es.tipo_documento = 'TDCNRP' AND es.check_ne = 'S' AND e.estatus <> 'ANULADO')
+                    (es.tipo_documento = 'TDCNRP'
+                     AND es.check_ne = 'S'
+                     AND e.estatus <> 'ANULADO')
                   )
-              AND es.articulo = a.id
               AND es.newdata = 'S'
 
             UNION ALL
 
-            SELECT es.cantidad_movimiento
+            SELECT
+                es.articulo,
+                es.cantidad_movimiento
             FROM entradas_salidas AS es
             JOIN salidas AS s
                 ON s.tipo_documento = es.tipo_documento
@@ -29225,18 +29268,21 @@ SELECT
                 ON al.codigo = es.almacen
                AND al.movimiento = 'S'
             WHERE (
-                    (es.tipo_documento = 'TDCPDV' AND s.estatus = 'NUEVO')
+                    (es.tipo_documento = 'TDCPDV'
+                     AND s.estatus = 'NUEVO')
                     OR
-                    (es.tipo_documento IN ('$tipo_documento_sql', 'TDCASA') AND s.estatus <> 'ANULADO')
+                    (es.tipo_documento IN ('$tipo_documento_sql', 'TDCASA')
+                     AND s.estatus <> 'ANULADO')
                   )
-              AND es.articulo = a.id
               AND es.newdata = 'S'
         ) AS x
+        WHERE x.articulo = a.id
     ), 0) AS existencia
 
 FROM articulo AS a
 JOIN fabricante AS b
     ON b.Id = a.fabricante
+
 WHERE
        a.codigo LIKE '%$articulo_sql%'
     OR a.codigo_ims LIKE '%$articulo_sql%'
@@ -29244,10 +29290,12 @@ WHERE
     OR a.nombre_comercial LIKE '%$articulo_sql%'
     OR a.principio_activo LIKE '%$articulo_sql%'
     OR a.presentacion LIKE '%$articulo_sql%'
-ORDER BY 
+
+ORDER BY
     a.principio_activo,
     a.nombre_comercial,
     a.presentacion
+
 LIMIT 100;
 ";
 
@@ -32937,295 +32985,217 @@ function Row_Rendered()
 }
 ]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="ftp_subir_pedidos.php"><![CDATA[<?php
-//if(trim($_COOKIE["strcon"]) != "mandrake") {
-if(trim($_COOKIE["strcon"]) != "dropharm_mandrake") {
-	header("Location: Home");
-	die();
+
+// 1. Verificación de seguridad y bloqueos
+if (trim($_COOKIE["strcon"] ?? '') !== "dropharm_mandrake") {
+    header("Location: Home");
+    die();
 }
 
 $sql = "SELECT valor1 FROM parametro WHERE codigo = '013';";
 $bloquea = ExecuteScalar($sql);
-if($bloquea == "SI") { 
-	header("Location: Home");
-	die();
+if ($bloquea === "SI") { 
+    header("Location: Home");
+    die();
 } 
 
+// 2. Parámetros globales
 $sql = "SELECT valor1 AS almacen FROM parametro WHERE codigo = '002';";
 $row = ExecuteRow($sql);
-$almacen = $row["almacen"];
-
+$almacen = $row["almacen"] ?? '';
 $tipo_documento = "TDCPDV";
-$username = "FTP";
-$lista_pedido = "PED000";
 
-// $path = "/home4/drophqsc/dropharmadm.com/ftpexportar/pedidos/";
-$path = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
-// $path = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos\\";
+/**
+ * Función modular para procesar lotes de pedidos FTP
+ */
+function procesarArchivosFTP(
+    string $path, 
+    string $pathOld, 
+    string $prefix, 
+    string $delimiter, 
+    string $username, 
+    string $tipoDocumento
+): int {
+    $cnt = 0;
+    $arrFiles = is_dir($path) ? scandir($path) : [];
 
-$arrFiles = scandir($path);
-$cnt = 0;
-foreach ($arrFiles as $key => $value) { 
-	if($value != "." and $value != "..") { 
-		if(substr($value, 0, 6) == "PEDIDO") { 
-			$sql = "SELECT factura FROM ftp_fact_pedi_procesado WHERE pedido = '$value';";
-			if(!$row = ExecuteRow($sql)) {
-				$myfile = str_replace("PEDIDO", "", $value);
-				$myfile = str_replace(".txt", "", strtolower($myfile));
-				$arrDatos = explode("_", $myfile);
-				$cliente = $arrDatos[0];
-				$pedido = $arrDatos[1];
+    foreach ($arrFiles as $archivo) { 
+        if ($archivo === '.' || $archivo === '..') {
+            continue;
+        }
 
-                $xSql = "SELECT IFNULL(descuento, 0) AS descuento FROM cliente WHERE id = $cliente;";
-                $xDescuento = floatval(ExecuteScalar($xSql));
+        if (str_starts_with($archivo, $prefix)) { 
+            $sql = "SELECT factura FROM ftp_fact_pedi_procesado WHERE pedido = '$archivo';";
+            
+            if (!ExecuteRow($sql)) {
+                // Extracción de datos del nombre de archivo
+                $nombreBase = pathinfo($archivo, PATHINFO_FILENAME);
 
-				$nota = "CREADO VIA FTP DESDE ARCHVO $value Nro Pedido $pedido";
-				$pedido = $value;
+                if ($prefix === "PEDIDO") {
 
-				$fp = fopen("$path$value", "r");
-				$arrx = [];
-				$lspd = "";
-				$lista = [];
-				while (!feof($fp)){ 
-				    $linea = fgets($fp);
-				    if(trim($linea) != "") { 
-				    	$arry = [];
-					    $detalle = explode(";", $linea);
-					    $articulo = $detalle[3];
-					    $sql = "SELECT codigo, lista_pedido FROM articulo WHERE id = $articulo;";
-					    $row = ExecuteRow($sql);
-					    $cod_articulo = $row["codigo"];
-					    $lista_pedido = $row["lista_pedido"];
-					    $nombre = $detalle[1];
-					    $cantidad = $detalle[2];
+                    // Estructura:
+                    // PEDIDO1893_9745.txt
+                    //
+                    // Resultado esperado:
+                    // cliente = 1893
+                    // pedido  = 9745
 
-   				    	$arry["articulo"] = $articulo;
-   				    	$arry["cod_articulo"] = $cod_articulo;
-   				    	$arry["lista_pedido"] = $lista_pedido;
-   				    	$arry["nombre"] = $nombre;
-   				    	$arry["cantidad"] = $cantidad;
-   				    	$arrx[] = $arry;
+                    $myfile = substr($nombreBase, strlen("PEDIDO"));
+                    $arrDatos = explode("_", $myfile);
 
-   				    	if($lspd != $lista_pedido) { 
-   				    		$sw = true;
-   				    		foreach ($lista as $key => $value) {
-   				    			if($value == $lista_pedido) $sw = false;
-   				    		}
-   				    		if($sw) $lista[] = $lista_pedido;
-   				    		$lspd = $lista_pedido;
-   				    	}
-				    }
-				} 
-				fclose($fp);
+                    $cliente = intval($arrDatos[0] ?? 0);
+                    $pedido  = intval($arrDatos[1] ?? 0);
 
-				foreach ($lista as $key => $value) { 
-					$sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipo_documento';";
-					$row = ExecuteRow($sql);
-					$consecutivo = intval($row["consecutivo"]) + 1; 
-					$nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
+                } else {
 
-					$sql = "INSERT INTO salidas
-								(id, tipo_documento, username, fecha,
-								cliente, nro_documento,
-								nota, estatus,
-								asesor, lista_pedido, asesor_asignado, moneda, descuento, nombre)
-							VALUES  
-								(NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "',
-								$cliente, '$nro_documento',
-								'$nota', 'NUEVO', 
-								'$username', '$value', '$username', 'USD', $xDescuento, '$username');";
-					Execute($sql);
+                    // Estructura:
+                    // PED-2436-297539-PR.txt
+                    //
+                    // Resultado esperado:
+                    // cliente = 2436
+                    // pedido  = 297539
 
-					// Obtengo el id de la nueva factura
-					$row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
-					$new_id = $row["id"];						
-					$insart = new PdvLineaGuardar();
-					foreach ($arrx as $key2 => $value2) {
-						if($value2["lista_pedido"] == $value) {
-	   				    	$articulo = $value2["articulo"];
-	   				    	$cod_articulo = $value2["cod_articulo"];
-	   				    	$lista_pedido = $value2["lista_pedido"];
-	   				    	$nombre = $value2["nombre"];
-	   				    	$cantidad = $value2["cantidad"];
+                    $myfile = substr($nombreBase, strlen("PED-"));
+                    $arrDatos = explode("-", $myfile);
 
-						    $sql = "SELECT 
-										b.activo, a.activo AS artact  
-									FROM 
-										articulo AS a 
-										JOIN fabricante AS b ON b.Id = a.fabricante 
-									WHERE 
-										a.codigo = '$cod_articulo';";
-							if($row101 = ExecuteRow($sql)) {
-								if($row101["activo"] == "S" and $row101["artact"] == "S") {
-									$insart->insertar_articulo($tipo_documento, $new_id, $cliente, $cod_articulo, $lista_pedido, $cantidad, 2);
-								}
-							}
-						}
-					}
-					$insart->ActualizarCabecera();
-					unset($insart);
-					$cnt++;
-				}
+                    $cliente = intval($arrDatos[0] ?? 0);
+                    $pedido  = intval($arrDatos[1] ?? 0);
+                }
 
-
-				$sql = "INSERT INTO ftp_fact_pedi_procesado	(id, factura, pedido, fecha_hora) VALUES (NULL, '', '" . $pedido . "', NOW())";
-				Execute($sql);
-
-				$path2 = "/home2/dropharm/dropharmadm/ftpexportar/pedidos_old/";
-				// $path2 = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos_old\\";
-				if (!file_exists($path2)) {
-					mkdir($path2, 0777, true);
-				}
-				$file = $path.$pedido;
-				$file2 = $path2.$pedido;
-				$moved = rename($file, $file2);
-			}
-		}
-	}
-}
-
-echo '<div class="alert alert-primary" role="alert">
-		  Proceso FTP culminado, total de pedidos generados ' . $cnt . '
-		</div>';
-
-///////////////////////////////////////
-///////////////////////////////////////
-///////////////////////////////////////
-
-// $path = "/home4/drophqsc/dropharmadm.com/ftpexportar2/salidas/";
-$path = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
-
-// $path = "C:\\laragon\\www\\mandrake_2024_dropharma\\maker\\FullTech360\\salida\\";
-
-$arrFiles = scandir($path);
-$username = "FTP2";
-// var_dump($arrFiles);
-$cnt = 0;
-foreach ($arrFiles as $key => $value) { 
-	if($value != "." and $value != "..") { 
-		if(substr($value, 0, 3) == "PED") { 
-			$sql = "SELECT factura FROM ftp_fact_pedi_procesado WHERE pedido = '$value';"; 
-			if(!$row = ExecuteRow($sql)) {
-				$myfile = str_replace("PED", "", $value);
-				$myfile = str_replace(".txt", "", strtolower($myfile));
-				$arrDatos = explode("-", $myfile);
-				$cliente = $arrDatos[1];
-				$pedido = $arrDatos[2];
+                // Protección ante nombres de archivo incorrectos
+                if ($cliente <= 0 || $pedido <= 0) {
+                    continue;
+                }
 
                 $xSql = "SELECT IFNULL(descuento, 0) AS descuento FROM cliente WHERE id = $cliente;";
                 $xDescuento = floatval(ExecuteScalar($xSql));
 
-				$nota = "CREADO VIA FTP DESDE ARCHVO $value Nro Pedido $pedido"; 
-				$pedidoFile = $value;
+                $nota = "CREADO VIA FTP DESDE ARCHVO $archivo Nro Pedido $pedido";
+                $filePath = $path . $archivo;
 
-				$fp = fopen("$path$value", "r");
-				$arrx = [];
-				$lspd = "";
-				$lista = [];
-				while (!feof($fp)){ 
-				    $linea = fgets($fp);
-				    if(trim($linea) != "") { 
-				    	$arry = [];
-					    $detalle = explode("|", $linea);
-					    // var_dump($detalle);
-					    $articulo = $detalle[0];
-					    $sql = "SELECT codigo, lista_pedido FROM articulo WHERE id = $articulo;"; 
-					    $row = ExecuteRow($sql);
-					    $cod_articulo = $row["codigo"];
-					    $lista_pedido = $row["lista_pedido"];
-					    $nombre = $detalle[1];
-					    $cantidad = $detalle[2];
+                if (!file_exists($filePath)) {
+                    continue;
+                }
 
-   				    	$arry["articulo"] = $articulo;
-   				    	$arry["cod_articulo"] = $cod_articulo;
-   				    	$arry["lista_pedido"] = $lista_pedido;
-   				    	$arry["nombre"] = $nombre;
-   				    	$arry["cantidad"] = $cantidad;
-   				    	$arrx[] = $arry;
+                // Lectura del archivo de texto
+                $fp = fopen($filePath, "r");
+                $arrx = [];
+                $lista = [];
 
-   				    	if($lspd != $lista_pedido) { 
-   				    		$sw = true;
-   				    		foreach ($lista as $key => $value) {
-   				    			if($value == $lista_pedido) $sw = false;
-   				    		}
-   				    		if($sw) $lista[] = $lista_pedido;
-   				    		$lspd = $lista_pedido;
-   				    	}
-				    }
-				} 
-				fclose($fp);
+                while (!feof($fp)) { 
+                    $linea = fgets($fp);
+                    if (trim($linea) !== "") { 
+                        $detalle = explode($delimiter, $linea);
 
-				foreach ($lista as $key => $value) { 
-					$sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipo_documento';";
-					$row = ExecuteRow($sql);
-					$consecutivo = intval($row["consecutivo"]) + 1; 
-					$nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
+                        if ($prefix === "PEDIDO") {
+                            $articulo = $detalle[3] ?? null;
+                            $nombre   = $detalle[1] ?? null;
+                            $cantidad = $detalle[2] ?? null;
+                        } else {
+                            $articulo = $detalle[0] ?? null;
+                            $nombre   = $detalle[1] ?? null;
+                            $cantidad = $detalle[2] ?? null;
+                        }
 
-					$sql = "INSERT INTO salidas
-								(id, tipo_documento, username, fecha,
-								cliente, nro_documento,
-								nota, estatus,
-								asesor, lista_pedido, asesor_asignado, moneda, descuento, nombre)
-							VALUES  
-								(NULL, '$tipo_documento', '$username', '" . date("Y-m-d H:i:s") . "',
-								$cliente, '$nro_documento',
-								'$nota', 'NUEVO', 
-								'$username', '$value', '$username', 'USD', $xDescuento, '$username');";
-					Execute($sql);
+                        $sql = "SELECT codigo, lista_pedido FROM articulo WHERE id = $articulo;";
+                        $row = ExecuteRow($sql);
+                        $cod_articulo = $row["codigo"] ?? '';
+                        $lista_pedido = $row["lista_pedido"] ?? '';
 
-					// Obtengo el id de la nueva factura
-					$row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
-					$new_id = $row["id"];						
-					$insart = new PdvLineaGuardar();
-					foreach ($arrx as $key2 => $value2) {
-						if($value2["lista_pedido"] == $value) {
-	   				    	$articulo = $value2["articulo"];
-	   				    	$cod_articulo = $value2["cod_articulo"];
-	   				    	$lista_pedido = $value2["lista_pedido"];
-	   				    	$nombre = $value2["nombre"];
-	   				    	$cantidad = $value2["cantidad"];
+                        $arrx[] = [
+                            "articulo"     => $articulo,
+                            "cod_articulo" => $cod_articulo,
+                            "lista_pedido" => $lista_pedido,
+                            "nombre"       => $nombre,
+                            "cantidad"     => $cantidad
+                        ];
 
-						    $sql = "SELECT 
-										b.activo, a.activo AS artact  
-									FROM 
-										articulo AS a 
-										JOIN fabricante AS b ON b.Id = a.fabricante 
-									WHERE 
-										a.codigo = '$cod_articulo';";
-							if($row101 = ExecuteRow($sql)) {
-								if($row101["activo"] == "S" and $row101["artact"] == "S") {
-									$insart->insertar_articulo($tipo_documento, $new_id, $cliente, $cod_articulo, $lista_pedido, $cantidad, 2);
-								}
-							}
-						}
-					}
-					$insart->ActualizarCabecera();
-					unset($insart);
-					$cnt++;
-				}
+                        if (!in_array($lista_pedido, $lista, true)) {
+                            $lista[] = $lista_pedido;
+                        }
+                    }
+                } 
+                fclose($fp);
 
+                // Inserción de cabecera y detalles por lista
+                foreach ($lista as $listaPedido) { 
+                    $sql = "SELECT MAX(CAST(IFNULL(nro_documento, 0) AS UNSIGNED)) AS consecutivo FROM salidas WHERE tipo_documento = '$tipoDocumento';";
+                    $row = ExecuteRow($sql);
+                    $consecutivo = intval($row["consecutivo"] ?? 0) + 1; 
+                    $nro_documento = str_pad($consecutivo, 7, "0", STR_PAD_LEFT);
 
-				$sql = "INSERT INTO ftp_fact_pedi_procesado	(id, factura, pedido, fecha_hora) VALUES (NULL, '', '" . $pedidoFile . "', NOW())";
-				Execute($sql);
-			}
+                    $fechaActual = date("Y-m-d H:i:s");
+                    $sql = "INSERT INTO salidas
+                                (id, tipo_documento, username, fecha, cliente, nro_documento, nota, estatus, asesor, lista_pedido, asesor_asignado, moneda, descuento, nombre)
+                            VALUES  
+                                (NULL, '$tipoDocumento', '$username', '$fechaActual', $cliente, '$nro_documento', '$nota', 'NUEVO', '$username', '$listaPedido', '$username', 'USD', $xDescuento, '$username');";
+                    Execute($sql);
 
-            // Borrar archivo
-            // $path2 = "/home4/drophqsc/dropharmadm.com/ftpexportar2/pedidos_old/";
-            $path2 = "/home2/dropharm/dropharmadm/ftpexportar2/pedidos_old/";
-            // $path2 = "C:\\laragon\\www\\mandrake\\db\\Maquina_Fiscal\\pedidos_old\\";
-            if (!file_exists($path2)) {
-                mkdir($path2, 0777, true);
+                    $row = ExecuteRow("SELECT LAST_INSERT_ID() AS id;");
+                    $new_id = $row["id"];                       
+                    $insart = new PdvLineaGuardar();
+
+                    foreach ($arrx as $value2) {
+                        if ($value2["lista_pedido"] === $listaPedido) {
+                            $cod_articulo = $value2["cod_articulo"];
+                            $cantidad     = $value2["cantidad"];
+
+                            $sql = "SELECT b.activo, a.activo AS artact  
+                                    FROM articulo AS a 
+                                    JOIN fabricante AS b ON b.Id = a.fabricante 
+                                    WHERE a.codigo = '$cod_articulo';";
+
+                            if ($row101 = ExecuteRow($sql)) {
+                                if ($row101["activo"] === "S" && $row101["artact"] === "S") {
+                                    $insart->insertar_articulo($tipoDocumento, $new_id, $cliente, $cod_articulo, $listaPedido, $cantidad, 2);
+                                }
+                            }
+                        }
+                    }
+
+                    $insart->ActualizarCabecera();
+                    unset($insart);
+                    $cnt++;
+                }
+
+                // Registrar en log y mover archivo
+                $sql = "INSERT INTO ftp_fact_pedi_procesado (id, factura, pedido, fecha_hora) VALUES (NULL, '', '$archivo', NOW())";
+                Execute($sql);
+
+                if (!file_exists($pathOld)) {
+                    mkdir($pathOld, 0777, true);
+                }
+                rename($filePath, $pathOld . $archivo);
             }
-            $file = $path.$value;
-            $file2 = $path2.$value;
-            // die("$file, $file2");
-            $moved = rename($file, $file2);
-		}
-	}
+        }
+    }
+
+    return $cnt;
 }
 
+// -------------------------------------------------------------
+// Proceso FTP 1
+// -------------------------------------------------------------
+$path1     = "/home2/dropharm/dropharmadm/ftpexportar/pedidos/";
+$path1_old = "/home2/dropharm/dropharmadm/ftpexportar/pedidos_old/";
+
+$cnt1 = procesarArchivosFTP($path1, $path1_old, "PEDIDO", ";", "FTP", $tipo_documento);
+
 echo '<div class="alert alert-primary" role="alert">
-		  Proceso FTP2 culminado, total de pedidos generados ' . $cnt . '
-		</div>';
+        Proceso FTP culminado, total de pedidos generados ' . $cnt1 . '
+      </div>';
+
+// -------------------------------------------------------------
+// Proceso FTP 2
+// -------------------------------------------------------------
+$path2     = "/home2/dropharm/dropharmadm/ftpexportar2/salidas/";
+$path2_old = "/home2/dropharm/dropharmadm/ftpexportar2/pedidos_old/";
+
+$cnt2 = procesarArchivosFTP($path2, $path2_old, "PED", "|", "FTP2", $tipo_documento);
+
+echo '<div class="alert alert-primary" role="alert">
+        Proceso FTP2 culminado, total de pedidos generados ' . $cnt2 . '
+      </div>';
 
 ?>]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_Exporting" ScriptCtrlID="list" ScriptL1Key="articulo"><![CDATA[// Page Exporting event
@@ -38478,6 +38448,53 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 
 $preguntarNE = false;
 
+// ------------------------------------------------------------
+// Modalidad de emisión fiscal
+// 112 = Impresora fiscal (S/N)
+// 116 = Facturación digital TFHKA (S/N)
+//
+// Regla:
+//   DIGITAL   -> 116=S y 112=N
+//   IMPRESORA -> 112=S y 116=N
+//   LIBRE     -> ambos N
+//   CONFLICTO -> ambos S (se bloquea el procesamiento)
+// ------------------------------------------------------------
+ExecuteStatement("
+    INSERT INTO parametro (codigo, descripcion, valor1)
+    SELECT '112', 'USA IMPRESORA FISCAL', 'N'
+    FROM DUAL
+    WHERE NOT EXISTS (
+        SELECT 1 FROM parametro WHERE codigo = '112'
+    )
+");
+
+ExecuteStatement("
+    INSERT INTO parametro (codigo, descripcion, valor1)
+    SELECT '116', 'USA FACTURACION DIGITAL TFHKA', 'N'
+    FROM DUAL
+    WHERE NOT EXISTS (
+        SELECT 1 FROM parametro WHERE codigo = '116'
+    )
+");
+
+$impresoraFiscal = strtoupper(trim((string) ExecuteScalar(
+    "SELECT valor1 FROM parametro WHERE codigo = '112' LIMIT 1"
+)));
+
+$facturacionDigital = strtoupper(trim((string) ExecuteScalar(
+    "SELECT valor1 FROM parametro WHERE codigo = '116' LIMIT 1"
+)));
+
+if ($facturacionDigital === 'S' && $impresoraFiscal === 'S') {
+    $modoEmisionFiscal = 'CONFLICTO';
+} elseif ($facturacionDigital === 'S') {
+    $modoEmisionFiscal = 'DIGITAL';
+} elseif ($impresoraFiscal === 'S') {
+    $modoEmisionFiscal = 'IMPRESORA';
+} else {
+    $modoEmisionFiscal = 'LIBRE';
+}
+
 $rowParametro111 = ExecuteRow("SELECT valor1 FROM parametro WHERE codigo = '111' LIMIT 1");
 if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
     $preguntarNE = true;
@@ -38636,12 +38653,15 @@ if (intval($pedido) > 0) {
         <label class="form-label small fw-bold mb-1">Tasa B.C.V.</label>
 
         <input name="tasa_usd"
-               id="tasa_usd"
-               type="number"
-               class="form-control form-control-sm bg-light text-end"
-               value="<?= $tasa ?>"
-               onkeyup="js:RefreshMonedaTasa()"
-               readonly>
+                id="tasa_usd"
+                type="number"
+                step="0.01"
+                min="0"
+                class="form-control form-control-sm <?= ($consignacion == "NC" ? "" : "bg-light") ?> text-end"
+                value="<?= $tasa ?>"
+                onkeyup="js:RefreshMonedaTasa()"
+                onchange="js:RefreshMonedaTasa()"
+                <?= ($consignacion == "NC" ? "" : "readonly") ?>>
     </div>
 
     <div style="display:none;">
@@ -38840,6 +38860,39 @@ if (
 }
 ?>
 
+<?php
+
+$fmDocValor = ExecuteScalar("
+    SELECT IFNULL(ultimo_numero, 0) + 1
+    FROM documento_consecutivo
+    WHERE tipo_documento = 'TDCFCV'
+      AND serie = 'FM_DOC'
+    LIMIT 1
+");
+
+$fmDocSiguiente = (
+    is_numeric($fmDocValor) && intval($fmDocValor) > 0
+)
+    ? intval($fmDocValor)
+    : 1;
+
+
+$fmCtrlValor = ExecuteScalar("
+    SELECT IFNULL(ultimo_numero, 0) + 1
+    FROM documento_consecutivo
+    WHERE tipo_documento = 'TDCFCV'
+      AND serie = 'FM_CTRL'
+    LIMIT 1
+");
+
+$fmCtrlSiguiente = (
+    is_numeric($fmCtrlValor) && intval($fmCtrlValor) > 0
+)
+    ? intval($fmCtrlValor)
+    : 1;
+
+?>
+
 <script type="text/javascript">
 loadjs.ready(["jquery"], function () {
     const $ = jQuery;
@@ -38929,6 +38982,58 @@ loadjs.ready(["jquery"], function () {
         style: "decimal",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
+    });
+
+    let diasCreditoOriginal = parseInt(
+        $("#dias_credito").val() || 0,
+        10
+    );
+
+    // Guardamos el valor ANTES de que el usuario haga el cambio
+    $(document).on("focus mousedown", "#dias_credito", function () {
+        diasCreditoOriginal = parseInt(
+            $(this).val() || 0,
+            10
+        );
+    });
+
+    $(document).on("change.autorizacion", "#dias_credito", function () {
+
+        const nuevo = parseInt(
+            $(this).val() || 0,
+            10
+        );
+
+        // Si realmente no cambió nada, no hacemos nada
+        if (nuevo === diasCreditoOriginal) {
+            return;
+        }
+
+        diasCreditoPendiente = {
+            original: diasCreditoOriginal,
+            nuevo: nuevo
+        };
+
+        // Los usuarios con permiso 040 no requieren autorización
+        if (puedeModificarPrecioDescuento) {
+
+            diasCreditoOriginal = nuevo;
+
+            diasCreditoPendiente = {
+                original: "",
+                nuevo: ""
+            };
+
+            return;
+        }
+
+        // Temporalmente regresamos el select al valor autorizado anterior
+        $("#dias_credito").val(diasCreditoOriginal);
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+
+        showModalAutorizarTdcfcv();
     });
 
     function alertMsg(msg) {
@@ -39112,6 +39217,23 @@ loadjs.ready(["jquery"], function () {
     });
 
     $(document).on("click", "#btnCancelarAutorizarTdcfcv", function () {
+        if (diasCreditoPendiente.original !== "") {
+            $("#dias_credito").val(
+                diasCreditoPendiente.original
+            );
+
+            diasCreditoOriginal =
+                parseInt(diasCreditoPendiente.original, 10);
+
+            diasCreditoPendiente = {
+                original: "",
+                nuevo: ""
+            };
+
+            hideModalAutorizarTdcfcv();
+            return;
+        }
+
         if (transferenciaPendiente.original !== "") {
             $("#descTransferencista").val(
                 transferenciaPendiente.original
@@ -39184,6 +39306,23 @@ loadjs.ready(["jquery"], function () {
         })
         .done(function (result) {
             if (String(result).trim() === "S") {
+                if (diasCreditoPendiente.original !== "") {
+                    $("#dias_credito").val(
+                        diasCreditoPendiente.nuevo
+                    );
+
+                    diasCreditoOriginal =
+                        parseInt(diasCreditoPendiente.nuevo, 10);
+
+                    diasCreditoPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 if (descuentoGlobalPendiente.pedido !== "") {
                     AplicarDescuentoGlobalPendiente();
                     hideModalAutorizarTdcfcv();
@@ -39220,6 +39359,24 @@ loadjs.ready(["jquery"], function () {
             } else {
                 alertMsg("!!! NO AUTORIZADO !!!");
 
+                if (diasCreditoPendiente.original !== "") {
+
+                    $("#dias_credito").val(
+                        diasCreditoPendiente.original
+                    );
+
+                    diasCreditoOriginal =
+                        parseInt(diasCreditoPendiente.original, 10);
+
+                    diasCreditoPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 if (transferenciaPendiente.original !== "") {
                     $("#descTransferencista").val(transferenciaPendiente.original);
                     $("#rangoTransferencista").val(transferenciaPendiente.original);
@@ -39253,7 +39410,24 @@ loadjs.ready(["jquery"], function () {
         })
         .fail(function () {
             alertMsg("Error de comunicación con el servidor.");
-            
+
+            if (diasCreditoPendiente.original !== "") {
+                $("#dias_credito").val(
+                    diasCreditoPendiente.original
+                );
+
+                diasCreditoOriginal =
+                    parseInt(diasCreditoPendiente.original, 10);
+
+                diasCreditoPendiente = {
+                    original: "",
+                    nuevo: ""
+                };
+
+                hideModalAutorizarTdcfcv();
+                return;
+            }
+
             if (transferenciaPendiente.original !== "") {
                 $("#descTransferencista").val(transferenciaPendiente.original);
                 $("#rangoTransferencista").val(transferenciaPendiente.original);
@@ -39318,16 +39492,67 @@ loadjs.ready(["jquery"], function () {
 
         const total = parseFloat(json.total ?? 0);
         const totalUsd = parseFloat(json.total_usd ?? 0);
-        const montoSinDescuento = parseFloat(json.monto_sin_descuento ?? 0);
-        const totalUsdSinDescuento = parseFloat(json.total_usd_sin_descuento ?? 0);
 
-        if (total === montoSinDescuento) {
-            $("#xTotalBs").html(formatter.format(total));
-            $("#xTotalUSD").html(formatter.format(totalUsd));
-        } else {
-            $("#xTotalBs").html(formatter.format(total) + "<br><del>" + formatter.format(montoSinDescuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(totalUsd) + "<br><del>" + formatter.format(totalUsdSinDescuento) + "</del>");
+        const montoSinDescuento = parseFloat(
+            json.monto_sin_descuento ?? 0
+        );
+
+        const totalUsdSinDescuento = parseFloat(
+            json.total_usd_sin_descuento ?? 0
+        );
+
+        const totalConIva = parseFloat(
+            json.total_con_iva ?? 0
+        );
+
+        const totalUsdConIva = parseFloat(
+            json.total_usd_con_iva ?? 0
+        );
+
+
+        // ==========================================
+        // MONTO EN USD
+        // ==========================================
+        let htmlTotal = formatter.format(total);
+
+        if (Math.abs(total - montoSinDescuento) > 0.001) {
+            htmlTotal +=
+                "<br><del>" +
+                formatter.format(montoSinDescuento) +
+                "</del>";
         }
+
+        htmlTotal +=
+            '<br><span class="fw-bold">' +
+            'c/IVA: ' +
+            formatter.format(totalConIva) +
+            '</span>';
+
+        $("#xTotalBs").html(htmlTotal);
+
+
+        // ==========================================
+        // MONTO EN Bs.
+        // ==========================================
+        let htmlTotalUsd = formatter.format(totalUsd);
+
+        if (
+            Math.abs(totalUsd - totalUsdSinDescuento) >
+            0.001
+        ) {
+            htmlTotalUsd +=
+                "<br><del>" +
+                formatter.format(totalUsdSinDescuento) +
+                "</del>";
+        }
+
+        htmlTotalUsd +=
+            '<br><span class="fw-bold">' +
+            'c/IVA: ' +
+            formatter.format(totalUsdConIva) +
+            '</span>';
+
+        $("#xTotalUSD").html(htmlTotalUsd);
     }
 
     window.insertar = function (i) {
@@ -39381,6 +39606,8 @@ loadjs.ready(["jquery"], function () {
                 $("#x" + i + "_boton").html(
                     '<i class="fa-solid fa-trash text-danger" style="cursor:pointer;" onclick="js:eliminar(' + i + ', ' + json.id_item + ')"></i>'
                 );
+
+                getCodigos3(json.pedido);
             } else {
                 alertMsg("Error: " + (json.mensaje ?? "No se pudo insertar."));
                 $("#x" + i + "_boton").html(
@@ -39446,6 +39673,7 @@ loadjs.ready(["jquery"], function () {
         $("#x" + i + "_cantidad").prop("disabled", false).focus();
         $("#x" + i + "_precioFull").prop("disabled", false);
         $("#x" + i + "_descuento").prop("disabled", false);
+        $("#x" + i + "_descuento2").prop("disabled", false);
         $("#x" + i + "_lote").prop("disabled", false);
         $("#x" + i + "_vence").prop("disabled", false);
 
@@ -39858,6 +40086,12 @@ loadjs.ready(["jquery"], function () {
             return true;
         }
 
+        const tipoDocumentoFiscal = String(
+            $("#consignacion").val() || ""
+        ).toUpperCase();
+
+        const docAfe = <?= intval($doc_afe) ?>;
+
         $.ajax({
             url: "include/tdcfcv/validar_existencia_articulo_tdcfcv.php",
             type: "POST",
@@ -39866,7 +40100,9 @@ loadjs.ready(["jquery"], function () {
                 pedido: pedido,
                 id_item: idItem,
                 articulo: articulo,
-                cantidad: cantidad
+                cantidad: cantidad,
+                tipo_documento_fiscal: tipoDocumentoFiscal,
+                doc_afe: docAfe
             }
         })
         .done(function (respuesta) {
@@ -39911,14 +40147,29 @@ loadjs.ready(["jquery"], function () {
             }
 
             if (!respuesta.cantidad_valida) {
-                alertMsg(
-                    "La cantidad solicitada (" +
-                    respuesta.cantidad_solicitada +
-                    ") es mayor a la existencia disponible (" +
-                    respuesta.cantidad_disponible +
-                    ")."
-                );
+                let mensaje = "";
 
+                if (respuesta.tipo_validacion === "FACTURA_AFECTADA") {
+
+                    mensaje =
+                        "La cantidad solicitada (" +
+                        respuesta.cantidad_solicitada +
+                        ") es mayor a la cantidad facturada (" +
+                        respuesta.cantidad_disponible +
+                        ") para este artículo en la factura afectada.";
+
+                } else {
+
+                    mensaje =
+                        "La cantidad solicitada (" +
+                        respuesta.cantidad_solicitada +
+                        ") es mayor a la existencia disponible (" +
+                        respuesta.cantidad_disponible +
+                        ").";
+                }
+
+                alertMsg(mensaje);
+                
                 $("#x" + i + "_cantidad")
                     .val(cantidadOriginal)
                     .focus();
@@ -40040,6 +40291,17 @@ loadjs.ready(["jquery"], function () {
     window.sendProccess = function (i) {
         if (i <= 0) return false;
 
+        const modoEmisionFiscal = "<?= $modoEmisionFiscal ?>";
+
+        if (modoEmisionFiscal === "CONFLICTO") {
+            alertMsg(
+                "Configuración fiscal inválida: están activas simultáneamente " +
+                "la Impresora Fiscal (parámetro 112) y la Facturación Digital TFHKA " +
+                "(parámetro 116). Debe quedar activa solamente una modalidad."
+            );
+            return false;
+        }
+
         // Antes de abrir los modales o reservar correlativos, valida
         // que todos los renglones tengan precio full y precio final > 0.
         if (!validarPreciosAntesDeProcesar()) {
@@ -40060,8 +40322,25 @@ loadjs.ready(["jquery"], function () {
             if (response.estatus == 1) {
                 // Inyectar datos calculados en el modal
                 $("#modal_nro_factura").val(response.factura);
-                $("#modal_nro_control").val(response.control);
+                $("#modal_nro_control").val(
+                    modoEmisionFiscal === "DIGITAL"
+                        ? "ASIGNADO POR TFHKA"
+                        : response.control
+                );
                 $("#modal_fecha").val(response.fecha);
+
+                // Conservar los correlativos fiscales normales para poder restaurarlos
+                // cuando se desmarque Factura de Contingencia.
+                const nroFacturaFiscalOriginal = response.factura;
+                const nroControlFiscalOriginal = (
+                    modoEmisionFiscal === "DIGITAL"
+                        ? "ASIGNADO POR TFHKA"
+                        : response.control
+                );
+
+                // Próximos correlativos de factura manual / contingencia.
+                const nroFacturaManual = <?= intval($fmDocSiguiente) ?>;
+                const nroControlManual = <?= intval($fmCtrlSiguiente) ?>;                
 
                 // Cambiar dinámicamente el título según el tipo de documento para mayor claridad
                 let tipoDocTxt = "Factura Fiscal";
@@ -40138,16 +40417,48 @@ loadjs.ready(["jquery"], function () {
                 $("#modal_nota_contingencia").val("");
 
                 $("#modal_contingencia").off("change").on("change", function () {
+
                     if ($(this).is(":checked")) {
-                        if (!confirm("¿Está seguro de registrar esta factura como Factura de Contingencia?")) {
+
+                        if (!confirm(
+                            "¿Está seguro de registrar esta factura como Factura de Contingencia?"
+                        )) {
                             $(this).prop("checked", false);
+
                             $("#div_nota_contingencia").slideUp(150);
                             $("#modal_nota_contingencia").val("");
+
+                            // Restaurar correlativos fiscales normales
+                            $("#modal_nro_factura").val(nroFacturaFiscalOriginal);
+                            $("#modal_nro_control").val(nroControlFiscalOriginal);
+
                             return;
                         }
+
+                        // --------------------------------------------------------
+                        // Mostrar correlativos correspondientes a factura manual
+                        // --------------------------------------------------------
+
+                        $("#modal_nro_factura").val(
+                            String(nroFacturaManual).padStart(5, "0")
+                        );
+
+                        $("#modal_nro_control").val(
+                            String(nroControlManual).padStart(7, "0")
+                        );
+
                         $("#div_nota_contingencia").slideDown(150);
                         $("#modal_nota_contingencia").trigger("focus");
+
                     } else {
+
+                        // --------------------------------------------------------
+                        // Regresar a los correlativos fiscales normales
+                        // --------------------------------------------------------
+
+                        $("#modal_nro_factura").val(nroFacturaFiscalOriginal);
+                        $("#modal_nro_control").val(nroControlFiscalOriginal);
+
                         $("#div_nota_contingencia").slideUp(150);
                         $("#modal_nota_contingencia").val("");
                     }
@@ -40204,7 +40515,8 @@ loadjs.ready(["jquery"], function () {
                             "&dias_credito=" + diasCredito +
                             "&entregado=" + tipoPago +
                             "&contingencia=" + (esContingencia ? "S" : "N") +
-                            "&nota_contingencia=" + encodeURIComponent(notaContingencia);
+                            "&nota_contingencia=" + encodeURIComponent(notaContingencia) +
+                            "&modo_emision=" + encodeURIComponent(modoEmisionFiscal);
                     };
 
                     const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
@@ -40275,6 +40587,11 @@ loadjs.ready(["jquery"], function () {
     };
 
     var transferenciaPendiente = {
+        original: "",
+        nuevo: ""
+    };
+
+    var diasCreditoPendiente = {
         original: "",
         nuevo: ""
     };
@@ -40685,23 +41002,6 @@ loadjs.ready(["jquery"], function () {
   </div>
 </div>
 
-<?php
-ExecuteStatement("
-    INSERT INTO parametro (codigo, descripcion, valor1)
-    SELECT '112', 'USA IMPRESORA FISCAL', 'N'
-    FROM DUAL
-    WHERE NOT EXISTS (
-        SELECT 1
-        FROM parametro
-        WHERE codigo = '112'
-    )
-");
-
-$impresoraFiscal = strtoupper(trim(
-    ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
-));
-?>
-
 <div class="modal fade" id="modalConfirmarFiscal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarFiscalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-primary shadow-lg">
@@ -40764,13 +41064,43 @@ $impresoraFiscal = strtoupper(trim(
                       placeholder="Indique el motivo (mínimo tres palabras)..."></textarea>
           </div>
 
-          <?php if ($impresoraFiscal == "S") { ?>
+          <?php if ($modoEmisionFiscal === "DIGITAL") { ?>
+              <div class="col-12">
+                  <div class="alert alert-success d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-cloud-arrow-up flex-shrink-0 me-2 fs-5"></i>
+                      <div>
+                          <strong>Facturación Digital TFHKA activa:</strong>
+                          el documento se preparará para emisión digital y el número de control será asignado por TFHKA.
+                      </div>
+                  </div>
+              </div>
+          <?php } elseif ($modoEmisionFiscal === "IMPRESORA") { ?>
               <div class="col-12">
                   <div class="alert alert-primary d-flex align-items-center mb-0 py-2 small" role="alert">
                       <i class="fa-solid fa-print flex-shrink-0 me-2 fs-5 text-primary"></i>
                       <div>
                           <strong>Impresora fiscal activa:</strong>
                           este documento será emitido e impreso en la impresora fiscal configurada.
+                      </div>
+                  </div>
+              </div>
+          <?php } elseif ($modoEmisionFiscal === "LIBRE") { ?>
+              <div class="col-12">
+                  <div class="alert alert-secondary d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-file-lines flex-shrink-0 me-2 fs-5"></i>
+                      <div>
+                          <strong>Formato libre activo:</strong>
+                          el documento continuará por el mecanismo actual de emisión en formato libre.
+                      </div>
+                  </div>
+              </div>
+          <?php } else { ?>
+              <div class="col-12">
+                  <div class="alert alert-danger d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-triangle-exclamation flex-shrink-0 me-2 fs-5"></i>
+                      <div>
+                          <strong>Conflicto de configuración:</strong>
+                          parámetros 112 y 116 están activos simultáneamente. No se permitirá procesar el documento.
                       </div>
                   </div>
               </div>
@@ -41073,9 +41403,22 @@ $impresoraFiscal = strtoupper(trim(
 
         </div>
     </div>
-</div>
-]]></CustomScript>
+</div>]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="tdcfcv_process.php"><![CDATA[<?php
+
+/*****************************************************************************
+ * TdcfcvProcess - Integración TFHKA Fase 3
+ *
+ * Objetivo:
+ * - Mantener intactos los flujos LIBRE e IMPRESORA.
+ * - Formalizar CONTINGENCIA como modalidad con prioridad.
+ * - Incorporar parámetro 116 para FACTURACIÓN DIGITAL TFHKA.
+ * - Bloquear 112=S + 116=S.
+ * - Integrar DIGITAL con include/tfhka/ en ambiente DEMO.
+ * - Reservar solo nro_documento Mandrake antes del envío.
+ * - Tomar nro_control exclusivamente de TFHKA.
+ * - Marcar PROCESADO solo con respuesta de negocio 200.
+ *****************************************************************************/
 
 function TdcfcvSqlValue($value)
 {
@@ -41137,24 +41480,138 @@ function CongelarSnapshotFiscalTdcfcv($pedido)
      * - Cada UPDATE es simple sobre entradas_salidas por id, sin JOIN.
      * - Solo rellena campos vacios; nunca pisa datos ya congelados.
      *****************************************************************************/
-    $sql = "SELECT
-                e.id,
-                IFNULL(a.codigo, '') AS articulo_codigo,
+    /*****************************************************************************
+    * Configuración de la descripción congelada del artículo
+    *
+    * Parámetro 115:
+    * A = Nombre comercial + Principio activo + Presentación + Fabricante
+    * B = Nombre comercial + Presentación + Fabricante
+    * C = Principio activo + Presentación + Fabricante
+    * D = Solo Nombre comercial + Fabricante
+    * E = Solo Principio activo + Fabricante
+    *
+    * Si no existe el parámetro 115, se crea B como opción default.
+    *****************************************************************************/
+
+    // Crear parámetro por defecto si todavía no existe
+    ExecuteStatement("
+        INSERT INTO parametro
+            (codigo, descripcion, valor1, valor2)
+        SELECT
+            '115',
+            'Para el detalle del articulo en factura',
+            'B',
+            'A = Nombre comercial + Principio activo + Presentación, B = Nombre comercial + Presentación; C = Principio activo + Presentación; D = Solo Nombre comercial; E = Solo Principio activo'
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM parametro
+            WHERE codigo = '115'
+            AND valor1 = 'B'
+        );
+    ");
+
+    // Obtener configuración por defecto
+    $opcionDescripcionArticulo = strtoupper(trim(
+        ExecuteScalar("
+            SELECT valor1
+            FROM parametro
+            WHERE codigo = '115' 
+            LIMIT 1
+        ") ?? "B"
+    ));
+
+    // Si por alguna razón el valor no es válido, usar B
+    if (!in_array($opcionDescripcionArticulo, ["A", "B", "C", "D", "E"], true)) {
+        $opcionDescripcionArticulo = "B";
+    }
+
+    // Construir expresión SQL según configuración
+    switch ($opcionDescripcionArticulo) {
+
+        // Nombre comercial + Principio activo + Presentación + Fabricante
+        case "A":
+            $descripcionArticuloSql = "
                 LTRIM(RTRIM(CONCAT(
                     IFNULL(a.nombre_comercial, ''),
                     ' ',
                     IFNULL(a.principio_activo, ''),
                     ' ',
                     IFNULL(a.presentacion, '')
-                ))) AS articulo_descripcion
+                )))
+            ";
+            break;
+
+        // Nombre comercial + Presentación + Fabricante
+        case "B":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                )))
+            ";
+            break;
+
+        // Principio activo + Presentación + Fabricante
+        case "C":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.principio_activo, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                )))
+            ";
+            break;
+
+        // Solo nombre comercial + Fabricante
+        case "D":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, '')
+                )))
+            ";
+            break;
+
+        // Solo principio activo + Fabricante
+        case "E":
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.principio_activo, '')
+                )))
+            ";
+            break;
+
+        // Seguridad adicional:
+        // Nombre comercial + Presentación + Fabricante
+        default:
+            $descripcionArticuloSql = "
+                LTRIM(RTRIM(CONCAT(
+                    IFNULL(a.nombre_comercial, ''),
+                    ' ',
+                    IFNULL(a.presentacion, '')
+                )))
+            ";
+            break;
+    }
+
+    $sql = "SELECT
+                e.id,
+                IFNULL(a.codigo, '') AS articulo_codigo,
+                {$descripcionArticuloSql} AS articulo_descripcion
             FROM entradas_salidas AS e
-            LEFT JOIN articulo AS a ON a.id = e.articulo
+            LEFT JOIN articulo AS a
+                ON a.id = e.articulo
+            LEFT JOIN fabricante AS f
+                ON f.id = a.fabricante
             WHERE e.id_documento = {$pedido}
-              AND e.tipo_documento = 'TDCFCV'
-              AND (
-                    e.articulo_codigo IS NULL OR e.articulo_codigo = ''
-                 OR e.articulo_descripcion IS NULL OR e.articulo_descripcion = ''
-              )";
+            AND e.tipo_documento = 'TDCFCV'
+            AND (
+                    e.articulo_codigo IS NULL
+                    OR e.articulo_codigo = ''
+                    OR e.articulo_descripcion IS NULL
+                    OR e.articulo_descripcion = ''
+            )";
+
     $rows = ExecuteRows($sql);
 
     if ($rows) {
@@ -41196,6 +41653,54 @@ function ParametroImpresoraFiscalActivaTdcfcv()
     return strtoupper(trim(
         ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
     ) ?? "") == "S";
+}
+
+
+function ParametroFacturacionDigitalActivaTdcfcv()
+{
+    ExecuteStatement("
+        INSERT INTO parametro (codigo, descripcion, valor1)
+        SELECT '116', 'USA FACTURACION DIGITAL TFHKA', 'N'
+        FROM DUAL
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM parametro
+            WHERE codigo = '116'
+        )
+    ");
+
+    return strtoupper(trim(
+        ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '116'")
+    ) ?? "") == "S";
+}
+
+function ObtenerModoEmisionFiscalTdcfcv($esContingencia = false)
+{
+    // La contingencia tiene prioridad sobre cualquier modalidad automática.
+    if ($esContingencia) {
+        return "CONTINGENCIA";
+    }
+
+    $impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
+    $facturacionDigital = ParametroFacturacionDigitalActivaTdcfcv();
+
+    // No permitimos dos mecanismos fiscales activos simultáneamente.
+    if ($impresoraFiscal && $facturacionDigital) {
+        die(
+            "Configuración fiscal inválida: no pueden estar activas simultáneamente " .
+            "la impresora fiscal (parámetro 112) y la facturación digital TFHKA (parámetro 116)."
+        );
+    }
+
+    if ($facturacionDigital) {
+        return "DIGITAL";
+    }
+
+    if ($impresoraFiscal) {
+        return "IMPRESORA";
+    }
+
+    return "LIBRE";
 }
 
 function NombreDocumentoFiscalTdcfcv($documento)
@@ -41254,7 +41759,32 @@ $documento = strtoupper(trim($row["documento"] ?? ""));
 $nro_documento = $row["nro_documento"] ?? "";
 $estatus = $row["estatus"] ?? "";
 $id_documento_padre = intval($row["id_documento_padre"] ?? 0);
-$impresoraFiscal = ParametroImpresoraFiscalActivaTdcfcv();
+
+// -----------------------------------------------------------------------
+// Modalidad de emisión fiscal
+// -----------------------------------------------------------------------
+// 112 = S / 116 = N  -> IMPRESORA
+// 112 = N / 116 = S  -> DIGITAL
+// 112 = N / 116 = N  -> LIBRE
+// contingencia = S   -> CONTINGENCIA (prioridad)
+// 112 = S / 116 = S  -> configuración inválida
+//
+// Aunque TdcfcvAdd.php envíe "modo_emision", la decisión se vuelve a
+// validar aquí en servidor usando los parámetros del sistema.
+// -----------------------------------------------------------------------
+$esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
+$notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
+
+if ($esContingencia) {
+    $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
+
+    if (count($palabrasNota) < 3) {
+        die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
+    }
+}
+
+$modoEmisionSolicitado = strtoupper(trim($_REQUEST["modo_emision"] ?? ""));
+$modoEmisionFiscal = ObtenerModoEmisionFiscalTdcfcv($esContingencia);
 
 /*
 |--------------------------------------------------------------------------
@@ -41324,14 +41854,23 @@ Execute("
     LIMIT 1
 ");
 
-if(trim($nro_documento ?? "") == "") {
-    if ($impresoraFiscal) {
-        // En modo impresora fiscal activa, NO reservamos consecutivos desde el sistema.
-        // La impresora fiscal emitirá el documento y factura_fiscal.php actualizará
-        // salidas.nro_documento, salidas.nro_control, estatus e impreso con la respuesta real.
-        CongelarSnapshotFiscalTdcfcv($pedido);
+if (trim($nro_documento ?? "") == "") {
 
+    // La fotografía fiscal se congela antes de delegar en cualquier mecanismo
+    // de emisión para garantizar que todos trabajen con los mismos datos.
+    CongelarSnapshotFiscalTdcfcv($pedido);
+
+    // -------------------------------------------------------------------
+    // IMPRESORA FISCAL
+    // -------------------------------------------------------------------
+    if ($modoEmisionFiscal == "IMPRESORA") {
+
+        // En modo impresora fiscal NO reservamos consecutivos desde Mandrake.
+        // La impresora fiscal emitirá el documento y factura_fiscal.php
+        // actualizará salidas.nro_documento, salidas.nro_control, estatus e
+        // impreso con la respuesta real de FiscalPrinterV2.
         $usernameFiscal = urlencode(CurrentUserName());
+
         header(
             "Location: reportes/factura_fiscal.php?id={$pedido}" .
             "&username={$usernameFiscal}" .
@@ -41342,22 +41881,97 @@ if(trim($nro_documento ?? "") == "") {
         die();
     }
 
-    switch($documento) {
-    case "FC":
-        $docu = "003";
-        break;
+    // -------------------------------------------------------------------
+    // FACTURACIÓN DIGITAL TFHKA
+    // -------------------------------------------------------------------
+    if ($modoEmisionFiscal == "DIGITAL") {
 
-    case "NC":
-        $docu = "010";
-        break;
+        require_once dirname(__DIR__) . "/include/tfhka/TFHKA.php";
 
-    case "ND":
-        $docu = "011";
-        break;
+        $resultadoTFHKA = TFHKA_EmitirDocumento($pedido);
+
+        if (empty($resultadoTFHKA["ok"])) {
+            $codigoTFHKA = $resultadoTFHKA["codigo"] ?? "ERROR";
+            $mensajeTFHKA = $resultadoTFHKA["mensaje"] ?? "Error no especificado.";
+
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'PENDIENTE'
+                WHERE id = {$pedido}
+                LIMIT 1
+            ");
+
+            die(
+                "TFHKA - Documento pendiente de emisión digital. " .
+                "Código: " . htmlspecialchars((string)$codigoTFHKA) . ". " .
+                htmlspecialchars((string)$mensajeTFHKA)
+            );
+        }
+
+        $factura = (string)($resultadoTFHKA["numero_documento"] ?? "");
+        $facturaCTRL = (string)($resultadoTFHKA["numero_control"] ?? "");
+
+        if ($factura == "" || $facturaCTRL == "") {
+            die("TFHKA respondió exitosamente, pero faltan número de documento o número de control.");
+        }
+
+        ExecuteStatement("
+            UPDATE salidas
+            SET nro_documento = '" . TdcfcvSqlValue($factura) . "',
+                nro_control = '" . TdcfcvSqlValue($facturaCTRL) . "',
+                estatus = 'PROCESADO',
+                username = '" . TdcfcvSqlValue(CurrentUserName()) . "'
+            WHERE id = {$pedido}
+            LIMIT 1
+        ");
+
+        if ($id_documento_padre > 0) {
+            ExecuteStatement("
+                UPDATE salidas
+                SET estatus = 'PROCESADO'
+                WHERE id = {$id_documento_padre}
+            ");
+        }
+
+        $estatus = "PROCESADO";
+
+        RegistrarAuditoriaEmisionTdcfcv(
+            $pedido,
+            $documento,
+            $factura,
+            $facturaCTRL,
+            "TFHKA"
+        );
+    }
+
+    if ($modoEmisionFiscal != "DIGITAL") {
+
+    // -------------------------------------------------------------------
+    // FORMATO LIBRE / CONTINGENCIA
+    // -------------------------------------------------------------------
+    // Ambos conservan el mecanismo actual de correlativos Mandrake.
+    // CONTINGENCIA únicamente cambia las series a FM_DOC / FM_CTRL.
+    switch ($documento) {
+        case "FC":
+            $docu = "003";
+            break;
+
+        case "NC":
+            $docu = "010";
+            break;
+
+        case "ND":
+            $docu = "011";
+            break;
+
+        default:
+            die("Tipo de documento fiscal no soportado.");
     }
 
     // ¿El número de control es único para FC, NC y ND?
-    $controlUnificado = (ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '035'") == "S");
+    $controlUnificado = (
+        ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '035'") == "S"
+    );
 
     if ($controlUnificado) {
 
@@ -41369,83 +41983,110 @@ if(trim($nro_documento ?? "") == "") {
 
     } else {
 
-        switch($documento) {
-        case "FC":
-            $crtl = "030";
-            break;
+        switch ($documento) {
+            case "FC":
+                $crtl = "030";
+                break;
 
-        case "NC":
-            $crtl = "031";
-            break;
+            case "NC":
+                $crtl = "031";
+                break;
 
-        case "ND":
-            $crtl = "032";
-            break;
+            case "ND":
+                $crtl = "032";
+                break;
         }
 
         // Cada documento mantiene su propia serie
         $serie_ctrl = $documento . "_CTRL";
     }
 
-    // El consecutivo del documento SIEMPRE es independiente
+    // El consecutivo del documento SIEMPRE es independiente.
     $serie_doc = $documento . "_DOC";
 
-    // -------------------------------------------------------------------
-    // Factura de Contingencia: si viene marcada desde el modal, se usan
-    // las series FM_DOC / FM_CTRL en vez de las series normales del
-    // documento, y se exige un motivo de al menos tres palabras (se
-    // guardará más abajo en salidas.nota).
-    // -------------------------------------------------------------------
-    $esContingencia = (strtoupper(trim($_REQUEST["contingencia"] ?? "N")) == "S");
-    $notaContingencia = trim($_REQUEST["nota_contingencia"] ?? "");
-
-    if ($esContingencia) {
-        $palabrasNota = preg_split('/\s+/', $notaContingencia, -1, PREG_SPLIT_NO_EMPTY);
-        if (count($palabrasNota) < 3) {
-            die("Debe indicar el motivo de la Factura de Contingencia (mínimo tres palabras).");
-        }
-
+    if ($modoEmisionFiscal == "CONTINGENCIA") {
         $serie_doc = "FM_DOC";
         $serie_ctrl = "FM_CTRL";
     }
 
-    $numeroDoc  = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_doc));
-    $numeroCtrl = intval(ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl));
+    $numeroDoc  = intval(
+        ReservarConsecutivoDocumento("TDCFCV", $serie_doc)
+    );
 
-    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$docu';";
+    $numeroCtrl = intval(
+        ReservarConsecutivoDocumento("TDCFCV", $serie_ctrl)
+    );
+
+    $sql = "SELECT valor2, valor3
+            FROM parametro
+            WHERE codigo = '$docu';";
     $row = ExecuteRow($sql);
+
     $prefijo = trim($row["valor2"] ?? "");
-    $padeo   = intval($row["valor3"]);
-    $factura = $prefijo . str_pad($numeroDoc, $padeo, "0", STR_PAD_LEFT);
+    $padeo = intval($row["valor3"] ?? 0);
 
-    $sql = "SELECT valor2, valor3 FROM parametro WHERE codigo = '$crtl';";
+    $factura = $prefijo . str_pad(
+        $numeroDoc,
+        $padeo,
+        "0",
+        STR_PAD_LEFT
+    );
+
+    $sql = "SELECT valor2, valor3
+            FROM parametro
+            WHERE codigo = '$crtl';";
     $row = ExecuteRow($sql);
-    $prefijo      = trim($row["valor2"] ?? "");
-    $padeo        = intval($row["valor3"]);
-    $facturaCTRL  = $prefijo . str_pad($numeroCtrl, $padeo, "0", STR_PAD_LEFT);
 
-    // $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
-    // $faltan_datos = ExecuteScalar($sql);
-    // if($faltan_datos == "N") $estatus = "PROCESADO";
+    $prefijo = trim($row["valor2"] ?? "");
+    $padeo = intval($row["valor3"] ?? 0);
+
+    $facturaCTRL = $prefijo . str_pad(
+        $numeroCtrl,
+        $padeo,
+        "0",
+        STR_PAD_LEFT
+    );
+
     $estatus = "PROCESADO";
 
-    $sql = "UPDATE salidas 
-            SET fecha = '" . date("Y-m-d H:i:s") . "', 
-                nro_documento = '$factura', 
-                nro_control = '$facturaCTRL', 
-                estatus = '$estatus', 
-                username = '" . CurrentUserName() . "'"
-                . ($esContingencia ? ", nota = '" . TdcfcvSqlValue("Factura de Contingencia: " . $notaContingencia) . "'" : "") . "
+    $sql = "UPDATE salidas
+            SET fecha = '" . date("Y-m-d H:i:s") . "',
+                nro_documento = '$factura',
+                nro_control = '$facturaCTRL',
+                estatus = '$estatus',
+                username = '" . TdcfcvSqlValue(CurrentUserName()) . "'"
+                . ($modoEmisionFiscal == "CONTINGENCIA"
+                    ? ", nota = '" . TdcfcvSqlValue(
+                        "Factura de Contingencia: " . $notaContingencia
+                    ) . "'"
+                    : ""
+                ) . "
             WHERE id = $pedido
-            AND (nro_documento IS NULL OR nro_documento = '')";
+              AND (nro_documento IS NULL OR nro_documento = '')";
     Execute($sql);
-    
-    // Congela la foto fiscal del cliente y de los articulos al momento de emitir.
-    CongelarSnapshotFiscalTdcfcv($pedido);
 
-    // Registro de auditoría de emisión de documento no fiscal/manual.
-    RegistrarAuditoriaEmisionTdcfcv($pedido, $documento, $factura, $facturaCTRL, "SISTEMA");
-} 
+    // Se procesa el Documento Origen después de que la emisión local quedó
+    // formalmente procesada.
+    if ($id_documento_padre > 0) {
+        $sql = "UPDATE salidas
+                SET estatus = 'PROCESADO'
+                WHERE id = $id_documento_padre";
+        Execute($sql);
+    }
+
+    $origenAuditoria = (
+        $modoEmisionFiscal == "CONTINGENCIA"
+    ) ? "CONTINGENCIA" : "SISTEMA";
+
+    RegistrarAuditoriaEmisionTdcfcv(
+        $pedido,
+        $documento,
+        $factura,
+        $facturaCTRL,
+        $origenAuditoria
+    );
+    }
+}
 else {
     $sql = "SELECT IF(a.dias_credito IS NULL OR a.asesor_asignado IS NULL, 'S', 'N') AS faltan_datos FROM salidas AS a WHERE id = $pedido;";
     $faltan_datos = ExecuteScalar($sql);
@@ -41766,6 +42407,16 @@ if ($userLevelId == -1) {
 }
 // --- //
 
+$puedeCrearFacturaVenta = true;
+
+if ($tipo_documento == "TDCFCV") {
+    $puedeCrearFacturaVenta = false;
+
+    if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
+        $puedeCrearFacturaVenta = VerificaFuncion("051");
+    }
+}
+
 ?>
 
 
@@ -41794,42 +42445,44 @@ if ($userLevelId == -1) {
 
                 <input type="hidden" name="tipo_documento" value="<?= $tipo_documento ?>">
 
-                <div class="row g-2 align-items-center">
+                <?php if ($tipo_documento != "TDCFCV" || $puedeCrearFacturaVenta) { ?>
+                    <div class="row g-2 align-items-center">
 
-                    <!-- Cliente -->
-                    <div class="col-md-4">
-                        <div class="input-group input-group-sm">
-                            <input name="cliente"
-                                id="cliente"
-                                type="text"
-                                class="form-control"
-                                placeholder="Buscar Cliente"
-                                value="<?= $clienteNombre ?>" />
+                        <!-- Cliente -->
+                        <div class="col-md-4">
+                            <div class="input-group input-group-sm">
+                                <input name="cliente"
+                                    id="cliente"
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Buscar Cliente"
+                                    value="<?= $clienteNombre ?>" />
 
-                            <?php if ($puedeAgregarCliente) { ?>
-                            <button type="button"
-                                    class="btn btn-success"
-                                    title="Nuevo Cliente"
-                                    onclick="abrirModalCliente();">
-                                <i class="fa-solid fa-plus"></i>
+                                <?php if ($puedeAgregarCliente) { ?>
+                                <button type="button"
+                                        class="btn btn-success"
+                                        title="Nuevo Cliente"
+                                        onclick="abrirModalCliente();">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                        <!-- Botón Crear -->
+                        <div class="col-md-4">
+                            <button id="btnCrear"
+                                    class="btn btn-primary btn-sm w-100"
+                                    type="submit"
+                                    disabled>
+                                Crear <?= $tipo_documento_nombre ?>
                             </button>
-                            <?php } ?>
+                        </div>
+
+                        <div class="col-md-4">
                         </div>
                     </div>
-
-                    <!-- Botón Crear -->
-                    <div class="col-md-4">
-                        <button id="btnCrear"
-                                class="btn btn-primary btn-sm w-100"
-                                type="submit"
-                                disabled>
-                            Crear <?= $tipo_documento_nombre ?>
-                        </button>
-                    </div>
-
-                    <div class="col-md-4">
-                    </div>
-                </div>
+                <?php } ?>
 
                 <input name="codcli"
                     id="codcli"
@@ -42056,16 +42709,20 @@ if ($userLevelId == -1) {
 </div>
 
 <script type="text/javascript">
-  document.getElementById("cliente").addEventListener("keyup", getCodigos)
-  document.getElementById("cliente").addEventListener("click", getCodigos)
-  document.getElementById("cliente").addEventListener("change", getCodigos2)
+    const inputCliente = document.getElementById("cliente");
+
+    if (inputCliente) {
+        inputCliente.addEventListener("keyup", getCodigos);
+        inputCliente.addEventListener("click", getCodigos);
+        inputCliente.addEventListener("change", getCodigos2);
+    }
 
   function getCodigos() {
 
       let inputCP = document.getElementById("cliente").value
       let inputUN = document.getElementById("username").value
       let lista = document.getElementById("lista")
-      document.getElementById('btnCrear').setAttribute("disabled","disabled")
+      setBtnCrearDisabled(true);
       document.getElementById("codcli").value = ""
 
       if (inputCP.length > -1) {
@@ -42117,7 +42774,7 @@ if ($userLevelId == -1) {
       }).then(response => response.json()) 
           .then(data => { 
               datos = data.split("|")
-              document.getElementById('btnCrear').removeAttribute("disabled")
+              setBtnCrearDisabled(false);
               document.getElementById("codcli").value = datos[0]
               document.getElementById("cliente").value = datos[1]
               document.getElementById("clienteNombre").innerHTML = datos[1]
@@ -42144,18 +42801,32 @@ if ($userLevelId == -1) {
 
       if (inputCP.length == 0) {
 
-        document.getElementById('btnCrear').setAttribute("disabled","disabled")
+        setBtnCrearDisabled(true);
         document.getElementById("codcli").value = ""
         lista.style.display = 'none'
       }
   }
 
-  var codcli = document.getElementById("codcli").value
-  if(codcli != "") {
-    document.getElementById("cliente").disabled = true
-    document.getElementById("btnCrear").disabled = false
-  }
+    var codcli = document.getElementById("codcli").value;
 
+    const clienteInput = document.getElementById("cliente");
+    const btnCrear = document.getElementById("btnCrear");
+
+    if (codcli != "" && clienteInput) {
+        clienteInput.disabled = true;
+
+        if (btnCrear) {
+            btnCrear.disabled = false;
+        }
+    }
+
+    function setBtnCrearDisabled(disabled) {
+        const btn = document.getElementById("btnCrear");
+
+        if (btn) {
+            btn.disabled = disabled;
+        }
+    }
 
   function abrirModalCliente() {
       var tipo_documento = "<?=  $tipo_documento ?>";
@@ -42207,9 +42878,40 @@ function Page_DataRendering(&$header)
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="list" ScriptL1Key="view_out_tdcnet"><![CDATA[// Page Data Rendering event
 function Page_DataRendering(&$header)
 {
-    // Example:
-    //$header = "your header";
-    $header .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCNET"><span class="fas fa-plus"></span> Nuevo Documento</a><br><br>';
+    // 1. Consultar la cantidad de registros
+    $sqlNuevo = "SELECT COUNT(unidades) AS cantidad, SUM(unidades) AS unidades FROM view_out_tdcnet WHERE entregado = 'N' AND estatus = 'PROCESADO';";
+    $cantidadNuevos = 0;
+    $unidadNuevos = 0;
+
+    if ($row = ExecuteRow($sqlNuevo)) { // Se corrigió el paréntesis
+        $cantidadNuevos = $row["cantidad"] ?? 0;
+        $unidadNuevos = $row["unidades"] ?? 0;
+    }
+
+    // 2. Construcción de la botonera con clases Bootstrap para espaciado limpio
+    $html = '<div class="d-inline-flex flex-wrap gap-2 mb-3">';
+
+    // Botón Nuevo Documento
+    $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCNET">
+                <span class="fas fa-plus me-1"></span> Nuevo Documento
+              </a>';
+
+    // Botón / Alerta de Notificación
+    if ($cantidadNuevos > 0) {
+        $urlFiltro = CurrentPageName() . "?cmd=search&x_estatus=PROCESADO&x_entregado=N"; 
+        
+        $html .= '<a href="' . $urlFiltro . '" class="btn btn-warning" style="background-color: #eda135; border-color: #eda135; color: white;">
+                    <span class="fas fa-exclamation-triangle me-1"></span> 
+                    Pedidos Procesados por Entregar: 
+                    <span class="badge bg-light text-dark ms-1">' . $cantidadNuevos . ' Doc.</span> 
+                    <span class="badge bg-light text-dark ms-1">' . $unidadNuevos . ' Unidades</span>
+                </a>';
+    }
+
+    $html .= '</div>';
+
+    // Asignar al header
+    $header .= $html;
 }]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Page_DataRendering" ScriptCtrlID="view" ScriptL1Key="view_in_tdcpdc"><![CDATA[// Page Data Rendering event
 function Page_DataRendering(&$header)
@@ -45101,7 +45803,7 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
             <input type="range"
                    class="form-range"
                    min="<?= $PorDesMin ?>"
-                   max="99"
+                   max="80"
                    step="1"
                    id="rangoDescuentoCliente"
                    value="<?= intval($PorDesAct) ?>">
@@ -45123,7 +45825,7 @@ if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
             <input type="range"
                    class="form-range"
                    min="0"
-                   max="99"
+                   max="0"
                    step="1"
                    id="rangoTransferencista"
                    value="<?= intval($descTransferencista) ?>">
@@ -50874,7 +51576,7 @@ else {
                       VALUES 
                         (NULL, '$tipo', '" . CurrentUserName() . "', NOW(), " . $meta['cliente'] . ", '$nro_documento_hijo',
                         'Despacho Parcial - Ref. Origen #" . $meta['nro_documento'] . "', 'PROCESADO', '" . $meta['moneda'] . "', 
-                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . ($meta['asesor'] ?? 'NULL') . ", '" . $meta['documento'] . "', 
+                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . (!empty($meta['asesor']) ? "'" . $meta['asesor'] . "'" : "NULL") . ", '" . $meta['documento'] . "', 
                         " . ($meta['dias_credito'] ?? '0') . ", '" . $meta['consignacion'] . "', '" . $meta['nro_documento'] . "', 'S');";
     Execute($sqlInsertHijo);
     $factura_id_hijo = ExecuteScalar("SELECT LAST_INSERT_ID();");
@@ -50891,7 +51593,7 @@ else {
                       VALUES 
                         (NULL, '$tipo', '" . CurrentUserName() . "', NOW(), " . $meta['cliente'] . ", '$nro_documento_remanente',
                         'Saldo Pendiente - Ex Ref. #" . $meta['nro_documento'] . "', '" . $meta['estatus'] . "', '" . $meta['moneda'] . "', 
-                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . ($meta['asesor'] ?? 'NULL') . ", '" . $meta['documento'] . "', 
+                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . (!empty($meta['asesor']) ? "'" . $meta['asesor'] . "'" : "NULL") . ", '" . $meta['documento'] . "', 
                         " . ($meta['dias_credito'] ?? '0') . ", '" . $meta['consignacion'] . "', '" . $meta['nro_documento'] . "', 'N');";
     Execute($sqlInsertNuevoPadre);
     $factura_id_remanente = ExecuteScalar("SELECT LAST_INSERT_ID();");
@@ -53282,7 +53984,7 @@ try {
 ]]></CustomScript>
   <CustomScript ScriptType="Template" ScriptCodeType="Table" ScriptName="Content" ScriptCtrlID="custom" ScriptL1Key="crear_nota_entrega_automatica_wait.php"><![CDATA[<?php
 $id = isset($_GET["id"]) ? intval($_GET["id"]) : 0;
-$return = $_GET["return"] ?? "ViewOutTdcfcvView/" . $id . "?showdetail=";
+$return = "ViewOutTdcfcvView/" . $id . "?showdetail=";
 
 $idDocumentoPadre = 0;
 
@@ -53331,10 +54033,6 @@ loadjs.ready(["jquery"], function () {
                 '<i class="fa fa-arrow-right"></i> Continuar' +
             '</button>'
         );
-
-        $(document).on("click", "#btnContinuarNE", function () {
-            window.location.href = "ViewOutTdcfcvView/<?= intval($id) ?>?showdetail=";
-        });
 
         return;
 
@@ -53400,9 +54098,6 @@ loadjs.ready(["jquery"], function () {
         }
     });
 
-    $(document).on("click", "#btnContinuarNE", function () {
-        window.location.href = "<?= htmlspecialchars($return, ENT_QUOTES) ?>";
-    });
 });
 </script>]]></CustomScript>
   <CustomScript ScriptType="Server" ScriptCodeType="Table" ScriptName="Row_Inserting" ScriptL1Key="visitas"><![CDATA[// Row Inserting event

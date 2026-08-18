@@ -35,9 +35,28 @@ $descTransferencista = 0.00;
 $descFabricante = 0.00;
 $id_documento_padre = 0;
 $doc_afe = 0;
+$dias_credito = 0;
 if(isset($_REQUEST["pedido"])) {
     $pedido = $_REQUEST["pedido"];
-    $sql = "SELECT cliente, tipo_documento, nota, tasa_dia, moneda, documento, IFNULL(doc_afectado, '') AS doc_afectado, nro_documento, IFNULL(descuento2, 0) AS descuento2, IFNULL(descuento3, 0) AS descuento3, IFNULL(id_documento_padre, 0) AS id_documento_padre, IFNULL(doc_afe, 0) AS doc_afe FROM salidas WHERE id = $pedido;";
+    $sql = "
+        SELECT
+            cliente,
+            tipo_documento,
+            nota,
+            tasa_dia,
+            moneda,
+            documento,
+            IFNULL(doc_afectado, '') AS doc_afectado,
+            nro_documento,
+            IFNULL(descuento2, 0) AS descuento2,
+            IFNULL(descuento3, 0) AS descuento3,
+            IFNULL(id_documento_padre, 0) AS id_documento_padre,
+            IFNULL(doc_afe, 0) AS doc_afe,
+            IFNULL(dias_credito, 0) AS dias_credito
+        FROM salidas
+        WHERE id = " . intval($pedido) . "
+        LIMIT 1;
+    ";
     if($row = ExecuteRow($sql)) {
       $codcli = $row["cliente"];
       $tipo_documento = $_REQUEST["tipo_documento"];
@@ -51,6 +70,7 @@ if(isset($_REQUEST["pedido"])) {
       $descFabricante = floatval($row["descuento3"]);
       $id_documento_padre = intval($row["id_documento_padre"]);
       $doc_afe = $row["doc_afe"];
+      $dias_credito = intval($row["dias_credito"]);
     } 
     else {
       header("Location: ViewOutTdcfcvList");
@@ -165,7 +185,7 @@ if (intval($pedido) > 0) {
 
 <div class="row g-3 align-items-end">
 
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
         <div class="border rounded p-2 bg-light h-100">
             <label for="rangoDescuentoCliente" class="form-label small fw-bold mb-1">
                 Descuento cliente:
@@ -173,7 +193,7 @@ if (intval($pedido) > 0) {
             </label>
 
             <input type="range"
-                   class="form-range"
+                   class="form-range w-95"
                    min="<?= $PorDesMin ?>"
                    max="80"
                    step="1"
@@ -182,7 +202,7 @@ if (intval($pedido) > 0) {
         </div>
     </div>
 
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-3">
         <div class="border rounded p-2 bg-light h-100">
             <input name="doc_afectado" id="doc_afectado" type="hidden" value="<?= $doc_afectado ?>" />
 
@@ -203,13 +223,44 @@ if (intval($pedido) > 0) {
                    value="<?= $descTransferencista ?>">
 
             <input type="range"
-                   class="form-range"
+                   class="form-range w-95"
                    min="0"
                    max="80"
                    step="1"
                    id="rangoTransferencista"
                    value="<?= intval($descTransferencista) ?>">
         </div>
+    </div>
+
+    <div class="col-6 col-md-2">
+        <label for="dias_credito"
+            class="form-label small fw-bold mb-1">
+            Días de crédito
+        </label>
+
+        <select id="dias_credito"
+                name="dias_credito"
+                class="form-select form-select-sm">
+            <?php
+            $rowsDiasCredito = ExecuteRows("
+                SELECT valor1 AS dias
+                FROM parametro
+                WHERE codigo = '007'
+                ORDER BY CAST(valor1 AS UNSIGNED)
+            ");
+
+            foreach ($rowsDiasCredito as $rowDias) {
+                $dias = intval($rowDias["dias"]);
+                $selected = ($dias === intval($dias_credito))
+                    ? ' selected="selected"'
+                    : '';
+
+                echo '<option value="' . $dias . '"' . $selected . '>'
+                    . $dias . ($dias == 1 ? ' día' : ' días')
+                    . '</option>';
+            }
+            ?>
+        </select>
     </div>
 
     <div class="col-6 col-md-2">
@@ -416,34 +467,63 @@ if (intval($pedido) > 0) {
 <?php
 $condicionPago = "";
 
-// Si es una Nota de Crédito, buscar la factura origen
-if ($consignacion == "NC" && trim($doc_afectado) != "") {
-    /*
+// Para Nota de Crédito se conserva la condición de pago
+// que tenía la factura afectada.
+if (
+    $consignacion == "NC" &&
+    intval($doc_afe) > 0
+) {
     $sql = "
         SELECT entregado
         FROM salidas
-        WHERE tipo_documento = 'TDCFCV'
-          AND documento = 'FC'
-          AND nro_documento = '" . AdjustSql($doc_afectado) . "'
-        LIMIT 1;
-    ";
-    */
-    $sql = "
-        SELECT entregado
-        FROM salidas
-        WHERE id = $doc_afe
+        WHERE id = " . intval($doc_afe) . "
         LIMIT 1;
     ";
 
-    $condicionPago = ExecuteScalar($sql);
+    $condicionPago = strtoupper(trim(
+        ExecuteScalar($sql) ?? ""
+    ));
 
-    // Normalizar por seguridad
-    $condicionPago = strtoupper(trim($condicionPago));
-
-    if ($condicionPago != "S" && $condicionPago != "N") {
+    if (
+        $condicionPago != "S" &&
+        $condicionPago != "N"
+    ) {
         $condicionPago = "";
     }
 }
+?>
+
+<?php
+
+$fmDocValor = ExecuteScalar("
+    SELECT IFNULL(ultimo_numero, 0) + 1
+    FROM documento_consecutivo
+    WHERE tipo_documento = 'TDCFCV'
+      AND serie = 'FM_DOC'
+    LIMIT 1
+");
+
+$fmDocSiguiente = (
+    is_numeric($fmDocValor) && intval($fmDocValor) > 0
+)
+    ? intval($fmDocValor)
+    : 1;
+
+
+$fmCtrlValor = ExecuteScalar("
+    SELECT IFNULL(ultimo_numero, 0) + 1
+    FROM documento_consecutivo
+    WHERE tipo_documento = 'TDCFCV'
+      AND serie = 'FM_CTRL'
+    LIMIT 1
+");
+
+$fmCtrlSiguiente = (
+    is_numeric($fmCtrlValor) && intval($fmCtrlValor) > 0
+)
+    ? intval($fmCtrlValor)
+    : 1;
+
 ?>
 
 <script type="text/javascript">
@@ -535,6 +615,58 @@ loadjs.ready(["jquery"], function () {
         style: "decimal",
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
+    });
+
+    let diasCreditoOriginal = parseInt(
+        $("#dias_credito").val() || 0,
+        10
+    );
+
+    // Guardamos el valor ANTES de que el usuario haga el cambio
+    $(document).on("focus mousedown", "#dias_credito", function () {
+        diasCreditoOriginal = parseInt(
+            $(this).val() || 0,
+            10
+        );
+    });
+
+    $(document).on("change.autorizacion", "#dias_credito", function () {
+
+        const nuevo = parseInt(
+            $(this).val() || 0,
+            10
+        );
+
+        // Si realmente no cambió nada, no hacemos nada
+        if (nuevo === diasCreditoOriginal) {
+            return;
+        }
+
+        diasCreditoPendiente = {
+            original: diasCreditoOriginal,
+            nuevo: nuevo
+        };
+
+        // Los usuarios con permiso 040 no requieren autorización
+        if (puedeModificarPrecioDescuento) {
+
+            diasCreditoOriginal = nuevo;
+
+            diasCreditoPendiente = {
+                original: "",
+                nuevo: ""
+            };
+
+            return;
+        }
+
+        // Temporalmente regresamos el select al valor autorizado anterior
+        $("#dias_credito").val(diasCreditoOriginal);
+
+        $("#auth_user_tdcfcv").val("");
+        $("#auth_pass_tdcfcv").val("");
+
+        showModalAutorizarTdcfcv();
     });
 
     function alertMsg(msg) {
@@ -718,6 +850,23 @@ loadjs.ready(["jquery"], function () {
     });
 
     $(document).on("click", "#btnCancelarAutorizarTdcfcv", function () {
+        if (diasCreditoPendiente.original !== "") {
+            $("#dias_credito").val(
+                diasCreditoPendiente.original
+            );
+
+            diasCreditoOriginal =
+                parseInt(diasCreditoPendiente.original, 10);
+
+            diasCreditoPendiente = {
+                original: "",
+                nuevo: ""
+            };
+
+            hideModalAutorizarTdcfcv();
+            return;
+        }
+
         if (transferenciaPendiente.original !== "") {
             $("#descTransferencista").val(
                 transferenciaPendiente.original
@@ -790,6 +939,23 @@ loadjs.ready(["jquery"], function () {
         })
         .done(function (result) {
             if (String(result).trim() === "S") {
+                if (diasCreditoPendiente.original !== "") {
+                    $("#dias_credito").val(
+                        diasCreditoPendiente.nuevo
+                    );
+
+                    diasCreditoOriginal =
+                        parseInt(diasCreditoPendiente.nuevo, 10);
+
+                    diasCreditoPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 if (descuentoGlobalPendiente.pedido !== "") {
                     AplicarDescuentoGlobalPendiente();
                     hideModalAutorizarTdcfcv();
@@ -826,6 +992,24 @@ loadjs.ready(["jquery"], function () {
             } else {
                 alertMsg("!!! NO AUTORIZADO !!!");
 
+                if (diasCreditoPendiente.original !== "") {
+
+                    $("#dias_credito").val(
+                        diasCreditoPendiente.original
+                    );
+
+                    diasCreditoOriginal =
+                        parseInt(diasCreditoPendiente.original, 10);
+
+                    diasCreditoPendiente = {
+                        original: "",
+                        nuevo: ""
+                    };
+
+                    hideModalAutorizarTdcfcv();
+                    return;
+                }
+
                 if (transferenciaPendiente.original !== "") {
                     $("#descTransferencista").val(transferenciaPendiente.original);
                     $("#rangoTransferencista").val(transferenciaPendiente.original);
@@ -859,7 +1043,24 @@ loadjs.ready(["jquery"], function () {
         })
         .fail(function () {
             alertMsg("Error de comunicación con el servidor.");
-            
+
+            if (diasCreditoPendiente.original !== "") {
+                $("#dias_credito").val(
+                    diasCreditoPendiente.original
+                );
+
+                diasCreditoOriginal =
+                    parseInt(diasCreditoPendiente.original, 10);
+
+                diasCreditoPendiente = {
+                    original: "",
+                    nuevo: ""
+                };
+
+                hideModalAutorizarTdcfcv();
+                return;
+            }
+
             if (transferenciaPendiente.original !== "") {
                 $("#descTransferencista").val(transferenciaPendiente.original);
                 $("#rangoTransferencista").val(transferenciaPendiente.original);
@@ -987,6 +1188,8 @@ loadjs.ready(["jquery"], function () {
                 $("#x" + i + "_boton").html(
                     '<i class="fa-solid fa-trash text-danger" style="cursor:pointer;" onclick="js:eliminar(' + i + ', ' + json.id_item + ')"></i>'
                 );
+
+                getCodigos3(json.pedido);
             } else {
                 alertMsg("Error: " + (json.mensaje ?? "No se pudo insertar."));
                 $("#x" + i + "_boton").html(
@@ -1052,6 +1255,7 @@ loadjs.ready(["jquery"], function () {
         $("#x" + i + "_cantidad").prop("disabled", false).focus();
         $("#x" + i + "_precioFull").prop("disabled", false);
         $("#x" + i + "_descuento").prop("disabled", false);
+        $("#x" + i + "_descuento2").prop("disabled", false);
         $("#x" + i + "_lote").prop("disabled", false);
         $("#x" + i + "_vence").prop("disabled", false);
 
@@ -1669,6 +1873,15 @@ loadjs.ready(["jquery"], function () {
                 $("#modal_nro_control").val(response.control);
                 $("#modal_fecha").val(response.fecha);
 
+                // Conservar los correlativos fiscales normales para poder restaurarlos
+                // cuando se desmarque Factura de Contingencia.
+                const nroFacturaFiscalOriginal = response.factura;
+                const nroControlFiscalOriginal = response.control;
+
+                // Próximos correlativos de factura manual / contingencia.
+                const nroFacturaManual = <?= intval($fmDocSiguiente) ?>;
+                const nroControlManual = <?= intval($fmCtrlSiguiente) ?>;                
+
                 // Cambiar dinámicamente el título según el tipo de documento para mayor claridad
                 let tipoDocTxt = "Factura Fiscal";
                 if (response.tipo_doc === "NC") tipoDocTxt = "Nota de Crédito";
@@ -1682,12 +1895,46 @@ loadjs.ready(["jquery"], function () {
                 // Cada vez que se abre el modal, se reinicia la condición de pago
                 // y el botón "Sí, Procesar" queda deshabilitado hasta que el
                 // usuario elija explícitamente Contado o Crédito.
-                const condicionPago = "<?= $condicionPago ?>";
+                let condicionPago = "<?= $condicionPago ?>";
+
+                const tipoDocumentoFiscal = String(
+                    response.tipo_doc || ""
+                ).toUpperCase();
+
+                if (tipoDocumentoFiscal === "FC") {
+                    const diasCreditoSeleccionados = parseInt(
+                        $("#dias_credito").val() || 0,
+                        10
+                    );
+
+                    condicionPago = (
+                        diasCreditoSeleccionados > 0
+                    ) ? "N" : "S";
+                }
+
+                $("#dias_credito").off("change.condicionPago").on(
+                    "change.condicionPago",
+                    function () {
+                        if (tipoDocumentoFiscal !== "FC") {
+                            return;
+                        }
+
+                        const diasCreditoSeleccionados = parseInt(
+                            $(this).val() || 0,
+                            10
+                        );
+
+                        const nuevaCondicionPago = (
+                            diasCreditoSeleccionados > 0
+                        ) ? "N" : "S";
+
+                        $("#modal_tipo_pago").val(nuevaCondicionPago);
+                        $("#btnConfirmarProcesar").prop("disabled", false);
+                    }
+                );                
 
                 $("#modal_tipo_pago").val(condicionPago);
 
-                // Si viene preseleccionado se habilita el botón,
-                // de lo contrario el usuario debe escogerlo.
                 $("#btnConfirmarProcesar").prop(
                     "disabled",
                     condicionPago === ""
@@ -1710,16 +1957,48 @@ loadjs.ready(["jquery"], function () {
                 $("#modal_nota_contingencia").val("");
 
                 $("#modal_contingencia").off("change").on("change", function () {
+
                     if ($(this).is(":checked")) {
-                        if (!confirm("¿Está seguro de registrar esta factura como Factura de Contingencia?")) {
+
+                        if (!confirm(
+                            "¿Está seguro de registrar esta factura como Factura de Contingencia?"
+                        )) {
                             $(this).prop("checked", false);
+
                             $("#div_nota_contingencia").slideUp(150);
                             $("#modal_nota_contingencia").val("");
+
+                            // Restaurar correlativos fiscales normales
+                            $("#modal_nro_factura").val(nroFacturaFiscalOriginal);
+                            $("#modal_nro_control").val(nroControlFiscalOriginal);
+
                             return;
                         }
+
+                        // --------------------------------------------------------
+                        // Mostrar correlativos correspondientes a factura manual
+                        // --------------------------------------------------------
+
+                        $("#modal_nro_factura").val(
+                            String(nroFacturaManual).padStart(5, "0")
+                        );
+
+                        $("#modal_nro_control").val(
+                            String(nroControlManual).padStart(7, "0")
+                        );
+
                         $("#div_nota_contingencia").slideDown(150);
                         $("#modal_nota_contingencia").trigger("focus");
+
                     } else {
+
+                        // --------------------------------------------------------
+                        // Regresar a los correlativos fiscales normales
+                        // --------------------------------------------------------
+
+                        $("#modal_nro_factura").val(nroFacturaFiscalOriginal);
+                        $("#modal_nro_control").val(nroControlFiscalOriginal);
+
                         $("#div_nota_contingencia").slideUp(150);
                         $("#modal_nota_contingencia").val("");
                     }
@@ -1730,6 +2009,11 @@ loadjs.ready(["jquery"], function () {
                     const btn = $(this);
                     const idDocumentoPadre = <?= intval($id_documento_padre) ?>;
                     const preguntarNE = <?= $preguntarNE ? "true" : "false" ?>;
+
+                    const diasCredito = parseInt(
+                        getVal("dias_credito") || 0,
+                        10
+                    );
 
                     // 'S' = Contado, 'N' = Crédito. Viaja a TdcfcvProcess.php para
                     // actualizar salidas.entregado.
@@ -1768,6 +2052,7 @@ loadjs.ready(["jquery"], function () {
                             "&PorDesAct=" + PorDesAct +
                             "&generar_ne=" + generarNE +
                             "&generar_nr=" + generarNR +
+                            "&dias_credito=" + diasCredito +
                             "&entregado=" + tipoPago +
                             "&contingencia=" + (esContingencia ? "S" : "N") +
                             "&nota_contingencia=" + encodeURIComponent(notaContingencia);
@@ -1841,6 +2126,11 @@ loadjs.ready(["jquery"], function () {
     };
 
     var transferenciaPendiente = {
+        original: "",
+        nuevo: ""
+    };
+
+    var diasCreditoPendiente = {
         original: "",
         nuevo: ""
     };
@@ -2490,6 +2780,10 @@ $impresoraFiscal = strtoupper(trim(
 #modalNuevoArticulo .nuevo-articulo-campo input,
 #modalNuevoArticulo .nuevo-articulo-campo select {
     width: 100%;
+}
+
+.w-95{
+    width:90% !important;
 }
 </style>
 

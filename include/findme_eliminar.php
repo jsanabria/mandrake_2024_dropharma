@@ -89,10 +89,12 @@ try {
     }
 
     // Actualizar autor y estado de revisión si todavía quedan renglones.
+    /*
     $stmtUpd = $link->prepare("UPDATE salidas SET estatus = 'PROCESADO', username = ? WHERE id = ?;");
     $stmtUpd->bind_param("si", $username, $id_documento);
     $stmtUpd->execute();
     $stmtUpd->close();
+    */
 
     $dataActualizada = calcularYObtenerDetalleJSON($link, $tipo_documento, $id_documento);
 

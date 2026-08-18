@@ -581,7 +581,29 @@ SELECT * FROM audittrail WHERE ACTION LIKE 'SENIAT:%';
 
 
 
+/* ============================================================
+   VISTAS CxP / CxC
+   Blindaje de COLLATION
+   Collation estándar utilizada: utf8mb4_unicode_ci
+   ============================================================ */
+
+SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+
+/* ============================================================
+   ELIMINAR PRIMERO LAS VISTAS DEPENDIENTES
+   ============================================================ */
+
+DROP VIEW IF EXISTS view_cuentas_por_pagar_resumen;
+DROP VIEW IF EXISTS view_cuentas_por_cobrar_resumen;
 DROP VIEW IF EXISTS view_cuentas_por_pagar;
+DROP VIEW IF EXISTS view_cuentas_por_cobrar;
+
+
+/* ============================================================
+   1. CUENTAS POR PAGAR
+   ============================================================ */
 
 CREATE VIEW view_cuentas_por_pagar AS
 SELECT
@@ -640,52 +662,67 @@ SELECT
         2
     ) AS saldo_usd,
 
-    CASE
-        WHEN base.anulado = 'S'
-            THEN 'ANULADO'
+    /* Estado de cuenta */
+    (
+        CASE
+            WHEN
+                base.anulado COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'S' COLLATE utf8mb4_unicode_ci
+            THEN _utf8mb4'ANULADO'
 
-        WHEN base.tipo_documento = 'NC'
-            THEN 'NOTA DE CRÉDITO'
+            WHEN
+                base.tipo_documento COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'NC' COLLATE utf8mb4_unicode_ci
+            THEN _utf8mb4'NOTA DE CRÉDITO'
 
-        WHEN ROUND(
-            (base.monto_documento_bs * base.signo_documento)
-            - IFNULL(base.total_pagado_bs, 0),
-            2
-        ) <= 0.01
-            THEN 'PAGADO'
+            WHEN ROUND(
+                (base.monto_documento_bs * base.signo_documento)
+                - IFNULL(base.total_pagado_bs, 0),
+                2
+            ) <= 0.01
+            THEN _utf8mb4'PAGADO'
 
-        WHEN IFNULL(base.total_pagado_bs, 0) > 0
-            THEN 'PAGO PARCIAL'
+            WHEN IFNULL(base.total_pagado_bs, 0) > 0
+            THEN _utf8mb4'PAGO PARCIAL'
 
-        ELSE 'PENDIENTE'
-    END AS estado_cuenta,
+            ELSE _utf8mb4'PENDIENTE'
+        END
+    ) COLLATE utf8mb4_unicode_ci AS estado_cuenta,
 
     DATEDIFF(
         CURDATE(),
         base.fecha
     ) AS dias_transcurridos,
 
-    CASE
-        WHEN base.tipo_documento = 'NC'
-            THEN 'NOTA DE CRÉDITO'
+    /* Antigüedad */
+    (
+        CASE
+            WHEN
+                base.tipo_documento COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'NC' COLLATE utf8mb4_unicode_ci
+            THEN _utf8mb4'NOTA DE CRÉDITO'
 
-        WHEN DATEDIFF(CURDATE(), base.fecha) <= 0
-            THEN 'NO VENCIDO'
+            WHEN DATEDIFF(CURDATE(), base.fecha) <= 0
+            THEN _utf8mb4'NO VENCIDO'
 
-        WHEN DATEDIFF(CURDATE(), base.fecha)
-             BETWEEN 1 AND 30
-            THEN '1-30 DÍAS'
+            WHEN DATEDIFF(CURDATE(), base.fecha)
+                 BETWEEN 1 AND 30
+            THEN _utf8mb4'1-30 DÍAS'
 
-        WHEN DATEDIFF(CURDATE(), base.fecha)
-             BETWEEN 31 AND 60
-            THEN '31-60 DÍAS'
+            WHEN DATEDIFF(CURDATE(), base.fecha)
+                 BETWEEN 31 AND 60
+            THEN _utf8mb4'31-60 DÍAS'
 
-        WHEN DATEDIFF(CURDATE(), base.fecha)
-             BETWEEN 61 AND 90
-            THEN '61-90 DÍAS'
+            WHEN DATEDIFF(CURDATE(), base.fecha)
+                 BETWEEN 61 AND 90
+            THEN _utf8mb4'61-90 DÍAS'
 
-        ELSE 'MÁS DE 90 DÍAS'
-    END AS antiguedad
+            ELSE _utf8mb4'MÁS DE 90 DÍAS'
+        END
+    ) COLLATE utf8mb4_unicode_ci AS antiguedad
 
 FROM
 (
@@ -693,20 +730,38 @@ FROM
         c.id,
         c.proveedor,
 
-        p.ci_rif AS proveedor_rif,
-        p.nombre AS proveedor_nombre,
+        p.ci_rif COLLATE utf8mb4_unicode_ci
+            AS proveedor_rif,
 
-        c.tipo_documento,
-        c.documento,
-        c.nro_control,
+        p.nombre COLLATE utf8mb4_unicode_ci
+            AS proveedor_nombre,
+
+        c.tipo_documento COLLATE utf8mb4_unicode_ci
+            AS tipo_documento,
+
+        c.documento COLLATE utf8mb4_unicode_ci
+            AS documento,
+
+        c.nro_control COLLATE utf8mb4_unicode_ci
+            AS nro_control,
+
         c.fecha,
         c.fecha_registro,
-        c.descripcion,
-        c.doc_afectado,
-        c.anulado,
-        c.pagado,
 
-        c.moneda,
+        c.descripcion COLLATE utf8mb4_unicode_ci
+            AS descripcion,
+
+        c.doc_afectado COLLATE utf8mb4_unicode_ci
+            AS doc_afectado,
+
+        c.anulado COLLATE utf8mb4_unicode_ci
+            AS anulado,
+
+        c.pagado COLLATE utf8mb4_unicode_ci
+            AS pagado,
+
+        c.moneda COLLATE utf8mb4_unicode_ci
+            AS moneda,
 
         IFNULL(
             NULLIF(c.tasa_dia, 0),
@@ -714,35 +769,44 @@ FROM
         ) AS tasa_dia,
 
         CASE
-            WHEN c.tipo_documento = 'NC'
-                THEN -1
+            WHEN
+                c.tipo_documento COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'NC' COLLATE utf8mb4_unicode_ci
+            THEN -1
             ELSE 1
         END AS signo_documento,
 
-        /*
-        |------------------------------------------------------
-        | Monto en moneda original
-        |------------------------------------------------------
-        */
+        /* ----------------------------------------------------
+           Monto en moneda original
+           ---------------------------------------------------- */
+
         CASE
             WHEN IFNULL(c.monto_pagar, 0) > 0
                 THEN c.monto_pagar
             ELSE IFNULL(c.monto_total, 0)
         END AS monto_documento_moneda,
 
-        /*
-        |------------------------------------------------------
-        | Monto convertido a bolívares
-        |------------------------------------------------------
-        */
+        /* ----------------------------------------------------
+           Monto convertido a bolívares
+           ---------------------------------------------------- */
+
         CASE
-            WHEN UPPER(LEFT(TRIM(c.moneda), 3)) = 'BS.'
-                THEN
-                    CASE
-                        WHEN IFNULL(c.monto_pagar, 0) > 0
-                            THEN c.monto_pagar
-                        ELSE IFNULL(c.monto_total, 0)
-                    END
+            WHEN
+                UPPER(
+                    LEFT(
+                        TRIM(c.moneda COLLATE utf8mb4_unicode_ci),
+                        3
+                    )
+                )
+                =
+                _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+            THEN
+                CASE
+                    WHEN IFNULL(c.monto_pagar, 0) > 0
+                        THEN c.monto_pagar
+                    ELSE IFNULL(c.monto_total, 0)
+                END
             ELSE
                 (
                     CASE
@@ -758,23 +822,31 @@ FROM
                 )
         END AS monto_documento_bs,
 
-        /*
-        |------------------------------------------------------
-        | Monto convertido a USD
-        |------------------------------------------------------
-        */
+        /* ----------------------------------------------------
+           Monto convertido a USD
+           ---------------------------------------------------- */
+
         CASE
-            WHEN UPPER(LEFT(TRIM(c.moneda), 3)) = 'BS.'
-                THEN
-                    (
-                        CASE
-                            WHEN IFNULL(c.monto_pagar, 0) > 0
-                                THEN c.monto_pagar
-                            ELSE IFNULL(c.monto_total, 0)
-                        END
+            WHEN
+                UPPER(
+                    LEFT(
+                        TRIM(c.moneda COLLATE utf8mb4_unicode_ci),
+                        3
                     )
-                    /
-                    NULLIF(c.tasa_dia, 0)
+                )
+                =
+                _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+            THEN
+                (
+                    CASE
+                        WHEN IFNULL(c.monto_pagar, 0) > 0
+                            THEN c.monto_pagar
+                        ELSE IFNULL(c.monto_total, 0)
+                    END
+                )
+                /
+                NULLIF(c.tasa_dia, 0)
+
             ELSE
                 CASE
                     WHEN IFNULL(c.monto_pagar, 0) > 0
@@ -819,17 +891,21 @@ FROM
                 pc.id_documento,
                 pc.fecha,
 
-                /*
-                |----------------------------------------------
-                | Pago en Bs.
-                |----------------------------------------------
-                */
+                /* Pago en Bs. */
                 CASE
                     WHEN COUNT(pcd.id) > 0
                         THEN SUM(IFNULL(pcd.monto_bs, 0))
 
-                    WHEN UPPER(LEFT(TRIM(pc.moneda), 3)) = 'BS.'
-                        THEN IFNULL(pc.pago, 0)
+                    WHEN
+                        UPPER(
+                            LEFT(
+                                TRIM(pc.moneda COLLATE utf8mb4_unicode_ci),
+                                3
+                            )
+                        )
+                        =
+                        _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+                    THEN IFNULL(pc.pago, 0)
 
                     ELSE
                         IFNULL(pc.pago, 0)
@@ -840,14 +916,11 @@ FROM
                         )
                 END AS pagado_bs,
 
-                /*
-                |----------------------------------------------
-                | Pago equivalente en USD
-                |----------------------------------------------
-                */
+                /* Pago equivalente en USD */
                 CASE
                     WHEN COUNT(pcd.id) > 0
-                        THEN SUM(
+                    THEN
+                        SUM(
                             CASE
                                 WHEN IFNULL(pcd.monto_usd, 0) > 0
                                     THEN pcd.monto_usd
@@ -856,21 +929,37 @@ FROM
                                      AND IFNULL(pcd.tasa_usd, 0) > 0
                                     THEN pcd.monto_bs / pcd.tasa_usd
 
-                                WHEN UPPER(
-                                    LEFT(
-                                        TRIM(pcd.moneda),
-                                        3
+                                WHEN
+                                    UPPER(
+                                        LEFT(
+                                            TRIM(
+                                                pcd.moneda
+                                                COLLATE utf8mb4_unicode_ci
+                                            ),
+                                            3
+                                        )
                                     )
-                                ) <> 'BS.'
-                                    THEN IFNULL(pcd.monto_moneda, 0)
+                                    <>
+                                    _utf8mb4'BS.'
+                                    COLLATE utf8mb4_unicode_ci
+                                THEN IFNULL(pcd.monto_moneda, 0)
 
                                 ELSE 0
                             END
                         )
 
-                    WHEN UPPER(LEFT(TRIM(pc.moneda), 3)) = 'BS.'
-                         AND IFNULL(pc.tasa_cambio, 0) > 0
-                        THEN pc.pago / pc.tasa_cambio
+                    WHEN
+                        UPPER(
+                            LEFT(
+                                TRIM(pc.moneda COLLATE utf8mb4_unicode_ci),
+                                3
+                            )
+                        )
+                        =
+                        _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+
+                        AND IFNULL(pc.tasa_cambio, 0) > 0
+                    THEN pc.pago / pc.tasa_cambio
 
                     ELSE IFNULL(pc.pago, 0)
                 END AS pagado_usd
@@ -880,14 +969,12 @@ FROM
             LEFT JOIN pagos_compras_detalle AS pcd
                 ON pcd.pagos_compras = pc.id
 
-            /*
-            | Ajustar este valor al que realmente uses:
-            | GASTO, GASTOS o COMPRA.
-            */
-            WHERE pc.tipo_documento IN (
-                'GASTO',
-                'GASTOS'
-            )
+            WHERE
+                pc.tipo_documento COLLATE utf8mb4_unicode_ci
+                IN (
+                    _utf8mb4'GASTO' COLLATE utf8mb4_unicode_ci,
+                    _utf8mb4'GASTOS' COLLATE utf8mb4_unicode_ci
+                )
 
             GROUP BY
                 pc.id,
@@ -896,23 +983,30 @@ FROM
                 pc.pago,
                 pc.moneda,
                 pc.tasa_cambio
+
         ) AS pago_documento
 
-        GROUP BY pago_documento.id_documento
+        GROUP BY
+            pago_documento.id_documento
+
     ) AS pagos
         ON pagos.id_documento = c.id
 
-    WHERE c.tipo_documento IN (
-        'FC',
-        'NC',
-        'ND',
-        'RC'
-    )
+    WHERE
+        c.tipo_documento COLLATE utf8mb4_unicode_ci
+        IN (
+            _utf8mb4'FC' COLLATE utf8mb4_unicode_ci,
+            _utf8mb4'NC' COLLATE utf8mb4_unicode_ci,
+            _utf8mb4'ND' COLLATE utf8mb4_unicode_ci,
+            _utf8mb4'RC' COLLATE utf8mb4_unicode_ci
+        )
+
 ) AS base;
 
 
-
-DROP VIEW IF EXISTS view_cuentas_por_cobrar;
+/* ============================================================
+   2. CUENTAS POR COBRAR
+   ============================================================ */
 
 CREATE VIEW view_cuentas_por_cobrar AS
 SELECT
@@ -976,55 +1070,69 @@ SELECT
         2
     ) AS saldo_usd,
 
-    CASE
-        WHEN base.tipo_documento_fiscal = 'NC'
-            THEN 'NOTA DE CRÉDITO'
+    /* Estado cuenta */
+    (
+        CASE
+            WHEN
+                base.tipo_documento_fiscal
+                    COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'NC' COLLATE utf8mb4_unicode_ci
+            THEN _utf8mb4'NOTA DE CRÉDITO'
 
-        WHEN ROUND(
-            (base.monto_documento_bs * base.signo_documento)
-            - IFNULL(base.total_cobrado_bs, 0),
-            2
-        ) <= 0.01
-            THEN 'COBRADO'
+            WHEN ROUND(
+                (base.monto_documento_bs * base.signo_documento)
+                - IFNULL(base.total_cobrado_bs, 0),
+                2
+            ) <= 0.01
+            THEN _utf8mb4'COBRADO'
 
-        WHEN IFNULL(base.total_cobrado_bs, 0) > 0
-            THEN 'COBRO PARCIAL'
+            WHEN IFNULL(base.total_cobrado_bs, 0) > 0
+            THEN _utf8mb4'COBRO PARCIAL'
 
-        ELSE 'PENDIENTE'
-    END AS estado_cuenta,
+            ELSE _utf8mb4'PENDIENTE'
+        END
+    ) COLLATE utf8mb4_unicode_ci AS estado_cuenta,
 
     DATEDIFF(
         CURDATE(),
         base.fecha_vencimiento
     ) AS dias_vencido,
 
-    CASE
-        WHEN base.tipo_documento_fiscal = 'NC'
-            THEN 'NOTA DE CRÉDITO'
+    /* Antigüedad */
+    (
+        CASE
+            WHEN
+                base.tipo_documento_fiscal
+                    COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'NC' COLLATE utf8mb4_unicode_ci
+            THEN _utf8mb4'NOTA DE CRÉDITO'
 
-        WHEN CURDATE() <= base.fecha_vencimiento
-            THEN 'NO VENCIDO'
+            WHEN CURDATE() <= base.fecha_vencimiento
+            THEN _utf8mb4'NO VENCIDO'
 
-        WHEN DATEDIFF(
-            CURDATE(),
-            base.fecha_vencimiento
-        ) BETWEEN 1 AND 30
-            THEN '1-30 DÍAS'
+            WHEN DATEDIFF(
+                CURDATE(),
+                base.fecha_vencimiento
+            ) BETWEEN 1 AND 30
+            THEN _utf8mb4'1-30 DÍAS'
 
-        WHEN DATEDIFF(
-            CURDATE(),
-            base.fecha_vencimiento
-        ) BETWEEN 31 AND 60
-            THEN '31-60 DÍAS'
+            WHEN DATEDIFF(
+                CURDATE(),
+                base.fecha_vencimiento
+            ) BETWEEN 31 AND 60
+            THEN _utf8mb4'31-60 DÍAS'
 
-        WHEN DATEDIFF(
-            CURDATE(),
-            base.fecha_vencimiento
-        ) BETWEEN 61 AND 90
-            THEN '61-90 DÍAS'
+            WHEN DATEDIFF(
+                CURDATE(),
+                base.fecha_vencimiento
+            ) BETWEEN 61 AND 90
+            THEN _utf8mb4'61-90 DÍAS'
 
-        ELSE 'MÁS DE 90 DÍAS'
-    END AS antiguedad
+            ELSE _utf8mb4'MÁS DE 90 DÍAS'
+        END
+    ) COLLATE utf8mb4_unicode_ci AS antiguedad
 
 FROM
 (
@@ -1032,20 +1140,35 @@ FROM
         s.id,
         s.cliente,
 
+        /* RIF del cliente blindado contra mezcla de collations */
         COALESCE(
-            NULLIF(s.cliente_ci_rif, ''),
-            cl.ci_rif
-        ) AS cliente_rif,
+            NULLIF(
+                s.cliente_ci_rif COLLATE utf8mb4_unicode_ci,
+                _utf8mb4'' COLLATE utf8mb4_unicode_ci
+            ),
+            cl.ci_rif COLLATE utf8mb4_unicode_ci
+        ) COLLATE utf8mb4_unicode_ci AS cliente_rif,
 
+        /* Nombre del cliente blindado */
         COALESCE(
-            NULLIF(s.cliente_nombre, ''),
-            cl.nombre
-        ) AS cliente_nombre,
+            NULLIF(
+                s.cliente_nombre COLLATE utf8mb4_unicode_ci,
+                _utf8mb4'' COLLATE utf8mb4_unicode_ci
+            ),
+            cl.nombre COLLATE utf8mb4_unicode_ci
+        ) COLLATE utf8mb4_unicode_ci AS cliente_nombre,
 
-        s.documento AS tipo_documento_fiscal,
-        s.nro_documento,
-        s.nro_control,
+        s.documento COLLATE utf8mb4_unicode_ci
+            AS tipo_documento_fiscal,
+
+        s.nro_documento COLLATE utf8mb4_unicode_ci
+            AS nro_documento,
+
+        s.nro_control COLLATE utf8mb4_unicode_ci
+            AS nro_control,
+
         s.fecha,
+
         DATE(s.fecha) AS fecha_documento,
 
         DATE_ADD(
@@ -1053,7 +1176,8 @@ FROM
             INTERVAL IFNULL(s.dias_credito, 0) DAY
         ) AS fecha_vencimiento,
 
-        s.moneda,
+        s.moneda COLLATE utf8mb4_unicode_ci
+            AS moneda,
 
         IFNULL(
             NULLIF(s.tasa_dia, 0),
@@ -1061,68 +1185,105 @@ FROM
         ) AS tasa_dia,
 
         IFNULL(s.dias_credito, 0) AS dias_credito,
-        s.entregado,
-        s.pagado,
-        s.doc_afectado,
+
+        s.entregado COLLATE utf8mb4_unicode_ci
+            AS entregado,
+
+        s.pagado COLLATE utf8mb4_unicode_ci
+            AS pagado,
+
+        s.doc_afectado COLLATE utf8mb4_unicode_ci
+            AS doc_afectado,
+
         s.doc_afe,
 
-        s.igtf,
+        s.igtf COLLATE utf8mb4_unicode_ci
+            AS igtf,
 
         CASE
-            WHEN s.igtf = 'S'
-                THEN IFNULL(s.monto_igtf, 0)
+            WHEN
+                s.igtf COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'S' COLLATE utf8mb4_unicode_ci
+            THEN IFNULL(s.monto_igtf, 0)
             ELSE 0
         END AS monto_igtf_bs,
 
         CASE
-            WHEN s.documento = 'NC'
-                THEN -1
+            WHEN
+                s.documento COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'NC' COLLATE utf8mb4_unicode_ci
+            THEN -1
             ELSE 1
         END AS signo_documento,
 
-        /*
-        |------------------------------------------------------
-        | Monto en moneda original
-        |------------------------------------------------------
-        | Si la factura está en divisas, el monto_igtf debe
-        | convertirse de Bs. a la moneda del documento.
-        */
+        /* ----------------------------------------------------
+           Monto en moneda original
+           ---------------------------------------------------- */
+
         CASE
-            WHEN UPPER(LEFT(TRIM(s.moneda), 3)) = 'BS.'
-                THEN
-                    IFNULL(s.total, 0)
-                    +
-                    CASE
-                        WHEN s.igtf = 'S'
-                            THEN IFNULL(s.monto_igtf, 0)
-                        ELSE 0
-                    END
+            WHEN
+                UPPER(
+                    LEFT(
+                        TRIM(s.moneda COLLATE utf8mb4_unicode_ci),
+                        3
+                    )
+                )
+                =
+                _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+            THEN
+                IFNULL(s.total, 0)
+                +
+                CASE
+                    WHEN
+                        s.igtf COLLATE utf8mb4_unicode_ci
+                        =
+                        _utf8mb4'S' COLLATE utf8mb4_unicode_ci
+                    THEN IFNULL(s.monto_igtf, 0)
+                    ELSE 0
+                END
+
             ELSE
                 IFNULL(s.total, 0)
                 +
                 CASE
-                    WHEN s.igtf = 'S'
-                         AND IFNULL(s.tasa_dia, 0) > 0
-                        THEN s.monto_igtf / s.tasa_dia
+                    WHEN
+                        s.igtf COLLATE utf8mb4_unicode_ci
+                        =
+                        _utf8mb4'S' COLLATE utf8mb4_unicode_ci
+                        AND IFNULL(s.tasa_dia, 0) > 0
+                    THEN s.monto_igtf / s.tasa_dia
                     ELSE 0
                 END
         END AS monto_documento_moneda,
 
-        /*
-        |------------------------------------------------------
-        | Monto expresado en Bs.
-        |------------------------------------------------------
-        */
+        /* ----------------------------------------------------
+           Monto expresado en Bs.
+           ---------------------------------------------------- */
+
         CASE
-            WHEN UPPER(LEFT(TRIM(s.moneda), 3)) = 'BS.'
-                THEN
-                    IFNULL(s.total, 0)
-                    +
-                    CASE
-                        WHEN s.igtf = 'S'
-                            THEN IFNULL(s.monto_igtf, 0)
-                        ELSE 0
-                    END
+            WHEN
+                UPPER(
+                    LEFT(
+                        TRIM(s.moneda COLLATE utf8mb4_unicode_ci),
+                        3
+                    )
+                )
+                =
+                _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+            THEN
+                IFNULL(s.total, 0)
+                +
+                CASE
+                    WHEN
+                        s.igtf COLLATE utf8mb4_unicode_ci
+                        =
+                        _utf8mb4'S' COLLATE utf8mb4_unicode_ci
+                    THEN IFNULL(s.monto_igtf, 0)
+                    ELSE 0
+                END
+
             ELSE
                 (
                     IFNULL(s.total, 0)
@@ -1134,38 +1295,59 @@ FROM
                 )
                 +
                 CASE
-                    WHEN s.igtf = 'S'
-                        THEN IFNULL(s.monto_igtf, 0)
+                    WHEN
+                        s.igtf COLLATE utf8mb4_unicode_ci
+                        =
+                        _utf8mb4'S' COLLATE utf8mb4_unicode_ci
+                    THEN IFNULL(s.monto_igtf, 0)
                     ELSE 0
                 END
         END AS monto_documento_bs,
 
-        /*
-        |------------------------------------------------------
-        | Monto equivalente en USD
-        |------------------------------------------------------
-        */
+        /* ----------------------------------------------------
+           Monto equivalente en USD
+           ---------------------------------------------------- */
+
         CASE
-            WHEN UPPER(LEFT(TRIM(s.moneda), 3)) = 'BS.'
-                 AND IFNULL(s.tasa_dia, 0) > 0
-                THEN
-                    (
-                        IFNULL(s.total, 0)
-                        +
-                        CASE
-                            WHEN s.igtf = 'S'
-                                THEN IFNULL(s.monto_igtf, 0)
-                            ELSE 0
-                        END
+            WHEN
+                UPPER(
+                    LEFT(
+                        TRIM(s.moneda COLLATE utf8mb4_unicode_ci),
+                        3
                     )
-                    / s.tasa_dia
+                )
+                =
+                _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+
+                AND IFNULL(s.tasa_dia, 0) > 0
+            THEN
+                (
+                    IFNULL(s.total, 0)
+                    +
+                    CASE
+                        WHEN
+                            s.igtf COLLATE utf8mb4_unicode_ci
+                            =
+                            _utf8mb4'S'
+                            COLLATE utf8mb4_unicode_ci
+                        THEN IFNULL(s.monto_igtf, 0)
+                        ELSE 0
+                    END
+                )
+                / s.tasa_dia
+
             ELSE
                 IFNULL(s.total, 0)
                 +
                 CASE
-                    WHEN s.igtf = 'S'
-                         AND IFNULL(s.tasa_dia, 0) > 0
-                        THEN s.monto_igtf / s.tasa_dia
+                    WHEN
+                        s.igtf COLLATE utf8mb4_unicode_ci
+                        =
+                        _utf8mb4'S'
+                        COLLATE utf8mb4_unicode_ci
+
+                        AND IFNULL(s.tasa_dia, 0) > 0
+                    THEN s.monto_igtf / s.tasa_dia
                     ELSE 0
                 END
         END AS monto_documento_usd,
@@ -1206,17 +1388,21 @@ FROM
                 cc.id_documento,
                 cc.fecha,
 
-                /*
-                |----------------------------------------------
-                | Cobro en Bs.
-                |----------------------------------------------
-                */
+                /* Cobro en Bs. */
                 CASE
                     WHEN COUNT(ccd.id) > 0
-                        THEN SUM(IFNULL(ccd.monto_bs, 0))
+                    THEN SUM(IFNULL(ccd.monto_bs, 0))
 
-                    WHEN UPPER(LEFT(TRIM(cc.moneda), 3)) = 'BS.'
-                        THEN IFNULL(cc.pago, 0)
+                    WHEN
+                        UPPER(
+                            LEFT(
+                                TRIM(cc.moneda COLLATE utf8mb4_unicode_ci),
+                                3
+                            )
+                        )
+                        =
+                        _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+                    THEN IFNULL(cc.pago, 0)
 
                     ELSE
                         IFNULL(cc.pago, 0)
@@ -1227,37 +1413,50 @@ FROM
                         )
                 END AS cobrado_bs,
 
-                /*
-                |----------------------------------------------
-                | Cobro equivalente en USD
-                |----------------------------------------------
-                */
+                /* Cobro equivalente USD */
                 CASE
                     WHEN COUNT(ccd.id) > 0
-                        THEN SUM(
+                    THEN
+                        SUM(
                             CASE
                                 WHEN IFNULL(ccd.monto_usd, 0) > 0
-                                    THEN ccd.monto_usd
+                                THEN ccd.monto_usd
 
                                 WHEN IFNULL(ccd.monto_bs, 0) > 0
                                      AND IFNULL(ccd.tasa_usd, 0) > 0
-                                    THEN ccd.monto_bs / ccd.tasa_usd
+                                THEN ccd.monto_bs / ccd.tasa_usd
 
-                                WHEN UPPER(
-                                    LEFT(
-                                        TRIM(ccd.moneda),
-                                        3
+                                WHEN
+                                    UPPER(
+                                        LEFT(
+                                            TRIM(
+                                                ccd.moneda
+                                                COLLATE utf8mb4_unicode_ci
+                                            ),
+                                            3
+                                        )
                                     )
-                                ) <> 'BS.'
-                                    THEN IFNULL(ccd.monto_moneda, 0)
+                                    <>
+                                    _utf8mb4'BS.'
+                                    COLLATE utf8mb4_unicode_ci
+                                THEN IFNULL(ccd.monto_moneda, 0)
 
                                 ELSE 0
                             END
                         )
 
-                    WHEN UPPER(LEFT(TRIM(cc.moneda), 3)) = 'BS.'
-                         AND IFNULL(cc.tasa_cambio, 0) > 0
-                        THEN cc.pago / cc.tasa_cambio
+                    WHEN
+                        UPPER(
+                            LEFT(
+                                TRIM(cc.moneda COLLATE utf8mb4_unicode_ci),
+                                3
+                            )
+                        )
+                        =
+                        _utf8mb4'BS.' COLLATE utf8mb4_unicode_ci
+
+                        AND IFNULL(cc.tasa_cambio, 0) > 0
+                    THEN cc.pago / cc.tasa_cambio
 
                     ELSE IFNULL(cc.pago, 0)
                 END AS cobrado_usd
@@ -1274,45 +1473,72 @@ FROM
                 cc.pago,
                 cc.moneda,
                 cc.tasa_cambio
+
         ) AS cobro_documento
 
-        GROUP BY cobro_documento.id_documento
+        GROUP BY
+            cobro_documento.id_documento
+
     ) AS cobros
         ON cobros.id_documento = s.id
 
-    WHERE s.tipo_documento = 'TDCFCV'
-      AND s.estatus = 'PROCESADO'
-      AND s.documento IN (
-          'FC',
-          'NC',
-          'ND',
-          'RC'
-      )
+    WHERE
+        s.tipo_documento COLLATE utf8mb4_unicode_ci
+            =
+        _utf8mb4'TDCFCV' COLLATE utf8mb4_unicode_ci
+
+        AND
+        s.estatus COLLATE utf8mb4_unicode_ci
+            =
+        _utf8mb4'PROCESADO' COLLATE utf8mb4_unicode_ci
+
+        AND
+        s.documento COLLATE utf8mb4_unicode_ci
+        IN (
+            _utf8mb4'FC' COLLATE utf8mb4_unicode_ci,
+            _utf8mb4'NC' COLLATE utf8mb4_unicode_ci,
+            _utf8mb4'ND' COLLATE utf8mb4_unicode_ci,
+            _utf8mb4'RC' COLLATE utf8mb4_unicode_ci
+        )
+
 ) AS base;
 
 
-DROP VIEW IF EXISTS view_cuentas_por_pagar_resumen;
+/* ============================================================
+   3. RESUMEN CUENTAS POR PAGAR
+   ============================================================ */
 
 CREATE VIEW view_cuentas_por_pagar_resumen AS
 SELECT
     proveedor,
-    proveedor_rif,
-    proveedor_nombre,
+
+    proveedor_rif COLLATE utf8mb4_unicode_ci
+        AS proveedor_rif,
+
+    proveedor_nombre COLLATE utf8mb4_unicode_ci
+        AS proveedor_nombre,
 
     COUNT(*) AS cantidad_documentos,
 
     SUM(
         CASE
-            WHEN estado_cuenta = 'PENDIENTE'
-                THEN 1
+            WHEN
+                estado_cuenta COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'PENDIENTE' COLLATE utf8mb4_unicode_ci
+            THEN 1
             ELSE 0
         END
     ) AS documentos_pendientes,
 
     SUM(
         CASE
-            WHEN estado_cuenta = 'PAGO PARCIAL'
-                THEN 1
+            WHEN
+                estado_cuenta COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'PAGO PARCIAL'
+                COLLATE utf8mb4_unicode_ci
+            THEN 1
             ELSE 0
         END
     ) AS documentos_parciales,
@@ -1349,36 +1575,53 @@ SELECT
 
 FROM view_cuentas_por_pagar
 
-WHERE anulado = 'N'
+WHERE
+    anulado COLLATE utf8mb4_unicode_ci
+    =
+    _utf8mb4'N' COLLATE utf8mb4_unicode_ci
 
 GROUP BY
     proveedor,
-    proveedor_rif,
-    proveedor_nombre;
-	
-	
-DROP VIEW IF EXISTS view_cuentas_por_cobrar_resumen;
+    proveedor_rif COLLATE utf8mb4_unicode_ci,
+    proveedor_nombre COLLATE utf8mb4_unicode_ci;
+
+
+/* ============================================================
+   4. RESUMEN CUENTAS POR COBRAR
+   ============================================================ */
 
 CREATE VIEW view_cuentas_por_cobrar_resumen AS
 SELECT
     cliente,
-    cliente_rif,
-    cliente_nombre,
+
+    cliente_rif COLLATE utf8mb4_unicode_ci
+        AS cliente_rif,
+
+    cliente_nombre COLLATE utf8mb4_unicode_ci
+        AS cliente_nombre,
 
     COUNT(*) AS cantidad_documentos,
 
     SUM(
         CASE
-            WHEN estado_cuenta = 'PENDIENTE'
-                THEN 1
+            WHEN
+                estado_cuenta COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'PENDIENTE'
+                COLLATE utf8mb4_unicode_ci
+            THEN 1
             ELSE 0
         END
     ) AS documentos_pendientes,
 
     SUM(
         CASE
-            WHEN estado_cuenta = 'COBRO PARCIAL'
-                THEN 1
+            WHEN
+                estado_cuenta COLLATE utf8mb4_unicode_ci
+                =
+                _utf8mb4'COBRO PARCIAL'
+                COLLATE utf8mb4_unicode_ci
+            THEN 1
             ELSE 0
         END
     ) AS documentos_parciales,
@@ -1417,6 +1660,6 @@ FROM view_cuentas_por_cobrar
 
 GROUP BY
     cliente,
-    cliente_rif,
-    cliente_nombre;
+    cliente_rif COLLATE utf8mb4_unicode_ci,
+    cliente_nombre COLLATE utf8mb4_unicode_ci;
 

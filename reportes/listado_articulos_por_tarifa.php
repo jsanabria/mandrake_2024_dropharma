@@ -1,25 +1,18 @@
 <?php
 session_start();
 
-require('rcs/fpdf.php');
-require("../include/connect.php");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1); 
+error_reporting(E_ALL); 
 
-$username = trim($_REQUEST["username"]);
-$codcliente = trim($_REQUEST["codcliente"]);
+require('rcs/fpdf.php');
+require("../include/connect2.php");
+
+$codcliente = intval($_REQUEST["codcliente"]);
+$codasesor = intval(isset($_REQUEST["codasesor"]) ? $_REQUEST["codasesor"] : 0);
 $tarifa = trim($_REQUEST["tarifa"]);
 
-$sql = "SELECT valor1 AS ppal from parametro WHERE codigo = '002';";
-$result = mysqli_query($link, $sql);
-$row = mysqli_fetch_array($result);
-$almacen = $row["ppal"];
-
 $descuento = 0;
-
-$sql = "SELECT cliente FROM usuario WHERE username = '$username';";
-$rs = mysqli_query($link, $sql);
-if($row = mysqli_fetch_array($rs)) $codcliente = intval($row["cliente"]);
-else $codcliente = 0;
-
 if($codcliente > 0) {
     $sql = "SELECT descuento FROM cliente WHERE id = $codcliente;";
     $rs = mysqli_query($link, $sql);
@@ -27,6 +20,20 @@ if($codcliente > 0) {
     else $descuento = 0;
 }
 
+
+$sql = "SELECT valor1 AS ppal from parametro WHERE codigo = '002';";
+$result = mysqli_query($link, $sql);
+$row = mysqli_fetch_array($result);
+$almacen = $row["ppal"];
+
+$where = "";
+if($codasesor > 0) {
+    $sql = "SELECT IFNULL(fabricante, 0) AS fabricante FROM asesor_fabricante WHERE asesor = $codasesor;"; 
+	$rs = mysqli_query($link, $sql);
+    if($row = mysqli_fetch_array($rs)) {
+        $where = " AND a.fabricante IN (SELECT IFNULL(fabricante, 0) AS fabricante FROM asesor_fabricante WHERE asesor = $codasesor)";
+    } 
+}
 
 if($tarifa == "") {
 	$sql = "SELECT tarifa FROM cliente WHERE id = $codcliente"; 
@@ -39,21 +46,20 @@ $sql = "SELECT nombre FROM tarifa WHERE id = $tarifa;";
 $rs = mysqli_query($link, $sql);
 $row = mysqli_fetch_array($rs);
 
-$GLOBALS["titulo"] = "ARTICULOS TARIFA " . $row["nombre"];
-$GLOBALS["condicion_comercial"] = $descuento; 
+if($codasesor == 0)
+	$GLOBALS["titulo"] = "ARTICULOS TARIFA " . $row["nombre"];
+else
+	$GLOBALS["titulo"] = "LISTA DE PRECIO";
 
-$sql = "SELECT valor1 AS tipo_documento FROM parametro WHERE codigo = '050';";
-$tipo_documento = 'TDCNET';
-$rs = mysqli_query($link, $sql);
-if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
+$GLOBALS["condicion_comercial"] = $descuento; 
 
 class PDF extends FPDF
 {
-	// Cabecera de página
+	// Cabecera de pï¿½gina
 	function Header()
 	{
-		// Consulto datos de la compañía 
-		require("../include/connect.php");
+		// Consulto datos de la compaï¿½ï¿½a 
+		require("../include/connect2.php");
 		$sql = "SELECT id FROM compania ORDER BY id ASC LIMIT 0,1;";
 		$rs = mysqli_query($link, $sql);
 		$row = mysqli_fetch_array($rs);
@@ -88,7 +94,7 @@ class PDF extends FPDF
 		$this->Ln(10);
 		
 		$this->SetFont('Arial','B',14);
-		$this->Cell(200, 6, mb_convert_encoding(substr($GLOBALS["titulo"], 0, 55), "UTF-8", mb_detect_encoding($GLOBALS["titulo"])),0,0,'C');
+		$this->Cell(200, 6, mb_convert_encoding($GLOBALS["titulo"], "ISO-8859-1"),0,0,'C');
 		if(floatval($GLOBALS["condicion_comercial"]) > 0) {
 			$this->Ln();
 			$cc = "Descuento Comercial " . $GLOBALS["condicion_comercial"] . "%";
@@ -109,20 +115,20 @@ class PDF extends FPDF
 		$this->Cell(45, 6, "PRESENTACION", 1, 0, 'L');
 		$this->Cell(25, 6, "CODBAR", 1, 0, 'L');
 		$this->Cell(35, 6, "PRECIO", 1, 0, 'R');
-		$this->Cell(10, 6, "DESC", 1, 0, 'R');
+		$this->Cell(10, 6, "D1/D2", 1, 0, 'R');
 		$this->Cell(15, 6, "CANT", 1, 0, 'C');
 		$this->Cell(10, 6, "U.M.", 1, 0, 'C');
 		$this->Ln(6);
 	}
 	
-	// Pie de página
+	// Pie de pï¿½gina
 	function Footer()
 	{
-		// Posición: a 1,5 cm del final
+		// Posiciï¿½n: a 1,5 cm del final
 		$this->SetY(-15);
 		// Arial italic 8
 		$this->SetFont('Arial','I',8);
-		// Número de página
+		// Nï¿½mero de pï¿½gina
 		$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 	}
 	
@@ -136,35 +142,49 @@ class PDF extends FPDF
 	}
 }
 
-// Creación del objeto de la clase heredada
+// Creaciï¿½n del objeto de la clase heredada
 $pdf = new PDF('P', 'mm', 'Letter');
 $pdf->SetMargins(2,10,10);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Arial','',8);
 
+$sql = "SELECT valor1 AS tipo_documento FROM parametro WHERE codigo = '050';";
+$tipo_documento = 'TDCNET';
+$rs = mysqli_query($link, $sql);
+if($row = mysqli_fetch_array($rs)) $tipo_documento = $row["tipo_documento"];
+
+
 $sql = "SELECT 
         a.id, 
-        a.foto, IFNULL(a.nombre_comercial, '') AS nombre_comercial, IFNULL(b.nombre, '')  AS fabricante, 
-        IFNULL(a.principio_activo, '') AS principio_activo, IFNULL(a.presentacion, '') AS presentacion, c.precio AS precio, 
+        a.foto, IFNULL(a.nombre_comercial, '') AS nombre_comercial, SUBSTRING(b.nombre, 1, 10) AS fabricante, 
+        a.principio_activo, a.presentacion, c.precio AS precio, 
         (a.cantidad_en_mano+a.cantidad_en_pedido)-a.cantidad_en_transito AS cantidad_en_mano, 
-        d.descripcion AS unidad_medida, a.descuento, IFNULL(a.codigo_de_barra, '') AS codbar  
+        d.descripcion AS unidad_medida, 
+        IFNULL(a.descuento, 0) AS descuento,
+        IFNULL(b.descuento, 0) AS descuento_fabricante,
+        (
+            (c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100)))
+            -
+            ((c.precio - (c.precio * (IFNULL(a.descuento, 0) / 100))) * (IFNULL(b.descuento, 0) / 100))
+        ) AS precio_descuentos,
+        IFNULL(a.codigo_de_barra, '') AS codbar  
       FROM 
         articulo AS a 
         LEFT OUTER JOIN fabricante AS b ON b.Id = a.fabricante 
         INNER JOIN tarifa_articulo AS c ON c.articulo = a.id AND c.tarifa = $tarifa 
         INNER JOIN unidad_medida AS d ON d.codigo = a.unidad_medida_defecto 
       WHERE 
-        a.activo = 'S' AND a.articulo_inventario = 'S' AND a.cantidad_en_mano > 0 AND b.activo = 'S' 
+        a.activo = 'S' AND a.articulo_inventario = 'S' AND a.cantidad_en_mano > 0  
+        $where 
       ORDER BY a.principio_activo, a.presentacion;"; 
 
 $rs = mysqli_query($link, $sql) or die(mysqli_error());
 $items = 0;
 while($row = mysqli_fetch_array($rs))
 {
-
     $sql = "SELECT 
-                SUM(x.cantidad_movimiento) AS cantidad_en_mano, MAX(fecha_vencimiento) AS fecha_vencimiento   
+                SUM(x.cantidad_movimiento) AS cantidad_en_mano  
             FROM 
                 (
                     SELECT 
@@ -203,10 +223,9 @@ while($row = mysqli_fetch_array($rs))
             WHERE 1;";
     $result2 = mysqli_query($link, $sql);
     $row2 = mysqli_fetch_array($result2);
-    $FechaVencimiento = isset($row2["fecha_vencimiento"]) ? $row2["fecha_vencimiento"] : "";
     $onHand = floatval($row2["cantidad_en_mano"]);
 
-	if($onHand > 0) {
+    if($onHand > 0) {
 		$pdf->SetFont('Arial', '', 8);
 
 		//$pdf->Cell(5, 5);
@@ -216,12 +235,20 @@ while($row = mysqli_fetch_array($rs))
 		$pre = trim($row["presentacion"]);
 		$pdf->Cell(45, 5, substr($pre, 0, 25), 1, 0, 'L');
 		$pdf->Cell(25, 5, trim($row["codbar"]), 1, 0, 'L');
-		// $pdf->Cell(35, 5, number_format($row["precio"], 2, ".", ",") . " USD", 1, 0, 'R');
-		$precio = floatval($row["precio"]);
-		$precio = $precio - ($precio * ($row["descuento"]/100));
-		$precio = $precio - ($precio * ($descuento/100));
+		// $pdf->Cell(35, 5, number_format($row["precio"], 2, ".", ",") . "Bs", 1, 0, 'R');
+		// Descuento sobre descuento: ArtÃ­culo -> Fabricante -> Cliente
+		$precio = floatval($row["precio_descuentos"]);
+		$precio = $precio - ($precio * ($descuento / 100));
+
 		$pdf->Cell(35, 5, number_format($row["precio"], 2, ".", ",") . " / " . number_format($precio, 2, ",", "") . " USD", 1, 0, 'R');
-		$pdf->Cell(10, 5, (floatval($row["descuento"]) == 0 ? '' : number_format($row["descuento"], 0, ".", ",") . "%"), 1, 0, 'R');
+
+		$descArticulo = floatval($row["descuento"]);
+		$descFabricante = floatval($row["descuento_fabricante"]);
+		$textoDescuento = '';
+		if ($descArticulo > 0 || $descFabricante > 0) {
+			$textoDescuento = number_format($descArticulo, 0, ".", ",") . "/" . number_format($descFabricante, 0, ".", ",");
+		}
+		$pdf->Cell(10, 5, $textoDescuento, 1, 0, 'R');
 		$pdf->Cell(15, 5, "", 1, 0, 'C');
 		$pdf->Cell(10, 5, substr($row["unidad_medida"], 0, 4), 1, 0, 'C');
 		$pdf->Ln();
@@ -235,7 +262,7 @@ while($row = mysqli_fetch_array($rs))
 			$pdf->Cell(95, 5, "", 1, 0, 'C');
 			$pdf->Ln();
 		}
-	}
+    }
 }
 
 $pdf->EndReport($items);

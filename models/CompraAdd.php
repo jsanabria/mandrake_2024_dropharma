@@ -1392,12 +1392,15 @@ class CompraAdd extends Compra
 
             // monto_exento
             $this->monto_exento->HrefValue = "";
+            $this->monto_exento->TooltipValue = "";
 
             // monto_gravado
             $this->monto_gravado->HrefValue = "";
+            $this->monto_gravado->TooltipValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
+            $this->alicuota->TooltipValue = "";
 
             // fecha_registro
             $this->fecha_registro->HrefValue = "";

@@ -96,7 +96,7 @@ else {
                       VALUES 
                         (NULL, '$tipo', '" . CurrentUserName() . "', NOW(), " . $meta['cliente'] . ", '$nro_documento_hijo',
                         'Despacho Parcial - Ref. Origen #" . $meta['nro_documento'] . "', 'PROCESADO', '" . $meta['moneda'] . "', 
-                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . ($meta['asesor'] ?? 'NULL') . ", '" . $meta['documento'] . "', 
+                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . (!empty($meta['asesor']) ? "'" . $meta['asesor'] . "'" : "NULL") . ", '" . $meta['documento'] . "', 
                         " . ($meta['dias_credito'] ?? '0') . ", '" . $meta['consignacion'] . "', '" . $meta['nro_documento'] . "', 'S');";
     Execute($sqlInsertHijo);
     $factura_id_hijo = ExecuteScalar("SELECT LAST_INSERT_ID();");
@@ -113,7 +113,7 @@ else {
                       VALUES 
                         (NULL, '$tipo', '" . CurrentUserName() . "', NOW(), " . $meta['cliente'] . ", '$nro_documento_remanente',
                         'Saldo Pendiente - Ex Ref. #" . $meta['nro_documento'] . "', '" . $meta['estatus'] . "', '" . $meta['moneda'] . "', 
-                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . ($meta['asesor'] ?? 'NULL') . ", '" . $meta['documento'] . "', 
+                        " . ($meta['id_documento_padre'] ?? 'NULL') . ", " . (!empty($meta['asesor']) ? "'" . $meta['asesor'] . "'" : "NULL") . ", '" . $meta['documento'] . "', 
                         " . ($meta['dias_credito'] ?? '0') . ", '" . $meta['consignacion'] . "', '" . $meta['nro_documento'] . "', 'N');";
     Execute($sqlInsertNuevoPadre);
     $factura_id_remanente = ExecuteScalar("SELECT LAST_INSERT_ID();");

@@ -107,6 +107,16 @@ if ($userLevelId == -1) {
 }
 // --- //
 
+$puedeCrearFacturaVenta = true;
+
+if ($tipo_documento == "TDCFCV") {
+    $puedeCrearFacturaVenta = false;
+
+    if (function_exists(__NAMESPACE__ . "\\VerificaFuncion")) {
+        $puedeCrearFacturaVenta = VerificaFuncion("051");
+    }
+}
+
 ?>
 
 
@@ -135,42 +145,44 @@ if ($userLevelId == -1) {
 
                 <input type="hidden" name="tipo_documento" value="<?= $tipo_documento ?>">
 
-                <div class="row g-2 align-items-center">
+                <?php if ($tipo_documento != "TDCFCV" || $puedeCrearFacturaVenta) { ?>
+                    <div class="row g-2 align-items-center">
 
-                    <!-- Cliente -->
-                    <div class="col-md-4">
-                        <div class="input-group input-group-sm">
-                            <input name="cliente"
-                                id="cliente"
-                                type="text"
-                                class="form-control"
-                                placeholder="Buscar Cliente"
-                                value="<?= $clienteNombre ?>" />
+                        <!-- Cliente -->
+                        <div class="col-md-4">
+                            <div class="input-group input-group-sm">
+                                <input name="cliente"
+                                    id="cliente"
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Buscar Cliente"
+                                    value="<?= $clienteNombre ?>" />
 
-                            <?php if ($puedeAgregarCliente) { ?>
-                            <button type="button"
-                                    class="btn btn-success"
-                                    title="Nuevo Cliente"
-                                    onclick="abrirModalCliente();">
-                                <i class="fa-solid fa-plus"></i>
+                                <?php if ($puedeAgregarCliente) { ?>
+                                <button type="button"
+                                        class="btn btn-success"
+                                        title="Nuevo Cliente"
+                                        onclick="abrirModalCliente();">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                        <!-- Botón Crear -->
+                        <div class="col-md-4">
+                            <button id="btnCrear"
+                                    class="btn btn-primary btn-sm w-100"
+                                    type="submit"
+                                    disabled>
+                                Crear <?= $tipo_documento_nombre ?>
                             </button>
-                            <?php } ?>
+                        </div>
+
+                        <div class="col-md-4">
                         </div>
                     </div>
-
-                    <!-- Botón Crear -->
-                    <div class="col-md-4">
-                        <button id="btnCrear"
-                                class="btn btn-primary btn-sm w-100"
-                                type="submit"
-                                disabled>
-                            Crear <?= $tipo_documento_nombre ?>
-                        </button>
-                    </div>
-
-                    <div class="col-md-4">
-                    </div>
-                </div>
+                <?php } ?>
 
                 <input name="codcli"
                     id="codcli"
@@ -397,16 +409,20 @@ if ($userLevelId == -1) {
 </div>
 
 <script type="text/javascript">
-  document.getElementById("cliente").addEventListener("keyup", getCodigos)
-  document.getElementById("cliente").addEventListener("click", getCodigos)
-  document.getElementById("cliente").addEventListener("change", getCodigos2)
+    const inputCliente = document.getElementById("cliente");
+
+    if (inputCliente) {
+        inputCliente.addEventListener("keyup", getCodigos);
+        inputCliente.addEventListener("click", getCodigos);
+        inputCliente.addEventListener("change", getCodigos2);
+    }
 
   function getCodigos() {
 
       let inputCP = document.getElementById("cliente").value
       let inputUN = document.getElementById("username").value
       let lista = document.getElementById("lista")
-      document.getElementById('btnCrear').setAttribute("disabled","disabled")
+      setBtnCrearDisabled(true);
       document.getElementById("codcli").value = ""
 
       if (inputCP.length > -1) {
@@ -458,7 +474,7 @@ if ($userLevelId == -1) {
       }).then(response => response.json()) 
           .then(data => { 
               datos = data.split("|")
-              document.getElementById('btnCrear').removeAttribute("disabled")
+              setBtnCrearDisabled(false);
               document.getElementById("codcli").value = datos[0]
               document.getElementById("cliente").value = datos[1]
               document.getElementById("clienteNombre").innerHTML = datos[1]
@@ -485,18 +501,32 @@ if ($userLevelId == -1) {
 
       if (inputCP.length == 0) {
 
-        document.getElementById('btnCrear').setAttribute("disabled","disabled")
+        setBtnCrearDisabled(true);
         document.getElementById("codcli").value = ""
         lista.style.display = 'none'
       }
   }
 
-  var codcli = document.getElementById("codcli").value
-  if(codcli != "") {
-    document.getElementById("cliente").disabled = true
-    document.getElementById("btnCrear").disabled = false
-  }
+    var codcli = document.getElementById("codcli").value;
 
+    const clienteInput = document.getElementById("cliente");
+    const btnCrear = document.getElementById("btnCrear");
+
+    if (codcli != "" && clienteInput) {
+        clienteInput.disabled = true;
+
+        if (btnCrear) {
+            btnCrear.disabled = false;
+        }
+    }
+
+    function setBtnCrearDisabled(disabled) {
+        const btn = document.getElementById("btnCrear");
+
+        if (btn) {
+            btn.disabled = disabled;
+        }
+    }
 
   function abrirModalCliente() {
       var tipo_documento = "<?=  $tipo_documento ?>";

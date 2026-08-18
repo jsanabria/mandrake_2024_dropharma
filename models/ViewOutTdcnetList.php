@@ -5881,9 +5881,37 @@ class ViewOutTdcnetList extends ViewOutTdcnet
     // Page Data Rendering event
     public function pageDataRendering(&$header)
     {
-        // Example:
-        //$header = "your header";
-        $header .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCNET"><span class="fas fa-plus"></span> Nuevo Documento</a><br><br>';
+        // 1. Consultar la cantidad de registros
+        $sqlNuevo = "SELECT COUNT(unidades) AS cantidad, SUM(unidades) AS unidades FROM view_out_tdcnet WHERE entregado = 'N' AND estatus = 'PROCESADO';";
+        $cantidadNuevos = 0;
+        $unidadNuevos = 0;
+        if ($row = ExecuteRow($sqlNuevo)) { // Se corrigió el paréntesis
+            $cantidadNuevos = $row["cantidad"] ?? 0;
+            $unidadNuevos = $row["unidades"] ?? 0;
+        }
+
+        // 2. Construcción de la botonera con clases Bootstrap para espaciado limpio
+        $html = '<div class="d-inline-flex flex-wrap gap-2 mb-3">';
+
+        // Botón Nuevo Documento
+        $html .= '<a class="btn btn-outline-primary" id="btnNuevo" href="HomeOutAdd?tipo_documento=TDCNET">
+                    <span class="fas fa-plus me-1"></span> Nuevo Documento
+                  </a>';
+
+        // Botón / Alerta de Notificación
+        if ($cantidadNuevos > 0) {
+            $urlFiltro = CurrentPageName() . "?cmd=search&x_estatus=PROCESADO&x_entregado=N"; 
+            $html .= '<a href="' . $urlFiltro . '" class="btn btn-warning" style="background-color: #eda135; border-color: #eda135; color: white;">
+                        <span class="fas fa-exclamation-triangle me-1"></span> 
+                        Pedidos Procesados por Entregar: 
+                        <span class="badge bg-light text-dark ms-1">' . $cantidadNuevos . ' Doc.</span> 
+                        <span class="badge bg-light text-dark ms-1">' . $unidadNuevos . ' Unidades</span>
+                    </a>';
+        }
+        $html .= '</div>';
+
+        // Asignar al header
+        $header .= $html;
     }
 
     // Page Data Rendered event
