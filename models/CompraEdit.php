@@ -906,7 +906,7 @@ class CompraEdit extends Compra
             if (IsApi() && $val === null) {
                 $this->monto_exento->Visible = false; // Disable update for API request
             } else {
-                $this->monto_exento->setFormValue($val);
+                $this->monto_exento->setFormValue($val, true, $validate);
             }
         }
 
@@ -916,7 +916,7 @@ class CompraEdit extends Compra
             if (IsApi() && $val === null) {
                 $this->monto_gravado->Visible = false; // Disable update for API request
             } else {
-                $this->monto_gravado->setFormValue($val);
+                $this->monto_gravado->setFormValue($val, true, $validate);
             }
         }
 
@@ -1589,11 +1589,9 @@ class CompraEdit extends Compra
 
             // monto_exento
             $this->monto_exento->HrefValue = "";
-            $this->monto_exento->TooltipValue = "";
 
             // monto_gravado
             $this->monto_gravado->HrefValue = "";
-            $this->monto_gravado->TooltipValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
@@ -1609,7 +1607,6 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_iva->HrefValue = "";
             }
-            $this->ref_iva->TooltipValue = "";
 
             // ref_islr
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1621,7 +1618,6 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_islr->HrefValue = "";
             }
-            $this->ref_islr->TooltipValue = "";
 
             // ref_municipal
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1633,7 +1629,6 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_municipal->HrefValue = "";
             }
-            $this->ref_municipal->TooltipValue = "";
 
             // fecha_registro
             $this->fecha_registro->HrefValue = "";
@@ -1722,12 +1717,18 @@ class CompraEdit extends Compra
             // monto_exento
             $this->monto_exento->setupEditAttributes();
             $this->monto_exento->EditValue = $this->monto_exento->CurrentValue;
-            $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, $this->monto_exento->formatPattern());
+            $this->monto_exento->PlaceHolder = RemoveHtml($this->monto_exento->caption());
+            if (strval($this->monto_exento->EditValue) != "" && is_numeric($this->monto_exento->EditValue)) {
+                $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, null);
+            }
 
             // monto_gravado
             $this->monto_gravado->setupEditAttributes();
             $this->monto_gravado->EditValue = $this->monto_gravado->CurrentValue;
-            $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, $this->monto_gravado->formatPattern());
+            $this->monto_gravado->PlaceHolder = RemoveHtml($this->monto_gravado->caption());
+            if (strval($this->monto_gravado->EditValue) != "" && is_numeric($this->monto_gravado->EditValue)) {
+                $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, null);
+            }
 
             // alicuota
             $this->alicuota->setupEditAttributes();
@@ -1756,15 +1757,27 @@ class CompraEdit extends Compra
 
             // ref_iva
             $this->ref_iva->setupEditAttributes();
-            $this->ref_iva->EditValue = $this->ref_iva->CurrentValue;
+            if (!$this->ref_iva->Raw) {
+                $this->ref_iva->CurrentValue = HtmlDecode($this->ref_iva->CurrentValue);
+            }
+            $this->ref_iva->EditValue = HtmlEncode($this->ref_iva->CurrentValue);
+            $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
 
             // ref_islr
             $this->ref_islr->setupEditAttributes();
-            $this->ref_islr->EditValue = $this->ref_islr->CurrentValue;
+            if (!$this->ref_islr->Raw) {
+                $this->ref_islr->CurrentValue = HtmlDecode($this->ref_islr->CurrentValue);
+            }
+            $this->ref_islr->EditValue = HtmlEncode($this->ref_islr->CurrentValue);
+            $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
 
             // ref_municipal
             $this->ref_municipal->setupEditAttributes();
-            $this->ref_municipal->EditValue = $this->ref_municipal->CurrentValue;
+            if (!$this->ref_municipal->Raw) {
+                $this->ref_municipal->CurrentValue = HtmlDecode($this->ref_municipal->CurrentValue);
+            }
+            $this->ref_municipal->EditValue = HtmlEncode($this->ref_municipal->CurrentValue);
+            $this->ref_municipal->PlaceHolder = RemoveHtml($this->ref_municipal->caption());
 
             // fecha_registro
             $this->fecha_registro->setupEditAttributes();
@@ -1841,11 +1854,9 @@ class CompraEdit extends Compra
 
             // monto_exento
             $this->monto_exento->HrefValue = "";
-            $this->monto_exento->TooltipValue = "";
 
             // monto_gravado
             $this->monto_gravado->HrefValue = "";
-            $this->monto_gravado->TooltipValue = "";
 
             // alicuota
             $this->alicuota->HrefValue = "";
@@ -1861,7 +1872,6 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_iva->HrefValue = "";
             }
-            $this->ref_iva->TooltipValue = "";
 
             // ref_islr
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1873,7 +1883,6 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_islr->HrefValue = "";
             }
-            $this->ref_islr->TooltipValue = "";
 
             // ref_municipal
             if (!EmptyValue($this->id->CurrentValue)) {
@@ -1885,7 +1894,6 @@ class CompraEdit extends Compra
             } else {
                 $this->ref_municipal->HrefValue = "";
             }
-            $this->ref_municipal->TooltipValue = "";
 
             // fecha_registro
             $this->fecha_registro->HrefValue = "";
@@ -1974,10 +1982,16 @@ class CompraEdit extends Compra
                     $this->monto_exento->addErrorMessage(str_replace("%s", $this->monto_exento->caption(), $this->monto_exento->RequiredErrorMessage));
                 }
             }
+            if (!CheckNumber($this->monto_exento->FormValue)) {
+                $this->monto_exento->addErrorMessage($this->monto_exento->getErrorMessage(false));
+            }
             if ($this->monto_gravado->Visible && $this->monto_gravado->Required) {
                 if (!$this->monto_gravado->IsDetailKey && EmptyValue($this->monto_gravado->FormValue)) {
                     $this->monto_gravado->addErrorMessage(str_replace("%s", $this->monto_gravado->caption(), $this->monto_gravado->RequiredErrorMessage));
                 }
+            }
+            if (!CheckNumber($this->monto_gravado->FormValue)) {
+                $this->monto_gravado->addErrorMessage($this->monto_gravado->getErrorMessage(false));
             }
             if ($this->alicuota->Visible && $this->alicuota->Required) {
                 if (!$this->alicuota->IsDetailKey && EmptyValue($this->alicuota->FormValue)) {
@@ -2120,6 +2134,21 @@ class CompraEdit extends Compra
         // descripcion
         $this->descripcion->setDbValueDef($rsnew, $this->descripcion->CurrentValue, $this->descripcion->ReadOnly);
 
+        // monto_exento
+        $this->monto_exento->setDbValueDef($rsnew, $this->monto_exento->CurrentValue, $this->monto_exento->ReadOnly);
+
+        // monto_gravado
+        $this->monto_gravado->setDbValueDef($rsnew, $this->monto_gravado->CurrentValue, $this->monto_gravado->ReadOnly);
+
+        // ref_iva
+        $this->ref_iva->setDbValueDef($rsnew, $this->ref_iva->CurrentValue, $this->ref_iva->ReadOnly);
+
+        // ref_islr
+        $this->ref_islr->setDbValueDef($rsnew, $this->ref_islr->CurrentValue, $this->ref_islr->ReadOnly);
+
+        // ref_municipal
+        $this->ref_municipal->setDbValueDef($rsnew, $this->ref_municipal->CurrentValue, $this->ref_municipal->ReadOnly);
+
         // fecha_registro
         $this->fecha_registro->setDbValueDef($rsnew, UnFormatDateTime($this->fecha_registro->CurrentValue, $this->fecha_registro->formatPattern()), $this->fecha_registro->ReadOnly);
 
@@ -2142,6 +2171,21 @@ class CompraEdit extends Compra
         }
         if (isset($row['descripcion'])) { // descripcion
             $this->descripcion->CurrentValue = $row['descripcion'];
+        }
+        if (isset($row['monto_exento'])) { // monto_exento
+            $this->monto_exento->CurrentValue = $row['monto_exento'];
+        }
+        if (isset($row['monto_gravado'])) { // monto_gravado
+            $this->monto_gravado->CurrentValue = $row['monto_gravado'];
+        }
+        if (isset($row['ref_iva'])) { // ref_iva
+            $this->ref_iva->CurrentValue = $row['ref_iva'];
+        }
+        if (isset($row['ref_islr'])) { // ref_islr
+            $this->ref_islr->CurrentValue = $row['ref_islr'];
+        }
+        if (isset($row['ref_municipal'])) { // ref_municipal
+            $this->ref_municipal->CurrentValue = $row['ref_municipal'];
         }
         if (isset($row['fecha_registro'])) { // fecha_registro
             $this->fecha_registro->CurrentValue = $row['fecha_registro'];

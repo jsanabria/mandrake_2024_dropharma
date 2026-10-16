@@ -62,22 +62,22 @@ HTML;
                 REPLACE(a.doc_afectado, 'FACT-', '') AS afectado, 
                 a.`total` AS total_ventas, 
                 ROUND((SELECT
-                    SUM(IF(IFNULL(alicuota,0)=0, precio - (precio * (IFNULL(a.descuento, 0)/100)), 0)) AS exento_2 
+                    SUM(IF(IFNULL(alicuota,0)=0, (precio * (1 - (IFNULL(a.descuento, 0)/100))) * (1 - (IFNULL(a.descuento2, 0)/100)), 0)) AS exento_2 
                 FROM entradas_salidas
                 WHERE tipo_documento = a.tipo_documento AND 
-                    id_documento = a.id), 2) AS no_gravadas, 
+                    id_documento = a.id), 2) AS no_gravadas,
                 ROUND((SELECT
-                    SUM(IF(IFNULL(alicuota,0)=0, 0, precio - (precio * (IFNULL(a.descuento, 0)/100)))) AS gravado_2 
+                    SUM(IF(IFNULL(alicuota,0)=0, 0, (precio * (1 - (IFNULL(a.descuento, 0)/100))) * (1 - (IFNULL(a.descuento2, 0)/100)))) AS gravado_2 
                 FROM entradas_salidas
                 WHERE tipo_documento = a.tipo_documento AND 
-                    id_documento = a.id), 2) AS base, 
+                    id_documento = a.id), 2) AS base,
                 (SELECT
                     alicuota  
                 FROM entradas_salidas
                 WHERE tipo_documento = a.tipo_documento AND 
                     id_documento = a.id ORDER BY alicuota DESC LIMIT 0, 1) AS alic, 
                 a.`iva` AS iva, 
-                0 AS iva_ret, 'N' AS orden, a.asesor_asignado AS asesor, a.descuento, a.tipo_documento, a.estatus, 
+                0 AS iva_ret, 'N' AS orden, a.asesor_asignado AS asesor, a.descuento, a.descuento2, a.tipo_documento, a.estatus, 
                 a.dias_credito, date_format(DATE_ADD(a.fecha,INTERVAL IFNULL(a.dias_credito, 0) DAY), '%d/%m/%Y') AS fec_venc   
             FROM 
                 salidas AS a 

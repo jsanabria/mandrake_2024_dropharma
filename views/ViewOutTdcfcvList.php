@@ -936,7 +936,6 @@ loadjs.ready("head", function() {
 loadjs.ready("load", function () {
     // Startup script
     // Write your table-specific startup script here, no need to add script tags.
-
     // Listener para el nuevo botón de exportación
     $("#btnExportExcel").on("click", function(e) {
         e.preventDefault();

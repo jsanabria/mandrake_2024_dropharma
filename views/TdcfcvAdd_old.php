@@ -131,6 +131,53 @@ $categoriasNuevo = ExecuteRows("SELECT campo_codigo AS id, campo_descripcion AS 
 
 $preguntarNE = false;
 
+// ------------------------------------------------------------
+// Modalidad de emisión fiscal
+// 112 = Impresora fiscal (S/N)
+// 116 = Facturación digital TFHKA (S/N)
+//
+// Regla:
+//   DIGITAL   -> 116=S y 112=N
+//   IMPRESORA -> 112=S y 116=N
+//   LIBRE     -> ambos N
+//   CONFLICTO -> ambos S (se bloquea el procesamiento)
+// ------------------------------------------------------------
+ExecuteStatement("
+    INSERT INTO parametro (codigo, descripcion, valor1)
+    SELECT '112', 'USA IMPRESORA FISCAL', 'N'
+    FROM DUAL
+    WHERE NOT EXISTS (
+        SELECT 1 FROM parametro WHERE codigo = '112'
+    )
+");
+
+ExecuteStatement("
+    INSERT INTO parametro (codigo, descripcion, valor1)
+    SELECT '116', 'USA FACTURACION DIGITAL TFHKA', 'N'
+    FROM DUAL
+    WHERE NOT EXISTS (
+        SELECT 1 FROM parametro WHERE codigo = '116'
+    )
+");
+
+$impresoraFiscal = strtoupper(trim((string) ExecuteScalar(
+    "SELECT valor1 FROM parametro WHERE codigo = '112' LIMIT 1"
+)));
+
+$facturacionDigital = strtoupper(trim((string) ExecuteScalar(
+    "SELECT valor1 FROM parametro WHERE codigo = '116' LIMIT 1"
+)));
+
+if ($facturacionDigital === 'S' && $impresoraFiscal === 'S') {
+    $modoEmisionFiscal = 'CONFLICTO';
+} elseif ($facturacionDigital === 'S') {
+    $modoEmisionFiscal = 'DIGITAL';
+} elseif ($impresoraFiscal === 'S') {
+    $modoEmisionFiscal = 'IMPRESORA';
+} else {
+    $modoEmisionFiscal = 'LIBRE';
+}
+
 $rowParametro111 = ExecuteRow("SELECT valor1 FROM parametro WHERE codigo = '111' LIMIT 1");
 if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
     $preguntarNE = true;
@@ -289,12 +336,15 @@ if (intval($pedido) > 0) {
         <label class="form-label small fw-bold mb-1">Tasa B.C.V.</label>
 
         <input name="tasa_usd"
-               id="tasa_usd"
-               type="number"
-               class="form-control form-control-sm bg-light text-end"
-               value="<?= $tasa ?>"
-               onkeyup="js:RefreshMonedaTasa()"
-               readonly>
+                id="tasa_usd"
+                type="number"
+                step="0.01"
+                min="0"
+                class="form-control form-control-sm <?= ($consignacion == "NC" ? "" : "bg-light") ?> text-end"
+                value="<?= $tasa ?>"
+                onkeyup="js:RefreshMonedaTasa()"
+                onchange="js:RefreshMonedaTasa()"
+                <?= ($consignacion == "NC" ? "" : "readonly") ?>>
     </div>
 
     <div style="display:none;">
@@ -1125,16 +1175,67 @@ loadjs.ready(["jquery"], function () {
 
         const total = parseFloat(json.total ?? 0);
         const totalUsd = parseFloat(json.total_usd ?? 0);
-        const montoSinDescuento = parseFloat(json.monto_sin_descuento ?? 0);
-        const totalUsdSinDescuento = parseFloat(json.total_usd_sin_descuento ?? 0);
 
-        if (total === montoSinDescuento) {
-            $("#xTotalBs").html(formatter.format(total));
-            $("#xTotalUSD").html(formatter.format(totalUsd));
-        } else {
-            $("#xTotalBs").html(formatter.format(total) + "<br><del>" + formatter.format(montoSinDescuento) + "</del>");
-            $("#xTotalUSD").html(formatter.format(totalUsd) + "<br><del>" + formatter.format(totalUsdSinDescuento) + "</del>");
+        const montoSinDescuento = parseFloat(
+            json.monto_sin_descuento ?? 0
+        );
+
+        const totalUsdSinDescuento = parseFloat(
+            json.total_usd_sin_descuento ?? 0
+        );
+
+        const totalConIva = parseFloat(
+            json.total_con_iva ?? 0
+        );
+
+        const totalUsdConIva = parseFloat(
+            json.total_usd_con_iva ?? 0
+        );
+
+
+        // ==========================================
+        // MONTO EN USD
+        // ==========================================
+        let htmlTotal = formatter.format(total);
+
+        if (Math.abs(total - montoSinDescuento) > 0.001) {
+            htmlTotal +=
+                "<br><del>" +
+                formatter.format(montoSinDescuento) +
+                "</del>";
         }
+
+        htmlTotal +=
+            '<br><span class="fw-bold">' +
+            'c/IVA: ' +
+            formatter.format(totalConIva) +
+            '</span>';
+
+        $("#xTotalBs").html(htmlTotal);
+
+
+        // ==========================================
+        // MONTO EN Bs.
+        // ==========================================
+        let htmlTotalUsd = formatter.format(totalUsd);
+
+        if (
+            Math.abs(totalUsd - totalUsdSinDescuento) >
+            0.001
+        ) {
+            htmlTotalUsd +=
+                "<br><del>" +
+                formatter.format(totalUsdSinDescuento) +
+                "</del>";
+        }
+
+        htmlTotalUsd +=
+            '<br><span class="fw-bold">' +
+            'c/IVA: ' +
+            formatter.format(totalUsdConIva) +
+            '</span>';
+
+        $("#xTotalUSD").html(htmlTotalUsd);
     }
 
     window.insertar = function (i) {
@@ -1668,6 +1769,12 @@ loadjs.ready(["jquery"], function () {
             return true;
         }
 
+        const tipoDocumentoFiscal = String(
+            $("#consignacion").val() || ""
+        ).toUpperCase();
+
+        const docAfe = <?= intval($doc_afe) ?>;
+
         $.ajax({
             url: "include/tdcfcv/validar_existencia_articulo_tdcfcv.php",
             type: "POST",
@@ -1676,7 +1783,9 @@ loadjs.ready(["jquery"], function () {
                 pedido: pedido,
                 id_item: idItem,
                 articulo: articulo,
-                cantidad: cantidad
+                cantidad: cantidad,
+                tipo_documento_fiscal: tipoDocumentoFiscal,
+                doc_afe: docAfe
             }
         })
         .done(function (respuesta) {
@@ -1721,14 +1830,29 @@ loadjs.ready(["jquery"], function () {
             }
 
             if (!respuesta.cantidad_valida) {
-                alertMsg(
-                    "La cantidad solicitada (" +
-                    respuesta.cantidad_solicitada +
-                    ") es mayor a la existencia disponible (" +
-                    respuesta.cantidad_disponible +
-                    ")."
-                );
+                let mensaje = "";
 
+                if (respuesta.tipo_validacion === "FACTURA_AFECTADA") {
+
+                    mensaje =
+                        "La cantidad solicitada (" +
+                        respuesta.cantidad_solicitada +
+                        ") es mayor a la cantidad facturada (" +
+                        respuesta.cantidad_disponible +
+                        ") para este artículo en la factura afectada.";
+
+                } else {
+
+                    mensaje =
+                        "La cantidad solicitada (" +
+                        respuesta.cantidad_solicitada +
+                        ") es mayor a la existencia disponible (" +
+                        respuesta.cantidad_disponible +
+                        ").";
+                }
+
+                alertMsg(mensaje);
+                
                 $("#x" + i + "_cantidad")
                     .val(cantidadOriginal)
                     .focus();
@@ -1850,6 +1974,17 @@ loadjs.ready(["jquery"], function () {
     window.sendProccess = function (i) {
         if (i <= 0) return false;
 
+        const modoEmisionFiscal = "<?= $modoEmisionFiscal ?>";
+
+        if (modoEmisionFiscal === "CONFLICTO") {
+            alertMsg(
+                "Configuración fiscal inválida: están activas simultáneamente " +
+                "la Impresora Fiscal (parámetro 112) y la Facturación Digital TFHKA " +
+                "(parámetro 116). Debe quedar activa solamente una modalidad."
+            );
+            return false;
+        }
+
         // Antes de abrir los modales o reservar correlativos, valida
         // que todos los renglones tengan precio full y precio final > 0.
         if (!validarPreciosAntesDeProcesar()) {
@@ -1870,13 +2005,21 @@ loadjs.ready(["jquery"], function () {
             if (response.estatus == 1) {
                 // Inyectar datos calculados en el modal
                 $("#modal_nro_factura").val(response.factura);
-                $("#modal_nro_control").val(response.control);
+                $("#modal_nro_control").val(
+                    modoEmisionFiscal === "DIGITAL"
+                        ? "ASIGNADO POR TFHKA"
+                        : response.control
+                );
                 $("#modal_fecha").val(response.fecha);
 
                 // Conservar los correlativos fiscales normales para poder restaurarlos
                 // cuando se desmarque Factura de Contingencia.
                 const nroFacturaFiscalOriginal = response.factura;
-                const nroControlFiscalOriginal = response.control;
+                const nroControlFiscalOriginal = (
+                    modoEmisionFiscal === "DIGITAL"
+                        ? "ASIGNADO POR TFHKA"
+                        : response.control
+                );
 
                 // Próximos correlativos de factura manual / contingencia.
                 const nroFacturaManual = <?= intval($fmDocSiguiente) ?>;
@@ -2055,7 +2198,8 @@ loadjs.ready(["jquery"], function () {
                             "&dias_credito=" + diasCredito +
                             "&entregado=" + tipoPago +
                             "&contingencia=" + (esContingencia ? "S" : "N") +
-                            "&nota_contingencia=" + encodeURIComponent(notaContingencia);
+                            "&nota_contingencia=" + encodeURIComponent(notaContingencia) +
+                            "&modo_emision=" + encodeURIComponent(modoEmisionFiscal);
                     };
 
                     const modalFiscalEl = document.getElementById('modalConfirmarFiscal');
@@ -2541,23 +2685,6 @@ loadjs.ready(["jquery"], function () {
   </div>
 </div>
 
-<?php
-ExecuteStatement("
-    INSERT INTO parametro (codigo, descripcion, valor1)
-    SELECT '112', 'USA IMPRESORA FISCAL', 'N'
-    FROM DUAL
-    WHERE NOT EXISTS (
-        SELECT 1
-        FROM parametro
-        WHERE codigo = '112'
-    )
-");
-
-$impresoraFiscal = strtoupper(trim(
-    ExecuteScalar("SELECT valor1 FROM parametro WHERE codigo = '112'")
-));
-?>
-
 <div class="modal fade" id="modalConfirmarFiscal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalConfirmarFiscalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-primary shadow-lg">
@@ -2620,13 +2747,43 @@ $impresoraFiscal = strtoupper(trim(
                       placeholder="Indique el motivo (mínimo tres palabras)..."></textarea>
           </div>
 
-          <?php if ($impresoraFiscal == "S") { ?>
+          <?php if ($modoEmisionFiscal === "DIGITAL") { ?>
+              <div class="col-12">
+                  <div class="alert alert-success d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-cloud-arrow-up flex-shrink-0 me-2 fs-5"></i>
+                      <div>
+                          <strong>Facturación Digital TFHKA activa:</strong>
+                          el documento se preparará para emisión digital y el número de control será asignado por TFHKA.
+                      </div>
+                  </div>
+              </div>
+          <?php } elseif ($modoEmisionFiscal === "IMPRESORA") { ?>
               <div class="col-12">
                   <div class="alert alert-primary d-flex align-items-center mb-0 py-2 small" role="alert">
                       <i class="fa-solid fa-print flex-shrink-0 me-2 fs-5 text-primary"></i>
                       <div>
                           <strong>Impresora fiscal activa:</strong>
                           este documento será emitido e impreso en la impresora fiscal configurada.
+                      </div>
+                  </div>
+              </div>
+          <?php } elseif ($modoEmisionFiscal === "LIBRE") { ?>
+              <div class="col-12">
+                  <div class="alert alert-secondary d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-file-lines flex-shrink-0 me-2 fs-5"></i>
+                      <div>
+                          <strong>Formato libre activo:</strong>
+                          el documento continuará por el mecanismo actual de emisión en formato libre.
+                      </div>
+                  </div>
+              </div>
+          <?php } else { ?>
+              <div class="col-12">
+                  <div class="alert alert-danger d-flex align-items-center mb-0 py-2 small" role="alert">
+                      <i class="fa-solid fa-triangle-exclamation flex-shrink-0 me-2 fs-5"></i>
+                      <div>
+                          <strong>Conflicto de configuración:</strong>
+                          parámetros 112 y 116 están activos simultáneamente. No se permitirá procesar el documento.
                       </div>
                   </div>
               </div>
@@ -2930,5 +3087,4 @@ $impresoraFiscal = strtoupper(trim(
         </div>
     </div>
 </div>
-
 <?= GetDebugMessage() ?>

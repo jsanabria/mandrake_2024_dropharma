@@ -22,6 +22,13 @@ class DocumentoConsecutivoController extends ControllerBase
         return $this->runPage($request, $response, $this->getKeyParams($args), "DocumentoConsecutivoList");
     }
 
+    // edit
+    #[Map(["GET","POST","OPTIONS"], "/DocumentoConsecutivoEdit[/{keys:.*}]", [PermissionMiddleware::class], "edit.documento_consecutivo")]
+    public function edit(Request $request, Response $response, array $args): Response
+    {
+        return $this->runPage($request, $response, $this->getKeyParams($args), "DocumentoConsecutivoEdit");
+    }
+
     // Get keys as associative array
     protected function getKeyParams($args)
     {

@@ -11,6 +11,7 @@ $tipo        = isset($_REQUEST["tipo"]) ? $_REQUEST["tipo"] : "";
 $articulo    = isset($_REQUEST["articulo"]) ? $_REQUEST["articulo"] : "";
 $cliente     = isset($_REQUEST["cliente"]) ? $_REQUEST["cliente"] : "";
 $asesor      = isset($_REQUEST["asesor"]) ? $_REQUEST["asesor"] : "";
+$proveedor   = isset($_REQUEST["proveedor"]) ? $_REQUEST["proveedor"] : "";
 
 $where = "";
 $excel = true;
@@ -49,6 +50,9 @@ switch($id) {
     case "sal_laboratorio":
         include("include/salidas_genreales_por_laboratorio_excel.php");
         break;
+    case "sal_laboratorio_neas":
+        include("include/salidas_genreales_por_laboratorio_excel_neas.php");
+        break;
     case "sal_articulo":
         include("include/salidas_genreales_por_articulo_excel.php");
         break;
@@ -84,6 +88,9 @@ switch($id) {
         break;
     case "vta_cliente":
         include("include/ventas_por_cliente_excel.php");
+        break;
+    case "vta_cliente_ne":
+        include("include/ventas_por_cliente_ne_excel.php");
         break;
     case "cng_descarga_entradas":
         include("include/descarga_entradas_consignacion_excel.php");

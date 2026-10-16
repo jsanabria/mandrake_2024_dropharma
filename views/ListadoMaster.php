@@ -29,8 +29,10 @@ $titulos_reportes = [
     "vta_articulo"                => "VENTAS POR ARTICULO (FACTURAS)",
     "vta_articulo_utilidad"       => "VENTAS POR ARTICULO (FACTURAS UTILIDAD NETA)",
     "sal_laboratorio"             => "SALIDAS GENERALES POR FABRICANTE (FACTURAS + AJUSTE SALIDAS)",
+    "sal_laboratorio_neas"        => "SALIDAS GENERALES POR FABRICANTE (NOTAS DE ENTEGA + AJUSTE SALIDAS)",
     "sal_articulo"                => "SALIDAS GENERALES POR ARTICULO (FACTURAS + AJUSTE SALIDAS)",
     "vta_cliente"                 => "VENTAS POR CLIENTE (FACTURAS SIN IVA Y CANTIDAD DE UNIDADES)",
+    "vta_cliente_ne" => "VENTAS POR CLIENTE (ORDENES DE ENTREGA)",
     "sal_articulo_detallado"      => "SALIDAS GENERALES POR ARTICULO DETALLADO (FACTURAS)",
     "sal_articulo_detallado_neas" => "SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS + AJUSTE SALIDAS)",
     "cng_cliente"                 => "CONSIGNACIONES POR CLIENTE",
@@ -161,7 +163,12 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                                 echo '<option value="NC">NOTA DE CREDITO</option>';
                                 echo '<option value="ND">NOTA DE DEBITO</option>';
                             }
-                            elseif (in_array($id, ["vta_laboratorio", "sal_laboratorio", "cng_descarga_entradas"])) {
+                            elseif ($id == "tax_libro_compra") {
+                                echo '<option value="FC">FACTURA</option>';
+                                echo '<option value="NC">NOTA DE CREDITO</option>';
+                                echo '<option value="ND">NOTA DE DEBITO</option>';
+                            }
+                            elseif (in_array($id, ["vta_laboratorio", "sal_laboratorio", "sal_laboratorio_neas", "cng_descarga_entradas"])) {
                                 $sql = "SELECT id, nombre FROM fabricante ORDER BY nombre;";
                                 $rows = ExecuteRows($sql);
                                 foreach ($rows as $row) {
@@ -197,7 +204,7 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                                     echo '<option value="' . $row["codigo"] . '">' . $row["descripcion"] . '</option>';
                                 }
                             }
-                            elseif (in_array($id, ["cli_compras_recientes", "cli_sin_compras", "vta_cliente"])) {
+                            elseif (in_array($id, ["cli_compras_recientes", "cli_sin_compras", "vta_cliente", "vta_cliente_ne"])) {
                                 $sql = "SELECT id, CONCAT(IFNULL(nombre, ''), ' - ', IFNULL(ci_rif, '')) AS nombre FROM cliente ORDER BY nombre;";
                                 $rows = ExecuteRows($sql);
                                 foreach ($rows as $row) {
@@ -241,6 +248,26 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                                         FROM 
                                             usuario AS a 
                                         ORDER BY a.nombre;";
+                                $rows = ExecuteRows($sql);
+                                foreach ($rows as $row) {
+                                    echo '<option value="' . $row["id"] . '">' . htmlspecialchars(substr($row["nombre"], 0, 45)) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Bloques condicionales secundarios -->
+                <?php if ($id == "tax_libro_compra"): ?>
+                    <div class="row g-3 mt-2 pt-3 border-top border-light" id="xCliente">
+                        <!-- Selector de Clientes con Select2 -->
+                        <div class="col-12 col-md-6">
+                            <label for="proveedor" class="form-label text-muted fw-semibold small">Proveedor específico:</label>
+                            <select id="proveedor" name="proveedor" class="form-select select2-enable">
+                                <option value="">-- Todos los Proveedores --</option>
+                                <?php
+                                $sql = "SELECT id, nombre FROM proveedor ORDER BY nombre;";
                                 $rows = ExecuteRows($sql);
                                 foreach ($rows as $row) {
                                     echo '<option value="' . $row["id"] . '">' . htmlspecialchars(substr($row["nombre"], 0, 45)) . '</option>';
@@ -432,6 +459,10 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                     ? $("#cliente").val()
                     : "";
 
+                var proveedor = $("#proveedor").length
+                    ? $("#proveedor").val()
+                    : "";
+
                 var asesor = $("#asesor").length
                     ? $("#asesor").val()
                     : "";
@@ -470,7 +501,7 @@ $esReporteFiscal = in_array($id, $reportesFiscales);
                         fecha_hasta: fecha_hasta,
                         tipo: tipo,
                         articulo: articulo,
-                        proveedor: 0,
+                        proveedor: proveedor,
                         cliente: cliente,
                         asesor: asesor
                     },

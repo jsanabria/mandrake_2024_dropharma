@@ -35,6 +35,7 @@ loadjs.ready(["wrapper", "head"], function () {
             ["cliente", [fields.cliente.visible && fields.cliente.required ? ew.Validators.required(fields.cliente.caption) : null], fields.cliente.isInvalid],
             ["nro_documento", [fields.nro_documento.visible && fields.nro_documento.required ? ew.Validators.required(fields.nro_documento.caption) : null], fields.nro_documento.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
+            ["estatus", [fields.estatus.visible && fields.estatus.required ? ew.Validators.required(fields.estatus.caption) : null], fields.estatus.isInvalid],
             ["bultos", [fields.bultos.visible && fields.bultos.required ? ew.Validators.required(fields.bultos.caption) : null, ew.Validators.integer], fields.bultos.isInvalid],
             ["ci_rif", [fields.ci_rif.visible && fields.ci_rif.required ? ew.Validators.required(fields.ci_rif.caption) : null], fields.ci_rif.isInvalid],
             ["nombre", [fields.nombre.visible && fields.nombre.required ? ew.Validators.required(fields.nombre.caption) : null], fields.nombre.isInvalid],
@@ -55,6 +56,7 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
+            "estatus": <?= $Page->estatus->toClientList($Page) ?>,
         })
         .build();
     window[form.id] = form;
@@ -123,6 +125,51 @@ loadjs.ready("head", function () {
 <textarea data-table="view_out_tdcnet" data-field="x_nota" name="x_nota" id="x_nota" cols="35" rows="3" placeholder="<?= HtmlEncode($Page->nota->getPlaceHolder()) ?>"<?= $Page->nota->editAttributes() ?> aria-describedby="x_nota_help"><?= $Page->nota->EditValue ?></textarea>
 <?= $Page->nota->getCustomMessage() ?>
 <div class="invalid-feedback"><?= $Page->nota->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->estatus->Visible) { // estatus ?>
+    <div id="r_estatus"<?= $Page->estatus->rowAttributes() ?>>
+        <label id="elh_view_out_tdcnet_estatus" for="x_estatus" class="<?= $Page->LeftColumnClass ?>"><?= $Page->estatus->caption() ?><?= $Page->estatus->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->estatus->cellAttributes() ?>>
+<span id="el_view_out_tdcnet_estatus">
+    <select
+        id="x_estatus"
+        name="x_estatus"
+        class="form-select ew-select<?= $Page->estatus->isInvalidClass() ?>"
+        <?php if (!$Page->estatus->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcnetedit_x_estatus"
+        <?php } ?>
+        data-table="view_out_tdcnet"
+        data-field="x_estatus"
+        data-value-separator="<?= $Page->estatus->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->estatus->getPlaceHolder()) ?>"
+        <?= $Page->estatus->editAttributes() ?>>
+        <?= $Page->estatus->selectOptionListHtml("x_estatus") ?>
+    </select>
+    <?= $Page->estatus->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->estatus->getErrorMessage() ?></div>
+<?php if (!$Page->estatus->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcnetedit", function() {
+    var options = { name: "x_estatus", selectId: "fview_out_tdcnetedit_x_estatus" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcnetedit.lists.estatus?.lookupOptions.length) {
+        options.data = { id: "x_estatus", form: "fview_out_tdcnetedit" };
+    } else {
+        options.ajax = { id: "x_estatus", form: "fview_out_tdcnetedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcnet.fields.estatus.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
 </span>
 </div></div>
     </div>

@@ -93,33 +93,35 @@ if ($documento == "FC") {
 Execute($sql);
 $newid = ExecuteScalar("SELECT LAST_INSERT_ID();");
 
-// ---------------------------------------------------------
-// 4. PROCESO DE INSERCIÓN (DETALLE)
-// ---------------------------------------------------------
-$sql_detalle = "INSERT INTO entradas_salidas (tipo_documento, id_documento, fabricante, articulo, almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, alicuota, precio_unidad, precio, lote, fecha_vencimiento, descuento, precio_unidad_sin_desc, costo_unidad, costo, id_compra)
-                SELECT 
-                    tipo_documento, $newid, fabricante, articulo, almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida,
-                    (saldo_pendiente * " . ($documento == 'NC' ? "-1" : "1") . ") as cantidad_movimiento,
-                    alicuota, precio_unidad, precio, lote, fecha_vencimiento, descuento, precio_unidad_sin_desc, costo_unidad, costo, id_compra
-                FROM (
-                    SELECT *,
-                        (ABS(cantidad_movimiento) - (
-                            SELECT COALESCE(SUM(ABS(es2.cantidad_movimiento)),0) 
-                            FROM entradas_salidas es2 
-                            INNER JOIN salidas s2 ON es2.id_documento = s2.id 
-                            WHERE s2.doc_afe = $id 
-                            AND s2.documento = 'NC' 
-                            AND es2.articulo = main.articulo 
-                            AND es2.tipo_documento = '$tipo_documento'
-                            AND s2.tipo_documento = '$tipo_documento'
-                            AND s2.id != $newid
-                        )) as saldo_pendiente
-                    FROM entradas_salidas main
-                    WHERE id_documento = $id AND tipo_documento = '$tipo_documento'
-                ) as consulta_saldos
-                WHERE saldo_pendiente > 0 OR '$documento' != 'NC';"; 
+if ($documento != "ND") {
+    // ---------------------------------------------------------
+    // 4. PROCESO DE INSERCIÓN (DETALLE)
+    // ---------------------------------------------------------
+    $sql_detalle = "INSERT INTO entradas_salidas (tipo_documento, id_documento, fabricante, articulo, almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida, cantidad_movimiento, alicuota, precio_unidad, precio, lote, fecha_vencimiento, descuento, precio_unidad_sin_desc, costo_unidad, costo, id_compra)
+                    SELECT 
+                        tipo_documento, $newid, fabricante, articulo, almacen, cantidad_articulo, articulo_unidad_medida, cantidad_unidad_medida,
+                        (saldo_pendiente * " . ($documento == 'NC' ? "-1" : "1") . ") as cantidad_movimiento,
+                        alicuota, precio_unidad, precio, lote, fecha_vencimiento, descuento, precio_unidad_sin_desc, costo_unidad, costo, id_compra
+                    FROM (
+                        SELECT *,
+                            (ABS(cantidad_movimiento) - (
+                                SELECT COALESCE(SUM(ABS(es2.cantidad_movimiento)),0) 
+                                FROM entradas_salidas es2 
+                                INNER JOIN salidas s2 ON es2.id_documento = s2.id 
+                                WHERE s2.doc_afe = $id 
+                                AND s2.documento = 'NC' 
+                                AND es2.articulo = main.articulo 
+                                AND es2.tipo_documento = '$tipo_documento'
+                                AND s2.tipo_documento = '$tipo_documento'
+                                AND s2.id != $newid
+                            )) as saldo_pendiente
+                        FROM entradas_salidas main
+                        WHERE id_documento = $id AND tipo_documento = '$tipo_documento'
+                    ) as consulta_saldos
+                    WHERE saldo_pendiente > 0 OR '$documento' != 'NC';"; 
 
-Execute($sql_detalle);
+    Execute($sql_detalle);
+}
 
 /* Auditoría */
 

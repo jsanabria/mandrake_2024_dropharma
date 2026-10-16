@@ -225,9 +225,11 @@ $sql = "SELECT
 			date_format(a.fecha, '%d/%m/%Y') AS fecha, 
 			a.`total`, 
 			a.`iva`, 
-			a.`estatus`, a.descuento,  
+			a.`estatus`, 
+			IFNULL(a.descuento, 0) AS desccomer, 
+			IFNULL(a.descuento2, 0) AS desctrans, 
 			0 AS ret_iva, IFNULL(NULL, '') AS ref_iva, '' AS fecha_retiva, 
-			0 AS ret_islr, IFNULL(NULL, '') AS ref_islr, '' AS fecha_retislr 
+			0 AS ret_islr, IFNULL(NULL, '') AS ref_islr, '' AS fecha_retislr, IFNULL(a.descuento, 0) AS desccomer, IFNULL(a.descuento2, 0) AS desctrans, IFNULL(a.descuento3, 0) AS descuento3  
 		FROM 
 			salidas AS a 
 			LEFT OUTER JOIN cliente AS b ON b.id = a.cliente 
@@ -249,7 +251,8 @@ $_retislr = 0.00;
 
 while($row = mysqli_fetch_array($rs))
 {
-	$desc = floatval($row["descuento"]);
+	$desc = floatval($row["desccomer"]);
+	$desc2 = floatval($row["desctrans"]);
 	$pdf->SetFont('Arial', '', 5);
 
 	$pdf->Cell(5, 4);
@@ -277,8 +280,10 @@ while($row = mysqli_fetch_array($rs))
 	$rs3 = mysqli_query($link, $sql) or die(mysqli_error($link));
 	$row2 = mysqli_fetch_array($rs3);
 	$exenta_val = floatval($row2["exenta"] ?? 0);
-	$pdf->Cell(18, 4, $estatus =="ANULADO" ? "" : ($exenta_val==0 ? "" : number_format(($row["documento"]=="NC" ? -1 : 1)*($exenta_val - ($exenta_val*($desc/100))), 2, ",", ".")), 0, 0, 'R');
-	$_exenta += $estatus =="ANULADO" ? 0 : (($row["documento"]=="NC" ? -1 : 1)*($exenta_val - ($exenta_val*($desc/100))));
+	$valor_exenta = ($exenta_val - ($exenta_val*($desc/100)));
+	$valor_exenta = ($valor_exenta - ($valor_exenta*($desc2/100)));
+	$pdf->Cell(18, 4, $estatus =="ANULADO" ? "" : ($exenta_val==0 ? "" : number_format(($row["documento"]=="NC" ? -1 : 1)*$valor_exenta, 2, ",", ".")), 0, 0, 'R');
+	$_exenta += $estatus =="ANULADO" ? 0 : (($row["documento"]=="NC" ? -1 : 1)*$valor_exenta);
 
 	// Base Gravable
 	$sql = "SELECT SUM(IF(alicuota>0, precio, 0)) AS gravable FROM entradas_salidas 
@@ -286,8 +291,10 @@ while($row = mysqli_fetch_array($rs))
 	$rs3 = mysqli_query($link, $sql) or die(mysqli_error($link));
 	$row2 = mysqli_fetch_array($rs3);
 	$gravable_val = floatval($row2["gravable"] ?? 0);
-	$pdf->Cell(18, 4, $estatus =="ANULADO" ? "" : ($gravable_val==0 ? "" : number_format(($row["documento"]=="NC" ? -1 : 1)*($gravable_val - ($gravable_val*($desc/100))), 2, ",", ".")), 0, 0, 'R');
-	$_gravable += $estatus =="ANULADO" ? 0 : (($row["documento"]=="NC" ? -1 : 1)*($gravable_val - ($gravable_val*($desc/100))));
+	$valor_gravable = ($gravable_val - ($gravable_val*($desc/100)));
+	$valor_gravable = ($valor_gravable - ($valor_gravable*($desc2/100)));
+	$pdf->Cell(18, 4, $estatus =="ANULADO" ? "" : ($gravable_val==0 ? "" : number_format(($row["documento"]=="NC" ? -1 : 1)*$valor_gravable, 2, ",", ".")), 0, 0, 'R');
+	$_gravable += $estatus =="ANULADO" ? 0 : (($row["documento"]=="NC" ? -1 : 1)*$valor_gravable);
 
 	// Alicuota % e Impuesto IVA
 	$sql = "SELECT MAX(alicuota) AS alicuota_iva FROM entradas_salidas 

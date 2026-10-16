@@ -48,34 +48,9 @@ if ($articulo <= 0) {
     TdcfcvJsonError("Artículo no válido.");
 }
 
-if ($cantidad <= 0) {
-    TdcfcvJsonError("La cantidad debe ser mayor a cero.");
-}
-
-if ($precioFull <= 0) {
-    TdcfcvJsonError("El precio debe ser mayor a cero.");
-}
-
-if ($descuento == 100) {
-    TdcfcvJsonError("El descuento del item no puede ser 100%.");
-}
-
-if ($descuento2 == 100) {
-    TdcfcvJsonError("El descuento fabricante del item no puede ser 100%.");
-}
-
-if ($descTransferencista == 100) {
-    TdcfcvJsonError("El descuento transferencista no puede ser 100%.");
-}
-
-if ($descFabricante == 100) {
-    TdcfcvJsonError("El descuento fabricante no puede ser 100%.");
-}
-
-// Regla especial NC para artículos no inventariables
 // ---------------------------------------------------------
 // PARAMETRO 065
-// Permitir artículo NO inventariable especial en las NC
+// Permite artículos con precio cero cuando valor1 = 'S'
 // ---------------------------------------------------------
 $existeParametro065 = intval(ExecuteScalar("
     SELECT COUNT(*)
@@ -103,6 +78,31 @@ $permite_articulo_no_inventario_nc =
         WHERE codigo = '065'
         LIMIT 1
     "))) === 'S';
+    
+
+if ($cantidad <= 0) {
+    TdcfcvJsonError("La cantidad debe ser mayor a cero.");
+}
+
+if (!$permite_articulo_no_inventario_nc && $precioFull <= 0) {
+    TdcfcvJsonError("El precio debe ser mayor a cero.");
+}
+
+if ($descuento == 100) {
+    TdcfcvJsonError("El descuento del item no puede ser 100%.");
+}
+
+if ($descuento2 == 100) {
+    TdcfcvJsonError("El descuento fabricante del item no puede ser 100%.");
+}
+
+if ($descTransferencista == 100) {
+    TdcfcvJsonError("El descuento transferencista no puede ser 100%.");
+}
+
+if ($descFabricante == 100) {
+    TdcfcvJsonError("El descuento fabricante no puede ser 100%.");
+}
 
 
 // Determinar si el artículo actual maneja inventario

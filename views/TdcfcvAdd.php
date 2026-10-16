@@ -183,6 +183,15 @@ if ($rowParametro111 && strtoupper(trim($rowParametro111["valor1"])) == "S") {
     $preguntarNE = true;
 }
 
+$permitePrecioCero = (
+    strtoupper(trim((string) ExecuteScalar("
+        SELECT IFNULL(valor1, 'N')
+        FROM parametro
+        WHERE codigo = '065'
+        LIMIT 1
+    "))) === 'S'
+);
+
 // Solo se ofrece la Nota de Recepción automática cuando la Nota de Crédito
 // contiene al menos un artículo que realmente maneja inventario.
 $tieneArticulosInventario = false;
@@ -340,11 +349,11 @@ if (intval($pedido) > 0) {
                 type="number"
                 step="0.01"
                 min="0"
-                class="form-control form-control-sm <?= ($consignacion == "NC" ? "" : "bg-light") ?> text-end"
+                class="form-control form-control-sm <?= (($consignacion == "NC" || $consignacion == "ND") ? "" : "bg-light") ?> text-end"
                 value="<?= $tasa ?>"
                 onkeyup="js:RefreshMonedaTasa()"
                 onchange="js:RefreshMonedaTasa()"
-                <?= ($consignacion == "NC" ? "" : "readonly") ?>>
+                <?= (($consignacion == "NC" || $consignacion == "ND") ? "" : "readonly") ?>>
     </div>
 
     <div style="display:none;">
@@ -1896,7 +1905,17 @@ loadjs.ready(["jquery"], function () {
         }
     };
 
+    const permitePrecioCero = <?= $permitePrecioCero ? "true" : "false" ?>;
+
     window.validarPreciosAntesDeProcesar = function () {
+
+        // PARAMETRO 065 = S:
+        // se permiten artículos con precio cero.
+        // No realizar ninguna validación de precio.
+        if (permitePrecioCero) {
+            return true;
+        }
+
         let preciosInvalidos = [];
         let primeraFilaInvalida = null;
 
@@ -1905,6 +1924,7 @@ loadjs.ready(["jquery"], function () {
             .removeClass("is-invalid");
 
         $("#lista2 input[id$='_precioFull']").each(function () {
+
             const $precioFull = $(this);
             const idPrecioFull = $precioFull.attr("id") || "";
             const match = idPrecioFull.match(/^x(\d+)_precioFull$/);
@@ -1930,10 +1950,12 @@ loadjs.ready(["jquery"], function () {
                 !Number.isFinite(precioFinal) ||
                 precioFinal <= 0
             ) {
+
                 $precioFull.addClass("is-invalid");
                 $precioFinal.addClass("is-invalid");
 
                 const $fila = $precioFull.closest("tr");
+
                 const articulo = $.trim(
                     $fila.find("td").eq(1).find("strong").first().text()
                 ) || ("Renglón " + fila);
@@ -1947,6 +1969,7 @@ loadjs.ready(["jquery"], function () {
         });
 
         if (preciosInvalidos.length > 0) {
+
             const articulosUnicos = [...new Set(preciosInvalidos)];
 
             alertMsg(
@@ -1956,6 +1979,7 @@ loadjs.ready(["jquery"], function () {
             );
 
             if (primeraFilaInvalida) {
+
                 const $fila = primeraFilaInvalida.closest("tr");
 
                 $("html, body").animate({
@@ -2804,7 +2828,7 @@ loadjs.ready(["jquery"], function () {
                 <i class="fa-solid fa-xmark me-1"></i>
                 Cancelar
             </button>
-            <!--
+            
             <a id="btnVistaPrevia"
                 href="<?= $urlImprimir ?>"
                 target="_blank"
@@ -2812,7 +2836,7 @@ loadjs.ready(["jquery"], function () {
                     <i class="fa-solid fa-magnifying-glass me-1"></i>
                     Vista Previa
             </a>
-            -->
+            
             <button type="button"
                     id="btnConfirmarProcesar"
                     class="btn btn-sm btn-success px-4 fw-bold"

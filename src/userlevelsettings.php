@@ -529,7 +529,15 @@ $USER_LEVEL_PRIVS = [["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}abono","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar","-2","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar","0","0"],
     ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar_resumen","-2","0"],
-    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar_resumen","0","0"]];
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}view_cuentas_por_pagar_resumen","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_grupo","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_grupo","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_grupo_cliente","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_grupo_cliente","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_grupo_fabricante","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencia_grupo_fabricante","0","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencistas.php","-2","0"],
+    ["{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}transferencistas.php","0","0"]];
 
 /**
  * Tables
@@ -795,4 +803,8 @@ $USER_LEVEL_TABLES = [["abono","abono","Abonos",true,"{3E26D9A5-1A72-49C3-8E7A-1
     ["view_cuentas_por_cobrar","view_cuentas_por_cobrar","Cuentas por Cobrar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorCobrarList"],
     ["view_cuentas_por_cobrar_resumen","view_cuentas_por_cobrar_resumen","Cuentas por Cobrar Resumen",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorCobrarResumenList"],
     ["view_cuentas_por_pagar","view_cuentas_por_pagar","Cuentas por Pagar",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorPagarList"],
-    ["view_cuentas_por_pagar_resumen","view_cuentas_por_pagar_resumen","Cuentas por Pagar Resumen",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorPagarResumenList"]];
+    ["view_cuentas_por_pagar_resumen","view_cuentas_por_pagar_resumen","Cuentas por Pagar Resumen",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","ViewCuentasPorPagarResumenList"],
+    ["transferencia_grupo","transferencia_grupo","transferencia grupo",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TransferenciaGrupoList"],
+    ["transferencia_grupo_cliente","transferencia_grupo_cliente","transferencia grupo cliente",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TransferenciaGrupoClienteList"],
+    ["transferencia_grupo_fabricante","transferencia_grupo_fabricante","transferencia grupo fabricante",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","TransferenciaGrupoFabricanteList"],
+    ["transferencistas.php","transferencistas","Transferencistas",true,"{3E26D9A5-1A72-49C3-8E7A-1DDF1CCB6455}","Transferencistas"]];

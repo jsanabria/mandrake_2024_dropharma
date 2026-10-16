@@ -1,7 +1,16 @@
-<ew-language date="2026/8/12" id="en-US" author="e.World Technology Limited">
+<ew-language date="2026/10/16" id="en-US" author="e.World Technology Limited">
   <project>
     <phrase id="bodytitle" value="Mandrake" />
     <phrase id="footertext" value="&amp;copy;2024. All rights reserved Junior Sanabria. Mandrake V2024" />
+    <menu id="1479">
+      <phrase id="menutext" value="transferencia grupo" />
+    </menu>
+    <menu id="1480">
+      <phrase id="menutext" value="transferencia grupo cliente" />
+    </menu>
+    <menu id="1481">
+      <phrase id="menutext" value="transferencia grupo fabricante" />
+    </menu>
     <menu id="19">
       <phrase id="menutext" value="Maestros" />
     </menu>
@@ -46,6 +55,9 @@
     </menu>
     <menu id="4">
       <phrase id="menutext" value="Cuenta Bancos" />
+    </menu>
+    <menu id="1482">
+      <phrase id="menutext" value="Transferencistas" />
     </menu>
     <menu id="48">
       <phrase id="menutext" value="Movimientos" />
@@ -8372,6 +8384,45 @@
       <field id="saldo_usd">
         <phrase id="fldcaption" value="Saldo USD" />
       </field>
+    </table>
+    <table id="transferencia_grupo">
+      <phrase id="tblcaption" value="transferencia grupo" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="nombre">
+        <phrase id="fldcaption" value="nombre" />
+      </field>
+    </table>
+    <table id="transferencia_grupo_cliente">
+      <phrase id="tblcaption" value="transferencia grupo cliente" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="transferencia_grupo">
+        <phrase id="fldcaption" value="transferencia grupo" />
+      </field>
+      <field id="cliente">
+        <phrase id="fldcaption" value="cliente" />
+      </field>
+    </table>
+    <table id="transferencia_grupo_fabricante">
+      <phrase id="tblcaption" value="transferencia grupo fabricante" />
+      <field id="id">
+        <phrase id="fldcaption" value="id" />
+      </field>
+      <field id="transferencia_grupo">
+        <phrase id="fldcaption" value="transferencia grupo" />
+      </field>
+      <field id="fabricante">
+        <phrase id="fldcaption" value="fabricante" />
+      </field>
+      <field id="descuento">
+        <phrase id="fldcaption" value="descuento" />
+      </field>
+    </table>
+    <table id="transferencistas">
+      <phrase id="tblcaption" value="Transferencistas" />
     </table>
   </project>
 </ew-language>

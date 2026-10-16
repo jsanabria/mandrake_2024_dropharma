@@ -537,8 +537,8 @@ loadjs.ready("load", function () {
     	?>
     	$("#x_alicuota").val(alicuota);
 
-        // Comprobamos si el tipo de documento es "NC"
-        if ($("#x_tipo_documento").val() == "NC") {
+        // Comprobamos si el tipo de documento es "NC" o "ND"
+        if ($("#x_tipo_documento").val() == "NC" || $("#x_tipo_documento").val() == "ND") {
             $("#r_doc_afectado").show();
         } else {
             $("#r_doc_afectado").hide();

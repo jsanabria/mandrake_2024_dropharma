@@ -2445,12 +2445,18 @@ class Compra extends DbTable
         // monto_exento
         $this->monto_exento->setupEditAttributes();
         $this->monto_exento->EditValue = $this->monto_exento->CurrentValue;
-        $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, $this->monto_exento->formatPattern());
+        $this->monto_exento->PlaceHolder = RemoveHtml($this->monto_exento->caption());
+        if (strval($this->monto_exento->EditValue) != "" && is_numeric($this->monto_exento->EditValue)) {
+            $this->monto_exento->EditValue = FormatNumber($this->monto_exento->EditValue, null);
+        }
 
         // monto_gravado
         $this->monto_gravado->setupEditAttributes();
         $this->monto_gravado->EditValue = $this->monto_gravado->CurrentValue;
-        $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, $this->monto_gravado->formatPattern());
+        $this->monto_gravado->PlaceHolder = RemoveHtml($this->monto_gravado->caption());
+        if (strval($this->monto_gravado->EditValue) != "" && is_numeric($this->monto_gravado->EditValue)) {
+            $this->monto_gravado->EditValue = FormatNumber($this->monto_gravado->EditValue, null);
+        }
 
         // alicuota
         $this->alicuota->setupEditAttributes();
@@ -2501,7 +2507,11 @@ class Compra extends DbTable
 
         // ref_iva
         $this->ref_iva->setupEditAttributes();
+        if (!$this->ref_iva->Raw) {
+            $this->ref_iva->CurrentValue = HtmlDecode($this->ref_iva->CurrentValue);
+        }
         $this->ref_iva->EditValue = $this->ref_iva->CurrentValue;
+        $this->ref_iva->PlaceHolder = RemoveHtml($this->ref_iva->caption());
 
         // ret_islr
         $this->ret_islr->setupEditAttributes();
@@ -2511,7 +2521,11 @@ class Compra extends DbTable
 
         // ref_islr
         $this->ref_islr->setupEditAttributes();
+        if (!$this->ref_islr->Raw) {
+            $this->ref_islr->CurrentValue = HtmlDecode($this->ref_islr->CurrentValue);
+        }
         $this->ref_islr->EditValue = $this->ref_islr->CurrentValue;
+        $this->ref_islr->PlaceHolder = RemoveHtml($this->ref_islr->caption());
 
         // ret_municipal
         $this->ret_municipal->setupEditAttributes();
@@ -2521,7 +2535,11 @@ class Compra extends DbTable
 
         // ref_municipal
         $this->ref_municipal->setupEditAttributes();
+        if (!$this->ref_municipal->Raw) {
+            $this->ref_municipal->CurrentValue = HtmlDecode($this->ref_municipal->CurrentValue);
+        }
         $this->ref_municipal->EditValue = $this->ref_municipal->CurrentValue;
+        $this->ref_municipal->PlaceHolder = RemoveHtml($this->ref_municipal->caption());
 
         // fecha_registro
         $this->fecha_registro->setupEditAttributes();
@@ -3188,34 +3206,287 @@ class Compra extends DbTable
     // Row Updating event
     public function rowUpdating($rsold, &$rsnew)
     {
-        // Ajuste de fechas
-        $date = new \DateTime($rsnew["fecha"]);
-        $date->modify("+1 day");
-        $rsnew["fecha"] = $date->format("Y-m-d");
-        $date = new \DateTime($rsnew["fecha_registro"]);
-        $date->modify("+1 day");
-        $rsnew["fecha_registro"] = $date->format("Y-m-d");
+        /*
+        |--------------------------------------------------------------------------
+        | Ajuste de fechas
+        |--------------------------------------------------------------------------
+        */
+        if (!empty($rsnew["fecha"])) {
+            $date = new \DateTime($rsnew["fecha"]);
+            $date->modify("+1 day");
+            $rsnew["fecha"] = $date->format("Y-m-d");
+        }
+        if (!empty($rsnew["fecha_registro"])) {
+            $date = new \DateTime($rsnew["fecha_registro"]);
+            $date->modify("+1 day");
+            $rsnew["fecha_registro"] = $date->format("Y-m-d");
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Obtener valores actuales del documento
+        |--------------------------------------------------------------------------
+        | En una actualización algún campo puede no venir en $rsnew.
+        | En ese caso utilizamos el valor existente en $rsold.
+        |--------------------------------------------------------------------------
+        */
         $tipo_documento = strtoupper(trim(
             $rsnew["tipo_documento"]
             ?? $rsold["tipo_documento"]
             ?? ""
         ));
+        $proveedor = intval(
+            $rsnew["proveedor"]
+            ?? $rsold["proveedor"]
+            ?? 0
+        );
+        $aplica_retencion = strtoupper(trim(
+            $rsnew["aplica_retencion"]
+            ?? $rsold["aplica_retencion"]
+            ?? "N"
+        ));
+        $alicuota = floatval(
+            $rsnew["alicuota"]
+            ?? $rsold["alicuota"]
+            ?? 0
+        );
+        $monto_exento = floatval(
+            $rsnew["monto_exento"]
+            ?? $rsold["monto_exento"]
+            ?? 0
+        );
+        $monto_gravado = floatval(
+            $rsnew["monto_gravado"]
+            ?? $rsold["monto_gravado"]
+            ?? 0
+        );
 
         /*
         |--------------------------------------------------------------------------
-        | Validación para reactivar documentos anulados
+        | Determinar si se está anulando o reactivando
         |--------------------------------------------------------------------------
         */
-        if (
-            ($rsold["anulado"] ?? "") == "S" &&
-            ($rsnew["anulado"] ?? "") == "N"
-        ) {
+        $anuladoAnterior = strtoupper(trim(
+            $rsold["anulado"] ?? "N"
+        ));
+        $anuladoNuevo = strtoupper(trim(
+            $rsnew["anulado"]
+            ?? $anuladoAnterior
+        ));
+        $estaAnulando = (
+            $anuladoAnterior === "N" &&
+            $anuladoNuevo === "S"
+        );
+        $estaReactivando = (
+            $anuladoAnterior === "S" &&
+            $anuladoNuevo === "N"
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validar permiso para reactivar
+        |--------------------------------------------------------------------------
+        */
+        if ($estaReactivando) {
             if (!VerificaFuncion("019")) {
                 $this->CancelMessage =
                     "No est&aacute; autorizado para cambiar a estatus activo; verifique.";
                 return false;
             }
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Reglas particulares del RC
+        |--------------------------------------------------------------------------
+        | El RC no genera IVA ni retenciones.
+        |--------------------------------------------------------------------------
+        */
+        if ($tipo_documento === "RC") {
+            $alicuota = 0.00;
+            $aplica_retencion = "N";
+            $rsnew["alicuota"] = 0.00;
+            $rsnew["aplica_retencion"] = "N";
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Recalcular documento y retenciones
+        |--------------------------------------------------------------------------
+        |
+        | FC + S -> Ret. IVA + ISLR + Municipal
+        | ND + S -> Solamente Ret. IVA
+        | NC     -> Sin retenciones
+        | RC     -> Sin retenciones
+        |--------------------------------------------------------------------------
+        */
+        $resultado = CalcularRetencionesProveedor(
+            $proveedor,
+            $tipo_documento,
+            $aplica_retencion,
+            $alicuota,
+            $monto_exento,
+            $monto_gravado
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Actualizar importes calculados
+        |--------------------------------------------------------------------------
+        */
+        $rsnew["aplica_retencion"] =
+            $resultado["aplica_retencion"];
+        $rsnew["monto_iva"] =
+            $resultado["monto_iva"];
+        $rsnew["monto_total"] =
+            $resultado["monto_total"];
+        $rsnew["monto_pagar"] =
+            $resultado["monto_pagar"];
+        $rsnew["ret_iva"] =
+            $resultado["ret_iva"];
+        $rsnew["ret_islr"] =
+            $resultado["ret_islr"];
+        $rsnew["ret_municipal"] =
+            $resultado["ret_municipal"];
+        $rsnew["tipo_iva"] =
+            strval($resultado["tipo_iva"]);
+        $rsnew["tipo_islr"] =
+            strval($resultado["tipo_islr"]);
+        $rsnew["tipo_municipal"] =
+            strval($resultado["tipo_municipal"]);
+        $rsnew["sustraendo"] =
+            $resultado["sustraendo"];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Determinar si existe alguna retención
+        |--------------------------------------------------------------------------
+        */
+        $hayRetencion = (
+            $resultado["ret_iva"] > 0 ||
+            $resultado["ret_islr"] > 0 ||
+            $resultado["ret_municipal"] > 0
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | CASO 1: Se está ANULANDO el documento
+        |--------------------------------------------------------------------------
+        | Las referencias dejan de estar vigentes.
+        |
+        | Los montos calculados permanecen en el documento.
+        |--------------------------------------------------------------------------
+        */
+        if ($estaAnulando) {
+            $rsnew["ref_iva"] = null;
+            $rsnew["ref_islr"] = null;
+            $rsnew["ref_municipal"] = null;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | CASO 2: Se está REACTIVANDO el documento
+        |--------------------------------------------------------------------------
+        | Ya validamos arriba el permiso 019.
+        |
+        | Si corresponde retención, generamos un NUEVO correlativo.
+        |--------------------------------------------------------------------------
+        */
+        elseif ($estaReactivando) {
+            // Limpiamos cualquier referencia anterior.
+            $rsnew["ref_iva"] = null;
+            $rsnew["ref_islr"] = null;
+            $rsnew["ref_municipal"] = null;
+            if ($hayRetencion) {
+                $nroRetencion =
+                    ObtenerConsecutivoRetencion("RETENCION");
+                if ($resultado["ret_iva"] > 0) {
+                    $rsnew["ref_iva"] = $nroRetencion;
+                }
+                if ($resultado["ret_islr"] > 0) {
+                    $rsnew["ref_islr"] = $nroRetencion;
+                }
+                if ($resultado["ret_municipal"] > 0) {
+                    $rsnew["ref_municipal"] = $nroRetencion;
+                }
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | CASO 3: Modificación normal
+        |--------------------------------------------------------------------------
+        | Conservamos el correlativo existente.
+        |
+        | Si ahora corresponde una retención y el documento no tenía
+        | correlativo, generamos uno nuevo.
+        |--------------------------------------------------------------------------
+        */
+        else {
+            /*
+            | Buscar una referencia existente.
+            */
+            $nroRetencion = "";
+            if (!empty($rsold["ref_iva"])) {
+                $nroRetencion =
+                    $rsold["ref_iva"];
+            } elseif (!empty($rsold["ref_islr"])) {
+                $nroRetencion =
+                    $rsold["ref_islr"];
+            } elseif (!empty($rsold["ref_municipal"])) {
+                $nroRetencion =
+                    $rsold["ref_municipal"];
+            }
+
+            /*
+            | Si corresponde retención pero nunca había tenido
+            | referencia, generamos un nuevo correlativo.
+            */
+            if (
+                $hayRetencion &&
+                $nroRetencion === ""
+            ) {
+                $nroRetencion =
+                    ObtenerConsecutivoRetencion("RETENCION");
+            }
+
+            /*
+            | Retención IVA
+            */
+            if ($resultado["ret_iva"] > 0) {
+                $rsnew["ref_iva"] =
+                    $nroRetencion;
+            } else {
+                $rsnew["ref_iva"] = null;
+            }
+
+            /*
+            | Retención ISLR
+            */
+            if ($resultado["ret_islr"] > 0) {
+                $rsnew["ref_islr"] =
+                    $nroRetencion;
+            } else {
+                $rsnew["ref_islr"] = null;
+            }
+
+            /*
+            | Retención Municipal
+            */
+            if ($resultado["ret_municipal"] > 0) {
+                $rsnew["ref_municipal"] =
+                    $nroRetencion;
+            } else {
+                $rsnew["ref_municipal"] = null;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Usuario que realiza la modificación
+        |--------------------------------------------------------------------------
+        */
+        $rsnew["username"] = CurrentUserName();
         return true;
     }
 

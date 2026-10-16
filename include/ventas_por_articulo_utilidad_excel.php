@@ -1,12 +1,16 @@
 <?php 
     // 1. Captura y sanitización estricta de parámetros GET por URL
-    $fecha_desde = $_GET['fd'] ?? '';
-    $fecha_hasta = $_GET['fh'] ?? '';
-    $tipo        = $_GET['tipo'] ?? '';
+    $fecha_desde = $_GET['fd'] ?? '';[cite: 13]
+    $fecha_hasta = $_GET['fh'] ?? '';[cite: 13]
+    $tipo        = $_GET['tipo'] ?? '';[cite: 13]
 
+    // Sanitización para prevenir inyección SQL en la cláusula IN
     $where = "";
     if (trim($tipo) != "") {
-        $where = " AND b.articulo IN ($tipo)";
+        $tipo_clean = preg_replace('/[^0-9,]/', '', $tipo);
+        if (!empty($tipo_clean)) {
+            $where = " AND b.articulo IN ($tipo_clean)";
+        }
     }
 
     // 2. Consulta idéntica para mantener integridad de datos
@@ -34,53 +38,105 @@
             GROUP BY 
                 d.id, d.codigo, d.nombre_comercial, d.principio_activo, d.presentacion, d.ultimo_costo
             ORDER BY 
-                venta_total DESC;"; 
+                venta_total DESC;";[cite: 13]
 
-    $rs = mysqli_query($link, $sql);
+    $rs = mysqli_query($link, $sql);[cite: 13]
 
     if (!$rs) {
-        var_dump(mysqli_error($link));
-        die();
+        var_dump(mysqli_error($link));[cite: 13]
+        die();[cite: 13]
+    }
+
+    $developer_records = array();
+    while ($row = mysqli_fetch_assoc($rs)) {
+        $developer_records[] = $row;
     }
 
     // 3. Cabeceras HTTP Estables para Forzar la Descarga del Documento
     $filename = "RENTABILIDAD_VENTAS_" . date('Ymd_His') . ".xls";
-    header("Content-Type: application/vnd.ms-excel; charset=utf-8");
-    header("Content-Disposition: attachment; filename=\"$filename\"");
-    header("Pragma: no-cache");
-    header("Expires: 0");
+    header("Content-Type: application/vnd.ms-excel; charset=utf-8");[cite: 13]
+    header("Content-Disposition: attachment; filename=\"$filename\"");[cite: 13]
+    header("Pragma: no-cache");[cite: 13]
+    header("Expires: 0");[cite: 13]
 
-    // 4. Encabezados de Columnas del Excel (Separados explícitamente por \t)
-    echo "CODIGO\tARTICULO / DESCRIPCION\tCANTIDAD\tCOSTO UND\tCOSTO TOTAL\tPRECIO UND\tVENTA TOTAL\tUTILIDAD MONTO\t% MARGEN\n";
-
-    // 5. Procesamiento y Escritura del Stream de Datos
-    while ($row = mysqli_fetch_assoc($rs)) {
-        $codigo      = trim($row["codigo"] ?? '-');
-        $articulo    = trim($row["articulo"] ?? 'Sin Detalle');
-        $cant_mov    = floatval($row["cantidad_movimiento"] ?? 0);
-        $costo_und   = floatval($row["costo_unidad"] ?? 0);
-        $costo_tot   = floatval($row["costo_total"] ?? 0);
-        $precio_und  = floatval($row["precio_unidad"] ?? 0);
-        $venta_tot   = floatval($row["venta_total"] ?? 0);
+    // Marca UTF-8 BOM para forzar acentos y caracteres especiales limpios
+    echo "\xEF\xBB\xBF"; 
+?>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--[if gte mso 9]>
+<xml>
+ <x:ExcelWorkbook>
+  <x:ExcelWorksheets>
+   <x:ExcelWorksheet>
+    <x:Name>Rentabilidad de Ventas</x:Name>
+    <x:WorksheetOptions>
+     <x:DisplayGridlines/>
+    </x:WorksheetOptions>
+   </x:ExcelWorksheet>
+  </x:ExcelWorksheets>
+ </x:ExcelWorkbook>
+</xml>
+<![endif]-->
+<style>
+    .texto { mso-number-format:"\@"; }
+    .num { mso-number-format:"0\.00"; text-align: right; }
+    .porcentaje { mso-number-format:"0\.00%"; text-align: right; }
+    .entero { mso-number-format:"0"; text-align: center; }
+    th { background-color: #002060; color: #FFFFFF; font-weight: bold; text-align: center; border: 0.5pt solid #000000; }
+    td { border: 0.5pt solid #D9D9D9; vertical-align: middle; }
+</style>
+</head>
+<body>
+<table border="1">
+    <thead>
+        <tr>
+            <th>CODIGO</th>
+            <th>ARTICULO / DESCRIPCION</th>
+            <th>CANTIDAD</th>
+            <th>COSTO UND</th>
+            <th>COSTO TOTAL</th>
+            <th>PRECIO UND</th>
+            <th>VENTA TOTAL</th>
+            <th>UTILIDAD MONTO</th>
+            <th>% MARGEN</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php
+    foreach ($developer_records as $row) {
+        $codigo      = trim($row["codigo"] ?? '-');[cite: 13]
+        $articulo    = trim($row["articulo"] ?? 'Sin Detalle');[cite: 13]
+        
+        // Conversiones numéricas puras para Excel
+        $cant_mov    = (float)($row["cantidad_movimiento"] ?? 0);[cite: 13]
+        $costo_und   = (float)($row["costo_unidad"] ?? 0);[cite: 13]
+        $costo_tot   = (float)($row["costo_total"] ?? 0);[cite: 13]
+        $precio_und  = (float)($row["precio_unidad"] ?? 0);[cite: 13]
+        $venta_tot   = (float)($row["venta_total"] ?? 0);[cite: 13]
 
         // Operaciones Financieras Libres de Divisiones por Cero
-        $utilidad_monto = $venta_tot - $costo_tot;
-        $porc_utilidad  = ($venta_tot > 0) ? ($utilidad_monto / $venta_tot) * 100 : 0;
+        $utilidad_monto = $venta_tot - $costo_tot;[cite: 13]
+        $porc_utilidad  = ($venta_tot > 0) ? ($utilidad_monto / $venta_tot) : 0; // Valor decimal para la clase .porcentaje
 
-        // Limpieza de strings para evitar que quiebre la grilla de Excel
-        $articulo = str_replace(["\r", "\n", "\t"], " ", $articulo);
-
-        // Formateo Numérico Plano con Comas Decimales para Reconocimiento Inmediato de Excel
-        $f_cant     = number_format($cant_mov, 0, ",", "");
-        $f_c_und    = number_format($costo_und, 2, ",", "");
-        $f_c_tot    = number_format($costo_tot, 2, ",", "");
-        $f_p_und    = number_format($precio_und, 2, ",", "");
-        $f_v_tot    = number_format($venta_tot, 2, ",", "");
-        $f_utilidad = number_format($utilidad_monto, 2, ",", "");
-        $f_porc     = number_format($porc_utilidad, 2, ",", "") . "%";
-
-        // Impresión en Buffer por Fila con salto de línea estándar \n
-        echo "{$codigo}\t{$articulo}\t{$f_cant}\t{$f_c_und}\t{$f_c_tot}\t{$f_p_und}\t{$f_v_tot}\t{$f_utilidad}\t{$f_porc}\n";
+        echo "<tr>";
+        echo "<td class='texto'>{$codigo}</td>";
+        echo "<td class='texto'>" . htmlspecialchars($articulo, ENT_QUOTES, 'UTF-8') . "</td>";
+        echo "<td class='entero'>{$cant_mov}</td>";
+        echo "<td class='num'>{$costo_und}</td>";
+        echo "<td class='num'>{$costo_tot}</td>";
+        echo "<td class='num'>{$precio_und}</td>";
+        echo "<td class='num'>{$venta_tot}</td>";
+        echo "<td class='num'>{$utilidad_monto}</td>";
+        echo "<td class='porcentaje'>{$porc_utilidad}</td>";
+        echo "</tr>";
     }
-    exit;
+?>
+    </tbody>
+</table>
+</body>
+</html>
+<?php
+    exit();[cite: 13]
 ?>

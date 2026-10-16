@@ -1275,6 +1275,12 @@ class DocumentoConsecutivoList extends DocumentoConsecutivo
         $item->OnLeft = true;
         $item->Visible = false;
 
+        // "edit"
+        $item = &$this->ListOptions->add("edit");
+        $item->CssClass = "text-nowrap";
+        $item->Visible = $Security->canEdit();
+        $item->OnLeft = true;
+
         // List actions
         $item = &$this->ListOptions->add("listactions");
         $item->CssClass = "text-nowrap";
@@ -1333,7 +1339,19 @@ class DocumentoConsecutivoList extends DocumentoConsecutivo
         // Call ListOptions_Rendering event
         $this->listOptionsRendering();
         $pageUrl = $this->pageUrl(false);
-        if ($this->CurrentMode == "view") { // Check view mode
+        if ($this->CurrentMode == "view") {
+            // "edit"
+            $opt = $this->ListOptions["edit"];
+            $editcaption = HtmlTitle($Language->phrase("EditLink"));
+            if ($Security->canEdit()) {
+                if ($this->ModalEdit && !IsMobile()) {
+                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-table=\"documento_consecutivo\" data-caption=\"" . $editcaption . "\" data-ew-action=\"modal\" data-action=\"edit\" data-ajax=\"" . ($this->UseAjaxActions ? "true" : "false") . "\" data-url=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\" data-btn=\"SaveBtn\">" . $Language->phrase("EditLink") . "</a>";
+                } else {
+                    $opt->Body = "<a class=\"ew-row-link ew-edit\" title=\"" . $editcaption . "\" data-caption=\"" . $editcaption . "\" href=\"" . HtmlEncode(GetUrl($this->EditUrl)) . "\">" . $Language->phrase("EditLink") . "</a>";
+                }
+            } else {
+                $opt->Body = "";
+            }
         } // End View mode
 
         // Set up list action buttons

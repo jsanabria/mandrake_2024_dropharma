@@ -33,6 +33,7 @@ loadjs.ready(["wrapper", "head"], function () {
         .setFields([
             ["documento", [fields.documento.visible && fields.documento.required ? ew.Validators.required(fields.documento.caption) : null], fields.documento.isInvalid],
             ["nro_documento", [fields.nro_documento.visible && fields.nro_documento.required ? ew.Validators.required(fields.nro_documento.caption) : null], fields.nro_documento.isInvalid],
+            ["fecha", [fields.fecha.visible && fields.fecha.required ? ew.Validators.required(fields.fecha.caption) : null], fields.fecha.isInvalid],
             ["nro_control", [fields.nro_control.visible && fields.nro_control.required ? ew.Validators.required(fields.nro_control.caption) : null], fields.nro_control.isInvalid],
             ["cliente", [fields.cliente.visible && fields.cliente.required ? ew.Validators.required(fields.cliente.caption) : null], fields.cliente.isInvalid],
             ["doc_afectado", [fields.doc_afectado.visible && fields.doc_afectado.required ? ew.Validators.required(fields.doc_afectado.caption) : null], fields.doc_afectado.isInvalid],
@@ -41,7 +42,11 @@ loadjs.ready(["wrapper", "head"], function () {
             ["iva", [fields.iva.visible && fields.iva.required ? ew.Validators.required(fields.iva.caption) : null], fields.iva.isInvalid],
             ["total", [fields.total.visible && fields.total.required ? ew.Validators.required(fields.total.caption) : null], fields.total.isInvalid],
             ["nota", [fields.nota.visible && fields.nota.required ? ew.Validators.required(fields.nota.caption) : null], fields.nota.isInvalid],
+            ["igtf", [fields.igtf.visible && fields.igtf.required ? ew.Validators.required(fields.igtf.caption) : null], fields.igtf.isInvalid],
+            ["monto_base_igtf", [fields.monto_base_igtf.visible && fields.monto_base_igtf.required ? ew.Validators.required(fields.monto_base_igtf.caption) : null, ew.Validators.float], fields.monto_base_igtf.isInvalid],
+            ["monto_igtf", [fields.monto_igtf.visible && fields.monto_igtf.required ? ew.Validators.required(fields.monto_igtf.caption) : null], fields.monto_igtf.isInvalid],
             ["moneda", [fields.moneda.visible && fields.moneda.required ? ew.Validators.required(fields.moneda.caption) : null], fields.moneda.isInvalid],
+            ["tasa_dia", [fields.tasa_dia.visible && fields.tasa_dia.required ? ew.Validators.required(fields.tasa_dia.caption) : null], fields.tasa_dia.isInvalid],
             ["dias_credito", [fields.dias_credito.visible && fields.dias_credito.required ? ew.Validators.required(fields.dias_credito.caption) : null], fields.dias_credito.isInvalid],
             ["entregado", [fields.entregado.visible && fields.entregado.required ? ew.Validators.required(fields.entregado.caption) : null], fields.entregado.isInvalid],
             ["nro_despacho", [fields.nro_despacho.visible && fields.nro_despacho.required ? ew.Validators.required(fields.nro_despacho.caption) : null], fields.nro_despacho.isInvalid],
@@ -64,6 +69,7 @@ loadjs.ready(["wrapper", "head"], function () {
 
         // Dynamic selection lists
         .setLists({
+            "igtf": <?= $Page->igtf->toClientList($Page) ?>,
             "dias_credito": <?= $Page->dias_credito->toClientList($Page) ?>,
             "entregado": <?= $Page->entregado->toClientList($Page) ?>,
             "asesor_asignado": <?= $Page->asesor_asignado->toClientList($Page) ?>,
@@ -120,6 +126,18 @@ loadjs.ready("head", function () {
 <span<?= $Page->nro_documento->viewAttributes() ?>>
 <input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->nro_documento->getDisplayValue($Page->nro_documento->EditValue))) ?>"></span>
 <input type="hidden" data-table="view_out_tdcfcv" data-field="x_nro_documento" data-hidden="1" data-page="1" name="x_nro_documento" id="x_nro_documento" value="<?= HtmlEncode($Page->nro_documento->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->fecha->Visible) { // fecha ?>
+    <div id="r_fecha"<?= $Page->fecha->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_fecha" for="x_fecha" class="<?= $Page->LeftColumnClass ?>"><?= $Page->fecha->caption() ?><?= $Page->fecha->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->fecha->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_fecha">
+<span<?= $Page->fecha->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->fecha->getDisplayValue($Page->fecha->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_fecha" data-hidden="1" data-page="1" name="x_fecha" id="x_fecha" value="<?= HtmlEncode($Page->fecha->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -270,6 +288,76 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
 </div></div>
     </div>
 <?php } ?>
+<?php if ($Page->igtf->Visible) { // igtf ?>
+    <div id="r_igtf"<?= $Page->igtf->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_igtf" for="x_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->igtf->caption() ?><?= $Page->igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->igtf->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_igtf">
+    <select
+        id="x_igtf"
+        name="x_igtf"
+        class="form-select ew-select<?= $Page->igtf->isInvalidClass() ?>"
+        <?php if (!$Page->igtf->IsNativeSelect) { ?>
+        data-select2-id="fview_out_tdcfcvedit_x_igtf"
+        <?php } ?>
+        data-table="view_out_tdcfcv"
+        data-field="x_igtf"
+        data-page="2"
+        data-value-separator="<?= $Page->igtf->displayValueSeparatorAttribute() ?>"
+        data-placeholder="<?= HtmlEncode($Page->igtf->getPlaceHolder()) ?>"
+        <?= $Page->igtf->editAttributes() ?>>
+        <?= $Page->igtf->selectOptionListHtml("x_igtf") ?>
+    </select>
+    <?= $Page->igtf->getCustomMessage() ?>
+    <div class="invalid-feedback"><?= $Page->igtf->getErrorMessage() ?></div>
+<?php if (!$Page->igtf->IsNativeSelect) { ?>
+<script>
+loadjs.ready("fview_out_tdcfcvedit", function() {
+    var options = { name: "x_igtf", selectId: "fview_out_tdcfcvedit_x_igtf" },
+        el = document.querySelector("select[data-select2-id='" + options.selectId + "']");
+    if (!el)
+        return;
+    options.closeOnSelect = !options.multiple;
+    options.dropdownParent = el.closest("#ew-modal-dialog, #ew-add-opt-dialog");
+    if (fview_out_tdcfcvedit.lists.igtf?.lookupOptions.length) {
+        options.data = { id: "x_igtf", form: "fview_out_tdcfcvedit" };
+    } else {
+        options.ajax = { id: "x_igtf", form: "fview_out_tdcfcvedit", limit: ew.LOOKUP_PAGE_SIZE };
+    }
+    options.minimumResultsForSearch = Infinity;
+    options = Object.assign({}, ew.selectOptions, options, ew.vars.tables.view_out_tdcfcv.fields.igtf.selectOptions);
+    ew.createSelect(options);
+});
+</script>
+<?php } ?>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->monto_base_igtf->Visible) { // monto_base_igtf ?>
+    <div id="r_monto_base_igtf"<?= $Page->monto_base_igtf->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_monto_base_igtf" for="x_monto_base_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_base_igtf->caption() ?><?= $Page->monto_base_igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_base_igtf->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_monto_base_igtf">
+<input type="<?= $Page->monto_base_igtf->getInputTextType() ?>" name="x_monto_base_igtf" id="x_monto_base_igtf" data-table="view_out_tdcfcv" data-field="x_monto_base_igtf" value="<?= $Page->monto_base_igtf->EditValue ?>" data-page="2" size="30" placeholder="<?= HtmlEncode($Page->monto_base_igtf->getPlaceHolder()) ?>" data-format-pattern="<?= HtmlEncode($Page->monto_base_igtf->formatPattern()) ?>"<?= $Page->monto_base_igtf->editAttributes() ?> aria-describedby="x_monto_base_igtf_help">
+<?= $Page->monto_base_igtf->getCustomMessage() ?>
+<div class="invalid-feedback"><?= $Page->monto_base_igtf->getErrorMessage() ?></div>
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->monto_igtf->Visible) { // monto_igtf ?>
+    <div id="r_monto_igtf"<?= $Page->monto_igtf->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_monto_igtf" for="x_monto_igtf" class="<?= $Page->LeftColumnClass ?>"><?= $Page->monto_igtf->caption() ?><?= $Page->monto_igtf->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->monto_igtf->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_monto_igtf">
+<span<?= $Page->monto_igtf->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->monto_igtf->getDisplayValue($Page->monto_igtf->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_monto_igtf" data-hidden="1" data-page="2" name="x_monto_igtf" id="x_monto_igtf" value="<?= HtmlEncode($Page->monto_igtf->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
 <?php if ($Page->moneda->Visible) { // moneda ?>
     <div id="r_moneda"<?= $Page->moneda->rowAttributes() ?>>
         <label id="elh_view_out_tdcfcv_moneda" for="x_moneda" class="<?= $Page->LeftColumnClass ?>"><?= $Page->moneda->caption() ?><?= $Page->moneda->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
@@ -278,6 +366,18 @@ loadjs.ready("fview_out_tdcfcvedit", function() {
 <span<?= $Page->moneda->viewAttributes() ?>>
 <span class="form-control-plaintext"><?= $Page->moneda->getDisplayValue($Page->moneda->EditValue) ?></span></span>
 <input type="hidden" data-table="view_out_tdcfcv" data-field="x_moneda" data-hidden="1" data-page="2" name="x_moneda" id="x_moneda" value="<?= HtmlEncode($Page->moneda->CurrentValue) ?>">
+</span>
+</div></div>
+    </div>
+<?php } ?>
+<?php if ($Page->tasa_dia->Visible) { // tasa_dia ?>
+    <div id="r_tasa_dia"<?= $Page->tasa_dia->rowAttributes() ?>>
+        <label id="elh_view_out_tdcfcv_tasa_dia" for="x_tasa_dia" class="<?= $Page->LeftColumnClass ?>"><?= $Page->tasa_dia->caption() ?><?= $Page->tasa_dia->Required ? $Language->phrase("FieldRequiredIndicator") : "" ?></label>
+        <div class="<?= $Page->RightColumnClass ?>"><div<?= $Page->tasa_dia->cellAttributes() ?>>
+<span id="el_view_out_tdcfcv_tasa_dia">
+<span<?= $Page->tasa_dia->viewAttributes() ?>>
+<input type="text" readonly class="form-control-plaintext" value="<?= HtmlEncode(RemoveHtml($Page->tasa_dia->getDisplayValue($Page->tasa_dia->EditValue))) ?>"></span>
+<input type="hidden" data-table="view_out_tdcfcv" data-field="x_tasa_dia" data-hidden="1" data-page="2" name="x_tasa_dia" id="x_tasa_dia" value="<?= HtmlEncode($Page->tasa_dia->CurrentValue) ?>">
 </span>
 </div></div>
     </div>
@@ -482,21 +582,29 @@ loadjs.ready("load", function () {
         $("#x_monto_base_igtf").on('keyup change', function() {
             // Solo validamos si NO es readonly (es decir, si eligieron "Otro")
             if (!$(this).prop('readonly')) {
-                var valorIngresado = parseFloat($(this).val()) || 0;
-                var totalMaximo = parseFloat($("#x_total").val()) || 0;
-                if (valorIngresado > totalMaximo) {
-                    ew.alert("El monto base IGTF no puede ser mayor al Total de la factura (" + totalMaximo + ")");
-                    $(this).val(totalMaximo); // Lo reseteamos al máximo permitido
+                var valorIngresadoBs = parseFloat($(this).val()) || 0; // El monto digitado (siempre en Bs.)
+                var totalFactura = parseFloat($("#x_total").val()) || 0;
+                var moneda = $("#x_moneda").val();
+                var tasaCambio = parseFloat($("#x_tasa_dia").val()) || 1;
+
+                // Calculamos el Total Máximo en Bolívares
+                var totalMaximoBs = totalFactura;
+
+                // Si la moneda de la factura no es Bs., convertimos el Total a Bolívares
+                if (moneda.toLowerCase() !== 'bs.') {
+                    totalMaximoBs = totalFactura * tasaCambio;
+                }
+
+                // Redondeamos a 2 decimales para evitar problemas de precisión flotante
+                totalMaximoBs = Math.round(totalMaximoBs * 100) / 100;
+
+                // Validación: Si el monto en Bs ingresado supera el Total de la factura en Bs
+                if (valorIngresadoBs > totalMaximoBs) {
+                    ew.alert("El monto base IGTF no puede ser mayor al Total de la factura (" + totalMaximoBs.toFixed(2) + " Bs.)");
+                    $(this).val(totalMaximoBs.toFixed(2)); // Lo reseteamos al límite máximo en Bs.
                 }
             }
         });
-
-        /*
-        $("#x_nro_documento").prop('readonly', true);
-        $('#x_fecha').prop('readonly', true);
-        $('#x_nro_control').prop('readonly', true);
-        $(".btn[data-target='#datetimepicker_fview_out_tdcfcvedit_x_fecha']").css("pointer-events", "none");
-        */
     });
 });
 </script>

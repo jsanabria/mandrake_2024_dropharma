@@ -144,7 +144,7 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->lista_pedido->Visible = false;
         $this->nota->setVisibility();
         $this->unidades->Visible = false;
-        $this->estatus->Visible = false;
+        $this->estatus->setVisibility();
         $this->id_documento_padre->Visible = false;
         $this->asesor->Visible = false;
         $this->documento->Visible = false;
@@ -907,6 +907,16 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             }
         }
 
+        // Check field name 'estatus' first before field var 'x_estatus'
+        $val = $CurrentForm->hasValue("estatus") ? $CurrentForm->getValue("estatus") : $CurrentForm->getValue("x_estatus");
+        if (!$this->estatus->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->estatus->Visible = false; // Disable update for API request
+            } else {
+                $this->estatus->setFormValue($val);
+            }
+        }
+
         // Check field name 'bultos' first before field var 'x_bultos'
         $val = $CurrentForm->hasValue("bultos") ? $CurrentForm->getValue("bultos") : $CurrentForm->getValue("x_bultos");
         if (!$this->bultos->IsDetailKey) {
@@ -974,6 +984,7 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         $this->cliente->CurrentValue = $this->cliente->FormValue;
         $this->nro_documento->CurrentValue = $this->nro_documento->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
+        $this->estatus->CurrentValue = $this->estatus->FormValue;
         $this->bultos->CurrentValue = $this->bultos->FormValue;
         $this->ci_rif->CurrentValue = $this->ci_rif->FormValue;
         $this->nombre->CurrentValue = $this->nombre->FormValue;
@@ -1998,6 +2009,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             // nota
             $this->nota->HrefValue = "";
 
+            // estatus
+            $this->estatus->HrefValue = "";
+
             // bultos
             $this->bultos->HrefValue = "";
 
@@ -2050,6 +2064,11 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             $this->nota->setupEditAttributes();
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
             $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
+
+            // estatus
+            $this->estatus->setupEditAttributes();
+            $this->estatus->EditValue = $this->estatus->options(true);
+            $this->estatus->PlaceHolder = RemoveHtml($this->estatus->caption());
 
             // bultos
             $this->bultos->setupEditAttributes();
@@ -2105,6 +2124,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             // nota
             $this->nota->HrefValue = "";
 
+            // estatus
+            $this->estatus->HrefValue = "";
+
             // bultos
             $this->bultos->HrefValue = "";
 
@@ -2158,6 +2180,11 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
             if ($this->nota->Visible && $this->nota->Required) {
                 if (!$this->nota->IsDetailKey && EmptyValue($this->nota->FormValue)) {
                     $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
+                }
+            }
+            if ($this->estatus->Visible && $this->estatus->Required) {
+                if (!$this->estatus->IsDetailKey && EmptyValue($this->estatus->FormValue)) {
+                    $this->estatus->addErrorMessage(str_replace("%s", $this->estatus->caption(), $this->estatus->RequiredErrorMessage));
                 }
             }
             if ($this->bultos->Visible && $this->bultos->Required) {
@@ -2319,6 +2346,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
+        // estatus
+        $this->estatus->setDbValueDef($rsnew, $this->estatus->CurrentValue, $this->estatus->ReadOnly);
+
         // bultos
         $this->bultos->setDbValueDef($rsnew, $this->bultos->CurrentValue, $this->bultos->ReadOnly);
 
@@ -2344,6 +2374,9 @@ class ViewOutTdcnetEdit extends ViewOutTdcnet
     {
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];
+        }
+        if (isset($row['estatus'])) { // estatus
+            $this->estatus->CurrentValue = $row['estatus'];
         }
         if (isset($row['bultos'])) { // bultos
             $this->bultos->CurrentValue = $row['bultos'];

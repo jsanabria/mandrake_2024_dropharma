@@ -1,119 +1,508 @@
-<?php 
-    // 1. Inicializar y sanitizar parámetros de búsqueda para evitar "Undefined variable"
-    $id          = isset($id) ? trim($id) : '';
-    $tipo        = isset($tipo) ? trim($tipo) : '';
-    $fecha_desde = isset($fecha_desde) ? trim($fecha_desde) : '';
-    $fecha_hasta = isset($fecha_hasta) ? trim($fecha_hasta) : '';
-    
-    $where = "";
-    if ($tipo !== "") {
-        $where = "AND b.id = '" . mysqli_real_escape_string($link, $tipo) . "'";
-    }
-    
-    $contar   = 0;
-    $facturas = 0; 
-    $monto    = 0.00;
-    $unidades = 0;
+<?php
 
-    // 2. Encabezado de la tabla y botón de acción con diseño optimizado
-    $out .= <<<HTML
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="text-secondary m-0">Ventas por Cliente</h4>
-    </div>
+// ============================================================
+// VENTAS POR CLIENTE - FACTURAS
+// Detalla lo comprado por cada cliente.
+// ============================================================
 
-    <div class="table-responsive">
-        <table class="table table-hover table-striped align-middle" style="font-size: 0.875rem; border: 1px solid #dee2e6;">
-            <thead class="table-light text-uppercase text-nowrap" style="font-size: 0.75rem; letter-spacing: 0.5px;">
-                <tr>
-                    <th scope="col" style="width: 25%;">Ciudad</th>
-                    <th scope="col" style="width: 43%;">Cliente</th>
-                    <th scope="col" style="width: 10%;" class="text-end">Facturas</th>
-                    <th scope="col" style="width: 11%;" class="text-end">Total</th>
-                    <th scope="col" style="width: 11%;" class="text-end">Unidades</th>
-                </tr>
-            </thead>
-            <tbody>
+// 1. Inicializar parámetros
+$id          = isset($id) ? trim($id) : '';
+$tipo        = isset($tipo) ? trim($tipo) : '';
+$fecha_desde = isset($fecha_desde) ? trim($fecha_desde) : '';
+$fecha_hasta = isset($fecha_hasta) ? trim($fecha_hasta) : '';
+
+$where = "";
+
+// ------------------------------------------------------------
+// Filtro opcional por cliente.
+// $tipo contiene el ID seleccionado en listado_master.php.
+// ------------------------------------------------------------
+if ($tipo !== "") {
+    $cliente_id = mysqli_real_escape_string($link, $tipo);
+    $where .= " AND g.id = '$cliente_id' ";
+}
+
+
+// ============================================================
+// 2. CONSULTA
+// ============================================================
+
+$sql = "
+    SELECT
+        a.id,
+        a.cliente AS id_cliente,
+        a.nro_documento,
+        DATE_FORMAT(a.fecha, '%d/%m/%Y') AS fecha,
+
+        g.nombre AS cliente,
+
+        (
+            SELECT campo_descripcion
+            FROM tabla
+            WHERE tabla = 'CIUDAD'
+              AND campo_codigo = g.ciudad
+            LIMIT 1
+        ) AS ciudad,
+
+        d.codigo AS codigo_articulo,
+        TRIM(
+            CONCAT_WS(
+                ' - ',
+                NULLIF(TRIM(d.nombre_comercial), ''),
+                NULLIF(TRIM(d.principio_activo), '')
+            )
+        ) AS articulo,
+
+        b.cantidad_movimiento AS cantidad,
+        b.precio_unidad AS precio_unidad,
+        b.precio AS total_articulo,
+
+        a.moneda
+
+    FROM salidas AS a
+
+        JOIN entradas_salidas AS b
+            ON b.tipo_documento = a.tipo_documento
+           AND b.id_documento = a.id
+
+        LEFT JOIN articulo AS d
+            ON d.id = b.articulo
+
+        LEFT JOIN cliente AS g
+            ON g.id = a.cliente
+
+    WHERE
+        a.fecha BETWEEN '$fecha_desde 00:00:00'
+                    AND '$fecha_hasta 23:59:59'
+
+        AND a.estatus = 'PROCESADO'
+
+        AND a.tipo_documento = 'TDCFCV'
+
+        AND IFNULL(a.documento, '') = 'FC'
+
+        $where
+
+    ORDER BY
+        g.nombre,
+        a.fecha,
+        a.nro_documento,
+        d.nombre_comercial
+";
+
+$rs = mysqli_query($link, $sql);
+
+if (!$rs) {
+    var_dump(mysqli_error($link));
+    die();
+}
+
+
+// ============================================================
+// 3. ENCABEZADO DEL REPORTE
+// ============================================================
+
+$out .= <<<HTML
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="text-secondary m-0">
+        Ventas por Cliente - Facturas
+    </h4>
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-sm table-hover align-middle"
+       style="font-size: 0.80rem; border: 1px solid #dee2e6;">
+
+    <thead class="table-light text-uppercase text-nowrap"
+           style="font-size: 0.72rem; letter-spacing: 0.4px;">
+
+        <tr>
+            <th>Fecha</th>
+            <th>Documento</th>
+            <th>Código</th>
+            <th>Artículo</th>
+
+            <th class="text-end">Cantidad</th>
+            <th class="text-end">Precio Unidad</th>
+            <th class="text-end">Total</th>
+
+            <th class="text-center">Moneda</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
 HTML;
 
-    // 3. Consulta SQL unificada
-    $sql = "SELECT
-                c.campo_descripcion AS ciudad, b.nombre AS cliente, 
-                COUNT(a.nro_documento) AS facturas, 
-                SUM(a.monto_total) AS total, SUM(a.unidades) AS unidades 
-            FROM 
-                salidas AS a 
-                LEFT OUTER JOIN cliente AS b ON b.id = a.cliente 
-                LEFT OUTER JOIN tabla AS c ON c.campo_codigo = b.ciudad AND c.tabla = 'CIUDAD' 
-            WHERE 
-                a.fecha BETWEEN '$fecha_desde 00:00:00' AND '$fecha_hasta 23:59:59' 
-                AND a.estatus  = 'PROCESADO' 
-                AND a.tipo_documento = 'TDCFCV' 
-                AND IFNULL(a.documento, '') = 'FC' 
-                $where 
-            GROUP BY 
-                c.campo_descripcion, b.nombre 
-            ORDER BY 4 DESC;"; 
 
-    $rs = mysqli_query($link, $sql);
+// ============================================================
+// 4. VARIABLES DE CONTROL
+// ============================================================
 
-    if(!$rs) {
-        var_dump(mysqli_error($link));
-        die();
-    }
+$cliente_anterior = null;
 
-    // 4. Renderizado seguro del cuerpo de la tabla
-    while($row = mysqli_fetch_array($rs)) {
-        $ciudad_val  = trim($row["ciudad"] ?? '');
-        $cliente_val = trim($row["cliente"] ?? '');
-        
-        // Formatos condicionales para registros vacíos
-        $ciudad_disp  = !empty($ciudad_val) ? $ciudad_val : '<span class="text-muted">SIN CIUDAD</span>';
-        $cliente_disp = !empty($cliente_val) ? $cliente_val : '<span class="text-muted">CLIENTE NO REGISTRADO</span>';
+$total_cliente_cantidad = 0;
+$total_cliente_monto    = 0;
 
-        // Castings y protección nula para PHP 8.1+
-        $val_facturas = intval($row["facturas"] ?? 0);
-        $val_total    = floatval($row["total"] ?? 0);
-        $val_unidades = intval($row["unidades"] ?? 0);
+$total_general_cantidad = 0;
+$total_general_monto    = 0;
 
-        // Sumas acumuladas de control
-        $contar++;
-        $facturas += $val_facturas;
-        $monto    += $val_total;
-        $unidades += $val_unidades;
+$total_clientes = 0;
+$total_lineas   = 0;
 
-        // Formateo de salidas numéricas individuales
-        $facturas_form = number_format($val_facturas, 0, "", ".");
-        $total_form    = number_format($val_total, 2, ",", ".");
-        $unidades_form = number_format($val_unidades, 0, "", ".");
+
+// ============================================================
+// 5. RECORRER RESULTADOS
+// ============================================================
+
+while ($row = mysqli_fetch_assoc($rs)) {
+
+    $id_cliente = isset($row["id_cliente"])
+        ? $row["id_cliente"]
+        : '';
+
+    $cliente = trim(
+        isset($row["cliente"])
+            ? $row["cliente"]
+            : ''
+    );
+
+    $ciudad = trim(
+        isset($row["ciudad"])
+            ? $row["ciudad"]
+            : ''
+    );
+
+    $codigo = trim(
+        isset($row["codigo_articulo"])
+            ? $row["codigo_articulo"]
+            : ''
+    );
+
+    $articulo = trim(
+        isset($row["articulo"])
+            ? $row["articulo"]
+            : ''
+    );
+
+    $moneda = trim(
+        isset($row["moneda"])
+            ? $row["moneda"]
+            : ''
+    );
+
+    $cantidad = floatval(
+        isset($row["cantidad"])
+            ? $row["cantidad"]
+            : 0
+    );
+
+    $precio_unidad = floatval(
+        isset($row["precio_unidad"])
+            ? $row["precio_unidad"]
+            : 0
+    );
+
+    $total_articulo = floatval(
+        isset($row["total_articulo"])
+            ? $row["total_articulo"]
+            : 0
+    );
+
+
+    // ========================================================
+    // CAMBIO DE CLIENTE
+    // ========================================================
+
+    if ($cliente_anterior !== $id_cliente) {
+
+        // ----------------------------------------------------
+        // Cerrar cliente anterior
+        // ----------------------------------------------------
+        if ($cliente_anterior !== null) {
+
+            $total_cliente_cantidad_form =
+                number_format($total_cliente_cantidad, 2, ",", ".");
+
+            $total_cliente_monto_form =
+                number_format($total_cliente_monto, 2, ",", ".");
+
+            $out .= <<<HTML
+
+            <tr class="table-light">
+                <th colspan="4"
+                    class="text-end pe-3">
+                    TOTAL CLIENTE
+                </th>
+
+                <th class="text-end font-monospace">
+                    {$total_cliente_cantidad_form}
+                </th>
+
+                <th></th>
+
+                <th class="text-end font-monospace fw-bold">
+                    {$total_cliente_monto_form}
+                </th>
+
+                <th></th>
+            </tr>
+
+            <tr>
+                <td colspan="8"
+                    style="height: 10px; background: #ffffff;">
+                </td>
+            </tr>
+
+HTML;
+        }
+
+
+        // ----------------------------------------------------
+        // Abrir nuevo cliente
+        // ----------------------------------------------------
+
+        $total_clientes++;
+
+        $total_cliente_cantidad = 0;
+        $total_cliente_monto    = 0;
+
+        $cliente_disp = ($cliente !== "")
+            ? htmlspecialchars($cliente, ENT_QUOTES, 'UTF-8')
+            : "CLIENTE NO REGISTRADO";
+
+        $ciudad_disp = ($ciudad !== "")
+            ? htmlspecialchars($ciudad, ENT_QUOTES, 'UTF-8')
+            : "SIN CIUDAD";
 
         $out .= <<<HTML
-        <tr>
-            <td class="text-uppercase text-nowrap">{$ciudad_disp}</td>
-            <td class="text-uppercase text-wrap">{$cliente_disp}</td>
-            <td class="text-end font-monospace text-secondary">{$facturas_form}</td>
-            <td class="text-end font-monospace fw-semibold text-dark">{$total_form}</td>
-            <td class="text-end font-monospace text-muted">{$unidades_form}</td>
+
+        <tr class="table-primary">
+            <th colspan="8"
+                class="py-2">
+
+                <span class="fw-bold">
+                    CLIENTE:
+                </span>
+
+                {$cliente_disp}
+
+                <span class="text-muted ms-3">
+                    {$ciudad_disp}
+                </span>
+
+            </th>
         </tr>
+
 HTML;
+
+        $cliente_anterior = $id_cliente;
     }
 
-    // 5. Totales acumulados al pie de la tabla
-    $total_clientes_form = number_format($contar, 0, "", ".");
-    $total_facturas_form = number_format($facturas, 0, "", ".");
-    $total_monto_form    = number_format($monto, 2, ",", ".");
-    $total_unidades_form = number_format($unidades, 0, "", ".");
+
+    // ========================================================
+    // ACUMULAR
+    // ========================================================
+
+    $total_cliente_cantidad += $cantidad;
+    $total_cliente_monto    += $total_articulo;
+
+    $total_general_cantidad += $cantidad;
+    $total_general_monto    += $total_articulo;
+
+    $total_lineas++;
+
+
+    // ========================================================
+    // FORMATO
+    // ========================================================
+
+    $cantidad_form =
+        number_format($cantidad, 2, ",", ".");
+
+    $precio_unidad_form =
+        number_format($precio_unidad, 2, ",", ".");
+
+    $total_articulo_form =
+        number_format($total_articulo, 2, ",", ".");
+
+    $fecha = htmlspecialchars(
+        $row["fecha"],
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $documento = htmlspecialchars(
+        $row["nro_documento"],
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $codigo_disp = htmlspecialchars(
+        $codigo,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $articulo_disp = htmlspecialchars(
+        $articulo,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $moneda_disp = htmlspecialchars(
+        $moneda,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+
+    // ========================================================
+    // DETALLE
+    // ========================================================
 
     $out .= <<<HTML
-            <tr>
-                <th colspan="2" class="text-end table-light py-3 pe-4 text-secondary">
-                    Total Clientes: <span class="text-dark">{$total_clientes_form}</span>
-                </th>
-                <th class="text-end font-monospace table-light py-3 text-secondary">{$total_facturas_form}</th>
-                <th class="text-end font-monospace table-light py-3 text-primary">{$total_monto_form}</th>
-                <th class="text-end font-monospace table-light py-3 text-muted">{$total_unidades_form}</th>
-            </tr>
-        </tbody>
-    </table>
-</div>
+
+    <tr>
+
+        <td class="text-nowrap">
+            {$fecha}
+        </td>
+
+        <td class="font-monospace text-nowrap">
+            {$documento}
+        </td>
+
+        <td class="font-monospace">
+            {$codigo_disp}
+        </td>
+
+        <td class="text-uppercase">
+            {$articulo_disp}
+        </td>
+
+        <td class="text-end font-monospace">
+            {$cantidad_form}
+        </td>
+
+        <td class="text-end font-monospace">
+            {$precio_unidad_form}
+        </td>
+
+        <td class="text-end font-monospace fw-semibold">
+            {$total_articulo_form}
+        </td>
+
+        <td class="text-center">
+            {$moneda_disp}
+        </td>
+
+    </tr>
+
 HTML;
+}
+
+
+// ============================================================
+// 6. CERRAR ÚLTIMO CLIENTE
+// ============================================================
+
+if ($cliente_anterior !== null) {
+
+    $total_cliente_cantidad_form =
+        number_format($total_cliente_cantidad, 2, ",", ".");
+
+    $total_cliente_monto_form =
+        number_format($total_cliente_monto, 2, ",", ".");
+
+    $out .= <<<HTML
+
+    <tr class="table-light">
+
+        <th colspan="4"
+            class="text-end pe-3">
+
+            TOTAL CLIENTE
+
+        </th>
+
+        <th class="text-end font-monospace">
+            {$total_cliente_cantidad_form}
+        </th>
+
+        <th></th>
+
+        <th class="text-end font-monospace fw-bold">
+            {$total_cliente_monto_form}
+        </th>
+
+        <th></th>
+
+    </tr>
+
+HTML;
+}
+
+
+// ============================================================
+// 7. TOTAL GENERAL
+// ============================================================
+
+$total_general_cantidad_form =
+    number_format($total_general_cantidad, 2, ",", ".");
+
+$total_general_monto_form =
+    number_format($total_general_monto, 2, ",", ".");
+
+$total_clientes_form =
+    number_format($total_clientes, 0, "", ".");
+
+$total_lineas_form =
+    number_format($total_lineas, 0, "", ".");
+
+
+$out .= <<<HTML
+
+    <tr class="table-dark">
+
+        <th colspan="4"
+            class="text-end pe-3 py-3">
+
+            TOTAL GENERAL
+
+            <span class="ms-3">
+                Clientes: {$total_clientes_form}
+            </span>
+
+            <span class="ms-3">
+                Líneas: {$total_lineas_form}
+            </span>
+
+        </th>
+
+        <th class="text-end font-monospace">
+            {$total_general_cantidad_form}
+        </th>
+
+        <th></th>
+
+        <th class="text-end font-monospace">
+            {$total_general_monto_form}
+        </th>
+
+        <th></th>
+
+    </tr>
+
+    </tbody>
+
+</table>
+
+</div>
+
+HTML;
+
 ?>

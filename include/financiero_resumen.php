@@ -31,6 +31,39 @@ if ($fecha_desde > $fecha_hasta) {
 }
 
 /**
+ * Generación de la barra de acciones/botones
+ */
+$urlDetalleWeb = sprintf(
+    'include/FinancieroDetalle.php?FechaDesde=%s&FechaHasta=%s&xTipo=%s',
+    urlencode($fecha_desde),
+    urlencode($fecha_hasta),
+    urlencode($tipo)
+);
+
+$urlDetalleExcel = sprintf(
+    'include/FinancieroDetalle.php?toexcel=SI&FechaDesde=%s&FechaHasta=%s&xTipo=%s',
+    urlencode($fecha_desde),
+    urlencode($fecha_hasta),
+    urlencode($tipo)
+);
+
+$out .= '
+<div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
+    <span class="fw-bold text-secondary">
+        <i class="fa fa-chart-line me-1"></i> Resumen Financiero (' . htmlspecialchars($fecha_desde) . ' a ' . htmlspecialchars($fecha_hasta) . ')
+    </span>
+    <div>
+        <a href="' . htmlspecialchars($urlDetalleWeb, ENT_QUOTES, 'UTF-8') . '" class="btn btn-primary btn-sm me-2" target="_blank">
+            <i class="fa fa-list-alt me-1"></i> Ver Detalle Completo
+        </a>
+        <a href="' . htmlspecialchars($urlDetalleExcel, ENT_QUOTES, 'UTF-8') . '" class="btn btn-success btn-sm" target="_blank">
+            <i class="fa fa-file-excel me-1"></i> Exportar Detalle a Excel
+        </a>
+    </div>
+</div>
+';
+
+/**
  * Ejecuta una consulta SELECT aprovechando la conexión disponible en connect.php.
  * Admite PHPMaker ExecuteRows(), mysqli o PDO.
  */
@@ -123,8 +156,8 @@ $reportes = [
         'sql' => "SELECT
                     'COMPRAS' AS TIPO,
                     b.moneda AS MONEDA,
-                    FORMAT(SUM(ABS(a.cantidad_movimiento)), 0) AS UNIDADES,
-                    FORMAT(SUM(a.costo), 2) AS COSTO
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * ABS(a.cantidad_movimiento)), 0) AS UNIDADES,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * a.costo), 2) AS COSTO
                 FROM entradas_salidas AS a
                 JOIN entradas AS b
                   ON b.id = a.id_documento
@@ -148,10 +181,10 @@ $reportes = [
         'sql' => "SELECT
                     'VENTAS' AS TIPO,
                     b.moneda AS MONEDA,
-                    FORMAT(SUM(ABS(a.cantidad_movimiento)), 0) AS UNIDADES,
-                    FORMAT(SUM(a.costo), 2) AS COSTO_USD,
-                    FORMAT(SUM(a.precio), 2) AS PRECIO,
-                    FORMAT(SUM(a.precio / NULLIF(b.tasa_dia, 0)), 2) AS PRECIO_USD
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * ABS(a.cantidad_movimiento)), 0) AS UNIDADES,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * a.costo), 2) AS COSTO_USD,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * a.precio), 2) AS PRECIO,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * (a.precio / NULLIF(b.tasa_dia, 0))), 2) AS PRECIO_USD
                 FROM entradas_salidas AS a
                 JOIN salidas AS b
                   ON b.id = a.id_documento
@@ -175,10 +208,10 @@ $reportes = [
         'sql' => "SELECT
                     'GIROS' AS TIPO,
                     b.moneda AS MONEDA,
-                    FORMAT(SUM(ABS(a.cantidad_movimiento)), 0) AS UNIDADES,
-                    FORMAT(SUM(a.costo), 2) AS COSTO_USD,
-                    FORMAT(SUM(a.precio), 2) AS PRECIO,
-                    FORMAT(SUM(a.precio / NULLIF(IF(b.moneda = 'USD', 1, b.tasa_dia), 0)), 2) AS PRECIO_USD
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * ABS(a.cantidad_movimiento)), 0) AS UNIDADES,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * a.costo), 2) AS COSTO_USD,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * a.precio), 2) AS PRECIO,
+                    FORMAT(SUM(IF(b.documento = 'NC', -1, 1) * (a.precio / NULLIF(IF(b.moneda = 'USD', 1, b.tasa_dia), 0))), 2) AS PRECIO_USD
                 FROM entradas_salidas AS a
                 JOIN salidas AS b
                   ON b.id = a.id_documento

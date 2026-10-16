@@ -133,7 +133,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->tipo_documento->Visible = false;
         $this->documento->setVisibility();
         $this->nro_documento->setVisibility();
-        $this->fecha->Visible = false;
+        $this->fecha->setVisibility();
         $this->nro_control->setVisibility();
         $this->cliente->setVisibility();
         $this->doc_afectado->setVisibility();
@@ -142,9 +142,9 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->iva->setVisibility();
         $this->total->setVisibility();
         $this->nota->setVisibility();
-        $this->igtf->Visible = false;
-        $this->monto_base_igtf->Visible = false;
-        $this->monto_igtf->Visible = false;
+        $this->igtf->setVisibility();
+        $this->monto_base_igtf->setVisibility();
+        $this->monto_igtf->setVisibility();
         $this->moneda->setVisibility();
         $this->lista_pedido->Visible = false;
         $this->unidades->Visible = false;
@@ -152,7 +152,7 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->_username->Visible = false;
         $this->id_documento_padre->Visible = false;
         $this->asesor->Visible = false;
-        $this->tasa_dia->Visible = false;
+        $this->tasa_dia->setVisibility();
         $this->monto_usd->Visible = false;
         $this->dias_credito->setVisibility();
         $this->entregado->setVisibility();
@@ -889,6 +889,17 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
         }
 
+        // Check field name 'fecha' first before field var 'x_fecha'
+        $val = $CurrentForm->hasValue("fecha") ? $CurrentForm->getValue("fecha") : $CurrentForm->getValue("x_fecha");
+        if (!$this->fecha->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->fecha->Visible = false; // Disable update for API request
+            } else {
+                $this->fecha->setFormValue($val);
+            }
+            $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
+        }
+
         // Check field name 'nro_control' first before field var 'x_nro_control'
         $val = $CurrentForm->hasValue("nro_control") ? $CurrentForm->getValue("nro_control") : $CurrentForm->getValue("x_nro_control");
         if (!$this->nro_control->IsDetailKey) {
@@ -969,6 +980,36 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             }
         }
 
+        // Check field name 'igtf' first before field var 'x_igtf'
+        $val = $CurrentForm->hasValue("igtf") ? $CurrentForm->getValue("igtf") : $CurrentForm->getValue("x_igtf");
+        if (!$this->igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->igtf->setFormValue($val);
+            }
+        }
+
+        // Check field name 'monto_base_igtf' first before field var 'x_monto_base_igtf'
+        $val = $CurrentForm->hasValue("monto_base_igtf") ? $CurrentForm->getValue("monto_base_igtf") : $CurrentForm->getValue("x_monto_base_igtf");
+        if (!$this->monto_base_igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_base_igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_base_igtf->setFormValue($val, true, $validate);
+            }
+        }
+
+        // Check field name 'monto_igtf' first before field var 'x_monto_igtf'
+        $val = $CurrentForm->hasValue("monto_igtf") ? $CurrentForm->getValue("monto_igtf") : $CurrentForm->getValue("x_monto_igtf");
+        if (!$this->monto_igtf->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->monto_igtf->Visible = false; // Disable update for API request
+            } else {
+                $this->monto_igtf->setFormValue($val);
+            }
+        }
+
         // Check field name 'moneda' first before field var 'x_moneda'
         $val = $CurrentForm->hasValue("moneda") ? $CurrentForm->getValue("moneda") : $CurrentForm->getValue("x_moneda");
         if (!$this->moneda->IsDetailKey) {
@@ -976,6 +1017,16 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
                 $this->moneda->Visible = false; // Disable update for API request
             } else {
                 $this->moneda->setFormValue($val);
+            }
+        }
+
+        // Check field name 'tasa_dia' first before field var 'x_tasa_dia'
+        $val = $CurrentForm->hasValue("tasa_dia") ? $CurrentForm->getValue("tasa_dia") : $CurrentForm->getValue("x_tasa_dia");
+        if (!$this->tasa_dia->IsDetailKey) {
+            if (IsApi() && $val === null) {
+                $this->tasa_dia->Visible = false; // Disable update for API request
+            } else {
+                $this->tasa_dia->setFormValue($val);
             }
         }
 
@@ -1033,6 +1084,8 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->id->CurrentValue = $this->id->FormValue;
         $this->documento->CurrentValue = $this->documento->FormValue;
         $this->nro_documento->CurrentValue = $this->nro_documento->FormValue;
+        $this->fecha->CurrentValue = $this->fecha->FormValue;
+        $this->fecha->CurrentValue = UnFormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
         $this->nro_control->CurrentValue = $this->nro_control->FormValue;
         $this->cliente->CurrentValue = $this->cliente->FormValue;
         $this->doc_afectado->CurrentValue = $this->doc_afectado->FormValue;
@@ -1041,7 +1094,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         $this->iva->CurrentValue = $this->iva->FormValue;
         $this->total->CurrentValue = $this->total->FormValue;
         $this->nota->CurrentValue = $this->nota->FormValue;
+        $this->igtf->CurrentValue = $this->igtf->FormValue;
+        $this->monto_base_igtf->CurrentValue = $this->monto_base_igtf->FormValue;
+        $this->monto_igtf->CurrentValue = $this->monto_igtf->FormValue;
         $this->moneda->CurrentValue = $this->moneda->FormValue;
+        $this->tasa_dia->CurrentValue = $this->tasa_dia->FormValue;
         $this->dias_credito->CurrentValue = $this->dias_credito->FormValue;
         $this->entregado->CurrentValue = $this->entregado->FormValue;
         $this->nro_despacho->CurrentValue = $this->nro_despacho->FormValue;
@@ -2059,6 +2116,10 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
 
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
             // nro_control
             $this->nro_control->HrefValue = "";
             $this->nro_control->TooltipValue = "";
@@ -2090,9 +2151,23 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // nota
             $this->nota->HrefValue = "";
 
+            // igtf
+            $this->igtf->HrefValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+            $this->monto_igtf->TooltipValue = "";
+
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
+
+            // tasa_dia
+            $this->tasa_dia->HrefValue = "";
+            $this->tasa_dia->TooltipValue = "";
 
             // dias_credito
             $this->dias_credito->HrefValue = "";
@@ -2117,6 +2192,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // nro_documento
             $this->nro_documento->setupEditAttributes();
             $this->nro_documento->EditValue = $this->nro_documento->CurrentValue;
+
+            // fecha
+            $this->fecha->setupEditAttributes();
+            $this->fecha->EditValue = $this->fecha->CurrentValue;
+            $this->fecha->EditValue = FormatDateTime($this->fecha->EditValue, $this->fecha->formatPattern());
 
             // nro_control
             $this->nro_control->setupEditAttributes();
@@ -2175,6 +2255,24 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             $this->nota->EditValue = HtmlEncode($this->nota->CurrentValue);
             $this->nota->PlaceHolder = RemoveHtml($this->nota->caption());
 
+            // igtf
+            $this->igtf->setupEditAttributes();
+            $this->igtf->EditValue = $this->igtf->options(true);
+            $this->igtf->PlaceHolder = RemoveHtml($this->igtf->caption());
+
+            // monto_base_igtf
+            $this->monto_base_igtf->setupEditAttributes();
+            $this->monto_base_igtf->EditValue = $this->monto_base_igtf->CurrentValue;
+            $this->monto_base_igtf->PlaceHolder = RemoveHtml($this->monto_base_igtf->caption());
+            if (strval($this->monto_base_igtf->EditValue) != "" && is_numeric($this->monto_base_igtf->EditValue)) {
+                $this->monto_base_igtf->EditValue = FormatNumber($this->monto_base_igtf->EditValue, null);
+            }
+
+            // monto_igtf
+            $this->monto_igtf->setupEditAttributes();
+            $this->monto_igtf->EditValue = $this->monto_igtf->CurrentValue;
+            $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, $this->monto_igtf->formatPattern());
+
             // moneda
             $this->moneda->setupEditAttributes();
             $curVal = strval($this->moneda->CurrentValue);
@@ -2199,6 +2297,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             } else {
                 $this->moneda->EditValue = null;
             }
+
+            // tasa_dia
+            $this->tasa_dia->setupEditAttributes();
+            $this->tasa_dia->EditValue = $this->tasa_dia->CurrentValue;
+            $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, $this->tasa_dia->formatPattern());
 
             // dias_credito
             $this->dias_credito->setupEditAttributes();
@@ -2287,6 +2390,10 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             $this->nro_documento->HrefValue = "";
             $this->nro_documento->TooltipValue = "";
 
+            // fecha
+            $this->fecha->HrefValue = "";
+            $this->fecha->TooltipValue = "";
+
             // nro_control
             $this->nro_control->HrefValue = "";
             $this->nro_control->TooltipValue = "";
@@ -2318,9 +2425,23 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
             // nota
             $this->nota->HrefValue = "";
 
+            // igtf
+            $this->igtf->HrefValue = "";
+
+            // monto_base_igtf
+            $this->monto_base_igtf->HrefValue = "";
+
+            // monto_igtf
+            $this->monto_igtf->HrefValue = "";
+            $this->monto_igtf->TooltipValue = "";
+
             // moneda
             $this->moneda->HrefValue = "";
             $this->moneda->TooltipValue = "";
+
+            // tasa_dia
+            $this->tasa_dia->HrefValue = "";
+            $this->tasa_dia->TooltipValue = "";
 
             // dias_credito
             $this->dias_credito->HrefValue = "";
@@ -2364,6 +2485,11 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
                     $this->nro_documento->addErrorMessage(str_replace("%s", $this->nro_documento->caption(), $this->nro_documento->RequiredErrorMessage));
                 }
             }
+            if ($this->fecha->Visible && $this->fecha->Required) {
+                if (!$this->fecha->IsDetailKey && EmptyValue($this->fecha->FormValue)) {
+                    $this->fecha->addErrorMessage(str_replace("%s", $this->fecha->caption(), $this->fecha->RequiredErrorMessage));
+                }
+            }
             if ($this->nro_control->Visible && $this->nro_control->Required) {
                 if (!$this->nro_control->IsDetailKey && EmptyValue($this->nro_control->FormValue)) {
                     $this->nro_control->addErrorMessage(str_replace("%s", $this->nro_control->caption(), $this->nro_control->RequiredErrorMessage));
@@ -2404,9 +2530,32 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
                     $this->nota->addErrorMessage(str_replace("%s", $this->nota->caption(), $this->nota->RequiredErrorMessage));
                 }
             }
+            if ($this->igtf->Visible && $this->igtf->Required) {
+                if (!$this->igtf->IsDetailKey && EmptyValue($this->igtf->FormValue)) {
+                    $this->igtf->addErrorMessage(str_replace("%s", $this->igtf->caption(), $this->igtf->RequiredErrorMessage));
+                }
+            }
+            if ($this->monto_base_igtf->Visible && $this->monto_base_igtf->Required) {
+                if (!$this->monto_base_igtf->IsDetailKey && EmptyValue($this->monto_base_igtf->FormValue)) {
+                    $this->monto_base_igtf->addErrorMessage(str_replace("%s", $this->monto_base_igtf->caption(), $this->monto_base_igtf->RequiredErrorMessage));
+                }
+            }
+            if (!CheckNumber($this->monto_base_igtf->FormValue)) {
+                $this->monto_base_igtf->addErrorMessage($this->monto_base_igtf->getErrorMessage(false));
+            }
+            if ($this->monto_igtf->Visible && $this->monto_igtf->Required) {
+                if (!$this->monto_igtf->IsDetailKey && EmptyValue($this->monto_igtf->FormValue)) {
+                    $this->monto_igtf->addErrorMessage(str_replace("%s", $this->monto_igtf->caption(), $this->monto_igtf->RequiredErrorMessage));
+                }
+            }
             if ($this->moneda->Visible && $this->moneda->Required) {
                 if (!$this->moneda->IsDetailKey && EmptyValue($this->moneda->FormValue)) {
                     $this->moneda->addErrorMessage(str_replace("%s", $this->moneda->caption(), $this->moneda->RequiredErrorMessage));
+                }
+            }
+            if ($this->tasa_dia->Visible && $this->tasa_dia->Required) {
+                if (!$this->tasa_dia->IsDetailKey && EmptyValue($this->tasa_dia->FormValue)) {
+                    $this->tasa_dia->addErrorMessage(str_replace("%s", $this->tasa_dia->caption(), $this->tasa_dia->RequiredErrorMessage));
                 }
             }
             if ($this->dias_credito->Visible && $this->dias_credito->Required) {
@@ -2560,6 +2709,12 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
         // nota
         $this->nota->setDbValueDef($rsnew, $this->nota->CurrentValue, $this->nota->ReadOnly);
 
+        // igtf
+        $this->igtf->setDbValueDef($rsnew, $this->igtf->CurrentValue, $this->igtf->ReadOnly);
+
+        // monto_base_igtf
+        $this->monto_base_igtf->setDbValueDef($rsnew, $this->monto_base_igtf->CurrentValue, $this->monto_base_igtf->ReadOnly);
+
         // dias_credito
         $this->dias_credito->setDbValueDef($rsnew, $this->dias_credito->CurrentValue, $this->dias_credito->ReadOnly);
 
@@ -2582,6 +2737,12 @@ class ViewOutTdcfcvEdit extends ViewOutTdcfcv
     {
         if (isset($row['nota'])) { // nota
             $this->nota->CurrentValue = $row['nota'];
+        }
+        if (isset($row['igtf'])) { // igtf
+            $this->igtf->CurrentValue = $row['igtf'];
+        }
+        if (isset($row['monto_base_igtf'])) { // monto_base_igtf
+            $this->monto_base_igtf->CurrentValue = $row['monto_base_igtf'];
         }
         if (isset($row['dias_credito'])) { // dias_credito
             $this->dias_credito->CurrentValue = $row['dias_credito'];

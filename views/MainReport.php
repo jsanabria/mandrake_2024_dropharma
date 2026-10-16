@@ -123,6 +123,12 @@ $Page->showMessage();
                     </label>
                 </div>
                 <div class="radio">
+                    <label for="rep_sal_lab">
+                        <input type="radio" id="rep_sal_lab_neas" name="id" value="sal_laboratorio_neas">
+                        SALIDAS GENERALES POR FABRICANTE (NOTAS DE ENTREGA + AJUSTE SALIDAS)
+                    </label>
+                </div>
+                <div class="radio">
                     <label for="rep_sal_art">
                         <input type="radio" id="rep_sal_art" name="id" value="sal_articulo">
                         SALIDAS GENERALES POR ARTICULO (FACTURAS + AJUSTE SALIDAS)
@@ -141,6 +147,12 @@ $Page->showMessage();
                     </label>
                 </div>
                 <div class="radio">
+                    <label for="rep_vta_cli_ne">
+                        <input type="radio" id="rep_vta_cli_ne" name="id" value="vta_cliente_ne">
+                        VENTAS POR CLIENTE (ORDENES DE ENTREGA)
+                    </label>
+                </div>
+                <div class="radio">
                     <label for="rep_sal_det">
                         <input type="radio" id="rep_sal_det" name="id" value="sal_articulo_detallado">
                         SALIDAS GENERALES POR ARTICULO DETALLADO (FACTURAS)
@@ -149,7 +161,7 @@ $Page->showMessage();
                 <div class="radio">
                     <label for="rep_sal_det">
                         <input type="radio" id="rep_sal_det_neas" name="id" value="sal_articulo_detallado_neas">
-                        SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS DE ENTREGA + AJSUTES DE SALIDA)
+                        SALIDAS GENERALES POR ARTICULO DETALLADO (NOTAS DE ENTREGA + AJUSTES DE SALIDA)
                     </label>
                 </div>
             </div>

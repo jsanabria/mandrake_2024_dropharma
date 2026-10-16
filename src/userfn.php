@@ -1738,6 +1738,15 @@ function CalcularRetencionesProveedor(
     $alicuota = floatval($alicuota);
     $montoExento = floatval($montoExento);
     $montoGravado = floatval($montoGravado);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cálculo normal del documento
+    |--------------------------------------------------------------------------
+    | El tipo de documento no afecta el cálculo del IVA del documento.
+    | Lo que cambia según FC / ND / NC / RC son las retenciones.
+    |--------------------------------------------------------------------------
+    */
     $montoIva = round(
         $montoGravado * ($alicuota / 100),
         2
@@ -1746,6 +1755,12 @@ function CalcularRetencionesProveedor(
         $montoExento + $montoGravado + $montoIva,
         2
     );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Inicializar retenciones
+    |--------------------------------------------------------------------------
+    */
     $retIVA = 0.00;
     $retISLR = 0.00;
     $retMunicipal = 0.00;
@@ -1756,16 +1771,69 @@ function CalcularRetencionesProveedor(
 
     /*
     |--------------------------------------------------------------------------
-    | Solo se retiene cuando:
-    | - aplica_retencion = S
-    | - no es Nota de Crédito
+    | Reglas de retención según tipo de documento
+    |--------------------------------------------------------------------------
+    |
+    | FC:
+    |   Si aplica_retencion = S:
+    |   - Retención IVA
+    |   - Retención ISLR
+    |   - Retención Municipal
+    |
+    | ND:
+    |   Si aplica_retencion = S:
+    |   - Solamente Retención IVA
+    |
+    | NC:
+    |   - No calcula ninguna retención
+    |
+    | RC:
+    |   - No calcula ninguna retención
+    |
     |--------------------------------------------------------------------------
     */
-    $debeRetener = (
-        $aplicaRetencion === "S" &&
-        $tipoDocumentoFiscal !== "NC"
-    );
-    if ($debeRetener && $proveedor > 0) {
+    $retenerIVA = false;
+    $retenerISLR = false;
+    $retenerMunicipal = false;
+    if ($aplicaRetencion === "S") {
+        if ($tipoDocumentoFiscal === "FC") {
+            $retenerIVA = true;
+            $retenerISLR = true;
+            $retenerMunicipal = true;
+        } elseif ($tipoDocumentoFiscal === "ND") {
+            $retenerIVA = true;
+            $retenerISLR = false;
+            $retenerMunicipal = false;
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | NC y RC nunca generan retenciones
+    |--------------------------------------------------------------------------
+    */
+    if (
+        $tipoDocumentoFiscal === "NC" ||
+        $tipoDocumentoFiscal === "RC"
+    ) {
+        $retenerIVA = false;
+        $retenerISLR = false;
+        $retenerMunicipal = false;
+        $aplicaRetencion = "N";
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Consultar configuración del proveedor
+    |--------------------------------------------------------------------------
+    | Solo hacemos la consulta si realmente existe alguna retención que
+    | calcular.
+    |--------------------------------------------------------------------------
+    */
+    if (
+        ($retenerIVA || $retenerISLR || $retenerMunicipal) &&
+        $proveedor > 0
+    ) {
         $sql = "
             SELECT
                 IFNULL(a.ci_rif, '') AS rif,
@@ -1799,32 +1867,64 @@ function CalcularRetencionesProveedor(
         ";
         $row = ExecuteRow($sql);
         if ($row) {
-            $retIVA = floatval($row["tipo_iva"] ?? 0);
-            $retISLR = floatval($row["tipo_islr"] ?? 0);
-            $sustraendo = floatval($row["sustraendo"] ?? 0);
-            $retMunicipal = floatval($row["tipo_municipal"] ?? 0);
-        }
-        $montoRetIVA = round(
-            $montoIva * ($retIVA / 100),
-            2
-        );
-        $montoRetISLR = round(
-            ($montoGravado * ($retISLR / 100)) -
-            $sustraendo,
-            2
-        );
-        $montoRetMunicipal = round(
-            $montoGravado * ($retMunicipal / 100),
-            2
-        );
+            /*
+            |--------------------------------------------------------------------------
+            | Retención IVA
+            |--------------------------------------------------------------------------
+            */
+            if ($retenerIVA) {
+                $retIVA = floatval($row["tipo_iva"] ?? 0);
+                $montoRetIVA = round(
+                    $montoIva * ($retIVA / 100),
+                    2
+                );
+                $montoRetIVA = max(0, $montoRetIVA);
+            }
 
-        // Nunca guardar retenciones negativas.
-        $montoRetIVA = max(0, $montoRetIVA);
-        $montoRetISLR = max(0, $montoRetISLR);
-        $montoRetMunicipal = max(0, $montoRetMunicipal);
+            /*
+            |--------------------------------------------------------------------------
+            | Retención ISLR
+            |--------------------------------------------------------------------------
+            */
+            if ($retenerISLR) {
+                $retISLR = floatval($row["tipo_islr"] ?? 0);
+                $sustraendo = floatval($row["sustraendo"] ?? 0);
+                $montoRetISLR = round(
+                    ($montoGravado * ($retISLR / 100)) -
+                    $sustraendo,
+                    2
+                );
+                $montoRetISLR = max(0, $montoRetISLR);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Retención Municipal
+            |--------------------------------------------------------------------------
+            */
+            if ($retenerMunicipal) {
+                $retMunicipal = floatval($row["tipo_municipal"] ?? 0);
+                $montoRetMunicipal = round(
+                    $montoGravado * ($retMunicipal / 100),
+                    2
+                );
+                $montoRetMunicipal = max(0, $montoRetMunicipal);
+            }
+        }
     } else {
+        /*
+        |--------------------------------------------------------------------------
+        | Si no corresponde ninguna retención
+        |--------------------------------------------------------------------------
+        */
         $aplicaRetencion = "N";
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Totales
+    |--------------------------------------------------------------------------
+    */
     $totalRetenido = round(
         $montoRetIVA +
         $montoRetISLR +

@@ -6214,6 +6214,7 @@ class ViewOutTdcfcvList extends ViewOutTdcfcv
         if ($this->estatus->CurrentValue == "PROCESADO") {
             // Ocultamos el botón de Editar (edit)
             $this->ListOptions["edit"]->Visible = false;
+            if (VerificaFuncion("052")) $this->ListOptions["edit"]->Visible = true;
 
             // Ocultamos el botón de Copiar (copy) si lo deseas
             if (isset($this->ListOptions["copy"])) {

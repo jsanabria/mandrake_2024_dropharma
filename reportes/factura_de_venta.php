@@ -204,7 +204,9 @@ if ($GLOBALS["entregado"] == "S") {
 	$rs_chk = mysqli_query($link, $sql_chk);
 	$row_chk = mysqli_fetch_array($rs_chk);
 
-	if (($GLOBALS["documento"] === 'FC' OR $GLOBALS["documento"] === 'ND') AND (int)($row_chk["total"] ?? 0) === 0) {
+	// if (($GLOBALS["documento"] === 'FC' OR $GLOBALS["documento"] === 'ND') AND (int)($row_chk["total"] ?? 0) === 0) {
+	/*
+	if (!empty($GLOBALS["nro_documento"]) && ($GLOBALS["documento"] === 'FC' OR $GLOBALS["documento"] === 'ND') AND (int)($row_chk["total"] ?? 0) === 0) {
 		header('Content-Type: text/html; charset=UTF-8');
 		echo '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>
 				<div style="font-family: Arial, sans-serif; max-width: 480px; margin: 80px auto; padding: 20px 30px;
@@ -215,6 +217,7 @@ if ($GLOBALS["entregado"] == "S") {
 			  </body></html>';
 		exit;
 	}
+	*/
 }
 
 // Si es una prefactura (sin número de documento asignado y estatus NUEVO), se muestra
@@ -762,10 +765,10 @@ class PDF extends FPDF
 
 		// --- TOTAL ---
 		$this->SetFont('Courier', 'B', 8);
-		$this->Cell(155, 4, "TOTAL:", 0, 0, 'R');
-		$this->SetFont('Courier', '', 8);
+		$this->Cell(155, 4, "TOTAL FACTURA:", 0, 0, 'R');
 		$this->Cell(21, 4, number_format($to_bs($xTotal), 2, ",", "."), 0, 0, 'R');
 		$this->Cell(22, 4, number_format($to_usd($xTotal), 2, ",", "."), 0, 1, 'R');
+		$this->SetFont('Courier', '', 8);
 
 		// 4. Alícuota de IGTF vigente (se usa como referencia cuando salidas.igtf = 'N')
 		$sql = "SELECT alicuota FROM alicuota WHERE codigo = 'IGT' AND activo = 'S' LIMIT 1;";

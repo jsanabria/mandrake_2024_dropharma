@@ -120,7 +120,7 @@ HTML;
         $out .= '</tr>';
 
         // Límite visual preventivo en pantalla (Top 20)
-        if ($contar >= 20) {
+        if ($contar >= 2000) {
             $out .= <<<HTML
             <tr>
                 <th colspan="13" class="text-center table-warning py-3 text-secondary" style="font-size: 0.85rem;">

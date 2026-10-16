@@ -347,13 +347,15 @@ if (
                                     <?php
                                     $hoy = date("Y-m-d");
                                     $sql = "SELECT IFNULL(b.nombre, a.user) AS usuario,
-                                                   DATE_FORMAT(a.datetime, '%h:%i:%s %p') AS fecha,
-                                                   a.action
+                                                DATE_FORMAT(a.datetime, '%h:%i:%s %p') AS fecha,
+                                                a.action
                                             FROM audittrail AS a
-                                            LEFT OUTER JOIN usuario AS b ON b.username = a.user
+                                            LEFT OUTER JOIN usuario AS b
+                                            ON b.username COLLATE utf8mb4_general_ci =
+                                                a.user COLLATE utf8mb4_general_ci
                                             WHERE DATE(a.datetime) = '$hoy'
-                                              AND a.action IN ('login', 'logout')
-                                              AND a.user <> '-1'
+                                            AND a.action IN ('login', 'logout')
+                                            AND a.user <> '-1'
                                             ORDER BY a.datetime DESC
                                             LIMIT 7;";
                                     $rs = ExecuteQuery($sql);

@@ -4073,8 +4073,8 @@ class ViewOutTdcfcv extends DbTable
 
         // fecha
         $this->fecha->setupEditAttributes();
-        $this->fecha->EditValue = FormatDateTime($this->fecha->CurrentValue, $this->fecha->formatPattern());
-        $this->fecha->PlaceHolder = RemoveHtml($this->fecha->caption());
+        $this->fecha->EditValue = $this->fecha->CurrentValue;
+        $this->fecha->EditValue = FormatDateTime($this->fecha->EditValue, $this->fecha->formatPattern());
 
         // nro_control
         $this->nro_control->setupEditAttributes();
@@ -4149,10 +4149,7 @@ class ViewOutTdcfcv extends DbTable
         // monto_igtf
         $this->monto_igtf->setupEditAttributes();
         $this->monto_igtf->EditValue = $this->monto_igtf->CurrentValue;
-        $this->monto_igtf->PlaceHolder = RemoveHtml($this->monto_igtf->caption());
-        if (strval($this->monto_igtf->EditValue) != "" && is_numeric($this->monto_igtf->EditValue)) {
-            $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, null);
-        }
+        $this->monto_igtf->EditValue = FormatNumber($this->monto_igtf->EditValue, $this->monto_igtf->formatPattern());
 
         // moneda
         $this->moneda->setupEditAttributes();
@@ -4215,10 +4212,7 @@ class ViewOutTdcfcv extends DbTable
         // tasa_dia
         $this->tasa_dia->setupEditAttributes();
         $this->tasa_dia->EditValue = $this->tasa_dia->CurrentValue;
-        $this->tasa_dia->PlaceHolder = RemoveHtml($this->tasa_dia->caption());
-        if (strval($this->tasa_dia->EditValue) != "" && is_numeric($this->tasa_dia->EditValue)) {
-            $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, null);
-        }
+        $this->tasa_dia->EditValue = FormatNumber($this->tasa_dia->EditValue, $this->tasa_dia->formatPattern());
 
         // monto_usd
         $this->monto_usd->setupEditAttributes();
@@ -5100,17 +5094,37 @@ class ViewOutTdcfcv extends DbTable
         //Log("Recordset Selected");
     }
 
-    // Recordset Search Validated event
     public function recordsetSearchValidated()
     {
-        // Example:
-        //$this->MyField1->AdvancedSearch->SearchValue = "your search criteria"; // Search value
+        if (!empty($_GET['x_fecha'])) {
+            $p = explode('/', $_GET['x_fecha']); // dd/mm/yyyy
+            if (count($p) == 3) {
+                $this->fecha->AdvancedSearch->SearchValue = $p[2] . '-' . $p[1] . '-' . $p[0] . ' 00:00:00';
+            }
+        }
+        if (!empty($_GET['y_fecha'])) {
+            $p = explode('/', $_GET['y_fecha']); // dd/mm/yyyy
+            if (count($p) == 3) {
+                $this->fecha->AdvancedSearch->SearchValue2 = $p[2] . '-' . $p[1] . '-' . $p[0] . ' 00:00:00';
+            }
+        }
     }
 
-    // Recordset Searching event
     public function recordsetSearching(&$filter)
     {
-        // Enter your code here
+        $val2 = $this->fecha->AdvancedSearch->SearchValue2;
+        if (!empty($val2)) {
+            $onlyDate = substr($val2, 0, 10); // yyyy-mm-dd
+            $needle = $onlyDate . ' 00:00:00';
+            $replacement = $onlyDate . ' 23:59:59';
+
+            // Usamos la ÚLTIMA aparición porque es el límite superior del BETWEEN
+            // (importante cuando x_fecha y y_fecha son el mismo día, como en tu ejemplo 19/07 a 19/07)
+            $pos = strrpos($filter, $needle);
+            if ($pos !== false) {
+                $filter = substr_replace($filter, $replacement, $pos, strlen($needle));
+            }
+        }
     }
 
     // Row_Selecting event
@@ -5152,13 +5166,30 @@ class ViewOutTdcfcv extends DbTable
                 // }
             } 
         }
-        if ($rsnew["igtf"] == "S") {
-            $montoBase = floatval($rsnew["monto_base_igtf"]);
-            $montoTotalFactura = floatval($rsold["total"] ?? $rsnew["total"]); // Usa rsold en edición o rsnew en inserción
+
+        // Verificamos si se está activando el IGTF
+        // (Si rsnew["igtf"] no viene en el array, mantenemos el valor anterior o validamos su estado)
+        $igtfEstado = $rsnew["igtf"] ?? $rsold["igtf"] ?? "N";
+        if ($igtfEstado == "S") {
+            $montoBase = floatval($rsnew["monto_base_igtf"] ?? $rsold["monto_base_igtf"] ?? 0);
+
+            // Obtenemos los campos clave buscando en rsnew o respaldando con rsold
+            $montoTotalFactura = floatval($rsnew["total"] ?? $rsold["total"] ?? 0);
+            $moneda = $rsnew["moneda"] ?? $rsold["moneda"] ?? 'Bs';
+            $tasaDia = floatval($rsnew["tasa_dia"] ?? $rsold["tasa_dia"] ?? 1);
+
+            // Calculamos el Total Máximo en Bolívares
+            $totalMaximoBs = $montoTotalFactura;
+            if ($moneda && strtoupper(trim($moneda)) !== 'BS.') {
+                $totalMaximoBs = $montoTotalFactura * $tasaDia;
+            }
+
+            // Redondeamos a 2 decimales para evitar diferencias por precisión flotante
+            $totalMaximoBs = round($totalMaximoBs, 2);
             if ($montoBase > 0) {
-                // 1. Validar que la base no supere el total (Refuerzo de seguridad del lado del servidor)
-                if ($montoBase > $montoTotalFactura) {
-                    $this->setFailureMessage("El monto para aplicar IGTF debe ser menor o igual al monto total de la factura.");
+                // 1. Validar que la base en Bs. no supere el total de la factura convertido a Bs.
+                if ($montoBase > $totalMaximoBs) {
+                    $this->setFailureMessage("El monto para aplicar IGTF (" . number_format($montoBase, 2, ',', '.') . ") debe ser menor o igual al monto total de la factura (" . number_format($totalMaximoBs, 2, ',', '.') . " Bs.).");
                     return FALSE;
                 }
 

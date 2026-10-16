@@ -12,8 +12,7 @@ $tipo        = isset($_REQUEST["tipo"]) ? $_REQUEST["tipo"] : "";
 $articulo    = isset($_REQUEST["articulo"]) ? $_REQUEST["articulo"] : "";
 $cliente     = isset($_REQUEST["cliente"]) ? $_REQUEST["cliente"] : "";
 $asesor      = isset($_REQUEST["asesor"]) ? $_REQUEST["asesor"] : "";
-
-$proveedor   = isset($_REQUEST["proveedor"]) ? intval($_REQUEST["proveedor"]) : 0;
+$proveedor   = isset($_REQUEST["proveedor"]) ? $_REQUEST["proveedor"] : "";
 
 $out = '';
 $where = "";
@@ -46,6 +45,9 @@ switch($id) {
         break;
     case "sal_laboratorio":
         include("include/salidas_genreales_por_laboratorio.php");
+        break;
+    case "sal_laboratorio_neas":
+        include("include/salidas_genreales_por_laboratorio_neas.php");
         break;
     case "sal_articulo":
         include("include/salidas_genreales_por_articulo.php");
@@ -83,6 +85,9 @@ switch($id) {
     case "vta_cliente":
         include("include/ventas_por_cliente.php");
         break;
+    case "vta_cliente_ne":
+        include("include/ventas_por_cliente_ne.php");
+        break;
     case "cng_descarga_entradas":
         include("include/descarga_entradas_consignacion.php");
         break;
@@ -104,13 +109,14 @@ switch($id) {
 
 // Construcción segura de los query strings para la exportación
 $query_params = http_build_query([
-    'id'      => $id,
-    'fd'      => $fecha_desde,
-    'fh'      => $fecha_hasta,
-    'tipo'    => $tipo,
-    'articulo'    => $articulo,
-    'cliente' => trim($cliente),
-    'asesor'  => trim($asesor)
+    'id'        => $id,
+    'fd'        => $fecha_desde,
+    'fh'        => $fecha_hasta,
+    'tipo'      => $tipo,
+    'articulo'  => $articulo,
+    'cliente'   => trim($cliente),
+    'proveedor' => trim($proveedor),
+    'asesor'    => trim($asesor)
 ]);
 
 $url_excel = "listado_master_buscar_excel.php?" . $query_params;

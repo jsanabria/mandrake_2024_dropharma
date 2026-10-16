@@ -318,6 +318,10 @@ return [
     "view_cuentas_por_cobrar_resumen" => \DI\create(ViewCuentasPorCobrarResumen::class),
     "view_cuentas_por_pagar" => \DI\create(ViewCuentasPorPagar::class),
     "view_cuentas_por_pagar_resumen" => \DI\create(ViewCuentasPorPagarResumen::class),
+    "transferencia_grupo" => \DI\create(TransferenciaGrupo::class),
+    "transferencia_grupo_cliente" => \DI\create(TransferenciaGrupoCliente::class),
+    "transferencia_grupo_fabricante" => \DI\create(TransferenciaGrupoFabricante::class),
+    "transferencistas" => \DI\create(Transferencistas::class),
 
     // User table
     "usertable" => \DI\get("usuario"),

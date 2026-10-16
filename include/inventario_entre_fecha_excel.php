@@ -111,47 +111,102 @@
         $developer_records[] = $row;
     }
 
-    // 3. Configurar cabeceras HTTP de descarga forzada para Excel (.xls)
+// 3. Configurar cabeceras HTTP de descarga forzada para Excel (.xls)
     $filename = "INVENTARIO_" . date('Ymd_His') . ".xls";
     header("Content-Type: application/vnd.ms-excel; charset=utf-8");
     header("Content-Disposition: attachment; filename=\"$filename\"");
     header("Pragma: no-cache");
     header("Expires: 0");
 
-    // 4. Imprimir la primera fila con los títulos de las columnas planos para Excel
-    echo "LABORATORIO\tARTICULO\tCODIGO\tCODIGO BARRA\tUNIDAD MEDIDA\tENTRADAS\tSALIDA\tEXISTENCIA\tPEDIDO\tCOSTO C/U\tPRECIO C/U\n";
-
-    // 5. Volcado e impresión sanitizada de los registros
+    // Marca UTF-8 BOM para forzar acentos y caracteres especiales limpios
+    echo "\xEF\xBB\xBF"; 
+?>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--[if gte mso 9]>
+<xml>
+ <x:ExcelWorkbook>
+  <x:ExcelWorksheets>
+   <x:ExcelWorksheet>
+    <x:Name>Inventario</x:Name>
+    <x:WorksheetOptions>
+     <x:DisplayGridlines/>
+    </x:WorksheetOptions>
+   </x:ExcelWorksheet>
+  </x:ExcelWorksheets>
+ </x:ExcelWorkbook>
+</xml>
+<![endif]-->
+<style>
+    .texto { mso-number-format:"\@"; }
+    .num { mso-number-format:"0\.00"; text-align: right; }
+    .entero { mso-number-format:"0"; text-align: center; }
+    th { background-color: #002060; color: #FFFFFF; font-weight: bold; text-align: center; border: 0.5pt solid #000000; }
+    td { border: 0.5pt solid #D9D9D9; vertical-align: middle; }
+</style>
+</head>
+<body>
+<table border="1">
+    <thead>
+        <tr>
+            <th>LABORATORIO</th>
+            <th>ARTICULO</th>
+            <th>CODIGO</th>
+            <th>CODIGO BARRA</th>
+            <th>UNIDAD MEDIDA</th>
+            <th>ENTRADAS</th>
+            <th>SALIDA</th>
+            <th>EXISTENCIA</th>
+            <th>PEDIDO</th>
+            <th>COSTO C/U</th>
+            <th>PRECIO C/U</th>
+        </tr>
+    </thead>
+    <tbody>
+<?php
     foreach ($developer_records as $row) {
-        // Asignaciones seguras con operador de fusión de nulos (PHP 8.1+)
         $laboratorio     = trim($row["laboratorio"] ?? '');
         $codigo          = trim($row["codigo"] ?? '');
         $codigo_de_barra = trim($row["codigo_de_barra"] ?? '');
         $unidad_medida   = trim($row["unidad_medida"] ?? 'UNIDAD');
         
-        // Unificación del nombre del artículo
         $nombre_comercial = trim($row["nombre_comercial"] ?? '');
         $principio_activo = trim($row["principio_activo"] ?? '');
         $presentacion     = trim($row["presentacion"] ?? '');
         $articulo         = trim($nombre_comercial . ' ' . $principio_activo . ' ' . $presentacion);
 
-        // Conversión segura de cantidades y valores monetarios
-        $entradas   = $row["entradas"] ?? 0;
-        $salidas    = $row["salidas"] ?? 0;
-        $existencia = $row["existencia"] ?? 0;
-        $pedido     = $row["cantidad_en_pedido"] ?? 0;
-        $costo      = $row["costo"] ?? 0;
-        $precio     = $row["precio"] ?? 0;
+        // Conversión a valores numéricos flotantes puros
+        $entradas   = (float)($row["entradas"] ?? 0);
+        $salidas    = (float)($row["salidas"] ?? 0);
+        $existencia = (float)($row["existencia"] ?? 0);
+        $pedido     = (float)($row["cantidad_en_pedido"] ?? 0);
+        $costo      = (float)($row["costo"] ?? 0);
+        $precio     = (float)($row["precio"] ?? 0);
 
-        // Sanitización para evitar desalineación de columnas en Excel plano
-        $laboratorio     = str_replace(array("\n", "\r", "\t", '"'), array(" ", " ", " ", "'"), $laboratorio);
-        $articulo        = str_replace(array("\n", "\r", "\t", '"'), array(" ", " ", " ", "'"), $articulo);
-        $codigo          = str_replace(array("\n", "\r", "\t", '"'), array(" ", " ", " ", "'"), $codigo);
-        $codigo_de_barra = str_replace(array("\n", "\r", "\t", '"'), array(" ", " ", " ", "'"), $codigo_de_barra);
-
-        // Imprimir fila formateada por delimitador de tabulaciones (\t)
-        echo "{$laboratorio}\t{$articulo}\t{$codigo}\t{$codigo_de_barra}\t{$unidad_medida}\t{$entradas}\t{$salidas}\t{$existencia}\t{$pedido}\t{$costo}\t{$precio}\n";
+        echo "<tr>";
+        echo "<td class='texto'>" . htmlspecialchars($laboratorio, ENT_QUOTES, 'UTF-8') . "</td>";
+        echo "<td class='texto'>" . htmlspecialchars($articulo, ENT_QUOTES, 'UTF-8') . "</td>";
+        echo "<td class='texto'>{$codigo}</td>";
+        echo "<td class='texto'>{$codigo_de_barra}</td>";
+        echo "<td class='texto'>{$unidad_medida}</td>";
+        
+        // Celdas de números enteros/cantidades
+        echo "<td class='entero'>{$entradas}</td>";
+        echo "<td class='entero'>{$salidas}</td>";
+        echo "<td class='entero'>{$existencia}</td>";
+        echo "<td class='entero'>{$pedido}</td>";
+        
+        // Celdas monetarias formateadas automáticamente según la región del usuario
+        echo "<td class='num'>{$costo}</td>";
+        echo "<td class='num'>{$precio}</td>";
+        echo "</tr>";
     }
-
+?>
+    </tbody>
+</table>
+</body>
+</html>
+<?php
     exit();
 ?>
